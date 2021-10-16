@@ -15,7 +15,7 @@ jobs:
         with:
           image_size: 100
           columns_per_row: 6
-          readme_path: ./docs/acknowledgments.md
+          readme_path: docs/acknowledgments.md
       - name: Install doxygen
         run: sudo apt-get install doxygen
       - name: Generate doxygen XML
