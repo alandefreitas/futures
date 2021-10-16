@@ -574,9 +574,13 @@ namespace futures {
         /// needs to be done when the future is created.
         /// All this behavior is encapsulated in the async function.
         template <class T, class Shared, class LazyContinuable, class Stoppable>
-        class [[clang::preferred_name(jfuture<T>), clang::preferred_name(cfuture<T>),
-                clang::preferred_name(jcfuture<T>), clang::preferred_name(shared_jfuture<T>),
-                clang::preferred_name(shared_cfuture<T>), clang::preferred_name(shared_jcfuture<T>)]] basic_future
+        class
+#ifdef __clang__
+            [[clang::preferred_name(jfuture<T>), clang::preferred_name(cfuture<T>), clang::preferred_name(jcfuture<T>),
+              clang::preferred_name(shared_jfuture<T>), clang::preferred_name(shared_cfuture<T>),
+              clang::preferred_name(shared_jcfuture<T>)]]
+#endif
+            basic_future
             : public std::conditional_t<Shared::value,
                                         enable_shared<basic_future<T, Shared, LazyContinuable, Stoppable>, T>,
                                         disable_shared<basic_future<T, Shared, LazyContinuable, Stoppable>, T>>,
@@ -747,7 +751,8 @@ namespace futures {
                 if (not valid()) {
                     throw std::future_error(std::future_errc::no_state);
                 }
-                shared_base::future_->wait(); }
+                shared_base::future_->wait();
+            }
 
             /// \brief Waits for the result to become available.
             template <class Rep, class Period>
