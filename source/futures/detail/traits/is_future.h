@@ -9,26 +9,61 @@
 #include <future>
 
 namespace futures {
-    /// Check if type is a future
+    /// Check if type is a future type
     template <typename> struct is_future : std::false_type {};
+
+    /// Check if type is a future type (specialization for std::future<T>)
     template <typename T> struct is_future<std::future<T>> : std::true_type {};
+
+    /// Check if type is a future type (specialization for std::shared_future<T>)
     template <typename T> struct is_future<std::shared_future<T>> : std::true_type {};
+
+    /// Check if type is a future type (specialization for std::future<T> &)
     template <typename T> struct is_future<std::future<T> &> : std::true_type {};
+
+    /// Check if type is a future type (specialization for std::shared_future<T> &)
     template <typename T> struct is_future<std::shared_future<T> &> : std::true_type {};
+
+    /// Check if type is a future type (specialization for std::future<T> &&)
     template <typename T> struct is_future<std::future<T> &&> : std::true_type {};
+
+    /// Check if type is a future type (specialization for std::shared_future<T> &&)
     template <typename T> struct is_future<std::shared_future<T> &&> : std::true_type {};
+
+    /// Check if type is a future type (specialization for const std::future<T>)
     template <typename T> struct is_future<const std::future<T>> : std::true_type {};
+
+    /// Check if type is a future type (specialization for const std::shared_future<T>)
     template <typename T> struct is_future<const std::shared_future<T>> : std::true_type {};
+
+    /// Check if type is a future type (specialization for const std::future<T> &)
     template <typename T> struct is_future<const std::future<T> &> : std::true_type {};
+
+    /// Check if type is a future type (specialization for const std::shared_future<T> &)
     template <typename T> struct is_future<const std::shared_future<T> &> : std::true_type {};
+
+    /// Check if type is a future type as a bool value
     template <class T> constexpr bool is_future_v = is_future<T>::value;
 
+    /// Check if type is a shared future type
     template <typename> struct is_shared_future : std::false_type {};
+
+    /// Check if type is a shared future type (specialization for std::shared_future<T>)
     template <typename T> struct is_shared_future<std::shared_future<T>> : std::true_type {};
+
+    /// Check if type is a shared future type (specialization for std::shared_future<T> &)
     template <typename T> struct is_shared_future<std::shared_future<T> &> : std::true_type {};
+
+    /// Check if type is a shared future type (specialization for std::shared_future<T> &&)
     template <typename T> struct is_shared_future<std::shared_future<T> &&> : std::true_type {};
+
+    /// Check if type is a shared future type (specialization for const std::shared_future<T>)
     template <typename T> struct is_shared_future<const std::shared_future<T>> : std::true_type {};
+
+    /// Check if type is a shared future type (specialization for const std::shared_future<T> &)
     template <typename T> struct is_shared_future<const std::shared_future<T> &> : std::true_type {};
+
+    /// Check if type is a shared future type
     template <class T> constexpr bool is_shared_future_v = is_shared_future<T>::value;
 
     /// \brief Define future as supporting lazy continuations

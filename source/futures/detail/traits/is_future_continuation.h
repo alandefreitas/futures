@@ -538,6 +538,11 @@ namespace futures {
         using type = when_any_element_result_t<unwrap_future_t<Future>>;
     };
 
+    /// Determine result of @ref Function with @ref FuncArgs used as a continuation to @ref Future
+    ///
+    /// \tparam Function Function to come after the future
+    /// \tparam Future Future object type
+    /// \tparam FuncArgs Function arguments
     template <class Function, class Future, class... FuncArgs>
     struct continuation_result<
         Function, Future, std::tuple<FuncArgs...>,
@@ -570,6 +575,11 @@ namespace futures {
         using type = when_any_unwrap_result_t<unwrap_future_t<Future>>;
     };
 
+    /// Determine result of @ref Function with @ref FuncArgs used as a continuation to @ref Future
+    ///
+    /// \tparam Function Function to come after the future
+    /// \tparam Future Future object type
+    /// \tparam FuncArgs Function arguments
     template <class Function, class Future, class FuncArgsTuple>
     using continuation_result_t = typename continuation_result<Function, Future, FuncArgsTuple>::type;
 
