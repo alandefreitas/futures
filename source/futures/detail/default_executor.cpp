@@ -3,6 +3,10 @@
 // Created by Alan Freitas on 8/17/21.
 //
 
+#ifdef _WIN32
+#include <SDKDDKVer.h>
+#endif
+
 #include "default_executor.h"
 
 namespace futures {

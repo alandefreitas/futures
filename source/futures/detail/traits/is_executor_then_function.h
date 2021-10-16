@@ -5,6 +5,10 @@
 #ifndef CPP_MANIFEST_IS_EXECUTOR_THEN_FUNCTION_H
 #define CPP_MANIFEST_IS_EXECUTOR_THEN_FUNCTION_H
 
+#ifdef _WIN32
+#include <SDKDDKVer.h>
+#endif
+
 #include <asio.hpp>
 
 namespace futures {

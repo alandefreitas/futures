@@ -5,6 +5,10 @@
 #ifndef CPP_MANIFEST_INLINE_EXECUTOR_H
 #define CPP_MANIFEST_INLINE_EXECUTOR_H
 
+#ifdef _WIN32
+#include <SDKDDKVer.h>
+#endif
+
 #include <asio.hpp>
 
 namespace futures {
@@ -58,7 +62,10 @@ namespace futures {
             return asio::execution::blocking_t::never;
         }
 
-        template <class F> void execute(F f) const { std::async(std::launch::async, f); }
+        template <class F> void execute(F f) const {
+            auto fut = std::async(std::launch::async, f);
+            fut.wait_for(std::chrono::seconds(0));
+        }
     };
 
     /// \brief Make an new thread executor object
@@ -83,7 +90,10 @@ namespace futures {
             return asio::execution::blocking_t::never;
         }
 
-        template <class F> void execute(F f) const { std::async(std::launch::deferred, f); }
+        template <class F> void execute(F f) const {
+            auto fut = std::async(std::launch::deferred, f);
+            fut.wait_for(std::chrono::seconds(0));
+        }
     };
 
     /// \brief Make an new thread executor object
