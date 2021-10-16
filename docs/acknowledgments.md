@@ -8,7 +8,7 @@ has_toc: false
 
 # Contributors
 
-<!-- readme: collaborators,contributors -start --> 
+<!-- readme: collaborators,contributors -start -->
 <table>
 <tr>
     <td align="center">
