@@ -290,7 +290,7 @@ version_requirement_message(asio
 #######################################################
 ### Dev Dependencies                                ###
 #######################################################
-if (NOT SMALL_DEV_BUILD)
+if (NOT FUTURES_DEV_BUILD)
     return()
 endif ()
 
