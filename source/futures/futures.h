@@ -110,7 +110,7 @@ namespace futures {
         struct defer_schedule_tag {};
 
         template <typename SchedulePolicy, typename Executor, typename Function,
-                  std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function>, int> = 0>
+                  std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function>, int>>
         async_future_result_of<Function> internal_launch_async(const Executor &ex, Function &&f) {
             // The Function should accept no parameters or the stop token here
             // - No parameters: schedule `cfuture` to allow lazy continuations

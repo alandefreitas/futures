@@ -105,7 +105,7 @@ namespace futures {
         }
 
         template <typename Executor, typename Function, class Future,
-                  std::enable_if_t<is_executor_then_continuation_v<Executor, Function, Future>, int> = 0>
+                  std::enable_if_t<is_executor_then_continuation_v<Executor, Function, Future>, int>>
         then_result_of_t<Function, Future> internal_then(const Executor &ex, Future &&before, Function &&after) {
             // Deduce types
             using result_future_type = detail::then_result_of_t<Function, Future>;
