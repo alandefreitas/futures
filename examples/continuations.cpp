@@ -17,7 +17,7 @@ int main() {
     cfuture<int> future5 = async([] { return 2; });
     asio::thread_pool pool(1);
     asio::thread_pool::executor_type ex = pool.executor();
-    cfuture<int> future6 = then(before, ex, [](int v) { return v * 2; });
+    cfuture<int> future6 = then(future5, ex, [](int v) { return v * 2; });
 
     // Continuation with operator>>
     auto future7 = future6 >> [](int x) { return x * 2; };
