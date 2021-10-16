@@ -81,6 +81,7 @@ target_link_libraries(futures PUBLIC small::small)
 target_link_libraries(futures PUBLIC asio::asio)
 target_compile_definitions(futures PUBLIC ASIO_SEPARATE_COMPILATION)
 target_link_libraries(futures PUBLIC range-v3::range-v3)
+target_link_libraries(futures PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
 #######################################################
 ### Installer                                       ###
