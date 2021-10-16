@@ -707,7 +707,7 @@ namespace futures {
             }
 
             // Function that posts a notifier task to update our common variable that indicates if the task is ready
-            auto launch_notifier_task = [this](auto &&future, std::atomic_bool &cancel_token,
+            auto launch_notifier_task = [&](auto &&future, std::atomic_bool &cancel_token,
                                                std::atomic_bool &start_token) {
                 // Launch a task with access to the underlying when_any_future and a cancel token that asks it to stop
                 // These threads need to be independent of any executor because the whole system might crash if
@@ -793,11 +793,14 @@ namespace futures {
 
                 // Post the task appropriately
                 using future_type = std::decay_t<decltype(future)>;
-                const bool lazy_continuable = is_lazy_continuable_v<future_type>;
-                if constexpr (setting_lazy && lazy_continuable) {
+                // MSVC hack
+                constexpr bool internal_lazy_continuable = is_lazy_continuable_v<future_type>;
+                constexpr bool internal_setting_lazy = SettingLazyContinuables::value;
+                constexpr bool internal_setting_thread = not SettingLazyContinuables::value;
+                if constexpr (internal_setting_lazy && internal_lazy_continuable) {
                     // Execute notifier task inline whenever `future` is done
                     future.then(make_inline_executor(), executor_handle);
-                } else if constexpr (setting_thread && not lazy_continuable) {
+                } else if constexpr (internal_setting_thread && not internal_lazy_continuable) {
                     // Execute notifier task in a new thread because we don't have the executor context
                     // to be sure. We detach it here but can still control the cancel_token and the future.
                     // This is basically the same as calling std::async and ignoring its std::future because
@@ -827,12 +830,14 @@ namespace futures {
                     }
                 }
             } else {
-                for_each_paired(v, notifiers, [&launch_notifier_task](auto &this_future, notifier &n) {
+                for_each_paired(v, notifiers, [&](auto &this_future, notifier &n) {
                     using future_type = std::decay_t<decltype(this_future)>;
-                    const bool current_is_lazy_continuable_v = is_lazy_continuable_v<future_type>;
-                    if constexpr (current_is_lazy_continuable_v && setting_thread) {
+                    constexpr bool current_is_lazy_continuable_v = is_lazy_continuable_v<future_type>;
+                    constexpr bool internal_setting_thread = not SettingLazyContinuables::value;
+                    constexpr bool internal_setting_lazy = SettingLazyContinuables::value;
+                    if constexpr (current_is_lazy_continuable_v && internal_setting_thread) {
                         return;
-                    } else if constexpr (not current_is_lazy_continuable_v && setting_lazy) {
+                    } else if constexpr (not current_is_lazy_continuable_v && internal_setting_lazy) {
                         return;
                     } else {
                         n.cancel_token.store(false);

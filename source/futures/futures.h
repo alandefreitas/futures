@@ -124,12 +124,11 @@ namespace futures {
                 std::conditional_t<expects_stop_token, type_member_or_void_t<std::invoke_result<Function, stop_token>>,
                                    type_member_or_void_t<std::invoke_result<Function>>>;
 
-            // Check if the function return type isn't void
-            constexpr bool future_returns_void = std::is_same_v<future_value_type, void>;
-
             // Create stop source (only valid if we expect a continuation)
-            stop_source ss = []() {
-                if constexpr (expects_stop_token) {
+            stop_source ss = [=]() {
+                // this redundancy is an MSVC hack
+                constexpr bool st_expects_stop_token = std::is_invocable_v<Function, stop_token>;
+                if constexpr (st_expects_stop_token) {
                     return stop_source();
                 } else {
                     return stop_source(nostopstate);
@@ -151,7 +150,8 @@ namespace futures {
             ]() mutable {
                 // Arguments we send to the function (with or without token)
                 auto func_args = [&]() {
-                    if constexpr (not expects_stop_token) {
+                  constexpr bool fn_expects_stop_token = std::is_invocable_v<Function, stop_token>;
+                  if constexpr (!fn_expects_stop_token) {
                         return std::make_tuple();
                     } else {
                         return std::make_tuple(token);
@@ -160,6 +160,8 @@ namespace futures {
 
                 // Run the main function and fulfill its promise
                 try {
+                    // Check if the function return type isn't void
+                    constexpr bool future_returns_void = std::is_same_v<future_value_type, void>;
                     if constexpr (not future_returns_void) {
                         auto state = std::apply(f, std::move(func_args));
                         p.set_value(std::move(state));

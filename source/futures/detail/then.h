@@ -110,17 +110,17 @@ namespace futures {
             // Deduce types
             using result_future_type = detail::then_result_of_t<Function, Future>;
             using result_value_type = unwrap_future_t<result_future_type>;
-            constexpr bool before_has_stop_token = has_stop_token_v<Future>;
-            constexpr bool before_is_shared = is_shared_future_v<Future>;
-            constexpr bool propagate_stop_token = before_has_stop_token && not before_is_shared;
-            constexpr bool function_expects_stop_token = is_future_continuation_v<Function, Future, stop_token>;
-            constexpr bool result_shares_stop_source = propagate_stop_token && not function_expects_stop_token;
 
             // Set up continuation stop source
-            constexpr bool result_has_stop_token = has_stop_token_v<result_future_type>;
             stop_source ss = [&] {
-                if constexpr (result_has_stop_token) {
-                    if constexpr (result_shares_stop_source) {
+              constexpr bool result_has_stop_token = has_stop_token_v<result_future_type>;
+              if constexpr (result_has_stop_token) {
+                  constexpr bool before_has_stop_token = has_stop_token_v<Future>;
+                  constexpr bool before_is_shared = is_shared_future_v<Future>;
+                  constexpr bool propagate_stop_token = before_has_stop_token && not before_is_shared;
+                  constexpr bool function_expects_stop_token = is_future_continuation_v<Function, Future, stop_token>;
+                  constexpr bool result_shares_stop_source = propagate_stop_token && not function_expects_stop_token;
+                  if constexpr (result_shares_stop_source) {
                         return before.get_stop_source();
                     } else {
                         return stop_source();
@@ -134,9 +134,9 @@ namespace futures {
             detail::continuations_source after_cs;
 
             // Store previous continuation source, so we can access it after it maybe gets moved into the result lambda
-            constexpr bool before_is_lazy_continuable = is_lazy_continuable_v<Future>;
             continuations_source before_cs = [&]() {
-                if constexpr (before_is_lazy_continuable) {
+              constexpr bool before_is_lazy_continuable = is_lazy_continuable_v<Future>;
+              if constexpr (before_is_lazy_continuable) {
                     return before.get_continuations_source();
                 } else {
                     return continuations_source(nocontinuationsstate);
@@ -148,7 +148,6 @@ namespace futures {
             std::future<result_value_type> std_future = p.get_future();
 
             // Set the complete executor task, using result to fulfill the promise, and running continuations
-            constexpr bool future_returns_void = std::is_same_v<result_value_type, void>;
             auto fulfill_promise = [p = std::move(p),                                    // after result promise
                                     continuation = std::move(detail::decay_copy(after)), // the continuation func
                                     before_future =
@@ -175,6 +174,7 @@ namespace futures {
 
                 // Unwrap and run the main function to fulfill its promise
                 try {
+                    constexpr bool future_returns_void = std::is_same_v<result_value_type, void>;
                     if constexpr (not future_returns_void) {
                         auto state = std::apply(unwrap_and_continue, std::move(apply_args));
                         p.set_value(std::move(state));
@@ -194,6 +194,7 @@ namespace futures {
             auto continue_ptr = std::make_shared<decltype(fulfill_promise)>(std::move(fulfill_promise));
             auto executor_handle = [continue_ptr]() { (*continue_ptr)(); };
 
+            constexpr bool before_is_lazy_continuable = is_lazy_continuable_v<Future>;
             if constexpr (before_is_lazy_continuable) {
                 // Attach continuation to previous future.
                 // - Continuation is posted when previous is done
@@ -209,6 +210,7 @@ namespace futures {
             result_future_type result;
             result.set_future(std::make_unique<std::future<result_value_type>>(std::move(std_future)));
             result.set_continuations_source(after_cs);
+            constexpr bool result_has_stop_token = has_stop_token_v<result_future_type>;
             if constexpr (result_has_stop_token) {
                 result.set_stop_source(ss);
             }
