@@ -106,13 +106,13 @@ Result Variables
 
 This will define the following variables:
 
-``asio_FOUND``
+``Asio_FOUND``
   True if the system has the asio library.
-``asio_VERSION``
+``Asio_VERSION``
   The version of the asio library which was found.
-``asio_INCLUDE_DIRS``
+``Asio_INCLUDE_DIRS``
   Include directories needed to use asio.
-``asio_LIBRARIES``
+``Asio_LIBRARIES``
   Libraries needed to link to asio.
 
 Cache Variables
@@ -120,9 +120,9 @@ Cache Variables
 
 The following cache variables may also be set:
 
-``asio_INCLUDE_DIR``
+``Asio_INCLUDE_DIR``
   The directory containing ``foo.h``.
-``asio_LIBRARY``
+``Asio_LIBRARY``
   The path to the asio library.
 
 @see https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html
@@ -136,62 +136,62 @@ The following cache variables may also be set:
 # find_package. Thus, these variables that should NOT be changed in this script.
 # Besides the user parameters provided to find_package, this script will also
 # consider these variables from the parent script.
-# asio_DIR: The directory where we can find asio
+# Asio_DIR: The directory where we can find asio
 # CMAKE_FIND_PACKAGE_SORT_ORDER: The preference order for versions (NONE, NAME (lexographically), NATURAL (VERSION_GREATER))
 # CMAKE_FIND_PACKAGE_SORT_DIRECTION: How to order packager versions (DEC (default) or ASC (will return min version found))
 # Variables that should NOT be used (users need them to manipulate behavior)
-# asio_LIBRARY: The path of the library
-# asio_Yy_LIBRARY: The path of library Yy provided by the module Xxx
-# asio_INCLUDE_DIR: Where to find headers for using the library
-# asio_Yy_INCLUDE_DIR: Where to find headers for using the library component Yy
+# Asio_LIBRARY: The path of the library
+# Asio_Yy_LIBRARY: The path of library Yy provided by the module Xxx
+# Asio_INCLUDE_DIR: Where to find headers for using the library
+# Asio_Yy_INCLUDE_DIR: Where to find headers for using the library component Yy
 
 #######################################################
 ### Dev instructions: CMAKE INPUT                   ###
 #######################################################
 # CMake transforms the user parameters given to find_packages into these variables
 # CMAKE_FIND_PACKAGE_NAME: The <PackageName> which is searched for asio
-# asio_FIND_REQUIRED: True if REQUIRED option was given
-# asio_FIND_COMPONENTS: Required components
-# asio_FIND_REQUIRED_<c>: True if component <c> was required
-# asio_FIND_QUIETLY: True if QUIET option was given
-# asio_CONSIDERED_CONFIGS: Config files considered by CMake
-# asio_CONSIDERED_VERSIONS: Versions considered by CMake
+# Asio_FIND_REQUIRED: True if REQUIRED option was given
+# Asio_FIND_COMPONENTS: Required components
+# Asio_FIND_REQUIRED_<c>: True if component <c> was required
+# Asio_FIND_QUIETLY: True if QUIET option was given
+# Asio_CONSIDERED_CONFIGS: Config files considered by CMake
+# Asio_CONSIDERED_VERSIONS: Versions considered by CMake
 
 # When a version is required:
-# asio_FIND_VERSION: Full requested version string
-# asio_FIND_MAJOR: Major version if requested, else 0
-# asio_FIND_MINOR: Minor version if requested, else 0
-# asio_FIND_PATCH: Patch version if requested, else 0
-# asio_FIND_TWEAK: Tweak version if requested, else 0
-# asio_FIND_VERSION_COUNT: Number of version components, 0 to 4
-# asio_FIND_VERSION_EXACT: True if EXACT option was given
+# Asio_FIND_VERSION: Full requested version string
+# Asio_FIND_MAJOR: Major version if requested, else 0
+# Asio_FIND_MINOR: Minor version if requested, else 0
+# Asio_FIND_PATCH: Patch version if requested, else 0
+# Asio_FIND_TWEAK: Tweak version if requested, else 0
+# Asio_FIND_VERSION_COUNT: Number of version components, 0 to 4
+# Asio_FIND_VERSION_EXACT: True if EXACT option was given
 
 # When a version range was required:
-# asio_FIND_VERSION_RANGE: Full requested version range string
-# asio_FIND_VERSION_RANGE_MIN: Lower end point of the version range
-# asio_FIND_VERSION_RANGE_MAX: Upper end point of the version range
-# asio_FIND_VERSION_MIN: Full requested version string of the lower end point of the range
-# asio_FIND_VERSION_MIN_MAJOR: Major version of the lower end point if requested (or 0)
-# asio_FIND_VERSION_MIN_MINOR: Minor version of the lower end point if requested (or 0)
-# asio_FIND_VERSION_MIN_PATCH: Patch version of the lower end point if requested (or 0)
-# asio_FIND_VERSION_MIN_TWEAK: Major version of the lower end point if requested (or 0)
-# asio_FIND_VERSION_MIN_COUNT: Number of version components in lower end point, 0 to 4
-# asio_FIND_VERSION_RANGE_MAX: Lower end point of the version range
-# asio_FIND_VERSION_RANGE_MAX: Upper end point of the version range
-# asio_FIND_VERSION_MAX: Full requested version string of the upper end point of the range
-# asio_FIND_VERSION_MAX_MAJOR: Major version of the upper end point if requested (or 0)
-# asio_FIND_VERSION_MAX_MINOR: Minor version of the upper end point if requested (or 0)
-# asio_FIND_VERSION_MAX_PATCH: Patch version of the upper end point if requested (or 0)
-# asio_FIND_VERSION_MAX_TWEAK: Major version of the upper end point if requested (or 0)
-# asio_FIND_VERSION_MAX_COUNT: Number of version components in upper end point, 0 to 4
-# asio_FIND_VERSION_COMPLETE: full requested version string as specified (single or range)
+# Asio_FIND_VERSION_RANGE: Full requested version range string
+# Asio_FIND_VERSION_RANGE_MIN: Lower end point of the version range
+# Asio_FIND_VERSION_RANGE_MAX: Upper end point of the version range
+# Asio_FIND_VERSION_MIN: Full requested version string of the lower end point of the range
+# Asio_FIND_VERSION_MIN_MAJOR: Major version of the lower end point if requested (or 0)
+# Asio_FIND_VERSION_MIN_MINOR: Minor version of the lower end point if requested (or 0)
+# Asio_FIND_VERSION_MIN_PATCH: Patch version of the lower end point if requested (or 0)
+# Asio_FIND_VERSION_MIN_TWEAK: Major version of the lower end point if requested (or 0)
+# Asio_FIND_VERSION_MIN_COUNT: Number of version components in lower end point, 0 to 4
+# Asio_FIND_VERSION_RANGE_MAX: Lower end point of the version range
+# Asio_FIND_VERSION_RANGE_MAX: Upper end point of the version range
+# Asio_FIND_VERSION_MAX: Full requested version string of the upper end point of the range
+# Asio_FIND_VERSION_MAX_MAJOR: Major version of the upper end point if requested (or 0)
+# Asio_FIND_VERSION_MAX_MINOR: Minor version of the upper end point if requested (or 0)
+# Asio_FIND_VERSION_MAX_PATCH: Patch version of the upper end point if requested (or 0)
+# Asio_FIND_VERSION_MAX_TWEAK: Major version of the upper end point if requested (or 0)
+# Asio_FIND_VERSION_MAX_COUNT: Number of version components in upper end point, 0 to 4
+# Asio_FIND_VERSION_COMPLETE: full requested version string as specified (single or range)
 
 #######################################################
 ### Macros                                          ###
 #######################################################
 # Print message if not in quiet mode
-macro(asio_message _MSG)
-    if (NOT asio_FIND_QUIETLY)
+macro(Asio_message _MSG)
+    if (NOT Asio_FIND_QUIETLY)
         message(STATUS
                 "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
     endif ()
@@ -202,10 +202,10 @@ macro(throw)
 endmacro()
 
 macro(throw_if_required)
-    if (asio_FIND_REQUIRED)
+    if (Asio_FIND_REQUIRED)
         throw()
     else ()
-        asio_message("asio not found")
+        Asio_message("asio not found")
         return()
     endif ()
 endmacro()
@@ -227,18 +227,18 @@ endfunction()
 ### Set some hint paths                             ###
 #######################################################
 # Initial hints
-set(asio_INCLUDE_PATHS)
-set(asio_INCLUDE_HINTS)
+set(Asio_INCLUDE_PATHS)
+set(Asio_INCLUDE_HINTS)
 
 # If the user is using this script, it's very likely that it's also using cppm
-# or a library that used cppm. This means asio_INSTALL_HINT should be set
+# or a library that used cppm. This means Asio_INSTALL_HINT should be set
 # at this point and we also use it as a hint path.
-if (asio_INSTALL_HINT)
-    set(asio_INCLUDE_HINTS ${asio_INCLUDE_HINTS} ${asio_INSTALL_HINT} ${asio_INSTALL_HINT}/include)
+if (Asio_INSTALL_HINT)
+    set(Asio_INCLUDE_HINTS ${Asio_INCLUDE_HINTS} ${Asio_INSTALL_HINT} ${Asio_INSTALL_HINT}/include)
 endif ()
 
 # Get some more hints from PkgConfig, if available
-if (asio_FIND_QUIETLY)
+if (Asio_FIND_QUIETLY)
     find_package(PkgConfig QUIET)
 else ()
     find_package(PkgConfig)
@@ -248,30 +248,30 @@ if (PKG_CONFIG_FOUND)
 
     # Check and maybe set the pkgconfig path
     if ($ENV{PKG_CONFIG_PATH})
-        asio_message("PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
-    elseif (asio_INSTALL_HINT)
+        Asio_message("PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
+    elseif (Asio_INSTALL_HINT)
         # If PKG_CONFIG_PATH is empty and we have an installation hint with a package config file
-        if (EXISTS ${asio_INSTALL_HINT}/lib/pkgconfig)
-            set(ENV{PKG_CONFIG_PATH} ${asio_INSTALL_HINT}/lib/pkgconfig)
+        if (EXISTS ${Asio_INSTALL_HINT}/lib/pkgconfig)
+            set(ENV{PKG_CONFIG_PATH} ${Asio_INSTALL_HINT}/lib/pkgconfig)
         endif ()
     endif ()
 
     # Run pkgconfig
     pkg_check_modules(PC_asio QUIET asio)
-    set(asio_INCLUDE_PATHS ${asio_INCLUDE_PATHS} ${PC_asio_INCLUDE_DIRS})
+    set(Asio_INCLUDE_PATHS ${Asio_INCLUDE_PATHS} ${PC_Asio_INCLUDE_DIRS})
 endif ()
 
 #######################################################
 ### Look for packages candidates                    ###
 #######################################################
-find_path(asio_INCLUDE_DIR
+find_path(Asio_INCLUDE_DIR
         NAMES asio.hpp
-        HINTS ${asio_INCLUDE_HINTS}
-        PATHS ${asio_INCLUDE_PATHS}
+        HINTS ${Asio_INCLUDE_HINTS}
+        PATHS ${Asio_INCLUDE_PATHS}
         PATH_SUFFIXES include
         )
 
-if (NOT asio_INCLUDE_DIR)
+if (NOT Asio_INCLUDE_DIR)
     throw_if_required()
 endif ()
 
@@ -279,21 +279,21 @@ endif ()
 ### Check versions                                  ###
 #######################################################
 # The package version might be available from pkgconfig or from the cppm directory layout
-if (NOT asio_VERSION)
-    if (PC_asio_VERSION)
-        set(asio_VERSION ${PC_asio_VERSION})
+if (NOT Asio_VERSION)
+    if (PC_Asio_VERSION)
+        set(Asio_VERSION ${PC_Asio_VERSION})
     endif ()
 endif ()
 
-if (NOT asio_VERSION)
-    if (asio_INSTALL_HINT)
-        is_subdirectory(${asio_INSTALL_HINT} ${asio_INCLUDE_DIR} is_cppm_subdir)
+if (NOT Asio_VERSION)
+    if (Asio_INSTALL_HINT)
+        is_subdirectory(${Asio_INSTALL_HINT} ${Asio_INCLUDE_DIR} is_cppm_subdir)
         if (is_cppm_subdir)
-            get_filename_component(asio_ALL_INSTALLS_PATH ${asio_INSTALL_HINT} DIRECTORY)
-            get_filename_component(asio_VERSION_PATH ${asio_ALL_INSTALLS_PATH} DIRECTORY)
-            get_filename_component(asio_VERSION ${asio_VERSION_PATH} NAME)
-            if (NOT asio_VERSION VERSION_GREATER_EQUAL 0.0.0)
-                unset(asio_VERSION)
+            get_filename_component(Asio_ALL_INSTALLS_PATH ${Asio_INSTALL_HINT} DIRECTORY)
+            get_filename_component(Asio_VERSION_PATH ${Asio_ALL_INSTALLS_PATH} DIRECTORY)
+            get_filename_component(Asio_VERSION ${Asio_VERSION_PATH} NAME)
+            if (NOT Asio_VERSION VERSION_GREATER_EQUAL 0.0.0)
+                unset(Asio_VERSION)
             endif ()
         endif ()
     endif ()
@@ -306,64 +306,64 @@ endif ()
 # FindPackageHandleStandardArgs will make most of the work here.
 # Result variables find_package inherits from the from config script (returned to the user)
 # Found:
-#    asio_FOUND: Whether we found the module
-#    asio_NOT_FOUND_MESSAGE: A message when not found. Use this instead of a message.
-#    asio_Yy_FOUND: Whether we found the component Yy
-#    asio_ROOT_DIR: Where to find the base directory of the module
+#    Asio_FOUND: Whether we found the module
+#    Asio_NOT_FOUND_MESSAGE: A message when not found. Use this instead of a message.
+#    Asio_Yy_FOUND: Whether we found the component Yy
+#    Asio_ROOT_DIR: Where to find the base directory of the module
 # Headers:
-#    asio_INCLUDE_DIRS: Optionally, the final set of include directories listed in one variable
-#    asio_INCLUDE_DIR:
+#    Asio_INCLUDE_DIRS: Optionally, the final set of include directories listed in one variable
+#    Asio_INCLUDE_DIR:
 # Libraries
-#     asio_RUNTIME_LIBRARY_DIRS: Optionally, PATH on windows or LD_LIBRARY_PATH on UNIX
-#     asio_LIBRARIES: The libraries to use with the module
-#     asio_LIBRARY_DIRS: Optionally, the final set of library directories listed in one variable for use by client code
+#     Asio_RUNTIME_LIBRARY_DIRS: Optionally, PATH on windows or LD_LIBRARY_PATH on UNIX
+#     Asio_LIBRARIES: The libraries to use with the module
+#     Asio_LIBRARY_DIRS: Optionally, the final set of library directories listed in one variable for use by client code
 # Definitions
-#     asio_DEFINITIONS: The compile definitions to use when compiling code that uses the module
+#     Asio_DEFINITIONS: The compile definitions to use when compiling code that uses the module
 # Executables
-#     asio_EXECUTABLE: The full absolute path to an executable.
-#     asio_YYY_EXECUTABLE: The full absolute path to another executable where YYY is the tool name.
+#     Asio_EXECUTABLE: The full absolute path to an executable.
+#     Asio_YYY_EXECUTABLE: The full absolute path to another executable where YYY is the tool name.
 # Versions (if acceptable)
-#     asio_VERSION: The version we found
-#     asio_VERSION_VV: Variables of this form specify whether the Xxx module being provided is version VV of the module
-#     asio_VERSION_MAJOR: major version component
-#     asio_VERSION_MINOR: minor version component
-#     asio_VERSION_PATCH: patch version component
-#     asio_VERSION_TWEAK: tweak version component
-#     asio_VERSION_COUNT: count of version components (0 to 4)
+#     Asio_VERSION: The version we found
+#     Asio_VERSION_VV: Variables of this form specify whether the Xxx module being provided is version VV of the module
+#     Asio_VERSION_MAJOR: major version component
+#     Asio_VERSION_MINOR: minor version component
+#     Asio_VERSION_PATCH: patch version component
+#     Asio_VERSION_TWEAK: tweak version component
+#     Asio_VERSION_COUNT: count of version components (0 to 4)
 
 # FindPackageHandleStandardArgs will check if values are correct
-# It ensures REQUIRED_VARS have valid values and asio_VERSION matches the requirements
+# It ensures REQUIRED_VARS have valid values and Asio_VERSION matches the requirements
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(asio
-        FOUND_VAR asio_FOUND
+find_package_handle_standard_args(Asio
+        FOUND_VAR Asio_FOUND
         REQUIRED_VARS
-        asio_INCLUDE_DIR
-        VERSION_VAR asio_VERSION
+        Asio_INCLUDE_DIR
+        VERSION_VAR Asio_VERSION
         )
 
 #######################################################
 ### Variable results                                ###
 #######################################################
 # Provide variables the user can user can use to link the library
-if (asio_FOUND)
-    set(asio_INCLUDE_DIRS ${asio_INCLUDE_DIR})
+if (Asio_FOUND)
+    set(Asio_INCLUDE_DIRS ${Asio_INCLUDE_DIR})
 endif ()
 
 #######################################################
 ### Target results                                  ###
 #######################################################
 # Provide targets the user can user can use to link the library
-if (asio_FOUND AND NOT TARGET asio::asio)
+if (Asio_FOUND AND NOT TARGET asio::asio)
     # Imported targets can be of unknown type
     add_library(asio::asio INTERFACE IMPORTED)
     set_target_properties(asio::asio PROPERTIES
-            # IMPORTED_LOCATION "${asio_LIBRARY}"
-            # INTERFACE_COMPILE_OPTIONS "${PC_asio_CFLAGS_OTHER}"
-            INTERFACE_INCLUDE_DIRECTORIES "${asio_INCLUDE_DIR}"
+            # IMPORTED_LOCATION "${Asio_LIBRARY}"
+            # INTERFACE_COMPILE_OPTIONS "${PC_Asio_CFLAGS_OTHER}"
+            INTERFACE_INCLUDE_DIRECTORIES "${Asio_INCLUDE_DIR}"
             )
 endif ()
 
 # Hide cache variables
 mark_as_advanced(
-        asio_INCLUDE_DIR
+        Asio_INCLUDE_DIR
 )

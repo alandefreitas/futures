@@ -227,12 +227,12 @@ set(asio_FIND_COMPONENTS)
 # Look for lock version
 if (NOT asio_FOUND)
     semver_split(${asio_VERSION_LOCK} asio_VERSION_LOCK)
-    find_package(asio ${asio_VERSION_LOCK_CORE} COMPONENTS ${asio_FIND_COMPONENTS} QUIET)
+    find_package(Asio ${asio_VERSION_LOCK_CORE} COMPONENTS ${asio_FIND_COMPONENTS} QUIET)
 endif ()
 
 # Look for any version that matches our requirements
 if (NOT asio_FOUND)
-    find_package(asio QUIET)
+    find_package(Asio QUIET)
     if (asio_FOUND AND asio_VERSION AND NOT DEFINED ENV{asio_ROOT})
         semver_requirements_compatible(${asio_VERSION} ${asio_VERSION_REQUIREMENT} COMPONENTS ${asio_FIND_COMPONENTS} ok)
         if (NOT ok)
@@ -278,7 +278,7 @@ if (NOT asio_FOUND)
     # ASIO requires a custom FindAsio.cmake
     message("Finding asio...")
     set(ENV{asio_ROOT} ${asio_INSTALL_HINT})
-    find_package(asio COMPONENTS ${asio_FIND_COMPONENTS} REQUIRED)
+    find_package(Asio COMPONENTS ${asio_FIND_COMPONENTS} REQUIRED)
 endif ()
 version_requirement_message(asio
         VERSION_FOUND ${asio_VERSION}
