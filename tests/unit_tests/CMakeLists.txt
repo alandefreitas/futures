@@ -39,7 +39,10 @@ macro(add_futures_test TEST_NAME)
         target_link_libraries(ut_${TEST_NAME} PUBLIC ${LINK_LIBS} catch_main)
 
         # Enable UTF-8 on windows
-        target_msvc_compile_options(ut_${TEST_NAME} INTERFACE "/utf-8")
+        target_msvc_compile_options(ut_${TEST_NAME} "/utf-8")
+
+        # Enable /bigobj on windows
+        target_msvc_compile_options(ut_${TEST_NAME} "/bigobj")
 
         # Register with ctest
         catch_discover_tests(ut_${TEST_NAME})
