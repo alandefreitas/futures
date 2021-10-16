@@ -7,6 +7,14 @@ site_description: "Futures: C++ Task Programming with ASIO executors"
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
+  - Future types: future_concept.md
+  - Launching tasks: launching.md
+  - Continuations: continuations.md
+  - Conjunctions: conjunctions.md
+  - Disjunctions: disjunctions.md
+  - Stoppable futures: stoppable_futures.md
+  - Shared futures: shared_futures.md
+  - Parallel Algorithms: parallel_algorithms.md
   - API Reference: reference/Namespaces/namespacefutures.md
   - Contributing: contributing.md
   - Acknowledgments: acknowledgments.md
