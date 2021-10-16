@@ -1,6 +1,6 @@
 # Parallel Algorithms
 
-The header [algorithm_8h.md](reference/Files/algorithm_8h.md) includes implementations of common STL algorithms using these primitives. These algorithms also accept ranges as parameters and, unless a policy is explicitly stated, all algorithms are parallel by default.
+The header [`algorithm.h`](reference/Files/algorithm_8h.md) includes implementations of common STL algorithms using these primitives. These algorithms also accept ranges as parameters and, unless a policy is explicitly stated, all algorithms are parallel by default.
 
 ```cpp
 --8<-- "examples/algorithms.cpp"
