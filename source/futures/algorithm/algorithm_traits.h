@@ -105,7 +105,7 @@ namespace futures {
                                      ranges::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
                                  int> = 0>
             decltype(auto) operator()(const E &, P p, I first, S last, Fun f) const {
-                return Derived::operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
+                return Derived().operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
             }
 
             /// \overload Ranges
@@ -116,7 +116,7 @@ namespace futures {
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
             decltype(auto) operator()(const E &ex, P p, R &&r, Fun f) const {
-                return Derived::operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+                return Derived().operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
             }
 
             /// \overload Iterators / default parallel executor
@@ -126,7 +126,7 @@ namespace futures {
                                      ranges::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
                                  int> = 0>
             decltype(auto) operator()(P p, I first, S last, Fun f) const {
-                return Derived::operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
+                return Derived().operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
             }
 
             /// \overload Ranges / default parallel executor
@@ -136,7 +136,7 @@ namespace futures {
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
             decltype(auto) operator()(P p, R &&r, Fun f) const {
-                return Derived::operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
+                return Derived().operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
                                            std::move(f));
             }
 
@@ -147,7 +147,7 @@ namespace futures {
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
             decltype(auto) operator()(const E &ex, I first, S last, Fun f) const {
-                return Derived::operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
+                return Derived().operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
             }
 
             /// \overload Ranges / default partitioner
@@ -157,7 +157,7 @@ namespace futures {
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
             decltype(auto) operator()(const E &ex, R &&r, Fun f) const {
-                return Derived::operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r),
+                return Derived().operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r),
                                            std::move(f));
             }
 
@@ -168,7 +168,7 @@ namespace futures {
                                      ranges::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
                                  int> = 0>
             decltype(auto) operator()(I first, S last, Fun f) const {
-                return Derived::operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
+                return Derived().operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
                                            std::move(f));
             }
 
@@ -179,7 +179,7 @@ namespace futures {
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
             decltype(auto) operator()(R &&r, Fun f) const {
-                return Derived::operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
+                return Derived().operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
                                            std::end(r), std::move(f));
             }
         };
@@ -205,7 +205,7 @@ namespace futures {
                                            ranges::indirectly_binary_invocable_<ranges::equal_to, T *, I>,
                                        int> = 0>
             decltype(auto) operator()(const E &, P p, I first, S last, T f) const {
-                return Derived::operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
+                return Derived().operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
             }
 
             /// \overload Ranges
@@ -217,7 +217,7 @@ namespace futures {
                               std::is_copy_constructible_v<T>,
                           int> = 0>
             decltype(auto) operator()(const E &ex, P p, R &&r, T f) const {
-                return Derived::operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+                return Derived().operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
             }
 
             /// \overload Iterators / default parallel executor
@@ -228,7 +228,7 @@ namespace futures {
                                      std::is_copy_constructible_v<T>,
                                  int> = 0>
             decltype(auto) operator()(P p, I first, S last, T f) const {
-                return Derived::operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
+                return Derived().operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
             }
 
             /// \overload Ranges / default parallel executor
@@ -239,7 +239,7 @@ namespace futures {
                               std::is_copy_constructible_v<T>,
                           int> = 0>
             decltype(auto) operator()(P p, R &&r, T f) const {
-                return Derived::operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
+                return Derived().operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
                                            std::move(f));
             }
 
@@ -250,7 +250,7 @@ namespace futures {
                                            ranges::indirectly_binary_invocable_<ranges::equal_to, T *, I>,
                                        int> = 0>
             decltype(auto) operator()(const E &ex, I first, S last, T f) const {
-                return Derived::operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
+                return Derived().operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
             }
 
             /// \overload Ranges / default partitioner
@@ -261,7 +261,7 @@ namespace futures {
                               std::is_copy_constructible_v<T>,
                           int> = 0>
             decltype(auto) operator()(const E &ex, R &&r, T f) const {
-                return Derived::operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r),
+                return Derived().operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r),
                                            std::move(f));
             }
 
@@ -271,7 +271,7 @@ namespace futures {
                                            ranges::indirectly_binary_invocable_<ranges::equal_to, T *, I>,
                                        int> = 0>
             decltype(auto) operator()(I first, S last, T f) const {
-                return Derived::operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
+                return Derived().operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
                                            std::move(f));
             }
 
@@ -283,7 +283,7 @@ namespace futures {
                               std::is_copy_constructible_v<T>,
                           int> = 0>
             decltype(auto) operator()(R &&r, T f) const {
-                return Derived::operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
+                return Derived().operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
                                            std::end(r), std::move(f));
             }
         };
