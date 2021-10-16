@@ -15,7 +15,7 @@ namespace futures {
     /// \brief Check if a future is ready
     template <typename Future, std::enable_if_t<is_future_v<Future>, int> = 0> bool is_ready(Future &&f) {
         assert(f.valid() && "Undefined behaviour. Checking if an invalid future is ready.");
-        return f.template wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+        return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
     }
 
     /// \brief Make a placeholder std::future object that is ready

@@ -788,7 +788,7 @@ namespace futures {
                 if (not valid()) {
                     throw std::future_error(std::future_errc::no_state);
                 }
-                return shared_base::future_->template wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+                return shared_base::future_->wait_for(std::chrono::seconds(0)) == std::future_status::ready;
             }
 
             /// \brief Tell this future not to join at destruction
