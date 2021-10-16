@@ -585,7 +585,7 @@ namespace futures {
         /// All this behavior is encapsulated in the async function.
         template <class T, class Shared, class LazyContinuable, class Stoppable>
         class
-#ifdef __clang__
+#if defined(__clang__) && !defined(__apple_build_version__)
             [[clang::preferred_name(jfuture<T>), clang::preferred_name(cfuture<T>), clang::preferred_name(jcfuture<T>),
               clang::preferred_name(shared_jfuture<T>), clang::preferred_name(shared_cfuture<T>),
               clang::preferred_name(shared_jcfuture<T>)]]
