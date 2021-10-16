@@ -124,8 +124,8 @@ namespace futures {
             constexpr static bool after_has_stop_token = continuation_expects_stop_token || inherit_stop_token;
             using decay_function = std::decay_t<Function>;
             using argtuple = std::conditional_t<continuation_expects_stop_token, std::tuple<stop_token>, std::tuple<>>;
-            using continuation_result = continuation_result<decay_function, Future, argtuple>;
-            using result_value_type = type_member_or_void_t<continuation_result>;
+            using this_continuation_result = continuation_result<decay_function, Future, argtuple>;
+            using result_value_type = type_member_or_void_t<this_continuation_result>;
 
           public:
             using type =
@@ -134,6 +134,16 @@ namespace futures {
 
         template <typename Function, typename Future>
         using then_result_of_t = typename then_result_of<Function, Future>::type;
+
+        /// Fwd-declaration internal_then with default template argument
+        template <typename TExecutor, typename TFunction, class TFuture,
+                  std::enable_if_t<is_executor_then_continuation_v<TExecutor, TFunction, TFuture>, int> = 0>
+        then_result_of_t<TFunction, TFuture> internal_then(const TExecutor &ex, TFuture &&before,
+                                                           TFunction &&after);
+
+        template <typename ScheduleMethod, typename Executor, typename Function,
+                  std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function>, int> = 0>
+        async_future_result_of<Function> internal_launch_async(const Executor &ex, Function &&f);
 
         /// \class Enable a future class a whose future is shared
         /// Shared futures can move copied and their state can be retrieved more than once
