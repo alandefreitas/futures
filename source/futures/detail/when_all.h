@@ -211,6 +211,7 @@ namespace futures {
             } else {
                 tuple_for_each(v, f_request_stop);
             }
+            return any_request;
         }
 
       private:
