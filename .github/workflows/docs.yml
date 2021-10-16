@@ -1,0 +1,41 @@
+name: Publish Docs
+
+on: push
+
+jobs:
+  generateDOC:
+    name: Publish Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install doxygen
+        run: sudo apt-get install doxygen
+      - name: Generate doxygen XML
+        run: doxygen
+        working-directory: ./docs
+      - name: Download doxybook2
+        uses: carlosperate/download-file-action@v1.0.3
+        id: download-mdsplit
+        with:
+          file-url: 'https://github.com/matusnovak/doxybook2/releases/download/v1.4.0/doxybook2-linux-amd64-v1.4.0.zip'
+          file-name: 'doxybook2.zip'
+          location: './docs'
+      - name: Unzip doxybook2
+        run: |
+          unzip doxybook2.zip
+          rm -f doxybook2.zip
+          sudo chmod +x ./bin/doxybook2
+          mkdir reference
+          ls
+        working-directory: ./docs
+      - name: Generate Doxybook
+        run: ./bin/doxybook2 --input ./xml --output reference --config .doxybook/config.json
+        working-directory: ./docs
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install Mkdocs Material
+        run: pip install mkdocs-material
+      - name: Deploy mkdocs to gh-pages branch
+        run: mkdocs gh-deploy --force
