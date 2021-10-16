@@ -88,7 +88,7 @@ int main() {
     int c = futures::reduce(v, 0);
     std::cout << "Sum: " << c << std::endl;
 
-    // The launch policy can be replaced with a asio custom executor
+    // The launch policy can be replaced with an asio custom executor
     asio::thread_pool custom_pool2(4);
     asio::thread_pool::executor_type ex2 = custom_pool2.executor();
     futures::for_each(ex2, v.begin(), v.begin() + 10, [](int x) {
