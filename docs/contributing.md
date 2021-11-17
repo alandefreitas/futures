@@ -25,3 +25,5 @@ The only thing we ask you is to make sure your contribution is not destructive. 
 * "I'm creating this high-cost promise that we'll support ________ forever" but I'm not sticking around to keep that promise
 
 In doubt, please open a [discussion](https://github.com/alandefreitas/futures/discussions) first
+
+--8<-- "docs/references.md"

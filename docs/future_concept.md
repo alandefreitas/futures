@@ -45,16 +45,5 @@ Any custom type with the requirements of [is_future] can interoperate with other
 [std::stop_token]: https://en.cppreference.com/w/cpp/thread/stop_token
 [std::jthread]: https://en.cppreference.com/w/cpp/thread/jthread
 
-[jfuture]: /futures/reference/Namespaces/namespacefutures/#using-jfuture
-[shared_jfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_jfuture
-[cfuture]: /futures/reference/Namespaces/namespacefutures/#using-cfuture
-[shared_cfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_cfuture
-[jcfuture]: /futures/reference/Namespaces/namespacefutures/#using-jcfuture
-[shared_jcfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_jcfuture
-[when_all_future]: /futures/reference/Classes/classfutures_1_1when__all__future/
-[when_any_future]: /futures/reference/Classes/classfutures_1_1when__any__future/
-[when_all]: /futures/reference/Namespaces/namespacefutures/#function-when_all
-[when_any]: /futures/reference/Namespaces/namespacefutures/#function-when_any
 
-[stop_source]: /futures/reference/Classes/classfutures_1_1stop__source/
-[stop_token]: /futures/reference/Classes/classfutures_1_1stop__token/
+--8<-- "docs/references.md"

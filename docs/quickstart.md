@@ -150,3 +150,6 @@ The following example highlights what is possible with `futures`:
 ```cpp
 --8<-- "examples/quickstart.cpp"
 ```
+
+
+--8<-- "docs/references.md"
