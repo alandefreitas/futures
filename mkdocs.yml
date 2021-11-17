@@ -7,14 +7,18 @@ site_description: "Futures: C++ Task Programming with ASIO executors"
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
-  - Future types: future_concept.md
-  - Launching tasks: launching.md
-  - Continuations: continuations.md
-  - Conjunctions: conjunctions.md
-  - Disjunctions: disjunctions.md
-  - Stoppable futures: stoppable_futures.md
-  - Shared futures: shared_futures.md
+  - Motivation: motivation.md
+  - Future types:
+    - Concepts: future_concept.md
+    - Launching tasks: launching.md
+    - Stoppable futures: stoppable_futures.md
+    - Shared futures: shared_futures.md
+  - Future adaptors:
+    - Continuations: continuations.md
+    - Conjunctions: conjunctions.md
+    - Disjunctions: disjunctions.md
   - Parallel Algorithms: parallel_algorithms.md
+  # doxygen && mkdir reference && doxybook2 --input ./xml --output ./reference --config ./.doxybook/config.json
   - API Reference: reference/Namespaces/namespacefutures.md
   - Contributing: contributing.md
   - Acknowledgments: acknowledgments.md
@@ -59,3 +63,4 @@ extra_javascript:
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://media.ethicalads.io/media/client/ethicalads.min.js
+  - javascripts/extra.js
