@@ -33,12 +33,4 @@ For instance, these are some concrete future classes defined in this library and
 
 Any custom type with the requirements of [is_future] can interoperate with other future type. These classes might represent any process for which a result will only be available in the future, such as child processes and network requests with third-party libraries (such as CURL).
 
-## Related work
-
-[N3747 - A Universal Model for Asynchronous Operations](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf) (Christopher Kohlhoff, 2013) discusses some extensions proposed for [std::future] (such as N3634 and N3650).  
-
-- N3747: [Futures is dead](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf)
-  - Nice easy to understand abstraction, but doesn't scale well
-
-
 --8<-- "docs/references.md"
