@@ -5,7 +5,7 @@
 * Academic collaboration is more than welcome. It'd be great to see this library help people write papers.
 * If contributing with code, please leave all warnings ON (`-DFUTURES_BUILD_WITH_PEDANTIC_WARNINGS=ON`), use [cppcheck](http://cppcheck.sourceforge.net/), and [clang-format](https://clang.llvm.org/docs/ClangFormat.html).
 
-# Ideas and Roadmap
+# Ideas
 
 Feel free to contribute new features to this library. For complex features and changes, consider [getting feedback](https://github.com/alandefreitas/futures/discussions/new) from the community first. Contributing to an existing code base with its conventions might seem obscure at first but please don't let that discourage you from sharing your ideas.
 
@@ -25,5 +25,19 @@ The only thing we ask you is to make sure your contribution is not destructive. 
 * "I'm creating this high-cost promise that we'll support ________ forever" but I'm not sticking around to keep that promise
 
 In doubt, please open a [discussion](https://github.com/alandefreitas/futures/discussions) first
+
+# Roadmap
+
+- Easier Integration
+- Stop reusing std::future for shared state
+- Create an ASIO Completion token
+- Future types
+- Features for basic_future
+- Features for launching futures
+- Continuation features
+- Future adaptors
+- Algorithms
+- Task graphs
+
 
 --8<-- "docs/references.md"
