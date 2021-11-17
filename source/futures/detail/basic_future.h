@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/21/21.
 //
 
-#ifndef CPP_MANIFEST_BASIC_FUTURE_H
-#define CPP_MANIFEST_BASIC_FUTURE_H
+#ifndef FUTURES_BASIC_FUTURE_H
+#define FUTURES_BASIC_FUTURE_H
 
 #include <functional>
 #include <shared_mutex>
@@ -873,4 +873,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_BASIC_FUTURE_H
+#endif // FUTURES_BASIC_FUTURE_H

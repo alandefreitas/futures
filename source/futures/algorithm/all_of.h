@@ -3,8 +3,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_ALL_OF_H
-#define CPP_MANIFEST_ALL_OF_H
+#ifndef FUTURES_ALL_OF_H
+#define FUTURES_ALL_OF_H
 
 #include <execution>
 #include <variant>
@@ -68,4 +68,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_ALL_OF_H
+#endif // FUTURES_ALL_OF_H

@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/20/21.
 //
 
-#ifndef CPP_MANIFEST_WHEN_ANY_RESULT_H
-#define CPP_MANIFEST_WHEN_ANY_RESULT_H
+#ifndef FUTURES_WHEN_ANY_RESULT_H
+#define FUTURES_WHEN_ANY_RESULT_H
 
 namespace futures {
     /// \brief Result type for when_any_future objects
@@ -16,4 +16,4 @@ namespace futures {
     };
 }
 
-#endif // CPP_MANIFEST_WHEN_ANY_RESULT_H
+#endif // FUTURES_WHEN_ANY_RESULT_H

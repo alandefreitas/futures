@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_COUNT_H
-#define CPP_MANIFEST_COUNT_H
+#ifndef FUTURES_COUNT_H
+#define FUTURES_COUNT_H
 
 #include <execution>
 #include <variant>
@@ -63,4 +63,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_COUNT_H
+#endif // FUTURES_COUNT_H

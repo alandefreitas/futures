@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/21/21.
 //
 
-#ifndef CPP_MANIFEST_STOP_TOKEN_H
-#define CPP_MANIFEST_STOP_TOKEN_H
+#ifndef FUTURES_STOP_TOKEN_H
+#define FUTURES_STOP_TOKEN_H
 
 /// \file This header contains is a slightly adapted version of std::stop_token for futures rather than threads
 /// \author This is slightly adapted from Baker Josuttis' reference implementation for C++20
@@ -508,4 +508,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_STOP_TOKEN_H
+#endif // FUTURES_STOP_TOKEN_H

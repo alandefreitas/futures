@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_IS_EXECUTOR_THEN_CONTINUATION_H
-#define CPP_MANIFEST_IS_EXECUTOR_THEN_CONTINUATION_H
+#ifndef FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H
+#define FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H
 
 #ifdef _WIN32
 #include <SDKDDKVer.h>
@@ -44,4 +44,4 @@ namespace futures::detail {
     constexpr bool is_continuation_non_executor_v = is_continuation_non_executor<Function, Future>::value;
 } // namespace futures::detail
 
-#endif // CPP_MANIFEST_IS_EXECUTOR_THEN_CONTINUATION_H
+#endif // FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H

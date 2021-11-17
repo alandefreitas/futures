@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_IS_CALLABLE_H
-#define CPP_MANIFEST_IS_CALLABLE_H
+#ifndef FUTURES_IS_CALLABLE_H
+#define FUTURES_IS_CALLABLE_H
 
 namespace futures {
     /// Check if something is callable, regardless of the arguments
@@ -32,4 +32,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_IS_CALLABLE_H
+#endif // FUTURES_IS_CALLABLE_H

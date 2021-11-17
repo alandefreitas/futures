@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_WHEN_ANY_H
-#define CPP_MANIFEST_WHEN_ANY_H
+#ifndef FUTURES_WHEN_ANY_H
+#define FUTURES_WHEN_ANY_H
 
 /// \file Implement the when_any functionality for futures and executors
 /// The same rationale as when_all applies here
@@ -1153,4 +1153,4 @@ namespace futures {
     }
 
 } // namespace futures
-#endif // CPP_MANIFEST_WHEN_ANY_H
+#endif // FUTURES_WHEN_ANY_H

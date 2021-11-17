@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_IS_REFERENCE_WRAPPER_H
-#define CPP_MANIFEST_IS_REFERENCE_WRAPPER_H
+#ifndef FUTURES_IS_REFERENCE_WRAPPER_H
+#define FUTURES_IS_REFERENCE_WRAPPER_H
 
 #include <type_traits>
 
@@ -16,4 +16,4 @@ namespace futures {
     template <class T> constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
 } // namespace futures
 
-#endif // CPP_MANIFEST_IS_REFERENCE_WRAPPER_H
+#endif // FUTURES_IS_REFERENCE_WRAPPER_H

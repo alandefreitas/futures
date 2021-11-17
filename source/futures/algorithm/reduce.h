@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_REDUCE_H
-#define CPP_MANIFEST_REDUCE_H
+#ifndef FUTURES_REDUCE_H
+#define FUTURES_REDUCE_H
 
 #include <execution>
 #include <variant>
@@ -262,4 +262,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_REDUCE_H
+#endif // FUTURES_REDUCE_H

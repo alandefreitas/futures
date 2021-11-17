@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/17/21.
 //
 
-#ifndef CPP_MANIFEST_DEFAULT_EXECUTOR_H
-#define CPP_MANIFEST_DEFAULT_EXECUTOR_H
+#ifndef FUTURES_DEFAULT_EXECUTOR_H
+#define FUTURES_DEFAULT_EXECUTOR_H
 
 #ifdef _WIN32
 #include <SDKDDKVer.h>
@@ -78,4 +78,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_DEFAULT_EXECUTOR_H
+#endif // FUTURES_DEFAULT_EXECUTOR_H

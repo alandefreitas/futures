@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/20/21.
 //
 
-#ifndef CPP_MANIFEST_ALGORITHM_TRAITS_H
-#define CPP_MANIFEST_ALGORITHM_TRAITS_H
+#ifndef FUTURES_ALGORITHM_TRAITS_H
+#define FUTURES_ALGORITHM_TRAITS_H
 
 /// \file Identify traits for algorithms, like we do for other types
 ///
@@ -291,4 +291,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_ALGORITHM_TRAITS_H
+#endif // FUTURES_ALGORITHM_TRAITS_H

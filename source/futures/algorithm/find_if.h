@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_FIND_IF_H
-#define CPP_MANIFEST_FIND_IF_H
+#ifndef FUTURES_FIND_IF_H
+#define FUTURES_FIND_IF_H
 
 #include <execution>
 #include <variant>
@@ -72,4 +72,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_FIND_IF_H
+#endif // FUTURES_FIND_IF_H

@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_IS_EXECUTOR_THEN_FUNCTION_H
-#define CPP_MANIFEST_IS_EXECUTOR_THEN_FUNCTION_H
+#ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
+#define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
 #ifdef _WIN32
 #include <SDKDDKVer.h>
@@ -64,4 +64,4 @@ namespace futures::detail {
     constexpr bool is_async_input_non_executor_v = is_async_input_non_executor<F, Args...>::value;
 } // namespace futures::detail
 
-#endif // CPP_MANIFEST_IS_EXECUTOR_THEN_FUNCTION_H
+#endif // FUTURES_IS_EXECUTOR_THEN_FUNCTION_H

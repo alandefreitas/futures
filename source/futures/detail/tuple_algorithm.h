@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_TUPLE_ALGORITHM_H
-#define CPP_MANIFEST_TUPLE_ALGORITHM_H
+#ifndef FUTURES_TUPLE_ALGORITHM_H
+#define FUTURES_TUPLE_ALGORITHM_H
 
 #include <small/detail/exception/throw.h>
 #include <tuple>
@@ -236,4 +236,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_TUPLE_ALGORITHM_H
+#endif // FUTURES_TUPLE_ALGORITHM_H

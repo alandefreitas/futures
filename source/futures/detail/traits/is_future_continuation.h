@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_IS_FUTURE_CONTINUATION_H
-#define CPP_MANIFEST_IS_FUTURE_CONTINUATION_H
+#ifndef FUTURES_IS_FUTURE_CONTINUATION_H
+#define FUTURES_IS_FUTURE_CONTINUATION_H
 
 #include <range/v3/range/concepts.hpp>
 #include <small/vector.h>
@@ -585,4 +585,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_IS_FUTURE_CONTINUATION_H
+#endif // FUTURES_IS_FUTURE_CONTINUATION_H

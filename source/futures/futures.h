@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/1/21.
 //
 
-#ifndef CPP_MANIFEST_FUTURES_H
-#define CPP_MANIFEST_FUTURES_H
+#ifndef FUTURES_FUTURES_H
+#define FUTURES_FUTURES_H
 
 /// \file Functions to work with future
 ///
@@ -391,4 +391,4 @@ namespace futures {
     }
 
 } // namespace futures
-#endif // CPP_MANIFEST_FUTURES_H
+#endif // FUTURES_FUTURES_H

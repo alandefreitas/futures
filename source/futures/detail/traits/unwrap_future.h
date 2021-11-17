@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_UNWRAP_FUTURE_H
-#define CPP_MANIFEST_UNWRAP_FUTURE_H
+#ifndef FUTURES_UNWRAP_FUTURE_H
+#define FUTURES_UNWRAP_FUTURE_H
 
 #include "is_future.h"
 #include "has_get.h"
@@ -34,4 +34,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_UNWRAP_FUTURE_H
+#endif // FUTURES_UNWRAP_FUTURE_H

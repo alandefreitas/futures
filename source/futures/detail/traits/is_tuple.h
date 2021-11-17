@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/19/21.
 //
 
-#ifndef CPP_MANIFEST_IS_TUPLE_H
-#define CPP_MANIFEST_IS_TUPLE_H
+#ifndef FUTURES_IS_TUPLE_H
+#define FUTURES_IS_TUPLE_H
 
 #include <type_traits>
 #include <tuple>
@@ -21,4 +21,4 @@ namespace futures {
     template <class T> constexpr bool is_tuple_v = is_tuple<T>::value;
 } // namespace futures
 
-#endif // CPP_MANIFEST_IS_TUPLE_H
+#endif // FUTURES_IS_TUPLE_H

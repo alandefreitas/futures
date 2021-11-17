@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/19/21.
 //
 
-#ifndef CPP_MANIFEST_TO_FUTURE_H
-#define CPP_MANIFEST_TO_FUTURE_H
+#ifndef FUTURES_TO_FUTURE_H
+#define FUTURES_TO_FUTURE_H
 
 namespace futures::detail {
     /// \brief Trait to convert input type to its proper future type
@@ -38,4 +38,4 @@ namespace futures::detail {
     template <class T> using to_future_t = typename to_future<T>::type;
 }
 
-#endif // CPP_MANIFEST_TO_FUTURE_H
+#endif // FUTURES_TO_FUTURE_H

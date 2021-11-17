@@ -1,5 +1,5 @@
-#ifndef CPP_MANIFEST_PARTITIONER_H
-#define CPP_MANIFEST_PARTITIONER_H
+#ifndef FUTURES_PARTITIONER_H
+#define FUTURES_PARTITIONER_H
 
 #include <range/v3/all.hpp>
 #include "../detail/traits/has_get.h"
@@ -115,4 +115,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif
+#endif // FUTURES_PARTITIONER_H

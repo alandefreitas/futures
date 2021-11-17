@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_IS_FUTURE_H
-#define CPP_MANIFEST_IS_FUTURE_H
+#ifndef FUTURES_IS_FUTURE_H
+#define FUTURES_IS_FUTURE_H
 
 #include <type_traits>
 #include <future>
@@ -93,4 +93,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_IS_FUTURE_H
+#endif // FUTURES_IS_FUTURE_H

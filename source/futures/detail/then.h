@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/18/21.
 //
 
-#ifndef CPP_MANIFEST_THEN_H
-#define CPP_MANIFEST_THEN_H
+#ifndef FUTURES_THEN_H
+#define FUTURES_THEN_H
 
 #include <future>
 
@@ -299,4 +299,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_THEN_H
+#endif // FUTURES_THEN_H

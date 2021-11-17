@@ -2,8 +2,8 @@
 // Created by Alan Freitas on 8/16/21.
 //
 
-#ifndef CPP_MANIFEST_FUTURE_RETURN_H
-#define CPP_MANIFEST_FUTURE_RETURN_H
+#ifndef FUTURES_FUTURE_RETURN_H
+#define FUTURES_FUTURE_RETURN_H
 
 #include "is_reference_wrapper.h"
 #include <type_traits>
@@ -18,4 +18,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // CPP_MANIFEST_FUTURE_RETURN_H
+#endif // FUTURES_FUTURE_RETURN_H
