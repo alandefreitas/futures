@@ -30,7 +30,37 @@ C++11 [proposed](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3170.h
     std::cout << "Result is: " << f.get() << '\n'; // 8
     ```
 
-One satisfactory thing about the combination of [std::future], [std::async], and [std::future::wait] is it makes C++ asynchronous programming somewhat similar to that of other languages, such as [Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Choosing_the_right_approach) promises. However, because [std::future] relies on synchronization of a shared state, this initial model is incomplete, hard to use, inefficient, and lacks the usual generality of C++ algorithms.
+One satisfactory thing about the combination of [std::future], [std::async], and [std::future::wait] is it makes C++ asynchronous programming somewhat similar and often even simpler to that of other programming languages, such as [Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Choosing_the_right_approach) futures and promises: 
+
+=== "C++ Futures and Promises"
+
+    ```cpp
+    std::future<int> f = std::async([]{ return 8; });
+    std::cout << "Result is: " << f.get() << '\n'; // 8
+    ```
+
+=== "JS Futures and Promises"
+
+    ```js
+    // std::future<int> f = std::async([]{ return 8; });
+    let f = new Promise(function(resolve, reject) { resolve(8) });
+    // std::cout << "Result is: " << f.get() << '\n'; // 8
+    f.then( function(value) { console.log('Result is: ' + value) } )
+    ```
+
+=== "JS Async / Await"
+
+    ```js
+    // std::future<int> f = std::async([]{ return 8; });
+    // `async` makes my_function `return Promise.resolve(8)`
+    async function my_function() { return 8 };
+    let f = my_function()
+    // std::cout << "Result is: " << f.get() << '\n'; // 8
+    let value = await f
+    console.log('Result is: ' + value)
+    ```
+
+However, because [std::future] relies on synchronization of a shared state, this initial model is incomplete, hard to use, inefficient, and lacks the usual generality of C++ algorithms.
 
 ## Previous work
 
@@ -426,9 +456,6 @@ sender_of<dynamic_buffer> auto async_read_array(auto handle) {
        });
 }
 ```
-
-- https://github.com/facebookexperimental/libunifex/blob/main/doc/concepts.md
-- https://github.com/facebookexperimental/libunifex/blob/main/doc/overview.md
 
 ## The futures library
 
