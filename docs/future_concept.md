@@ -1,15 +1,11 @@
-# Futures
 
-## Motivation 
+# Futures Concepts
 
-A number of proposals have been presented to extend the model defined by the standard [std::future]: future continuations, cancellation tokens, association with executors, and algorithms. However, because a "future" object is any object representing a handle to a future value, it is highly unlikely that a single concrete future definition will be appropriate for most applications. 
-
-In this context, this library implements future types as a *concept* rather than a concrete object. Algorithms work with any given class that has the requirements of the future concept, as defined by the trait [is_future]. The [std::future] class also has the requirements of this concept, so it can interoperate with any of the new algorithms and future types.
+This library implements a number of future types as a *concept* rather than a single concrete object. Algorithms work with any given class that has the requirements of the future concept, as defined by the trait [is_future]. The [std::future] class also has the requirements of this concept, so it can interoperate with any of the new algorithms and future types.
 
 ```cpp
 --8<-- "examples/future_types/interoperability.cpp"
 ```
- 
 
 ## Some future types
 
@@ -37,13 +33,12 @@ For instance, these are some concrete future classes defined in this library and
 
 Any custom type with the requirements of [is_future] can interoperate with other future type. These classes might represent any process for which a result will only be available in the future, such as child processes and network requests with third-party libraries (such as CURL).
 
+## Related work
 
-[is_future]: /futures/reference/Classes/structfutures_1_1is__future/
-[std::future]: https://en.cppreference.com/w/cpp/thread/future
-[std::shared_future]: https://en.cppreference.com/w/cpp/thread/shared_future
-[std::stop_source]: https://en.cppreference.com/w/cpp/thread/stop_source
-[std::stop_token]: https://en.cppreference.com/w/cpp/thread/stop_token
-[std::jthread]: https://en.cppreference.com/w/cpp/thread/jthread
+[N3747 - A Universal Model for Asynchronous Operations](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf) (Christopher Kohlhoff, 2013) discusses some extensions proposed for [std::future] (such as N3634 and N3650).  
+
+- N3747: [Futures is dead](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf)
+  - Nice easy to understand abstraction, but doesn't scale well
 
 
 --8<-- "docs/references.md"
