@@ -8,7 +8,8 @@ int main() {
     // Tuple disjunction
     cfuture<int> f1 = async([]() { return 2; });
     cfuture<double> f2 = async([]() { return 3.5; });
-    cfuture<std::string> f3 = async([]() -> std::string { return "name"; });
+    cfuture<std::string> f3 =
+        async([]() -> std::string { return "name"; });
     auto f = when_any(f1, f2, f3); // or f1 || f2 || f3
 
     // Get result

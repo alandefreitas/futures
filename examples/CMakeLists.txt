@@ -1,41 +1,63 @@
-add_executable(quickstart-example quickstart.cpp)
-target_link_libraries(quickstart-example futures)
+add_executable(quickstart-launching-example quickstart/launching.cpp)
+target_link_libraries(quickstart-launching-example futures)
 
-add_executable(interoperability-example interoperability.cpp)
-target_link_libraries(interoperability-example futures)
+add_executable(quickstart-continuations-example quickstart/continuations.cpp)
+target_link_libraries(quickstart-continuations-example futures)
 
-add_executable(launching-example launching.cpp)
-target_link_libraries(launching-example futures)
+add_executable(quickstart-conjunctions-example quickstart/conjunctions.cpp)
+target_link_libraries(quickstart-conjunctions-example futures)
 
-add_executable(continuations-example continuations.cpp)
+add_executable(quickstart-disjunctions-example quickstart/disjunctions.cpp)
+target_link_libraries(quickstart-disjunctions-example futures)
+
+add_executable(quickstart-algorithms-example quickstart/algorithms.cpp)
+target_link_libraries(quickstart-algorithms-example futures)
+
+add_executable(polling_continuation-example motivation/polling_continuation.cpp)
+target_link_libraries(polling_continuation-example futures)
+
+add_executable(continuations-example adaptors/continuations.cpp)
 target_link_libraries(continuations-example futures)
 
-add_executable(continuations_unwrap-example continuations_unwrap.cpp)
+add_executable(continuations_unwrap-example adaptors/continuations_unwrap.cpp)
 target_link_libraries(continuations_unwrap-example futures)
 
-add_executable(conjunctions-example conjunctions.cpp)
+add_executable(conjunctions-example adaptors/conjunctions.cpp)
 target_link_libraries(conjunctions-example futures)
 
-add_executable(conjunctions_unwrap-example conjunctions_unwrap.cpp)
+add_executable(conjunctions_unwrap-example adaptors/conjunctions_unwrap.cpp)
 target_link_libraries(conjunctions_unwrap-example futures)
 
-add_executable(disjunctions-example disjunctions.cpp)
+add_executable(disjunctions-example adaptors/disjunctions.cpp)
 target_link_libraries(disjunctions-example futures)
 
-add_executable(disjunctions_unwrap-example disjunctions_unwrap.cpp)
+add_executable(disjunctions_unwrap-example adaptors/disjunctions_unwrap.cpp)
 target_link_libraries(disjunctions_unwrap-example futures)
 
-add_executable(stoppable-example stoppable.cpp)
+add_executable(interoperability-example future_types/interoperability.cpp)
+target_link_libraries(interoperability-example futures)
+
+add_executable(launching-example future_types/launching.cpp)
+target_link_libraries(launching-example futures)
+
+add_executable(stoppable-example future_types/stoppable.cpp)
 target_link_libraries(stoppable-example futures)
 
-add_executable(shared-example shared.cpp)
+add_executable(shared-example future_types/shared.cpp)
 target_link_libraries(shared-example futures)
 
-add_executable(algorithms-example algorithms.cpp)
+add_executable(algorithms-example algorithm/algorithms.cpp)
 target_link_libraries(algorithms-example futures)
 
+add_executable(echo_server-example networking/echo_server.cpp)
+target_link_libraries(echo_server-example futures)
+
 if (FUTURES_BUILD_TESTS)
-    add_test(NAME quickstart-example-as-test COMMAND quickstart-example)
+    add_test(NAME quickstart-launching-example-as-test COMMAND launching-example)
+    add_test(NAME quickstart-continuations-example-as-test COMMAND continuations-example)
+    add_test(NAME quickstart-conjunctions-example-as-test COMMAND conjunctions-example)
+    add_test(NAME quickstart-disjunctions-example-as-test COMMAND disjunctions-example)
+    add_test(NAME quickstart-algorithms-example-as-test COMMAND algorithms-example)
     add_test(NAME interoperability-example-as-test COMMAND interoperability-example)
     add_test(NAME launching-example-as-test COMMAND launching-example)
     add_test(NAME continuations-example-as-test COMMAND continuations-example)
@@ -47,4 +69,5 @@ if (FUTURES_BUILD_TESTS)
     add_test(NAME stoppable-example-as-test COMMAND stoppable-example)
     add_test(NAME shared-example-as-test COMMAND shared-example)
     add_test(NAME algorithms-example-as-test COMMAND algorithms-example)
+    # add_test(NAME echo_server-example-as-test COMMAND echo_server-example)
 endif ()

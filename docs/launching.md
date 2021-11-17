@@ -8,7 +8,7 @@ Like [std::async], [futures::async] is used to launch new tasks. However, [futur
 - If the first task parameter is a [stop_source], it returns a [jcfuture] 
 
 ```cpp
---8<-- "examples/launching.cpp"
+--8<-- "examples/future_types/launching.cpp"
 ```
  
 ## Executors

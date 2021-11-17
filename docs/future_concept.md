@@ -7,7 +7,7 @@ A number of proposals have been presented to extend the model defined by the sta
 In this context, this library implements future types as a *concept* rather than a concrete object. Algorithms work with any given class that has the requirements of the future concept, as defined by the trait [is_future]. The [std::future] class also has the requirements of this concept, so it can interoperate with any of the new algorithms and future types.
 
 ```cpp
---8<-- "examples/interoperability.cpp"
+--8<-- "examples/future_types/interoperability.cpp"
 ```
  
 

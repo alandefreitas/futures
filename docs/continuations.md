@@ -3,7 +3,7 @@
 Futures can have continuations, which allows us to create tasks chains. The function [then] is used to create a continuation to a future, which is itself another future.
 
 ```cpp
---8<-- "examples/continuations.cpp"
+--8<-- "examples/adaptors/continuations.cpp"
 ```
 
 !!! note "Continuation Function"
@@ -21,7 +21,7 @@ Because continuations involve accessing the future object for the previous tasks
 This following example include the basic wrapping functions.
 
 ```cpp
---8<-- "examples/continuations.cpp"
+--8<-- "examples/adaptors/continuations_unwrap.cpp"
 ```
 
 ## Continuation stop

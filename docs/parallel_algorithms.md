@@ -3,7 +3,7 @@
 The header [`algorithm.h`](reference/Files/algorithm_8h.md) includes implementations of common STL algorithms using these primitives. These algorithms also accept ranges as parameters and, unless a policy is explicitly stated, all algorithms are parallel by default.
 
 ```cpp
---8<-- "examples/algorithms.cpp"
+--8<-- "examples/algorithm/algorithms.cpp"
 ```
 
 These algorithms give us access to parallel algorithms that rely only on executors, instead of more complex libraries, such as TBB. Like other parallel algorithms defined in this library, these algorithms can also accept executors instead of policies as parameters.

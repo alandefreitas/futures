@@ -143,13 +143,37 @@
         You are also responsible for downloading and linking transitive dependencies (asio, ranges, and small), something the CMake script will attempt to do for you.
 
 
-## First example
+## Hello world
 
-The following example highlights what is possible with `futures`:
+=== "Launching futures"
 
-```cpp
---8<-- "examples/quickstart.cpp"
-```
+    ```cpp
+    --8<-- "examples/quickstart/launching.cpp"
+    ```
+
+=== "Continuations"
+
+    ```cpp
+    --8<-- "examples/quickstart/continuations.cpp"
+    ```
+
+=== "Conjunctions"
+
+    ```cpp
+    --8<-- "examples/quickstart/conjunctions.cpp"
+    ```
+
+=== "Disjunctions"
+
+    ```cpp
+    --8<-- "examples/quickstart/disjunctions.cpp"
+    ```
+
+=== "Algorithms"
+
+    ```cpp
+    --8<-- "examples/quickstart/algorithms.cpp"
+    ```
 
 
 --8<-- "docs/references.md"
