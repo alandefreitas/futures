@@ -10,6 +10,12 @@ This library attempts to [solve this problem](#the-futures-library) by defining 
  
 The concepts allow reusable algorithms for all future types, an alternative to [std::async] based on executors, various efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel variants of the STL algorithms.
 
+Our motivation is organized as follows:
+
+- [An introduction](#standard-futures) to the model of futures and promises in C++11 
+- [An overview](#previous-work) of all related work presented since then 
+- [A brief description](#the-futures-library) of how this library relates this previous work 
+
 ## Standard Futures
 
 C++11 [proposed](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3170.html) [std::future] as its intended model for asynchronicity. In the common use case, the user would call [std::async] to execute a task is parallel. This [std::async] function would then return a [std::future] which allows us to query the status of this asynchronous operation:
