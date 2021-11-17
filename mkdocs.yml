@@ -27,7 +27,7 @@ theme:
   name: material
   custom_dir: docs/overrides
   palette:
-    scheme: preference
+    scheme: futures
   icon:
     repo: fontawesome/brands/git-alt
     logo: fontawesome/solid/code
@@ -64,3 +64,6 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://media.ethicalads.io/media/client/ethicalads.min.js
   - javascripts/extra.js
+
+extra_css:
+  - stylesheets/extra.css
