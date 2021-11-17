@@ -9,5 +9,6 @@
   "indexRelatedPagesName": "index",
   "indexExamplesName": "index",
   "mainPageInRoot": true,
-  "mainPageName": "index"
+  "mainPageName": "index",
+  "foldersToGenerate": ["namespaces", "classes", "files"]
 }
