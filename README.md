@@ -2,7 +2,7 @@
 
 > C++ Task Programming with Asio Executors
 
-[![Futures](docs/img/futures_banner.svg)](https://alandefreitas.github.io/futures/)
+[![Futures](docs/img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 
 <br/>
 

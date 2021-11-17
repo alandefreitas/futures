@@ -8,7 +8,7 @@ has_toc: false
 
 > C++ Task Programming with Asio Executors
 
-[![Futures](img/futures_banner.svg)](https://alandefreitas.github.io/futures/)
+[![Futures](img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 
 <br/>
 
