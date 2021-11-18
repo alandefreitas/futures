@@ -216,52 +216,52 @@ version_requirement_message(range-v3 VERSION_FOUND ${range-v3_VERSION} VERSION_L
 # and the FindAsio.cmake script should look for these headers.
 
 # Set local hints, if any
-set(asio_VERSION_LOCK 1.19.2)
-set(asio_VERSION_REQUIREMENT ^1.19.2)
-set_local_module_hints(asio ${asio_VERSION_LOCK} ${asio_VERSION_REQUIREMENT})
+set(Asio_VERSION_LOCK 1.19.2)
+set(Asio_VERSION_REQUIREMENT ^1.19.2)
+set_local_module_hints(Asio ${Asio_VERSION_LOCK} ${Asio_VERSION_REQUIREMENT})
 
 # CMake options and hints
-set(asio_ROOT_DIR ${asio_ROOT})
-set(asio_FIND_COMPONENTS)
+set(Asio_ROOT_DIR ${Asio_ROOT})
+set(Asio_FIND_COMPONENTS)
 
 # Look for lock version
-if (NOT asio_FOUND)
-    semver_split(${asio_VERSION_LOCK} asio_VERSION_LOCK)
-    find_package(Asio ${asio_VERSION_LOCK_CORE} COMPONENTS ${asio_FIND_COMPONENTS} QUIET)
+if (NOT Asio_FOUND)
+    semver_split(${Asio_VERSION_LOCK} Asio_VERSION_LOCK)
+    find_package(Asio ${Asio_VERSION_LOCK_CORE} COMPONENTS ${Asio_FIND_COMPONENTS} QUIET)
 endif ()
 
 # Look for any version that matches our requirements
-if (NOT asio_FOUND)
+if (NOT Asio_FOUND)
     find_package(Asio QUIET)
-    if (asio_FOUND AND asio_VERSION AND NOT DEFINED ENV{asio_ROOT})
-        semver_requirements_compatible(${asio_VERSION} ${asio_VERSION_REQUIREMENT} COMPONENTS ${asio_FIND_COMPONENTS} ok)
+    if (Asio_FOUND AND Asio_VERSION AND NOT DEFINED ENV{Asio_ROOT})
+        semver_requirements_compatible(${Asio_VERSION} ${Asio_VERSION_REQUIREMENT} COMPONENTS ${Asio_FIND_COMPONENTS} ok)
         if (NOT ok)
-            set(asio_FOUND FALSE)
+            set(Asio_FOUND FALSE)
         endif ()
     endif ()
 endif ()
 
-# Fetch asio if we couldn't find a valid version
-if (NOT asio_FOUND)
+# Fetch Asio if we couldn't find a valid version
+if (NOT Asio_FOUND)
     # Fallback to FetchContent and then find_package again
-    if (EXISTS ${asio_SOURCE_HINT})
+    if (EXISTS ${Asio_SOURCE_HINT})
         message("Sources for asio found...")
-        set(asio_SOURCE_DIR ${asio_SOURCE_HINT})
-        set(asio_BINARY_DIR ${asio_BINARY_HINT})
+        set(Asio_SOURCE_DIR ${Asio_SOURCE_HINT})
+        set(Asio_BINARY_DIR ${Asio_BINARY_HINT})
     else ()
         message("Downloading asio...")
-        FetchContent_Declare(asio
+        FetchContent_Declare(Asio
                 URL https://sourceforge.net/projects/asio/files/asio/1.19.2%20%28Development%29/asio-1.19.2.tar.bz2/download
                 SOURCE_DIR ${asio_SOURCE_HINT}
                 BINARY_DIR ${asio_BINARY_HINT}
                 )
 
         # Check if already populated
-        FetchContent_GetProperties(asio)
+        FetchContent_GetProperties(Asio)
 
-        if (NOT asio_POPULATED)
+        if (NOT Asio_POPULATED)
             # Download files
-            FetchContent_Populate(asio)
+            FetchContent_Populate(Asio)
         endif ()
     endif ()
 
@@ -269,22 +269,22 @@ if (NOT asio_FOUND)
     # No build step
     # Run install step: copying relevant header files
     message("Installing asio...")
-    if (NOT EXISTS ${asio_INSTALL_HINT})
-        file(MAKE_DIRECTORY ${asio_INSTALL_HINT})
+    if (NOT EXISTS ${Asio_INSTALL_HINT})
+        file(MAKE_DIRECTORY ${Asio_INSTALL_HINT})
     endif ()
-    file(INSTALL ${asio_SOURCE_HINT}/include DESTINATION ${asio_INSTALL_HINT})
+    file(INSTALL ${Asio_SOURCE_HINT}/include DESTINATION ${Asio_INSTALL_HINT})
 
     # Find package again
     # ASIO requires a custom FindAsio.cmake
     message("Finding asio...")
-    set(ENV{asio_ROOT} ${asio_INSTALL_HINT})
-    find_package(Asio COMPONENTS ${asio_FIND_COMPONENTS} REQUIRED)
+    set(ENV{Asio_ROOT} ${Asio_INSTALL_HINT})
+    find_package(Asio COMPONENTS ${Asio_FIND_COMPONENTS} REQUIRED)
 endif ()
-version_requirement_message(asio
-        VERSION_FOUND ${asio_VERSION}
-        VERSION_LOCK ${asio_VERSION_LOCK}
-        VERSION_REQUIREMENTS ${asio_VERSION_REQUIREMENT}
-        PREFIX_HINT ${asio_PREFIX_HINT}
+version_requirement_message(Asio
+        VERSION_FOUND ${Asio_VERSION}
+        VERSION_LOCK ${Asio_VERSION_LOCK}
+        VERSION_REQUIREMENTS ${Asio_VERSION_REQUIREMENT}
+        PREFIX_HINT ${Asio_PREFIX_HINT}
         )
 
 #######################################################

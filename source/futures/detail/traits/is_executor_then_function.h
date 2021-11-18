@@ -5,11 +5,7 @@
 #ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 #define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
-#ifdef _WIN32
-#include <SDKDDKVer.h>
-#endif
-
-#include <asio.hpp>
+#include <futures/detail/asio_include.h>
 
 namespace futures {
     /** \addtogroup Futures

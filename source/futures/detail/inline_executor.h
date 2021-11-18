@@ -5,11 +5,7 @@
 #ifndef FUTURES_INLINE_EXECUTOR_H
 #define FUTURES_INLINE_EXECUTOR_H
 
-#ifdef _WIN32
-#include <SDKDDKVer.h>
-#endif
-
-#include <asio.hpp>
+ #include <futures/detail/asio_include.h>
 
 namespace futures {
     /** \addtogroup Executors
@@ -102,7 +98,7 @@ namespace futures {
 
     /// \brief Make an new thread executor object
     inline_later_executor make_inline_later_executor();
-
+    /** @} */  // \addtogroup Executors
 } // namespace futures
 
 namespace asio {
@@ -202,8 +198,6 @@ namespace asio {
 #endif // !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
 
     } // namespace traits
-
-    /** @} */  // \addtogroup Executors
 } // namespace asio
 
 #endif // FUTURES_INLINE_EXECUTOR_H
