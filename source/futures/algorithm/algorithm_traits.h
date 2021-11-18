@@ -39,7 +39,7 @@ namespace futures {
      */
 
 
-    // section Execution policies
+    /// @name Execution policies
 
     /// Class representing a type for a sequenced_policy tag
     class sequenced_policy {};
@@ -53,7 +53,7 @@ namespace futures {
     /// Class representing a type for an unsequenced_policy tag
     class unsequenced_policy {};
 
-    /// \section Instances of the execution policy types
+    /// @name Instances of the execution policy types
 
     /// \brief Tag used in algorithms for a sequenced_policy
     inline constexpr sequenced_policy seq{};
