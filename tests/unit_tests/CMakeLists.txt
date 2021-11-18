@@ -19,7 +19,7 @@ macro(add_futures_test TEST_NAME)
     if (${NUM_EXTRA_ARGS} GREATER 0)
         set(LINK_LIBS ${ARGN})
     else ()
-        set(LINK_LIBS futures::futures)
+        set(LINK_LIBS futures::futures-compiled)
     endif ()
 
     # Check if these libraries really exist
@@ -53,6 +53,5 @@ macro(add_futures_test TEST_NAME)
 endmacro()
 
 # Main tests
-add_futures_test(futures futures::futures)
-
-add_futures_test(futures-algorithm futures::futures)
+add_futures_test(futures futures::futures-compiled)
+add_futures_test(futures-algorithm futures::futures-compiled)

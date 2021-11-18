@@ -5,11 +5,7 @@
 #ifndef FUTURES_DEFAULT_EXECUTOR_H
 #define FUTURES_DEFAULT_EXECUTOR_H
 
-#ifdef _WIN32
-#include <SDKDDKVer.h>
-#endif
-
-#include <asio.hpp>
+#include <futures/detail/asio_include.h>
 
 namespace futures {
     /** \addtogroup Executors
