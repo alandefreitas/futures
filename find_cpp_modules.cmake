@@ -216,9 +216,9 @@ version_requirement_message(range-v3 VERSION_FOUND ${range-v3_VERSION} VERSION_L
 # and the FindAsio.cmake script should look for these headers.
 
 # Set local hints, if any
-set(Asio_VERSION_LOCK 1.19.2)
-set(Asio_VERSION_REQUIREMENT ^1.19.2)
-set_local_module_hints(Asio ${Asio_VERSION_LOCK} ${Asio_VERSION_REQUIREMENT})
+set(Asio_VERSION_LOCK 1.20.0)
+set(Asio_VERSION_REQUIREMENT ^1.20.0)
+set_local_module_hints(asio ${Asio_VERSION_LOCK} ${Asio_VERSION_REQUIREMENT})
 
 # CMake options and hints
 set(Asio_ROOT_DIR ${Asio_ROOT})
@@ -246,14 +246,23 @@ if (NOT Asio_FOUND)
     # Fallback to FetchContent and then find_package again
     if (EXISTS ${Asio_SOURCE_HINT})
         message("Sources for asio found...")
-        set(Asio_SOURCE_DIR ${Asio_SOURCE_HINT})
-        set(Asio_BINARY_DIR ${Asio_BINARY_HINT})
-    else ()
+        file(GLOB SOURCE_DIR_GLOB ${Asio_SOURCE_HINT}/*)
+        list(LENGTH SOURCE_DIR_GLOB RES_LEN)
+        if (RES_LEN EQUAL 0)
+            message("asio source directory is empty...")
+            file(REMOVE ${Asio_SOURCE_HINT})
+        else()
+            set(Asio_SOURCE_DIR ${Asio_SOURCE_HINT})
+            set(Asio_BINARY_DIR ${Asio_BINARY_HINT})
+        endif()
+    endif()
+
+    if (NOT Asio_SOURCE_DIR)
         message("Downloading asio...")
         FetchContent_Declare(Asio
-                URL https://sourceforge.net/projects/asio/files/asio/1.19.2%20%28Development%29/asio-1.19.2.tar.bz2/download
-                SOURCE_DIR ${asio_SOURCE_HINT}
-                BINARY_DIR ${asio_BINARY_HINT}
+                URL https://sourceforge.net/projects/asio/files/asio/1.20.0%20%28Stable%29/asio-1.20.0.tar.bz2/download
+                SOURCE_DIR ${Asio_SOURCE_HINT}
+                BINARY_DIR ${Asio_BINARY_HINT}
                 )
 
         # Check if already populated
