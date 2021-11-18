@@ -28,6 +28,10 @@ namespace futures {
     /** \addtogroup Futures
      *  @{
      */
+    /** \addtogroup Cancellation
+     *  @{
+     */
+
 
     namespace detail {
         inline void spin_yield() noexcept {
@@ -510,6 +514,7 @@ namespace futures {
     /// Registers a callback function for an associated std::stop_token object
     template <typename Callback> stop_callback(stop_token, Callback) -> stop_callback<Callback>;
 
+    /** @} */  // \addtogroup Cancellation
     /** @} */  // \addtogroup Futures
 } // namespace futures
 

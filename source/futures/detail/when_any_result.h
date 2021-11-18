@@ -6,7 +6,7 @@
 #define FUTURES_WHEN_ANY_RESULT_H
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup Adaptors
      *  @{
      */
 
@@ -19,7 +19,7 @@ namespace futures {
         Sequence tasks;
     };
 
-    /** @} */
+    /** @} */ // Adaptors
 }
 
 #endif // FUTURES_WHEN_ANY_RESULT_H

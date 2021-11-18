@@ -20,6 +20,10 @@ namespace futures {
      *  @{
      */
 
+    /** \addtogroup future-types Future types
+     *  @{
+     */
+
     /// \section Forward declarations for base classes
     namespace detail {
         template <class T, class Shared, class LazyContinuable, class Stoppable> class basic_future;
@@ -875,6 +879,7 @@ namespace futures {
     template <class T, class S, class L, class Stoppable>
     struct is_stoppable<const detail::basic_future<T, S, L, Stoppable> &> : Stoppable {};
 
+    /** @} */  // \addtogroup future-types Future Types
     /** @} */  // \addtogroup Futures
 } // namespace futures
 
