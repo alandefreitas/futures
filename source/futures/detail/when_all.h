@@ -38,7 +38,7 @@
 #include "tuple_algorithm.h"
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup Adaptors
      *  @{
      */
 
@@ -482,7 +482,7 @@ namespace futures {
         }
     }
 
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup Adaptors
 } // namespace futures
 
 #endif // FUTURES_WHEN_ALL_H

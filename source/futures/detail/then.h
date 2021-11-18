@@ -17,7 +17,7 @@
 #include <version>
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup Adaptors
      *  @{
      */
 
@@ -301,7 +301,7 @@ namespace futures {
         return std::make_pair(std::cref(ex), std::ref(after));
     }
 
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup Adaptors
 } // namespace futures
 
 #endif // FUTURES_THEN_H
