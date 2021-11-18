@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref count function
     class count_fn : public detail::value_cmp_algorithm_fn<count_fn> {
       public:
@@ -61,6 +65,7 @@ namespace futures {
     /// \brief Returns the number of elements matching an element
     inline constexpr count_fn count;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_COUNT_H

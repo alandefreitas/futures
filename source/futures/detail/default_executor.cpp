@@ -1,15 +1,14 @@
-
 //
 // Created by Alan Freitas on 8/17/21.
 //
 
-#ifdef _WIN32
-#include <SDKDDKVer.h>
-#endif
-
+#include <futures/detail/asio_include.h>
 #include "default_executor.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
 
     asio::thread_pool &default_execution_context() {
         static asio::thread_pool pool(/*hardware_concurrency() * 3*/ 1);
@@ -29,4 +28,5 @@ namespace futures {
         return value == 0 ? 1 : value;
     }
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures

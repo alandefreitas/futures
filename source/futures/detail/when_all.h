@@ -38,6 +38,10 @@
 #include "tuple_algorithm.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
 
     /// \brief Proxy future class referring to the result of a conjunction of futures from @ref when_all
     ///
@@ -478,6 +482,7 @@ namespace futures {
         }
     }
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_WHEN_ALL_H

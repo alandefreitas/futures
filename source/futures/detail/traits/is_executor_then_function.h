@@ -12,6 +12,13 @@
 #include <asio.hpp>
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
     class stop_token;
 }
 
@@ -62,6 +69,8 @@ namespace futures::detail {
 
     template <class F, typename... Args>
     constexpr bool is_async_input_non_executor_v = is_async_input_non_executor<F, Args...>::value;
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures::detail
 
 #endif // FUTURES_IS_EXECUTOR_THEN_FUNCTION_H

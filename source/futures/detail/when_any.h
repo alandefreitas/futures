@@ -23,6 +23,10 @@
 #include "when_any_result.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     /// \brief Proxy future class referring to the result of a disjunction of futures from @ref when_any
     ///
     /// This class implements another future type to identify when one of the tasks is over.
@@ -1152,5 +1156,6 @@ namespace futures {
         }
     }
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 #endif // FUTURES_WHEN_ANY_H

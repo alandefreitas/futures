@@ -9,6 +9,10 @@
 #include <tuple>
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     namespace detail {
         template<class Function, class... Args, std::size_t... Is>
         static void for_each_impl(const std::tuple<Args...> &t, Function &&fn, std::index_sequence<Is...>) {
@@ -234,6 +238,7 @@ namespace futures {
                 tup);
     }
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_TUPLE_ALGORITHM_H

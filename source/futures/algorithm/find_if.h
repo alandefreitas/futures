@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref find_if function
     class find_if_fn : public detail::unary_invoke_algorithm_fn<find_if_fn> {
       public:
@@ -70,6 +74,7 @@ namespace futures {
     /// \brief Finds the first element satisfying specific criteria
     inline constexpr find_if_fn find_if;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_FIND_IF_H

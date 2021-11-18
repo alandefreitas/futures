@@ -30,7 +30,16 @@
 #include "partitioner.h"
 
 namespace futures {
-    /// \section Execution policies
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
+    /** \addtogroup algorithm-traits Algorithm Traits
+     *  @{
+     */
+
+
+    // section Execution policies
 
     /// Class representing a type for a sequenced_policy tag
     class sequenced_policy {};
@@ -288,7 +297,8 @@ namespace futures {
             }
         };
     } // namespace detail
-
+    /** @}*/ // \addtogroup algorithm-traits Algorithm Traits
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_H

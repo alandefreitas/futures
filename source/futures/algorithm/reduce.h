@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref reduce function
     class reduce_fn {
       public:
@@ -260,6 +264,7 @@ namespace futures {
     /// \brief Sums up (or accumulate with a custom function) a range of elements, except out of order
     inline constexpr reduce_fn reduce;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_REDUCE_H
