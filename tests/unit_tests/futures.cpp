@@ -1173,7 +1173,7 @@ TEST_CASE("Cancellable future") {
     SECTION("Continue from jfuture<int>") {
         jcfuture<int> f = async(
             [](stop_token s, std::chrono::milliseconds x) {
-                int i = 0;
+                int i = 2;
                 do {
                     std::this_thread::sleep_for(x);
                     ++i;
@@ -1194,14 +1194,14 @@ TEST_CASE("Cancellable future") {
         SECTION("Stop from source copy") {
             ss.request_stop();
             double t = f2.get();
-            REQUIRE(t > 2.2);
+            REQUIRE(t >= 2.2);
         }
 
         SECTION("Stop from original source") {
             // the stop state is not invalided in the original future
             f.request_stop();
             double t = f2.get();
-            REQUIRE(t > 2.2);
+            REQUIRE(t >= 2.2);
         }
     }
 }
