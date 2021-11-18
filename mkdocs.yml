@@ -18,8 +18,14 @@ nav:
     - Conjunctions: conjunctions.md
     - Disjunctions: disjunctions.md
   - Parallel Algorithms: parallel_algorithms.md
-  # doxygen && mkdir reference && doxybook2 --input ./xml --output ./reference --config ./.doxybook/config.json
-  - API Reference: reference/Namespaces/namespacefutures.md
+  # doxygen && rm -r reference && mkdir reference && doxybook2 --input ./xml --output ./reference --config ./.doxybook/config.json
+  - Reference: # Reference is organized by module
+    - Futures: reference/Modules/group___futures.md        # futures module
+    - Executors: reference/Modules/group___executors.md    # executors module
+    - Algorithms: reference/Modules/group___algorithms.md  # algorithms module
+    - Index: reference/Namespaces/namespacefutures.md      # The futures namespace contains everything
+    - Classes: reference/Classes/index.md                  # All Classes
+    - Files: reference/Files/index.md                      # All Files
   - Contributing: contributing.md
   - Acknowledgments: acknowledgments.md
 
