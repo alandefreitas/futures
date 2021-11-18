@@ -12,6 +12,10 @@
 #include "traits/is_future.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     /// \brief Check if a future is ready
     template <typename Future, std::enable_if_t<is_future_v<Future>, int> = 0> bool is_ready(Future &&f) {
         assert(f.valid() && "Undefined behaviour. Checking if an invalid future is ready.");
@@ -158,6 +162,7 @@ namespace futures {
         p.set_exception(std::make_exception_ptr(ex));
         return p.get_future();
     }
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_READY_FUTURE_H

@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref for_each function
     class for_each_fn : public detail::unary_invoke_algorithm_fn<for_each_fn> {
       public:
@@ -62,6 +66,7 @@ namespace futures {
     /// \brief Applies a function to a range of elements
     inline constexpr for_each_fn for_each;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_FOR_EACH_H

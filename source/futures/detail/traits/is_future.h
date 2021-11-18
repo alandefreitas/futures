@@ -9,6 +9,13 @@
 #include <future>
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
     /// Check if type is a future type
     template <typename> struct is_future : std::false_type {};
 
@@ -91,6 +98,8 @@ namespace futures {
         }
     }
 
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_IS_FUTURE_H

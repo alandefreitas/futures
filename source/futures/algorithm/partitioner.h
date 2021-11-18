@@ -11,6 +11,14 @@
 /// `middle`/`last` in the executor.
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
+    /** \addtogroup Partitioners
+     *  @{
+     */
+
     /// \brief The halve partitioner always splits the sequence into two parts of roughly equal size
     ///
     /// The sequence is split up to a minimum grain size.
@@ -113,6 +121,8 @@ namespace futures {
 
     template <class T, class R> constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;
 
+    /** @}*/ // \addtogroup Partitioners
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_PARTITIONER_H

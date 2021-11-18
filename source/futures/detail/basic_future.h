@@ -16,6 +16,10 @@
 #include "traits/is_executor_then_function.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     /// \section Forward declarations for base classes
     namespace detail {
         template <class T, class Shared, class LazyContinuable, class Stoppable> class basic_future;
@@ -871,6 +875,7 @@ namespace futures {
     template <class T, class S, class L, class Stoppable>
     struct is_stoppable<const detail::basic_future<T, S, L, Stoppable> &> : Stoppable {};
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_BASIC_FUTURE_H

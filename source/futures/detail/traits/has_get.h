@@ -6,6 +6,13 @@
 #define FUTURES_HAS_GET_H
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
     namespace detail {
         /// Check if a type implements the get function
         /// This is what we use to identify the return type of a future type candidate
@@ -14,6 +21,8 @@ namespace futures {
 
         template <typename T> struct has_get<T, std::void_t<decltype(std::declval<T>().get())>> : std::true_type {};
     } // namespace detail
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_HAS_GET_H

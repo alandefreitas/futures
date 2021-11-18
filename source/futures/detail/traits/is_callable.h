@@ -6,6 +6,13 @@
 #define FUTURES_IS_CALLABLE_H
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
     /// Check if something is callable, regardless of the arguments
     template <typename T> struct is_callable {
       private:
@@ -30,6 +37,8 @@ namespace futures {
     template <typename T>
     constexpr bool is_callable_v = is_callable<T>::value;
 
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_IS_CALLABLE_H

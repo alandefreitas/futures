@@ -23,6 +23,13 @@
 ///    v...) see below
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
     /// \section Fwd-declarations
     template <typename Sequence> struct when_any_result;
 
@@ -583,6 +590,8 @@ namespace futures {
     template <class Function, class Future, class FuncArgsTuple>
     using continuation_result_t = typename continuation_result<Function, Future, FuncArgsTuple>::type;
 
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_IS_FUTURE_CONTINUATION_H

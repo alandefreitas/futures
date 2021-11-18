@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref count_if function
     class count_if_fn : public detail::unary_invoke_algorithm_fn<count_if_fn> {
       public:
@@ -61,6 +65,7 @@ namespace futures {
     /// \brief Returns the number of elements satisfying specific criteria
     inline constexpr count_if_fn count_if;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_COUNT_IF_H

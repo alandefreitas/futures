@@ -17,6 +17,10 @@
 #include <version>
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     namespace detail {
         /// \brief Create a decay copy
         /// As in the standard extensions for concurrency
@@ -297,6 +301,7 @@ namespace futures {
         return std::make_pair(std::cref(ex), std::ref(after));
     }
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_THEN_H

@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref none_of function
     class none_of_fn : public detail::unary_invoke_algorithm_fn<none_of_fn> {
       public:
@@ -65,6 +69,7 @@ namespace futures {
     /// \brief Checks if a predicate is true for none of the elements in a range
     inline constexpr none_of_fn none_of;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_NONE_OF_H

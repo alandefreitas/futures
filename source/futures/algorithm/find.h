@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref find function
     class find_fn : public detail::value_cmp_algorithm_fn<find_fn> {
       public:
@@ -70,6 +74,7 @@ namespace futures {
     /// \brief Finds the first element equal to another element
     inline constexpr find_fn find;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_FIND_H

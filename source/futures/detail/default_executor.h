@@ -12,6 +12,10 @@
 #include <asio.hpp>
 
 namespace futures {
+    /** \addtogroup Executors
+     *  @{
+     */
+
     /// \brief The default execution context for async operations, unless otherwise stated
     ///
     /// Unless an executor is explicitly provided, this is the executor we use
@@ -76,6 +80,7 @@ namespace futures {
     /// \brief Determine if type is an executor
     template <typename T> constexpr bool is_executor_v = is_executor<T>::value;
 
+    /** @} */  // \addtogroup Executors
 } // namespace futures
 
 #endif // FUTURES_DEFAULT_EXECUTOR_H

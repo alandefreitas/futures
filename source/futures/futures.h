@@ -63,6 +63,10 @@
 #include "detail/when_any.h"
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     /// \brief Specifies the launch policy for a task executed by the @ref futures::async function
     ///
     /// Most of the time, we want the executor policy. As the @ref async function also accepts an executor,
@@ -390,5 +394,6 @@ namespace futures {
         return f.get();
     }
 
+    /** @} */ // \addtogroup Futures
 } // namespace futures
 #endif // FUTURES_FUTURES_H

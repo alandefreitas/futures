@@ -15,6 +15,10 @@
 #include "partitioner.h"
 
 namespace futures {
+    /** \addtogroup Algorithms
+     *  @{
+     */
+
     /// Class representing the overloads for the @ref any_of function
     class any_of_fn : public detail::unary_invoke_algorithm_fn<any_of_fn> {
       public:
@@ -65,6 +69,7 @@ namespace futures {
     /// \brief Checks if a predicate is true for any of the elements in a range
     inline constexpr any_of_fn any_of;
 
+    /** @}*/ // \addtogroup Algorithms
 } // namespace futures
 
 #endif // FUTURES_ANY_OF_H

@@ -12,6 +12,10 @@
 #include <asio.hpp>
 
 namespace futures {
+    /** \addtogroup Executors
+     *  @{
+     */
+
     /// \brief A minimal executor that runs anything in the local thread in the default context
     ///
     /// Although simple, it needs to meet the executor requirements:
@@ -198,6 +202,8 @@ namespace asio {
 #endif // !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
 
     } // namespace traits
+
+    /** @} */  // \addtogroup Executors
 } // namespace asio
 
 #endif // FUTURES_INLINE_EXECUTOR_H

@@ -5,6 +5,10 @@
 #include "inline_executor.h"
 
 namespace futures {
+    /** \addtogroup Executors
+     *  @{
+     */
+
     asio::execution_context &inline_execution_context() {
         static asio::execution_context context;
         return context;
@@ -24,4 +28,6 @@ namespace futures {
         asio::execution_context &ctx = inline_execution_context();
         return inline_later_executor{&ctx};
     }
+
+    /** @} */ // Executors
 }

@@ -25,6 +25,10 @@
 #endif
 
 namespace futures {
+    /** \addtogroup Futures
+     *  @{
+     */
+
     namespace detail {
         inline void spin_yield() noexcept {
             // TODO: Platform-specific code here
@@ -506,6 +510,7 @@ namespace futures {
     /// Registers a callback function for an associated std::stop_token object
     template <typename Callback> stop_callback(stop_token, Callback) -> stop_callback<Callback>;
 
+    /** @} */  // \addtogroup Futures
 } // namespace futures
 
 #endif // FUTURES_STOP_TOKEN_H

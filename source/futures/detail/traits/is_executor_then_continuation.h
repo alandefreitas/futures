@@ -5,11 +5,7 @@
 #ifndef FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H
 #define FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H
 
-#ifdef _WIN32
-#include <SDKDDKVer.h>
-#endif
-
-#include <asio.hpp>
+#include <futures/detail/asio_include.h>
 
 #include "is_future.h"
 #include "is_future_continuation.h"
@@ -42,6 +38,8 @@ namespace futures::detail {
 
     template <class Function, class Future>
     constexpr bool is_continuation_non_executor_v = is_continuation_non_executor<Function, Future>::value;
+    /** @} */  // \addtogroup future-traits Future Traits
+    /** @} */  // \addtogroup Futures
 } // namespace futures::detail
 
 #endif // FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H
