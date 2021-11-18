@@ -5,7 +5,11 @@
 #ifndef FUTURES_INLINE_EXECUTOR_H
 #define FUTURES_INLINE_EXECUTOR_H
 
- #include <futures/detail/asio_include.h>
+// Don't let asio compile definitions at this point
+#ifndef ASIO_SEPARATE_COMPILATION
+#define ASIO_SEPARATE_COMPILATION
+#endif
+#include <futures/detail/asio_include.h>
 
 namespace futures {
     /** \addtogroup Executors
