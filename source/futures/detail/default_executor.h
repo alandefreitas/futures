@@ -5,6 +5,10 @@
 #ifndef FUTURES_DEFAULT_EXECUTOR_H
 #define FUTURES_DEFAULT_EXECUTOR_H
 
+// Don't let asio compile definitions at this point
+#ifndef ASIO_SEPARATE_COMPILATION
+#define ASIO_SEPARATE_COMPILATION
+#endif
 #include <futures/detail/asio_include.h>
 
 namespace futures {

@@ -2,6 +2,10 @@
 // Created by Alan Freitas on 8/17/21.
 //
 
+// Don't let asio compile definitions at this point
+#ifndef ASIO_SEPARATE_COMPILATION
+#define ASIO_SEPARATE_COMPILATION
+#endif
 #include <futures/detail/asio_include.h>
 #include "default_executor.h"
 
