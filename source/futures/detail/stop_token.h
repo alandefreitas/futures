@@ -25,7 +25,7 @@
 #endif
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup cancellation Cancellation
@@ -515,7 +515,7 @@ namespace futures {
     template <typename Callback> stop_callback(stop_token, Callback) -> stop_callback<Callback>;
 
     /** @} */  // \addtogroup cancellation Cancellation
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_STOP_TOKEN_H

@@ -6,7 +6,7 @@
 #define FUTURES_IS_CALLABLE_H
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -38,7 +38,7 @@ namespace futures {
     constexpr bool is_callable_v = is_callable<T>::value;
 
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_CALLABLE_H

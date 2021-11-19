@@ -9,7 +9,7 @@
 #include "has_get.h"
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -40,7 +40,7 @@ namespace futures {
     template <class T> using unwrap_future_t = typename unwrap_future<T>::type;
 
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_UNWRAP_FUTURE_H

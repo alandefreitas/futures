@@ -9,7 +9,7 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -24,7 +24,7 @@ namespace futures {
     template <class T> using future_return_t = typename future_return<T>::type;
 
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_FUTURE_RETURN_H

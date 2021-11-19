@@ -8,7 +8,7 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -22,7 +22,7 @@ namespace futures {
 
     template <class T> constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_REFERENCE_WRAPPER_H

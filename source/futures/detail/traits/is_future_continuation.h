@@ -23,7 +23,7 @@
 ///    v...) see below
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -591,7 +591,7 @@ namespace futures {
     using continuation_result_t = typename continuation_result<Function, Future, FuncArgsTuple>::type;
 
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_FUTURE_CONTINUATION_H

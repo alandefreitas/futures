@@ -12,7 +12,7 @@
 #include "traits/is_future.h"
 
 namespace futures {
-    /** \addtogroup future Futures
+    /** \addtogroup futures Futures
      *  @{
      */
 
@@ -167,7 +167,7 @@ namespace futures {
         return p.get_future();
     }
     /** @} */  // \addtogroup adaptors Adaptors
-    /** @} */  // \addtogroup future Futures
+    /** @} */  // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_READY_FUTURE_H

@@ -2,7 +2,6 @@
   "baseUrl": "/futures/reference/",
   "indexInFolders": true,
   "linkSuffix": "/",
-  "linkLowercase": true,
   "indexClassesName": "index",
   "indexFilesName": "index",
   "indexGroupsName": "index",
