@@ -15,7 +15,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -65,7 +65,7 @@ namespace futures {
     /// \brief Returns the number of elements matching an element
     inline constexpr count_fn count;
 
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_COUNT_H

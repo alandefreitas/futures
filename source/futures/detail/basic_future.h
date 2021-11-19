@@ -16,7 +16,7 @@
 #include "traits/is_executor_then_function.h"
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
 
@@ -880,7 +880,7 @@ namespace futures {
     struct is_stoppable<const detail::basic_future<T, S, L, Stoppable> &> : Stoppable {};
 
     /** @} */  // \addtogroup future-types Future Types
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_BASIC_FUTURE_H

@@ -10,7 +10,7 @@
 #include "default_executor.h"
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
 
@@ -32,5 +32,5 @@ namespace futures {
         return value == 0 ? 1 : value;
     }
 
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures

@@ -12,7 +12,7 @@
 #include <futures/detail/asio_include.h>
 
 namespace futures {
-    /** \addtogroup Executors
+    /** \addtogroup executors Executors
      *  @{
      */
 
@@ -102,7 +102,7 @@ namespace futures {
 
     /// \brief Make an new thread executor object
     inline_later_executor make_inline_later_executor();
-    /** @} */  // \addtogroup Executors
+    /** @} */  // \addtogroup executors Executors
 } // namespace futures
 
 namespace asio {

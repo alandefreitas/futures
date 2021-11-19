@@ -23,7 +23,7 @@
 #include "when_any_result.h"
 
 namespace futures {
-    /** \addtogroup Adaptors
+    /** \addtogroup adaptors Adaptors
      *  @{
      */
 
@@ -1156,6 +1156,6 @@ namespace futures {
         }
     }
 
-    /** @} */  // \addtogroup Adaptors
+    /** @} */  // \addtogroup adaptors Adaptors
 } // namespace futures
 #endif // FUTURES_WHEN_ANY_H

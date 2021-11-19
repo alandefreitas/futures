@@ -9,7 +9,7 @@
 #include <tuple>
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -27,7 +27,7 @@ namespace futures {
 
     template <class T> constexpr bool is_tuple_v = is_tuple<T>::value;
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_IS_TUPLE_H

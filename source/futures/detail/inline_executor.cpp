@@ -5,7 +5,7 @@
 #include "inline_executor.h"
 
 namespace futures {
-    /** \addtogroup Executors
+    /** \addtogroup executors Executors
      *  @{
      */
 
@@ -29,5 +29,5 @@ namespace futures {
         return inline_later_executor{&ctx};
     }
 
-    /** @} */ // Executors
+    /** @} */ // executors Executors
 }

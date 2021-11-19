@@ -6,7 +6,7 @@
 #define FUTURES_HAS_GET_H
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -22,7 +22,7 @@ namespace futures {
         template <typename T> struct has_get<T, std::void_t<decltype(std::declval<T>().get())>> : std::true_type {};
     } // namespace detail
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_HAS_GET_H

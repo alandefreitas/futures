@@ -9,7 +9,7 @@
 #include <tuple>
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
 
@@ -238,7 +238,7 @@ namespace futures {
                 tup);
     }
 
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_TUPLE_ALGORITHM_H

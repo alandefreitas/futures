@@ -9,7 +9,7 @@
 #include <future>
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -99,7 +99,7 @@ namespace futures {
     }
 
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_IS_FUTURE_H

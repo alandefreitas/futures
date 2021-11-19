@@ -11,11 +11,11 @@
 /// `middle`/`last` in the executor.
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup Partitioners
+    /** \addtogroup partitioners Partitioners
      *  @{
      */
 
@@ -121,8 +121,8 @@ namespace futures {
 
     template <class T, class R> constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;
 
-    /** @}*/ // \addtogroup Partitioners
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup partitioners Partitioners
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_PARTITIONER_H

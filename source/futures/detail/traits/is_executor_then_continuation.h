@@ -38,8 +38,6 @@ namespace futures::detail {
 
     template <class Function, class Future>
     constexpr bool is_continuation_non_executor_v = is_continuation_non_executor<Function, Future>::value;
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup Futures
 } // namespace futures::detail
 
 #endif // FUTURES_IS_EXECUTOR_THEN_CONTINUATION_H

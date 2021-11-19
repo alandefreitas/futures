@@ -63,7 +63,7 @@
 #include "detail/when_any.h"
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
 
@@ -394,6 +394,6 @@ namespace futures {
         return f.get();
     }
 
-    /** @} */ // \addtogroup Futures
+    /** @} */ // \addtogroup future Futures
 } // namespace futures
 #endif // FUTURES_FUTURES_H

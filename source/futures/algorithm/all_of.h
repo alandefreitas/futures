@@ -16,7 +16,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -70,7 +70,7 @@ namespace futures {
     /// \brief Checks if a predicate is true for all the elements in a range
     inline constexpr all_of_fn all_of;
 
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_ALL_OF_H

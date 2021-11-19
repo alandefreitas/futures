@@ -25,10 +25,10 @@
 #endif
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
-    /** \addtogroup Cancellation
+    /** \addtogroup cancellation Cancellation
      *  @{
      */
 
@@ -514,8 +514,8 @@ namespace futures {
     /// Registers a callback function for an associated std::stop_token object
     template <typename Callback> stop_callback(stop_token, Callback) -> stop_callback<Callback>;
 
-    /** @} */  // \addtogroup Cancellation
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup cancellation Cancellation
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_STOP_TOKEN_H

@@ -12,11 +12,11 @@
 #include "traits/is_future.h"
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
 
-    /** \addtogroup Adaptors
+    /** \addtogroup adaptors Adaptors
      *  @{
      */
 
@@ -166,8 +166,8 @@ namespace futures {
         p.set_exception(std::make_exception_ptr(ex));
         return p.get_future();
     }
-    /** @} */  // \addtogroup Adaptors
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup adaptors Adaptors
+    /** @} */  // \addtogroup future Futures
 } // namespace futures
 
 #endif // FUTURES_READY_FUTURE_H

@@ -15,7 +15,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -69,7 +69,7 @@ namespace futures {
     /// \brief Checks if a predicate is true for none of the elements in a range
     inline constexpr none_of_fn none_of;
 
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_NONE_OF_H

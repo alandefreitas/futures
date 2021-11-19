@@ -15,7 +15,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -74,7 +74,7 @@ namespace futures {
     /// \brief Finds the first element not satisfying specific criteria
     inline constexpr find_if_not_fn find_if_not;
 
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_FIND_IF_NOT_H

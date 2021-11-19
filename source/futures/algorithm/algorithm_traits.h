@@ -30,7 +30,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -298,7 +298,7 @@ namespace futures {
         };
     } // namespace detail
     /** @}*/ // \addtogroup algorithm-traits Algorithm Traits
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_H

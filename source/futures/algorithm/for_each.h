@@ -15,7 +15,7 @@
 #include "partitioner.h"
 
 namespace futures {
-    /** \addtogroup Algorithms
+    /** \addtogroup algorithms Algorithms
      *  @{
      */
 
@@ -66,7 +66,7 @@ namespace futures {
     /// \brief Applies a function to a range of elements
     inline constexpr for_each_fn for_each;
 
-    /** @}*/ // \addtogroup Algorithms
+    /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_FOR_EACH_H

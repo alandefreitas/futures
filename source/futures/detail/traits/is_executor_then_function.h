@@ -8,7 +8,7 @@
 #include <futures/detail/asio_include.h>
 
 namespace futures {
-    /** \addtogroup Futures
+    /** \addtogroup future Futures
      *  @{
      */
     /** \addtogroup future-traits Future Traits
@@ -66,7 +66,7 @@ namespace futures::detail {
     template <class F, typename... Args>
     constexpr bool is_async_input_non_executor_v = is_async_input_non_executor<F, Args...>::value;
     /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup Futures
+    /** @} */  // \addtogroup future Futures
 } // namespace futures::detail
 
 #endif // FUTURES_IS_EXECUTOR_THEN_FUNCTION_H

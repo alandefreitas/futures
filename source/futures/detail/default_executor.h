@@ -12,7 +12,7 @@
 #include <futures/detail/asio_include.h>
 
 namespace futures {
-    /** \addtogroup Executors
+    /** \addtogroup executors Executors
      *  @{
      */
 
@@ -80,7 +80,7 @@ namespace futures {
     /// \brief Determine if type is an executor
     template <typename T> constexpr bool is_executor_v = is_executor<T>::value;
 
-    /** @} */  // \addtogroup Executors
+    /** @} */  // \addtogroup executors Executors
 } // namespace futures
 
 #endif // FUTURES_DEFAULT_EXECUTOR_H
