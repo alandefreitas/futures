@@ -1217,7 +1217,7 @@ TEST_CASE("Continuation stop") {
             }
             return count;
         },
-        0);
+        10);
 
     SECTION("Shared stop source") {
         jcfuture<int> f2 = then(f1, [&](int count) { return count * 2; });
@@ -1227,7 +1227,7 @@ TEST_CASE("Continuation stop") {
         f2.wait();
         REQUIRE(is_ready(f2));
         int final_count = f2.get();
-        REQUIRE(final_count > 0);
+        REQUIRE(final_count >= 10);
     }
 
     SECTION("Independent stop source") {
@@ -1247,7 +1247,7 @@ TEST_CASE("Continuation stop") {
         f2.wait();         // <- wait for f1 result to arrive at f2
         REQUIRE(is_ready(f2));
         int final_count = f2.get();
-        REQUIRE(final_count > 0);
+        REQUIRE(final_count >= 10);
     }
 }
 
