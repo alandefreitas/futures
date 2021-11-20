@@ -12,10 +12,9 @@ has_toc: false
 
 <br/>
 
-- A `future` object represents a handle to a value that might not be available yet from an asynchronous operation.
-- To compose with multiple tasks, they allow us to query whether this future value is ready and to obtain its value once it is made available by some provider.
-- A number of proposals have been presented as extend this model in C++, such as future continuations, cancellation tokens, association with executors, and algorithms.  
-- Rather than proposing one more concrete future type, this library implements a number of types that follow a future *concept*, which also includes existing future types, such as `std::future` and `boost::future`.  
+- A *Future* 🔮 object represents a handle to a value that will only be available when an asynchronous operation fulfills its *Promise* 🤞. To compose with multiple tasks, *Futures* allow us to query whether this future value is ready and obtain its value once it is made available.
+- A number of proposals have been presented as extend the model proposed in C++11 for Futures (`std::future`). These are suggestions such as future continuations, cancellation tokens, association with executors, and algorithms.  
+- Rather than proposing one more concrete future type, this library implements a number of types that follow a *Future* *concept* (`is_future`). The concept is able to handle existing future types, such as `std::future` and `boost::future` as well as custom types.  
 - The concepts allow reusable algorithms for all future types, an alternative to `std::async` based on executors, various efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel variants of the STL algorithms.
 
 

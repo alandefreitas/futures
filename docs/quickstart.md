@@ -1,6 +1,6 @@
 # Quickstart
 
-## Integration
+## Integration 💻 
 
 === "CMake"
 
@@ -143,7 +143,7 @@
         You are also responsible for downloading and linking transitive dependencies (asio, ranges, and small), something the CMake script will attempt to do for you.
 
 
-## Hello world
+## Hello world 👋
 
 === "Launching futures"
 
