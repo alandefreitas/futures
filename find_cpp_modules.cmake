@@ -13,6 +13,41 @@ include(cmake/functions/cpp_modules.cmake)
 find_package(Threads)
 
 #######################################################
+### Boost                                           ###
+#######################################################
+# We look for Boost and standalone dependencies, although we only need one of them.
+# All dependencies are also header only, so they are all also made available to
+# the interface target. The user can later choose what to use.
+# When boost is not found, we do not provide an alternative FetchContents because
+# boost is a very large library.
+set(boost_VERSION_LOCK 1.76.0)
+set(boost_VERSION_REQUIREMENT ^1.76.0)
+set_local_module_hints(boost ${boost_VERSION_LOCK} ${boost_VERSION_REQUIREMENT})
+
+# Look for lock version
+if (NOT Boost_FOUND)
+    semver_split(${boost_VERSION_LOCK} boost_VERSION_LOCK)
+    find_package(Boost ${boost_VERSION_LOCK_CORE} QUIET COMPONENTS ${boost_FIND_COMPONENTS} CONFIG)
+endif ()
+
+# Look for any version that matches our requirements
+if (NOT Boost_FOUND)
+    find_package(Boost QUIET COMPONENTS ${boost_FIND_COMPONENTS} CONFIG)
+    if (Boost_FOUND AND Boost_VERSION AND NOT DEFINED ENV{Boost_ROOT})
+        semver_requirements_compatible(${Boost_VERSION} ${Boost_VERSION_REQUIREMENT} ok)
+        if (NOT ok)
+            set(Boost_FOUND FALSE)
+        endif ()
+    endif ()
+endif ()
+version_requirement_message(boost
+        VERSION_FOUND ${Boost_VERSION}
+        VERSION_LOCK ${boost_VERSION_LOCK}
+        VERSION_REQUIREMENTS ${boost_VERSION_REQUIREMENT}
+        PREFIX_HINT ${boost_PREFIX_HINT})
+
+
+#######################################################
 ### Small containers                                ###
 #######################################################
 set(small_VERSION_LOCK 0.1.1)
@@ -289,7 +324,7 @@ if (NOT Asio_FOUND)
     set(ENV{Asio_ROOT} ${Asio_INSTALL_HINT})
     find_package(Asio COMPONENTS ${Asio_FIND_COMPONENTS} REQUIRED)
 endif ()
-version_requirement_message(Asio
+version_requirement_message(asio
         VERSION_FOUND ${Asio_VERSION}
         VERSION_LOCK ${Asio_VERSION_LOCK}
         VERSION_REQUIREMENTS ${Asio_VERSION_REQUIREMENT}

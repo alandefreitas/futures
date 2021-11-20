@@ -80,10 +80,27 @@ maybe_target_pedantic_warnings(futures)
 #######################################################
 ### Dependencies                                    ###
 #######################################################
-target_link_libraries(futures PUBLIC small::small)
-target_link_libraries(futures PUBLIC asio::asio)
+if (Boost_FOUND)
+    target_link_libraries(futures PUBLIC Boost::boost)
+endif()
+if (small_FOUND OR Small_FOUND)
+    target_link_libraries(futures PUBLIC small::small)
+endif()
+if (asio_FOUND OR Asio_FOUND)
+    target_link_libraries(futures PUBLIC asio::asio)
+endif()
 target_link_libraries(futures PUBLIC range-v3::range-v3)
 target_link_libraries(futures PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+
+###############################################################
+### Set proper compile options if we already know about it  ###
+###############################################################
+if (FUTURES_PREFER_BOOST_DEPENDENCIES)
+    target_compile_definitions(futures PUBLIC FUTURES_PREFER_BOOST_DEPENDENCIES)
+endif()
+if (FUTURES_PREFER_STANDALONE_DEPENDENCIES)
+    target_compile_definitions(futures PUBLIC FUTURES_PREFER_STANDALONE_DEPENDENCIES)
+endif()
 
 ###########################################################
 ### Target with separate compilation (not header-only)  ###

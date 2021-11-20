@@ -5,9 +5,6 @@
 // docs.
 //
 
-#include <asio.hpp>
-#include <asio/ts/buffer.hpp>
-#include <asio/ts/internet.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -16,7 +13,17 @@
 
 #include <futures/futures.h>
 
-using asio::ip::tcp;
+#ifdef FUTURES_USE_ASIO
+#include <asio.hpp>
+#include <asio/ts/buffer.hpp>
+#include <asio/ts/internet.hpp>
+#else
+#include <boost/asio.hpp>
+#include <boost/asio/ts/buffer.hpp>
+#include <boost/asio/ts/internet.hpp>
+#endif
+
+using futures::asio::ip::tcp;
 
 class session : public std::enable_shared_from_this<session> {
   public:
@@ -31,7 +38,7 @@ class session : public std::enable_shared_from_this<session> {
   private:
     void schedule_read() {
         socket_.async_read_some(
-            asio::buffer(data_, max_length),
+            futures::asio::buffer(data_, max_length),
             [this, self = shared_from_this()](std::error_code ec,
                                               std::size_t length) {
                 if (!ec) {
@@ -47,8 +54,8 @@ class session : public std::enable_shared_from_this<session> {
     void schedule_write(std::size_t length) {
         // keep creating shared_from_this() pointer everytime we
         // schedule some function so that "this" object never dies
-        asio::async_write(
-            socket_, asio::buffer(data_, length),
+        futures::asio::async_write(
+            socket_, futures::asio::buffer(data_, length),
             [this, self = shared_from_this()](
                 std::error_code ec, std::size_t /*length*/) {
                 if (!ec) {
@@ -63,7 +70,7 @@ class session : public std::enable_shared_from_this<session> {
 
 class server {
   public:
-    server(asio::io_context &io_context, short port)
+    server(futures::asio::io_context &io_context, short port)
         : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),
           socket_(io_context), ex_(io_context.get_executor()) {
         schedule_accept();
@@ -73,7 +80,7 @@ class server {
     void schedule_accept() {
         // Schedule function to accept connection from client
         std::future<void> client_connected =
-            acceptor_.async_accept(socket_, asio::use_future);
+            acceptor_.async_accept(socket_, futures::asio::use_future);
 
         // Attach continuation so that when the client connects, we
         // create a new session
@@ -96,7 +103,7 @@ class server {
 
     tcp::acceptor acceptor_;
     tcp::socket socket_;
-    asio::io_context::executor_type ex_;
+    futures::asio::io_context::executor_type ex_;
 };
 
 int main(int argc, char *argv[]) {
@@ -106,7 +113,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        asio::io_context io_context;
+        futures::asio::io_context io_context;
 
         server s(io_context, std::atoi(argv[1]));
 
