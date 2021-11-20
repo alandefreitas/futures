@@ -40,12 +40,14 @@ if (NOT Boost_FOUND)
         endif ()
     endif ()
 endif ()
-version_requirement_message(boost
-        VERSION_FOUND ${Boost_VERSION}
-        VERSION_LOCK ${boost_VERSION_LOCK}
-        VERSION_REQUIREMENTS ${boost_VERSION_REQUIREMENT}
-        PREFIX_HINT ${boost_PREFIX_HINT})
 
+if (Boost_FOUND)
+    version_requirement_message(boost
+            VERSION_FOUND ${Boost_VERSION}
+            VERSION_LOCK ${boost_VERSION_LOCK}
+            VERSION_REQUIREMENTS ${boost_VERSION_REQUIREMENT}
+            PREFIX_HINT ${boost_PREFIX_HINT})
+endif()
 
 #######################################################
 ### Small containers                                ###
