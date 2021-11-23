@@ -5,7 +5,7 @@
 include(${Catch2_DIR}/Catch.cmake)
 
 # Create a common catch main for all tests
-add_library(catch_main catch_main.cpp)
+add_library(catch_main detail/catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_compile_features(catch_main PUBLIC cxx_std_17)
 
@@ -53,5 +53,15 @@ macro(add_futures_test TEST_NAME)
 endmacro()
 
 # Main tests
-add_futures_test(futures futures::futures-compiled)
-add_futures_test(futures-algorithm futures::futures-compiled)
+add_futures_test(asio_executors)
+add_futures_test(futures_types)
+add_futures_test(make_ready)
+add_futures_test(async_overloads)
+add_futures_test(continuations)
+add_futures_test(conjunction)
+add_futures_test(disjunction)
+add_futures_test(cancel_futures)
+add_futures_test(continuation_stop)
+add_futures_test(exceptions)
+add_futures_test(shared_futures)
+add_futures_test(futures-algorithm)

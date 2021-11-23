@@ -74,7 +74,7 @@ if (NOT small_FOUND)
 endif ()
 
 # Fetch small if we couldn't find a valid version
-if (NOT small_FOUND)
+if (NOT small_FOUND AND NOT (Boost_FOUND AND FUTURES_PREFER_BOOST_DEPENDENCIES))
     # Fallback to FetchContent and then find_package again
     if (EXISTS ${small_SOURCE_HINT})
         message("Sources for small found...")
