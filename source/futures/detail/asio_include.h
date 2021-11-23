@@ -51,7 +51,6 @@ namespace futures {
     /** \addtogroup executors Executors
      *  @{
      */
-
 #if defined(FUTURES_USE_ASIO) || defined(FUTURES_DOXYGEN)
     /// \brief Alias to the asio namespace
     ///
