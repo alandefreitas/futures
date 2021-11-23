@@ -718,7 +718,7 @@ namespace futures {
 
             // Function that posts a notifier task to update our common variable that indicates if the task is ready
             auto launch_notifier_task = [&](auto &&future, std::atomic_bool &cancel_token,
-                                               std::atomic_bool &start_token) {
+                                            std::atomic_bool &start_token) {
                 // Launch a task with access to the underlying when_any_future and a cancel token that asks it to stop
                 // These threads need to be independent of any executor because the whole system might crash if
                 // the executor has no room for them. So this is either a real continuation or a new thread.
@@ -1035,9 +1035,13 @@ namespace futures {
     /// This overload uses a small vector to avoid further allocations for such a simple operation.
     ///
     /// \return @ref when_any_future with all future objects
-    template <class InputIt,
+    template <class InputIt
+#ifndef FUTURES_DOXYGEN
+              ,
               std::enable_if_t<detail::is_valid_when_any_argument_v<typename std::iterator_traits<InputIt>::value_type>,
-                               int> = 0>
+                               int> = 0
+#endif
+              >
     when_any_future<::futures::small_vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_any(InputIt first, InputIt last) {
         // Infer types
@@ -1076,7 +1080,11 @@ namespace futures {
     /// cv-qualified) std::shared_future or a cv-unqualified std::future.
     ///
     /// \return @ref when_any_future with all future objects
-    template <class Range, std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0>
+    template <class Range
+#ifndef FUTURES_DOXYGEN
+              , std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0
+#endif
+              >
     when_any_future<::futures::small_vector<
         detail::to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_any(Range &&r) {
@@ -1089,7 +1097,11 @@ namespace futures {
     /// cv-qualified) std::shared_future or a cv-unqualified std::future.
     ///
     /// \return @ref when_any_future with all future objects
-    template <class... Futures, std::enable_if_t<detail::are_valid_when_any_arguments_v<Futures...>, int> = 0>
+    template <class... Futures
+#ifndef FUTURES_DOXYGEN
+              , std::enable_if_t<detail::are_valid_when_any_arguments_v<Futures...>, int> = 0
+#endif
+              >
     when_any_future<std::tuple<detail::to_future_t<Futures>...>> when_any(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::to_future_t<Futures>...>;
@@ -1131,8 +1143,12 @@ namespace futures {
     /// - when_any(f1,f2,f3) -> <f1 || f2 || f3>
     /// - when_any(f1,when_any(f2,f3)) -> <f1 || <f2 || f3>>
     template <
-        class T1, class T2,
-        std::enable_if_t<detail::is_valid_when_any_argument_v<T1> && detail::is_valid_when_any_argument_v<T2>, int> = 0>
+        class T1, class T2
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<detail::is_valid_when_any_argument_v<T1> && detail::is_valid_when_any_argument_v<T2>, int> = 0
+#endif
+        >
     auto operator||(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_any = detail::is_when_any_future_v<T1>;
         constexpr bool second_is_when_any = detail::is_when_any_future_v<T2>;
@@ -1171,6 +1187,6 @@ namespace futures {
         }
     }
 
-    /** @} */  // \addtogroup adaptors Adaptors
+    /** @} */ // \addtogroup adaptors Adaptors
 } // namespace futures
 #endif // FUTURES_WHEN_ANY_H
