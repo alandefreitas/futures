@@ -1,8 +1,10 @@
 #ifndef FUTURES_PARTITIONER_H
 #define FUTURES_PARTITIONER_H
 
-#include <range/v3/all.hpp>
-#include "../detail/traits/has_get.h"
+#include <thread>
+
+#include <futures/adaptor/detail/traits/has_get.h>
+#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
 
 /// \file Default partitioners
 /// A partitioner is a light callable object that takes a pair of iterators and returns the
@@ -58,7 +60,8 @@ namespace futures {
 
       public:
         explicit thread_partitioner(std::size_t min_grain_size)
-            : min_grain_size_(min_grain_size), num_threads_(hardware_concurrency()) {}
+            : min_grain_size_(min_grain_size),
+              num_threads_(std::max(std::thread::hardware_concurrency(), static_cast<unsigned int>(1))) {}
 
         template <typename I, typename S> auto operator()(I first, S last) {
             if (num_threads_ <= 1) {
@@ -82,15 +85,23 @@ namespace futures {
     /// Its type and parameters might change
     using default_partitioner = thread_partitioner;
 
+    /// \brief Determine a reasonable minimum grain size depending on the number of elements in a sequence
+    inline std::size_t make_grain_size(std::size_t n) {
+        return std::clamp(n / (8 * std::max(std::thread::hardware_concurrency(), static_cast<unsigned int>(1))),
+                          size_t(1), size_t(2048));
+    }
+
     /// \brief Create an instance of the default partitioner with a reasonable grain size for @ref n elements
     ///
     /// The default partitioner type and parameters might change
     inline default_partitioner make_default_partitioner(size_t n) { return default_partitioner(make_grain_size(n)); }
 
-    /// \brief Create an instance of the default partitioner with a reasonable grain for the range @ref first , @ref last
+    /// \brief Create an instance of the default partitioner with a reasonable grain for the range @ref first , @ref
+    /// last
     ///
     /// The default partitioner type and parameters might change
-    template <class I, class S, std::enable_if_t<ranges::input_iterator<I> && ranges::sentinel_for<S, I>, int> = 0>
+    template <class I, class S,
+              std::enable_if_t<futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I>, int> = 0>
     default_partitioner make_default_partitioner(I first, S last) {
         return make_default_partitioner(std::distance(first, last));
     }
@@ -98,7 +109,7 @@ namespace futures {
     /// \brief Create an instance of the default partitioner with a reasonable grain for the range @ref r
     ///
     /// The default partitioner type and parameters might change
-    template <class R, std::enable_if_t<ranges::input_range<R>, int> = 0>
+    template <class R, std::enable_if_t<futures::detail::input_range<R>, int> = 0>
     default_partitioner make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
     }
@@ -106,8 +117,8 @@ namespace futures {
     /// Determine if P is a valid partitioner for the iterator range [I,S]
     template <class T, class I, class S>
     using is_partitioner =
-        std::conjunction<std::conditional_t<ranges::input_iterator<I>, std::true_type, std::false_type>,
-                         std::conditional_t<ranges::input_iterator<S>, std::true_type, std::false_type>,
+        std::conjunction<std::conditional_t<futures::detail::input_iterator<I>, std::true_type, std::false_type>,
+                         std::conditional_t<futures::detail::input_iterator<S>, std::true_type, std::false_type>,
                          std::is_invocable<T, I, S>>;
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
@@ -116,8 +127,9 @@ namespace futures {
     /// Determine if P is a valid partitioner for the range R
     template <class T, class R, typename = void> struct is_range_partitioner : std::false_type {};
     template <class T, class R>
-    struct is_range_partitioner<T, R, std::enable_if_t<ranges::range<R>>>
-        : is_partitioner<T, ranges::range_common_iterator_t<R>, ranges::range_common_iterator_t<R>> {};
+    struct is_range_partitioner<T, R, std::enable_if_t<futures::detail::range<R>>>
+        : is_partitioner<T, futures::detail::range_common_iterator_t<R>, futures::detail::range_common_iterator_t<R>> {
+    };
 
     template <class T, class R> constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;
 

@@ -8,11 +8,11 @@
 #include <execution>
 #include <variant>
 
-#include <range/v3/all.hpp>
+#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
 
-#include "../futures.h"
-#include "algorithm_traits.h"
-#include "partitioner.h"
+#include <futures/futures.h>
+#include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/partitioner.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -34,14 +34,18 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c any_of
-        template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && ranges::input_iterator<I> &&
-                                       ranges::sentinel_for<S, I> && ranges::indirectly_unary_invocable<Fun, I> &&
+        template <class E, class P, class I, class S, class Fun
+#ifndef FUTURES_DOXYGEN
+                  ,
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
+                                   int> = 0
+#endif
+                  >
         bool main(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || ranges::forward_iterator<I>) {
+            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
                 return std::any_of(first, last, f);
             }
 

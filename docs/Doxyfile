@@ -5,17 +5,14 @@ GENERATE_LATEX = NO
 
 GENERATE_XML = YES
 XML_OUTPUT = xml
-RECURSIVE = YES
+
+INPUT = ./../source/futures
 STRIP_FROM_PATH = ./../source
-INPUT = ./../source ./../source/detail/traits/is_future.h
-EXCLUDE = ./../source/futures/detail/tuple_algorithm.h \
-          ./../source/futures/detail/traits/has_get.h \
-          ./../source/futures/detail/traits/is_callable.h \
-          ./../source/futures/detail/traits/is_executor_then_continuation.h \
-          ./../source/futures/detail/traits/is_executor_then_function.h \
-          ./../source/futures/detail/traits/is_reference_wrapper.h \
-          ./../source/futures/detail/traits/is_tuple.h \
-FILE_PATTERNS = *.h *.md
+RECURSIVE = YES
+EXCLUDE = ./../source/futures/adaptor/detail \
+          ./../source/futures/algorithm/detail \
+          ./../source/futures/futures/detail
+FILE_PATTERNS = *.h
 EXCLUDE_SYMBOLS = "std" "asio" "detail" "futures::detail" "detail::*" "futures::detail::*" "A" "Enable" "Proxy"
 EXAMPLE_PATH = ./../examples
 EXAMPLE_PATTERNS = *.cpp

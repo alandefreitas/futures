@@ -3,38 +3,80 @@
 #######################################################
 add_library(futures
         # Type aliases
-        futures/detail/asio_include.h
-        futures/detail/small_vector_include.h
+        futures/config/asio_include.h
+        futures/config/small_vector_include.h
+
+        # Detail / Traits
+        futures/adaptor/detail/traits/is_callable.h
+        futures/adaptor/detail/traits/is_executor_then_continuation.h
+        futures/adaptor/detail/traits/is_executor_then_function.h
+        futures/adaptor/detail/traits/is_reference_wrapper.h
+        futures/adaptor/detail/traits/is_tuple.h
+
+        # Detail / Range Traits / Bundled subset from range-v3
+        futures/algorithm/detail/traits/range/compare.hpp
+        futures/algorithm/detail/traits/range/concepts/concepts.hpp
+        futures/algorithm/detail/traits/range/concepts/type_traits.hpp
+        futures/algorithm/detail/traits/range/concepts/swap.hpp
+        futures/algorithm/detail/traits/range/concepts/compare.hpp
+        futures/algorithm/detail/traits/range/detail/adl_get.hpp
+        futures/algorithm/detail/traits/range/detail/config.hpp
+        futures/algorithm/detail/traits/range/detail/range_access.hpp
+        futures/algorithm/detail/traits/range/detail/prologue.hpp
+        futures/algorithm/detail/traits/range/detail/epilogue.hpp
+        futures/algorithm/detail/traits/range/functional/concepts.hpp
+        futures/algorithm/detail/traits/range/functional/invoke.hpp
+        futures/algorithm/detail/traits/range/functional/comparisons.hpp
+        futures/algorithm/detail/traits/range/functional/reference_wrapper.hpp
+        futures/algorithm/detail/traits/range/functional/identity.hpp
+        futures/algorithm/detail/traits/range/iterator/concepts.hpp
+        futures/algorithm/detail/traits/range/iterator/access.hpp
+        futures/algorithm/detail/traits/range/iterator/traits.hpp
+        futures/algorithm/detail/traits/range/iterator/basic_iterator.hpp
+        futures/algorithm/detail/traits/range/iterator/reverse_iterator.hpp
+        futures/algorithm/detail/traits/range/meta/meta_fwd.hpp
+        futures/algorithm/detail/traits/range/meta/meta.hpp
+        futures/algorithm/detail/traits/range/range/concepts.hpp
+        futures/algorithm/detail/traits/range/range/access.hpp
+        futures/algorithm/detail/traits/range/range/traits.hpp
+        futures/algorithm/detail/traits/range/range/primitives.hpp
+        futures/algorithm/detail/traits/range/range_fwd.hpp
+        futures/algorithm/detail/traits/range/std/detail/associated_types.hpp
+        futures/algorithm/detail/traits/range/utility/get.hpp
+        futures/algorithm/detail/traits/range/utility/move.hpp
+        futures/algorithm/detail/traits/range/utility/common_type.hpp
+        futures/algorithm/detail/traits/range/utility/swap.hpp
+        futures/algorithm/detail/traits/range/utility/addressof.hpp
+        futures/algorithm/detail/traits/range/utility/in_place.hpp
+        futures/algorithm/detail/traits/range/utility/static_const.hpp
+        futures/algorithm/detail/traits/range/utility/semiregular_box.hpp
+        futures/algorithm/detail/traits/range/utility/box.hpp
+        futures/algorithm/detail/traits/range/version.hpp
 
         # Traits
-        futures/detail/traits/future_return.h
-        futures/detail/traits/is_callable.h
-        futures/detail/traits/is_executor_then_continuation.h
-        futures/detail/traits/is_executor_then_function.h
-        futures/detail/traits/is_future.h
-        futures/detail/traits/is_future_continuation.h
-        futures/detail/traits/is_reference_wrapper.h
-        futures/detail/traits/is_tuple.h
-        futures/detail/traits/to_future.h
-        futures/detail/traits/unwrap_future.h
+        futures/futures/traits/future_return.h
+        futures/futures/traits/is_future.h
+        futures/futures/traits/is_future_continuation.h
+        futures/futures/traits/to_future.h
+        futures/futures/traits/unwrap_future.h
 
         # Better default executors for async
-        futures/detail/default_executor.h
-        futures/detail/default_executor.cpp
-        futures/detail/inline_executor.h
-        futures/detail/inline_executor.cpp
+        futures/executor/default_executor.h
+        futures/executor/default_executor.cpp
+        futures/executor/inline_executor.h
+        futures/executor/inline_executor.cpp
 
         # Future types
-        futures/detail/stop_token.h
-        futures/detail/basic_future.h
-        futures/detail/tuple_algorithm.h
-        futures/detail/when_all.h
-        futures/detail/when_any.h
-        futures/detail/when_any_result.h
+        futures/futures/stop_token.h
+        futures/futures/basic_future.h
 
-        # Utilities
-        futures/detail/then.h
-        futures/detail/ready_future.h
+        # Adaptors
+        futures/adaptor/detail/tuple_algorithm.h
+        futures/adaptor/when_all.h
+        futures/adaptor/when_any.h
+        futures/adaptor/when_any_result.h
+        futures/adaptor/then.h
+        futures/adaptor/ready_future.h
 
         # Async algorithms
         futures/algorithm/algorithm_traits.h
@@ -93,7 +135,6 @@ endif()
 if (asio_FOUND OR Asio_FOUND)
     target_link_libraries(futures PUBLIC asio::asio)
 endif()
-target_link_libraries(futures PUBLIC range-v3::range-v3)
 target_link_libraries(futures PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
 ###############################################################

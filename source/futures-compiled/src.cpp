@@ -7,6 +7,6 @@
 
 /// \file The user can compile and link this file to make the library not header-only
 
-#include <futures/impl/asio-compile.h>
+#include <futures/config/asio-compile.h>
 
 #endif // FUTURES_COMPILED_SRC_COMPILE_H
