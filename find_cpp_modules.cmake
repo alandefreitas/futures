@@ -151,13 +151,15 @@ if (NOT small_FOUND)
 
     # Find package again
     set(ENV{small_ROOT} ${small_INSTALL_HINT})
-    find_package(small REQUIRED CONFIG)
+    find_package(small CONFIG)
 endif ()
-version_requirement_message(small
-        VERSION_FOUND ${small_VERSION}
-        VERSION_LOCK ${small_VERSION_LOCK}
-        VERSION_REQUIREMENTS ${small_VERSION_REQUIREMENT}
-        PREFIX_HINT ${small_PREFIX_HINT})
+if (small_FOUND OR Small_FOUND)
+    version_requirement_message(small
+            VERSION_FOUND ${small_VERSION}
+            VERSION_LOCK ${small_VERSION_LOCK}
+            VERSION_REQUIREMENTS ${small_VERSION_REQUIREMENT}
+            PREFIX_HINT ${small_PREFIX_HINT})
+endif()
 
 #######################################################
 ### C++: Ranges                                     ###

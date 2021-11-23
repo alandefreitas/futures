@@ -2,6 +2,10 @@
 ### Futures library                                 ###
 #######################################################
 add_library(futures
+        # Type aliases
+        futures/detail/asio_include.h
+        futures/detail/small_vector_include.h
+
         # Traits
         futures/detail/traits/future_return.h
         futures/detail/traits/is_callable.h
