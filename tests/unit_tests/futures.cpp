@@ -637,7 +637,7 @@ TEST_CASE("Conjunction") {
 
         SECTION("No unwrapping") {
             SECTION("Continue with value") {
-                auto continuation = [](small::vector<cfuture<int>> rs) {
+                auto continuation = [](futures::small_vector<cfuture<int>> rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -647,7 +647,7 @@ TEST_CASE("Conjunction") {
             }
 
             SECTION("Continue with lvalue") {
-                auto continuation = [](small::vector<cfuture<int>> &rs) {
+                auto continuation = [](futures::small_vector<cfuture<int>> &rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -658,7 +658,7 @@ TEST_CASE("Conjunction") {
             }
 
             SECTION("Continue with const lvalue") {
-                auto continuation = [](const small::vector<cfuture<int>> &) {
+                auto continuation = [](const futures::small_vector<cfuture<int>> &) {
                     return 2 + 3 + 4; // <- cannot get from const future :P
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -669,7 +669,7 @@ TEST_CASE("Conjunction") {
             }
 
             SECTION("Continue with rvalue") {
-                auto continuation = [](small::vector<cfuture<int>> &&rs) {
+                auto continuation = [](futures::small_vector<cfuture<int>> &&rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -682,7 +682,7 @@ TEST_CASE("Conjunction") {
 
         SECTION("Unwrap vector") {
             SECTION("Continue with value") {
-                auto continuation = [](small::vector<int> rs) { return rs[0] + rs[1] + rs[2]; };
+                auto continuation = [](futures::small_vector<int> rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
@@ -690,7 +690,7 @@ TEST_CASE("Conjunction") {
             }
 
             SECTION("Continue with lvalue") {
-                auto continuation = [](small::vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
+                auto continuation = [](futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
@@ -698,7 +698,7 @@ TEST_CASE("Conjunction") {
             }
 
             SECTION("Continue with const lvalue") {
-                auto continuation = [](const small::vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
+                auto continuation = [](const futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
@@ -978,7 +978,7 @@ TEST_CASE("Disjunction") {
         }
 
         SECTION("Continue") {
-            auto continuation = [](when_any_result<small::vector<cfuture<int>>> r) {
+            auto continuation = [](when_any_result<futures::small_vector<cfuture<int>>> r) {
                 if (r.index == 0) {
                     return r.tasks[0].get();
                 } else if (r.index == 1) {
@@ -997,7 +997,7 @@ TEST_CASE("Disjunction") {
         }
 
         SECTION("Unwrap to tuple of futures") {
-            auto continuation = [](size_t index, small::vector<cfuture<int>> tasks) {
+            auto continuation = [](size_t index, futures::small_vector<cfuture<int>> tasks) {
                 if (index == 0) {
                     return tasks[0].get();
                 } else if (index == 1) {
@@ -1007,7 +1007,7 @@ TEST_CASE("Disjunction") {
                 }
                 return 0;
             };
-            using tuple_type = small::vector<cfuture<int>>;
+            using tuple_type = futures::small_vector<cfuture<int>>;
             using result_type = when_any_result<tuple_type>;
             STATIC_REQUIRE(detail::is_when_any_result_v<result_type>);
             STATIC_REQUIRE(
