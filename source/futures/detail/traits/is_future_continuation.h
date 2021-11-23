@@ -6,7 +6,8 @@
 #define FUTURES_IS_FUTURE_CONTINUATION_H
 
 #include <range/v3/range/concepts.hpp>
-#include <small/vector.h>
+
+#include <futures/detail/small_vector_include.h>
 
 #include "is_future.h"
 #include "is_tuple.h"
@@ -155,13 +156,13 @@ namespace futures {
         template <typename Function, typename T, typename... Args>
         struct is_vector_unwrap_invocable : std::false_type {};
         template <typename Function, typename FT, typename... Args>
-        struct is_vector_unwrap_invocable<Function, small::vector<FT>, Args...>
-            : std::disjunction<std::is_invocable<Function, Args..., small::vector<unwrap_future_t<FT>>>,
+        struct is_vector_unwrap_invocable<Function, futures::small_vector<FT>, Args...>
+            : std::disjunction<std::is_invocable<Function, Args..., futures::small_vector<unwrap_future_t<FT>>>,
                                std::is_invocable<Function, Args...,
-                                                 std::add_lvalue_reference_t<small::vector<unwrap_future_t<FT>>>>> {};
+                                                 std::add_lvalue_reference_t<futures::small_vector<unwrap_future_t<FT>>>>> {};
 
         /// \brief Check if a function can be invoked with unwrapped futures of a range
-        /// - Something like function(small::vector<T>) as continuation to small::vector<future<T>>
+        /// - Something like function(futures::small_vector<T>) as continuation to futures::small_vector<future<T>>
         template <class Function, class Future, class... Args>
         using is_vector_unwrap_continuation = std::conjunction<
             is_range_of_futures<unwrap_future_t<Future>>, // T in future<T> is tuple<future<T1>, future<T2>, ...>
@@ -440,17 +441,17 @@ namespace futures {
 
         template <typename Arg>
         struct vector_unwrap_result<
-            small::vector<Arg>,
-            std::enable_if_t<std::is_invocable_v<Function, FuncArgs..., small::vector<unwrap_future_t<Arg>>>>> {
-            using type = std::invoke_result_t<Function, FuncArgs..., small::vector<unwrap_future_t<Arg>>>;
+            futures::small_vector<Arg>,
+            std::enable_if_t<std::is_invocable_v<Function, FuncArgs..., futures::small_vector<unwrap_future_t<Arg>>>>> {
+            using type = std::invoke_result_t<Function, FuncArgs..., futures::small_vector<unwrap_future_t<Arg>>>;
         };
 
         template <typename Arg>
         struct vector_unwrap_result<
-            small::vector<Arg>,
-            std::enable_if_t<not std::is_invocable_v<Function, FuncArgs..., small::vector<unwrap_future_t<Arg>>>>> {
+            futures::small_vector<Arg>,
+            std::enable_if_t<not std::is_invocable_v<Function, FuncArgs..., futures::small_vector<unwrap_future_t<Arg>>>>> {
             using type = std::invoke_result_t<Function, FuncArgs...,
-                                              std::add_lvalue_reference_t<small::vector<unwrap_future_t<Arg>>>>;
+                                              std::add_lvalue_reference_t<futures::small_vector<unwrap_future_t<Arg>>>>;
         };
 
         template <typename Vector> using vector_unwrap_result_t = typename vector_unwrap_result<Vector>::type;

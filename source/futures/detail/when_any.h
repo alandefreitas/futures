@@ -15,7 +15,8 @@
 #include <shared_mutex>
 
 #include <range/v3/range/concepts.hpp>
-#include <small/vector.h>
+
+#include <futures/detail/small_vector_include.h>
 
 #include "traits/is_tuple.h"
 #include "traits/to_future.h"
@@ -677,8 +678,13 @@ namespace futures {
         void maybe_set_up_thread_notifiers() { maybe_set_up_notifiers_common<std::false_type>(); }
 
         /// \brief Common functionality to setup notifiers
+        ///
         /// The logic for setting notifiers for futures with and without lazy continuations is almost the
-        /// same. The task is the same but the first goes to a continuation and the later goes into a thread.
+        /// same.
+        ///
+        /// The task is the same but the first goes to a continuation and the later goes into a new thread.
+        /// Unfortunately, we do need a new thread an not only a new task because we are not sure there's
+        /// room in the executor for that.
         template <class SettingLazyContinuables> void maybe_set_up_notifiers_common() {
             constexpr bool setting_lazy = SettingLazyContinuables::value;
             constexpr bool setting_thread = not SettingLazyContinuables::value;
@@ -863,7 +869,9 @@ namespace futures {
         /// We could probably use stop tokens instead of atomic_bool in C++20
 
         /// \brief Type that defines an internal when_any notifier task
+        ///
         /// A notifier task notifies the when_any_future of any internal future that is ready.
+        ///
         /// We use this notifier type instead of a std::pair because futures need to be moved and
         /// the atomic bools do not, but std::pair conservatively deletes the move constructor
         /// because of atomic_bool.
@@ -879,8 +887,16 @@ namespace futures {
                   start_token(rhs.start_token.load()) {}
         };
 
-        using notifier_sequence_type =
-            std::conditional_t<sequence_is_range, small::vector<notifier>, std::array<notifier, compile_time_size()>>;
+#ifdef FUTURES_USE_SMALL_VECTOR
+        using notifier_vector = ::futures::small_vector<notifier>;
+#else
+        // Whenever small::vector in unavailable we use std::vector because boost small_vector
+        // couldn't handle move-only notifiers
+        using notifier_vector = ::std::vector<notifier>;
+#endif
+        using notifier_array = std::array<notifier, compile_time_size()>;
+
+        using notifier_sequence_type = std::conditional_t<sequence_is_range, notifier_vector, notifier_array>;
 
       private:
         /// \brief Internal wait_any_future state
@@ -913,7 +929,6 @@ namespace futures {
 
     /// Specialization explicitly setting const when_any_future<T> & as a type of future
     template <typename T> struct is_future<const when_any_future<T> &> : std::true_type {};
-
 
     namespace detail {
         /// \section Useful traits
@@ -1023,7 +1038,7 @@ namespace futures {
     template <class InputIt,
               std::enable_if_t<detail::is_valid_when_any_argument_v<typename std::iterator_traits<InputIt>::value_type>,
                                int> = 0>
-    when_any_future<small::vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+    when_any_future<::futures::small_vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_any(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<typename std::iterator_traits<InputIt>::value_type>;
@@ -1031,7 +1046,7 @@ namespace futures {
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
         using output_future_type = detail::to_future_t<input_type>;
-        using sequence_type = small::vector<output_future_type>;
+        using sequence_type = ::futures::small_vector<output_future_type>;
         constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
 
         // Create sequence
@@ -1062,7 +1077,7 @@ namespace futures {
     ///
     /// \return @ref when_any_future with all future objects
     template <class Range, std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0>
-    when_any_future<small::vector<
+    when_any_future<::futures::small_vector<
         detail::to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_any(Range &&r) {
         return when_any(std::begin(std::forward<Range>(r)), std::end(std::forward<Range>(r)));

@@ -66,7 +66,7 @@ namespace futures {
                 future_vector_type futures = before_future.get();
                 using future_vector_value_type = typename future_vector_type::value_type;
                 using unwrap_future_vector_value_type = unwrap_future_t<future_vector_value_type>;
-                using unwrap_future_vector_type = small::vector<unwrap_future_vector_value_type>;
+                using unwrap_future_vector_type = ::futures::small_vector<unwrap_future_vector_value_type>;
                 unwrap_future_vector_type values;
                 std::transform(futures.begin(), futures.end(), std::back_inserter(values),
                                [](future_vector_value_type &f) { return f.get(); });

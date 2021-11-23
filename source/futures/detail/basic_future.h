@@ -9,7 +9,7 @@
 #include <shared_mutex>
 #include <utility>
 
-#include <small/vector.h>
+#include <futures/detail/small_vector_include.h>
 
 #include "stop_token.h"
 #include "traits/is_executor_then_continuation.h"
@@ -311,7 +311,7 @@ namespace futures {
 
             /// \brief The continuation vector
             /// We use a small vector because of the common case when there few continuations per task
-            using continuation_vector = small::vector<continuation_ptr>;
+            using continuation_vector = futures::small_vector<continuation_ptr>;
 
           public:
             ~continuations_state() { request_run(); }

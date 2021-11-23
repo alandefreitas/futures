@@ -29,7 +29,7 @@
 /// If the input futures are not shared, they are moved into `when_all_future` and are invalidated,
 /// as usual. The `when_all_future` cannot be shared.
 
-#include <small/vector.h>
+#include <futures/detail/small_vector_include.h>
 
 #include <range/v3/range/concepts.hpp>
 
@@ -348,7 +348,7 @@ namespace futures {
     template <class InputIt,
               std::enable_if_t<detail::is_valid_when_all_argument_v<typename std::iterator_traits<InputIt>::value_type>,
                                int> = 0>
-    when_all_future<small::vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+    when_all_future<futures::small_vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<typename std::iterator_traits<InputIt>::value_type>;
@@ -356,7 +356,7 @@ namespace futures {
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
         using output_future_type = detail::to_future_t<input_type>;
-        using sequence_type = small::vector<output_future_type>;
+        using sequence_type = futures::small_vector<output_future_type>;
         constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
 
         // Create sequence
@@ -386,7 +386,7 @@ namespace futures {
     ///
     /// \return Future object of type @ref when_all_future
     template <class Range, std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0>
-    when_all_future<small::vector<
+    when_all_future<futures::small_vector<
         detail::to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
         return when_all(std::begin(std::forward<Range>(r)), std::end(std::forward<Range>(r)));
