@@ -48,6 +48,9 @@
  */
 
 namespace futures {
+    /** \addtogroup adaptors Adaptors
+     *  @{
+     */
 #if defined(FUTURES_USE_SMALL_VECTOR) || defined(FUTURES_DOXYGEN)
     /// \brief Alias to the small vector class we use
     ///
@@ -68,6 +71,9 @@ namespace futures {
     template <typename T, size_t N = ::small::default_inline_storage_v<T>, typename A = std::allocator<T>>
     using small_vector = ::std::vector<T, A>;
 #endif
+
+    /** @} */ // \addtogroup adaptors Adaptors
+
 }
 
 #endif // FUTURES_SMALL_VECTOR_INCLUDE_H

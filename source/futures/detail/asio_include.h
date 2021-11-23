@@ -48,6 +48,10 @@
  */
 
 namespace futures {
+    /** \addtogroup executors Executors
+     *  @{
+     */
+
 #if defined(FUTURES_USE_ASIO) || defined(FUTURES_DOXYGEN)
     /// \brief Alias to the asio namespace
     ///
@@ -60,6 +64,7 @@ namespace futures {
 #else
     namespace asio = ::boost::asio;
 #endif
+    /** @} */
 }
 
 #endif // FUTURES_ASIO_INCLUDE_H
