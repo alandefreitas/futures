@@ -8,11 +8,11 @@
 #include <execution>
 #include <variant>
 
-#include <range/v3/all.hpp>
+#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
 
-#include "../futures.h"
-#include "algorithm_traits.h"
-#include "partitioner.h"
+#include <futures/futures.h>
+#include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/partitioner.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -35,13 +35,13 @@ namespace futures {
         /// \param value Value
         /// \brief function template \c count
         template <class E, class P, class I, class S, class T,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && ranges::input_iterator<I> &&
-                                       ranges::sentinel_for<S, I> &&
-                                       ranges::indirectly_binary_invocable_<ranges::equal_to, T*, I>,
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                                       futures::detail::sentinel_for<S, I> &&
+                                       futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T*, I>,
                                    int> = 0>
-        ranges::iter_difference_t<I> main(const E &ex, P p, I first, S last, T v) const {
+        futures::detail::iter_difference_t<I> main(const E &ex, P p, I first, S last, T v) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || ranges::forward_iterator<I>) {
+            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
                 return std::count(first, last, v);
             }
 

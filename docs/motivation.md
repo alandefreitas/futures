@@ -102,7 +102,7 @@ The act of waiting for a [std::future] result is synchronous, which is not appro
 === "Continuations"
 
     ```cpp
-    auto A = futures_lib::async([]() { return 2; });
+    auto A = some_future_lib::async([]() { return 2; });
     auto B = A.then([](int A_result) {
         std::cout << A_result << std::endl;
     });
@@ -141,7 +141,7 @@ In [N3747 - A Universal Model for Asynchronous Operations](http://www.open-std.o
     ```cpp
     void schedule_write(std::size_t length) {
         // async_write returns some future type
-        future_lib::async_write(socket_, asio::buffer(data_, length))
+        some_future_lib::async_write(socket_, asio::buffer(data_, length))
             .then(schedule_read_function).detach();
     }
     ``` 
@@ -178,7 +178,7 @@ This is what these models would look like:
     void schedule_write(std::size_t length) {
         // async_write returns some continuable future type
         // `then` incurs in a synchronization cost
-        future_lib::async_write(socket_, asio::buffer(data_, length))
+        some_future_lib::async_write(socket_, asio::buffer(data_, length))
             .then(schedule_read_function).detach();
     }
     ``` 
@@ -211,7 +211,7 @@ This is what these models would look like:
     void schedule_write(std::size_t length) {
         // async_write returns some callback future type that always knows its continuation 
         // no synchronization cost because no extra continuations might be attached 
-        future_lib::async_write(socket_, asio::buffer(data_, length), 
+        some_future_lib::async_write(socket_, asio::buffer(data_, length), 
             schedule_read_function).detach();
     }
     ``` 
@@ -222,7 +222,7 @@ This is what these models would look like:
     void schedule_write(std::size_t length) {
         // async_write returns some lazy future type that we know is not executing yet 
         // no synchronization cost because continuations always come before the task starts 
-        future_lib::lazy_async_write(socket_, asio::buffer(data_, length)) 
+        some_future_lib::lazy_async_write(socket_, asio::buffer(data_, length)) 
             .then(schedule_read_function).detach();
     }
     ``` 
@@ -278,7 +278,7 @@ Libraries such as [Taskflow] and [TTB] provide facilities to compose task graphs
     });
     
     // D runs after B and C
-    std::future D = future_lib::when_all(B, C).then([] () { 
+    std::future D = some_future_lib::when_all(B, C).then([] () { 
         std::cout << "TaskD\n"; 
     });
     

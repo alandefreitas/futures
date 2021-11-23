@@ -8,7 +8,7 @@ TEST_CASE("Async algorithm") {
     auto ex = make_default_executor();
 
     std::vector<int> v(5000);
-    ranges::iota(v, 1);
+    std::iota(v.begin(), v.end(), 1);
     constexpr int v_sum = 12502500;
     static int v_prod = std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
     auto p = [](std::vector<int>::iterator first, std::vector<int>::iterator last) {

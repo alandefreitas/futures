@@ -6,18 +6,18 @@
 #define FUTURES_ALGORITHM_H
 
 
-#include "algorithm/algorithm_traits.h"
+#include <futures/algorithm/algorithm_traits.h>
 
-#include "algorithm/all_of.h"
-#include "algorithm/any_of.h"
-#include "algorithm/none_of.h"
-#include "algorithm/for_each.h"
-#include "algorithm/find.h"
-#include "algorithm/find_if.h"
-#include "algorithm/find_if_not.h"
-#include "algorithm/count.h"
-#include "algorithm/count_if.h"
-#include "algorithm/reduce.h"
+#include <futures/algorithm/all_of.h>
+#include <futures/algorithm/any_of.h>
+#include <futures/algorithm/none_of.h>
+#include <futures/algorithm/for_each.h>
+#include <futures/algorithm/find.h>
+#include <futures/algorithm/find_if.h>
+#include <futures/algorithm/find_if_not.h>
+#include <futures/algorithm/count.h>
+#include <futures/algorithm/count_if.h>
+#include <futures/algorithm/reduce.h>
 
 
 #endif // FUTURES_ALGORITHM_H

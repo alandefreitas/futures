@@ -48,22 +48,25 @@
 #include <future>
 
 // Some executors
-#include "detail/default_executor.h"
-#include "detail/inline_executor.h"
+#include <futures/executor/default_executor.h>
+#include <futures/executor/inline_executor.h>
 
 // Helper functions for std::future
-#include "detail/ready_future.h"
+#include <futures/adaptor/ready_future.h>
 
 // Future types
-#include "detail/basic_future.h"
+#include <futures/futures/basic_future.h>
 
 // Future adapters
-#include "detail/then.h"
-#include "detail/when_all.h"
-#include "detail/when_any.h"
+#include <futures/adaptor/then.h>
+#include <futures/adaptor/when_all.h>
+#include <futures/adaptor/when_any.h>
 
 namespace futures {
     /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup launch Launch
      *  @{
      */
 
@@ -73,12 +76,22 @@ namespace futures {
     /// this option can often be ignored, and is here most for compatibility with the std::async,
     /// so that std::launch can be converted to futures::launch.
     enum class launch {
-        new_thread = 1,      // execute on a new thread regarless of executors (like std::async(async))
-        deferred = 2,        // execute on the calling thread when result is requested (like std::async(deferred))
-        inline_now = 4,      // execute on the calling thread now (uses inline executor)
-        executor = 8,        // enqueue task in the default executor (uses default executor)
-        executor_now = 16,   // run immediately if inside the default executor (uses default executor)
-        executor_later = 32, // enqueue task for later in the default executor (uses default executor)
+        /// execute on a new thread regardless of executors (same as std::async::async)
+        new_thread = 1,
+        async = 1,
+        /// execute on the calling thread when result is requested (same as std::async::deferred)
+        deferred = 2,
+        /// execute on the calling thread now (uses inline executor)
+        inline_now = 4,
+        sync = 4,
+        /// enqueue task in the executor
+        executor = 8,
+        dispatch = 8,
+        /// run immediately if inside the executor
+        executor_now = 16,
+        /// enqueue task for later in the executor
+        executor_later = 32,
+        defer = 32,
     };
 
     /// \brief operator & for launch policies
@@ -113,8 +126,12 @@ namespace futures {
         struct dispatch_schedule_tag {};
         struct defer_schedule_tag {};
 
-        template <typename SchedulePolicy, typename Executor, typename Function,
-                  std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function>, int>>
+        template <typename SchedulePolicy, typename Executor, typename Function
+#ifndef FUTURES_DOXYGEN
+                  ,
+                  std::enable_if_t<is_executor_then_async_input_v<Executor, Function>, int>
+#endif
+                  >
         async_future_result_of<Function> internal_launch_async(const Executor &ex, Function &&f) {
             // The Function should accept no parameters or the stop token here
             // - No parameters: schedule `cfuture` to allow lazy continuations
@@ -186,11 +203,11 @@ namespace futures {
             auto executor_handle = [run_ptr]() { (*run_ptr)(); };
 
             // Post a handle running the complete function to the executor
-            if constexpr (std::is_same_v<SchedulePolicy, detail::post_schedule_tag>) {
+            if constexpr (std::is_same_v<SchedulePolicy, post_schedule_tag>) {
                 asio::post(ex, executor_handle);
-            } else if constexpr (std::is_same_v<SchedulePolicy, detail::dispatch_schedule_tag>) {
+            } else if constexpr (std::is_same_v<SchedulePolicy, dispatch_schedule_tag>) {
                 asio::dispatch(ex, executor_handle);
-            } else if constexpr (std::is_same_v<SchedulePolicy, detail::defer_schedule_tag>) {
+            } else if constexpr (std::is_same_v<SchedulePolicy, defer_schedule_tag>) {
                 asio::defer(ex, executor_handle);
             }
 
@@ -204,8 +221,12 @@ namespace futures {
             return std::move(result_future);
         }
 
-        template <typename SchedulePolicy, typename Executor, typename Function, typename... Args,
-                  std::enable_if_t<detail::is_executor_then_function_v<Executor, Function, Args...>, int> = 0>
+        template <typename SchedulePolicy, typename Executor, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+                  ,
+                  std::enable_if_t<is_executor_then_function_v<Executor, Function, Args...>, int> = 0
+#endif
+                  >
         auto internal_wrap_async(const Executor &ex, Function &&f, Args &&...args) {
             return internal_launch_async<SchedulePolicy, Executor>(
                 ex, [f = std::forward<Function>(f), args = std::make_tuple(std::forward<Args>(args)...)]() {
@@ -213,8 +234,12 @@ namespace futures {
                 });
         }
 
-        template <typename SchedulePolicy, typename Executor, typename Function, typename... Args,
-                  std::enable_if_t<detail::is_executor_then_stoppable_function_v<Executor, Function, Args...>, int> = 0>
+        template <typename SchedulePolicy, typename Executor, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+                  ,
+                  std::enable_if_t<is_executor_then_stoppable_function_v<Executor, Function, Args...>, int> = 0
+#endif
+                  >
         auto internal_wrap_async(const Executor &ex, Function &&f, Args &&...args) {
             return internal_launch_async<SchedulePolicy, Executor>(
                 ex,
@@ -224,8 +249,12 @@ namespace futures {
                 });
         }
 
-        template <typename SchedulePolicy, typename Function, typename... Args,
-                  std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0>
+        template <typename SchedulePolicy, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+                  ,
+                  std::enable_if_t<is_async_input_non_executor_v<Function, Args...>, int> = 0
+#endif
+>
         auto internal_default_async(Function &&f, Args &&...args) {
             return internal_wrap_async<SchedulePolicy>(::futures::make_default_executor(), std::forward<Function>(f),
                                                        std::forward<Args>(args)...);
@@ -248,8 +277,12 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Executor, typename Function, typename... Args,
-              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0>
+    template <typename Executor, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0
+#endif
+              >
     decltype(auto) async(const Executor &ex, Function &&f, Args &&...args) {
         return detail::internal_wrap_async<detail::post_schedule_tag>(ex, std::forward<Function>(f),
                                                                       std::forward<Args>(args)...);
@@ -267,8 +300,12 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Executor, typename Function, typename... Args,
-              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0>
+    template <typename Executor, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0
+#endif
+              >
     decltype(auto) async(launch policy, const Executor &ex, Function &&f, Args &&...args) {
         // Unwrap policies
         const bool new_thread_policy = (policy & launch::new_thread) == launch::new_thread;
@@ -321,8 +358,12 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Function, typename... Args,
-              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0>
+    template <typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
+#endif
+              >
     decltype(auto) async(launch policy, Function &&f, Args &&...args) {
         return async(policy, make_default_executor(), std::forward<Function>(f), std::forward<Args>(args)...);
     }
@@ -337,8 +378,12 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Function, typename... Args,
-              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0>
+    template <typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
+#endif
+              >
     decltype(auto) async(Function &&f, Args &&...args) {
         return detail::internal_default_async<detail::post_schedule_tag>(std::forward<Function>(f),
                                                                          std::forward<Args>(args)...);
@@ -358,8 +403,12 @@ namespace futures {
     /// Although this is a general solution to allow any executor in the algorithms, executor traits
     /// to identify capacity in executor are much more desirable.
     ///
-    template <typename Executor, typename Function, typename... Args,
-              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0>
+    template <typename Executor, typename Function, typename... Args
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::is_executor_then_async_input_v<Executor, Function, Args...>, int> = 0
+#endif
+              >
     decltype(auto) try_async(const Executor &ex, Function &&f, Args &&...args) {
         // Communication flags
         std::promise<void> started_token;
@@ -390,9 +439,15 @@ namespace futures {
 
     /// \brief Very simple version syntax sugar for types that pass the Future concept: future.wait() / future.get()
     /// This syntax is most useful for cases where we are immediately requesting the future result
-    template <typename Future, std::enable_if_t<is_future_v<Future>, int> = 0> decltype(auto) await(Future &&f) {
+    template <typename Future
+#ifndef FUTURES_DOXYGEN
+              , std::enable_if_t<is_future_v<Future>, int> = 0
+#endif
+              > decltype(auto) await(Future &&f) {
         return f.get();
     }
+
+    /** @} */ // \addtogroup launch Launch
 
     /** @} */ // \addtogroup futures Futures
 } // namespace futures
