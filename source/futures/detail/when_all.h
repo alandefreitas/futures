@@ -345,9 +345,13 @@ namespace futures {
     /// This overload uses a small vector for avoid further allocations for such a simple operation.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class InputIt,
+    template <class InputIt
+#ifndef FUTURES_DOXYGEN
+              ,
               std::enable_if_t<detail::is_valid_when_all_argument_v<typename std::iterator_traits<InputIt>::value_type>,
-                               int> = 0>
+                               int> = 0
+#endif
+              >
     when_all_future<futures::small_vector<detail::to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
         // Infer types
@@ -385,7 +389,12 @@ namespace futures {
     /// This function does not participate in overload resolution unless the range type @ref is_future.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class Range, std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0>
+    template <class Range
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<ranges::range<std::decay_t<Range>>, int> = 0
+#endif
+              >
     when_all_future<futures::small_vector<
         detail::to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
@@ -398,7 +407,12 @@ namespace futures {
     /// cv-qualified) shared_future or a cv-unqualified future, as defined by the trait @ref is_future.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class... Futures, std::enable_if_t<detail::are_valid_when_all_arguments_v<Futures...>, int> = 0>
+    template <class... Futures
+#ifndef FUTURES_DOXYGEN
+              ,
+              std::enable_if_t<detail::are_valid_when_all_arguments_v<Futures...>, int> = 0
+#endif
+              >
     when_all_future<std::tuple<detail::to_future_t<Futures>...>> when_all(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::to_future_t<Futures>...>;
@@ -442,8 +456,12 @@ namespace futures {
     ///
     /// \return @ref when_all_future object that concatenates all futures
     template <
-        class T1, class T2,
-        std::enable_if_t<detail::is_valid_when_all_argument_v<T1> && detail::is_valid_when_all_argument_v<T2>, int> = 0>
+        class T1, class T2
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<detail::is_valid_when_all_argument_v<T1> && detail::is_valid_when_all_argument_v<T2>, int> = 0
+#endif
+        >
     auto operator&&(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;
         constexpr bool second_is_when_all = detail::is_when_all_future_v<T2>;
