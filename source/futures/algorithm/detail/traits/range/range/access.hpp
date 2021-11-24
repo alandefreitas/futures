@@ -22,7 +22,9 @@
 
 #ifdef __has_include
 #if __has_include(<span>)
-#include <span>
+namespace std {
+    template <class T, std::size_t Extent> class span;
+}
 #endif
 #if __has_include(<string_view>)
 #include <string_view>
