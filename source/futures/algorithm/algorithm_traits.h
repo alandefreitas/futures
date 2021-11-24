@@ -86,7 +86,7 @@ namespace futures {
 #endif
               >
     constexpr decltype(auto) make_policy_executor() {
-        if constexpr (not std::is_same_v<E, sequenced_policy>) {
+        if constexpr (!std::is_same_v<E, sequenced_policy>) {
             return make_default_executor();
         } else {
             return make_inline_executor();
@@ -117,7 +117,7 @@ namespace futures {
             template <class E, class P, class I, class S, class Fun
 #ifndef FUTURES_DOXYGEN
                       ,
-                      std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
+                      std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
                                            futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
                                            futures::detail::indirectly_unary_invocable<Fun, I> &&
                                            std::is_copy_constructible_v<Fun>,
@@ -262,7 +262,7 @@ namespace futures {
                 class E, class P, class I, class S, class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
+                std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
                                      futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
                                  int> = 0
