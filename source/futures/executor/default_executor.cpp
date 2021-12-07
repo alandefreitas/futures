@@ -25,6 +25,6 @@ namespace futures {
         static std::size_t value = std::thread::hardware_concurrency();
 
         // Always return at least 1 core
-        return value == 0 ? 1 : value;
+        return std::max(static_cast<std::size_t>(1), value);
     }
 } // namespace futures
