@@ -162,7 +162,7 @@ namespace futures {
             r.index = get_ready_index();
             request_notifiers_stop_and_wait();
             r.tasks = std::move(v);
-            return std::move(r);
+            return r;
         }
 
         /// \brief Checks if the future refers to a shared state

@@ -437,7 +437,7 @@ namespace futures::detail {
                 asio::defer(ex, std::move(copyable_handle));
             }
 
-            return std::move(result);
+            return result;
         }
     };
     constexpr internal_then_functor internal_then;

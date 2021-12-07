@@ -128,7 +128,7 @@ namespace futures {
                     break;
                 }
 
-                return std::move(result);
+                return result;
             }
         };
         constexpr async_future_scheduler schedule_future;

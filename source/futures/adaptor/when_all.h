@@ -379,7 +379,7 @@ namespace futures {
         } else /* if constexpr (input_is_invocable) */ {
             static_assert(input_is_invocable);
             std::transform(first, last, std::back_inserter(v), [](auto &&f) {
-                return std::move(asio::post(make_default_executor(), asio::use_future(std::forward<decltype(f)>(f))));
+                return std::move(futures::async(std::forward<decltype(f)>(f)));
             });
         }
 
