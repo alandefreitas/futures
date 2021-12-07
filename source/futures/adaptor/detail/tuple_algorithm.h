@@ -5,7 +5,7 @@
 #ifndef FUTURES_TUPLE_ALGORITHM_H
 #define FUTURES_TUPLE_ALGORITHM_H
 
-#include <small/detail/exception/throw.h>
+#include <futures/futures/detail/throw_exception.h>
 #include <tuple>
 
 namespace futures {
@@ -110,7 +110,7 @@ namespace futures {
             return apply < Function, Tuple, current_tuple_idx + 1 > (std::forward<Function>(fn), std::forward<Tuple>(t),
                     idx);
         } else {
-            small::throw_exception<std::out_of_range>("apply:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>("apply:: tuple idx out of range");
         }
     }
 
@@ -128,7 +128,7 @@ namespace futures {
         } else if constexpr (current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>) {
             return get < Tuple, current_tuple_idx + 1 > (std::forward<Tuple>(t), idx);
         } else {
-            small::throw_exception<std::out_of_range>("get:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>("get:: tuple idx out of range");
         }
     }
 
@@ -146,7 +146,7 @@ namespace futures {
         } else if constexpr (current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>) {
             return get < Tuple, current_tuple_idx + 1 > (std::forward<Tuple>(t), idx, transform);
         } else {
-            small::throw_exception<std::out_of_range>("get:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>("get:: tuple idx out of range");
         }
     }
 

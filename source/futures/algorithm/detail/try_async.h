@@ -7,6 +7,7 @@
 #define FUTURES_TRY_ASYNC_H
 
 #include <futures/futures/async.h>
+#include <futures/futures/detail/throw_exception.h>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -44,7 +45,7 @@ namespace futures {
                         f](Args &&...args) mutable {
             p.set_value();
             if (cancel_token.stop_requested()) {
-                small::throw_exception<std::runtime_error>("task cancelled");
+                detail::throw_exception<std::runtime_error>("task cancelled");
             }
             return std::invoke(f, std::forward<Args>(args)...);
         };

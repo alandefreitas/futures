@@ -79,7 +79,7 @@ namespace futures::detail {
         constexpr auto fail = []() {
             // Could not unwrap, return unwrapping_failure_t to indicate we couldn't unwrap the continuation
             // The function still needs to be well-formed because other templates depend on it
-            small::throw_exception<std::logic_error>("Continuation unwrapping not possible");
+            detail::throw_exception<std::logic_error>("Continuation unwrapping not possible");
             return unwrapping_failure_t{};
         };
 
