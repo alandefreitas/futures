@@ -1,12 +1,23 @@
 //
-// Created by alandefreitas on 11/18/21.
+// Copyright (c) Alan de Freitas 11/18/21.
 //
 
 #ifndef FUTURES_ASIO_INCLUDE_H
 #define FUTURES_ASIO_INCLUDE_H
 
-/// \file Whenever including <asio.hpp>, we include this file instead
-/// This ensures the logic of including asio or boost::asio is consistent
+/// \file
+/// Indirectly includes asio or boost.asio
+///
+/// Whenever including <asio.hpp>, we include this file instead.
+/// This ensures the logic of including asio or boost::asio is consistent and that
+/// we never include both.
+///
+/// Because this is not a networking library, at this point, we only depend on the
+/// asio execution concepts (which we can forward-declare) and its thread-pool, which
+/// is not very advanced. So this means we might be able to remove boost asio as a
+/// dependency at some point and, because the small vector library is also not
+/// mandatory, we can make this library free of dependencies.
+///
 
 #ifdef _WIN32
 #include <SDKDDKVer.h>

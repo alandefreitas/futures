@@ -1,11 +1,12 @@
 //
-// Created by alandefreitas on 11/18/21.
+// Copyright (c) Alan de Freitas 11/18/21.
 //
 
 #ifndef FUTURES_ASIO_COMPILE_H
 #define FUTURES_ASIO_COMPILE_H
 
-/// \file Compilation proxy to make the library not header-only
+/// \file
+/// Compilation proxy to make the library not header-only
 ///
 /// To make the library *not* header-only, the user can:
 /// - create a source file,

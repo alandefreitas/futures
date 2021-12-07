@@ -1,11 +1,13 @@
 //
-// Created by alandefreitas on 11/18/21.
+// Copyright (c) Alan de Freitas 11/18/21.
 //
 
 #ifndef FUTURES_SMALL_VECTOR_INCLUDE_H
 #define FUTURES_SMALL_VECTOR_INCLUDE_H
 
-/// \file Whenever including <small/vector.h>, we include this file instead
+/// \file
+/// Whenever including <small/vector.h>, we include this file instead
+///
 /// This ensures the logic of including small::vector or boost::container::small_vector is consistent
 
 /*
@@ -72,7 +74,7 @@ namespace futures {
     using small_vector = ::std::vector<T, A>;
 #endif
 
-    /** @} */ // \addtogroup adaptors Adaptors
+    /** @} */
 
 }
 
