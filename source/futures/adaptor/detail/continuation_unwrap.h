@@ -237,8 +237,8 @@ namespace futures::detail {
     template <class Future, class Function>
     struct result_of_unwrap<
         Future, Function,
-        std::void_t<std::invoke_result_t<decltype(unwrap_and_continue<Future, Function>), Future, Function>>> {
-        using type = typename std::invoke_result_t<decltype(unwrap_and_continue<Future, Function>), Future, Function>;
+        std::void_t<decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>()))>> {
+        using type = decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>()));
     };
 
     template <class Future, class Function>
@@ -252,10 +252,8 @@ namespace futures::detail {
     template <class Future, class Function>
     struct result_of_unwrap_with_token<
         Future, Function,
-        std::void_t<std::invoke_result_t<decltype(unwrap_and_continue<Future, Function, stop_token>), Future, Function,
-                                         stop_token>>> {
-        using type = typename std::invoke_result_t<decltype(unwrap_and_continue<Future, Function, stop_token>), Future,
-                                                   Function, stop_token>;
+        std::void_t<decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(), std::declval<stop_token>()))>> {
+        using type = decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(), std::declval<stop_token>()));
     };
 
     template <class Future, class Function>
