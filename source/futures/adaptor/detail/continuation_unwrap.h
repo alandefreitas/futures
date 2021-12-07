@@ -368,7 +368,7 @@ namespace futures::detail {
                 return std::make_tuple(std::forward<Future>(before_future),
                                        std::forward<Function>(continuation_function), st);
             }
-        };
+        }
 
         template <typename Executor, typename Function, class Future
 #ifndef FUTURES_DOXYGEN

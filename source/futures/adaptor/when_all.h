@@ -401,7 +401,7 @@ namespace futures {
         to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
         return when_all(std::begin(std::forward<Range>(r)), std::end(std::forward<Range>(r)));
-    };
+    }
 
     /// \brief Create a future object that becomes ready when all of the input futures become ready
     ///
@@ -437,7 +437,7 @@ namespace futures {
         sequence_type v = std::make_tuple((to_future_t<Futures>(move_share_or_post(futures)))...);
 
         return when_all_future<sequence_type>(std::move(v));
-    };
+    }
 
     /// \brief Operator to create a future object that becomes ready when all of the input futures are ready
     ///
