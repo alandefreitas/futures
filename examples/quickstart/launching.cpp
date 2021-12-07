@@ -33,6 +33,7 @@ int main() {
     f1.wait();
     f2.wait();
     f3.wait();
+    f4.request_stop();
     f4.wait();
 
     return 0;
