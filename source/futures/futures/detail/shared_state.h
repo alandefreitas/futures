@@ -174,7 +174,7 @@ namespace futures::detail {
         }
 
         /// \brief Check if state is ready
-        bool is_ready(const std::unique_lock<std::mutex> &lk) const {
+        bool is_ready([[maybe_unused]] const std::unique_lock<std::mutex> &lk) const {
             assert(lk.owns_lock());
             return ready_;
         }
