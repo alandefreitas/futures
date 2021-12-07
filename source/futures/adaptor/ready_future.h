@@ -7,96 +7,86 @@
 
 #include <future>
 
-#include <futures/futures/basic_future.h>
+#include <futures/futures/detail/traits/has_is_ready.h>
+
 #include <futures/futures/traits/future_return.h>
 #include <futures/futures/traits/is_future.h>
 
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
+#include <futures/futures/basic_future.h>
+#include <futures/futures/promise.h>
 
+namespace futures {
     /** \addtogroup adaptors Adaptors
      *  @{
      */
 
     /// \brief Check if a future is ready
+    /// Although basic_future has its more efficient is_ready function, this free function
+    /// allows us to query other futures that don't implement is_ready, such as std::future.
     template <typename Future
 #ifndef FUTURES_DOXYGEN
-              , std::enable_if_t<is_future_v<Future>, int> = 0
+              ,
+              std::enable_if_t<is_future_v<Future>, int> = 0
 #endif
-              > bool is_ready(Future &&f) {
+              >
+    bool is_ready(Future &&f) {
         assert(f.valid() && "Undefined behaviour. Checking if an invalid future is ready.");
-        return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+        if constexpr (detail::has_is_ready_v<Future>) {
+            return f.is_ready();
+        } else {
+            return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+        }
     }
 
-    /// \brief Make a placeholder std::future object that is ready
+    /// \brief Make a placeholder future object that is ready
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T> std::future<typename std::decay_t<T>> make_ready_future(T &&value) {
+    template <typename T, typename Future = future<typename std::decay_t<T>>> Future make_ready_future(T &&value) {
         using decay_type = typename std::decay_t<T>;
-        std::promise<decay_type> p;
-        std::future<decay_type> result = p.get_future();
+        promise<decay_type> p;
+        Future result = p.template get_future<Future>();
         p.set_value(value);
         return result;
     }
 
-    /// \brief Make a placeholder std::future object that is ready from a reference
+    /// \brief Make a placeholder future object that is ready from a reference
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T> std::future<T &> make_ready_future(std::reference_wrapper<T> value) {
-        std::promise<T &> p;
-        std::future<T &> result = p.get_future();
+    template <typename T, typename Future = future<T &>> Future make_ready_future(std::reference_wrapper<T> value) {
+        promise<T &> p;
+        Future result = p.template get_future<Future>();
         p.set_value(value);
         return result;
     }
 
-    /// \brief Make a placeholder void std::future object that is ready
+    /// \brief Make a placeholder void future object that is ready
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    inline std::future<void> make_ready_future() {
-        std::promise<void> p;
-        std::future<void> result = p.get_future();
+    template <typename Future = future<void>> Future make_ready_future() {
+        promise<void> p;
+        auto result = p.get_future<Future>();
         p.set_value();
         return result;
     }
-
-    namespace detail {
-        template <typename T> cfuture<typename std::decay_t<T>> internal_make_ready_cfuture(T &&value) {
-            auto std_future = futures::make_ready_future(std::forward<T>(value));
-            cfuture<typename std::decay_t<T>> c_future;
-            c_future.set_future(std::move(std_future));
-            return c_future;
-        }
-
-        template <typename T> cfuture<T &> internal_make_ready_cfuture(std::reference_wrapper<T> value) {
-            auto std_future = futures::make_ready_future(std::forward<T>(value));
-            cfuture<T&> c_future;
-            c_future.set_future(std::move(std_future));
-            return c_future;
-        }
-
-        inline cfuture<void> internal_make_ready_cfuture() {
-            auto std_future = futures::make_ready_future();
-            cfuture<void> c_future;
-            c_future.set_future(std::make_unique<decltype(std_future)>(std::move(std_future)));
-            return c_future;
-        }
-    } // namespace detail
 
     /// \brief Make a placeholder @ref cfuture object that is ready
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    template <typename T> decltype(auto) make_ready_cfuture(T &&value) {
-        return detail::internal_make_ready_cfuture(std::forward<T>(value));
+    template <typename T> cfuture<typename std::decay<T>> make_ready_cfuture(T &&value) {
+        return make_ready_future<T, cfuture<typename std::decay<T>>>(std::forward<T>(value));
+    }
+
+    /// \brief Make a placeholder @ref cfuture object that is ready
+    template <typename T> cfuture<T&> make_ready_cfuture(std::reference_wrapper<T> value) {
+        return make_ready_future<T, cfuture<T&>>(value);
     }
 
     /// \brief Make a placeholder void @ref cfuture object that is ready
@@ -104,40 +94,22 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline decltype(auto) make_ready_cfuture() {
-        return detail::internal_make_ready_cfuture();
+    inline cfuture<void> make_ready_cfuture() {
+        return make_ready_future<cfuture<void>>();
     }
-
-    namespace detail {
-        template <typename T> jcfuture<typename std::decay_t<T>> internal_make_ready_jcfuture(T &&value) {
-            auto std_future = futures::make_ready_future(std::forward<T>(value));
-            jcfuture<typename std::decay_t<T>> c_future;
-            c_future.set_future(std::move(std_future));
-            return c_future;
-        }
-
-        template <typename T> jcfuture<T &> internal_make_ready_jcfuture(std::reference_wrapper<T> value) {
-            auto std_future = futures::make_ready_future(std::forward<T>(value));
-            jcfuture<T&> c_future;
-            c_future.set_future(std::move(std_future));
-            return c_future;
-        }
-
-        inline jcfuture<void> internal_make_ready_jcfuture() {
-            auto std_future = futures::make_ready_future();
-            jcfuture<void> c_future;
-            c_future.set_future(std::make_unique<decltype(std_future)>(std::move(std_future)));
-            return c_future;
-        }
-    } // namespace detail
 
     /// \brief Make a placeholder @ref jcfuture object that is ready
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    template <typename T> decltype(auto) make_ready_jcfuture(T &&value) {
-        return detail::internal_make_ready_jcfuture(std::forward<T>(value));
+    template <typename T> jcfuture<typename std::decay<T>> make_ready_jcfuture(T &&value) {
+        return make_ready_future<T, jcfuture<typename std::decay<T>>>(std::forward<T>(value));
+    }
+
+    /// \brief Make a placeholder @ref cfuture object that is ready
+    template <typename T> jcfuture<T&> make_ready_jcfuture(std::reference_wrapper<T> value) {
+        return make_ready_future<T, jcfuture<T&>>(value);
     }
 
     /// \brief Make a placeholder void @ref jcfuture object that is ready
@@ -145,8 +117,8 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline decltype(auto) make_ready_jcfuture() {
-        return detail::internal_make_ready_jcfuture();
+    inline jcfuture<void> make_ready_jcfuture() {
+        return make_ready_future<jcfuture<void>>();
     }
 
     /// \brief Make a placeholder future object that is ready with an exception from an exception ptr
@@ -154,10 +126,10 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T> std::future<T> make_exceptional_future(std::exception_ptr ex) {
-        std::promise<T> p;
+    template <typename T, typename Future = future<T>> future<T> make_exceptional_future(std::exception_ptr ex) {
+        promise<T> p;
         p.set_exception(ex);
-        return p.get_future();
+        return p.template get_future<Future>();
     }
 
     /// \brief Make a placeholder future object that is ready with from any exception
@@ -165,13 +137,12 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <class T, class E> std::future<T> make_exceptional_future(E ex) {
-        std::promise<T> p;
+    template <class T, typename Future = future<T>, class E> future<T> make_exceptional_future(E ex) {
+        promise<T> p;
         p.set_exception(std::make_exception_ptr(ex));
-        return p.get_future();
+        return p.template get_future<Future>();
     }
-    /** @} */  // \addtogroup adaptors Adaptors
-    /** @} */  // \addtogroup futures Futures
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_READY_FUTURE_H
