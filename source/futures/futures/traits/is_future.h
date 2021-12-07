@@ -5,8 +5,8 @@
 #ifndef FUTURES_IS_FUTURE_H
 #define FUTURES_IS_FUTURE_H
 
-#include <type_traits>
 #include <future>
+#include <type_traits>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -90,7 +90,7 @@ namespace futures {
     /// This state should be copied to the new callback function.
     /// Shared futures can be copied. Normal futures should be moved.
     /// \return The moved future or the shared future
-    template <class Future> constexpr auto move_or_share(Future &&before) {
+    template <class Future> constexpr decltype(auto) move_or_copy(Future &&before) {
         if constexpr (is_shared_future_v<Future>) {
             return std::forward<Future>(before);
         } else {
@@ -98,8 +98,8 @@ namespace futures {
         }
     }
 
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_FUTURE_H

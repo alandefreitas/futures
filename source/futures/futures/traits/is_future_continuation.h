@@ -6,6 +6,7 @@
 #define FUTURES_IS_FUTURE_CONTINUATION_H
 
 #include <futures/algorithm/detail/traits/range/range/concepts.hpp>
+#include <futures/adaptor/detail/traits/is_when_any_result.h>
 
 #include <futures/config/small_vector_include.h>
 
@@ -94,6 +95,7 @@ namespace futures {
         /// \brief Check if a function can be invoked with the elements of a tuple, as in std::apply
         template <typename Function, typename ArgsTuple, typename RealTuple, typename... Args>
         struct is_tuple_explode_invocable : std::false_type {};
+
         template <typename Function, class... Args, typename... TupleArgs>
         struct is_tuple_explode_invocable<Function, std::tuple<Args...>, std::tuple<TupleArgs...>>
             : std::is_invocable<Function, Args..., TupleArgs...> {};
@@ -174,15 +176,6 @@ namespace futures {
         constexpr bool is_vector_unwrap_continuation_v =
             is_vector_unwrap_continuation<Function, Future, Args...>::value;
 
-        /// Check if type is a when_any_result
-        template <typename> struct is_when_any_result : std::false_type {};
-        template <typename Sequence> struct is_when_any_result<when_any_result<Sequence>> : std::true_type {};
-        template <typename Sequence> struct is_when_any_result<const when_any_result<Sequence>> : std::true_type {};
-        template <typename Sequence> struct is_when_any_result<when_any_result<Sequence> &> : std::true_type {};
-        template <typename Sequence> struct is_when_any_result<when_any_result<Sequence> &&> : std::true_type {};
-        template <typename Sequence> struct is_when_any_result<const when_any_result<Sequence> &> : std::true_type {};
-        template <class T> constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
-
         /// Check if type is a when_any_result where the sequence type is a tuple
         template <typename> struct is_tuple_when_any_result : std::false_type {};
         template <typename Sequence> struct is_tuple_when_any_result<when_any_result<Sequence>> : is_tuple<Sequence> {};
@@ -191,10 +184,12 @@ namespace futures {
         /// \brief Check if a function can be invoked with the decomposed elements of a tuple_when_any_result
         template <typename Function, typename ArgsTuple, typename T>
         struct is_index_and_sequence_invocable : std::false_type {};
+
         template <typename Function, typename... ArgsTupleArgs, typename... Args>
         struct is_index_and_sequence_invocable<Function, std::tuple<ArgsTupleArgs...>,
                                                when_any_result<std::tuple<Args...>>>
             : std::is_invocable<Function, ArgsTupleArgs..., size_t, std::tuple<Args...>> {};
+
         template <typename Function, typename Sequence, typename... ArgsTuple>
         struct is_index_and_sequence_invocable<Function, std::tuple<ArgsTuple...>, when_any_result<Sequence>>
             : std::is_invocable<Function, ArgsTuple..., size_t, Sequence> {};

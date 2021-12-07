@@ -5,7 +5,7 @@
 #ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 #define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
-#include <futures/config/asio_include.h>
+#include "../../config/asio_include.h"
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -37,13 +37,6 @@ namespace futures::detail {
 
     template <class E, class F, typename... Args>
     constexpr bool is_executor_then_stoppable_function_v = is_executor_then_stoppable_function<E, F, Args...>::value;
-
-    template <class E, class F, typename... Args>
-    using is_executor_then_async_input =
-        std::disjunction<is_executor_then_function<E, F, Args...>, is_executor_then_stoppable_function<E, F, Args...>>;
-
-    template <class E, class F, typename... Args>
-    constexpr bool is_executor_then_async_input_v = is_executor_then_async_input<E, F, Args...>::value;
 
     template <class F, typename... Args>
     using is_invocable_non_executor =
