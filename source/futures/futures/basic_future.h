@@ -95,8 +95,8 @@ namespace futures {
         /// @}
 
         // Fwd-declare
-        template <typename R> struct promise_base;
-        class async_future_scheduler;
+        template <typename R> class promise_base;
+        struct async_future_scheduler;
         struct internal_then_functor;
 
         /// \class Enable a future class that automatically waits on destruction, and can be cancelled/stopped
@@ -263,7 +263,7 @@ namespace futures {
         /// @{
 
         // Other shared state types can access the shared state constructor directly
-        friend struct detail::promise_base<T>;
+        friend class detail::promise_base<T>;
 
         template <typename Signature> friend class packaged_task;
 
@@ -274,7 +274,7 @@ namespace futures {
         using basic_future_unique_version_t = basic_future<T, std::false_type, LazyContinuable, Stoppable>;
         friend basic_future_unique_version_t;
 
-        friend class detail::async_future_scheduler;
+        friend struct detail::async_future_scheduler;
         friend struct detail::internal_then_functor;
 
         /// @}
