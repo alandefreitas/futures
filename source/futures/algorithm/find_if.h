@@ -12,6 +12,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -19,8 +20,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref find_if function
-    class find_if_fn : public detail::unary_invoke_algorithm_fn<find_if_fn> {
+    /// \brief Functor representing the overloads for the @ref find_if function
+    class find_if_functor : public detail::unary_invoke_algorithm_functor<find_if_functor> {
       public:
         /// \brief Complete overload of the find_if algorithm
         /// \tparam E Executor type
@@ -72,7 +73,7 @@ namespace futures {
     };
 
     /// \brief Finds the first element satisfying specific criteria
-    inline constexpr find_if_fn find_if;
+    inline constexpr find_if_functor find_if;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

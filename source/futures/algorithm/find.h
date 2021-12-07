@@ -12,6 +12,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -19,8 +20,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref find function
-    class find_fn : public detail::value_cmp_algorithm_fn<find_fn> {
+    /// \brief Functor representing the overloads for the @ref find function
+    class find_functor : public detail::value_cmp_algorithm_functor<find_functor> {
       public:
         /// \brief Complete overload of the find algorithm
         /// \tparam E Executor type
@@ -72,7 +73,7 @@ namespace futures {
     };
 
     /// \brief Finds the first element equal to another element
-    inline constexpr find_fn find;
+    inline constexpr find_functor find;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

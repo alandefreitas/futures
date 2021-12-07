@@ -12,6 +12,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -19,8 +20,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref count_if function
-    class count_if_fn : public detail::unary_invoke_algorithm_fn<count_if_fn> {
+    /// \brief Functor representing the overloads for the @ref count_if function
+    class count_if_functor : public detail::unary_invoke_algorithm_functor<count_if_functor> {
       public:
         /// \brief Complete overload of the count_if algorithm
         /// \tparam E Executor type
@@ -63,7 +64,7 @@ namespace futures {
     };
 
     /// \brief Returns the number of elements satisfying specific criteria
-    inline constexpr count_if_fn count_if;
+    inline constexpr count_if_functor count_if;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

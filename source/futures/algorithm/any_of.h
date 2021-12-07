@@ -12,6 +12,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -19,8 +20,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref any_of function
-    class any_of_fn : public detail::unary_invoke_algorithm_fn<any_of_fn> {
+    /// \brief Functor representing the overloads for the @ref any_of function
+    class any_of_functor : public detail::unary_invoke_algorithm_functor<any_of_functor> {
       public:
         /// \brief Complete overload of the any_of algorithm
         /// \tparam E Executor type
@@ -71,7 +72,7 @@ namespace futures {
     };
 
     /// \brief Checks if a predicate is true for any of the elements in a range
-    inline constexpr any_of_fn any_of;
+    inline constexpr any_of_functor any_of;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

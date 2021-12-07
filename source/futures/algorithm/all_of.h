@@ -11,18 +11,18 @@
 
 #include <futures/algorithm/detail/traits/range/range/concepts.hpp>
 
-#include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
+#include <futures/futures.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
 
-    /// Class representing the overloads for the @ref all_of function
-    class all_of_fn : public detail::unary_invoke_algorithm_fn<all_of_fn>
-    {
+    /// \brief Functor representing the overloads for the @ref all_of function
+    class all_of_functor : public detail::unary_invoke_algorithm_functor<all_of_functor> {
       public:
         /// \brief Complete overload of the all_of algorithm
         /// \tparam E Executor type
@@ -39,8 +39,9 @@ namespace futures {
         template <class E, class P, class I, class S, class Fun
 #ifndef FUTURES_DOXYGEN
                   ,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
+                                       futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                       futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0
 #endif
@@ -73,7 +74,7 @@ namespace futures {
     };
 
     /// \brief Checks if a predicate is true for all the elements in a range
-    inline constexpr all_of_fn all_of;
+    inline constexpr all_of_functor all_of;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

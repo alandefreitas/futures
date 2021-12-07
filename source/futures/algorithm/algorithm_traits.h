@@ -34,11 +34,9 @@ namespace futures {
      *  @{
      */
 
-    /** \addtogroup algorithm-traits Algorithm Traits
+    /** \addtogroup execution-policies Execution Policies
      *  @{
      */
-
-    /// @name Execution policies
 
     /// Class representing a type for a sequenced_policy tag
     class sequenced_policy {};
@@ -93,11 +91,17 @@ namespace futures {
         }
     }
 
+    /** @}*/
+
+    /** \addtogroup algorithm-traits Algorithm Traits
+     *  @{
+     */
+
     namespace detail {
 
         /// \brief CRTP class with the overloads for classes that look for elements in a sequence with an unary function
         /// This includes algorithms such as for_each, any_of, all_of, ...
-        template <class Derived> class unary_invoke_algorithm_fn {
+        template <class Derived> class unary_invoke_algorithm_functor {
           public:
             template <class E, class P, class I, class S, class Fun
 #ifndef FUTURES_DOXYGEN
@@ -240,7 +244,7 @@ namespace futures {
 
         /// \brief CRTP class with the overloads for classes that look for elements in a sequence with an unary function
         /// This includes algorithms such as for_each, any_of, all_of, ...
-        template <class Derived> class value_cmp_algorithm_fn {
+        template <class Derived> class value_cmp_algorithm_functor {
           public:
             template <
                 class E, class P, class I, class S, class T
@@ -384,8 +388,8 @@ namespace futures {
             }
         };
     }        // namespace detail
-    /** @}*/ // \addtogroup algorithm-traits Algorithm Traits
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_H

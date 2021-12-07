@@ -12,6 +12,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -19,8 +20,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref count function
-    class count_fn : public detail::value_cmp_algorithm_fn<count_fn> {
+    /// \brief Functor representing the overloads for the @ref count function
+    class count_functor : public detail::value_cmp_algorithm_functor<count_functor> {
       public:
         /// \brief Complete overload of the count algorithm
         /// \tparam E Executor type
@@ -63,7 +64,7 @@ namespace futures {
     };
 
     /// \brief Returns the number of elements matching an element
-    inline constexpr count_fn count;
+    inline constexpr count_functor count;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures

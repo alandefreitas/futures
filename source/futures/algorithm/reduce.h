@@ -13,6 +13,7 @@
 
 #include <futures/futures.h>
 #include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <futures/algorithm/partitioner.h>
 
 namespace futures {
@@ -20,8 +21,8 @@ namespace futures {
      *  @{
      */
 
-    /// Class representing the overloads for the @ref reduce function
-    class reduce_fn {
+    /// \brief Functor representing the overloads for the @ref reduce function
+    class reduce_functor {
       public:
         /// \brief Complete overload of the reduce algorithm
         /// The reduce algorithm is equivalent to a version std::accumulate where the binary operation
@@ -263,7 +264,7 @@ namespace futures {
     };
 
     /// \brief Sums up (or accumulate with a custom function) a range of elements, except out of order
-    inline constexpr reduce_fn reduce;
+    inline constexpr reduce_functor reduce;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
