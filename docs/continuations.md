@@ -24,6 +24,25 @@ This following example include the basic wrapping functions.
 --8<-- "examples/adaptors/continuations_unwrap.cpp"
 ```
 
+The following table describes all unwrapping functions by their priority:
+
+| Future output                                                 | Continuation input                             | Inputs |
+|---------------------------------------------------------------|------------------------------------------------|--------|
+| `future<T>`                                                   | `future<T>`                                    | 1      |
+| `future<T>`                                                   | ``                                             | 0      |
+| `future<T>`                                                   | `T`                                            | 1      |
+| `future<tuple<future<T1>, future<T2>, ...>>`                  | `future<T1>`, `future<T2>` ...                 | N      |
+| `future<tuple<future<T1>, future<T2>, ...>>`                  | `T1`, `T2` ...                                 | N      |
+| `future<vector<future<T>>>`                                   | `vector<T>`                                    | 1      |
+| `future<when_any_result<tuple<future<T1>, future<T2>, ...>>>` | `size_t`, `tuple<future<T1>, future<T2>, ...>` | 2      |
+| `future<when_any_result<tuple<future<T1>, future<T2>, ...>>>` | `size_t`, `future<T1>`, `future<T2>`, ...      | N + 1  |
+| `future<when_any_result<tuple<future<T>, future<T>, ...>>>`   | `future<T>`                                    | 1      |
+| `future<when_any_result<vector<future<T>>>>`                  | `future<T>`                                    | 1      |
+| `future<when_any_result<tuple<future<T>, future<T>, ...>>>`   | `T`                                            | 1      |
+| `future<when_any_result<vector<future<T>>>>`                  | `T`                                            | 1      |
+
+Note that wherever the continuation input has the same number of arguments for the same future output, a template function would be ambiguous. In this case, the continuation output with the highest priority is always used. This means a template continuation will usually unwrap to "`future<T>`" over "`T`" continuation input variants. 
+
 ## Continuation stop
 
 Like the [async] function, the function [then] might return a future type with a [stop_token]. This happens whenever 1) the continuation function expects a stop token, or 2) the previous future has a stop token. In the second case, both futures with share the same [stop_source].    
