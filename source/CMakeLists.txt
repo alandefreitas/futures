@@ -9,7 +9,7 @@ add_library(futures
         # Detail / Traits
         futures/adaptor/detail/traits/is_callable.h
         futures/adaptor/detail/traits/is_executor_then_continuation.h
-        futures/adaptor/detail/traits/is_executor_then_function.h
+        futures/futures/traits/is_executor_then_function.h
         futures/adaptor/detail/traits/is_reference_wrapper.h
         futures/adaptor/detail/traits/is_tuple.h
 
@@ -67,8 +67,14 @@ add_library(futures
         futures/executor/inline_executor.cpp
 
         # Future types
+        futures/futures/future_error.h
         futures/futures/stop_token.h
+        futures/futures/promise.h
         futures/futures/basic_future.h
+        futures/futures/detail/shared_state.h
+        futures/futures/detail/task.h
+        futures/futures/detail/to_address.h
+        futures/futures/detail/intrusive_ptr.h
 
         # Adaptors
         futures/adaptor/detail/tuple_algorithm.h
