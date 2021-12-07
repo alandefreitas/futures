@@ -502,7 +502,7 @@ namespace futures {
         }
     }
 
-    /** @} */ // \addtogroup adaptors Adaptors
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_WHEN_ALL_H

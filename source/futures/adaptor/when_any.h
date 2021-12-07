@@ -22,6 +22,7 @@
 #include <futures/adaptor/detail/tuple_algorithm.h>
 #include <futures/adaptor/when_any_result.h>
 #include <futures/futures/traits/to_future.h>
+#include <futures/futures/async.h>
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -271,7 +272,10 @@ namespace futures {
         }
 
         /// \brief Check if it's ready
-        [[nodiscard]] bool is_ready() const { return get_ready_index() != size_t(-1); }
+        [[nodiscard]] bool is_ready() const {
+            auto idx = get_ready_index();
+            return idx != static_cast<size_t>(-1) || (size() == 0);
+        }
 
         /// \brief Allow move the underlying sequence somewhere else
         /// The when_any_future is left empty and should now be considered invalid.
@@ -286,22 +290,25 @@ namespace futures {
         /// \brief Get index of the first internal future that is ready
         /// If no future is ready, this returns the sequence size as a sentinel
         template <class CheckLazyContinuables = std::true_type> [[nodiscard]] size_t get_ready_index() const {
-            const auto eq_comp = [&](auto &&f) {
-                if constexpr (CheckLazyContinuables::value || not is_lazy_continuable_v<std::decay_t<decltype(f)>>) {
+            const auto eq_comp = [](auto &&f) {
+                if constexpr (CheckLazyContinuables::value || (!is_lazy_continuable_v<std::decay_t<decltype(f)>>)) {
                     return ::futures::is_ready(std::forward<decltype(f)>(f));
                 } else {
                     return false;
                 }
             };
-            size_t ready_index = [&] {
-                if constexpr (sequence_is_range) {
-                    auto it = std::find_if(v.begin(), v.end(), eq_comp);
-                    return it - v.begin();
-                } else {
-                    return tuple_find_if(v, eq_comp);
-                }
-            }();
-            return ready_index == size() ? size_t(-1) : ready_index;
+            size_t ready_index(-1);
+            if constexpr (sequence_is_range) {
+                auto it = std::find_if(v.begin(), v.end(), eq_comp);
+                ready_index = it - v.begin();
+            } else {
+                ready_index = tuple_find_if(v, eq_comp);
+            }
+            if (ready_index == size()) {
+                return static_cast<size_t>(-1);
+            } else {
+                return ready_index;
+            }
         }
 
         /// \brief To common paths to wait for a future
@@ -687,7 +694,7 @@ namespace futures {
         /// room in the executor for that.
         template <class SettingLazyContinuables> void maybe_set_up_notifiers_common() {
             constexpr bool setting_lazy = SettingLazyContinuables::value;
-            constexpr bool setting_thread = not SettingLazyContinuables::value;
+            constexpr bool setting_thread = !SettingLazyContinuables::value;
 
             // Never do that more than once. Also check
             if constexpr (setting_thread) {
@@ -704,7 +711,8 @@ namespace futures {
 
             // Initialize the variable the notifiers need to set
             // Any of the notifiers will set the same variable
-            const bool init_ready = (setting_lazy && !thread_notifiers_set) || (setting_thread && !lazy_notifiers_set);
+            const bool init_ready =
+                (setting_lazy && (!thread_notifiers_set)) || (setting_thread && (!lazy_notifiers_set));
             if (init_ready) {
                 ready_notified = false;
             }
@@ -727,8 +735,8 @@ namespace futures {
 
                 // Create promise the notifier needs to fulfill
                 // All we need to know is whether it's over
-                std::promise<void> p;
-                std::future<void> std_future = p.get_future();
+                promise<void> p;
+                auto std_future = p.get_future<futures::future<void>>();
                 auto notifier_task = [p = std::move(p), &future, &cancel_token, &start_token, this]() mutable {
                     // The very first thing we need to do is set the start token,
                     // so we never wait for notifiers that aren't running
@@ -843,16 +851,16 @@ namespace futures {
                 for_each_paired(v, notifiers, [&](auto &this_future, notifier &n) {
                     using future_type = std::decay_t<decltype(this_future)>;
                     constexpr bool current_is_lazy_continuable_v = is_lazy_continuable_v<future_type>;
-                    constexpr bool internal_setting_thread = not SettingLazyContinuables::value;
+                    constexpr bool internal_setting_thread = !SettingLazyContinuables::value;
                     constexpr bool internal_setting_lazy = SettingLazyContinuables::value;
                     if constexpr (current_is_lazy_continuable_v && internal_setting_thread) {
                         return;
-                    } else if constexpr (not current_is_lazy_continuable_v && internal_setting_lazy) {
+                    } else if constexpr ((!current_is_lazy_continuable_v) && internal_setting_lazy) {
                         return;
                     } else {
                         n.cancel_token.store(false);
                         n.start_token.store(false);
-                        std::future<void> tmp = launch_notifier_task(this_future, n.cancel_token, n.start_token);
+                        future<void> tmp = launch_notifier_task(this_future, n.cancel_token, n.start_token);
                         n.task = std::move(tmp);
                     }
                 });
@@ -878,13 +886,23 @@ namespace futures {
         /// the atomic bools do not, but std::pair conservatively deletes the move constructor
         /// because of atomic_bool.
         struct notifier {
-            std::future<void> task;
-            std::atomic_bool cancel_token;
-            std::atomic_bool start_token;
+            /// A simple task that notifies us whenever the task is ready
+            future<void> task{make_ready_future()};
 
-            notifier() : task(make_ready_future()), cancel_token(false), start_token(false) {}
-            notifier(std::future<void> &&f, bool c, bool s) : task(std::move(f)), cancel_token(c), start_token(s) {}
-            notifier(notifier &&rhs)
+            /// Cancel the notification task
+            std::atomic_bool cancel_token{false};
+
+            /// Notifies this task the notification task has started
+            std::atomic_bool start_token{false};
+
+            /// Construct a ready notifier
+            notifier() = default;
+
+            /// Construct a notifier from an existing future
+            notifier(future<void> &&f, bool c, bool s) : task(std::move(f)), cancel_token(c), start_token(s) {}
+
+            /// Move a notifier
+            notifier(notifier &&rhs) noexcept
                 : task(std::move(rhs.task)), cancel_token(rhs.cancel_token.load()),
                   start_token(rhs.start_token.load()) {}
         };
@@ -1091,7 +1109,8 @@ namespace futures {
     /// \return @ref when_any_future with all future objects
     template <class Range
 #ifndef FUTURES_DOXYGEN
-              , std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
+              ,
+              std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
 #endif
               >
     when_any_future<::futures::small_vector<
@@ -1108,7 +1127,8 @@ namespace futures {
     /// \return @ref when_any_future with all future objects
     template <class... Futures
 #ifndef FUTURES_DOXYGEN
-              , std::enable_if_t<detail::are_valid_when_any_arguments_v<Futures...>, int> = 0
+              ,
+              std::enable_if_t<detail::are_valid_when_any_arguments_v<Futures...>, int> = 0
 #endif
               >
     when_any_future<std::tuple<to_future_t<Futures>...>> when_any(Futures &&...futures) {
@@ -1170,9 +1190,9 @@ namespace futures {
             // Any such argument might be another future or a function which needs to become a future.
             // Thus, we need a function to maybe convert these functions to futures.
             auto maybe_make_future = [](auto &&f) {
-                if constexpr (std::is_invocable_v<decltype(f)> && not is_future_v<decltype(f)>) {
+                if constexpr (std::is_invocable_v<decltype(f)> && (!is_future_v<decltype(f)>)) {
                     // Convert to future with the default executor if not a future yet
-                    return asio::post(make_default_executor(), asio::use_future(std::forward<decltype(f)>(f)));
+                    return async(f);
                 } else {
                     if constexpr (is_shared_future_v<decltype(f)>) {
                         return std::forward<decltype(f)>(f);
@@ -1196,6 +1216,6 @@ namespace futures {
         }
     }
 
-    /** @} */ // \addtogroup adaptors Adaptors
+    /** @} */
 } // namespace futures
 #endif // FUTURES_WHEN_ANY_H
