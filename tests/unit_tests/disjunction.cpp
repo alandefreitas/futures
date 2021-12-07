@@ -76,6 +76,7 @@ TEST_CASE("Disjunction") {
             using Future = decltype(f);
             using Function = decltype(continuation);
             STATIC_REQUIRE(detail::is_when_any_future_v<Future>);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -101,11 +102,6 @@ TEST_CASE("Disjunction") {
             STATIC_REQUIRE(
                 detail::is_index_and_sequence_invocable<decltype(continuation), std::tuple<>, result_type>::value);
             SECTION("Sync unwrapping") {
-                using Future = decltype(f);
-                using Function = decltype(continuation);
-                using prefix_as_tuple = std::tuple<>;
-                using when_any_index = typename result_type::size_type;
-                using when_any_sequence = typename result_type::sequence_type;
                 int r = detail::unwrap_and_continue(f, continuation);
                 REQUIRE_FALSE(r == 0);
                 REQUIRE((r == 2 || r == 3 || r == 4));
