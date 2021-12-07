@@ -2,7 +2,7 @@
 ### Futures                                         ###
 #######################################################
 # Project information
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19)
 project(futures VERSION 0.1.0)
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
@@ -53,7 +53,7 @@ option(FUTURES_BUILD_TESTS_WITH_PCH "Build tests with precompiled headers" ${DEF
 # How to build
 option(FUTURES_BUILD_WITH_PEDANTIC_WARNINGS "Use pedantic warnings. This is useful for developers because many of these warnings will be in continuous integration anyway." ${FUTURES_DEV_BUILD})
 option(FUTURES_BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(FUTURES_BUILD_WITH_SANITIZERS "Use pedantic warnings." ${DEBUG_MODE})
+option(FUTURES_BUILD_WITH_SANITIZERS "Build with sanitizers." ${DEBUG_MODE})
 
 # MSVC hacks
 option(FUTURES_BUILD_WITH_MSVC_HACKS "Accept utf-8 in MSVC by default." ON)
@@ -115,6 +115,7 @@ add_subdirectory(source)
 #######################################################
 if (FUTURES_BUILD_TESTS)
     include(CTest)
+    set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
     enable_testing()
     add_subdirectory(tests)
 endif ()
