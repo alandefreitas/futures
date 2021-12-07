@@ -152,7 +152,7 @@ namespace futures {
         /// The value v stored in the shared state, as std::move(v)
         when_any_result<sequence_type> get() {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
@@ -190,25 +190,25 @@ namespace futures {
         /// The behavior is undefined if valid() == false before the call to this function
         void wait() const {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::true_type;
             using timeout_version = std::false_type;
-            wait_for_common<const_version, timeout_version>(*this);
+            wait_for_common<const_version, timeout_version>(*this, std::chrono::seconds(0));
         }
 
         /// \overload mutable version which allows setting up notifiers which might not have been set yet
         void wait() {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::false_type;
             using timeout_version = std::false_type;
-            wait_for_common<const_version, timeout_version>(*this);
+            wait_for_common<const_version, timeout_version>(*this, std::chrono::seconds(0));
         }
 
         /// \brief Waits for the result to become available.
@@ -323,13 +323,13 @@ namespace futures {
                   class Period = std::chrono::seconds::period>
         static std::future_status
         wait_for_common(std::conditional_t<const_version::value, std::add_const<when_any_future>, when_any_future> &f,
-                        const std::chrono::duration<Rep, Period> &timeout_duration = std::chrono::seconds(0)) {
-            constexpr bool is_trivial_tuple = compile_time_size() < 2;
+                        const std::chrono::duration<Rep, Period> &timeout_duration) {
+            constexpr bool is_trivial_tuple = sequence_is_tuple && (compile_time_size() < 2);
             if constexpr (is_trivial_tuple) {
-                if constexpr (compile_time_size() == 0) {
+                if constexpr (0 == compile_time_size()) {
                     // Trivial tuple: empty -> ready()
                     return std::future_status::ready;
-                } else if constexpr (compile_time_size() == 1) {
+                } else /* if constexpr (1 == compile_time_size()) */ {
                     // Trivial tuple: one element -> get()
                     if constexpr (timeout_version::value) {
                         return std::get<0>(f.v).wait_for(timeout_duration);
@@ -457,7 +457,7 @@ namespace futures {
         std::future_status
         busy_wait_for(const std::chrono::duration<Rep, Period> &timeout_duration = std::chrono::seconds(0)) const {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             // Wait for on each thread, increasingly accounting for the time we waited from the total
@@ -550,7 +550,7 @@ namespace futures {
         [[nodiscard]] bool notifiers_started() const {
             if constexpr (sequence_is_range) {
                 return std::any_of(notifiers.begin(), notifiers.end(),
-                                   [](notifier &n) { return n.start_token.load(); });
+                                   [](const notifier &n) { return n.start_token.load(); });
             } else {
                 return tuple_any_of(v, [](auto &&f) { return f.valid(); });
             }
@@ -582,7 +582,7 @@ namespace futures {
         std::future_status
         notifier_wait_for(const std::chrono::duration<Rep, Period> &timeout_duration = std::chrono::seconds(0)) {
             // Check if that have started yet and do some busy waiting while they haven't
-            if (not notifiers_started()) {
+            if (!notifiers_started()) {
                 std::chrono::microseconds current_busy_wait(20);
                 std::chrono::seconds max_busy_wait(1);
                 do {
