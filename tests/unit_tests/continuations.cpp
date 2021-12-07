@@ -14,8 +14,11 @@ TEST_CASE("Continuation") {
             cfuture<int> before = async(c);
             using Future = decltype(before);
             using Function = decltype(cont);
-            STATIC_REQUIRE(std::is_same_v<detail::then_result_of_t<Function, Future>, cfuture<int>>);
+
+            STATIC_REQUIRE(std::is_same_v<detail::result_of_then_t<Function, Future>, cfuture<int>>);
+
             REQUIRE(before.valid());
+
             cfuture<int> after = then(before, [](int v) { return v * 2; });
             REQUIRE(after.get() == 4);
             REQUIRE_FALSE(before.valid());
@@ -33,7 +36,12 @@ TEST_CASE("Continuation") {
         SECTION("Void continuation") {
             int i = 0;
             cfuture<void> before = async([&] { ++i; });
-            cfuture<void> after = then(before, [&]() { ++i; });
+            auto cont = [&]() { ++i; };
+            using Future = decltype(before);
+            using Function = decltype(cont);
+            using traits = detail::unwrap_traits<Function, Future>;
+            STATIC_REQUIRE(std::is_same_v<typename traits::result_value_type, void>);
+            cfuture<void> after = then(before, cont);
             REQUIRE_NOTHROW(after.get());
             REQUIRE(i == 2);
             REQUIRE_FALSE(before.valid());
@@ -275,8 +283,34 @@ TEST_CASE("Continuation") {
         }
 
         SECTION("Tuple of futures unwrap") {
-            cfuture<std::tuple<future<int>, future<int>, future<int>>> f1 = async(
-                []() { return std::make_tuple(make_ready_future(1), make_ready_future(2), make_ready_future(3)); });
+            auto f1_function = []() {
+                return std::make_tuple(make_ready_future(1), make_ready_future(2), make_ready_future(3));
+            };
+            cfuture<std::tuple<future<int>, future<int>, future<int>>> f1 = async(f1_function);
+            auto continue_fn = [](int a, int b, int c) { return a * b * c; };
+
+            using Future = decltype(f1);
+            using Function = decltype(continue_fn);
+
+            using value_type = unwrap_future_t<Future>;
+            constexpr bool tuple_explode =
+                detail::is_tuple_invocable_v<Function, detail::tuple_type_concat_t<std::tuple<>, value_type>>;
+            STATIC_REQUIRE(!tuple_explode);
+            constexpr bool is_future_tuple = detail::tuple_type_all_of_v<value_type, is_future>;
+            STATIC_REQUIRE(is_future_tuple);
+            using unwrapped_elements = detail::tuple_type_transform_t<value_type, unwrap_future>;
+            STATIC_REQUIRE(std::is_same_v<unwrapped_elements, std::tuple<int, int, int>>);
+            constexpr bool tuple_explode_unwrap =
+                detail::is_tuple_invocable_v<Function, detail::tuple_type_concat_t<std::tuple<>, unwrapped_elements>>;
+            STATIC_REQUIRE(tuple_explode_unwrap);
+
+            STATIC_REQUIRE(!std::is_same_v<detail::unwrap_traits<Function, Future>::unwrap_result_no_token_type,
+                                           detail::unwrapping_failure_t>);
+            STATIC_REQUIRE(std::is_same_v<detail::unwrap_traits<Function, Future>::unwrap_result_with_token_type,
+                                          detail::unwrapping_failure_t>);
+            STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid);
+//            cfuture<int> f2 = operator>>(f1, continue_fn);
+//            cfuture<int> f2 = operator>>(f1, [](int a, int b, int c) { return a * b * c; });
             cfuture<int> f2 = f1 >> [](int a, int b, int c) { return a * b * c; };
             REQUIRE(f2.get() == 6);
         }

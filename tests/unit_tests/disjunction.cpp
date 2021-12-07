@@ -53,9 +53,9 @@ TEST_CASE("Disjunction") {
             size_t i = any_r.index;
             auto [r1, r2, r3] = std::move(any_r.tasks);
             REQUIRE(i < 3);
-            if (i == 0) {
+            if (0 == i) {
                 REQUIRE(r1.get() == 2);
-            } else if (i == 1) {
+            } else if (1 == i) {
                 REQUIRE(r2.get() > 3.0);
             } else {
                 REQUIRE(r3.get() == "name");
@@ -73,6 +73,9 @@ TEST_CASE("Disjunction") {
                 }
                 return 0;
             };
+            using Future = decltype(f);
+            using Function = decltype(continuation);
+            STATIC_REQUIRE(detail::is_when_any_future_v<Future>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -97,10 +100,22 @@ TEST_CASE("Disjunction") {
             STATIC_REQUIRE(detail::is_tuple_when_any_result_v<result_type>);
             STATIC_REQUIRE(
                 detail::is_index_and_sequence_invocable<decltype(continuation), std::tuple<>, result_type>::value);
-            auto f4 = then(f, continuation);
-            int r = f4.get();
-            REQUIRE_FALSE(r == 0);
-            REQUIRE((r == 2 || r == 3 || r == 4));
+            SECTION("Sync unwrapping") {
+                using Future = decltype(f);
+                using Function = decltype(continuation);
+                using prefix_as_tuple = std::tuple<>;
+                using when_any_index = typename result_type::size_type;
+                using when_any_sequence = typename result_type::sequence_type;
+                int r = detail::unwrap_and_continue(f, continuation);
+                REQUIRE_FALSE(r == 0);
+                REQUIRE((r == 2 || r == 3 || r == 4));
+            }
+            SECTION("Async continuation") {
+                auto f4 = then(f, continuation);
+                int r = f4.get();
+                REQUIRE_FALSE(r == 0);
+                REQUIRE((r == 2 || r == 3 || r == 4));
+            }
         }
 
         SECTION("Unwrap to futures") {
@@ -145,8 +160,24 @@ TEST_CASE("Disjunction") {
         SECTION("Unwrap to common value type") {
             // We can unwrap that here because all futures return int
             auto continuation = [](int r) { return r * 3; };
+            using Future = decltype(f);
+            using Function = decltype(continuation);
             STATIC_REQUIRE(is_future_v<decltype(f)>);
-            STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            // when_any_result -> int
+            using value_type = unwrap_future_t<Future>;
+            using when_any_sequence = typename value_type::sequence_type;
+            using when_any_element_type = detail::range_or_tuple_element_type_t<when_any_sequence>;
+            STATIC_REQUIRE(
+                detail::is_tuple_invocable_v<
+                    Function,
+                    detail::tuple_type_concat_t<std::tuple<>, std::tuple<unwrap_future_t<when_any_element_type>>>>);
+            STATIC_REQUIRE(std::is_same_v<detail::unwrap_traits<Function, Future>::unwrap_result_no_token_type, int>);
+            STATIC_REQUIRE(std::is_same_v<detail::unwrap_traits<Function, Future>::unwrap_result_with_token_type,
+                                          detail::unwrapping_failure_t>);
+            STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid_without_stop_token);
+            STATIC_REQUIRE(!detail::unwrap_traits<Function, Future>::is_valid_with_stop_token);
+            STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));
@@ -349,13 +380,18 @@ TEST_CASE("Disjunction") {
         cfuture<int> f1 = async([] { return 1; });
         cfuture<int> f2 = async([] { return 2; });
         cfuture<int> f3 = async([] { return 3; });
-        using Tuple = std::tuple<cfuture<int>, cfuture<int>, cfuture<int>, std::future<int>>;
+        using Tuple = std::tuple<cfuture<int>, cfuture<int>, cfuture<int>, cfuture<int>>;
         using Future = when_any_future<Tuple>;
         Future f = f1 || f2 || f3 || []() { return 4; };
         STATIC_REQUIRE(std::is_same_v<unwrap_future_t<Future>, when_any_result<Tuple>>);
-        auto c = f >> [](int a) { return a * 5; } >> [](int s) { return s * 5; };
-        int r = c.get();
-        REQUIRE(r >= 25);
-        REQUIRE(r <= 100);
+        SECTION("Sync unwrap") {
+            detail::unwrap_and_continue(f, [](int a) { return a * 5; });
+        }
+        SECTION("Async continue") {
+            auto c = f >> [](int a) { return a * 5; } >> [](int s) { return s * 5; };
+            int r = c.get();
+            REQUIRE(r >= 25);
+            REQUIRE(r <= 100);
+        }
     }
 }

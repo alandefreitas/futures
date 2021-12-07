@@ -5,17 +5,16 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Future types") {
+TEST_CASE("Futures types") {
     using namespace futures;
 
-    constexpr int thread_pool_replicates = 100;
+    constexpr int32_t thread_pool_replicates = 100;
     SECTION("Continuable") {
-        for (int i = 0; i < thread_pool_replicates; ++i) {
+        for (int32_t i = 0; i < thread_pool_replicates; ++i) {
             auto fn = [] { return 2; };
             using Function = decltype(fn);
             STATIC_REQUIRE(not std::is_invocable_v<std::decay_t<Function>, stop_token>);
-            STATIC_REQUIRE(std::is_same_v<detail::async_future_result_of<Function>, cfuture<int>>);
-            cfuture<int> r = async([] { return 2; });
+            cfuture<int32_t> r = async([] { return 2; });
             REQUIRE(r.valid());
             REQUIRE(r.get() == 2);
             REQUIRE_FALSE(r.valid());
@@ -23,10 +22,10 @@ TEST_CASE("Future types") {
     }
 
     SECTION("Shared") {
-        for (int i = 0; i < thread_pool_replicates; ++i) {
-            cfuture<int> r = async([] { return 2; });
+        for (int32_t i = 0; i < thread_pool_replicates; ++i) {
+            cfuture<int32_t> r = async([] { return 2; });
             REQUIRE(r.valid());
-            shared_cfuture<int> r2 = r.share();
+            shared_cfuture<int32_t> r2 = r.share();
             REQUIRE_FALSE(r.valid());
             REQUIRE(r2.valid());
             REQUIRE(r2.get() == 2);
@@ -35,8 +34,8 @@ TEST_CASE("Future types") {
     }
 
     SECTION("Dispatch immediately") {
-        for (int i = 0; i < thread_pool_replicates; ++i) {
-            cfuture<int> r = async(launch::executor_now, [] { return 2; });
+        for (int32_t i = 0; i < thread_pool_replicates; ++i) {
+            cfuture<int32_t> r = async(launch::executor_now, [] { return 2; });
             REQUIRE(r.valid());
             REQUIRE(r.get() == 2);
             REQUIRE_FALSE(r.valid());
@@ -44,9 +43,9 @@ TEST_CASE("Future types") {
     }
 
     SECTION("Promise / event future") {
-        for (int i = 0; i < thread_pool_replicates; ++i) {
-            std::promise<int> p;
-            future<int> r = p.get_future();
+        for (int32_t i = 0; i < thread_pool_replicates; ++i) {
+            promise<int32_t> p;
+            future<int32_t> r = p.template get_future<future<int32_t>>();
             REQUIRE_FALSE(is_ready(r));
             p.set_value(2);
             REQUIRE(is_ready(r));

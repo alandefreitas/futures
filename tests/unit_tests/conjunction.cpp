@@ -43,10 +43,27 @@ TEST_CASE("Conjunction") {
 
         SECTION("Continue") {
             auto continuation = [](std::tuple<cfuture<int>, cfuture<double>, cfuture<std::string>> r) {
-                return std::get<0>(r).get() + static_cast<int>(std::get<1>(r).get()) + std::get<2>(r).get().size();
+                return std::get<0>(r).get() + static_cast<int>(std::get<1>(r).get()) +
+                       static_cast<int>(std::get<2>(r).get().size());
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            using traits = detail::unwrap_traits<decltype(continuation), decltype(f)>;
+            STATIC_REQUIRE(
+                std::is_same_v<int,
+                               std::invoke_result_t<decltype(continuation),
+                                                    std::tuple<cfuture<int>, cfuture<double>, cfuture<std::string>>>>);
+            STATIC_REQUIRE(std::is_same_v<int, typename traits::unwrap_result_no_token_type>);
+            STATIC_REQUIRE(
+                std::is_same_v<detail::unwrapping_failure_t, typename traits::unwrap_result_with_token_type>);
+            STATIC_REQUIRE_FALSE(traits::is_valid_with_stop_token);
+            STATIC_REQUIRE(std::is_same_v<int, typename traits::result_value_type>);
+            STATIC_REQUIRE(std::is_same_v<int, typename traits::result_value_type>);
+            STATIC_REQUIRE(std::is_same_v<cfuture<int>, typename traits::result_future_type>);
+            STATIC_REQUIRE(std::is_same_v<cfuture<int>, detail::result_of_then_t<decltype(continuation), decltype(f)>>);
+            STATIC_REQUIRE(std::is_same_v<cfuture<int>, decltype(detail::internal_then(
+                                                            ::futures::make_default_executor(), f, continuation))>);
+            STATIC_REQUIRE(std::is_same_v<cfuture<int>, decltype(then(f, continuation))>);
             auto f4 = then(f, continuation);
             REQUIRE(f4.get() == 2 + 3 + 4);
         }
@@ -80,7 +97,7 @@ TEST_CASE("Conjunction") {
     }
 
     SECTION("Range conjunction") {
-        std::vector<cfuture<int>> range;
+        futures::small_vector<cfuture<int>> range;
         range.emplace_back(async([]() { return 2; }));
         range.emplace_back(async([]() { return 3; }));
         range.emplace_back(async([]() { return 4; }));
@@ -109,7 +126,7 @@ TEST_CASE("Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
-                auto f4 = then(f, continuation);
+                auto f4 = then(f, continuation); // continue from when_all
                 REQUIRE(f4.get() == 2 + 3 + 4);
             }
 
@@ -117,8 +134,29 @@ TEST_CASE("Conjunction") {
                 auto continuation = [](futures::small_vector<cfuture<int>> &rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(not is_future_v<decltype(continuation)>);
+                using Future = decltype(f);
+                using Function = decltype(continuation);
+                STATIC_REQUIRE(!is_executor_v<Function>);
+                STATIC_REQUIRE(!is_executor_v<Future>);
+                STATIC_REQUIRE(is_future_v<Future>);
+                using value_type = unwrap_future_t<Future>;
+                using lvalue_type = std::add_lvalue_reference_t<value_type>;
+                using rvalue_type = std::add_rvalue_reference_t<value_type>;
+                STATIC_REQUIRE(std::is_same_v<value_type, futures::small_vector<cfuture<int>>>);
+                STATIC_REQUIRE(
+                    std::is_same_v<lvalue_type, std::add_lvalue_reference_t<futures::small_vector<cfuture<int>>>>);
+                STATIC_REQUIRE(
+                    std::is_same_v<rvalue_type, std::add_rvalue_reference_t<futures::small_vector<cfuture<int>>>>);
+                STATIC_REQUIRE(std::is_invocable_v<Function, lvalue_type>);
+                STATIC_REQUIRE(
+                    std::is_same_v<detail::unwrap_traits<Function, Future>::unwrap_result_no_token_type, int>);
+                STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid_without_stop_token);
+                STATIC_REQUIRE_FALSE(detail::unwrap_traits<Function, Future>::is_valid_with_stop_token);
+                STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
+                STATIC_REQUIRE(is_future_v<Future>);
+                STATIC_REQUIRE(not is_future_v<Function>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
                 REQUIRE(f4.get() == 2 + 3 + 4);
@@ -152,24 +190,42 @@ TEST_CASE("Conjunction") {
                 auto continuation = [](futures::small_vector<int> rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
-                auto f4 = then(f, continuation);
-                REQUIRE(f4.get() == 2 + 3 + 4);
+                SECTION("Sync unwrap") {
+                    auto f4 = detail::unwrap_and_continue(f, continuation);
+                    REQUIRE(f4 == 2 + 3 + 4);
+                }
+                SECTION("Async continue") {
+                    auto f4 = then(f, continuation);
+                    REQUIRE(f4.get() == 2 + 3 + 4);
+                }
             }
 
             SECTION("Continue with lvalue") {
                 auto continuation = [](futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
-                auto f4 = then(f, continuation);
-                REQUIRE(f4.get() == 2 + 3 + 4);
+                SECTION("Sync unwrap") {
+                    auto f4 = detail::unwrap_and_continue(f, continuation);
+                    REQUIRE(f4 == 2 + 3 + 4);
+                }
+                SECTION("Async continue") {
+                    auto f4 = then(f, continuation);
+                    REQUIRE(f4.get() == 2 + 3 + 4);
+                }
             }
 
             SECTION("Continue with const lvalue") {
                 auto continuation = [](const futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
-                auto f4 = then(f, continuation);
-                REQUIRE(f4.get() == 2 + 3 + 4);
+                SECTION("Sync unwrap") {
+                    auto f4 = detail::unwrap_and_continue(f, continuation);
+                    REQUIRE(f4 == 2 + 3 + 4);
+                }
+                SECTION("Async continue") {
+                    auto f4 = then(f, continuation);
+                    REQUIRE(f4.get() == 2 + 3 + 4);
+                }
             }
         }
     }

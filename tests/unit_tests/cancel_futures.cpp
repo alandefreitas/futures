@@ -9,7 +9,7 @@ TEST_CASE("Cancellable future") {
     using namespace futures;
     SECTION("Cancel jfuture<void>") {
         jcfuture<void> f = async([](stop_token s) {
-            while (not s.stop_requested()) {
+            while (!s.stop_requested()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(20));
             }
         });
@@ -19,31 +19,30 @@ TEST_CASE("Cancellable future") {
     }
 
     SECTION("Cancel jfuture<int>") {
-        jcfuture<int> f = async(
-            [](stop_token s, std::chrono::milliseconds x) {
-                int i = 0;
-                do {
-                    std::this_thread::sleep_for(x);
-                    ++i;
-                } while (not s.stop_requested());
-                return i;
-            },
-            std::chrono::milliseconds(20));
+        auto fn = [](const stop_token& s, std::chrono::milliseconds x) {
+            int32_t i = 0;
+            do {
+                std::this_thread::sleep_for(x);
+                ++i;
+            } while (!s.stop_requested());
+            return i;
+        };
+        jcfuture<int32_t> f = async(fn, std::chrono::milliseconds(20));
         f.request_stop();
         f.wait();
         REQUIRE(is_ready(f));
-        int i = f.get();
+        int32_t i = f.get();
         REQUIRE(i > 0);
     }
 
     SECTION("Continue from jfuture<int>") {
-        jcfuture<int> f = async(
+        jcfuture<int32_t> f = async(
             [](stop_token s, std::chrono::milliseconds x) {
-                int i = 2;
+                int32_t i = 2;
                 do {
                     std::this_thread::sleep_for(x);
                     ++i;
-                } while (not s.stop_requested());
+                } while (!s.stop_requested());
                 return i;
             },
             std::chrono::milliseconds(20));
@@ -51,7 +50,7 @@ TEST_CASE("Cancellable future") {
         stop_token st = f.get_stop_token();
         stop_token sst = ss.get_token();
         REQUIRE(st == sst);
-        auto cont = [](int count) { return static_cast<double>(count) * 1.2; };
+        auto cont = [](int32_t count) { return static_cast<double>(count) * 1.2; };
         jcfuture<double> f2 = then(f, cont);
         REQUIRE_FALSE(f.valid());
         REQUIRE(not is_ready(f2));

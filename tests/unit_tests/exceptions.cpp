@@ -25,7 +25,7 @@ TEST_CASE("Exceptions") {
         bool caught = false;
         try {
             f2.get();
-        } catch (...) {
+        } catch (std::runtime_error&) {
             caught = true;
         }
         REQUIRE(caught);
