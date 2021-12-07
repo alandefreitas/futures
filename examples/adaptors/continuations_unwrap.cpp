@@ -11,7 +11,7 @@ int main() {
     cfuture<int> future2 = future1 >> []() { return 6; };
 
     // forward int directly as int
-    cfuture<std::future<int>> future3 =
+    cfuture<future<int>> future3 =
         future2 >> [](int x) { return make_ready_future(x * 2); };
 
     // unwrap previous future<int> to int
