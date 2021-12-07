@@ -7,18 +7,18 @@ int main() {
 
     auto f1 = futures::async([] {
         std::cout << "Task 1 in default executor. A thread pool."
-                  << std::endl;
+                  << '\n';
     });
 
     auto f2 = std::async([] {
         std::cout << "Task 2 in a new thread from std::async."
-                  << std::endl;
+                  << '\n';
     });
 
     asio::thread_pool custom_pool(1);
     asio::thread_pool::executor_type ex = custom_pool.executor();
     auto f3 = futures::async(ex, [] {
-        std::cout << "Task 3 in a custom executor." << std::endl;
+        std::cout << "Task 3 in a custom executor." << '\n';
     });
 
     auto f4 = futures::async(ex, [](futures::stop_token st) {
@@ -27,7 +27,7 @@ int main() {
             ++a;
         }
         std::cout << "Task 4 had a stop token. It stopped when a = "
-                  << a << std::endl;
+                  << a << '\n';
     });
 
     f1.wait();
