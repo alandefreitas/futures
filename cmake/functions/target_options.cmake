@@ -3,7 +3,7 @@
 function(target_pedantic_warnings TARGET_NAME)
     # Set warning levels to about the same level for MSVC, GCC, and Clang
     if (MSVC)
-        target_compile_options(${TARGET_NAME} INTERFACE /W4 /WX)
+        target_compile_options(${TARGET_NAME} INTERFACE /W3 /WX)
     else ()
         target_compile_options(${TARGET_NAME} INTERFACE -Wall -Wextra -pedantic -Werror)
     endif ()
@@ -22,7 +22,7 @@ endfunction ()
 # external libraries, which often lead to some warnings.
 macro(add_pedantic_warnings)
     if (MSVC)
-        add_compile_options(/W4 /WX)
+        add_compile_options(/W3 /WX)
     else ()
         add_compile_options(-Wall -Wextra -pedantic -Werror)
     endif ()
