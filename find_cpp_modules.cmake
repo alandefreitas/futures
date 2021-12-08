@@ -47,6 +47,8 @@ if (Boost_FOUND)
             VERSION_LOCK ${boost_VERSION_LOCK}
             VERSION_REQUIREMENTS ${boost_VERSION_REQUIREMENT}
             PREFIX_HINT ${boost_PREFIX_HINT})
+else()
+    message(STATUS "boost (${boost_VERSION_REQUIREMENT}) not found - Optional dependency")
 endif()
 
 #######################################################
