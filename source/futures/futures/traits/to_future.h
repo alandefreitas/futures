@@ -31,7 +31,7 @@ namespace futures {
     ///
     /// The primary template handles non-future types
     template <typename Lambda> struct to_future<Lambda, std::enable_if_t<std::is_invocable_v<std::decay_t<Lambda>>>> {
-        using type = std::future<std::invoke_result_t<std::decay_t<Lambda>>>;
+        using type = futures::cfuture<std::invoke_result_t<std::decay_t<Lambda>>>;
     };
 
     template <class T> using to_future_t = typename to_future<T>::type;

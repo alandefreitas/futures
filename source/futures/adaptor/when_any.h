@@ -1094,7 +1094,7 @@ namespace futures {
         } else /* if constexpr (input_is_invocable) */ {
             static_assert(input_is_invocable);
             std::transform(first, last, std::back_inserter(v), [](auto &&f) {
-                return std::move(asio::post(make_default_executor(), asio::use_future(std::forward<decltype(f)>(f))));
+                return ::futures::async(std::forward<decltype(f)>(f));
             });
         }
 
@@ -1139,18 +1139,18 @@ namespace futures {
         // - futures need to be moved
         // - shared futures need to be copied
         // - lambdas need to be posted
-        constexpr auto move_share_or_post = [](auto &&f) {
+        [[maybe_unused]] constexpr auto move_share_or_post = [](auto &&f) {
             if constexpr (is_shared_future_v<decltype(f)>) {
                 return std::forward<decltype(f)>(f);
             } else if constexpr (is_future_v<decltype(f)>) {
                 return std::move(std::forward<decltype(f)>(f));
             } else /* if constexpr (std::is_invocable_v<decltype(f)>) */ {
-                return asio::post(make_default_executor(), asio::use_future(std::forward<decltype(f)>(f)));
+                return ::futures::async(std::forward<decltype(f)>(f));
             }
         };
 
         // Create sequence (and infer types as we go)
-        sequence_type v = std::make_tuple((to_future_t<Futures>(move_share_or_post(futures)))...);
+        sequence_type v = std::make_tuple((move_share_or_post(futures))...);
 
         return when_any_future<sequence_type>(std::move(v));
     }
