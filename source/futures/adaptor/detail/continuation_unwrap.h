@@ -138,7 +138,7 @@ namespace futures::detail {
                 }
             } else if constexpr (sequence_unwrap && is_range) {
                 // when_all vector<future<T>> -> function(futures::small_vector<T>)
-                using range_value_t = detail::range_value_type_t<value_type>;
+                using range_value_t = detail::range_value_t<value_type>;
                 constexpr bool is_range_of_futures = is_future_v<range_value_t>;
                 using continuation_vector = futures::small_vector<unwrap_future_t<range_value_t>>;
                 using lvalue_continuation_vector = std::add_lvalue_reference_t<continuation_vector>;
