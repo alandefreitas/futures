@@ -6,7 +6,7 @@
 #define FUTURES_ALGORITHM_H
 
 
-#include <futures/algorithm/algorithm_traits.h>
+#include <futures/algorithm/traits/algorithm_traits.h>
 
 #include <futures/algorithm/all_of.h>
 #include <futures/algorithm/any_of.h>

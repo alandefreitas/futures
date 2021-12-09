@@ -31,7 +31,7 @@
 
 #include <futures/config/small_vector_include.h>
 
-#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 #include <futures/adaptor/detail/traits/is_tuple.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>

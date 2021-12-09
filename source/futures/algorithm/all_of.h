@@ -9,11 +9,11 @@
 #include <execution>
 #include <variant>
 
-#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
-#include <futures/algorithm/algorithm_traits.h>
+#include "futures/algorithm/traits/algorithm_traits.h"
 #include <futures/algorithm/detail/try_async.h>
-#include <futures/algorithm/partitioner.h>
+#include "futures/algorithm/partitioner/partitioner.h"
 #include <futures/futures.h>
 
 namespace futures {

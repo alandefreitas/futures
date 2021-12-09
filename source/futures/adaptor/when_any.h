@@ -14,7 +14,7 @@
 #include <optional>
 #include <shared_mutex>
 
-#include <futures/algorithm/detail/traits/range/range/concepts.hpp>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 #include <futures/config/small_vector_include.h>
 
