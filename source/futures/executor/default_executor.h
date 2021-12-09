@@ -5,16 +5,30 @@
 #ifndef FUTURES_DEFAULT_EXECUTOR_H
 #define FUTURES_DEFAULT_EXECUTOR_H
 
-// Don't let asio compile definitions at this point
-#ifndef ASIO_SEPARATE_COMPILATION
-#define ASIO_SEPARATE_COMPILATION
-#endif
 #include <futures/config/asio_include.h>
+#include <futures/executor/is_executor.h>
 
 namespace futures {
     /** \addtogroup executors Executors
      *  @{
      */
+
+    /// \brief A version of hardware_concurrency that returns 1 when the value is not computable
+    ///
+    /// - It never returns 0, 1 is returned instead.
+    /// - It is guaranteed to remain constant for the duration of the program.
+    ///
+    /// \see https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
+    ///
+    /// \return Number of concurrent threads supported. If the value is not well-defined or not computable, returns 1.
+    std::size_t hardware_concurrency() noexcept;
+    inline std::size_t hardware_concurrency() noexcept {
+        // Cache the value because calculating it may be expensive
+        static std::size_t value = std::thread::hardware_concurrency();
+
+        // Always return at least 1 core
+        return std::max(static_cast<std::size_t>(1), value);
+    }
 
     /// \brief The default execution context for async operations, unless otherwise stated
     ///
@@ -40,10 +54,20 @@ namespace futures {
     /// - Non-copyable
     /// - May contain additional state, such as timers, and threads
     ///
+#ifndef FUTURES_DOXYGEN
     using default_execution_context_type = asio::thread_pool;
+#else
+    using default_execution_context_type = __implementation_defined__;
+#endif
+
+    /// \brief Default executor type as a constant trait for future_base functions
+    using default_executor_type = default_execution_context_type::executor_type;
 
     /// \brief Create an instance of the default execution context
-    default_execution_context_type &default_execution_context();
+    inline default_execution_context_type &default_execution_context() {
+        static asio::thread_pool pool(hardware_concurrency() * 3);
+        return pool;
+    }
 
     /// \brief Create an Asio thread pool executor for the default thread pool
     /// In the executors notation:
@@ -59,23 +83,12 @@ namespace futures {
     ///
     /// There might be many executor types associated with with the same execution context.
     ///
-    default_execution_context_type::executor_type make_default_executor();
+    inline default_execution_context_type::executor_type make_default_executor() {
+        asio::thread_pool &pool = default_execution_context();
+        return pool.executor();
+    }
 
-    /// \brief Default executor type as a constant trait for future_base functions
-    using default_executor_type = default_execution_context_type::executor_type;
-
-    /// \brief Improved version of std::hardware_concurrency:
-    /// - It never returns 0, 1 is returned instead.
-    /// - It is guaranteed to remain constant for the duration of the program.
-    std::size_t hardware_concurrency() noexcept;
-
-    /// \brief Determine if type is an executor
-    template <typename T> using is_executor = asio::is_executor<T>;
-
-    /// \brief Determine if type is an executor
-    template <typename T> constexpr bool is_executor_v = is_executor<T>::value;
-
-    /** @} */  // \addtogroup executors Executors
+    /** @} */ // \addtogroup executors Executors
 } // namespace futures
 
 #endif // FUTURES_DEFAULT_EXECUTOR_H

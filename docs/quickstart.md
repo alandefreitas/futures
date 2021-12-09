@@ -133,14 +133,18 @@
 === "File amalgamation"
 
     !!! note
-
-        This library is not header-only. If you need to copy the contents from the `source` directory into your project and compile it as a new target.
-
+    
+        This library is also header-only. You can directly copy the contents from the `source` directory into your project.
+    
     !!! hint
-
-        In that case, you are responsible for setting the appropriate target include directories and any compile definitions you might require. 
+    
+        In that case, you are responsible for setting the appropriate target include directories and any compile definitions you might require.
         
-        You are also responsible for downloading and linking transitive dependencies (asio, ranges, and small), something the CMake script will attempt to do for you.
+        You are also responsible for making sure the headers for the header-only dependencies available:
+        
+        - The only mandadory dependency is [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
+        - There's also an optional recommended dependency on [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). If none of these are available, the implementation fallsback to [[std::vector]] 
+
 
 
 ## Hello world 👋
