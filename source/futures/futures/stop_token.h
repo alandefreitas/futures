@@ -5,24 +5,24 @@
 #ifndef FUTURES_STOP_TOKEN_H
 #define FUTURES_STOP_TOKEN_H
 
-/// \file This header contains is a slightly adapted version of std::stop_token for futures rather than threads
-/// \author This is slightly adapted from Baker Josuttis' reference implementation for C++20
-/// Although the jfuture class is obviously different from std::jthread, this stop_token is not different
-/// from std::stop_token. The main goal here is just to provide a stop sources in C++17 with the
-/// reference implementation. In the future, we might replace this with C++20 std::stop_token.
+/// \file
+///
+/// This header contains is an adapted version of std::stop_token for futures rather than threads.
+///
+/// The main difference in this implementation is 1) the reference counter does not distinguish between
+/// tokens and sources, and 2) there is no stop_callback.
+///
+/// The API was initially adapted from Baker Josuttis' reference implementation for C++20:
 /// \see https://github.com/josuttis/jthread
+///
+/// Although the jfuture class is obviously different from std::jthread, this stop_token is not different
+/// from std::stop_token. The main goal here is just to provide a stop source in C++17. In the future, we
+/// might replace this with an alias to a C++20 std::stop_token.
 
 #include <atomic>
 #include <thread>
 #include <type_traits>
 #include <utility>
-#ifdef SAFE
-#include <iostream>
-#endif
-
-#if defined(__x86_64__) || defined(_M_X64)
-#include <immintrin.h>
-#endif
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -32,280 +32,19 @@ namespace futures {
      *  @{
      */
 
-
     namespace detail {
-        inline void spin_yield() noexcept {
-            // TODO: Platform-specific code here
-#if defined(__x86_64__) || defined(_M_X64)
-            _mm_pause();
-#endif
-        }
-    } // namespace detail
-
-    //-----------------------------------------------
-    // internal types for shared stop state
-    //-----------------------------------------------
-
-    namespace detail {
-        struct stop_callback_base {
-            void (*callback_)(stop_callback_base *) = nullptr;
-
-            // Next and prev callbacks
-            stop_callback_base *next_ = nullptr;
-            stop_callback_base **prev_ = nullptr;
-            bool *is_removed_ = nullptr;
-            std::atomic<bool> callback_finished_executing{false};
-
-            void execute() noexcept { callback_(this); }
-
-          protected:
-            // it shall only by us who deletes this
-            // (workaround for virtual execute() and destructor)
-            ~stop_callback_base() = default;
-        };
-
-        struct stop_state {
-          public:
-            void add_token_reference() noexcept { state_.fetch_add(token_ref_increment, std::memory_order_relaxed); }
-
-            void remove_token_reference() noexcept {
-                auto old_state = state_.fetch_sub(token_ref_increment, std::memory_order_acq_rel);
-                if (old_state < (token_ref_increment + source_ref_increment)) {
-                    delete this;
-                }
-            }
-
-            void add_source_reference() noexcept { state_.fetch_add(source_ref_increment, std::memory_order_relaxed); }
-
-            void remove_source_reference() noexcept {
-                auto old_state = state_.fetch_sub(source_ref_increment, std::memory_order_acq_rel);
-                if (old_state < (token_ref_increment + source_ref_increment)) {
-                    delete this;
-                }
-            }
-
-            bool request_stop() noexcept {
-
-                if (!try_lock_and_signal_until_signalled()) {
-                    // Stop has already been requested.
-                    return false;
-                }
-
-                // Set the 'stop_requested' signal and acquired the lock.
-
-                signalling_thread_ = std::this_thread::get_id();
-
-                while (head_ != nullptr) {
-                    // Dequeue the head of the queue
-                    auto *cb = head_;
-                    head_ = cb->next_;
-                    const bool any_more = head_ != nullptr;
-                    if (any_more) {
-                        head_->prev_ = &head_;
-                    }
-                    // Mark this item as removed from the list.
-                    cb->prev_ = nullptr;
-
-                    // Don't hold lock while executing callback
-                    // so we don't block other threads from deregistering callbacks.
-                    unlock();
-
-                    // TRICKY: Need to store a flag on the stack here that the callback
-                    // can use to signal that the destructor was executed inline
-                    // during the call. If the destructor was executed inline then
-                    // it's not safe to dereference cb after execute() returns.
-                    // If the destructor runs on some other thread then the other
-                    // thread will block waiting for this thread to signal that the
-                    // callback has finished executing.
-                    bool is_removed = false;
-                    cb->is_removed_ = &is_removed;
-
-                    cb->execute();
-
-                    if (!is_removed) {
-                        cb->is_removed_ = nullptr;
-                        cb->callback_finished_executing.store(true, std::memory_order_release);
-                    }
-
-                    if (!any_more) {
-                        // This was the last item in the queue when we dequeued it.
-                        // No more items should be added to the queue after we have
-                        // marked the state as interrupted, only removed from the queue.
-                        // Avoid acquring/releasing the lock in this case.
-                        return true;
-                    }
-
-                    lock();
-                }
-
-                unlock();
-
-                return true;
-            }
-
-            bool is_stop_requested() noexcept { return is_stop_requested(state_.load(std::memory_order_acquire)); }
-
-            bool is_stop_requestable() noexcept { return is_stop_requestable(state_.load(std::memory_order_acquire)); }
-
-            bool try_add_callback(stop_callback_base *cb, bool increment_ref_count_if_successful) noexcept {
-                std::uint64_t old_state;
-                goto load_state;
-                do {
-                    goto check_state;
-                    do {
-                        spin_yield();
-                    load_state:
-                        old_state = state_.load(std::memory_order_acquire);
-                    check_state:
-                        if (is_stop_requested(old_state)) {
-                            cb->execute();
-                            return false;
-                        } else if (!is_stop_requestable(old_state)) {
-                            return false;
-                        }
-                    } while (is_locked(old_state));
-                } while (!state_.compare_exchange_weak(old_state, old_state | locked_flag, std::memory_order_acquire));
-
-                // Push callback onto callback list.
-                cb->next_ = head_;
-                if (cb->next_ != nullptr) {
-                    cb->next_->prev_ = &cb->next_;
-                }
-                cb->prev_ = &head_;
-                head_ = cb;
-
-                if (increment_ref_count_if_successful) {
-                    unlock_and_increment_token_ref_count();
-                } else {
-                    unlock();
-                }
-
-                // Successfully added the callback.
-                return true;
-            }
-
-            void remove_callback(stop_callback_base *cb) noexcept {
-                lock();
-
-                if (cb->prev_ != nullptr) {
-                    // Still registered, not yet executed
-                    // Just remove from the list.
-                    *cb->prev_ = cb->next_;
-                    if (cb->next_ != nullptr) {
-                        cb->next_->prev_ = cb->prev_;
-                    }
-
-                    unlock_and_decrement_token_ref_count();
-
-                    return;
-                }
-
-                unlock();
-
-                // Callback has either already executed or is executing
-                // concurrently on another thread.
-
-                if (signalling_thread_ == std::this_thread::get_id()) {
-                    // Callback executed on this thread or is still currently executing
-                    // and is deregistering itself from within the callback.
-                    if (cb->is_removed_ != nullptr) {
-                        // Currently inside the callback, let the request_stop() method
-                        // know the object is about to be destructed and that it should
-                        // not try to access the object when the callback returns.
-                        *cb->is_removed_ = true;
-                    }
-                } else {
-                    // Callback is currently executing on another thread,
-                    // block until it finishes executing.
-                    while (!cb->callback_finished_executing.load(std::memory_order_acquire)) {
-                        spin_yield();
-                    }
-                }
-
-                remove_token_reference();
-            }
-
-          private:
-            static bool is_locked(std::uint64_t state) noexcept { return (state & locked_flag) != 0; }
-
-            static bool is_stop_requested(std::uint64_t state) noexcept { return (state & stop_requested_flag) != 0; }
-
-            static bool is_stop_requestable(std::uint64_t state) noexcept {
-                // Interruptable if it has already been interrupted or if there are
-                // still interrupt_source instances in existence.
-                return is_stop_requested(state) || (state >= source_ref_increment);
-            }
-
-            bool try_lock_and_signal_until_signalled() noexcept {
-                std::uint64_t old_state = state_.load(std::memory_order_acquire);
-                do {
-                    if (is_stop_requested(old_state))
-                        return false;
-                    while (is_locked(old_state)) {
-                        spin_yield();
-                        old_state = state_.load(std::memory_order_acquire);
-                        if (is_stop_requested(old_state))
-                            return false;
-                    }
-                } while (!state_.compare_exchange_weak(old_state, old_state | stop_requested_flag | locked_flag,
-                                                       std::memory_order_acq_rel, std::memory_order_acquire));
-                return true;
-            }
-
-            void lock() noexcept {
-                auto old_state = state_.load(std::memory_order_relaxed);
-                do {
-                    while (is_locked(old_state)) {
-                        spin_yield();
-                        old_state = state_.load(std::memory_order_relaxed);
-                    }
-                } while (!state_.compare_exchange_weak(old_state, old_state | locked_flag, std::memory_order_acquire,
-                                                       std::memory_order_relaxed));
-            }
-
-            void unlock() noexcept { state_.fetch_sub(locked_flag, std::memory_order_release); }
-
-            void unlock_and_increment_token_ref_count() noexcept {
-                state_.fetch_sub(locked_flag - token_ref_increment, std::memory_order_release);
-            }
-
-            void unlock_and_decrement_token_ref_count() noexcept {
-                auto old_state = state_.fetch_sub(locked_flag + token_ref_increment, std::memory_order_acq_rel);
-                // Check if new state is less than token_ref_increment which would
-                // indicate that this was the last reference.
-                if (old_state < (locked_flag + token_ref_increment + token_ref_increment)) {
-                    delete this;
-                }
-            }
-
-            static constexpr std::uint64_t stop_requested_flag = 1u;
-            static constexpr std::uint64_t locked_flag = 2u;
-            static constexpr std::uint64_t token_ref_increment = 4u;
-            static constexpr std::uint64_t source_ref_increment = static_cast<std::uint64_t>(1u) << 33u;
-
-            // bit 0 - stop-requested
-            // bit 1 - locked
-            // bits 2-32 - token ref count (31 bits)
-            // bits 33-63 - source ref count (31 bits)
-            std::atomic<std::uint64_t> state_{source_ref_increment};
-            stop_callback_base *head_ = nullptr;
-            std::thread::id signalling_thread_{};
-        };
-    } // namespace detail
-
-    //-----------------------------------------------
-    // forward declarations
-    //-----------------------------------------------
+        using shared_stop_state = std::shared_ptr<std::atomic<bool>>;
+    }
 
     class stop_source;
     template <typename Callback> class stop_callback;
 
-    /// \brief Empty struct to initialize a @ref stop_source without shared stop state
+    /// \brief Empty struct to initialize a @ref stop_source without a shared stop state
     struct nostopstate_t {
         explicit nostopstate_t() = default;
     };
 
-    /// \brief Empty struct to initialize a @ref stop_source without shared stop state
+    /// \brief Empty struct to initialize a @ref stop_source without a shared stop state
     inline constexpr nostopstate_t nostopstate{};
 
     /// \brief Token to check if a stop request has been made
@@ -314,63 +53,156 @@ namespace futures {
     /// associated std::stop_source object. It is essentially a thread-safe "view" of the associated stop-state.
     class stop_token {
       public:
-        // construct:
-        stop_token() noexcept : state_(nullptr) {}
+        /// \name Constructors
+        /// @{
 
-        // copy/move/assign/destroy:
-        stop_token(const stop_token &it) noexcept : state_(it.state_) {
-            if (state_ != nullptr) {
-                state_->add_token_reference();
-            }
-        }
+        /// \brief Constructs an empty stop_token with no associated stop-state
+        ///
+        /// \post stop_possible() and stop_requested() are both false
+        ///
+        /// \param other another stop_token object to construct this stop_token object
+        stop_token() noexcept = default;
 
-        stop_token(stop_token &&it) noexcept : state_(std::exchange(it.state_, nullptr)) {}
+        /// \brief Copy constructor.
+        ///
+        /// Constructs a stop_token whose associated stop-state is the same as that of other.
+        ///
+        /// \post *this and other share the same associated stop-state and compare equal
+        ///
+        /// \param other another stop_token object to construct this stop_token object
+        stop_token(const stop_token &other) noexcept = default;
 
-        ~stop_token() {
-            if (state_ != nullptr) {
-                state_->remove_token_reference();
-            }
-        }
+        /// \brief Move constructor.
+        ///
+        /// Constructs a stop_token whose associated stop-state is the same as that of other; other is left empty
+        ///
+        /// \post *this has other's previously associated stop-state, and other.stop_possible() is false
+        ///
+        /// \param other another stop_token object to construct this stop_token object
+        stop_token(stop_token &&other) noexcept : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
-        stop_token &operator=(const stop_token &it) noexcept {
-            if (state_ != it.state_) {
-                stop_token tmp{it};
+        /// \brief Destroys the stop_token object.
+        ///
+        /// \post If *this has associated stop-state, releases ownership of it.
+        ///
+        ~stop_token() = default;
+
+        /// \brief Copy-assigns the associated stop-state of other to that of *this
+        ///
+        /// Equivalent to stop_token(other).swap(*this)
+        ///
+        /// \param other Another stop_token object to share the stop-state with to or acquire the stop-state from
+        stop_token &operator=(const stop_token &other) noexcept {
+            if (shared_state_ != other.shared_state_) {
+                stop_token tmp{other};
                 swap(tmp);
             }
             return *this;
         }
 
-        stop_token &operator=(stop_token &&it) noexcept {
-            stop_token tmp{std::move(it)};
-            swap(tmp);
+        /// \brief Move-assigns the associated stop-state of other to that of *this
+        ///
+        /// After the assignment, *this contains the previous associated stop-state of other, and other has no
+        /// associated stop-state
+        ///
+        /// Equivalent to stop_token(std::move(other)).swap(*this)
+        ///
+        /// \param other Another stop_token object to share the stop-state with to or acquire the stop-state from
+        stop_token &operator=(stop_token &&other) noexcept {
+            if (this != &other) {
+                stop_token tmp{std::move(other)};
+                swap(tmp);
+            }
             return *this;
         }
 
-        void swap(stop_token &it) noexcept { std::swap(state_, it.state_); }
+        /// @}
 
-        // stop handling:
-        [[nodiscard]] bool stop_requested() const noexcept { return state_ != nullptr && state_->is_stop_requested(); }
+        /// \name Modifiers
+        /// @{
 
-        [[nodiscard]] bool stop_possible() const noexcept { return state_ != nullptr && state_->is_stop_requestable(); }
+        /// \brief Exchanges the associated stop-state of *this and other
+        ///
+        /// \param other stop_token to exchange the contents with
+        void swap(stop_token &other) noexcept { std::swap(shared_state_, other.shared_state_); }
 
+        /// @}
+
+        /// \name Observers
+        /// @{
+
+        /// \brief Checks whether the associated stop-state has been requested to stop
+        ///
+        /// Checks if the stop_token object has associated stop-state and that state has received a stop request. A
+        /// default constructed stop_token has no associated stop-state, and thus has not had stop requested
+        ///
+        /// \return true if the stop_token object has associated stop-state and it received a stop request, false
+        /// otherwise.
+        [[nodiscard]] bool stop_requested() const noexcept {
+            return (shared_state_ != nullptr) && shared_state_->load(std::memory_order_relaxed);
+        }
+
+        /// \brief Checks whether associated stop-state can be requested to stop
+        ///
+        /// Checks if the stop_token object has associated stop-state, and that state either has already had a stop
+        /// requested or it has associated std::stop_source object(s).
+        ///
+        /// A default constructed stop_token has no associated `stop-state`, and thus cannot be stopped.
+        /// the associated stop-state for which no std::stop_source object(s) exist can also not be stopped if
+        /// such a request has not already been made.
+        ///
+        /// \note If the stop_token object has associated stop-state and a stop request has already been made, this
+        /// function still returns true.
+        ///
+        /// \return false if the stop_token object has no associated stop-state, or it did not yet receive a stop
+        /// request and there are no associated std::stop_source object(s); true otherwise
+        [[nodiscard]] bool stop_possible() const noexcept {
+            return (shared_state_ != nullptr) && (shared_state_->load(std::memory_order_relaxed) || (shared_state_.use_count() > 1));
+        }
+
+        /// @}
+
+        /// \name Non-member functions
+        /// @{
+
+        /// \brief compares two std::stop_token objects
+        ///
+        /// This function is not visible to ordinary unqualified or qualified lookup, and can only be found by
+        /// argument-dependent lookup when std::stop_token is an associated class of the arguments.
+        ///
+        /// \param a stop_tokens to compare
+        /// \param b stop_tokens to compare
+        ///
+        /// \return true if lhs and rhs have the same associated stop-state, or both have no associated stop-state,
+        /// otherwise false
         [[nodiscard]] friend bool operator==(const stop_token &a, const stop_token &b) noexcept {
-            return a.state_ == b.state_;
+            return a.shared_state_ == b.shared_state_;
         }
+
+        /// \brief compares two std::stop_token objects for inequality
+        ///
+        /// The != operator is synthesized from operator==
+        ///
+        /// \param a stop_tokens to compare
+        /// \param b stop_tokens to compare
+        ///
+        /// \return true if lhs and rhs have different associated stop-states
         [[nodiscard]] friend bool operator!=(const stop_token &a, const stop_token &b) noexcept {
-            return a.state_ != b.state_;
+            return a.shared_state_ != b.shared_state_;
         }
+
+        /// @}
 
       private:
         friend class stop_source;
-        template <typename Callback> friend class stop_callback;
 
-        explicit stop_token(detail::stop_state *state) noexcept : state_(state) {
-            if (state_ != nullptr) {
-                state_->add_token_reference();
-            }
-        }
+        /// \brief Constructor that allows the stop_source to construct the stop_token directly from the stop state
+        ///
+        /// \param state State for the new token
+        explicit stop_token(detail::shared_stop_state state) noexcept : shared_state_(std::move(state)) {}
 
-        detail::stop_state *state_;
+        /// \brief Shared pointer to an atomic bool indicating if an external procedure should stop
+        detail::shared_stop_state shared_state_{nullptr};
     };
 
     /// \brief Object used to issue a stop request
@@ -382,140 +214,153 @@ namespace futures {
     /// will be awoken.
     class stop_source {
       public:
-        stop_source() : state_(new detail::stop_state()) {}
+        /// \name Constructors
+        /// @{
 
-        explicit stop_source(nostopstate_t) noexcept : state_(nullptr) {}
+        /// \brief Constructs a stop_source with new stop-state
+        ///
+        /// \post stop_possible() is true and stop_requested() is false
+        stop_source() : shared_state_(std::make_shared<std::atomic_bool>(false)) {}
 
-        ~stop_source() {
-            if (state_ != nullptr) {
-                state_->remove_source_reference();
-            }
-        }
+        /// \brief Constructs an empty stop_source with no associated stop-state
+        ///
+        /// \post stop_possible() and stop_requested() are both false
+        explicit stop_source(nostopstate_t) noexcept {};
 
-        stop_source(const stop_source &other) noexcept : state_(other.state_) {
-            if (state_ != nullptr) {
-                state_->add_source_reference();
-            }
-        }
+        /// \brief Copy constructor
+        ///
+        /// Constructs a stop_source whose associated stop-state is the same as that of other.
+        ///
+        /// \post *this and other share the same associated stop-state and compare equal
+        ///
+        /// \param other another stop_source object to construct this stop_source object with
+        stop_source(const stop_source &other) noexcept = default;
 
-        stop_source(stop_source &&other) noexcept : state_(std::exchange(other.state_, nullptr)) {}
+        /// \brief Move constructor
+        ///
+        /// Constructs a stop_source whose associated stop-state is the same as that of other; other is left empty
+        ///
+        /// \post *this has other's previously associated stop-state, and other.stop_possible() is false
+        ///
+        /// \param other another stop_source object to construct this stop_source object with
+        stop_source(stop_source &&other) noexcept : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
+        /// \brief Destroys the stop_source object.
+        ///
+        /// If *this has associated stop-state, releases ownership of it.
+        ~stop_source() = default;
+
+        /// \brief Copy-assigns the stop-state of other
+        ///
+        /// Equivalent to stop_source(other).swap(*this)
+        ///
+        /// \param other another stop_source object acquire the stop-state from
         stop_source &operator=(stop_source &&other) noexcept {
             stop_source tmp{std::move(other)};
             swap(tmp);
             return *this;
         }
 
+        /// \brief Move-assigns the stop-state of other
+        ///
+        /// Equivalent to stop_source(std::move(other)).swap(*this)
+        ///
+        /// \post After the assignment, *this contains the previous stop-state of other, and other has no stop-state
+        ///
+        /// \param other another stop_source object to share the stop-state with
         stop_source &operator=(const stop_source &other) noexcept {
-            if (state_ != other.state_) {
+            if (shared_state_ != other.shared_state_) {
                 stop_source tmp{other};
                 swap(tmp);
             }
             return *this;
         }
 
-        [[nodiscard]] bool stop_requested() const noexcept { return state_ != nullptr && state_->is_stop_requested(); }
+        /// @}
 
-        [[nodiscard]] bool stop_possible() const noexcept { return state_ != nullptr; }
+        /// \name Modifiers
+        /// @{
 
+        /// \brief Makes a stop request for the associated stop-state, if any
+        ///
+        /// Issues a stop request to the stop-state, if the stop_source object has a stop-state, and it has not yet
+        /// already had stop requested.
+        ///
+        /// The determination is made atomically, and if stop was requested, the stop-state is atomically updated to
+        /// avoid race conditions, such that:
+        ///
+        /// - stop_requested() and stop_possible() can be concurrently invoked on other stop_tokens and stop_sources of
+        /// the same stop-state
+        /// - request_stop() can be concurrently invoked on other stop_source objects, and only one will actually
+        /// perform the stop request.
+        ///
+        /// \return true if the stop_source object has a stop-state and this invocation made a stop request (the
+        /// underlying atomic value was successfully changed), otherwise false
         bool request_stop() noexcept {
-            if (state_ != nullptr) {
-                return state_->request_stop();
+            if (shared_state_ != nullptr) {
+                bool expected = false;
+                return shared_state_->compare_exchange_strong(expected, true, std::memory_order_relaxed);
             }
             return false;
         }
 
-        [[nodiscard]] stop_token get_token() const noexcept { return stop_token{state_}; }
+        /// \brief Swaps two stop_source objects
+        /// \param other stop_source to exchange the contents with
+        void swap(stop_source &other) noexcept { std::swap(shared_state_, other.shared_state_); }
 
-        void swap(stop_source &other) noexcept { std::swap(state_, other.state_); }
+        /// @}
+
+        /// \name Non-member functions
+        /// @{
+
+        /// \brief Returns a stop_token for the associated stop-state
+        ///
+        /// Returns a stop_token object associated with the stop_source's stop-state, if the stop_source has stop-state,
+        /// otherwise returns a default-constructed (empty) stop_token.
+        ///
+        /// \return A stop_token object, which will be empty if this->stop_possible() == false
+        [[nodiscard]] stop_token get_token() const noexcept { return stop_token{shared_state_}; }
+
+        /// \brief Checks whether the associated stop-state has been requested to stop
+        ///
+        /// Checks if the stop_source object has a stop-state and that state has received a stop request.
+        ///
+        /// \return true if the stop_token object has a stop-state, and it has received a stop request, false otherwise
+        [[nodiscard]] bool stop_requested() const noexcept {
+            return (shared_state_ != nullptr) && shared_state_->load(std::memory_order_relaxed);
+        }
+
+        /// \brief Checks whether associated stop-state can be requested to stop
+        ///
+        /// Checks if the stop_source object has a stop-state.
+        ///
+        /// \note If the stop_source object has a stop-state and a stop request has already been made, this function
+        /// still returns true.
+        ///
+        /// \return true if the stop_source object has a stop-state, otherwise false
+        [[nodiscard]] bool stop_possible() const noexcept { return shared_state_ != nullptr; }
+
+        /// @}
+
+        /// \name Non-member functions
+        /// @{
 
         [[nodiscard]] friend bool operator==(const stop_source &a, const stop_source &b) noexcept {
-            return a.state_ == b.state_;
+            return a.shared_state_ == b.shared_state_;
         }
         [[nodiscard]] friend bool operator!=(const stop_source &a, const stop_source &b) noexcept {
-            return a.state_ != b.state_;
+            return a.shared_state_ != b.shared_state_;
         }
+
+        /// @}
 
       private:
-        detail::stop_state *state_;
+        /// \brief Shared pointer to an atomic bool indicating if an external procedure should stop
+        detail::shared_stop_state shared_state_{nullptr};
     };
 
-    /// \brief A stop callback for a stop token
-    ///
-    /// The stop_callback class template provides an RAII object type that registers a callback function for
-    /// an associated std::stop_token object, such that the callback function will be invoked when the
-    /// std::stop_token's associated std::stop_source is requested to stop.
-    template <typename Callback>
-    // requires Destructible<Callback> && Invocable<Callback>
-    class [[nodiscard]] stop_callback : private detail::stop_callback_base {
-      public:
-        using callback_type = Callback;
-
-        template <typename CB, std::enable_if_t<std::is_constructible_v<Callback, CB>, int> = 0>
-        // requires Constructible<Callback, C>
-        explicit stop_callback(const stop_token &token, CB &&cb) noexcept(std::is_nothrow_constructible_v<Callback, CB>)
-            : detail::stop_callback_base{[](detail::stop_callback_base *that) noexcept {
-                  static_cast<stop_callback *>(that)->execute();
-              }},
-              state_(nullptr), cb_(static_cast<CB &&>(cb)) {
-            if (token.state_ != nullptr && token.state_->try_add_callback(this, true)) {
-                state_ = token.state_;
-            }
-        }
-
-        template <typename CB, std::enable_if_t<std::is_constructible_v<Callback, CB>, int> = 0>
-        // requires Constructible<Callback, C>
-        explicit stop_callback(stop_token &&token, CB &&cb) noexcept(std::is_nothrow_constructible_v<Callback, CB>)
-            : detail::stop_callback_base{[](detail::stop_callback_base *that) noexcept {
-                  static_cast<stop_callback *>(that)->execute();
-              }},
-              state_(nullptr), cb_(static_cast<CB &&>(cb)) {
-            if (token.state_ != nullptr && token.state_->try_add_callback(this, false)) {
-                state_ = std::exchange(token.state_, nullptr);
-            }
-        }
-
-        ~stop_callback() {
-#ifdef SAFE
-            if (in_execute_.load()) {
-                std::cerr << "*** OOPS: ~stop_callback() while callback executed\n";
-            }
-#endif
-            if (state_ != nullptr) {
-                state_->remove_callback(this);
-            }
-        }
-
-        stop_callback &operator=(const stop_callback &) = delete;
-        stop_callback &operator=(stop_callback &&) = delete;
-        stop_callback(const stop_callback &) = delete;
-        stop_callback(stop_callback &&) = delete;
-
-      private:
-        void execute() noexcept {
-            // Executed in a noexcept context
-            // If it throws then we call std::terminate().
-#ifdef SAFE
-            in_execute_.store(true);
-            cb_();
-            in_execute_.store(false);
-#else
-            cb_();
-#endif
-        }
-
-        detail::stop_state *state_;
-        Callback cb_;
-#ifdef SAFE
-        std::atomic<bool> in_execute_{false};
-#endif
-    };
-
-    /// Registers a callback function for an associated std::stop_token object
-    template <typename Callback> stop_callback(stop_token, Callback) -> stop_callback<Callback>;
-
-    /** @} */  // \addtogroup cancellation Cancellation
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup cancellation Cancellation
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_STOP_TOKEN_H
