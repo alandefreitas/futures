@@ -47,7 +47,7 @@ TEST_CASE("Conjunction") {
                        static_cast<int>(std::get<2>(r).get().size());
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
-            STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
             using traits = detail::unwrap_traits<decltype(continuation), decltype(f)>;
             STATIC_REQUIRE(
                 std::is_same_v<int,
@@ -125,7 +125,7 @@ TEST_CASE("Conjunction") {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation); // continue from when_all
                 REQUIRE(f4.get() == 2 + 3 + 4);
             }
@@ -157,7 +157,7 @@ TEST_CASE("Conjunction") {
                 STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
                 STATIC_REQUIRE(is_future_v<Future>);
                 STATIC_REQUIRE(not is_future_v<Function>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
                 REQUIRE(f4.get() == 2 + 3 + 4);
             }
@@ -168,7 +168,7 @@ TEST_CASE("Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(not is_future_v<decltype(continuation)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
                 REQUIRE(f4.get() == 2 + 3 + 4);
             }
@@ -179,7 +179,7 @@ TEST_CASE("Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(not is_future_v<decltype(continuation)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 auto f4 = then(f, continuation);
                 REQUIRE(f4.get() == 2 + 3 + 4);
             }
@@ -189,7 +189,7 @@ TEST_CASE("Conjunction") {
             SECTION("Continue with value") {
                 auto continuation = [](futures::small_vector<int> rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 SECTION("Sync unwrap") {
                     auto f4 = detail::unwrap_and_continue(f, continuation);
                     REQUIRE(f4 == 2 + 3 + 4);
@@ -203,7 +203,7 @@ TEST_CASE("Conjunction") {
             SECTION("Continue with lvalue") {
                 auto continuation = [](futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 SECTION("Sync unwrap") {
                     auto f4 = detail::unwrap_and_continue(f, continuation);
                     REQUIRE(f4 == 2 + 3 + 4);
@@ -217,7 +217,7 @@ TEST_CASE("Conjunction") {
             SECTION("Continue with const lvalue") {
                 auto continuation = [](const futures::small_vector<int> &rs) { return rs[0] + rs[1] + rs[2]; };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+                STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
                 SECTION("Sync unwrap") {
                     auto f4 = detail::unwrap_and_continue(f, continuation);
                     REQUIRE(f4 == 2 + 3 + 4);

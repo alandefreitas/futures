@@ -13,7 +13,7 @@ namespace futures {
      *  @{
      */
 
-    /// Check if something is callable, regardless of the arguments
+    /// \brief Check if something is callable, regardless of the arguments
     template <typename T> struct is_callable {
       private:
         typedef char (&yes)[1];

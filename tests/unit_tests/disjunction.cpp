@@ -98,9 +98,6 @@ TEST_CASE("Disjunction") {
             using tuple_type = std::tuple<cfuture<int>, cfuture<double>, cfuture<std::string>>;
             using result_type = when_any_result<tuple_type>;
             STATIC_REQUIRE(detail::is_when_any_result_v<result_type>);
-            STATIC_REQUIRE(detail::is_tuple_when_any_result_v<result_type>);
-            STATIC_REQUIRE(
-                detail::is_index_and_sequence_invocable<decltype(continuation), std::tuple<>, result_type>::value);
             SECTION("Sync unwrapping") {
                 int r = detail::unwrap_and_continue(f, continuation);
                 REQUIRE_FALSE(r == 0);
@@ -147,7 +144,7 @@ TEST_CASE("Disjunction") {
             // We can unwrap that here because all futures return int
             auto continuation = [](cfuture<int> r) { return r.get() * 3; };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
-            STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));
@@ -237,7 +234,7 @@ TEST_CASE("Disjunction") {
                 return 0;
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
-            STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -258,8 +255,6 @@ TEST_CASE("Disjunction") {
             using tuple_type = futures::small_vector<cfuture<int>>;
             using result_type = when_any_result<tuple_type>;
             STATIC_REQUIRE(detail::is_when_any_result_v<result_type>);
-            STATIC_REQUIRE(
-                detail::is_index_and_sequence_invocable<decltype(continuation), std::tuple<>, result_type>::value);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -278,7 +273,7 @@ TEST_CASE("Disjunction") {
             // We can unwrap that here because all futures return int
             auto continuation = [](int r) { return r * 3; };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
-            STATIC_REQUIRE(is_future_continuation_v<decltype(continuation), decltype(f)>);
+            STATIC_REQUIRE(detail::is_valid_continuation_v<decltype(continuation), decltype(f)>);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));

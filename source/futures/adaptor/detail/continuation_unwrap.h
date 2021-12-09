@@ -7,7 +7,6 @@
 #define FUTURES_CONTINUATION_UNWRAP_H
 
 #include <futures/adaptor/detail/traits/is_callable.h>
-#include <futures/adaptor/detail/traits/is_executor_then_continuation.h>
 #include <futures/adaptor/detail/traits/is_single_type_tuple.h>
 #include <futures/adaptor/detail/traits/is_tuple.h>
 #include <futures/adaptor/detail/traits/is_tuple_invocable.h>
@@ -17,6 +16,7 @@
 #include <futures/adaptor/detail/traits/tuple_type_transform.h>
 #include <futures/adaptor/detail/traits/type_member_or.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/futures/detail/traits/type_member_or_void.h>
 
 #include <futures/futures/basic_future.h>
@@ -252,8 +252,10 @@ namespace futures::detail {
     template <class Future, class Function>
     struct result_of_unwrap_with_token<
         Future, Function,
-        std::void_t<decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(), std::declval<stop_token>()))>> {
-        using type = decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(), std::declval<stop_token>()));
+        std::void_t<decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(),
+                                                 std::declval<stop_token>()))>> {
+        using type =
+            decltype(unwrap_and_continue(std::declval<Future>(), std::declval<Function>(), std::declval<stop_token>()));
     };
 
     template <class Future, class Function>
@@ -307,20 +309,9 @@ namespace futures::detail {
     template <typename Function, typename Future>
     using result_of_then_t = typename result_of_then<Function, Future>::type;
 
-    /// \brief A single trait to validate and constraint futures::then input types
-    template <class Executor, class Function, class Future>
-    using is_valid_then_input = std::conjunction<is_executor<Executor>, std::negation<is_executor<Function>>,
-                                                 std::negation<is_executor<Future>>, is_future<Future>,
-                                                 std::bool_constant<unwrap_traits<Function, Future>::is_valid>>;
-
-    template <class Executor, class Function, class Future>
-    constexpr bool is_valid_then_input_v = is_valid_then_input<Executor, Function, Future>::value;
-
-    /// \brief A single trait to validate and constraint futures::then input types when we have no executor
+    /// \brief A trait to validate whether a Function can be continuation to a future
     template <class Function, class Future>
-    using is_valid_continuation =
-        std::conjunction<std::negation<is_executor<Function>>, std::negation<is_executor<Future>>, is_future<Future>,
-                         std::bool_constant<unwrap_traits<Function, Future>::is_valid>>;
+    using is_valid_continuation = std::bool_constant<unwrap_traits<Function, Future>::is_valid>;
 
     template <class Function, class Future>
     constexpr bool is_valid_continuation_v = is_valid_continuation<Function, Future>::value;
@@ -370,10 +361,16 @@ namespace futures::detail {
             }
         }
 
+        struct fulfill_promise_handle {
+
+        };
+
         template <typename Executor, typename Function, class Future
 #ifndef FUTURES_DOXYGEN
                   ,
-                  std::enable_if_t<is_valid_then_input_v<Executor, Function, Future>, int> = 0
+                  std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
+                                       is_future_v<Future> && is_valid_continuation_v<Function, Future>,
+                                   int> = 0
 #endif
                   >
         result_of_then_t<Function, Future> operator()(const Executor &ex, Future &&before, Function &&after) const {

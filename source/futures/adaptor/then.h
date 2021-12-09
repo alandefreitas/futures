@@ -38,7 +38,9 @@ namespace futures {
     template <typename Executor, typename Function, class Future
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<detail::is_valid_then_input_v<Executor, Function, Future>, int> = 0
+              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
+                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+                               int> = 0
 #endif
               >
     decltype(auto) then(const Executor &ex, Future &&before, Function &&after) {
@@ -51,7 +53,9 @@ namespace futures {
     template <class Future, typename Executor, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<detail::is_valid_then_input_v<Executor, Function, Future>, int> = 0
+              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
+                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+                               int> = 0
 #endif
               >
     decltype(auto) then(Future &&before, const Executor &ex, Function &&after) {
@@ -66,7 +70,9 @@ namespace futures {
     template <class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<detail::is_valid_continuation_v<Function, Future>, int> = 0
+              std::enable_if_t<!is_executor_v<Function> && !is_executor_v<Future> && is_future_v<Future> &&
+                                   detail::is_valid_continuation_v<Function, Future>,
+                               int> = 0
 #endif
               >
     decltype(auto) then(Future &&before, Function &&after) {
@@ -79,7 +85,9 @@ namespace futures {
     template <class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<detail::is_valid_continuation_v<Function, Future>, int> = 0
+              std::enable_if_t<!is_executor_v<Function> && !is_executor_v<Future> && is_future_v<Future> &&
+                                   detail::is_valid_continuation_v<Function, Future>,
+                               int> = 0
 #endif
               >
     auto operator>>(Future &&before, Function &&after) {
@@ -92,7 +100,9 @@ namespace futures {
     template <class Executor, class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<detail::is_valid_then_input_v<Executor, Function, Future>, int> = 0
+              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
+                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+                               int> = 0
 #endif
               >
     auto operator>>(Future &&before, std::pair<const Executor &, Function &> &&after) {
@@ -110,7 +120,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
               ,
               std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> &&
-                                   not is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
+                                   !is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
                                int> = 0
 #endif
               >
