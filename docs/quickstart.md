@@ -143,7 +143,7 @@
         You are also responsible for making sure the headers for the header-only dependencies available:
         
         - The only mandadory dependency is [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
-        - There's also an optional recommended dependency on [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). If none of these are available, the implementation fallsback to [[std::vector]] 
+        - There's also an optional recommended dependency on [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). If none of these are available, the implementation fallsback to [std::vector] 
 
 
 
