@@ -18,6 +18,7 @@
 [std::stop_token]: https://en.cppreference.com/w/cpp/thread/stop_token
 [std::jthread]: https://en.cppreference.com/w/cpp/thread/jthread
 [std::is_constant_evaluated]: https://en.cppreference.com/w/cpp/types/is_constant_evaluated
+[std::vector]: https://en.cppreference.com/w/cpp/container/vector
 
 <!-- C++ Standard library / Extensions and Proposals -->
 [C++ Extensions for Concurrency]: https://en.cppreference.com/w/cpp/experimental/concurrency

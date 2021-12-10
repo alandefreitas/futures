@@ -60,7 +60,8 @@ markdown_extensions:
       linenums_style: pymdownx.inline
   - pymdownx.inlinehilite
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.snippets
   - pymdownx.arithmatex:
       generic: true
