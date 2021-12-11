@@ -8,6 +8,7 @@
 
 #include <memory>
 
+#include <futures/futures/detail/empty_base.h>
 #include <futures/futures/detail/shared_state.h>
 #include <futures/futures/detail/to_address.h>
 
@@ -23,27 +24,39 @@ namespace futures {
         /// \brief A concrete and allocator aware implementation of a shared state with its destructor
         /// This is the shared_state implementation used by promises
         /// Only the shared_state<R> overload needs allocators
-        template <typename R, typename Allocator> class shared_state_object : public shared_state<R> {
+        template <typename R, typename Allocator>
+        class shared_state_object
+            : public shared_state<R>,
+              public maybe_empty<
+                  /* maybe_empty<allocator_type> <- see below */
+                  typename std::allocator_traits<Allocator>::template rebind_alloc<shared_state_object<R, Allocator>>> {
           public:
             /// \brief The allocator used for elements of type R
             using allocator_type =
                 typename std::allocator_traits<Allocator>::template rebind_alloc<shared_state_object>;
+
+            using maybe_empty_allocator_type = maybe_empty<allocator_type>;
 
             /// \brief The allocator traits for the allocator_type
             using allocator_traits_type = std::allocator_traits<allocator_type>;
 
             /// \brief Create promise shared state with the specified allocator
             /// The base class shared_state will create uninitialized aligned storage for R
-            explicit shared_state_object(allocator_type const &alloc) : shared_state<R>{}, alloc_{alloc} {}
+            explicit shared_state_object(allocator_type const &rhs_alloc)
+                : shared_state<R>{}, maybe_empty_allocator_type{rhs_alloc} {}
 
           protected:
             /// \brief Concrete function to deallocate the shared state
             /// It uses the underlying allocator to deallocate this very shared state
-            void deallocate_future() noexcept final { destroy(alloc_, this); }
+            void deallocate_future() noexcept final { destroy(alloc(), this); }
 
           private:
             /// \brief Allocator we use to create the object of type R
-            allocator_type alloc_;
+            /// \brief Get stop token from the base class as function for convenience
+            const allocator_type &alloc() const { return maybe_empty<allocator_type>::get(); }
+
+            /// \brief Get stop token from the base class as function for convenience
+            allocator_type &alloc() { return maybe_empty<allocator_type>::get(); }
 
             /// \brief The destroy function implementation
             /// This function destroys the element with our custom allocator

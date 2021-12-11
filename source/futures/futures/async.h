@@ -8,6 +8,7 @@
 
 #include <futures/executor/inline_executor.h>
 
+#include <futures/futures/detail/empty_base.h>
 #include <futures/futures/detail/traits/async_result_of.h>
 
 #include <futures/futures/await.h>
@@ -44,11 +45,12 @@ namespace futures {
         constexpr bool is_valid_async_input_v = is_valid_async_input<Executor, Function, Args...>::value;
 
         /// \brief Create a new stop source for the new shared state
-        template <bool expects_stop_token> stop_source create_stop_source() {
+        template <bool expects_stop_token> auto create_stop_source() {
             if constexpr (expects_stop_token) {
-                return {};
+                stop_source ss;
+                return std::make_pair(ss, ss.get_token());
             } else {
-                return stop_source(nostopstate);
+                return std::make_pair(empty_value, empty_value);
             }
         }
 
@@ -58,28 +60,47 @@ namespace futures {
             /// Handle to fulfill promise. Asio requires us to create a handle because
             /// callables need to be *copy constructable*. Continuations also require us to create an
             /// extra handle because we need to run them after the function is over.
-            template <class Function, class Task, class... Args> class promise_fulfiller {
+            template <class StopToken, class Function, class Task, class... Args>
+            class promise_fulfill_handle
+                : public maybe_empty<StopToken>, // stop token for stopping the process is represented in base class
+                  public maybe_empty<std::tuple<Args...>> // arguments bound to the function to fulfill the promise also
+                                                          // have empty base opt
+            {
               public:
-                promise_fulfiller(Task &&pt, std::tuple<Args...> &&args, continuations_source cs, const stop_source &ss)
-                    : pt_(std::move(pt)), args_(std::move(args)), continuations_(std::move(cs)),
-                      token_(ss.get_token()) {}
+                promise_fulfill_handle(Task &&pt, std::tuple<Args...> &&args, continuations_source cs,
+                                       const StopToken &st)
+                    : maybe_empty<StopToken>(st), maybe_empty<std::tuple<Args...>>(std::move(args)),
+                      pt_(std::forward<Task>(pt)), continuations_(std::move(cs)) {}
 
                 void operator()() {
-                    // Fulfill
-                    if constexpr (std::is_invocable_v<Function, stop_token, Args...>) {
-                        std::apply(pt_, std::tuple_cat(std::make_tuple(token_), std::move(args_)));
+                    // Fulfill promise
+                    if constexpr (std::is_invocable_v<Function, StopToken, Args...>) {
+                        std::apply(pt_, std::tuple_cat(std::make_tuple(token()), std::move(args())));
                     } else {
-                        std::apply(pt_, args_);
+                        std::apply(pt_, std::move(args()));
                     }
                     // Run future continuations
                     continuations_.request_run();
                 }
 
+                /// \brief Get stop token from the base class as function for convenience
+                const StopToken &token() const { return maybe_empty<StopToken>::get(); }
+
+                /// \brief Get stop token from the base class as function for convenience
+                StopToken &token() { return maybe_empty<StopToken>::get(); }
+
+                /// \brief Get args from the base class as function for convenience
+                const std::tuple<Args...> &args() const { return maybe_empty<std::tuple<Args...>>::get(); }
+
+                /// \brief Get args from the base class as function for convenience
+                std::tuple<Args...> &args() { return maybe_empty<std::tuple<Args...>>::get(); }
+
               private:
-                Task pt_;                            // Task and its shared state
-                std::tuple<Args...> args_;           // args to fulfill promise
-                continuations_source continuations_; // continuation source for next futures
-                stop_token token_;                   // stop token for stopping the process
+                /// \brief Task we need to fulfill the promise and its shared state
+                Task pt_;
+
+                /// \brief Continuation source for next futures
+                continuations_source continuations_;
             };
 
             /// \brief Schedule the function in the executor
@@ -98,7 +119,7 @@ namespace futures {
 
                 // Shared sources
                 constexpr bool expects_stop_token = std::is_invocable_v<Function, stop_token, Args...>;
-                stop_source ss = create_stop_source<expects_stop_token>();
+                auto [s_source, s_token] = create_stop_source<expects_stop_token>();
                 continuations_source cs;
 
                 // Set up shared state
@@ -110,10 +131,10 @@ namespace futures {
                 future_type result{pt.template get_future<future_type>()};
                 result.set_continuations_source(cs);
                 if constexpr (expects_stop_token) {
-                    result.set_stop_source(ss);
+                    result.set_stop_source(s_source);
                 }
-                promise_fulfiller<Function, packaged_task_type, Args...> fulfill_promise(
-                    std::move(pt), std::make_tuple(std::forward<Args>(args)...), cs, ss);
+                promise_fulfill_handle<std::decay_t<decltype(s_token)>, Function, packaged_task_type, Args...>
+                    fulfill_promise(std::move(pt), std::make_tuple(std::forward<Args>(args)...), cs, s_token);
 
                 // Fire-and-forget: Post a handle running the complete function to the executor
                 switch (policy) {
@@ -127,7 +148,6 @@ namespace futures {
                     asio::post(ex, std::move(fulfill_promise));
                     break;
                 }
-
                 return result;
             }
         };
