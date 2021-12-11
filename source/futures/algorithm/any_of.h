@@ -44,7 +44,7 @@ namespace futures {
                                    int> = 0
 #endif
                   >
-        bool main(const E &ex, P p, I first, S last, Fun f) const {
+        bool run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
                 return std::any_of(first, last, f);

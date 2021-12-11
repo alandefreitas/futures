@@ -113,7 +113,7 @@ namespace futures {
                                        int> = 0>
 #endif
             decltype(auto) operator()(const E &ex, P p, I first, S last, Fun f) const {
-                return Derived().main(ex, std::forward<P>(p), first, last, f);
+                return Derived().run(ex, std::forward<P>(p), first, last, f);
             }
 
             /// \overload execution policy instead of executor
@@ -240,6 +240,16 @@ namespace futures {
                 return Derived().operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
                                             std::end(r), std::move(f));
             }
+
+            /// \brief Struct holding the overload for the full async variant of all algorithms
+            ///
+            /// The async object represents the exact same overloads for the algorithms, with only
+            /// two relevant differences:
+            /// 1) the first task in the algorithm should not happen in the inline executor
+            /// 2) the function returns future<...> on which we can wait for the algorithm to finish
+            struct async_functor {
+
+            } async;
         };
 
         /// \brief CRTP class with the overloads for classes that look for elements in a sequence with an unary function
@@ -257,7 +267,7 @@ namespace futures {
 #endif
                 >
             decltype(auto) operator()(const E &ex, P p, I first, S last, T f) const {
-                return Derived().main(ex, std::forward<P>(p), first, last, f);
+                return Derived().run(ex, std::forward<P>(p), first, last, f);
             }
 
             /// \overload execution policy instead of executor
@@ -387,7 +397,7 @@ namespace futures {
                                             std::end(r), std::move(f));
             }
         };
-    }        // namespace detail
+    } // namespace detail
     /** @}*/
     /** @}*/
 } // namespace futures

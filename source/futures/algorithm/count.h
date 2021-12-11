@@ -40,7 +40,7 @@ namespace futures {
                                        futures::detail::sentinel_for<S, I> &&
                                        futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T*, I>,
                                    int> = 0>
-        futures::detail::iter_difference_t<I> main(const E &ex, P p, I first, S last, T v) const {
+        futures::detail::iter_difference_t<I> run(const E &ex, P p, I first, S last, T v) const {
             auto middle = p(first, last);
             if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
                 return std::count(first, last, v);

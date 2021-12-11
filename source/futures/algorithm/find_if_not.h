@@ -40,7 +40,7 @@ namespace futures {
                                        futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0>
-        I main(const E &ex, P p, I first, S last, Fun f) const {
+        I run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
                 return std::find_if_not(first, last, f);
