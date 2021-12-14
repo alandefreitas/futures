@@ -225,18 +225,6 @@ namespace futures {
     /// \brief Specialization explicitly setting when_all_future<T> as a type of future
     template <typename T> struct is_future<when_all_future<T>> : std::true_type {};
 
-    /// \brief Specialization explicitly setting when_all_future<T> & as a type of future
-    template <typename T> struct is_future<when_all_future<T> &> : std::true_type {};
-
-    /// \brief Specialization explicitly setting when_all_future<T> && as a type of future
-    template <typename T> struct is_future<when_all_future<T> &&> : std::true_type {};
-
-    /// \brief Specialization explicitly setting const when_all_future<T> as a type of future
-    template <typename T> struct is_future<const when_all_future<T>> : std::true_type {};
-
-    /// \brief Specialization explicitly setting const when_all_future<T> & as a type of future
-    template <typename T> struct is_future<const when_all_future<T> &> : std::true_type {};
-
     namespace detail {
         /// \name when_all helper traits
         /// Useful traits for when all future
@@ -245,16 +233,14 @@ namespace futures {
         /// \brief Check if type is a when_all_future as a type
         template <typename> struct is_when_all_future : std::false_type {};
         template <typename Sequence> struct is_when_all_future<when_all_future<Sequence>> : std::true_type {};
-        template <typename Sequence> struct is_when_all_future<const when_all_future<Sequence>> : std::true_type {};
-        template <typename Sequence> struct is_when_all_future<when_all_future<Sequence> &> : std::true_type {};
-        template <typename Sequence> struct is_when_all_future<when_all_future<Sequence> &&> : std::true_type {};
-        template <typename Sequence> struct is_when_all_future<const when_all_future<Sequence> &> : std::true_type {};
 
         /// \brief Check if type is a when_all_future as constant bool
         template <class T> constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
 
         /// \brief Check if a type can be used in a future conjunction (when_all or operator&& for futures)
-        template <class T> using is_valid_when_all_argument = std::disjunction<is_future<T>, std::is_invocable<T>>;
+        template <class T>
+        using is_valid_when_all_argument =
+            std::disjunction<is_future<std::decay_t<T>>, std::is_invocable<std::decay_t<T>>>;
         template <class T> constexpr bool is_valid_when_all_argument_v = is_valid_when_all_argument<T>::value;
 
         /// \brief Trait to identify valid when_all inputs
@@ -335,6 +321,20 @@ namespace futures {
             auto s = std::tuple_cat(std::move(s1), std::move(s2));
             return when_all_future(std::move(s));
         }
+
+        // When making the tuple for when_all_future:
+        // - futures need to be moved
+        // - shared futures need to be copied
+        // - lambdas need to be posted
+        template <typename F> constexpr decltype(auto) move_share_or_post(F &&f) {
+            if constexpr (is_shared_future_v<std::decay_t<F>>) {
+                return std::forward<F>(f);
+            } else if constexpr (is_future_v<std::decay_t<F>>) {
+                return std::move(std::forward<F>(f));
+            } else /* if constexpr (std::is_invocable_v<F>) */ {
+                return futures::async(std::forward<F>(f));
+            }
+        }
         ///@}
     } // namespace detail
 
@@ -378,9 +378,8 @@ namespace futures {
             }
         } else /* if constexpr (input_is_invocable) */ {
             static_assert(input_is_invocable);
-            std::transform(first, last, std::back_inserter(v), [](auto &&f) {
-                return std::move(futures::async(std::forward<decltype(f)>(f)));
-            });
+            std::transform(first, last, std::back_inserter(v),
+                           [](auto &&f) { return std::move(futures::async(std::forward<decltype(f)>(f))); });
         }
 
         return when_all_future<sequence_type>(std::move(v));
@@ -419,22 +418,8 @@ namespace futures {
         // Infer sequence type
         using sequence_type = std::tuple<to_future_t<Futures>...>;
 
-        // When making the tuple for when_all_future:
-        // - futures need to be moved
-        // - shared futures need to be copied
-        // - lambdas need to be posted
-        [[maybe_unused]] constexpr auto move_share_or_post = [](auto &&f) {
-            if constexpr (is_shared_future_v<decltype(f)>) {
-                return std::forward<decltype(f)>(f);
-            } else if constexpr (is_future_v<decltype(f)>) {
-                return std::move(std::forward<decltype(f)>(f));
-            } else /* if constexpr (std::is_invocable_v<decltype(f)>) */ {
-                return futures::async(std::forward<decltype(f)>(f));
-            }
-        };
-
         // Create sequence (and infer types as we go)
-        sequence_type v = std::make_tuple((move_share_or_post(futures))...);
+        sequence_type v = std::make_tuple((detail::move_share_or_post(futures))...);
 
         return when_all_future<sequence_type>(std::move(v));
     }

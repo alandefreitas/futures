@@ -38,8 +38,9 @@ namespace futures {
     template <typename Executor, typename Function, class Future
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
-                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
+                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
+                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                int> = 0
 #endif
               >
@@ -53,8 +54,9 @@ namespace futures {
     template <class Future, typename Executor, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
-                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
+                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
+                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                int> = 0
 #endif
               >
@@ -70,8 +72,9 @@ namespace futures {
     template <class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<!is_executor_v<Function> && !is_executor_v<Future> && is_future_v<Future> &&
-                                   detail::is_valid_continuation_v<Function, Future>,
+              std::enable_if_t<!is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> &&
+                                   is_future_v<std::decay_t<Future>> &&
+                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                int> = 0
 #endif
               >
@@ -85,8 +88,9 @@ namespace futures {
     template <class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<!is_executor_v<Function> && !is_executor_v<Future> && is_future_v<Future> &&
-                                   detail::is_valid_continuation_v<Function, Future>,
+              std::enable_if_t<!is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> &&
+                                   is_future_v<std::decay_t<Future>> &&
+                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                int> = 0
 #endif
               >
@@ -100,8 +104,9 @@ namespace futures {
     template <class Executor, class Future, typename Function
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
-                                   is_future_v<Future> && detail::is_valid_continuation_v<Function, Future>,
+              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
+                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
+                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                int> = 0
 #endif
               >
@@ -119,7 +124,7 @@ namespace futures {
     template <class Executor, typename Function, typename... Args
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> &&
+              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
                                    !is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
                                int> = 0
 #endif

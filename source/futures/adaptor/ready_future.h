@@ -26,7 +26,7 @@ namespace futures {
     template <typename Future
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_future_v<Future>, int> = 0
+              std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
 #endif
               >
     bool is_ready(Future &&f) {
@@ -85,8 +85,8 @@ namespace futures {
     }
 
     /// \brief Make a placeholder @ref cfuture object that is ready
-    template <typename T> cfuture<T&> make_ready_cfuture(std::reference_wrapper<T> value) {
-        return make_ready_future<T, cfuture<T&>>(value);
+    template <typename T> cfuture<T &> make_ready_cfuture(std::reference_wrapper<T> value) {
+        return make_ready_future<T, cfuture<T &>>(value);
     }
 
     /// \brief Make a placeholder void @ref cfuture object that is ready
@@ -94,9 +94,7 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline cfuture<void> make_ready_cfuture() {
-        return make_ready_future<cfuture<void>>();
-    }
+    inline cfuture<void> make_ready_cfuture() { return make_ready_future<cfuture<void>>(); }
 
     /// \brief Make a placeholder @ref jcfuture object that is ready
     ///
@@ -108,8 +106,8 @@ namespace futures {
     }
 
     /// \brief Make a placeholder @ref cfuture object that is ready
-    template <typename T> jcfuture<T&> make_ready_jcfuture(std::reference_wrapper<T> value) {
-        return make_ready_future<T, jcfuture<T&>>(value);
+    template <typename T> jcfuture<T &> make_ready_jcfuture(std::reference_wrapper<T> value) {
+        return make_ready_future<T, jcfuture<T &>>(value);
     }
 
     /// \brief Make a placeholder void @ref jcfuture object that is ready
@@ -117,9 +115,7 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline jcfuture<void> make_ready_jcfuture() {
-        return make_ready_future<jcfuture<void>>();
-    }
+    inline jcfuture<void> make_ready_jcfuture() { return make_ready_future<jcfuture<void>>(); }
 
     /// \brief Make a placeholder future object that is ready with an exception from an exception ptr
     ///

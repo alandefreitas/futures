@@ -6,6 +6,7 @@
 #ifndef FUTURES_CONTINUATION_UNWRAP_H
 #define FUTURES_CONTINUATION_UNWRAP_H
 
+#include <futures/adaptor/detail/move_or_copy.h>
 #include <futures/adaptor/detail/traits/is_callable.h>
 #include <futures/adaptor/detail/traits/is_single_type_tuple.h>
 #include <futures/adaptor/detail/traits/is_tuple.h>
@@ -53,7 +54,7 @@ namespace futures::detail {
     /// \param continuation The continuation function
     /// \param args Arguments we send to the function before the unwrapped result (stop_token or <empty>)
     /// \return The continuation result
-    template <class Future, typename Function, typename... PrefixArgs, std::enable_if_t<is_future_v<Future>, int> = 0>
+    template <class Future, typename Function, typename... PrefixArgs, std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0>
     decltype(auto) unwrap_and_continue(Future &&before_future, Function &&continuation, PrefixArgs &&...prefix_args) {
         // Types we might use in continuation
         using value_type = unwrap_future_t<Future>;
@@ -67,7 +68,7 @@ namespace futures::detail {
         constexpr bool lvalue_unwrap = std::is_invocable_v<Function, PrefixArgs..., lvalue_type>;
         constexpr bool rvalue_unwrap = std::is_invocable_v<Function, PrefixArgs..., rvalue_type>;
         constexpr bool double_unwrap =
-            is_future_v<value_type> && std::is_invocable_v<Function, PrefixArgs..., unwrap_future_t<value_type>>;
+            is_future_v<std::decay_t<value_type>> && std::is_invocable_v<Function, PrefixArgs..., unwrap_future_t<value_type>>;
         constexpr bool is_tuple = is_tuple_v<value_type>;
         constexpr bool is_range = range<value_type>;
 
@@ -85,7 +86,7 @@ namespace futures::detail {
 
         // Common continuations for basic_future
         if constexpr (no_unwrap) {
-            return continuation(std::forward<PrefixArgs>(prefix_args)..., move_or_copy(before_future));
+            return continuation(std::forward<PrefixArgs>(prefix_args)..., detail::move_or_copy(before_future));
         } else if constexpr (no_input) {
             before_future.get();
             return continuation(std::forward<PrefixArgs>(prefix_args)...);
@@ -107,7 +108,7 @@ namespace futures::detail {
             if constexpr (sequence_unwrap && is_tuple) {
                 constexpr bool tuple_explode =
                     is_tuple_invocable_v<Function, tuple_type_concat_t<prefix_as_tuple, value_type>>;
-                constexpr bool is_future_tuple = tuple_type_all_of_v<value_type, is_future>;
+                constexpr bool is_future_tuple = tuple_type_all_of_v<std::decay_t<value_type>, is_future>;
                 if constexpr (tuple_explode) {
                     // future<tuple<future<T1>, future<T2>, ...>> -> function(future<T1>, future<T2>, ...)
                     return std::apply(
@@ -139,7 +140,7 @@ namespace futures::detail {
             } else if constexpr (sequence_unwrap && is_range) {
                 // when_all vector<future<T>> -> function(futures::small_vector<T>)
                 using range_value_t = detail::range_value_t<value_type>;
-                constexpr bool is_range_of_futures = is_future_v<range_value_t>;
+                constexpr bool is_range_of_futures = is_future_v<std::decay_t<range_value_t>>;
                 using continuation_vector = futures::small_vector<unwrap_future_t<range_value_t>>;
                 using lvalue_continuation_vector = std::add_lvalue_reference_t<continuation_vector>;
                 constexpr bool vector_unwrap =
@@ -361,15 +362,12 @@ namespace futures::detail {
             }
         }
 
-        struct fulfill_promise_handle {
-
-        };
-
         template <typename Executor, typename Function, class Future
 #ifndef FUTURES_DOXYGEN
                   ,
-                  std::enable_if_t<is_executor_v<Executor> && !is_executor_v<Function> && !is_executor_v<Future> &&
-                                       is_future_v<Future> && is_valid_continuation_v<Function, Future>,
+                  std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
+                                       !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
+                                       is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
                                    int> = 0
 #endif
                   >
@@ -389,11 +387,12 @@ namespace futures::detail {
                 result.set_stop_source(ss);
             }
             // Set the complete executor task, using result to fulfill the promise, and running continuations
-            auto fulfill_promise = [p = std::move(p),                                           // task and shared state
-                                    before_future = move_or_copy(std::forward<Future>(before)), // the previous future
-                                    continuation = std::forward<Function>(after), // the continuation function
-                                    after_continuations,                          // continuation source for after
-                                    token = ss.get_token()                        // maybe shared stop token
+            auto fulfill_promise = [p = std::move(p), // task and shared state
+                                    before_future =
+                                        detail::move_or_copy(std::forward<Future>(before)), // the previous future
+                                    continuation = std::forward<Function>(after),           // the continuation function
+                                    after_continuations,   // continuation source for after
+                                    token = ss.get_token() // maybe shared stop token
             ]() mutable {
                 try {
                     if constexpr (std::is_same_v<typename traits::result_value_type, void>) {

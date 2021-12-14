@@ -24,7 +24,7 @@ namespace futures {
     template <typename Future
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<is_future_v<Future>, int> = 0
+              std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
 #endif
               >
     decltype(auto) await(Future &&f) {
