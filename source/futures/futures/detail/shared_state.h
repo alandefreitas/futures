@@ -10,289 +10,323 @@
 #include <condition_variable>
 #include <future>
 
-#include <futures/futures/detail/intrusive_ptr.h>
 #include <futures/futures/future_error.h>
 
-namespace futures::detail {
+namespace futures {
     /** \addtogroup futures Futures
      *  @{
      */
 
-    /// \brief Abstract class with the members common to all shared state objects regardless of type
+    namespace detail {
+
+        /// \brief Members functions and objects common to all shared state object types
+        ///
+        /// Shared states for asynchronous operations contain an element of a given type and an exception.
+        ///
+        /// All objects such as futures and promises have shared states and inherit from this class to synchronize
+        /// their access to their common shared state.
+        class shared_state_base {
+          public:
+            /// \brief A default constructed shared state data
+            shared_state_base() = default;
+
+            /// \brief Cannot copy construct the shared state data
+            ///
+            /// We cannot copy construct the shared state data because its parent class
+            /// holds synchronization primitives
+            shared_state_base(const shared_state_base &) = delete;
+
+            /// \brief Virtual shared state data destructor
+            ///
+            /// Virtual to make it inheritable
+            virtual ~shared_state_base() = default;
+
+            /// \brief Cannot copy assign the shared state data
+            ///
+            /// We cannot copy assign the shared state data because this parent class
+            /// holds synchronization primitives
+            shared_state_base &operator=(const shared_state_base &) = delete;
+
+            /// \brief Indicate to the shared state its owner (promise or packaged task) has been destroyed
+            ///
+            /// If the owner of a shared state is destroyed before the shared state is ready, we need to set
+            /// an exception indicating this error. This function checks if the shared state is at a correct
+            /// state when the owner is destroyed.
+            ///
+            /// This overload uses the default global mutex for synchronization
+            void signal_owner_destroyed() {
+                auto lk = create_unique_lock();
+                signal_owner_destroyed(lk);
+            }
+
+            /// \brief Set shared state to an exception
+            ///
+            /// This overload uses the default global mutex for synchronization
+            void set_exception(std::exception_ptr except) { // NOLINT(performance-unnecessary-value-param)
+                auto lk = create_unique_lock();
+                set_exception(except, lk);
+            }
+
+            /// \brief Get the shared state when it's an exception
+            ///
+            /// This overload uses the default global mutex for synchronization
+            std::exception_ptr get_exception_ptr() {
+                auto lk = create_unique_lock();
+                return get_exception_ptr(lk);
+            }
+
+            /// \brief Check if state is ready
+            ///
+            /// This overload uses the default global mutex for synchronization
+            bool is_ready() const {
+                auto lk = create_unique_lock();
+                return is_ready(lk);
+            }
+
+            /// \brief Wait for shared state to become ready
+            ///
+            /// This overload uses the default global mutex for synchronization
+            void wait() const {
+                auto lk = create_unique_lock();
+                wait(lk);
+            }
+
+            /// \brief Wait for a specified duration for the shared state to become ready
+            ///
+            /// This overload uses the default global mutex for synchronization
+            template <typename Rep, typename Period>
+            std::future_status wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) const {
+                auto lk = create_unique_lock();
+                return wait_for(lk, timeout_duration);
+            }
+
+            /// \brief Wait until a specified time point for the shared state to become ready
+            ///
+            /// This overload uses the default global mutex for synchronization
+            template <typename Clock, typename Duration>
+            std::future_status wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time) const {
+                auto lk = create_unique_lock();
+                return wait_until(lk, timeout_time);
+            }
+
+          protected:
+            /// \brief Indicate to the shared state the state is ready in the derived class
+            ///
+            /// This operation marks the ready_ flags and warns any future waiting on it.
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            void mark_ready_and_notify(std::unique_lock<std::mutex> &lk) noexcept {
+                assert(lk.owns_lock());
+                ready_ = true;
+                lk.unlock();
+                waiters_.notify_all();
+            }
+
+            /// \brief Indicate to the shared state its owner has been destroyed
+            ///
+            /// If owner has been destroyed before the shared state is ready, this means a promise has been broken
+            /// and the shared state should store an exception.
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            void signal_owner_destroyed(std::unique_lock<std::mutex> &lk) {
+                assert(lk.owns_lock());
+                if (!ready_) {
+                    set_exception(std::make_exception_ptr(broken_promise()), lk);
+                }
+            }
+
+            /// \brief Set shared state to an exception
+            ///
+            /// This sets the exception value and marks the shared state as ready.
+            /// If we try to set an exception on a shared state that's ready, we throw an exception.
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            void set_exception(std::exception_ptr except, // NOLINT(performance-unnecessary-value-param)
+                               std::unique_lock<std::mutex> &lk) {
+                assert(lk.owns_lock());
+                if (ready_) {
+                    throw promise_already_satisfied();
+                }
+                except_ = except;
+                mark_ready_and_notify(lk);
+            }
+
+            /// \brief Get shared state when it's an exception
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            std::exception_ptr get_exception_ptr(std::unique_lock<std::mutex> &lk) {
+                assert(lk.owns_lock());
+                wait(lk);
+                return except_;
+            }
+
+            /// \brief Check if state is ready
+            bool is_ready([[maybe_unused]] const std::unique_lock<std::mutex> &lk) const {
+                assert(lk.owns_lock());
+                return ready_;
+            }
+
+            /// \brief Wait for shared state to become ready
+            /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            void wait(std::unique_lock<std::mutex> &lk) const {
+                assert(lk.owns_lock());
+                waiters_.wait(lk, [this]() { return ready_; });
+            }
+
+            /// \brief Wait for a specified duration for the shared state to become ready
+            /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
+            /// for a specified duration.
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            template <typename Rep, typename Period>
+            std::future_status wait_for(std::unique_lock<std::mutex> &lk,
+                                        std::chrono::duration<Rep, Period> const &timeout_duration) const {
+                assert(lk.owns_lock());
+                if (waiters_.wait_for(lk, timeout_duration, [this]() { return ready_; })) {
+                    return std::future_status::ready;
+                } else {
+                    return std::future_status::timeout;
+                }
+            }
+
+            /// \brief Wait until a specified time point for the shared state to become ready
+            /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
+            /// until a specified time point.
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            template <typename Clock, typename Duration>
+            std::future_status wait_until(std::unique_lock<std::mutex> &lk,
+                                          std::chrono::time_point<Clock, Duration> const &timeout_time) const {
+                assert(lk.owns_lock());
+                if (waiters_.wait_until(lk, timeout_time, [this]() { return ready_; })) {
+                    return std::future_status::ready;
+                } else {
+                    return std::future_status::timeout;
+                }
+            }
+
+            /// \brief Check if state is ready without locking
+            constexpr bool is_ready_unsafe() const { return ready_; }
+
+            /// \brief Check if state is ready without locking
+            bool stores_exception_unsafe() const { return except_ != nullptr; }
+
+            void throw_internal_exception() const { std::rethrow_exception(except_); }
+
+            /// \brief Check if state is ready without locking
+            ///
+            /// Although the parent shared state class doesn't store the state, we know
+            /// it's ready with state because it's the only way it's ready unless it has an exception.
+            bool stores_state_unsafe() const { return is_ready_unsafe() && (!stores_exception_unsafe()); }
+
+            /// \brief Generate unique lock for the shared state
+            ///
+            /// This lock can be used for any operations on the state that might need to be protected/
+            std::unique_lock<std::mutex> create_unique_lock() const { return std::unique_lock{mutex_}; }
+
+          private:
+            /// \brief Default global mutex for shared state operations
+            mutable std::mutex mutex_{};
+
+            /// \brief Indicates if the shared state is already set
+            bool ready_{false};
+
+            /// \brief Pointer to an exception, when the shared_state has been set to an exception
+            std::exception_ptr except_{nullptr};
+
+            /// \brief Condition variable to notify any object waiting for this shared state to be ready
+            mutable std::condition_variable waiters_{};
+        };
+
+        /// \brief Determine the type we should use to store a shared state internally
+        ///
+        /// We usually need uninitialized storage for a given type, since the shared state needs to be in control
+        /// of constructors and destructors.
+        ///
+        /// For trivial types, we can directly store the value.
+        ///
+        /// When the shared state is a reference, we store pointers internally.
+        ///
+        template <typename R, class Enable = void> struct shared_state_storage {
+            using type = std::aligned_storage_t<sizeof(R), alignof(R)>;
+        };
+
+        template <typename R> struct shared_state_storage<R, std::enable_if_t<std::is_trivial_v<R>>> {
+            using type = R;
+        };
+
+        template <typename R> using shared_state_storage_t = typename shared_state_storage<R>::type;
+    }
+
+    /// \brief Shared state specialization for regular variables
     ///
-    /// All objects such as futures and promises are shared states and inherit from this class to synchronize
-    /// their access to their common shared state.
-    ///
-    /// All shared states need a counter identifying how many objects are relying
-    /// on this shared state and synchronization primitives to set the state.
-    class shared_state_base {
-      public:
-        /// \brief A default constructed shared state data
-        shared_state_base() = default;
-
-        /// \brief Cannot copy construct the shared state data
-        /// We cannot copy construct the shared state data because this parent class
-        /// holds synchronization primitives
-        shared_state_base(shared_state_base const &) = delete;
-
-        /// \brief Virtual shared state data destructor
-        /// Virtual to make it inheritable
-        virtual ~shared_state_base() = default;
-
-        /// \brief Cannot copy assign the shared state data
-        /// We cannot copy assign the shared state data because this parent class
-        /// holds synchronization primitives
-        shared_state_base &operator=(shared_state_base const &) = delete;
-
-        /// \brief Indicate to the shared state its owner has been destroyed
-        /// This overload uses the default global mutex for synchronization
-        void signal_owner_destroyed() {
-            std::unique_lock lk{mtx_};
-            signal_owner_destroyed(lk);
-        }
-
-        /// \brief Set shared state to an exception
-        /// This overload uses the default global mutex for synchronization
-        void set_exception(std::exception_ptr except) { // NOLINT(performance-unnecessary-value-param)
-            std::unique_lock lk{mtx_};
-            set_exception(except, lk);
-        }
-
-        /// \brief Get shared state when it's an exception
-        /// This overload uses the default global mutex for synchronization
-        std::exception_ptr get_exception_ptr() {
-            std::unique_lock lk{mtx_};
-            return get_exception_ptr(lk);
-        }
-
-        /// \brief Check if state is ready
-        /// This overload uses the default global mutex for synchronization
-        bool is_ready() const {
-            std::unique_lock lk{mtx_};
-            return is_ready(lk);
-        }
-
-        /// \brief Wait for shared state to become ready
-        /// This overload uses the default global mutex for synchronization
-        void wait() const {
-            std::unique_lock lk{mtx_};
-            wait(lk);
-        }
-
-        /// \brief Wait for a specified duration for the shared state to become ready
-        /// This overload uses the default global mutex for synchronization
-        template <typename Rep, typename Period>
-        std::future_status wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) const {
-            std::unique_lock lk{mtx_};
-            return wait_for(lk, timeout_duration);
-        }
-
-        /// \brief Wait until a specified time point for the shared state to become ready
-        /// This overload uses the default global mutex for synchronization
-        template <typename Clock, typename Duration>
-        std::future_status wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time) const {
-            std::unique_lock lk{mtx_};
-            return wait_until(lk, timeout_time);
-        }
-
-        /// \brief Count how many objects refer to the shared state
-        std::size_t use_count() noexcept {
-            return use_count_.load();
-        }
-
-        /// \brief Increment the reference counter for the number of objects sharing this state
-        /// This function is used by intrusive pointers to keep track of the number of references
-        /// to this shared state. This is only an optimization over shared pointers, whose
-        /// reference counter would be redundant with use_count_ and would require extra
-        /// synchronization.
-        ///
-        /// There are no synchronization or ordering constraints imposed on this operation
-        friend inline void intrusive_ptr_add_ref(shared_state_base *p) noexcept {
-            p->use_count_.fetch_add(1, std::memory_order_relaxed);
-        }
-
-        /// \brief Decrement the reference counter for number of objects sharing this state
-        /// This function is used by intrusive pointers to keep track of the number of references
-        /// to this shared state. This is only an optimization over shared pointers, whose
-        /// reference counter would be redundant with use_count_ and would require extra
-        /// synchronization.
-        ///
-        /// If the value immediately preceding this decrement on the number of objects was 1
-        /// (i.e. the current number of objects is 0), we deallocate the future associated
-        /// with this shared state.
-        ///
-        /// No reads or writes in the decrement operation can be reordered after this store.
-        friend inline void intrusive_ptr_release(shared_state_base *p) noexcept {
-            if (1 == p->use_count_.fetch_sub(1, std::memory_order_release)) {
-                std::atomic_thread_fence(std::memory_order_acquire);
-                p->deallocate_future();
-            }
-        }
-
-      protected:
-        /// \brief Indicate to the shared state the state is ready in the derived class
-        /// This operation marks the ready_ flags and warns any future waiting on it.
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        void mark_ready_and_notify(std::unique_lock<std::mutex> &lk) noexcept {
-            assert(lk.owns_lock());
-            ready_ = true;
-            lk.unlock();
-            waiters_.notify_all();
-        }
-
-        /// \brief Indicate to the shared state its owner has been destroyed
-        /// If owner has been destroyed before the shared state is ready, this means a promise has been broken
-        /// and the shared state should store an exception.
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        void signal_owner_destroyed(std::unique_lock<std::mutex> &lk) {
-            assert(lk.owns_lock());
-            if (!ready_) {
-                set_exception(std::make_exception_ptr(broken_promise()), lk);
-            }
-        }
-
-        /// \brief Set shared state to an exception
-        /// This sets the exception value and marks the shared state as ready.
-        /// If we try to set an exception on a shared state that's ready, we throw an exception.
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        void set_exception(std::exception_ptr except, std::unique_lock<std::mutex> &lk) {
-            assert(lk.owns_lock());
-            if (ready_) {
-                throw promise_already_satisfied();
-            }
-            except_ = except;
-
-            mark_ready_and_notify(lk);
-        }
-
-        /// \brief Get shared state when it's an exception
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        std::exception_ptr get_exception_ptr(std::unique_lock<std::mutex> &lk) {
-            assert(lk.owns_lock());
-            wait(lk);
-            return except_;
-        }
-
-        /// \brief Check if state is ready
-        bool is_ready([[maybe_unused]] const std::unique_lock<std::mutex> &lk) const {
-            assert(lk.owns_lock());
-            return ready_;
-        }
-
-        /// \brief Wait for shared state to become ready
-        /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        void wait(std::unique_lock<std::mutex> &lk) const {
-            assert(lk.owns_lock());
-            waiters_.wait(lk, [this]() { return ready_; });
-        }
-
-        /// \brief Wait for a specified duration for the shared state to become ready
-        /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
-        /// for a specified duration.
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        template <typename Rep, typename Period>
-        std::future_status wait_for(std::unique_lock<std::mutex> &lk,
-                                    std::chrono::duration<Rep, Period> const &timeout_duration) const {
-            assert(lk.owns_lock());
-            if (waiters_.wait_for(lk, timeout_duration, [this]() { return ready_; })) {
-                return std::future_status::ready;
-            } else {
-                return std::future_status::timeout;
-            }
-        }
-
-        /// \brief Wait until a specified time point for the shared state to become ready
-        /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
-        /// until a specified time point.
-        /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
-        template <typename Clock, typename Duration>
-        std::future_status wait_until(std::unique_lock<std::mutex> &lk,
-                                      std::chrono::time_point<Clock, Duration> const &timeout_time) const {
-            assert(lk.owns_lock());
-            return waiters_.wait_until(lk, timeout_time, [this]() { return ready_; }) ? std::future_status::ready
-                                                                                      : std::future_status::timeout;
-        }
-
-        /// \brief Virtual function to deallocate future
-        /// This is the pure virtual function derived classes can use to deallocate the state associated
-        /// with the future.
-        virtual void deallocate_future() noexcept = 0;
-
-      protected:
-        /// \brief Default global mutex for shared state operations
-        mutable std::mutex mtx_{};
-
-        /// \brief Indicates if the shared state is already set
-        bool ready_{false};
-
-        /// \brief Pointer to an exception, when the shared_state has been set to an exception
-        std::exception_ptr except_{};
-
-      private:
-        /// \brief Number of objects referring to this shared state
-        std::atomic<std::size_t> use_count_{0};
-
-        /// \brief Condition variable to notify any object waiting for this shared state to be ready
-        mutable std::condition_variable waiters_{};
-    };
-
-    /// \brief Abstract class with shared state for regular variables
     /// This class stores the data for a shared state holding an element of type T
-    template <typename R> class shared_state : public shared_state_base {
+    ///
+    /// The data is stored with uninitialized storage because this will only need to be initialized when the
+    /// state becomes ready. This ensures the shared state works for all types and avoids wasting operations
+    /// on a constructor we might not use.
+    ///
+    /// However, initialized storage might be more useful and easier to debug for trivial types.
+    ///
+    template <typename R> class shared_state : public detail::shared_state_base {
       public:
-        /// \brief Pointer to the shared state
-        /// This intrusive pointer is a fast replacement for a shared pointer
-        using ptr_type = intrusive_ptr<shared_state>;
-
         /// \brief Default construct a shared state
+        ///
         /// This will construct the state with uninitialized storage for R
+        ///
         shared_state() = default;
 
-        /// \brief Destructor
-        /// Destruct the shared object R if the state is ready with a value
-        ~shared_state() override {
-            if (ready_ && !except_) {
-                reinterpret_cast<R *>(std::addressof(storage_))->~R();
-            }
-        }
-
         /// \brief Deleted copy constructor
-        /// These functions do not make sense for shared states as they are shared
+        ///
+        /// The copy constructor does not make sense for shared states as they should be shared.
+        /// Besides, copying state that might be uninitialized is a bad idea.
+        ///
         shared_state(shared_state const &) = delete;
 
-        /// \brief Deleted copy assignment
+        /// \brief Deleted copy assignment operator
+        ///
         /// These functions do not make sense for shared states as they are shared
         shared_state &operator=(shared_state const &) = delete;
 
+        /// \brief Destructor
+        ///
+        /// Destruct the shared object R manually if the state is ready with a value
+        ///
+        ~shared_state() override {
+            if constexpr (!std::is_trivial_v<R>) {
+                if (stores_state_unsafe()) {
+                    reinterpret_cast<R *>(std::addressof(storage_))->~R();
+                }
+            }
+        }
+
         /// \brief Set the value of the shared state to a copy of value
-        /// This function locks the shared state and makes a copy of value
-        void set_value(R const &value) {
-            std::unique_lock lk{mtx_};
+        ///
+        /// This function locks the shared state and makes a copy of the value into the storage.
+        void set_value(const R& value) {
+            auto lk = create_unique_lock();
             set_value(value, lk);
         }
 
         /// \brief Set the value of the shared state by moving a value
+        ///
         /// This function locks the shared state and moves the value to the state
         void set_value(R &&value) {
-            std::unique_lock lk{mtx_};
+            auto lk = create_unique_lock();
             set_value(std::move(value), lk);
         }
 
         /// \brief Get the value of the shared state
+        ///
         /// \return Reference to the state as a reference to R
         R &get() {
-            std::unique_lock lk{mtx_};
+            auto lk = create_unique_lock();
             return get(lk);
         }
 
       private:
         /// \brief Set value of the shared state in the storage by copying the value
+        ///
         /// \param value The value for the shared state
         /// \param lk Custom mutex lock
         void set_value(R const &value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
-            if (ready_) {
+            if (is_ready_unsafe()) {
                 throw promise_already_satisfied{};
             }
             ::new (static_cast<void *>(std::addressof(storage_))) R(value);
@@ -300,11 +334,12 @@ namespace futures::detail {
         }
 
         /// \brief Set value of the shared state in the storage by moving the value
+        ///
         /// \param value The rvalue for the shared state
         /// \param lk Custom mutex lock
         void set_value(R &&value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
-            if (ready_) {
+            if (is_ready_unsafe()) {
                 throw promise_already_satisfied{};
             }
             ::new (static_cast<void *>(std::addressof(storage_))) R(std::move(value));
@@ -318,53 +353,57 @@ namespace futures::detail {
         R &get(std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             wait(lk);
-            if (except_) {
-                std::rethrow_exception(except_);
+            if (stores_exception_unsafe()) {
+                throw_internal_exception();
             }
             return *reinterpret_cast<R *>(std::addressof(storage_));
         }
 
         /// \brief Aligned opaque storage for an element of type R
+        ///
         /// This needs to be aligned_storage_t because the value might not be initialized yet
-        typename std::aligned_storage_t<sizeof(R), alignof(R)> storage_{};
+        detail::shared_state_storage_t<R> storage_{};
     };
 
-    /// \brief Abstract class with shared state for references
+    /// \brief Shared state specialization for references
+    ///
     /// This class stores the data for a shared state holding a reference to an element of type T
     /// These shared states need to store a pointer to R internally
-    template <typename R> class shared_state<R &> : public shared_state_base {
+    template <typename R> class shared_state<R &> : public detail::shared_state_base {
       public:
-        /// \brief Pointer to the shared state
-        /// This intrusive pointer is a fast replacement for a shared pointer
-        using ptr_type = intrusive_ptr<shared_state>;
-
         /// \brief Default construct a shared state
+        ///
         /// This will construct the state with uninitialized storage for R
         shared_state() = default;
 
-        /// \brief Destructor
-        /// Destruct the shared object R if the state is ready with a value
-        ~shared_state() override = default;
-
         /// \brief Deleted copy constructor
+        ///
         /// These functions do not make sense for shared states as they are shared
         shared_state(shared_state const &) = delete;
 
+        /// \brief Destructor
+        ///
+        /// Destruct the shared object R if the state is ready with a value
+        ~shared_state() override = default;
+
         /// \brief Deleted copy assignment
+        ///
         /// These functions do not make sense for shared states as they are shared
         shared_state &operator=(shared_state const &) = delete;
 
-        /// \brief Set the value of the shared state by moving a value R to the internal state
+        /// \brief Set the value of the shared state by storing the address of value R in its internal state
+        ///
+        /// Shared states to references internally store a pointer to the value instead fo copying it.
         /// This function locks the shared state and moves the value to the state
         void set_value(R &value) {
-            std::unique_lock lk{mtx_};
+            auto lk = create_unique_lock();
             set_value(value, lk);
         }
 
         /// \brief Get the value of the shared state as a reference to the internal pointer
         /// \return Reference to the state as a reference to R
         R &get() {
-            std::unique_lock lk{mtx_};
+            auto lk = create_unique_lock();
             return get(lk);
         }
 
@@ -374,7 +413,7 @@ namespace futures::detail {
         /// \param lk Custom mutex lock
         void set_value(R &value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
-            if (ready_) {
+            if (is_ready_unsafe()) {
                 throw promise_already_satisfied();
             }
             value_ = std::addressof(value);
@@ -386,8 +425,8 @@ namespace futures::detail {
         R &get(std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             wait(lk);
-            if (except_) {
-                std::rethrow_exception(except_);
+            if (stores_exception_unsafe()) {
+                throw_internal_exception();
             }
             return *value_;
         }
@@ -397,50 +436,54 @@ namespace futures::detail {
         R *value_{nullptr};
     };
 
-    /// \brief Abstract class with shared state for a void shared state
-    /// A void shared state needs to synchronize waiting but it does not need to store anything
-    template <> class shared_state<void> : public shared_state_base {
+    /// \brief Shared state specialization for a void shared state
+    ///
+    /// A void shared state needs to synchronize waiting, but it does not need to store anything.
+    template <> class shared_state<void> : public detail::shared_state_base {
       public:
-        /// \brief Pointer to the shared state
-        /// This intrusive pointer is a fast replacement for a shared pointer
-        using ptr_type = intrusive_ptr<shared_state>;
-
         /// \brief Default construct a shared state
+        ///
         /// This will construct the state with uninitialized storage for R
         shared_state() = default;
 
-        /// \brief Destructor
-        /// Destruct the shared object R if the state is ready with a value
-        ~shared_state() override = default;
-
         /// \brief Deleted copy constructor
+        ///
         /// These functions do not make sense for shared states as they are shared
         shared_state(shared_state const &) = delete;
 
+        /// \brief Destructor
+        ///
+        /// Destruct the shared object R if the state is ready with a value
+        ~shared_state() override = default;
+
         /// \brief Deleted copy assignment
+        ///
         /// These functions do not make sense for shared states as they are shared
         shared_state &operator=(shared_state const &) = delete;
 
         /// \brief Set the value of the void shared state without any input as "not-error"
+        ///
         /// This function locks the shared state and moves the value to the state
-        inline void set_value() {
-            std::unique_lock lk{mtx_};
+        void set_value() {
+            auto lk = create_unique_lock();
             set_value(lk);
         }
 
         /// \brief Get the value of the shared state by waiting and checking for exceptions
+        ///
         /// \return Reference to the state as a reference to R
-        inline void get() {
-            std::unique_lock lk{mtx_};
+        void get() {
+            auto lk = create_unique_lock();
             get(lk);
         }
 
       private:
         /// \brief Set value of the shared state with no inputs as "no-error"
+        ///
         /// \param lk Custom mutex lock
-        inline void set_value(std::unique_lock<std::mutex> &lk) {
+        void set_value(std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
-            if (ready_) {
+            if (is_ready_unsafe()) {
                 throw promise_already_satisfied();
             }
             mark_ready_and_notify(lk);
@@ -450,8 +493,8 @@ namespace futures::detail {
         void get(std::unique_lock<std::mutex> &lk) const {
             assert(lk.owns_lock());
             wait(lk);
-            if (except_) {
-                std::rethrow_exception(except_);
+            if (stores_exception_unsafe()) {
+                throw_internal_exception();
             }
         }
     };

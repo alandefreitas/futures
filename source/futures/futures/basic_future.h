@@ -233,14 +233,6 @@ namespace futures {
         : public detail::lazy_continuations_base<LazyContinuable, basic_future<T, Shared, LazyContinuable, Stoppable>,
                                                  T>,
           public detail::stop_token_base<Stoppable, basic_future<T, Shared, LazyContinuable, Stoppable>, T> {
-      private:
-        /// \name Private types
-        /// @{
-
-        /// \brief Pointer to shared state
-        using ptr_type = typename detail::shared_state<T>::ptr_type;
-        /// @}
-
       public:
         /// \name Public types
         /// @{
@@ -279,38 +271,25 @@ namespace futures {
 
         /// @}
 
-      private:
-        /// \name Private functions used by async/then/when_all/when_any to set up futures
-        /// @{
-
-        /// \brief Construct from a pointer to the shared state
-        /// This constructor is private because we need to ensure the launching
-        /// function appropriately sets this std::future handling these traits
-        /// This is a function for async.
-        explicit basic_future(const ptr_type &p) noexcept
-            : lazy_continuations_base(), // No continuations at constructions, but callbacks should be set
-              stop_token_base(),         // Stop token false, but stop token parameter should be set
-              state_{std::move(p)} {}
-
-        /// \subsection Private getters and setters
-        void set_stop_source(const stop_source &ss) noexcept { stop_token_base::stop_source_ = ss; }
-        void set_continuations_source(const detail::continuations_source &cs) noexcept {
-            lazy_continuations_base::continuations_source_ = cs;
-        }
-        detail::continuations_source get_continuations_source() const noexcept {
-            return lazy_continuations_base::continuations_source_;
-        }
-        /// @}
-      public:
         /// \name Constructors
         /// @{
 
-        /// \brief Default constructor.
+        /// \brief Default constructor. Constructs an invalid future with no shared state.
+        ///
         /// Null shared state. Properties inherited from base classes.
         basic_future() noexcept
             : lazy_continuations_base(), // No continuations at constructions, but callbacks should be set
               stop_token_base(),         // Stop token false, but stop token parameter should be set
               state_{nullptr} {}
+
+        /// \brief Construct from a pointer to the shared state
+        /// This constructor is private because we need to ensure the launching
+        /// function appropriately sets this std::future handling these traits
+        /// This is a function for async.
+        explicit basic_future(const std::shared_ptr<shared_state<T>> &p) noexcept
+            : lazy_continuations_base(), // No continuations at constructions, but callbacks should be set
+              stop_token_base(),         // Stop token false, but stop token parameter should be set
+              state_{std::move(p)} {}
 
         /// \brief Copy constructor for shared futures only.
         /// Inherited from base classes.
@@ -390,7 +369,7 @@ namespace futures {
             if constexpr (is_shared_v) {
                 return state_->get();
             } else {
-                ptr_type tmp{};
+                std::shared_ptr<shared_state<T>> tmp{};
                 tmp.swap(state_);
                 if constexpr (std::is_reference_v<T> || std::is_void_v<T>) {
                     return tmp->get();
@@ -487,11 +466,20 @@ namespace futures {
                 if constexpr (!is_shared_v) {
                     wait();
                 } else /* constexpr */ {
-                    if (1 == state_->use_count()) {
+                    if (1 == state_.use_count()) {
                         wait();
                     }
                 }
             }
+        }
+
+        /// \subsection Private getters and setters
+        void set_stop_source(const stop_source &ss) noexcept { stop_token_base::stop_source_ = ss; }
+        void set_continuations_source(const detail::continuations_source &cs) noexcept {
+            lazy_continuations_base::continuations_source_ = cs;
+        }
+        detail::continuations_source get_continuations_source() const noexcept {
+            return lazy_continuations_base::continuations_source_;
         }
 
         /// @}
@@ -502,7 +490,7 @@ namespace futures {
         bool join_{true};
 
         /// \brief Pointer to shared state
-        ptr_type state_{};
+        std::shared_ptr<shared_state<T>> state_{};
         /// @}
     };
 
