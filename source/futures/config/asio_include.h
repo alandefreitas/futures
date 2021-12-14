@@ -48,9 +48,11 @@
 // If the standalone is available, this is what we assume the user usually prefers, since it's more specific
 #if defined(FUTURES_HAS_ASIO) && !(defined(FUTURES_HAS_BOOST_ASIO) && defined(FUTURES_PREFER_BOOST_DEPENDENCIES))
 #define FUTURES_USE_ASIO
+#define ASIO_HAS_MOVE
 #include <asio.hpp>
 #else
 #define FUTURES_USE_BOOST_ASIO
+#define BOOST_ASIO_HAS_MOVE
 #include <boost/asio.hpp>
 #endif
 
