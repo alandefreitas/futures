@@ -32,3 +32,6 @@ add_futures_example(future_types/launching.cpp)
 add_futures_example(future_types/stoppable.cpp)
 add_futures_example(future_types/shared.cpp)
 add_futures_example(algorithm/algorithms.cpp)
+
+add_executable(networking-echo_server networking/echo_server.cpp)
+target_link_libraries(networking-echo_server futures-compiled)
