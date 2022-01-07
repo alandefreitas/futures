@@ -1,6 +1,6 @@
 # Futures
 
-> C++ Task Programming with Asio Executors
+> C++ Lock-Free Task Programming with Asio Executors
 
 [![Futures](docs/img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 

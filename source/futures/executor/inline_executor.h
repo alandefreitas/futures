@@ -58,7 +58,10 @@ namespace futures {
 namespace boost {
 #endif
     namespace asio {
-        /// \brief Ensure asio (and our internal functions) sees these as executors, as traits don't always work
+        /// \brief Ensure asio and our internal functions see inline_executor as an executor
+        ///
+        /// This traits ensures asio and our internal functions see inline_executor as an executor,
+        /// as asio traits don't always work.
         ///
         /// This is quite a workaround until things don't improve with our executor traits.
         ///

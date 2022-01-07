@@ -45,6 +45,11 @@ Note that wherever the continuation input has the same number of arguments for t
 
 ## Continuation stop
 
-Like the [async] function, the function [then] might return a future type with a [stop_token]. This happens whenever 1) the continuation function expects a stop token, or 2) the previous future has a stop token. In the second case, both futures with share the same [stop_source].    
+Like the [async] function, the function [then] might return a future type with a [stop_token]. This happens whenever:
+
+1) the continuation function expects a stop token, or 
+2) the previous future has a stop token.
+
+In the second case, both futures with share the same [stop_source].     
 
 --8<-- "docs/references.md"

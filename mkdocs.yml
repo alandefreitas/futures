@@ -2,7 +2,7 @@ site_name: Futures
 site_url: https://alandefreitas.github.io/futures/
 repo_url: https://github.com/alandefreitas/futures/
 repo_name: alandefreitas/futures
-site_description: "Futures: C++ Task Programming with ASIO executors"
+site_description: "Futures: C++ Lock-Free Task Programming with ASIO executors"
 
 nav:
   - Home: index.md
@@ -13,7 +13,7 @@ nav:
     - Launching tasks: launching.md
     - Stoppable futures: stoppable_futures.md
     - Shared futures: shared_futures.md
-  - Future adaptors:
+  - Future Adaptors:
     - Continuations: continuations.md
     - Conjunctions: conjunctions.md
     - Disjunctions: disjunctions.md

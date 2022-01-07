@@ -6,7 +6,7 @@ has_children: false
 has_toc: false
 ---
 
-> C++ Task Programming with Asio Executors
+> C++ Lock-Free Task Programming with Asio Executors
 
 [![Futures](img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 

@@ -13,7 +13,10 @@ namespace futures {
      *  @{
      */
 
-    /// \brief A version of hardware_concurrency that returns 1 when the value is not computable
+    /// \brief A version of hardware_concurrency that always returns at least 1
+    ///
+    /// This function is a safer version of hardware_concurrency that always returns at
+    /// least 1 to represent the current context when the value is not computable.
     ///
     /// - It never returns 0, 1 is returned instead.
     /// - It is guaranteed to remain constant for the duration of the program.
@@ -64,12 +67,15 @@ namespace futures {
     using default_executor_type = default_execution_context_type::executor_type;
 
     /// \brief Create an instance of the default execution context
+    ///
+    /// \return Reference to the default execution context for @ref async
     inline default_execution_context_type &default_execution_context() {
-        static asio::thread_pool pool(hardware_concurrency() * 3);
+        static asio::thread_pool pool(hardware_concurrency());
         return pool;
     }
 
     /// \brief Create an Asio thread pool executor for the default thread pool
+    ///
     /// In the executors notation:
     /// - Executor: set of rules governing where, when and how to run a function object
     ///   - A thread pool is an execution context for which we can create executors pointing to the pool.
@@ -83,6 +89,7 @@ namespace futures {
     ///
     /// There might be many executor types associated with with the same execution context.
     ///
+    /// \return Executor handle to the default execution context
     inline default_execution_context_type::executor_type make_default_executor() {
         asio::thread_pool &pool = default_execution_context();
         return pool.executor();

@@ -39,6 +39,7 @@
 [ASIO]: https://github.com/chriskohlhoff/asio/tree/master/asio
 
 <!-- Futures -->
+[await]: /futures/reference/Namespaces/namespacefutures/#function-await
 [async]: /futures/reference/Namespaces/namespacefutures/#function-async
 [launch]: /futures/reference/Namespaces/namespacefutures/#enum-launch
 [executor]: /futures/reference/Namespaces/namespacefutures/#using-is_executor
@@ -55,7 +56,9 @@
 [when_all_future]: /futures/reference/Classes/classfutures_1_1when__all__future/
 [when_any_future]: /futures/reference/Classes/classfutures_1_1when__any__future/
 [when_all]: /futures/reference/Namespaces/namespacefutures/#function-when_all
+[wait_for_all]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_all
 [when_any]: /futures/reference/Namespaces/namespacefutures/#function-when_any
+[wait_for_any]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_any
 [stop_source]: /futures/reference/Classes/classfutures_1_1stop__source/
 [stop_token]: /futures/reference/Classes/classfutures_1_1stop__token/
 [is_ready]: /futures/reference/Namespaces/namespacefutures/#function-is_ready
