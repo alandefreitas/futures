@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Conjunction") {
+TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
     using namespace futures;
     SECTION("Empty conjunction") {
         auto f = when_all();

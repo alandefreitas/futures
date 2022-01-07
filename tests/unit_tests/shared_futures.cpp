@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Shared futures") {
+TEST_CASE(TEST_CASE_PREFIX "Shared futures") {
     using namespace futures;
     SECTION("Basic") {
         shared_cfuture<int> f1 = async([] { return 1; }).share();

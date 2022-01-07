@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Disjunction") {
+TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
     using namespace futures;
     SECTION("Empty disjunction") {
         auto f = when_any();

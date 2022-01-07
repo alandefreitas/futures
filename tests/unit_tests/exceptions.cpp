@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Exceptions") {
+TEST_CASE(TEST_CASE_PREFIX "Exceptions") {
     using namespace futures;
     SECTION("Basic") {
         auto f1 = async([] { throw std::runtime_error("error"); });

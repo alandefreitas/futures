@@ -27,6 +27,9 @@ namespace futures {
 
     /// \brief Customization point to determine if a type is a future type as a bool value
     template <class T> constexpr bool is_future_v = is_future<T>::value;
+    /// \brief Customization point to determine if a type is a shared future type
+    template <typename> struct has_ready_notifier : std::false_type {};
+    template <class T> constexpr bool has_ready_notifier_v = has_ready_notifier<T>::value;
 
     /// \brief Customization point to determine if a type is a shared future type
     template <typename> struct is_shared_future : std::false_type {};

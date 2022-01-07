@@ -55,7 +55,7 @@ template <class T, class T2 = T> void package_task_tests(T2 test_value) {
     }
 }
 
-TEST_CASE("Shared state") {
+TEST_CASE(TEST_CASE_PREFIX "Shared state") {
     SECTION("Promise") {
         using namespace futures;
         SECTION("Concrete promise shared state") {

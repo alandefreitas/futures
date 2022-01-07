@@ -15,8 +15,10 @@
 
 #include <futures/futures/detail/continuations_source.h>
 #include <futures/futures/detail/shared_state.h>
-#include <futures/futures/traits/is_future.h>
+#include <futures/futures/detail/throw_exception.h>
+
 #include <futures/futures/stop_token.h>
+#include <futures/futures/traits/is_future.h>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -236,19 +238,26 @@ namespace futures {
       public:
         /// \name Public types
         /// @{
+
         using value_type = T;
+
         using is_shared = Shared;
         using is_lazy_continuable = LazyContinuable;
         using is_stoppable = Stoppable;
         static constexpr bool is_shared_v = Shared::value;
         static constexpr bool is_lazy_continuable_v = LazyContinuable::value;
         static constexpr bool is_stoppable_v = Stoppable::value;
+
         using lazy_continuations_base =
             detail::lazy_continuations_base<LazyContinuable, basic_future<T, Shared, LazyContinuable, Stoppable>, T>;
         using stop_token_base =
             detail::stop_token_base<Stoppable, basic_future<T, Shared, LazyContinuable, Stoppable>, T>;
+
         friend lazy_continuations_base;
         friend stop_token_base;
+
+        using notify_when_ready_handle = detail::shared_state_base::notify_when_ready_handle;
+
         /// @}
 
         /// \name Shared state counterparts
@@ -457,6 +466,38 @@ namespace futures {
         /// For safety, all futures join at destruction
         void detach() { join_ = false; }
 
+        /// \brief Notify this condition variable when the future is ready
+        notify_when_ready_handle notify_when_ready(std::condition_variable_any & cv) {
+            if (!state_) {
+                detail::throw_exception<future_uninitialized>();
+            }
+            return state_->notify_when_ready(cv);
+        }
+
+        /// \brief Cancel request to notify this condition variable when the future is ready
+        void unnotify_when_ready(notify_when_ready_handle h) {
+            if (!state_) {
+                detail::throw_exception<future_uninitialized>();
+            }
+            return state_->unnotify_when_ready(h);
+        }
+
+        /// \brief Get a reference to the mutex in the underlying shared state
+        std::mutex &mutex() {
+            if (!state_) {
+                detail::throw_exception<future_uninitialized>();
+            }
+            return state_->mutex();
+        }
+
+        /// \brief Checks if the shared state is ready
+        [[nodiscard]] bool is_ready(std::unique_lock<std::mutex>& lk) const {
+            if (!valid()) {
+                throw std::future_error(std::future_errc::no_state);
+            }
+            return state_->is_ready(lk);
+        }
+
       private:
         /// \name Private Functions
         /// @{
@@ -501,6 +542,15 @@ namespace futures {
     template <typename... Args> struct is_future<basic_future<Args...> &&> : std::true_type {};
     template <typename... Args> struct is_future<const basic_future<Args...>> : std::true_type {};
     template <typename... Args> struct is_future<const basic_future<Args...> &> : std::true_type {};
+    /// @}
+
+    /// \name Define basic_future as a kind of future
+    /// @{
+    template <typename... Args> struct has_ready_notifier<basic_future<Args...>> : std::true_type {};
+    template <typename... Args> struct has_ready_notifier<basic_future<Args...> &> : std::true_type {};
+    template <typename... Args> struct has_ready_notifier<basic_future<Args...> &&> : std::true_type {};
+    template <typename... Args> struct has_ready_notifier<const basic_future<Args...>> : std::true_type {};
+    template <typename... Args> struct has_ready_notifier<const basic_future<Args...> &> : std::true_type {};
     /// @}
 
     /// \name Define basic_futures as supporting lazy continuations

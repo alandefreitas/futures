@@ -21,8 +21,8 @@
 #include <futures/adaptor/detail/traits/is_tuple.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>
 #include <futures/adaptor/when_any_result.h>
-#include <futures/futures/traits/to_future.h>
 #include <futures/futures/async.h>
+#include <futures/futures/traits/to_future.h>
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -689,15 +689,34 @@ namespace futures {
         /// The logic for setting notifiers for futures with and without lazy continuations is almost the
         /// same.
         ///
-        /// The task is the same but the first goes to a continuation and the later goes into a new thread.
-        /// Unfortunately, we do need a new thread an not only a new task because we are not sure there's
-        /// room in the executor for that.
+        /// The task is the same but the difference is:
+        /// 1) the notification task is a continuation if the future supports continuations, and
+        /// 2) the notification task goes into a new new thread if the future does not support continuations.
+        ///
+        /// @note Unfortunately, we need a new thread an not only a new task in some executor whenever the
+        /// task doesn't support continuations because we cannot be sure there's room in the executor for
+        /// the notification task.
+        ///
+        /// This might be counter intuitive, as one could assume there's going to be room for the notifications
+        /// as soon as the ongoing tasks are running. However, there are a few situations where this might happen:
+        ///
+        /// 1) The current tasks we are waiting for have not been launched yet and the executor is busy with
+        ///    tasks that need cancellation to stop
+        /// 2) Some of the tasks we are waiting for are running and some are enqueued. The running tasks finish
+        ///    but we don't hear about it because the enqueued tasks come before the notification.
+        /// 3) All tasks we are waiting for have no support for continuations. The executor has no room for the
+        ///    notifier because of some parallel tasks happening in the executor and we never hear about a future
+        ///    getting ready.
+        ///
+        /// So although this is an edge case, we cannot assume there's room for the notifications in the
+        /// executor.
+        ///
         template <class SettingLazyContinuables> void maybe_set_up_notifiers_common() {
-            constexpr bool setting_lazy = SettingLazyContinuables::value;
-            constexpr bool setting_thread = !SettingLazyContinuables::value;
+            constexpr bool setting_notifiers_as_continuations = SettingLazyContinuables::value;
+            constexpr bool setting_notifiers_as_new_threads = !SettingLazyContinuables::value;
 
             // Never do that more than once. Also check
-            if constexpr (setting_thread) {
+            if constexpr (setting_notifiers_as_new_threads) {
                 if (thread_notifiers_set) {
                     return;
                 }
@@ -711,15 +730,15 @@ namespace futures {
 
             // Initialize the variable the notifiers need to set
             // Any of the notifiers will set the same variable
-            const bool init_ready =
-                (setting_lazy && (!thread_notifiers_set)) || (setting_thread && (!lazy_notifiers_set));
+            const bool init_ready = (setting_notifiers_as_continuations && (!thread_notifiers_set)) ||
+                                    (setting_notifiers_as_new_threads && (!lazy_notifiers_set));
             if (init_ready) {
                 ready_notified = false;
             }
 
             // Check if there are threads to set up
-            const bool no_compatible_futures =
-                (setting_thread && all_lazy_continuable()) || (setting_lazy && lazy_continuable_size() == 0);
+            const bool no_compatible_futures = (setting_notifiers_as_new_threads && all_lazy_continuable()) ||
+                                               (setting_notifiers_as_continuations && lazy_continuable_size() == 0);
             if (no_compatible_futures) {
                 return;
             }
@@ -831,9 +850,11 @@ namespace futures {
 
             // Launch the notification task for each future
             if constexpr (sequence_is_range) {
-                if constexpr (is_lazy_continuable_v<typename sequence_type::value_type> && setting_thread) {
+                if constexpr (is_lazy_continuable_v<typename sequence_type::value_type> &&
+                              setting_notifiers_as_new_threads) {
                     return;
-                } else if constexpr (not is_lazy_continuable_v<typename sequence_type::value_type> && setting_lazy) {
+                } else if constexpr (not is_lazy_continuable_v<typename sequence_type::value_type> &&
+                                     setting_notifiers_as_continuations) {
                     return;
                 } else {
                     // Ensure we have one notifier allocated for each task
@@ -1093,9 +1114,8 @@ namespace futures {
             }
         } else /* if constexpr (input_is_invocable) */ {
             static_assert(input_is_invocable);
-            std::transform(first, last, std::back_inserter(v), [](auto &&f) {
-                return ::futures::async(std::forward<decltype(f)>(f));
-            });
+            std::transform(first, last, std::back_inserter(v),
+                           [](auto &&f) { return ::futures::async(std::forward<decltype(f)>(f)); });
         }
 
         return when_any_future<sequence_type>(std::move(v));

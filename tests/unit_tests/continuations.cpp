@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Continuation") {
+TEST_CASE(TEST_CASE_PREFIX "Continuation") {
     using namespace futures;
     SECTION("Default executor") {
         SECTION("Integer continuation") {

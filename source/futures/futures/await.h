@@ -12,14 +12,9 @@ namespace futures {
     /** \addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup launch Launch
-     *  @{
-     */
-    /** \addtogroup launch-policies Launch Policies
-     *  @{
-     */
 
     /// \brief Very simple version syntax sugar for types that pass the Future concept: future.wait() / future.get()
+    ///
     /// This syntax is most useful for cases where we are immediately requesting the future result
     template <typename Future
 #ifndef FUTURES_DOXYGEN
@@ -31,8 +26,6 @@ namespace futures {
         return f.get();
     }
 
-    /** @} */
-    /** @} */
     /** @} */
 } // namespace futures
 

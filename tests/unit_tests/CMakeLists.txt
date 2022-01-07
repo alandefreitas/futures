@@ -32,20 +32,31 @@ macro(add_futures_test TEST_NAME)
     endforeach ()
 
     if (LINK_LIBS_EXIST)
-        # Create executable for test
-        add_executable(ut_${TEST_NAME} ${TEST_NAME}.cpp)
+        foreach(TEST_NAME_VARIANT ${TEST_NAME} ${TEST_NAME}_small_pool)
+            # Create executable for test
+            add_executable(ut_${TEST_NAME_VARIANT} ${TEST_NAME}.cpp)
 
-        # Link with catch-main
-        target_link_libraries(ut_${TEST_NAME} PUBLIC ${LINK_LIBS} catch_main)
+            # Link with catch-main
+            target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC ${LINK_LIBS} catch_main)
 
-        # Enable UTF-8 on windows
-        target_msvc_compile_options(ut_${TEST_NAME} "/utf-8")
+            # Enable UTF-8 on windows
+            target_msvc_compile_options(ut_${TEST_NAME_VARIANT} "/utf-8")
 
-        # Enable /bigobj on windows
-        target_msvc_compile_options(ut_${TEST_NAME} "/bigobj")
+            # Enable /bigobj on windows
+            target_msvc_compile_options(ut_${TEST_NAME_VARIANT} "/bigobj")
 
-        # Register with ctest
-        catch_discover_tests(ut_${TEST_NAME})
+            # Register with ctest
+            catch_discover_tests(ut_${TEST_NAME_VARIANT})
+
+            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
+                # Purposefully set thread pool size to 1 in a target variant to ensure tests work for
+                # all pool sizes. Some tests might lead to deadlocks that won't happen in large pools.
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
+            else()
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="")
+            endif()
+        endforeach()
     else ()
         # Library not found. Throw.
         message(FATAL_ERROR "${LINK_LIBS} does not exist")

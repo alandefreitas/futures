@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Asio default executors") {
+TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
     using namespace futures;
 
     SECTION("Wait and stop") {

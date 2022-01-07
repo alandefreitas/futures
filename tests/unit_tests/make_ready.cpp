@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Make ready") {
+TEST_CASE(TEST_CASE_PREFIX "Make ready") {
     using namespace futures;
     SECTION("Value") {
         auto f = make_ready_future(3);

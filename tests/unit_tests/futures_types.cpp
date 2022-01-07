@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Futures types") {
+TEST_CASE(TEST_CASE_PREFIX "Futures types") {
     using namespace futures;
 
     constexpr int32_t thread_pool_replicates = 100;

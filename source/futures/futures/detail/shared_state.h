@@ -19,6 +19,43 @@ namespace futures {
 
     namespace detail {
 
+        /// \brief An object that temporarily unlocks a lock
+        struct relocker {
+            /// \brief The underlying lock
+            std::unique_lock<std::mutex> &lock_;
+
+            /// \brief Construct a relocker
+            ///
+            /// A relocker keeps a temporary reference to the lock and immediately unlocks it
+            ///
+            /// \param lk Reference to underlying lock
+            explicit relocker(std::unique_lock<std::mutex> &lk) : lock_(lk) { lock_.unlock(); }
+
+            /// \brief Copy constructor is deleted
+            relocker(const relocker&) = delete;
+            relocker(relocker&& other) noexcept = delete;
+
+            /// \brief Copy assignment is deleted
+            relocker& operator=(const relocker&) = delete;
+            relocker& operator=(relocker&& other) noexcept = delete;
+
+            /// \brief Destroy the relocker
+            ///
+            /// The relocker locks the underlying lock when it's done
+            ~relocker() {
+                if (!lock_.owns_lock()) {
+                    lock_.lock();
+                }
+            }
+
+            /// \brief Lock the underlying lock
+            void lock() {
+                if (!lock_.owns_lock()) {
+                    lock_.lock();
+                }
+            }
+        };
+
         /// \brief Members functions and objects common to all shared state object types
         ///
         /// Shared states for asynchronous operations contain an element of a given type and an exception.
@@ -27,6 +64,13 @@ namespace futures {
         /// their access to their common shared state.
         class shared_state_base {
           public:
+            /// \brief A list of waiters: condition variables to notify any object waiting for this shared state to be
+            /// ready
+            using waiter_list = futures::small_vector<std::condition_variable_any *>;
+
+            /// \brief A handle to notify an external context about this state being ready
+            using notify_when_ready_handle = waiter_list::iterator;
+
             /// \brief A default constructed shared state data
             shared_state_base() = default;
 
@@ -109,23 +153,51 @@ namespace futures {
                 return wait_until(lk, timeout_time);
             }
 
+            /// \brief Include a condition variable in the list of waiters we need to notify when the state is ready
+            notify_when_ready_handle notify_when_ready(std::condition_variable_any &cv) {
+                auto lk = create_unique_lock();
+                return notify_when_ready(lk, cv);
+            }
+
+            /// \brief Remove condition variable from list of condition variables we need to warn about this state
+            void unnotify_when_ready(notify_when_ready_handle it) {
+                auto lk = create_unique_lock();
+                unnotify_when_ready(lk, it);
+            }
+
+            /// \brief Get a reference to the mutex in the shared state
+            std::mutex &mutex() {
+                return mutex_;
+            }
+
+            /// \brief Check if state is ready
+            bool is_ready([[maybe_unused]] const std::unique_lock<std::mutex> &lk) const {
+                assert(lk.owns_lock());
+                return ready_;
+            }
+
           protected:
             /// \brief Indicate to the shared state the state is ready in the derived class
             ///
             /// This operation marks the ready_ flags and warns any future waiting on it.
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             void mark_ready_and_notify(std::unique_lock<std::mutex> &lk) noexcept {
                 assert(lk.owns_lock());
                 ready_ = true;
                 lk.unlock();
                 waiters_.notify_all();
+                for (auto &&external_waiter : external_waiters_) {
+                    external_waiter->notify_all();
+                }
             }
 
             /// \brief Indicate to the shared state its owner has been destroyed
             ///
             /// If owner has been destroyed before the shared state is ready, this means a promise has been broken
             /// and the shared state should store an exception.
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             void signal_owner_destroyed(std::unique_lock<std::mutex> &lk) {
                 assert(lk.owns_lock());
                 if (!ready_) {
@@ -137,34 +209,31 @@ namespace futures {
             ///
             /// This sets the exception value and marks the shared state as ready.
             /// If we try to set an exception on a shared state that's ready, we throw an exception.
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             void set_exception(std::exception_ptr except, // NOLINT(performance-unnecessary-value-param)
                                std::unique_lock<std::mutex> &lk) {
                 assert(lk.owns_lock());
                 if (ready_) {
                     throw promise_already_satisfied();
                 }
-                except_ = except;
+                except_ = std::move(except);
                 mark_ready_and_notify(lk);
             }
 
             /// \brief Get shared state when it's an exception
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             std::exception_ptr get_exception_ptr(std::unique_lock<std::mutex> &lk) {
                 assert(lk.owns_lock());
                 wait(lk);
                 return except_;
             }
 
-            /// \brief Check if state is ready
-            bool is_ready([[maybe_unused]] const std::unique_lock<std::mutex> &lk) const {
-                assert(lk.owns_lock());
-                return ready_;
-            }
-
             /// \brief Wait for shared state to become ready
             /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             void wait(std::unique_lock<std::mutex> &lk) const {
                 assert(lk.owns_lock());
                 waiters_.wait(lk, [this]() { return ready_; });
@@ -173,7 +242,8 @@ namespace futures {
             /// \brief Wait for a specified duration for the shared state to become ready
             /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
             /// for a specified duration.
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             template <typename Rep, typename Period>
             std::future_status wait_for(std::unique_lock<std::mutex> &lk,
                                         std::chrono::duration<Rep, Period> const &timeout_duration) const {
@@ -188,7 +258,8 @@ namespace futures {
             /// \brief Wait until a specified time point for the shared state to become ready
             /// This function uses the condition variable waiters to wait for this shared state to be marked as ready
             /// until a specified time point.
-            /// This overload is meant to be used by derived classes that might need to use another mutex for this operation
+            /// This overload is meant to be used by derived classes that might need to use another mutex for this
+            /// operation
             template <typename Clock, typename Duration>
             std::future_status wait_until(std::unique_lock<std::mutex> &lk,
                                           std::chrono::time_point<Clock, Duration> const &timeout_time) const {
@@ -198,6 +269,29 @@ namespace futures {
                 } else {
                     return std::future_status::timeout;
                 }
+            }
+
+            /// \brief Call the internal callback function, if any
+            void do_callback(std::unique_lock<std::mutex> &lk) const {
+                if (callback_ && !ready_) {
+                    std::function<void()> local_callback = callback_;
+                    relocker relock(lk);
+                    local_callback();
+                }
+            }
+
+            /// \brief Include a condition variable in the list of waiters we need to notify when the state is ready
+            notify_when_ready_handle notify_when_ready([[maybe_unused]] std::unique_lock<std::mutex> &lk,
+                                                       std::condition_variable_any &cv) {
+                assert(lk.owns_lock());
+                do_callback(lk);
+                return external_waiters_.insert(external_waiters_.end(), &cv);
+            }
+
+            /// \brief Remove condition variable from list of condition variables we need to warn about this state
+            void unnotify_when_ready([[maybe_unused]] std::unique_lock<std::mutex> &lk, notify_when_ready_handle it) {
+                assert(lk.owns_lock());
+                external_waiters_.erase(it);
             }
 
             /// \brief Check if state is ready without locking
@@ -217,7 +311,9 @@ namespace futures {
             /// \brief Generate unique lock for the shared state
             ///
             /// This lock can be used for any operations on the state that might need to be protected/
-            std::unique_lock<std::mutex> create_unique_lock() const { return std::unique_lock{mutex_}; }
+            std::unique_lock<std::mutex> create_unique_lock() const {
+                return std::unique_lock{mutex_};
+            }
 
           private:
             /// \brief Default global mutex for shared state operations
@@ -231,6 +327,12 @@ namespace futures {
 
             /// \brief Condition variable to notify any object waiting for this shared state to be ready
             mutable std::condition_variable waiters_{};
+
+            /// \brief List of external condition variables waiting for this shared state to be ready
+            waiter_list external_waiters_;
+
+            /// \brief Callback function we should call when waiting for the shared state
+            std::function<void()> callback_;
         };
 
         /// \brief Determine the type we should use to store a shared state internally
@@ -251,7 +353,7 @@ namespace futures {
         };
 
         template <typename R> using shared_state_storage_t = typename shared_state_storage<R>::type;
-    }
+    } // namespace detail
 
     /// \brief Shared state specialization for regular variables
     ///
@@ -298,7 +400,7 @@ namespace futures {
         /// \brief Set the value of the shared state to a copy of value
         ///
         /// This function locks the shared state and makes a copy of the value into the storage.
-        void set_value(const R& value) {
+        void set_value(const R &value) {
             auto lk = create_unique_lock();
             set_value(value, lk);
         }
@@ -500,6 +602,6 @@ namespace futures {
     };
 
     /** @} */ // \addtogroup futures Futures
-} // namespace futures::detail
+} // namespace futures
 
 #endif // FUTURES_SHARED_STATE_H

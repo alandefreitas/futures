@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Continuation Stop - Shared stop source") {
+TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Shared stop source") {
     using namespace futures;
     using namespace std::literals;
     jcfuture<int> f1 = async(
@@ -28,7 +28,7 @@ TEST_CASE("Continuation Stop - Shared stop source") {
     REQUIRE(final_count >= 10);
 }
 
-TEST_CASE("Continuation Stop - Independent stop source") {
+TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Independent stop source") {
     using namespace futures;
     using namespace std::literals;
     jcfuture<int> f1 = async(

@@ -5,7 +5,7 @@
 
 #include <futures/futures.h>
 
-TEST_CASE("Cancellable future") {
+TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
     using namespace futures;
     SECTION("Cancel jfuture<void>") {
         jcfuture<void> f = async([](stop_token s) {

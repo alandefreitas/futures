@@ -70,7 +70,12 @@ namespace futures {
     ///
     /// \return Reference to the default execution context for @ref async
     inline default_execution_context_type &default_execution_context() {
-        static asio::thread_pool pool(hardware_concurrency());
+#ifdef FUTURES_DEFAULT_THREAD_POOL_SIZE
+        const std::size_t default_thread_pool_size = FUTURES_DEFAULT_THREAD_POOL_SIZE;
+#else
+        const std::size_t default_thread_pool_size = hardware_concurrency();
+#endif
+        static asio::thread_pool pool(default_thread_pool_size);
         return pool;
     }
 

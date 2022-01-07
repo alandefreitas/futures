@@ -13,6 +13,7 @@ nav:
     - Launching tasks: launching.md
     - Stoppable futures: stoppable_futures.md
     - Shared futures: shared_futures.md
+    - Waiting: waiting.md
   - Future Adaptors:
     - Continuations: continuations.md
     - Conjunctions: conjunctions.md

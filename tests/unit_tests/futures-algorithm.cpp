@@ -2,7 +2,7 @@
 #include <catch2/catch.hpp>
 #include <futures/algorithm.h>
 
-TEST_CASE("Async algorithm") {
+TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
     using namespace futures;
 
     auto ex = make_default_executor();
