@@ -22,6 +22,15 @@ namespace futures {
      *  @{
      */
     /** \addtogroup launch-algorithms Launch Algorithms
+     *
+     * \brief Function to schedule and launch future tasks
+     *
+     * This module contains function we can use to launch and schedule tasks. If possible, tasks should be
+     * scheduled lazily instead of launched eagerly to avoid a race between the task and its dependencies.
+     *
+     * When tasks are scheduled eagerly, the function @ref async provides an alternatives to launch tasks on specific
+     * executors instead of creating a new thread for each asynchronous task.
+     *
      *  @{
      */
 
@@ -154,7 +163,16 @@ namespace futures {
         constexpr async_future_scheduler schedule_future;
     } // namespace detail
 
-    /// \brief Launch an async function with an existing executor according to the policy @ref policy, like std::async
+    /// \brief Launch an asynchronous task with the specified executor and policy
+    ///
+    /// \par Example
+    /// \code
+    /// auto f = async([]() { return 2; });
+    /// std::cout << f.get() << std::endl; // 2
+    /// \endcode
+    ///
+    /// \see
+    ///      \ref basic_future
     ///
     /// \tparam Executor Executor from an execution context
     /// \tparam Function A callable object
@@ -172,7 +190,12 @@ namespace futures {
               std::enable_if_t<detail::is_valid_async_input_v<Executor, Function, Args...>, int> = 0
 #endif
               >
-    decltype(auto) async(launch policy, const Executor &ex, Function &&f, Args &&...args) {
+#ifndef FUTURES_DOXYGEN
+    decltype(auto)
+#else
+    __implementation_defined__
+#endif
+    async(launch policy, const Executor &ex, Function &&f, Args &&...args) {
         // Unwrap policies
         const bool new_thread_policy = (policy & launch::new_thread) == launch::new_thread;
         const bool deferred_policy = (policy & launch::deferred) == launch::deferred;
@@ -206,10 +229,12 @@ namespace futures {
         return detail::schedule_future(schedule_policy, ex, std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
-    /// \brief An extended version of std::async with custom executors instead of policies.
+    /// \brief Launch a task with a custom executor instead of policies.
     ///
-    /// This version of async will always use an executor to be provided.
-    /// If no executor is provided, then the function is run in a default executor made from
+    /// This version of the async function will always use the specified executor instead of
+    /// creating a new thread.
+    ///
+    /// If no executor is provided, then the function is run in a default executor created from
     /// the default thread pool.
     ///
     /// \tparam Executor Executor from an execution context
@@ -227,11 +252,16 @@ namespace futures {
               std::enable_if_t<detail::is_valid_async_input_v<Executor, Function, Args...>, int> = 0
 #endif
               >
-    detail::async_result_of_t<Function, Args...> async(const Executor &ex, Function &&f, Args &&...args) {
+#ifndef FUTURES_DOXYGEN
+    detail::async_result_of_t<Function, Args...>
+#else
+    __implementation_defined__
+#endif
+    async(const Executor &ex, Function &&f, Args &&...args) {
         return async(launch::async, ex, std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
-    /// \brief Launch an async function according to the policy @ref policy with the default executor
+    /// \brief Launch an async function according to the specified policy with the default executor
     ///
     /// \tparam Function A callable object
     /// \tparam Args Arguments for the Function
@@ -247,7 +277,12 @@ namespace futures {
               std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
 #endif
               >
-    detail::async_result_of_t<Function, Args...> async(launch policy, Function &&f, Args &&...args) {
+#ifndef FUTURES_DOXYGEN
+    detail::async_result_of_t<Function, Args...>
+#else
+    __implementation_defined__
+#endif
+    async(launch policy, Function &&f, Args &&...args) {
         return async(policy, make_default_executor(), std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
@@ -267,7 +302,12 @@ namespace futures {
               std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
 #endif
               >
-    detail::async_result_of_t<Function, Args...> async(Function &&f, Args &&...args) {
+#ifndef FUTURES_DOXYGEN
+    detail::async_result_of_t<Function, Args...>
+#else
+    __implementation_defined__
+#endif
+    async(Function &&f, Args &&...args) {
         return async(launch::async, ::futures::make_default_executor(), std::forward<Function>(f),
                      std::forward<Args>(args)...);
     }

@@ -22,11 +22,14 @@ namespace futures {
     template <typename Signature> class packaged_task;
 #endif
 
-    /// \brief Packaged task
+    /// \brief A packaged task that sets a shared state when done
     ///
     /// A packaged task holds a task to be executed and a shared state for its result.
     ///
     /// It's very similar to a promise where the shared state is replaced by a shared task.
+    ///
+    /// \tparam R Return type
+    /// \tparam Args Task arguments
 #ifndef FUTURES_DOXYGEN
     template <typename R, typename... Args>
 #else

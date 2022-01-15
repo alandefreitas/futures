@@ -13,6 +13,9 @@ namespace futures {
      *  @{
      */
     /** \addtogroup error Error
+     *
+     * \brief Basic future errors
+     *
      *  @{
      */
 
@@ -26,10 +29,12 @@ namespace futures {
 
         /// \brief Construct underlying system error with a specified error code and literal string message
         /// \param ec Error code
+        /// \param what_arg Error string
         futures_error(std::error_code ec, const char *what_arg) : std::system_error{ec, what_arg} {}
 
         /// \brief Construct underlying system error with a specified error code and std::string message
         /// \param ec Error code
+        /// \param what_arg Error string
         futures_error(std::error_code ec, std::string const &what_arg) : std::system_error{ec, what_arg} {}
 
         /// \brief Destructor
@@ -37,7 +42,16 @@ namespace futures {
     };
 
     /// \brief Error codes for futures
-    enum class future_errc { broken_promise = 1, future_already_retrieved, promise_already_satisfied, no_state };
+    enum class future_errc {
+        /// The state owner got destroyed before the promise has been fulfilled
+        broken_promise = 1,
+        /// Attempted to retrieve a unique future twice
+        future_already_retrieved = 2,
+        /// Promise has already been fulfilled
+        promise_already_satisfied = 3,
+        /// There is no shared state we can access
+        no_state = 4
+    };
 
     // fwd-declare
     inline std::error_category const &future_category() noexcept;

@@ -13,6 +13,9 @@ namespace futures {
      *  @{
      */
     /** \addtogroup future-traits Future Traits
+     *
+     * \brief Determine properties of future types
+     *
      *  @{
      */
 
@@ -27,8 +30,11 @@ namespace futures {
 
     /// \brief Customization point to determine if a type is a future type as a bool value
     template <class T> constexpr bool is_future_v = is_future<T>::value;
+
     /// \brief Customization point to determine if a type is a shared future type
     template <typename> struct has_ready_notifier : std::false_type {};
+
+    /// \brief Customization point to determine if a type is a shared future type
     template <class T> constexpr bool has_ready_notifier_v = has_ready_notifier<T>::value;
 
     /// \brief Customization point to determine if a type is a shared future type
@@ -42,14 +48,20 @@ namespace futures {
 
     /// \brief Customization point to define future as supporting lazy continuations
     template <typename> struct is_lazy_continuable : std::false_type {};
+
+    /// \brief Customization point to define future as supporting lazy continuations
     template <class T> constexpr bool is_lazy_continuable_v = is_lazy_continuable<T>::value;
 
     /// \brief Customization point to define future as stoppable
     template <typename> struct is_stoppable : std::false_type {};
+
+    /// \brief Customization point to define future as stoppable
     template <class T> constexpr bool is_stoppable_v = is_stoppable<T>::value;
 
     /// \brief Customization point to define future having a common stop token
     template <typename> struct has_stop_token : std::false_type {};
+
+    /// \brief Customization point to define future having a common stop token
     template <class T> constexpr bool has_stop_token_v = has_stop_token<T>::value;
 
     /** @} */ // \addtogroup future-traits Future Traits

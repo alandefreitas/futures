@@ -29,6 +29,9 @@ namespace futures {
      *  @{
      */
     /** \addtogroup cancellation Cancellation
+     *
+     * \brief Future cancellation primitives
+     *
      *  @{
      */
 
@@ -37,7 +40,6 @@ namespace futures {
     }
 
     class stop_source;
-    template <typename Callback> class stop_callback;
 
     /// \brief Empty struct to initialize a @ref stop_source without a shared stop state
     struct nostopstate_t {

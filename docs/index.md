@@ -1,11 +1,3 @@
----
-layout: default
-title: Home
-nav_order: 1
-has_children: false
-has_toc: false
----
-
 > C++ Lock-Free Task Programming with Asio Executors
 
 [![Futures](img/futures_banner.png)](https://alandefreitas.github.io/futures/)

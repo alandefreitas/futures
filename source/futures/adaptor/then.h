@@ -13,6 +13,12 @@
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
+     *
+     * \brief Functions to create new futures from existing functions.
+     *
+     * This module defines functions we can use to create new futures from existing futures. Future adaptors
+     * are future types of whose values are dependant on the condition of other future objects.
+     *
      *  @{
      */
 

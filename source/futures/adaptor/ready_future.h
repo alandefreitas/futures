@@ -21,6 +21,7 @@ namespace futures {
      */
 
     /// \brief Check if a future is ready
+    ///
     /// Although basic_future has its more efficient is_ready function, this free function
     /// allows us to query other futures that don't implement is_ready, such as std::future.
     template <typename Future

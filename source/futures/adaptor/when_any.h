@@ -957,9 +957,9 @@ namespace futures {
         /// @}
     };
 
+#ifndef FUTURES_DOXYGEN
     /// \name Define when_any_future as a kind of future
     /// @{
-
     /// Specialization explicitly setting when_any_future<T> as a type of future
     template <typename T> struct is_future<when_any_future<T>> : std::true_type {};
 
@@ -975,6 +975,7 @@ namespace futures {
     /// Specialization explicitly setting const when_any_future<T> & as a type of future
     template <typename T> struct is_future<const when_any_future<T> &> : std::true_type {};
     /// @}
+#endif
 
     namespace detail {
         /// \name Useful traits for when_any

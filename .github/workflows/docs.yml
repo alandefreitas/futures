@@ -41,7 +41,7 @@ jobs:
           ls
         working-directory: ./docs
       - name: Generate Doxybook
-        run: ./bin/doxybook2 --input ./xml --output reference --config .doxybook/config.json
+        run: ./bin/doxybook2 --input ./xml --output reference --config .doxybook/config.json --templates .doxybook/templates
         working-directory: ./docs
       - name: Setup Python
         uses: actions/setup-python@v2

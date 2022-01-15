@@ -222,8 +222,10 @@ namespace futures {
         sequence_type v;
     };
 
+#ifndef FUTURES_DOXYGEN
     /// \brief Specialization explicitly setting when_all_future<T> as a type of future
     template <typename T> struct is_future<when_all_future<T>> : std::true_type {};
+#endif
 
     namespace detail {
         /// \name when_all helper traits

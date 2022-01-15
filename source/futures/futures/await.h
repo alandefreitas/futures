@@ -13,9 +13,24 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Very simple version syntax sugar for types that pass the Future concept: future.wait() / future.get()
+    /** \addtogroup waiting Waiting
+     *
+     * \brief Basic function to wait for futures
+     *
+     * This module defines a variety of auxiliary functions to wait for futures.
+     *
+     *  @{
+     */
+
+    /// \brief Very simple syntax sugar for types that pass the @ref is_future concept
     ///
-    /// This syntax is most useful for cases where we are immediately requesting the future result
+    /// This syntax is most useful for cases where we are immediately requesting the future result.
+    ///
+    /// The function also makes the syntax optionally a little closer to languages such as javascript.
+    ///
+    /// \tparam Future A future type
+    ///
+    /// \return The result of the future object
     template <typename Future
 #ifndef FUTURES_DOXYGEN
               ,
@@ -26,6 +41,7 @@ namespace futures {
         return f.get();
     }
 
+    /** @} */
     /** @} */
 } // namespace futures
 

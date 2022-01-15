@@ -22,17 +22,28 @@
 
 namespace futures {
     /** \addtogroup futures Futures
+     *
+     * \brief Basic future types and functions
+     *
+     * The futures library provides components to create and launch futures, objects representing data that might
+     * not be available yet.
      *  @{
      */
 
     /** \addtogroup future-types Future types
+     *
+     * \brief Basic future types
+     *
+     * This module defines the @ref basic_future template class, which can be used to define futures
+     * with a number of extensions.
+     *
      *  @{
      */
 
     // Fwd-declaration
     template <class T, class Shared, class LazyContinuable, class Stoppable> class basic_future;
 
-    /// \brief A simple future type similar to std::future
+    /// \brief A simple future type similar to `std::future`
     template <class T> using future = basic_future<T, std::false_type, std::false_type, std::false_type>;
 
     /// \brief A future type with stop tokens
@@ -86,8 +97,6 @@ namespace futures {
     ///
     /// \note Same as @ref shared_jcfuture
     template <class T> using shared_cjfuture = shared_jcfuture<T>;
-
-    /// @}
 
     namespace detail {
         /// \name Helpers to declare internal_async a friend
@@ -166,11 +175,6 @@ namespace futures {
             /// Default Constructors: whenever the state is moved or copied, the default constructor
             /// will copy or move the internal shared ptr pointing to this common state of continuations.
 
-            /// \brief Emplace a function to the shared vector of continuations
-            /// If properly setup (by async), this future holds the result from a function that runs these
-            /// continuations after the main promise is fulfilled.
-            /// However, if this future is already ready, we can just run the continuation right away.
-            /// \return True if the contination was emplaced without the using the default executor
             bool then(continuations_state::continuation_type &&fn) {
                 return then(make_default_executor(), asio::use_future(std::move(fn)));
             }
@@ -216,14 +220,27 @@ namespace futures {
                                                            disable_lazy_continuations<Derived, T>>;
     } // namespace detail
 
+#ifndef FUTURES_DOXYGEN
     // fwd-declare
     template <typename Signature> class packaged_task;
+#endif
 
-    /// \brief The common implementation for a future that might have lazy continuations and stop tokens
-    /// Note that these classes only provide the capabilities of tracking these features
+    /// \brief A basic future type with custom features
+    ///
+    /// Note that these classes only provide the capabilities of tracking these features, such
+    /// as continuations.
+    ///
     /// Setting up these capabilities (creating tokens or setting main future to run continuations)
-    /// needs to be done when the future is created.
-    /// All this behavior is encapsulated in the async function.
+    /// needs to be done when the future is created in a function such as @ref async by creating
+    /// the appropriate state for each feature.
+    ///
+    /// All this behavior is already encapsulated in the @ref async function.
+    ///
+    /// \tparam T Type of element
+    /// \tparam Shared `std::true_value` if this future is shared
+    /// \tparam LazyContinuable `std::true_value` if this future supports continuations
+    /// \tparam Stoppable `std::true_value` if this future contains a stop token
+    ///
     template <class T, class Shared, class LazyContinuable, class Stoppable>
     class
 #if defined(__clang__) && !defined(__apple_build_version__)
@@ -232,9 +249,12 @@ namespace futures {
           clang::preferred_name(shared_jcfuture<T>)]]
 #endif
         basic_future
+#ifndef FUTURES_DOXYGEN
         : public detail::lazy_continuations_base<LazyContinuable, basic_future<T, Shared, LazyContinuable, Stoppable>,
                                                  T>,
-          public detail::stop_token_base<Stoppable, basic_future<T, Shared, LazyContinuable, Stoppable>, T> {
+          public detail::stop_token_base<Stoppable, basic_future<T, Shared, LazyContinuable, Stoppable>, T>
+#endif
+    {
       public:
         /// \name Public types
         /// @{
@@ -248,6 +268,7 @@ namespace futures {
         static constexpr bool is_lazy_continuable_v = LazyContinuable::value;
         static constexpr bool is_stoppable_v = Stoppable::value;
 
+#ifndef FUTURES_DOXYGEN
         using lazy_continuations_base =
             detail::lazy_continuations_base<LazyContinuable, basic_future<T, Shared, LazyContinuable, Stoppable>, T>;
         using stop_token_base =
@@ -257,6 +278,7 @@ namespace futures {
         friend stop_token_base;
 
         using notify_when_ready_handle = detail::shared_state_base::notify_when_ready_handle;
+#endif
 
         /// @}
 
@@ -268,12 +290,14 @@ namespace futures {
 
         template <typename Signature> friend class packaged_task;
 
+#ifndef FUTURES_DOXYGEN
         // The shared variant is always a friend
         using basic_future_shared_version_t = basic_future<T, std::true_type, LazyContinuable, Stoppable>;
         friend basic_future_shared_version_t;
 
         using basic_future_unique_version_t = basic_future<T, std::false_type, LazyContinuable, Stoppable>;
         friend basic_future_unique_version_t;
+#endif
 
         friend struct detail::async_future_scheduler;
         friend struct detail::internal_then_functor;
@@ -283,7 +307,9 @@ namespace futures {
         /// \name Constructors
         /// @{
 
-        /// \brief Default constructor. Constructs an invalid future with no shared state.
+        /// \brief Constructs the basic_future
+        ///
+        /// The default constructor creates an invalid future with no shared state.
         ///
         /// Null shared state. Properties inherited from base classes.
         basic_future() noexcept
@@ -292,16 +318,24 @@ namespace futures {
               state_{nullptr} {}
 
         /// \brief Construct from a pointer to the shared state
+        ///
         /// This constructor is private because we need to ensure the launching
         /// function appropriately sets this std::future handling these traits
         /// This is a function for async.
-        explicit basic_future(const std::shared_ptr<shared_state<T>> &p) noexcept
+        ///
+        /// \param s Future shared state
+        explicit basic_future(const std::shared_ptr<shared_state<T>> &s) noexcept
             : lazy_continuations_base(), // No continuations at constructions, but callbacks should be set
               stop_token_base(),         // Stop token false, but stop token parameter should be set
-              state_{std::move(p)} {}
+              state_{std::move(s)} {}
 
         /// \brief Copy constructor for shared futures only.
+        ///
         /// Inherited from base classes.
+        ///
+        /// \note The copy constructor only participates in overload resolution if `other` is shared
+        ///
+        /// \param other Another future used as source to initialize the shared state
         basic_future(const basic_future &other)
             : lazy_continuations_base(other), // Copy reference to continuations
               stop_token_base(other),         // Copy reference to stop state
@@ -309,7 +343,9 @@ namespace futures {
             static_assert(is_shared_v, "Copy constructor is only available for shared futures");
         }
 
-        /// \brief Move constructor. Inherited from base classes.
+        /// \brief Move constructor.
+        ///
+        /// Inherited from base classes.
         basic_future(basic_future && other) noexcept
             : lazy_continuations_base(std::move(other)), // Get control of continuations
               stop_token_base(std::move(other)),         // Move stop state
@@ -317,39 +353,8 @@ namespace futures {
             other.state_.reset();
         }
 
-        /// \brief Copy assignment for shared futures only.
-        /// Inherited from base classes.
-        basic_future &operator=(const basic_future &other) {
-            static_assert(is_shared_v, "Copy assignment is only available for shared futures");
-            if (&other == this) {
-                return *this;
-            }
-            wait_if_last(); // If this is the last shared future waiting for previous result, we wait
-            lazy_continuations_base::operator=(other); // Copy reference to continuations
-            stop_token_base::operator=(other);         // Copy reference to stop state
-            join_ = other.join_;
-            state_ = other.state_; // Make it point to the same shared state
-            other.detach();        // Detach other to ensure it won't block at destruction
-            return *this;
-        }
-
-        /// \brief Move assignment. Inherited from base classes.
-        basic_future &operator=(basic_future &&other) noexcept {
-            if (&other == this) {
-                return *this;
-            }
-            wait_if_last(); // If this is the last shared future waiting for previous result, we wait
-            lazy_continuations_base::operator=(std::move(other)); // Get control of continuations
-            stop_token_base::operator=(std::move(other));         // Move stop state
-            join_ = other.join_;
-            state_ = other.state_; // Make it point to the same shared state
-            other.state_.reset();
-            other.detach(); // Detach other to ensure it won't block at destruction
-            return *this;
-        }
-        /// @}
-
         /// \brief Destructor
+        ///
         /// The shared pointer will take care of decrementing the reference counter of the shared state, but we
         /// still take care of the special options:
         /// - We let stoppable futures set the stop token and wait.
@@ -369,7 +374,90 @@ namespace futures {
             }
         }
 
+        /// \brief Copy assignment for shared futures only.
+        ///
+        /// Inherited from base classes.
+        basic_future &operator=(const basic_future &other) {
+            static_assert(is_shared_v, "Copy assignment is only available for shared futures");
+            if (&other == this) {
+                return *this;
+            }
+            wait_if_last(); // If this is the last shared future waiting for previous result, we wait
+            lazy_continuations_base::operator=(other); // Copy reference to continuations
+            stop_token_base::operator=(other);         // Copy reference to stop state
+            join_ = other.join_;
+            state_ = other.state_; // Make it point to the same shared state
+            other.detach();        // Detach other to ensure it won't block at destruction
+            return *this;
+        }
+
+        /// \brief Move assignment.
+        ///
+        /// Inherited from base classes.
+        basic_future &operator=(basic_future &&other) noexcept {
+            if (&other == this) {
+                return *this;
+            }
+            wait_if_last(); // If this is the last shared future waiting for previous result, we wait
+            lazy_continuations_base::operator=(std::move(other)); // Get control of continuations
+            stop_token_base::operator=(std::move(other));         // Move stop state
+            join_ = other.join_;
+            state_ = other.state_; // Make it point to the same shared state
+            other.state_.reset();
+            other.detach(); // Detach other to ensure it won't block at destruction
+            return *this;
+        }
+        /// @}
+
+#if FUTURES_DOXYGEN
+        /// \brief Emplace a function to the shared vector of continuations
+        ///
+        /// If properly setup (by async), this future holds the result from a function that runs these
+        /// continuations after the main promise is fulfilled.
+        /// However, if this future is already ready, we can just run the continuation right away.
+        ///
+        /// \note This function only participates in overload resolution if the future supports continuations
+        ///
+        /// \return True if the contination was emplaced without the using the default executor
+        bool then(continuations_state::continuation_type &&fn);
+
+        /// \brief Emplace a function to the shared vector of continuations
+        ///
+        /// If the function is ready, use the given executor instead of executing inline
+        /// with the previous executor.
+        ///
+        /// \note This function only participates in overload resolution if the future supports continuations
+        ///
+        /// \tparam Executor
+        /// \param ex
+        /// \param fn
+        /// \return
+        template <class Executor> bool then(const Executor &ex, continuations_state::continuation_type &&fn);
+
+        /// \brief Request the future to stop whatever task it's running
+        ///
+        /// \note This function only participates in overload resolution if the future supports stop tokens
+        ///
+        /// \return Whether the request was made
+        bool request_stop() noexcept;
+
+        /// \brief Get this future's stop source
+        ///
+        /// \note This function only participates in overload resolution if the future supports stop tokens
+        ///
+        /// \return The stop source
+        [[nodiscard]] stop_source get_stop_source() const noexcept;
+
+        /// \brief Get this future's stop token
+        ///
+        /// \note This function only participates in overload resolution if the future supports stop tokens
+        ///
+        /// \return The stop token
+        [[nodiscard]] stop_token get_stop_token() const noexcept;
+#endif
+
         /// \brief Wait until all futures have a valid result and retrieves it
+        ///
         /// The behaviour depends on shared_based.
         decltype(auto) get() {
             if (!valid()) {
@@ -389,6 +477,7 @@ namespace futures {
         }
 
         /// \brief Create another future whose state is shared
+        ///
         /// Create a shared variant of the current future type.
         /// If the current type is not shared, the object becomes invalid.
         /// If the current type is shared, the new object is equivalent to a copy.
@@ -417,6 +506,7 @@ namespace futures {
         }
 
         /// \brief Get exception pointer without throwing exception
+        ///
         /// This extends std::future so that we can always check if the future threw an exception
         std::exception_ptr get_exception_ptr() {
             if (!valid()) {
@@ -463,6 +553,7 @@ namespace futures {
         }
 
         /// \brief Tell this future not to join at destruction
+        ///
         /// For safety, all futures join at destruction
         void detach() { join_ = false; }
 
@@ -491,7 +582,7 @@ namespace futures {
         }
 
         /// \brief Checks if the shared state is ready
-        [[nodiscard]] bool is_ready(std::unique_lock<std::mutex>& lk) const {
+        [[nodiscard]] bool is_ready(std::unique_lock<std::mutex> & lk) const {
             if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
@@ -535,6 +626,7 @@ namespace futures {
         /// @}
     };
 
+#ifndef FUTURES_DOXYGEN
     /// \name Define basic_future as a kind of future
     /// @{
     template <typename... Args> struct is_future<basic_future<Args...>> : std::true_type {};
@@ -598,6 +690,8 @@ namespace futures {
     struct is_stoppable<const basic_future<T, S, L, Stoppable>> : Stoppable {};
     template <class T, class S, class L, class Stoppable>
     struct is_stoppable<const basic_future<T, S, L, Stoppable> &> : Stoppable {};
+    /** @} */
+#endif
 
     /** @} */
     /** @} */

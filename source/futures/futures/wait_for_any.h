@@ -16,18 +16,21 @@ namespace futures {
     /** \addtogroup futures Futures
      *  @{
      */
+    /** \addtogroup waiting Waiting
+     *  @{
+     */
 
-    /// \brief Wait for any future in a range to be ready
+    /// \brief Wait for any future in a sequence to be ready
     ///
     /// This function waits for any future in the range [`first`, `last`) to be ready.
     ///
-    /// Unlike @wait_for_all, this function requires special data structures to allow that
+    /// Unlike @ref wait_for_all, this function requires special data structures to allow that
     /// to happen without blocking.
     ///
-    /// \note This function is adapted from boost::wait_for_any
+    /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any
+    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator Iterator type in a range of futures
     /// \param first Iterator to the first element in the range
@@ -52,15 +55,15 @@ namespace futures {
         }
     }
 
-    /// \brief Wait for any future in a range to be ready
+    /// \brief Wait for any future in a sequence to be ready
     ///
     /// This function waits for any future in the range `r` to be ready.
     /// This function requires special data structures to allow that to happen without blocking.
     ///
-    /// \note This function is adapted from boost::wait_for_any
+    /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any
+    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator A range of futures type
     /// \param r Range of futures
@@ -75,14 +78,14 @@ namespace futures {
         return wait_for_any(std::begin(r), std::end(r));
     }
 
-    /// \brief Wait for any of the specified futures to be ready
+    /// \brief Wait for any future in a sequence to be ready
     ///
     /// This function waits for all specified futures `fs`... to be ready.
     ///
-    /// \note This function is adapted from boost::wait_for_any
+    /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any
+    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Fs A list of future types
     /// \param fs A list of future objects
@@ -107,6 +110,7 @@ namespace futures {
         }
     }
 
+    /** @} */
     /** @} */
 } // namespace futures
 
