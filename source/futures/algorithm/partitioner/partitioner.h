@@ -3,8 +3,8 @@
 
 #include <thread>
 
-#include "futures/adaptor/detail/traits/has_get.h"
-#include "futures/algorithm/detail/traits/range/range/concepts.h"
+#include <futures/adaptor/detail/traits/has_get.h>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 /// \file Default partitioners
 /// A partitioner is a light callable object that takes a pair of iterators and returns the

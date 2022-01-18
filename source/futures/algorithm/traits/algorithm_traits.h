@@ -23,11 +23,11 @@
 #endif
 #endif
 
-#include "futures/algorithm/detail/traits/range/range/concepts.h"
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
-#include "futures/algorithm/partitioner/partitioner.h"
-#include "futures/executor/default_executor.h"
-#include "futures/executor/inline_executor.h"
+#include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/executor/default_executor.h>
+#include <futures/executor/inline_executor.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms

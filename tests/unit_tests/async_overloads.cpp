@@ -3,9 +3,6 @@
 
 #include <catch2/catch.hpp>
 #include <futures/futures.h>
-#include <futures/futures/await.h>
-#include <futures/futures/wait_for_all.h>
-#include <futures/futures/wait_for_any.h>
 
 TEST_CASE(TEST_CASE_PREFIX "Async overloads") {
     using namespace futures;

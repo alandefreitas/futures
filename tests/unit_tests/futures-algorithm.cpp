@@ -1,6 +1,9 @@
 #include <array>
 #include <catch2/catch.hpp>
+#include <futures/futures.h>
+#if __has_include(<futures/algorithm.h>)
 #include <futures/algorithm.h>
+#endif
 
 TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
     using namespace futures;

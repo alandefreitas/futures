@@ -51,6 +51,9 @@
 #include <futures/futures/promise.h>
 #include <futures/futures/packaged_task.h>
 #include <futures/futures/async.h>
+#include <futures/futures/wait_for_all.h>
+#include <futures/futures/wait_for_any.h>
+#include <futures/futures/await.h>
 
 // Adaptors
 #include <futures/adaptor/ready_future.h>

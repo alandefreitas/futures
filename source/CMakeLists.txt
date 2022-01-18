@@ -56,6 +56,43 @@ if (FUTURES_PREFER_STANDALONE_DEPENDENCIES)
 endif()
 
 ###########################################################
+### Single-header library                               ###
+###########################################################
+# Generate a single-header version of futures
+set(SINGLE_HEADER_PATH "${FUTURES_ROOT_DIR}/source/single-header/futures.h")
+add_custom_command(
+        OUTPUT ${SINGLE_HEADER_PATH}
+        COMMAND amalgamator
+        --include_paths
+        "${FUTURES_ROOT_DIR}/source"
+        --entry_points
+        "futures/futures.h"
+        "futures/algorithm.h"
+        --double_include
+        "futures/algorithm/detail/traits/range/detail/epilogue.h"
+        "futures/algorithm/detail/traits/range/detail/prologue.h"
+        --output
+        "${FUTURES_ROOT_DIR}/source/single-header/futures/futures.h"
+        DEPENDS amalgamator ${FUTURES_HEADERS}
+        COMMENT "Creating single-header library"
+        VERBATIM
+)
+add_custom_target(build_single_include DEPENDS ${SINGLE_HEADER_PATH})
+add_library(single-header-futures INTERFACE)
+add_dependencies(single-header-futures build_single_include)
+add_library(futures::single-header-futures ALIAS single-header-futures)
+
+target_include_directories(single-header-futures
+        INTERFACE $<BUILD_INTERFACE:${FUTURES_ROOT_DIR}/source/single-header>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/single-header>
+        )
+
+foreach(FUTURES_PROPERTY INTERFACE_COMPILE_FEATURES INTERFACE_COMPILE_OPTIONS INTERFACE_LINK_LIBRARIES)
+    get_target_property(PROPERTY_VALUE futures ${FUTURES_PROPERTY})
+    set_target_properties(single-header-futures PROPERTIES ${FUTURES_PROPERTY} "${PROPERTY_VALUE}")
+endforeach()
+
+###########################################################
 ### Target with separate compilation (not header-only)  ###
 ###########################################################
 # This is a version of futures where ASIO is not header-only
@@ -65,6 +102,8 @@ add_library(futures-compiled
 target_link_libraries(futures-compiled PUBLIC futures)
 target_compile_definitions(futures-compiled PUBLIC FUTURES_SEPARATE_COMPILATION)
 add_library(futures::futures-compiled ALIAS futures-compiled)
+
+
 
 #######################################################
 ### Installer                                       ###

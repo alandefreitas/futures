@@ -3,7 +3,7 @@
 #######################################################
 # Project information
 cmake_minimum_required(VERSION 3.19)
-project(futures VERSION 0.1.0)
+project(futures VERSION 0.1.1)
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
 message(STATUS "${CMAKE_PROJECT_NAME} v${CMAKE_PROJECT_VERSION}: ${CMAKE_PROJECT_HOMEPAGE_URL}")
@@ -104,6 +104,11 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/find_cpp_modules.cmake)
 else ()
     message(FATAL_ERROR "find_cpp_modules.cmake file not found.")
 endif ()
+
+#######################################################
+### Tools                                           ###
+#######################################################
+add_subdirectory(tools)
 
 #######################################################
 ### Libraries                                       ###

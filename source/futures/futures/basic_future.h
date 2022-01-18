@@ -11,7 +11,7 @@
 
 #include <futures/executor/default_executor.h>
 
-#include "futures/futures/traits/is_executor_then_function.h"
+#include <futures/futures/traits/is_executor_then_function.h>
 
 #include <futures/futures/detail/continuations_source.h>
 #include <futures/futures/detail/shared_state.h>

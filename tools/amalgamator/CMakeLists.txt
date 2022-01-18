@@ -1,0 +1,2 @@
+add_executable(amalgamator main.cpp)
+target_compile_features(amalgamator PUBLIC cxx_std_17)

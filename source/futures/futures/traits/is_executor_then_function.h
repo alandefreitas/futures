@@ -5,7 +5,7 @@
 #ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 #define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
-#include "../../config/asio_include.h"
+#include <futures/config/asio_include.h>
 
 namespace futures {
     /** \addtogroup futures Futures

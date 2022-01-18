@@ -4,6 +4,19 @@
 
 !!! example ""
 
+    === "Header-only"
+    
+        You can copy into your project:
+
+        - the contents from the `source/futures` directory; 
+        - **or** the single-header file from `source/single-header`.
+
+        Make sure the headers for the dependencies are also available:
+        
+        - The only mandadory dependency: [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
+        - An optional recommended dependency: [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). 
+            - If none of these are available, the implementation falls back to [std::vector]
+
     === "CMake"
     
         === "Add subdirectory"
@@ -53,88 +66,42 @@
             add_executable(your_target main.cpp)
             target_link_libraries(your_target PUBLIC futures::futures)
             ```
-    
+
     === "Build from source"
     
-        !!! note
-    
-            Ensure your C++ compiler and CMake are up-to-date
-    
+        === "Windows + MSVC"
+        
+            ```bash
+            mkdir build
+            cd build
+            cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/O2"
+            cmake --build . --config Release
+            cmake --install .
+            cpack .
+            ```
+
         === "Ubuntu + GCC"
     
             ```bash
-            # Create a new directory
             mkdir build
             cd build
-            # Configure
             cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-O2"
-            # Build
-            sudo cmake --build . --parallel 9 --config Release
-            # Install 
+            sudo cmake --build . --config Release
             sudo cmake --install .
-            # Create packages
             sudo cpack .
             ```
     
         === "Mac Os + Clang"
         
             ```bash
-            # Create a new directory
             mkdir build
             cd build
-            # Configure
             cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-O2"
-            # Build
-            cmake --build . --parallel 2 --config Release
-            # Install 
+            cmake --build . --config Release
             cmake --install .
-            # Create packages
             cpack .
             ```
         
-        === "Windows + MSVC"
-        
-            ```bash
-            # Create a new directory
-            mkdir build
-            cd build
-            # Configure
-            cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/O2"
-            # Build
-            cmake --build . --parallel 2 --config Release
-            # Install 
-            cmake --install .
-            # Create packages
-            cpack .
-            ```
-        
-        !!! hint "Parallel Build"
-            
-            Replace `--parallel 2` with `--parallel <number of cores in your machine>`
-    
-        !!! note "Setting C++ Compiler"
-    
-            If your C++ compiler that supports C++17 is not your default compiler, make sure you provide CMake with the compiler location with the DCMAKE_C_COMPILER and DCMAKE_CXX_COMPILER options. For instance:
-        
-            ```bash
-            cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-O2" -DCMAKE_C_COMPILER=/usr/bin/gcc-8 -DCMAKE_CXX_COMPILER=/usr/bin/g++-8
-            ```
-    
-    === "File amalgamation"
-    
-        !!! note
-        
-            This library is also header-only. You can directly copy the contents from the `source` directory into your project.
-        
-        !!! hint
-        
-            In that case, you are responsible for setting the appropriate target include directories and any compile definitions you might require.
-            
-            You are also responsible for making sure the headers for the header-only dependencies available:
-            
-            - The only mandadory dependency is [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
-            - There's also an optional recommended dependency on [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). If none of these are available, the implementation fallsback to [std::vector] 
-
     === "Install"
     
         !!! note
