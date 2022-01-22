@@ -75,7 +75,7 @@ namespace futures {
         /// This promise owns the shared state, so we need to warn the shared state when it's destroyed.
         virtual ~promise_base() {
             if (shared_state_ && obtained_) {
-                shared_state_->signal_owner_destroyed();
+                shared_state_->signal_promise_destroyed();
             }
         }
 

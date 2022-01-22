@@ -105,7 +105,7 @@ namespace futures {
         /// \brief Destructs the task object
         ~packaged_task() {
             if (task_ && future_retrieved_) {
-                task_->signal_owner_destroyed();
+                task_->signal_promise_destroyed();
             }
         }
 

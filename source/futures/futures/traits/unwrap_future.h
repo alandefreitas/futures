@@ -31,7 +31,7 @@ namespace futures {
     /// \note Not to be confused with continuation unwrapping
     template <typename Future>
     struct unwrap_future<Future, std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>> {
-        using type = std::invoke_result_t<decltype(&std::decay_t<Future>::get), Future>;
+        using type = std::decay_t<decltype(std::declval<std::decay_t<Future>>().get())>;
     };
 
     /// \brief Determine type a future object holds
