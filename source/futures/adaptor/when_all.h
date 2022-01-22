@@ -29,13 +29,11 @@
 /// If the input futures are not shared, they are moved into `when_all_future` and are invalidated,
 /// as usual. The `when_all_future` cannot be shared.
 
-#include <futures/config/small_vector_include.h>
-
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 #include <futures/adaptor/detail/traits/is_tuple.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>
 #include <futures/futures/traits/to_future.h>
+#include <futures/futures/detail/small_vector.h>
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -356,7 +354,7 @@ namespace futures {
                                int> = 0
 #endif
               >
-    when_all_future<futures::small_vector<to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+    when_all_future<detail::small_vector<to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<typename std::iterator_traits<InputIt>::value_type>;
@@ -364,7 +362,7 @@ namespace futures {
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
         using output_future_type = to_future_t<input_type>;
-        using sequence_type = futures::small_vector<output_future_type>;
+        using sequence_type = detail::small_vector<output_future_type>;
         constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
 
         // Create sequence
@@ -398,7 +396,7 @@ namespace futures {
               std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
 #endif
               >
-    when_all_future<futures::small_vector<
+    when_all_future<detail::small_vector<
         to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
         return when_all(std::begin(std::forward<Range>(r)), std::end(std::forward<Range>(r)));

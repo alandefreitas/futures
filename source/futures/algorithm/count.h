@@ -36,7 +36,7 @@ namespace futures {
         /// \param value Value
         /// \brief function template \c count
         template <class E, class P, class I, class S, class T,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                        futures::detail::sentinel_for<S, I> &&
                                        futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T*, I>,
                                    int> = 0>

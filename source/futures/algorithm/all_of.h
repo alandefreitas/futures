@@ -40,7 +40,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                   ,
                   std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                       futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                       is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                        futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0

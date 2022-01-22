@@ -40,7 +40,7 @@ namespace futures {
         /// \param f Function
         template <
             class E, class P, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+            std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                  futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
@@ -71,7 +71,7 @@ namespace futures {
 
         /// \overload default init value
         template <class E, class P, class I, class S, class Fun = std::plus<>,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                        futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0>
@@ -87,7 +87,7 @@ namespace futures {
         template <
             class E, class P, class I, class S, class T, class Fun = std::plus<>,
             std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                 futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                 is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  std::is_same_v<futures::detail::iter_value_t<I>, T> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
@@ -99,7 +99,7 @@ namespace futures {
         template <
             class E, class P, class I, class S, class Fun = std::plus<>,
             std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                 futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                 is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
         futures::detail::iter_value_t<I> operator()(const E &, P p, I first, S last, Fun f = std::plus<>()) const {
@@ -133,7 +133,7 @@ namespace futures {
         /// \overload Iterators / default parallel executor
         template <
             class P, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+            std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  std::is_same_v<futures::detail::iter_value_t<I>, T> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
@@ -144,7 +144,7 @@ namespace futures {
         /// \overload Iterators / default parallel executor / default init value
         template <
             class P, class I, class S, class Fun = std::plus<>,
-            std::enable_if_t<is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+            std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
         futures::detail::iter_value_t<I> operator()(P p, I first, S last, Fun f = std::plus<>()) const {
@@ -177,7 +177,7 @@ namespace futures {
         /// \overload Iterators / default partitioner
         template <
             class E, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_iterator<I> &&
+            std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
                                  futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
@@ -187,7 +187,7 @@ namespace futures {
 
         /// \overload Iterators / default partitioner / default init value
         template <class E, class I, class S, class Fun = std::plus<>,
-                  std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_iterator<I> &&
+                  std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
                                        futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0>
@@ -221,7 +221,7 @@ namespace futures {
         /// \overload Iterators / default executor / default partitioner
         template <
             class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+            std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  std::is_same_v<futures::detail::iter_value_t<I>, T> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
@@ -232,7 +232,7 @@ namespace futures {
         /// \overload Iterators / default executor / default partitioner / default init value
         template <
             class I, class S, class Fun = std::plus<>,
-            std::enable_if_t<futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+            std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                  futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                              int> = 0>
         futures::detail::iter_value_t<I> operator()(I first, S last, Fun f = std::plus<>()) const {

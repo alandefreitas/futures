@@ -6,9 +6,9 @@
 #ifndef FUTURES_CONTINUATIONS_SOURCE_H
 #define FUTURES_CONTINUATIONS_SOURCE_H
 
+#include <futures/futures/detail/small_vector.h>
+#include <shared_mutex>
 #include <memory>
-
-#include <futures/config/small_vector_include.h>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -48,7 +48,7 @@ namespace futures::detail {
 
         /// \brief The continuation vector
         /// We use a small vector because of the common case when there few continuations per task
-        using continuation_vector = futures::small_vector<continuation_ptr>;
+        using continuation_vector = detail::small_vector<continuation_ptr>;
 
         /// @}
 

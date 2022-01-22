@@ -78,7 +78,7 @@ namespace futures {
     template <class E, class I, class S
 #ifndef FUTURES_DOXYGEN
               ,
-              std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && futures::detail::input_iterator<I> &&
+              std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I> &&
                                    futures::detail::sentinel_for<S, I>,
                                int> = 0
 #endif
@@ -107,7 +107,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                       ,
                       std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                           futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                           is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                            futures::detail::indirectly_unary_invocable<Fun, I> &&
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0>
@@ -122,7 +122,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                       ,
                       std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                           futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                           is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                            futures::detail::indirectly_unary_invocable<Fun, I> &&
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0
@@ -152,7 +152,7 @@ namespace futures {
             template <class P, class I, class S, class Fun
 #ifndef FUTURES_DOXYGEN
                       ,
-                      std::enable_if_t<is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                      std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                            futures::detail::sentinel_for<S, I> &&
                                            futures::detail::indirectly_unary_invocable<Fun, I> &&
                                            std::is_copy_constructible_v<Fun>,
@@ -184,7 +184,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                       ,
                       std::enable_if_t<
-                          (is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_iterator<I> &&
+                          (is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
                               futures::detail::sentinel_for<S, I> &&
                               futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
                           int> = 0
@@ -214,7 +214,7 @@ namespace futures {
             template <class I, class S, class Fun
 #ifndef FUTURES_DOXYGEN
                       ,
-                      std::enable_if_t<futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                      std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                            futures::detail::indirectly_unary_invocable<Fun, I> &&
                                            std::is_copy_constructible_v<Fun>,
                                        int> = 0
@@ -260,7 +260,7 @@ namespace futures {
                 class E, class P, class I, class S, class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                      futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
                                  int> = 0
@@ -277,7 +277,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                 ,
                 std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                     futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                     is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
                                  int> = 0
 #endif
@@ -307,7 +307,7 @@ namespace futures {
                 class P, class I, class S, class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                      futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I> &&
                                      std::is_copy_constructible_v<T>,
@@ -339,7 +339,7 @@ namespace futures {
                 class E, class I, class S, class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_iterator<I> &&
+                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
                                      futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
                                  int> = 0
@@ -371,7 +371,7 @@ namespace futures {
                 class I, class S, class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                      futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
                                  int> = 0
 #endif

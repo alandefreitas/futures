@@ -90,7 +90,7 @@ namespace futures {
                 while (!tasks_.empty()) {
                     tasks_mutex_.unlock_shared();
                     tasks_mutex_.lock();
-                    futures::small_vector<futures::cfuture<void>> stolen_tasks(std::make_move_iterator(tasks_.begin()),
+                    detail::small_vector<futures::cfuture<void>> stolen_tasks(std::make_move_iterator(tasks_.begin()),
                                                                                std::make_move_iterator(tasks_.end()));
                     tasks_.clear();
                     tasks_mutex_.unlock();
@@ -106,7 +106,7 @@ namespace futures {
             }
 
           private:
-            futures::small_vector<futures::cfuture<void>> tasks_;
+            detail::small_vector<futures::cfuture<void>> tasks_;
             std::shared_mutex tasks_mutex_;
         };
 
@@ -126,7 +126,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
                   ,
                   std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                       futures::detail::input_iterator<I> && futures::detail::sentinel_for<S, I> &&
+                                       is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
                                        futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0

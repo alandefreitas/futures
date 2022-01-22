@@ -13,9 +13,7 @@
 
         Make sure the headers for the dependencies are also available:
         
-        - The only mandadory dependency: [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
-        - An optional recommended dependency: [Small](https://github.com/alandefreitas/small) or [Boost.Container](https://github.com/boostorg/container). 
-            - If none of these are available, the implementation falls back to [std::vector]
+        - [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
 
     === "CMake"
     

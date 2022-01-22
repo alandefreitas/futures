@@ -223,7 +223,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
         }
 
         SECTION("Continue") {
-            auto continuation = [](when_any_result<futures::small_vector<cfuture<int>>> r) {
+            auto continuation = [](when_any_result<detail::small_vector<cfuture<int>>> r) {
                 if (r.index == 0) {
                     return r.tasks[0].get();
                 } else if (r.index == 1) {
@@ -242,7 +242,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
         }
 
         SECTION("Unwrap to tuple of futures") {
-            auto continuation = [](size_t index, futures::small_vector<cfuture<int>> tasks) {
+            auto continuation = [](size_t index, detail::small_vector<cfuture<int>> tasks) {
                 if (index == 0) {
                     return tasks[0].get();
                 } else if (index == 1) {
@@ -252,7 +252,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
                 }
                 return 0;
             };
-            using tuple_type = futures::small_vector<cfuture<int>>;
+            using tuple_type = detail::small_vector<cfuture<int>>;
             using result_type = when_any_result<tuple_type>;
             STATIC_REQUIRE(detail::is_when_any_result_v<result_type>);
             auto f4 = then(f, continuation);

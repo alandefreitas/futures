@@ -36,7 +36,7 @@ namespace futures {
         /// \param f Function
         /// \brief function template \c find_if
         template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && futures::detail::input_iterator<I> &&
+                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
                                        futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
                                        std::is_copy_constructible_v<Fun>,
                                    int> = 0>
