@@ -87,7 +87,7 @@
 {% endfor -%} {# range(n_headers_rendered) -#}
 {% endif -%} {# n_headers_rendered > 0 -#}
 {#- Render if not blacklisted and update -#}
-{%- if not current_header_is_blacklisted -%}`<{{ overload.location.file }}>`{%- if n_headers_rendered > 0 -%}
+{%- if not current_header_is_blacklisted -%}[`<{{ overload.location.file }}>`](https://github.com/alandefreitas/futures/blob/master/source/{{ overload.location.file }}){%- if n_headers_rendered > 0 -%}
 {% set last_header_rendered.next = last_header_rendered -%}  {% endif -%}
 {% set last_header_rendered.name = overload.location.file -%}
 {% set n_headers_rendered = n_headers_rendered + 1 -%}
