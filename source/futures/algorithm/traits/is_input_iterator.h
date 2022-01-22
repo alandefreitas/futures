@@ -8,9 +8,9 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 #define FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 
-#include <futures/algorithm/traits/is_input_or_output_iterator.h>
-#include <futures/algorithm/traits/is_indirectly_readable.h>
 #include <futures/algorithm/traits/has_iterator_traits_value_type.h>
+#include <futures/algorithm/traits/is_indirectly_readable.h>
+#include <futures/algorithm/traits/is_input_or_output_iterator.h>
 #include <type_traits>
 
 namespace futures {
@@ -21,9 +21,10 @@ namespace futures {
     using is_input_iterator = __see_below__;
 #else
     template <class T>
-    struct is_input_iterator : std::conjunction<
-                                   is_input_or_output_iterator<T>,
-                                   is_indirectly_readable<T>>
+    struct is_input_iterator
+        : std::conjunction<
+              is_input_or_output_iterator<T>,
+              is_indirectly_readable<T>>
     {};
 #endif
     template <class T>

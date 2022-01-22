@@ -1,5 +1,8 @@
 //
-// Created by Alan Freitas on 8/1/21.
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_FUTURES_H
@@ -14,60 +17,61 @@
 /// - continuable
 /// - TBB
 ///
-/// However, we use std::future and the ASIO proposed standard executors (P0443r13, P1348r0, and P1393r0) to allow
-/// for better interoperability with the C++ standard.
+/// However, we use std::future and the ASIO proposed standard executors
+/// (P0443r13, P1348r0, and P1393r0) to allow for better interoperability with
+/// the C++ standard.
 /// - the async function can accept any standard executor
-/// - the async function will use a reasonable default thread pool when no executor is provided
-/// - future-concepts allows for new future classes to extend functionality while reusing algorithms
+/// - the async function will use a reasonable default thread pool when no
+/// executor is provided
+/// - future-concepts allows for new future classes to extend functionality
+/// while reusing algorithms
 /// - a cancellable future class is provided for more sensitive use cases
 /// - the API can be updated as the standard gets updated
-/// - the standard algorithms are reimplemented with a preference for parallel operations
+/// - the standard algorithms are reimplemented with a preference for parallel
+/// operations
 ///
-/// This interoperability comes at a price for continuations, as we might need to poll for when_all/when_any/then
-/// events, because std::future does not have internal continuations.
+/// This interoperability comes at a price for continuations, as we might need
+/// to poll for when_all/when_any/then events, because std::future does not have
+/// internal continuations.
 ///
-/// Although we attempt to replicate these features without recreating the future class with internal continuations,
-/// we use a number of heuristics to avoid polling for when_all/when_any/then:
-/// - we allow for other future-like classes to be implemented through a future-concept and provide these
+/// Although we attempt to replicate these features without recreating the
+/// future class with internal continuations, we use a number of heuristics to
+/// avoid polling for when_all/when_any/then:
+/// - we allow for other future-like classes to be implemented through a
+/// future-concept and provide these
 ///   functionalities at a lower cost whenever we can
-/// - `when_all` (or operator&&) returns a when_all_future class, which does not create a new std::future at all
+/// - `when_all` (or operator&&) returns a when_all_future class, which does not
+/// create a new std::future at all
 ///    and can check directly if futures are ready
-/// - `when_any` (or operator||) returns a when_any_future class, which implements a number of heuristics to avoid
-///    polling, limit polling time, increased pooling intervals, and only launching the necessary continuation futures
-///    for long tasks. (although when_all always takes longer than when_any, when_any involves a number of heuristics
-///    that influence its performance)
-/// - `then` (or operator>>) returns a new future object that sleeps while the previous future isn't ready
-/// - when the standard supports that, this approach based on concepts also serve as extension points to allow
-///   for these proxy classes to change their behavior to some other algorithm that makes more sense for futures
-///   that support continuations, cancellation, progress, queries, .... More interestingly, the concepts allow
-///   for all these possible future types to interoperate.
+/// - `when_any` (or operator||) returns a when_any_future class, which
+/// implements a number of heuristics to avoid
+///    polling, limit polling time, increased pooling intervals, and only
+///    launching the necessary continuation futures for long tasks. (although
+///    when_all always takes longer than when_any, when_any involves a number of
+///    heuristics that influence its performance)
+/// - `then` (or operator>>) returns a new future object that sleeps while the
+/// previous future isn't ready
+/// - when the standard supports that, this approach based on concepts also
+/// serve as extension points to allow
+///   for these proxy classes to change their behavior to some other algorithm
+///   that makes more sense for futures that support continuations,
+///   cancellation, progress, queries, .... More interestingly, the concepts
+///   allow for all these possible future types to interoperate.
 ///
 /// \see https://en.cppreference.com/w/cpp/experimental/concurrency
 /// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
 /// \see https://github.com/Amanieu/asyncplusplus
 
 // Future classes
-// #include <futures/futures/basic_future.h>
-//
-// Created by Alan Freitas on 8/21/21.
-//
+// #include <futures/futures/async.h>
+#ifndef FUTURES_ASYNC_H
+#define FUTURES_ASYNC_H
 
-#ifndef FUTURES_BASIC_FUTURE_H
-#define FUTURES_BASIC_FUTURE_H
-
-// #include <futures/executor/default_executor.h>
-//
-// Created by Alan Freitas on 8/17/21.
-//
-
-#ifndef FUTURES_DEFAULT_EXECUTOR_H
-#define FUTURES_DEFAULT_EXECUTOR_H
+// #include <futures/executor/inline_executor.h>
+#ifndef FUTURES_INLINE_EXECUTOR_H
+#define FUTURES_INLINE_EXECUTOR_H
 
 // #include <futures/config/asio_include.h>
-//
-// Copyright (c) Alan de Freitas 11/18/21.
-//
-
 #ifndef FUTURES_ASIO_INCLUDE_H
 #define FUTURES_ASIO_INCLUDE_H
 
@@ -75,18 +79,19 @@
 /// Indirectly includes asio or boost.asio
 ///
 /// Whenever including <asio.hpp>, we include this file instead.
-/// This ensures the logic of including asio or boost::asio is consistent and that
-/// we never include both.
+/// This ensures the logic of including asio or boost::asio is consistent and
+/// that we never include both.
 ///
-/// Because this is not a networking library, at this point, we only depend on the
-/// asio execution concepts (which we can forward-declare) and its thread-pool, which
-/// is not very advanced. So this means we might be able to remove boost asio as a
-/// dependency at some point and, because the small vector library is also not
-/// mandatory, we can make this library free of dependencies.
+/// Because this is not a networking library, at this point, we only depend on
+/// the asio execution concepts (which we can forward-declare) and its
+/// thread-pool, which is not very advanced. So this means we might be able to
+/// remove boost asio as a dependency at some point and, because the small
+/// vector library is also not mandatory, we can make this library free of
+/// dependencies.
 ///
 
 #ifdef _WIN32
-#include <SDKDDKVer.h>
+#    include <SDKDDKVer.h>
 #endif
 
 /*
@@ -96,28 +101,32 @@
  *
  */
 #if __has_include(<asio.hpp>)
-#define FUTURES_HAS_ASIO
+#    define FUTURES_HAS_ASIO
 #endif
 
 #if __has_include(<boost/asio.hpp>)
-#define FUTURES_HAS_BOOST_ASIO
+#    define FUTURES_HAS_BOOST_ASIO
 #endif
 
 #if !defined(FUTURES_HAS_BOOST_ASIO) && !defined(FUTURES_HAS_ASIO)
-#error Asio headers not found
+#    error Asio headers not found
 #endif
 
 /*
  * Decide what version of asio to use
  */
 
-// If the standalone is available, this is what we assume the user usually prefers, since it's more specific
-#if defined(FUTURES_HAS_ASIO) && !(defined(FUTURES_HAS_BOOST_ASIO) && defined(FUTURES_PREFER_BOOST_DEPENDENCIES))
-#define FUTURES_USE_ASIO
-#include <asio.hpp>
+// If the standalone is available, this is what we assume the user usually
+// prefers, since it's more specific
+#if defined(FUTURES_HAS_ASIO)           \
+    && !(                               \
+        defined(FUTURES_HAS_BOOST_ASIO) \
+        && defined(FUTURES_PREFER_BOOST_DEPENDENCIES))
+#    define FUTURES_USE_ASIO
+#    include <asio.hpp>
 #else
-#define FUTURES_USE_BOOST_ASIO
-#include <boost/asio.hpp>
+#    define FUTURES_USE_BOOST_ASIO
+#    include <boost/asio.hpp>
 #endif
 
 /*
@@ -142,16 +151,11 @@ namespace futures {
     namespace asio = ::boost::asio;
 #endif
     /** @} */
-}
+} // namespace futures
 
 #endif // FUTURES_ASIO_INCLUDE_H
 
 // #include <futures/executor/is_executor.h>
-//
-// Copyright (c) alandefreitas 12/9/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_IS_EXECUTOR_H
 #define FUTURES_IS_EXECUTOR_H
 
@@ -167,12 +171,15 @@ namespace futures {
     /// \brief Determine if type is an executor
     ///
     /// We only consider asio executors to be executors for now
-    /// Future and previous executor models can be considered here, as long as their interface is the same
-    /// as asio or we implement their respective traits to make @ref async work properly.
-    template <typename T> using is_executor = asio::is_executor<T>;
+    /// Future and previous executor models can be considered here, as long as
+    /// their interface is the same as asio or we implement their respective
+    /// traits to make @ref async work properly.
+    template <typename T>
+    using is_executor = asio::is_executor<T>;
 
     /// \brief Determine if type is an executor
-    template <typename T> constexpr bool is_executor_v = is_executor<T>::value;
+    template <typename T>
+    constexpr bool is_executor_v = is_executor<T>::value;
 
     /** @} */ // \addtogroup executors Executors
 } // namespace futures
@@ -185,19 +192,596 @@ namespace futures {
      *  @{
      */
 
+    /// \brief A minimal executor that runs anything in the local thread in the
+    /// default context
+    ///
+    /// Although simple, it needs to meet the executor requirements:
+    /// - Executor concept
+    /// - Ability to query the execution context
+    ///     - Result being derived from execution_context
+    /// - The execute function
+    /// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
+    struct inline_executor
+    {
+        asio::execution_context *context_{ nullptr };
+
+        constexpr bool
+        operator==(const inline_executor &other) const noexcept {
+            return context_ == other.context_;
+        }
+
+        constexpr bool
+        operator!=(const inline_executor &other) const noexcept {
+            return !(*this == other);
+        }
+
+        [[nodiscard]] constexpr asio::execution_context &
+        query(asio::execution::context_t) const noexcept {
+            return *context_;
+        }
+
+        static constexpr asio::execution::blocking_t::never_t
+        query(asio::execution::blocking_t) noexcept {
+            return asio::execution::blocking_t::never;
+        }
+
+        template <class F>
+        void
+        execute(F f) const {
+            f();
+        }
+    };
+
+    /// \brief Get the inline execution context
+    asio::execution_context &
+    inline_execution_context() {
+        static asio::execution_context context;
+        return context;
+    }
+
+    /// \brief Make an inline executor object
+    inline_executor
+    make_inline_executor() {
+        asio::execution_context &ctx = inline_execution_context();
+        return inline_executor{ &ctx };
+    }
+
+    /** @} */ // \addtogroup executors Executors
+} // namespace futures
+
+#ifdef FUTURES_USE_BOOST_ASIO
+namespace boost {
+#endif
+    namespace asio {
+        /// \brief Ensure asio and our internal functions see inline_executor as
+        /// an executor
+        ///
+        /// This traits ensures asio and our internal functions see
+        /// inline_executor as an executor, as asio traits don't always work.
+        ///
+        /// This is quite a workaround until things don't improve with our
+        /// executor traits.
+        ///
+        /// Ideally, we would have our own executor traits and let asio pick up
+        /// from those.
+        ///
+        template <>
+        class is_executor<futures::inline_executor> : public std::true_type
+        {};
+
+        namespace traits {
+#if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
+            template <typename F>
+            struct execute_member<futures::inline_executor, F>
+            {
+                static constexpr bool is_valid = true;
+                static constexpr bool is_noexcept = true;
+                typedef void result_type;
+            };
+
+#endif // !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
+#if !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
+            template <>
+            struct equality_comparable<futures::inline_executor>
+            {
+                static constexpr bool is_valid = true;
+                static constexpr bool is_noexcept = true;
+            };
+
+#endif // !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
+#if !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
+            template <>
+            struct query_member<
+                futures::inline_executor,
+                asio::execution::context_t>
+            {
+                static constexpr bool is_valid = true;
+                static constexpr bool is_noexcept = true;
+                typedef asio::execution_context &result_type;
+            };
+
+#endif // !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
+#if !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
+            template <typename Property>
+            struct query_static_constexpr_member<
+                futures::inline_executor,
+                Property,
+                typename enable_if<std::is_convertible<
+                    Property,
+                    asio::execution::blocking_t>::value>::type>
+            {
+                static constexpr bool is_valid = true;
+                static constexpr bool is_noexcept = true;
+                typedef asio::execution::blocking_t::never_t result_type;
+                static constexpr result_type
+                value() noexcept {
+                    return result_type();
+                }
+            };
+
+#endif // !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
+
+        } // namespace traits
+    }     // namespace asio
+#ifdef FUTURES_USE_BOOST_ASIO
+}
+#endif
+
+#endif // FUTURES_INLINE_EXECUTOR_H
+
+// #include <futures/futures/await.h>
+#ifndef FUTURES_AWAIT_H
+#define FUTURES_AWAIT_H
+
+// #include <futures/futures/traits/is_future.h>
+#ifndef FUTURES_IS_FUTURE_H
+#define FUTURES_IS_FUTURE_H
+
+#include <future>
+#include <type_traits>
+
+namespace futures {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *
+     * \brief Determine properties of future types
+     *
+     *  @{
+     */
+
+    /// \brief Customization point to determine if a type is a future type
+    template <typename>
+    struct is_future : std::false_type
+    {};
+
+    /// \brief Customization point to determine if a type is a future type
+    /// (specialization for std::future<T>)
+    template <typename T>
+    struct is_future<std::future<T>> : std::true_type
+    {};
+
+    /// \brief Customization point to determine if a type is a future type
+    /// (specialization for std::shared_future<T>)
+    template <typename T>
+    struct is_future<std::shared_future<T>> : std::true_type
+    {};
+
+    /// \brief Customization point to determine if a type is a future type as a
+    /// bool value
+    template <class T>
+    constexpr bool is_future_v = is_future<T>::value;
+
+    /// \brief Customization point to determine if a type is a shared future type
+    template <typename>
+    struct has_ready_notifier : std::false_type
+    {};
+
+    /// \brief Customization point to determine if a type is a shared future type
+    template <class T>
+    constexpr bool has_ready_notifier_v = has_ready_notifier<T>::value;
+
+    /// \brief Customization point to determine if a type is a shared future type
+    template <typename>
+    struct is_shared_future : std::false_type
+    {};
+
+    /// \brief Customization point to determine if a type is a shared future
+    /// type (specialization for std::shared_future<T>)
+    template <typename T>
+    struct is_shared_future<std::shared_future<T>> : std::true_type
+    {};
+
+    /// \brief Customization point to determine if a type is a shared future type
+    template <class T>
+    constexpr bool is_shared_future_v = is_shared_future<T>::value;
+
+    /// \brief Customization point to define future as supporting lazy
+    /// continuations
+    template <typename>
+    struct is_lazy_continuable : std::false_type
+    {};
+
+    /// \brief Customization point to define future as supporting lazy
+    /// continuations
+    template <class T>
+    constexpr bool is_lazy_continuable_v = is_lazy_continuable<T>::value;
+
+    /// \brief Customization point to define future as stoppable
+    template <typename>
+    struct is_stoppable : std::false_type
+    {};
+
+    /// \brief Customization point to define future as stoppable
+    template <class T>
+    constexpr bool is_stoppable_v = is_stoppable<T>::value;
+
+    /// \brief Customization point to define future having a common stop token
+    template <typename>
+    struct has_stop_token : std::false_type
+    {};
+
+    /// \brief Customization point to define future having a common stop token
+    template <class T>
+    constexpr bool has_stop_token_v = has_stop_token<T>::value;
+
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
+} // namespace futures
+
+#endif // FUTURES_IS_FUTURE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+
+    /** \addtogroup waiting Waiting
+     *
+     * \brief Basic function to wait for futures
+     *
+     * This module defines a variety of auxiliary functions to wait for futures.
+     *
+     *  @{
+     */
+
+    /// \brief Very simple syntax sugar for types that pass the @ref is_future
+    /// concept
+    ///
+    /// This syntax is most useful for cases where we are immediately requesting
+    /// the future result.
+    ///
+    /// The function also makes the syntax optionally a little closer to
+    /// languages such as javascript.
+    ///
+    /// \tparam Future A future type
+    ///
+    /// \return The result of the future object
+    template <
+        typename Future
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
+#endif
+        >
+    decltype(auto)
+    await(Future &&f) {
+        return f.get();
+    }
+
+    /** @} */
+    /** @} */
+} // namespace futures
+
+#endif // FUTURES_AWAIT_H
+
+// #include <futures/futures/launch.h>
+#ifndef FUTURES_LAUNCH_H
+#define FUTURES_LAUNCH_H
+
+namespace futures {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup launch Launch
+     *
+     * \brief Functions and policies for launching asynchronous tasks
+     *
+     * This module defines functions for conveniently launching asynchronous
+     * tasks and policies to determine how executors should handle these tasks.
+     *
+     *  @{
+     */
+    /** \addtogroup launch-policies Launch Policies
+     *
+     * \brief Launch policies for asynchronous tasks
+     *
+     * Launch policies determine how executors should launch and handle a task.
+     *
+     *  @{
+     */
+
+    /// \brief Specifies the launch policy for a task executed by the @ref
+    /// futures::async function
+    ///
+    /// std::async creates a new thread for each asynchronous operation, which
+    /// usually entails in only two execution policies: new thread or inline.
+    /// Because futures::async use executors, there are many more policies and
+    /// ways to use these executors beyond yes/no.
+    ///
+    /// Most of the time, we want the executor/post policy for executors. So as
+    /// the @ref async function also accepts executors directly, this option can
+    /// often be ignored, and is here mostly here for compatibility with the
+    /// std::async.
+    ///
+    /// When only the policy is provided, async will try to generate the proper
+    /// executor for that policy. When the executor and the policy is provided,
+    /// we might only have some conflict for the deferred policy, which does not
+    /// use an executor in std::launch. In the context of executors, the
+    /// deferred policy means the function is only posted to the executor when
+    /// its result is requested.
+    enum class launch
+    {
+        /// no policy
+        none = 0b0000'0000,
+        /// execute on a new thread regardless of executors (same as
+        /// std::async::async)
+        new_thread = 0b0000'0001,
+        /// execute on a new thread regardless of executors (same as
+        /// std::async::async)
+        async = 0b0000'0001,
+        /// execute on the calling thread when result is requested (same as
+        /// std::async::deferred)
+        deferred = 0b0000'0010,
+        /// execute on the calling thread when result is requested (same as
+        /// std::async::deferred)
+        lazy = 0b0000'0010,
+        /// inherit from context
+        inherit = 0b0000'0100,
+        /// execute on the calling thread now (uses inline executor)
+        inline_now = 0b0000'1000,
+        /// execute on the calling thread now (uses inline executor)
+        sync = 0b0000'1000,
+        /// enqueue task in the executor
+        post = 0b0001'0000,
+        /// run immediately if inside the executor
+        executor = 0b0001'0000,
+        /// run immediately if inside the executor
+        dispatch = 0b0010'0000,
+        /// run immediately if inside the executor
+        executor_now = 0b0010'0000,
+        /// enqueue task for later in the executor
+        executor_later = 0b0100'0000,
+        /// enqueue task for later in the executor
+        defer = 0b0100'0000,
+        /// both async and deferred are OK
+        any = async | deferred
+    };
+
+    /// \brief operator & for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A launch policy that attempts to satisfy both policies
+    constexpr launch
+    operator&(launch x, launch y) {
+        return static_cast<launch>(static_cast<int>(x) & static_cast<int>(y));
+    }
+
+    /// \brief operator | for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A launch policy that attempts to satisfy any of the policies
+    constexpr launch
+    operator|(launch x, launch y) {
+        return static_cast<launch>(static_cast<int>(x) | static_cast<int>(y));
+    }
+
+    /// \brief operator ^ for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A launch policy that attempts to satisfy any policy set in only
+    /// one of them
+    constexpr launch
+    operator^(launch x, launch y) {
+        return static_cast<launch>(static_cast<int>(x) ^ static_cast<int>(y));
+    }
+
+    /// \brief operator ~ for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \return A launch policy that attempts to satisfy the opposite of the
+    /// policies set
+    constexpr launch
+    operator~(launch x) {
+        return static_cast<launch>(~static_cast<int>(x));
+    }
+
+    /// \brief operator &= for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A reference to `x`
+    constexpr launch &
+    operator&=(launch &x, launch y) {
+        return x = x & y;
+    }
+
+    /// \brief operator |= for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A reference to `x`
+    constexpr launch &
+    operator|=(launch &x, launch y) {
+        return x = x | y;
+    }
+
+    /// \brief operator ^= for launch policies
+    ///
+    /// \param x left-hand side operand
+    /// \param y right-hand side operand
+    /// \return A reference to `x`
+    constexpr launch &
+    operator^=(launch &x, launch y) {
+        return x = x ^ y;
+    }
+    /** @} */
+    /** @} */
+    /** @} */
+} // namespace futures
+
+#endif // FUTURES_LAUNCH_H
+
+// #include <futures/futures/detail/empty_base.h>
+#ifndef FUTURES_EMPTY_BASE_H
+#define FUTURES_EMPTY_BASE_H
+
+namespace futures::detail {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+
+    /// \brief A convenience struct to refer to an empty type whenever we need
+    /// one
+    struct empty_value_type
+    {};
+
+    /// \brief A convenience struct to refer to an empty value whenever we need
+    /// one
+    inline constexpr empty_value_type empty_value = empty_value_type();
+
+    /// \brief Represents a potentially empty base class for empty base class
+    /// optimization
+    ///
+    /// We use the name maybe_empty for the base class that might be empty and
+    /// empty_value_type / empty_value for the values we know to be empty.
+    ///
+    /// \tparam T The type represented by the base class
+    /// \tparam BaseIndex An index to differentiate base classes in the same
+    /// derived class. This might be important to ensure the same base class
+    /// isn't inherited twice. \tparam E Indicates whether we should really
+    /// instantiate the class (true when the class is not empty)
+    template <class T, unsigned BaseIndex = 0, bool E = std::is_empty_v<T>>
+    class maybe_empty
+    {
+    public:
+        /// \brief The type this base class is effectively represent
+        using value_type = T;
+
+        /// \brief Initialize this potentially empty base with the specified
+        /// values This will initialize the vlalue with the default constructor
+        /// T(args...)
+        template <class... Args>
+        explicit maybe_empty(Args &&...args)
+            : value_(std::forward<Args>(args)...) {}
+
+        /// \brief Get the effective value this class represents
+        /// This returns the underlying value represented here
+        const T &
+        get() const noexcept {
+            return value_;
+        }
+
+        /// \brief Get the effective value this class represents
+        /// This returns the underlying value represented here
+        T &
+        get() noexcept {
+            return value_;
+        }
+
+    private:
+        /// \brief The effective value representation when the value is not empty
+        T value_;
+    };
+
+    /// \brief Represents a potentially empty base class, when it's effectively
+    /// not empty
+    ///
+    /// \tparam T The type represented by the base class
+    /// \tparam BaseIndex An index to differentiate base classes in the same
+    /// derived class
+    template <class T, unsigned BaseIndex>
+    class maybe_empty<T, BaseIndex, true> : public T
+    {
+    public:
+        /// \brief The type this base class is effectively represent
+        using value_type = T;
+
+        /// \brief Initialize this potentially empty base with the specified
+        /// values This won't initialize any values but it will call the
+        /// appropriate constructor T() in case we need its behaviour
+        template <class... Args>
+        explicit maybe_empty(Args &&...args) : T(std::forward<Args>(args)...) {}
+
+        /// \brief Get the effective value this class represents
+        /// Although the element takes no space, we can return a reference to
+        /// whatever it represents so we can access its underlying functions
+        const T &
+        get() const noexcept {
+            return *this;
+        }
+
+        /// \brief Get the effective value this class represents
+        /// Although the element takes no space, we can return a reference to
+        /// whatever it represents so we can access its underlying functions
+        T &
+        get() noexcept {
+            return *this;
+        }
+    };
+
+    /** @} */
+} // namespace futures::detail
+
+#endif // FUTURES_EMPTY_BASE_H
+
+// #include <futures/futures/detail/traits/async_result_of.h>
+#ifndef FUTURES_ASYNC_RESULT_OF_H
+#define FUTURES_ASYNC_RESULT_OF_H
+
+// #include <futures/futures/basic_future.h>
+#ifndef FUTURES_BASIC_FUTURE_H
+#define FUTURES_BASIC_FUTURE_H
+
+// #include <futures/executor/default_executor.h>
+#ifndef FUTURES_DEFAULT_EXECUTOR_H
+#define FUTURES_DEFAULT_EXECUTOR_H
+
+// #include <futures/config/asio_include.h>
+
+// #include <futures/executor/is_executor.h>
+
+
+namespace futures {
+    /** \addtogroup executors Executors
+     *  @{
+     */
+
     /// \brief A version of hardware_concurrency that always returns at least 1
     ///
-    /// This function is a safer version of hardware_concurrency that always returns at
-    /// least 1 to represent the current context when the value is not computable.
+    /// This function is a safer version of hardware_concurrency that always
+    /// returns at least 1 to represent the current context when the value is
+    /// not computable.
     ///
     /// - It never returns 0, 1 is returned instead.
     /// - It is guaranteed to remain constant for the duration of the program.
     ///
-    /// \see https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
+    /// \see
+    /// https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
     ///
-    /// \return Number of concurrent threads supported. If the value is not well-defined or not computable, returns 1.
-    std::size_t hardware_concurrency() noexcept;
-    inline std::size_t hardware_concurrency() noexcept {
+    /// \return Number of concurrent threads supported. If the value is not
+    /// well-defined or not computable, returns 1.
+    std::size_t
+    hardware_concurrency() noexcept;
+    inline std::size_t
+    hardware_concurrency() noexcept {
         // Cache the value because calculating it may be expensive
         static std::size_t value = std::thread::hardware_concurrency();
 
@@ -205,22 +789,24 @@ namespace futures {
         return std::max(static_cast<std::size_t>(1), value);
     }
 
-    /// \brief The default execution context for async operations, unless otherwise stated
+    /// \brief The default execution context for async operations, unless
+    /// otherwise stated
     ///
     /// Unless an executor is explicitly provided, this is the executor we use
     /// for async operations.
     ///
-    /// This is the ASIO thread pool execution context with a default number of threads.
-    /// However, the default execution context (and its type) might change in other
-    /// versions of this library if something more general comes along. As the standard
-    /// for executors gets adopted, libraries are likely to provide better implementations.
+    /// This is the ASIO thread pool execution context with a default number of
+    /// threads. However, the default execution context (and its type) might
+    /// change in other versions of this library if something more general comes
+    /// along. As the standard for executors gets adopted, libraries are likely
+    /// to provide better implementations.
     ///
-    /// Also note that executors might not allow work-stealing. This needs to be taken into
-    /// account when implementing algorithms with recursive tasks. One common options is to
-    /// use `try_async` for recursive tasks.
+    /// Also note that executors might not allow work-stealing. This needs to be
+    /// taken into account when implementing algorithms with recursive tasks.
+    /// One common options is to use `try_async` for recursive tasks.
     ///
-    /// Also note that, in the executors notation, the pool is an execution context but not
-    /// an executor:
+    /// Also note that, in the executors notation, the pool is an execution
+    /// context but not an executor:
     /// - Execution context: a place where we can execute functions
     /// - A thread pool is an execution context, not an executor
     ///
@@ -235,15 +821,18 @@ namespace futures {
     using default_execution_context_type = __implementation_defined__;
 #endif
 
-    /// \brief Default executor type as a constant trait for future_base functions
+    /// \brief Default executor type as a constant trait for future_base
+    /// functions
     using default_executor_type = default_execution_context_type::executor_type;
 
     /// \brief Create an instance of the default execution context
     ///
     /// \return Reference to the default execution context for @ref async
-    inline default_execution_context_type &default_execution_context() {
+    inline default_execution_context_type &
+    default_execution_context() {
 #ifdef FUTURES_DEFAULT_THREAD_POOL_SIZE
-        const std::size_t default_thread_pool_size = FUTURES_DEFAULT_THREAD_POOL_SIZE;
+        const std::size_t default_thread_pool_size
+            = FUTURES_DEFAULT_THREAD_POOL_SIZE;
 #else
         const std::size_t default_thread_pool_size = hardware_concurrency();
 #endif
@@ -254,20 +843,27 @@ namespace futures {
     /// \brief Create an Asio thread pool executor for the default thread pool
     ///
     /// In the executors notation:
-    /// - Executor: set of rules governing where, when and how to run a function object
-    ///   - A thread pool is an execution context for which we can create executors pointing to the pool.
-    ///   - The executor rule for the default thread pool executor is to run function objects in the pool
+    /// - Executor: set of rules governing where, when and how to run a function
+    /// object
+    ///   - A thread pool is an execution context for which we can create
+    ///   executors pointing to the pool.
+    ///   - The executor rule for the default thread pool executor is to run
+    ///   function objects in the pool
     ///     and nowhere else.
     ///
     /// An executor is:
-    /// - Lightweight and copyable (just references and pointers to the execution context).
+    /// - Lightweight and copyable (just references and pointers to the
+    /// execution context).
     /// - May be long or short lived.
-    /// - May be customized on a fine-grained basis, such as exception behavior, and order
+    /// - May be customized on a fine-grained basis, such as exception behavior,
+    /// and order
     ///
-    /// There might be many executor types associated with with the same execution context.
+    /// There might be many executor types associated with with the same
+    /// execution context.
     ///
     /// \return Executor handle to the default execution context
-    inline default_execution_context_type::executor_type make_default_executor() {
+    inline default_execution_context_type::executor_type
+    make_default_executor() {
         asio::thread_pool &pool = default_execution_context();
         return pool.executor();
     }
@@ -278,31 +874,31 @@ namespace futures {
 #endif // FUTURES_DEFAULT_EXECUTOR_H
 
 // #include <futures/futures/stop_token.h>
-//
-// Created by Alan Freitas on 8/21/21.
-//
-
 #ifndef FUTURES_STOP_TOKEN_H
 #define FUTURES_STOP_TOKEN_H
 
 /// \file
 ///
-/// This header contains is an adapted version of std::stop_token for futures rather than threads.
+/// This header contains is an adapted version of std::stop_token for futures
+/// rather than threads.
 ///
-/// The main difference in this implementation is 1) the reference counter does not distinguish between
-/// tokens and sources, and 2) there is no stop_callback.
+/// The main difference in this implementation is 1) the reference counter does
+/// not distinguish between/// tokens and sources, and 2) there is no
+/// stop_callback.
 ///
-/// The API was initially adapted from Baker Josuttis' reference implementation for C++20:
-/// \see https://github.com/josuttis/jthread
+/// The API was initially adapted from Baker Josuttis' reference implementation
+/// for C++20: \see https://github.com/josuttis/jthread
 ///
-/// Although the jfuture class is obviously different from std::jthread, this stop_token is not different
-/// from std::stop_token. The main goal here is just to provide a stop source in C++17. In the future, we
-/// might replace this with an alias to a C++20 std::stop_token.
+/// Although the jfuture class is obviously different from std::jthread, this
+/// stop_token is not different from std::stop_token. The main goal here is just
+/// to provide a stop source in C++17. In the future, we might replace this with
+/// an alias to a C++20 std::stop_token.
 
 #include <atomic>
 #include <thread>
-#include <type_traits>
 #include <utility>
+// #include <type_traits>
+
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -317,24 +913,29 @@ namespace futures {
 
     namespace detail {
         using shared_stop_state = std::shared_ptr<std::atomic<bool>>;
-    }
+    } // namespace detail
 
     class stop_source;
 
-    /// \brief Empty struct to initialize a @ref stop_source without a shared stop state
-    struct nostopstate_t {
+    /// \brief Empty struct to initialize a @ref stop_source without a shared
+    /// stop state
+    struct nostopstate_t
+    {
         explicit nostopstate_t() = default;
     };
 
-    /// \brief Empty struct to initialize a @ref stop_source without a shared stop state
+    /// \brief Empty struct to initialize a @ref stop_source without a shared
+    /// stop state
     inline constexpr nostopstate_t nostopstate{};
 
     /// \brief Token to check if a stop request has been made
     ///
-    /// The stop_token class provides the means to check if a stop request has been made or can be made, for its
-    /// associated std::stop_source object. It is essentially a thread-safe "view" of the associated stop-state.
-    class stop_token {
-      public:
+    /// The stop_token class provides the means to check if a stop request has
+    /// been made or can be made, for its associated std::stop_source object. It
+    /// is essentially a thread-safe "view" of the associated stop-state.
+    class stop_token
+    {
+    public:
         /// \name Constructors
         /// @{
 
@@ -342,26 +943,34 @@ namespace futures {
         ///
         /// \post stop_possible() and stop_requested() are both false
         ///
-        /// \param other another stop_token object to construct this stop_token object
+        /// \param other another stop_token object to construct this stop_token
+        /// object
         stop_token() noexcept = default;
 
         /// \brief Copy constructor.
         ///
-        /// Constructs a stop_token whose associated stop-state is the same as that of other.
+        /// Constructs a stop_token whose associated stop-state is the same as
+        /// that of other.
         ///
-        /// \post *this and other share the same associated stop-state and compare equal
+        /// \post *this and other share the same associated stop-state and
+        /// compare equal
         ///
-        /// \param other another stop_token object to construct this stop_token object
+        /// \param other another stop_token object to construct this stop_token
+        /// object
         stop_token(const stop_token &other) noexcept = default;
 
         /// \brief Move constructor.
         ///
-        /// Constructs a stop_token whose associated stop-state is the same as that of other; other is left empty
+        /// Constructs a stop_token whose associated stop-state is the same as
+        /// that of other; other is left empty
         ///
-        /// \post *this has other's previously associated stop-state, and other.stop_possible() is false
+        /// \post *this has other's previously associated stop-state, and
+        /// other.stop_possible() is false
         ///
-        /// \param other another stop_token object to construct this stop_token object
-        stop_token(stop_token &&other) noexcept : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
+        /// \param other another stop_token object to construct this stop_token
+        /// object
+        stop_token(stop_token &&other) noexcept
+            : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
         /// \brief Destroys the stop_token object.
         ///
@@ -369,30 +978,36 @@ namespace futures {
         ///
         ~stop_token() = default;
 
-        /// \brief Copy-assigns the associated stop-state of other to that of *this
+        /// \brief Copy-assigns the associated stop-state of other to that of
+        /// *this
         ///
         /// Equivalent to stop_token(other).swap(*this)
         ///
-        /// \param other Another stop_token object to share the stop-state with to or acquire the stop-state from
-        stop_token &operator=(const stop_token &other) noexcept {
+        /// \param other Another stop_token object to share the stop-state with
+        /// to or acquire the stop-state from
+        stop_token &
+        operator=(const stop_token &other) noexcept {
             if (shared_state_ != other.shared_state_) {
-                stop_token tmp{other};
+                stop_token tmp{ other };
                 swap(tmp);
             }
             return *this;
         }
 
-        /// \brief Move-assigns the associated stop-state of other to that of *this
+        /// \brief Move-assigns the associated stop-state of other to that of
+        /// *this
         ///
-        /// After the assignment, *this contains the previous associated stop-state of other, and other has no
-        /// associated stop-state
+        /// After the assignment, *this contains the previous associated
+        /// stop-state of other, and other has no associated stop-state
         ///
         /// Equivalent to stop_token(std::move(other)).swap(*this)
         ///
-        /// \param other Another stop_token object to share the stop-state with to or acquire the stop-state from
-        stop_token &operator=(stop_token &&other) noexcept {
+        /// \param other Another stop_token object to share the stop-state with
+        /// to or acquire the stop-state from
+        stop_token &
+        operator=(stop_token &&other) noexcept {
             if (this != &other) {
-                stop_token tmp{std::move(other)};
+                stop_token tmp{ std::move(other) };
                 swap(tmp);
             }
             return *this;
@@ -406,40 +1021,53 @@ namespace futures {
         /// \brief Exchanges the associated stop-state of *this and other
         ///
         /// \param other stop_token to exchange the contents with
-        void swap(stop_token &other) noexcept { std::swap(shared_state_, other.shared_state_); }
+        void
+        swap(stop_token &other) noexcept {
+            std::swap(shared_state_, other.shared_state_);
+        }
 
         /// @}
 
         /// \name Observers
         /// @{
 
-        /// \brief Checks whether the associated stop-state has been requested to stop
+        /// \brief Checks whether the associated stop-state has been requested
+        /// to stop
         ///
-        /// Checks if the stop_token object has associated stop-state and that state has received a stop request. A
-        /// default constructed stop_token has no associated stop-state, and thus has not had stop requested
+        /// Checks if the stop_token object has associated stop-state and that
+        /// state has received a stop request. A default constructed stop_token
+        /// has no associated stop-state, and thus has not had stop requested
         ///
-        /// \return true if the stop_token object has associated stop-state and it received a stop request, false
-        /// otherwise.
-        [[nodiscard]] bool stop_requested() const noexcept {
-            return (shared_state_ != nullptr) && shared_state_->load(std::memory_order_relaxed);
+        /// \return true if the stop_token object has associated stop-state and
+        /// it received a stop request, false otherwise.
+        [[nodiscard]] bool
+        stop_requested() const noexcept {
+            return (shared_state_ != nullptr)
+                   && shared_state_->load(std::memory_order_relaxed);
         }
 
         /// \brief Checks whether associated stop-state can be requested to stop
         ///
-        /// Checks if the stop_token object has associated stop-state, and that state either has already had a stop
-        /// requested or it has associated std::stop_source object(s).
+        /// Checks if the stop_token object has associated stop-state, and that
+        /// state either has already had a stop requested or it has associated
+        /// std::stop_source object(s).
         ///
-        /// A default constructed stop_token has no associated `stop-state`, and thus cannot be stopped.
-        /// the associated stop-state for which no std::stop_source object(s) exist can also not be stopped if
-        /// such a request has not already been made.
+        /// A default constructed stop_token has no associated `stop-state`, and
+        /// thus cannot be stopped. the associated stop-state for which no
+        /// std::stop_source object(s) exist can also not be stopped if such a
+        /// request has not already been made.
         ///
-        /// \note If the stop_token object has associated stop-state and a stop request has already been made, this
-        /// function still returns true.
+        /// \note If the stop_token object has associated stop-state and a stop
+        /// request has already been made, this function still returns true.
         ///
-        /// \return false if the stop_token object has no associated stop-state, or it did not yet receive a stop
-        /// request and there are no associated std::stop_source object(s); true otherwise
-        [[nodiscard]] bool stop_possible() const noexcept {
-            return (shared_state_ != nullptr) && (shared_state_->load(std::memory_order_relaxed) || (shared_state_.use_count() > 1));
+        /// \return false if the stop_token object has no associated stop-state,
+        /// or it did not yet receive a stop request and there are no associated
+        /// std::stop_source object(s); true otherwise
+        [[nodiscard]] bool
+        stop_possible() const noexcept {
+            return (shared_state_ != nullptr)
+                   && (shared_state_->load(std::memory_order_relaxed)
+                       || (shared_state_.use_count() > 1));
         }
 
         /// @}
@@ -449,15 +1077,17 @@ namespace futures {
 
         /// \brief compares two std::stop_token objects
         ///
-        /// This function is not visible to ordinary unqualified or qualified lookup, and can only be found by
-        /// argument-dependent lookup when std::stop_token is an associated class of the arguments.
+        /// This function is not visible to ordinary unqualified or qualified
+        /// lookup, and can only be found by argument-dependent lookup when
+        /// std::stop_token is an associated class of the arguments.
         ///
         /// \param a stop_tokens to compare
         /// \param b stop_tokens to compare
         ///
-        /// \return true if lhs and rhs have the same associated stop-state, or both have no associated stop-state,
-        /// otherwise false
-        [[nodiscard]] friend bool operator==(const stop_token &a, const stop_token &b) noexcept {
+        /// \return true if lhs and rhs have the same associated stop-state, or
+        /// both have no associated stop-state, otherwise false
+        [[nodiscard]] friend bool
+        operator==(const stop_token &a, const stop_token &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
 
@@ -469,40 +1099,48 @@ namespace futures {
         /// \param b stop_tokens to compare
         ///
         /// \return true if lhs and rhs have different associated stop-states
-        [[nodiscard]] friend bool operator!=(const stop_token &a, const stop_token &b) noexcept {
+        [[nodiscard]] friend bool
+        operator!=(const stop_token &a, const stop_token &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }
 
         /// @}
 
-      private:
+    private:
         friend class stop_source;
 
-        /// \brief Constructor that allows the stop_source to construct the stop_token directly from the stop state
+        /// \brief Constructor that allows the stop_source to construct the
+        /// stop_token directly from the stop state
         ///
         /// \param state State for the new token
-        explicit stop_token(detail::shared_stop_state state) noexcept : shared_state_(std::move(state)) {}
+        explicit stop_token(detail::shared_stop_state state) noexcept
+            : shared_state_(std::move(state)) {}
 
-        /// \brief Shared pointer to an atomic bool indicating if an external procedure should stop
-        detail::shared_stop_state shared_state_{nullptr};
+        /// \brief Shared pointer to an atomic bool indicating if an external
+        /// procedure should stop
+        detail::shared_stop_state shared_state_{ nullptr };
     };
 
     /// \brief Object used to issue a stop request
     ///
-    /// The stop_source class provides the means to issue a stop request, such as for std::jthread cancellation.
-    /// A stop request made for one stop_source object is visible to all stop_sources and std::stop_tokens of
-    /// the same associated stop-state; any std::stop_callback(s) registered for associated std::stop_token(s)
-    /// will be invoked, and any std::condition_variable_any objects waiting on associated std::stop_token(s)
-    /// will be awoken.
-    class stop_source {
-      public:
+    /// The stop_source class provides the means to issue a stop request, such
+    /// as for std::jthread cancellation. A stop request made for one
+    /// stop_source object is visible to all stop_sources and std::stop_tokens
+    /// of the same associated stop-state; any std::stop_callback(s) registered
+    /// for associated std::stop_token(s) will be invoked, and any
+    /// std::condition_variable_any objects waiting on associated
+    /// std::stop_token(s) will be awoken.
+    class stop_source
+    {
+    public:
         /// \name Constructors
         /// @{
 
         /// \brief Constructs a stop_source with new stop-state
         ///
         /// \post stop_possible() is true and stop_requested() is false
-        stop_source() : shared_state_(std::make_shared<std::atomic_bool>(false)) {}
+        stop_source()
+            : shared_state_(std::make_shared<std::atomic_bool>(false)) {}
 
         /// \brief Constructs an empty stop_source with no associated stop-state
         ///
@@ -511,21 +1149,28 @@ namespace futures {
 
         /// \brief Copy constructor
         ///
-        /// Constructs a stop_source whose associated stop-state is the same as that of other.
+        /// Constructs a stop_source whose associated stop-state is the same as
+        /// that of other.
         ///
-        /// \post *this and other share the same associated stop-state and compare equal
+        /// \post *this and other share the same associated stop-state and
+        /// compare equal
         ///
-        /// \param other another stop_source object to construct this stop_source object with
+        /// \param other another stop_source object to construct this
+        /// stop_source object with
         stop_source(const stop_source &other) noexcept = default;
 
         /// \brief Move constructor
         ///
-        /// Constructs a stop_source whose associated stop-state is the same as that of other; other is left empty
+        /// Constructs a stop_source whose associated stop-state is the same as
+        /// that of other; other is left empty
         ///
-        /// \post *this has other's previously associated stop-state, and other.stop_possible() is false
+        /// \post *this has other's previously associated stop-state, and
+        /// other.stop_possible() is false
         ///
-        /// \param other another stop_source object to construct this stop_source object with
-        stop_source(stop_source &&other) noexcept : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
+        /// \param other another stop_source object to construct this
+        /// stop_source object with
+        stop_source(stop_source &&other) noexcept
+            : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
         /// \brief Destroys the stop_source object.
         ///
@@ -537,8 +1182,9 @@ namespace futures {
         /// Equivalent to stop_source(other).swap(*this)
         ///
         /// \param other another stop_source object acquire the stop-state from
-        stop_source &operator=(stop_source &&other) noexcept {
-            stop_source tmp{std::move(other)};
+        stop_source &
+        operator=(stop_source &&other) noexcept {
+            stop_source tmp{ std::move(other) };
             swap(tmp);
             return *this;
         }
@@ -547,12 +1193,14 @@ namespace futures {
         ///
         /// Equivalent to stop_source(std::move(other)).swap(*this)
         ///
-        /// \post After the assignment, *this contains the previous stop-state of other, and other has no stop-state
+        /// \post After the assignment, *this contains the previous stop-state
+        /// of other, and other has no stop-state
         ///
         /// \param other another stop_source object to share the stop-state with
-        stop_source &operator=(const stop_source &other) noexcept {
+        stop_source &
+        operator=(const stop_source &other) noexcept {
             if (shared_state_ != other.shared_state_) {
-                stop_source tmp{other};
+                stop_source tmp{ other };
                 swap(tmp);
             }
             return *this;
@@ -565,30 +1213,39 @@ namespace futures {
 
         /// \brief Makes a stop request for the associated stop-state, if any
         ///
-        /// Issues a stop request to the stop-state, if the stop_source object has a stop-state, and it has not yet
-        /// already had stop requested.
+        /// Issues a stop request to the stop-state, if the stop_source object
+        /// has a stop-state, and it has not yet already had stop requested.
         ///
-        /// The determination is made atomically, and if stop was requested, the stop-state is atomically updated to
-        /// avoid race conditions, such that:
+        /// The determination is made atomically, and if stop was requested, the
+        /// stop-state is atomically updated to avoid race conditions, such
+        /// that:
         ///
-        /// - stop_requested() and stop_possible() can be concurrently invoked on other stop_tokens and stop_sources of
-        /// the same stop-state
-        /// - request_stop() can be concurrently invoked on other stop_source objects, and only one will actually
-        /// perform the stop request.
+        /// - stop_requested() and stop_possible() can be concurrently invoked
+        /// on other stop_tokens and stop_sources of the same stop-state
+        /// - request_stop() can be concurrently invoked on other stop_source
+        /// objects, and only one will actually perform the stop request.
         ///
-        /// \return true if the stop_source object has a stop-state and this invocation made a stop request (the
-        /// underlying atomic value was successfully changed), otherwise false
-        bool request_stop() noexcept {
+        /// \return true if the stop_source object has a stop-state and this
+        /// invocation made a stop request (the underlying atomic value was
+        /// successfully changed), otherwise false
+        bool
+        request_stop() noexcept {
             if (shared_state_ != nullptr) {
                 bool expected = false;
-                return shared_state_->compare_exchange_strong(expected, true, std::memory_order_relaxed);
+                return shared_state_->compare_exchange_strong(
+                    expected,
+                    true,
+                    std::memory_order_relaxed);
             }
             return false;
         }
 
         /// \brief Swaps two stop_source objects
         /// \param other stop_source to exchange the contents with
-        void swap(stop_source &other) noexcept { std::swap(shared_state_, other.shared_state_); }
+        void
+        swap(stop_source &other) noexcept {
+            std::swap(shared_state_, other.shared_state_);
+        }
 
         /// @}
 
@@ -597,48 +1254,65 @@ namespace futures {
 
         /// \brief Returns a stop_token for the associated stop-state
         ///
-        /// Returns a stop_token object associated with the stop_source's stop-state, if the stop_source has stop-state,
-        /// otherwise returns a default-constructed (empty) stop_token.
+        /// Returns a stop_token object associated with the stop_source's
+        /// stop-state, if the stop_source has stop-state, otherwise returns a
+        /// default-constructed (empty) stop_token.
         ///
-        /// \return A stop_token object, which will be empty if this->stop_possible() == false
-        [[nodiscard]] stop_token get_token() const noexcept { return stop_token{shared_state_}; }
+        /// \return A stop_token object, which will be empty if
+        /// this->stop_possible() == false
+        [[nodiscard]] stop_token
+        get_token() const noexcept {
+            return stop_token{ shared_state_ };
+        }
 
-        /// \brief Checks whether the associated stop-state has been requested to stop
+        /// \brief Checks whether the associated stop-state has been requested
+        /// to stop
         ///
-        /// Checks if the stop_source object has a stop-state and that state has received a stop request.
+        /// Checks if the stop_source object has a stop-state and that state has
+        /// received a stop request.
         ///
-        /// \return true if the stop_token object has a stop-state, and it has received a stop request, false otherwise
-        [[nodiscard]] bool stop_requested() const noexcept {
-            return (shared_state_ != nullptr) && shared_state_->load(std::memory_order_relaxed);
+        /// \return true if the stop_token object has a stop-state, and it has
+        /// received a stop request, false otherwise
+        [[nodiscard]] bool
+        stop_requested() const noexcept {
+            return (shared_state_ != nullptr)
+                   && shared_state_->load(std::memory_order_relaxed);
         }
 
         /// \brief Checks whether associated stop-state can be requested to stop
         ///
         /// Checks if the stop_source object has a stop-state.
         ///
-        /// \note If the stop_source object has a stop-state and a stop request has already been made, this function
-        /// still returns true.
+        /// \note If the stop_source object has a stop-state and a stop request
+        /// has already been made, this function still returns true.
         ///
-        /// \return true if the stop_source object has a stop-state, otherwise false
-        [[nodiscard]] bool stop_possible() const noexcept { return shared_state_ != nullptr; }
+        /// \return true if the stop_source object has a stop-state, otherwise
+        /// false
+        [[nodiscard]] bool
+        stop_possible() const noexcept {
+            return shared_state_ != nullptr;
+        }
 
         /// @}
 
         /// \name Non-member functions
         /// @{
 
-        [[nodiscard]] friend bool operator==(const stop_source &a, const stop_source &b) noexcept {
+        [[nodiscard]] friend bool
+        operator==(const stop_source &a, const stop_source &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
-        [[nodiscard]] friend bool operator!=(const stop_source &a, const stop_source &b) noexcept {
+        [[nodiscard]] friend bool
+        operator!=(const stop_source &a, const stop_source &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }
 
         /// @}
 
-      private:
-        /// \brief Shared pointer to an atomic bool indicating if an external procedure should stop
-        detail::shared_stop_state shared_state_{nullptr};
+    private:
+        /// \brief Shared pointer to an atomic bool indicating if an external
+        /// procedure should stop
+        detail::shared_stop_state shared_state_{ nullptr };
     };
 
     /** @} */ // \addtogroup cancellation Cancellation
@@ -648,10 +1322,6 @@ namespace futures {
 #endif // FUTURES_STOP_TOKEN_H
 
 // #include <futures/futures/traits/is_executor_then_function.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 #define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
@@ -667,229 +1337,128 @@ namespace futures {
      */
 
     class stop_token;
-}
+} // namespace futures
 
 namespace futures::detail {
     /// \brief Check if types are an executor then a function
-    /// The function should be invocable with the given args, the executor be an executor, and vice-versa
+    /// The function should be invocable with the given args, the executor be an
+    /// executor, and vice-versa
     template <class E, class F, typename... Args>
-    using is_executor_then_function =
-        std::conjunction<asio::is_executor<E>, std::negation<asio::is_executor<F>>,
-                         std::negation<std::is_invocable<E, Args...>>, std::is_invocable<F, Args...>>;
-
-    template <class E, class F, typename... Args>
-    constexpr bool is_executor_then_function_v = is_executor_then_function<E, F, Args...>::value;
-
-    template <class E, class F, typename... Args>
-    using is_executor_then_stoppable_function =
-        std::conjunction<asio::is_executor<E>, std::negation<asio::is_executor<F>>,
-                         std::negation<std::is_invocable<E, stop_token, Args...>>,
-                         std::is_invocable<F, stop_token, Args...>>;
+    using is_executor_then_function = std::conjunction<
+        asio::is_executor<E>,
+        std::negation<asio::is_executor<F>>,
+        std::negation<std::is_invocable<E, Args...>>,
+        std::is_invocable<F, Args...>>;
 
     template <class E, class F, typename... Args>
-    constexpr bool is_executor_then_stoppable_function_v = is_executor_then_stoppable_function<E, F, Args...>::value;
+    constexpr bool is_executor_then_function_v
+        = is_executor_then_function<E, F, Args...>::value;
+
+    template <class E, class F, typename... Args>
+    using is_executor_then_stoppable_function = std::conjunction<
+        asio::is_executor<E>,
+        std::negation<asio::is_executor<F>>,
+        std::negation<std::is_invocable<E, stop_token, Args...>>,
+        std::is_invocable<F, stop_token, Args...>>;
+
+    template <class E, class F, typename... Args>
+    constexpr bool is_executor_then_stoppable_function_v
+        = is_executor_then_stoppable_function<E, F, Args...>::value;
 
     template <class F, typename... Args>
-    using is_invocable_non_executor =
-        std::conjunction<std::negation<asio::is_executor<F>>, std::is_invocable<F, Args...>>;
+    using is_invocable_non_executor = std::conjunction<
+        std::negation<asio::is_executor<F>>,
+        std::is_invocable<F, Args...>>;
 
     template <class F, typename... Args>
-    constexpr bool is_invocable_non_executor_v = is_invocable_non_executor<F, Args...>::value;
+    constexpr bool is_invocable_non_executor_v
+        = is_invocable_non_executor<F, Args...>::value;
 
     template <class F, typename... Args>
-    using is_stoppable_invocable_non_executor =
-        std::conjunction<std::negation<asio::is_executor<F>>, std::is_invocable<F, stop_token, Args...>>;
+    using is_stoppable_invocable_non_executor = std::conjunction<
+        std::negation<asio::is_executor<F>>,
+        std::is_invocable<F, stop_token, Args...>>;
 
     template <class F, typename... Args>
-    constexpr bool is_stoppable_invocable_non_executor_v = is_stoppable_invocable_non_executor<F, Args...>::value;
+    constexpr bool is_stoppable_invocable_non_executor_v
+        = is_stoppable_invocable_non_executor<F, Args...>::value;
 
     template <class F, typename... Args>
-    using is_async_input_non_executor =
-        std::disjunction<is_invocable_non_executor<F, Args...>, is_stoppable_invocable_non_executor<F, Args...>>;
+    using is_async_input_non_executor = std::disjunction<
+        is_invocable_non_executor<F, Args...>,
+        is_stoppable_invocable_non_executor<F, Args...>>;
 
     template <class F, typename... Args>
-    constexpr bool is_async_input_non_executor_v = is_async_input_non_executor<F, Args...>::value;
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    constexpr bool is_async_input_non_executor_v
+        = is_async_input_non_executor<F, Args...>::value;
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures::detail
 
 #endif // FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
 
 // #include <futures/futures/traits/is_future.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
-#ifndef FUTURES_IS_FUTURE_H
-#define FUTURES_IS_FUTURE_H
-
-#include <future>
-// #include <type_traits>
-
-
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-    /** \addtogroup future-traits Future Traits
-     *
-     * \brief Determine properties of future types
-     *
-     *  @{
-     */
-
-    /// \brief Customization point to determine if a type is a future type
-    template <typename> struct is_future : std::false_type {};
-
-    /// \brief Customization point to determine if a type is a future type (specialization for std::future<T>)
-    template <typename T> struct is_future<std::future<T>> : std::true_type {};
-
-    /// \brief Customization point to determine if a type is a future type (specialization for std::shared_future<T>)
-    template <typename T> struct is_future<std::shared_future<T>> : std::true_type {};
-
-    /// \brief Customization point to determine if a type is a future type as a bool value
-    template <class T> constexpr bool is_future_v = is_future<T>::value;
-
-    /// \brief Customization point to determine if a type is a shared future type
-    template <typename> struct has_ready_notifier : std::false_type {};
-
-    /// \brief Customization point to determine if a type is a shared future type
-    template <class T> constexpr bool has_ready_notifier_v = has_ready_notifier<T>::value;
-
-    /// \brief Customization point to determine if a type is a shared future type
-    template <typename> struct is_shared_future : std::false_type {};
-
-    /// \brief Customization point to determine if a type is a shared future type (specialization for std::shared_future<T>)
-    template <typename T> struct is_shared_future<std::shared_future<T>> : std::true_type {};
-
-    /// \brief Customization point to determine if a type is a shared future type
-    template <class T> constexpr bool is_shared_future_v = is_shared_future<T>::value;
-
-    /// \brief Customization point to define future as supporting lazy continuations
-    template <typename> struct is_lazy_continuable : std::false_type {};
-
-    /// \brief Customization point to define future as supporting lazy continuations
-    template <class T> constexpr bool is_lazy_continuable_v = is_lazy_continuable<T>::value;
-
-    /// \brief Customization point to define future as stoppable
-    template <typename> struct is_stoppable : std::false_type {};
-
-    /// \brief Customization point to define future as stoppable
-    template <class T> constexpr bool is_stoppable_v = is_stoppable<T>::value;
-
-    /// \brief Customization point to define future having a common stop token
-    template <typename> struct has_stop_token : std::false_type {};
-
-    /// \brief Customization point to define future having a common stop token
-    template <class T> constexpr bool has_stop_token_v = has_stop_token<T>::value;
-
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
-} // namespace futures
-
-#endif // FUTURES_IS_FUTURE_H
 
 // #include <futures/futures/detail/continuations_source.h>
-//
-// Copyright (c) alandefreitas 12/2/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_CONTINUATIONS_SOURCE_H
 #define FUTURES_CONTINUATIONS_SOURCE_H
 
 // #include <futures/futures/detail/small_vector.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_SMALL_VECTOR_H
 #define FUTURES_SMALL_VECTOR_H
 
 // #include <futures/algorithm/traits/is_input_iterator.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 #define FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 
-// #include <futures/algorithm/traits/is_input_or_output_iterator.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
-#define FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
+// #include <futures/algorithm/traits/has_iterator_traits_value_type.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
+#define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
 
 // #include <type_traits>
 
+#include <iterator>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 input_or_output_iterator
-     * concept
+    /** A C++17 type trait equivalent to the C++20
+     * "has-iterator-traits-value-type" concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_input_or_output_iterator = __see_below__;
+    using has_iterator_traits_value_type = __see_below__;
 #else
     template <class T, class = void>
-    struct is_input_or_output_iterator : std::false_type
+    struct has_iterator_traits_value_type : std::false_type
     {};
 
     template <class T>
-    struct is_input_or_output_iterator<
+    struct has_iterator_traits_value_type<
         T,
-        std::void_t<decltype(*std::declval<T>())>> : std::true_type
+        std::void_t<typename std::iterator_traits<T>::value_type>>
+        : std::true_type
     {};
 #endif
     template <class T>
-    bool constexpr is_input_or_output_iterator_v = is_input_or_output_iterator<
-        T>::value;
+    bool constexpr has_iterator_traits_value_type_v
+        = has_iterator_traits_value_type<T>::value;
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
 
 // #include <futures/algorithm/traits/is_indirectly_readable.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
 #define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
 
-// #include <futures/algorithm/traits/iter_value.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
+// #include <futures/algorithm/traits/iter_reference.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
+#define FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
 
+// #include <futures/algorithm/traits/iter_value.h>
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_VALUE_H
 #define FUTURES_ALGORITHM_TRAITS_ITER_VALUE_H
 
 // #include <futures/algorithm/traits/has_element_type.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_HAS_ELEMENT_TYPE_H
 #define FUTURES_ALGORITHM_TRAITS_HAS_ELEMENT_TYPE_H
 
@@ -897,7 +1466,8 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 has-member-element-type concept
+    /** A C++17 type trait equivalent to the C++20 has-member-element-type
+     * concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -920,51 +1490,8 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_HAS_ELEMENT_TYPE_H
 
 // #include <futures/algorithm/traits/has_iterator_traits_value_type.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
-#ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
-#define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
-
-// #include <type_traits>
-
-
-namespace futures {
-    /** A C++17 type trait equivalent to the C++20
-     * "has-iterator-traits-value-type" concept
-     */
-#ifdef FUTURES_DOXYGEN
-    template <class T>
-    using has_iterator_traits_value_type = __see_below__;
-#else
-    template <class T, class = void>
-    struct has_iterator_traits_value_type : std::false_type
-    {};
-
-    template <class T>
-    struct has_iterator_traits_value_type<T, std::void_t<typename std::iterator_traits<T>::value_type>>
-        : std::true_type
-    {};
-#endif
-    template <class T>
-    bool constexpr has_iterator_traits_value_type_v = has_iterator_traits_value_type<T>::value;
-
-} // namespace futures
-
-#endif // FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
 
 // #include <futures/algorithm/traits/has_value_type.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
 #define FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
 
@@ -995,13 +1522,6 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
 
 // #include <futures/algorithm/traits/remove_cvref.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
 #define FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
 
@@ -1012,12 +1532,13 @@ namespace futures {
     /** A C++17 type trait equivalent to the C++20 remove_cvref
      * concept
      */
-    template< class T >
-    struct remove_cvref {
+    template <class T>
+    struct remove_cvref
+    {
         using type = std::remove_cv_t<std::remove_reference_t<T>>;
     };
 
-    template< class T >
+    template <class T>
     using remove_cvref_t = typename remove_cvref<T>::type;
 
 
@@ -1025,7 +1546,8 @@ namespace futures {
 
 #endif // FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
 
-#include <iterator>
+// #include <iterator>
+
 // #include <type_traits>
 
 
@@ -1108,19 +1630,6 @@ namespace futures {
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_VALUE_H
 
-// #include <futures/algorithm/traits/iter_reference.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
-#ifndef FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
-#define FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
-
-// #include <futures/algorithm/traits/iter_value.h>
-
 // #include <iterator>
 
 // #include <type_traits>
@@ -1139,9 +1648,7 @@ namespace futures {
     {};
 
     template <class T>
-    struct iter_reference<
-        T,
-        std::void_t<iter_value_t<T>>>
+    struct iter_reference<T, std::void_t<iter_value_t<T>>>
     {
         using type = std::add_lvalue_reference<iter_value_t<T>>;
     };
@@ -1155,13 +1662,6 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
 
 // #include <futures/algorithm/traits/iter_rvalue_reference.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_H
 #define FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_H
 
@@ -1185,9 +1685,7 @@ namespace futures {
     {};
 
     template <class T>
-    struct iter_rvalue_reference<
-        T,
-        std::void_t<iter_value_t<T>>>
+    struct iter_rvalue_reference<T, std::void_t<iter_value_t<T>>>
     {
         using type = std::add_rvalue_reference<iter_value_t<T>>;
     };
@@ -1198,6 +1696,8 @@ namespace futures {
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_H
+
+// #include <futures/algorithm/traits/iter_value.h>
 
 // #include <type_traits>
 
@@ -1221,19 +1721,48 @@ namespace futures {
             iter_value_t<T>,
             iter_reference_t<T>,
             iter_rvalue_reference_t<T>,
-            decltype(*std::declval<T>())
-        >> : std::true_type
+            decltype(*std::declval<T>())>> : std::true_type
     {};
 #endif
     template <class T>
-    bool constexpr is_indirectly_readable_v = is_indirectly_readable<
-        T>::value;
+    bool constexpr is_indirectly_readable_v = is_indirectly_readable<T>::value;
 
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
 
-// #include <futures/algorithm/traits/has_iterator_traits_value_type.h>
+// #include <futures/algorithm/traits/is_input_or_output_iterator.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
+#define FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** A C++17 type trait equivalent to the C++20 input_or_output_iterator
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_input_or_output_iterator = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_input_or_output_iterator : std::false_type
+    {};
+
+    template <class T>
+    struct is_input_or_output_iterator<
+        T,
+        std::void_t<decltype(*std::declval<T>())>> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_input_or_output_iterator_v = is_input_or_output_iterator<
+        T>::value;
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
 
 // #include <type_traits>
 
@@ -1246,9 +1775,10 @@ namespace futures {
     using is_input_iterator = __see_below__;
 #else
     template <class T>
-    struct is_input_iterator : std::conjunction<
-                                   is_input_or_output_iterator<T>,
-                                   is_indirectly_readable<T>>
+    struct is_input_iterator
+        : std::conjunction<
+              is_input_or_output_iterator<T>,
+              is_indirectly_readable<T>>
     {};
 #endif
     template <class T>
@@ -1259,13 +1789,6 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 
 // #include <futures/algorithm/traits/is_range.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
 #define FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
 
@@ -1299,103 +1822,12 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
 
 // #include <futures/futures/detail/empty_base.h>
-//
-// Copyright (c) alandefreitas 12/10/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_EMPTY_BASE_H
-#define FUTURES_EMPTY_BASE_H
-
-namespace futures::detail {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-
-    /// \brief A convenience struct to refer to an empty type whenever we need one
-    struct empty_value_type {};
-
-    /// \brief A convenience struct to refer to an empty value whenever we need one
-    inline constexpr empty_value_type empty_value = empty_value_type();
-
-    /// \brief Represents a potentially empty base class for empty base class optimization
-    ///
-    /// We use the name maybe_empty for the base class that might be empty and empty_value_type / empty_value
-    /// for the values we know to be empty.
-    ///
-    /// \tparam T The type represented by the base class
-    /// \tparam BaseIndex An index to differentiate base classes in the same derived class. This might be
-    /// important to ensure the same base class isn't inherited twice.
-    /// \tparam E Indicates whether we should really instantiate the class (true when the class is not empty)
-    template <class T, unsigned BaseIndex = 0, bool E = std::is_empty_v<T>> class maybe_empty {
-      public:
-        /// \brief The type this base class is effectively represent
-        using value_type = T;
-
-        /// \brief Initialize this potentially empty base with the specified values
-        /// This will initialize the vlalue with the default constructor T(args...)
-        template <class... Args> explicit maybe_empty(Args &&...args) : value_(std::forward<Args>(args)...) {}
-
-        /// \brief Get the effective value this class represents
-        /// This returns the underlying value represented here
-        const T &get() const noexcept { return value_; }
-
-        /// \brief Get the effective value this class represents
-        /// This returns the underlying value represented here
-        T &get() noexcept { return value_; }
-
-      private:
-        /// \brief The effective value representation when the value is not empty
-        T value_;
-    };
-
-    /// \brief Represents a potentially empty base class, when it's effectively not empty
-    ///
-    /// \tparam T The type represented by the base class
-    /// \tparam BaseIndex An index to differentiate base classes in the same derived class
-    template <class T, unsigned BaseIndex> class maybe_empty<T, BaseIndex, true> : public T {
-      public:
-        /// \brief The type this base class is effectively represent
-        using value_type = T;
-
-        /// \brief Initialize this potentially empty base with the specified values
-        /// This won't initialize any values but it will call the appropriate constructor T() in case we need
-        /// its behaviour
-        template <class... Args> explicit maybe_empty(Args &&...args) : T(std::forward<Args>(args)...) {}
-
-        /// \brief Get the effective value this class represents
-        /// Although the element takes no space, we can return a reference to whatever it represents so
-        /// we can access its underlying functions
-        const T &get() const noexcept { return *this; }
-
-        /// \brief Get the effective value this class represents
-        /// Although the element takes no space, we can return a reference to whatever it represents so
-        /// we can access its underlying functions
-        T &get() noexcept { return *this; }
-    };
-
-    /** @} */
-} // namespace futures::detail
-
-#endif // FUTURES_EMPTY_BASE_H
 
 // #include <futures/futures/detail/scope_guard.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_SCOPE_GUARD_H
 #define FUTURES_SCOPE_GUARD_H
 
 // #include <futures/futures/detail/throw_exception.h>
-//
-// Copyright (c) alandefreitas 12/7/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_THROW_EXCEPTION_H
 #define FUTURES_THROW_EXCEPTION_H
 
@@ -1405,26 +1837,33 @@ namespace futures::detail {
      */
 
     /// \brief Throw an exception but terminate if we can't throw
-    template <typename Ex> [[noreturn]] void throw_exception(Ex &&ex) {
+    template <typename Ex>
+    [[noreturn]] void
+    throw_exception(Ex &&ex) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS
         throw static_cast<Ex &&>(ex);
 #else
-        (void)ex;
+        (void) ex;
         std::terminate();
 #endif
     }
 
     /// \brief Construct and throw an exception but terminate otherwise
-    template <typename Ex, typename... Args> [[noreturn]] void throw_exception(Args &&...args) {
+    template <typename Ex, typename... Args>
+    [[noreturn]] void
+    throw_exception(Args &&...args) {
         throw_exception(Ex(std::forward<Args>(args)...));
     }
 
     /// \brief Throw an exception but terminate if we can't throw
-    template <typename ThrowFn, typename CatchFn> void catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {
+    template <typename ThrowFn, typename CatchFn>
+    void
+    catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS
         try {
             return static_cast<ThrowFn &&>(thrower)();
-        } catch (std::exception &) {
+        }
+        catch (std::exception &) {
             return static_cast<CatchFn &&>(catcher)();
         }
 #else
@@ -1830,7 +2269,8 @@ namespace futures::detail {
                     std::make_move_iterator(rhs.end()));
             } else {
                 if constexpr (std::is_empty_v<allocator_type>) {
-                    maybe_empty<Allocator>::get() = rhs.maybe_empty<Allocator>::get();
+                    maybe_empty<Allocator>::get() = rhs.maybe_empty<
+                        Allocator>::get();
                 } else {
                     maybe_empty<Allocator>::get() = (std::move(rhs.alloc_));
                 }
@@ -3431,47 +3871,54 @@ namespace futures::detail {
 
 #endif // FUTURES_SMALL_VECTOR_H
 
-#include <shared_mutex>
 #include <memory>
+#include <shared_mutex>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
      *  @{
      */
 
-    /// \brief The continuation state as a small thread safe container that holds continuation functions for a future
+    /// \brief The continuation state as a small thread safe container that
+    /// holds continuation functions for a future
     ///
-    /// The whole logic here is very similar to that of stop_tokens. There is a source, a state, and a token.
+    /// The whole logic here is very similar to that of stop_tokens. There is a
+    /// source, a state, and a token.
     ///
-    /// This is very limited as a container because there are not many operations we need to do with the
-    /// continuation state. We need to be able to attach continuations (then), and run all continuations
-    /// with a single shared lock.
+    /// This is very limited as a container because there are not many
+    /// operations we need to do with the continuation state. We need to be able
+    /// to attach continuations (then), and run all continuations with a single
+    /// shared lock.
     ///
-    /// Like the stop_state, a continuation state might be shared between shared futures.
-    /// Once one of the futures has run the continuations, the state is considered done.
+    /// Like the stop_state, a continuation state might be shared between shared
+    /// futures. Once one of the futures has run the continuations, the state is
+    /// considered done.
     ///
-    /// The continuation state needs to be atomic because it's also a shared state.
-    /// Especially when the future is shared, many threads might be trying to attach new continuations
-    /// to this future type, and the main future callback needs to wait for it.
-    class continuations_state {
-      public:
+    /// The continuation state needs to be atomic because it's also a shared
+    /// state. Especially when the future is shared, many threads might be
+    /// trying to attach new continuations to this future type, and the main
+    /// future callback needs to wait for it.
+    class continuations_state
+    {
+    public:
         /// \name Public Types
         /// @{
 
         /// \brief Type of a continuation callback
         /// This is a callback function that posts the next task to an executor.
         /// We cannot ensure the tasks go to the same executor.
-        /// This needs to be type erased because there are many types of callables
-        /// that might become a continuation here.
+        /// This needs to be type erased because there are many types of
+        /// callables that might become a continuation here.
         using continuation_type = std::function<void()>;
 
         /// \brief Continuation ptr
-        /// The callbacks are stored pointers because their addresses cannot lose stability
-        /// when the future is moved or shared
+        /// The callbacks are stored pointers because their addresses cannot
+        /// lose stability when the future is moved or shared
         using continuation_ptr = std::unique_ptr<continuation_type>;
 
         /// \brief The continuation vector
-        /// We use a small vector because of the common case when there few continuations per task
+        /// We use a small vector because of the common case when there few
+        /// continuations per task
         using continuation_vector = detail::small_vector<continuation_ptr>;
 
         /// @}
@@ -3486,10 +3933,14 @@ namespace futures::detail {
         continuations_state(const continuations_state &) = delete;
 
         /// \brief Destructor - Run continuations if they have not run yet
-        ~continuations_state() { request_run(); }
+        ~continuations_state() {
+            request_run();
+        }
 
         /// \brief Copy assignment
-        continuations_state &operator=(const continuations_state &) = delete;
+        continuations_state &
+        operator=(const continuations_state &)
+            = delete;
 
         /// @}
 
@@ -3497,14 +3948,17 @@ namespace futures::detail {
         /// @{
 
         /// \brief Get number of continuations
-        [[nodiscard]] size_t size() const {
+        [[nodiscard]] size_t
+        size() const {
             std::shared_lock lock(continuations_mutex_);
             return continuations_.size();
         }
 
         /// \brief Get the i-th continuation
-        /// The return reference is safe (in context) because the continuation vector has stability
-        continuation_type &operator[](size_t index) const {
+        /// The return reference is safe (in context) because the continuation
+        /// vector has stability
+        continuation_type &
+        operator[](size_t index) const {
             std::shared_lock lock(continuations_mutex_);
             return continuations_.at(index).operator*();
         }
@@ -3515,30 +3969,41 @@ namespace futures::detail {
 
         /// \brief Emplace a new continuation
         /// Use executor ex if more continuations are not possible
-        template <class Executor> bool emplace_back(const Executor &ex, continuation_type &&fn) {
+        template <class Executor>
+        bool
+        emplace_back(const Executor &ex, continuation_type &&fn) {
             std::unique_lock lock(continuations_mutex_);
             if (is_run_possible()) {
-                continuations_.emplace_back(std::make_unique<continuation_type>(std::move(fn)));
+                continuations_.emplace_back(
+                    std::make_unique<continuation_type>(std::move(fn)));
                 return true;
             } else {
-                // When the shared state currently associated with *this is ready, the continuation
-                // is called on an unspecified thread of execution
+                // When the shared state currently associated with *this is
+                // ready, the continuation is called on an unspecified thread of
+                // execution
                 asio::post(ex, asio::use_future(std::move(fn)));
                 return false;
             }
         }
 
-        /// \brief Check if some source asked already asked for the continuations to run
-        bool is_run_requested() const {
+        /// \brief Check if some source asked already asked for the
+        /// continuations to run
+        bool
+        is_run_requested() const {
             std::shared_lock lock(run_requested_mutex_);
             return run_requested_;
         }
 
-        /// \brief Check if some source asked already asked for the continuations to run
-        bool is_run_possible() const { return !is_run_requested(); }
+        /// \brief Check if some source asked already asked for the
+        /// continuations to run
+        bool
+        is_run_possible() const {
+            return !is_run_requested();
+        }
 
         /// \brief Run all continuations
-        bool request_run() {
+        bool
+        request_run() {
             {
                 // Check or update in a single lock
                 std::unique_lock lock(run_requested_mutex_);
@@ -3549,7 +4014,7 @@ namespace futures::detail {
                 }
             }
             std::unique_lock lock(continuations_mutex_);
-            for (auto &continuation : continuations_) {
+            for (auto &continuation: continuations_) {
                 (*continuation)();
             }
             continuations_.clear();
@@ -3557,103 +4022,142 @@ namespace futures::detail {
         }
         /// @}
 
-      private:
+    private:
         /// \brief The actual pointers to the continuation functions
         /// This is encapsulated so we can't break anything
         continuation_vector continuations_;
-        bool run_requested_{false};
+        bool run_requested_{ false };
         mutable std::shared_mutex continuations_mutex_;
         mutable std::shared_mutex run_requested_mutex_;
     };
 
-    /// Unit type intended for use as a placeholder in continuations_source non-default constructor
-    struct nocontinuationsstate_t {
+    /// Unit type intended for use as a placeholder in continuations_source
+    /// non-default constructor
+    struct nocontinuationsstate_t
+    {
         explicit nocontinuationsstate_t() = default;
     };
 
-    /// This is a constant object instance of stdnocontinuationsstate_t for use in constructing an empty
-    /// continuations_source, as a placeholder value in the non-default constructor
+    /// This is a constant object instance of stdnocontinuationsstate_t for use
+    /// in constructing an empty continuations_source, as a placeholder value in
+    /// the non-default constructor
     inline constexpr nocontinuationsstate_t nocontinuationsstate{};
 
     /// \brief Token the future object uses to emplace continuations
-    class continuations_token {
-      public:
-        /// \brief Constructs an empty continuations_token with no associated continuations-state
+    class continuations_token
+    {
+    public:
+        /// \brief Constructs an empty continuations_token with no associated
+        /// continuations-state
         continuations_token() noexcept : state_(nullptr) {}
 
-        /// \brief Constructs a continuations_token whose associated continuations-state is the same as that of
-        /// other
-        continuations_token(const continuations_token &other) noexcept = default;
+        /// \brief Constructs a continuations_token whose associated
+        /// continuations-state is the same as that of other
+        continuations_token(
+            const continuations_token &other) noexcept = default;
 
-        /// \brief Constructs a continuations_token whose associated continuations-state is the same as that of
-        /// other; other is left empty
+        /// \brief Constructs a continuations_token whose associated
+        /// continuations-state is the same as that of other; other is left empty
         continuations_token(continuations_token &&other) noexcept = default;
 
-        /// \brief Copy-assigns the associated continuations-state of other to that of *this
-        continuations_token &operator=(const continuations_token &other) noexcept = default;
+        /// \brief Copy-assigns the associated continuations-state of other to
+        /// that of *this
+        continuations_token &
+        operator=(const continuations_token &other) noexcept = default;
 
-        /// \brief Move-assigns the associated continuations-state of other to that of *this
-        continuations_token &operator=(continuations_token &&other) noexcept = default;
+        /// \brief Move-assigns the associated continuations-state of other to
+        /// that of *this
+        continuations_token &
+        operator=(continuations_token &&other) noexcept = default;
 
-        /// \brief Exchanges the associated continuations-state of *this and other.
-        void swap(continuations_token &other) noexcept { std::swap(state_, other.state_); }
+        /// \brief Exchanges the associated continuations-state of *this and
+        /// other.
+        void
+        swap(continuations_token &other) noexcept {
+            std::swap(state_, other.state_);
+        }
 
-        /// \brief Checks if the continuations_token object has associated continuations-state and that state has
-        /// received a run request
-        [[nodiscard]] bool run_requested() const noexcept { return (state_ != nullptr) && state_->is_run_requested(); }
+        /// \brief Checks if the continuations_token object has associated
+        /// continuations-state and that state has received a run request
+        [[nodiscard]] bool
+        run_requested() const noexcept {
+            return (state_ != nullptr) && state_->is_run_requested();
+        }
 
-        /// \brief Checks if the continuations_token object has associated continuations-state, and that state
-        /// either has already had a run requested or it has associated continuations_source object(s)
-        [[nodiscard]] bool run_possible() const noexcept {
+        /// \brief Checks if the continuations_token object has associated
+        /// continuations-state, and that state either has already had a run
+        /// requested or it has associated continuations_source object(s)
+        [[nodiscard]] bool
+        run_possible() const noexcept {
             return (state_ != nullptr) && (!state_->is_run_requested());
         }
 
         /// \brief compares two std::run_token objects
-        [[nodiscard]] friend bool operator==(const continuations_token &lhs, const continuations_token &rhs) noexcept {
+        [[nodiscard]] friend bool
+        operator==(
+            const continuations_token &lhs,
+            const continuations_token &rhs) noexcept {
             return lhs.state_ == rhs.state_;
         }
 
-        [[nodiscard]] friend bool operator!=(const continuations_token &lhs, const continuations_token &rhs) noexcept {
+        [[nodiscard]] friend bool
+        operator!=(
+            const continuations_token &lhs,
+            const continuations_token &rhs) noexcept {
             return lhs.state_ != rhs.state_;
         }
 
-      private:
+    private:
         friend class continuations_source;
 
         /// \brief Create token from state
-        explicit continuations_token(std::shared_ptr<continuations_state> state) noexcept : state_(std::move(state)) {}
+        explicit continuations_token(
+            std::shared_ptr<continuations_state> state) noexcept
+            : state_(std::move(state)) {}
 
         /// \brief The state
         std::shared_ptr<continuations_state> state_;
     };
 
-    /// \brief The continuations_source class provides the means to issue a request to run the future continuations
-    class continuations_source {
-      public:
+    /// \brief The continuations_source class provides the means to issue a
+    /// request to run the future continuations
+    class continuations_source
+    {
+    public:
         /// \brief Constructs a continuations_source with new continuations-state
-        continuations_source() : state_(std::make_shared<continuations_state>()){};
+        continuations_source()
+            : state_(std::make_shared<continuations_state>()){};
 
-        /// \brief Constructs an empty continuations_source with no associated continuations-state.
-        explicit continuations_source(nocontinuationsstate_t) noexcept : state_{nullptr} {}
+        /// \brief Constructs an empty continuations_source with no associated
+        /// continuations-state.
+        explicit continuations_source(nocontinuationsstate_t) noexcept
+            : state_{ nullptr } {}
 
         /// \brief Copy constructor.
-        /// Constructs a continuations_source whose associated continuations-state is the same as that of other.
-        continuations_source(const continuations_source &other) noexcept = default;
+        /// Constructs a continuations_source whose associated
+        /// continuations-state is the same as that of other.
+        continuations_source(
+            const continuations_source &other) noexcept = default;
 
         /// \brief Move constructor.
-        /// Constructs a continuations_source whose associated continuations-state is the same as that of other;
-        /// other is left empty.
+        /// Constructs a continuations_source whose associated
+        /// continuations-state is the same as that of other; other is left
+        /// empty.
         continuations_source(continuations_source &&other) noexcept = default;
 
         /// \brief Copy-assigns the continuations-state of other to that of *this
-        continuations_source &operator=(const continuations_source &other) noexcept = default;
+        continuations_source &
+        operator=(const continuations_source &other) noexcept = default;
 
         /// \brief Move-assigns the continuations-state of other to that of *this
-        continuations_source &operator=(continuations_source &&other) noexcept = default;
+        continuations_source &
+        operator=(continuations_source &&other) noexcept = default;
 
         /// \brief Run all continuations
-        /// The return reference is safe because the continuation vector has stability
-        bool request_run() const {
+        /// The return reference is safe because the continuation vector has
+        /// stability
+        bool
+        request_run() const {
             if (state_ != nullptr) {
                 return state_->request_run();
             }
@@ -3661,9 +4165,13 @@ namespace futures::detail {
         }
 
         /// \brief Run all continuations
-        /// The return reference is safe because the continuation vector has stability
+        /// The return reference is safe because the continuation vector has
+        /// stability
         template <class Executor>
-        bool emplace_continuation(const Executor &ex, continuations_state::continuation_type &&fn) {
+        bool
+        emplace_continuation(
+            const Executor &ex,
+            continuations_state::continuation_type &&fn) {
             if (state_ != nullptr) {
                 return state_->emplace_back(ex, std::move(fn));
             }
@@ -3671,32 +4179,52 @@ namespace futures::detail {
         }
 
         /// \brief Exchanges the continuations-state of *this and other.
-        void swap(continuations_source &other) noexcept { std::swap(state_, other.state_); }
+        void
+        swap(continuations_source &other) noexcept {
+            std::swap(state_, other.state_);
+        }
 
         /// \brief Get a token to this object
-        /// Returns a continuations_token object associated with the continuations_source's continuations-state, if
-        /// the continuations_source has continuations-state; otherwise returns a default-constructed (empty)
-        /// continuations_token.
-        [[nodiscard]] continuations_token get_token() const noexcept { return continuations_token(state_); }
+        /// Returns a continuations_token object associated with the
+        /// continuations_source's continuations-state, if the
+        /// continuations_source has continuations-state; otherwise returns a
+        /// default-constructed (empty) continuations_token.
+        [[nodiscard]] continuations_token
+        get_token() const noexcept {
+            return continuations_token(state_);
+        }
 
-        /// \brief Checks if the continuations_source object has a continuations-state and that state has received a
-        /// run request.
-        [[nodiscard]] bool run_requested() const noexcept { return state_ != nullptr && state_->is_run_requested(); }
+        /// \brief Checks if the continuations_source object has a
+        /// continuations-state and that state has received a run request.
+        [[nodiscard]] bool
+        run_requested() const noexcept {
+            return state_ != nullptr && state_->is_run_requested();
+        }
 
-        /// \brief Checks if the continuations_source object has a continuations-state.
-        [[nodiscard]] bool run_possible() const noexcept { return state_ != nullptr; }
+        /// \brief Checks if the continuations_source object has a
+        /// continuations-state.
+        [[nodiscard]] bool
+        run_possible() const noexcept {
+            return state_ != nullptr;
+        }
 
         /// \brief Compares two continuations_source values
-        [[nodiscard]] friend bool operator==(const continuations_source &a, const continuations_source &b) noexcept {
+        [[nodiscard]] friend bool
+        operator==(
+            const continuations_source &a,
+            const continuations_source &b) noexcept {
             return a.state_ == b.state_;
         }
 
         /// \brief Compares two continuations_source values
-        [[nodiscard]] friend bool operator!=(const continuations_source &a, const continuations_source &b) noexcept {
+        [[nodiscard]] friend bool
+        operator!=(
+            const continuations_source &a,
+            const continuations_source &b) noexcept {
             return a.state_ != b.state_;
         }
 
-      private:
+    private:
         std::shared_ptr<continuations_state> state_;
     };
 
@@ -3706,20 +4234,10 @@ namespace futures::detail {
 #endif // FUTURES_CONTINUATIONS_SOURCE_H
 
 // #include <futures/futures/detail/shared_state.h>
-//
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_SHARED_STATE_H
 #define FUTURES_SHARED_STATE_H
 
 // #include <futures/futures/future_error.h>
-//
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_FUTURE_ERROR_H
 #define FUTURES_FUTURE_ERROR_H
 
@@ -3738,28 +4256,32 @@ namespace futures {
 
     /// \brief Class for errors in the futures library
     /// All errors in the futures library derive from this class
-    class futures_error : public std::system_error {
-      public:
+    class futures_error : public std::system_error
+    {
+    public:
         /// \brief Construct underlying system error with a specified error code
         /// \param ec Error code
-        explicit futures_error(std::error_code ec) : std::system_error{ec} {}
+        explicit futures_error(std::error_code ec) : std::system_error{ ec } {}
 
-        /// \brief Construct underlying system error with a specified error code and literal string message
-        /// \param ec Error code
-        /// \param what_arg Error string
-        futures_error(std::error_code ec, const char *what_arg) : std::system_error{ec, what_arg} {}
+        /// \brief Construct underlying system error with a specified error code
+        /// and literal string message \param ec Error code \param what_arg
+        /// Error string
+        futures_error(std::error_code ec, const char *what_arg)
+            : std::system_error{ ec, what_arg } {}
 
-        /// \brief Construct underlying system error with a specified error code and std::string message
-        /// \param ec Error code
-        /// \param what_arg Error string
-        futures_error(std::error_code ec, std::string const &what_arg) : std::system_error{ec, what_arg} {}
+        /// \brief Construct underlying system error with a specified error code
+        /// and std::string message \param ec Error code \param what_arg Error
+        /// string
+        futures_error(std::error_code ec, std::string const &what_arg)
+            : std::system_error{ ec, what_arg } {}
 
         /// \brief Destructor
         ~futures_error() override = default;
     };
 
     /// \brief Error codes for futures
-    enum class future_errc {
+    enum class future_errc
+    {
         /// The state owner got destroyed before the promise has been fulfilled
         broken_promise = 1,
         /// Attempted to retrieve a unique future twice
@@ -3771,106 +4293,159 @@ namespace futures {
     };
 
     // fwd-declare
-    inline std::error_category const &future_category() noexcept;
+    inline std::error_category const &
+    future_category() noexcept;
 
-    /// \brief Class representing the common error category properties for future errors
-    class future_error_category : public std::error_category {
-      public:
+    /// \brief Class representing the common error category properties for
+    /// future errors
+    class future_error_category : public std::error_category
+    {
+    public:
         /// \brief Name for future_error_category errors
-        [[nodiscard]] const char *name() const noexcept override { return "future"; }
+        [[nodiscard]] const char *
+        name() const noexcept override {
+            return "future";
+        }
 
         /// \brief Generate error condition
-        [[nodiscard]] std::error_condition default_error_condition(int ev) const noexcept override {
+        [[nodiscard]] std::error_condition
+        default_error_condition(int ev) const noexcept override {
             switch (static_cast<future_errc>(ev)) {
             case future_errc::broken_promise:
-                return std::error_condition{static_cast<int>(future_errc::broken_promise), future_category()};
+                return std::error_condition{
+                    static_cast<int>(future_errc::broken_promise),
+                    future_category()
+                };
             case future_errc::future_already_retrieved:
-                return std::error_condition{static_cast<int>(future_errc::future_already_retrieved), future_category()};
+                return std::error_condition{
+                    static_cast<int>(future_errc::future_already_retrieved),
+                    future_category()
+                };
             case future_errc::promise_already_satisfied:
-                return std::error_condition{static_cast<int>(future_errc::promise_already_satisfied),
-                                            future_category()};
+                return std::error_condition{
+                    static_cast<int>(future_errc::promise_already_satisfied),
+                    future_category()
+                };
             case future_errc::no_state:
-                return std::error_condition{static_cast<int>(future_errc::no_state), future_category()};
+                return std::error_condition{
+                    static_cast<int>(future_errc::no_state),
+                    future_category()
+                };
             default:
-                return std::error_condition{ev, *this};
+                return std::error_condition{ ev, *this };
             }
         }
 
         /// \brief Check error condition
-        [[nodiscard]] bool equivalent(std::error_code const &code, int condition) const noexcept override {
-            return *this == code.category() &&
-                   static_cast<int>(default_error_condition(code.value()).value()) == condition;
+        [[nodiscard]] bool
+        equivalent(std::error_code const &code, int condition)
+            const noexcept override {
+            return *this == code.category()
+                   && static_cast<int>(
+                          default_error_condition(code.value()).value())
+                          == condition;
         }
 
         /// \brief Generate message
-        [[nodiscard]] std::string message(int ev) const override {
+        [[nodiscard]] std::string
+        message(int ev) const override {
             switch (static_cast<future_errc>(ev)) {
             case future_errc::broken_promise:
-                return std::string{"The associated promise has been destructed prior "
-                                   "to the associated state becoming ready."};
+                return std::string{
+                    "The associated promise has been destructed prior "
+                    "to the associated state becoming ready."
+                };
             case future_errc::future_already_retrieved:
-                return std::string{"The future has already been retrieved from "
-                                   "the promise or packaged_task."};
+                return std::string{
+                    "The future has already been retrieved from "
+                    "the promise or packaged_task."
+                };
             case future_errc::promise_already_satisfied:
-                return std::string{"The state of the promise has already been set."};
+                return std::string{
+                    "The state of the promise has already been set."
+                };
             case future_errc::no_state:
-                return std::string{"Operation not permitted on an object without "
-                                   "an associated state."};
+                return std::string{
+                    "Operation not permitted on an object without "
+                    "an associated state."
+                };
             }
-            return std::string{"unspecified future_errc value\n"};
+            return std::string{ "unspecified future_errc value\n" };
         }
     };
 
-    /// \brief Function to return a common reference to a global future error category
-    inline std::error_category const &future_category() noexcept {
+    /// \brief Function to return a common reference to a global future error
+    /// category
+    inline std::error_category const &
+    future_category() noexcept {
         static future_error_category cat;
         return cat;
     }
 
-    /// \brief Class for errors with specific future types or their dependencies, such as promises
-    class future_error : public futures_error {
-      public:
-        /// \brief Construct underlying futures error with a specified error code
-        /// \param ec Error code
-        explicit future_error(std::error_code ec) : futures_error{ec} {}
+    /// \brief Class for errors with specific future types or their
+    /// dependencies, such as promises
+    class future_error : public futures_error
+    {
+    public:
+        /// \brief Construct underlying futures error with a specified error
+        /// code \param ec Error code
+        explicit future_error(std::error_code ec) : futures_error{ ec } {}
     };
 
-    inline std::error_code make_error_code(future_errc code) {
-        return std::error_code{static_cast<int>(code), futures::future_category()};
+    inline std::error_code
+    make_error_code(future_errc code) {
+        return std::error_code{
+            static_cast<int>(code),
+            futures::future_category()
+        };
     }
 
     /// \brief Class for errors when a promise is not delivered properly
-    class broken_promise : public future_error {
-      public:
+    class broken_promise : public future_error
+    {
+    public:
         /// \brief Construct underlying future error with a specified error code
         /// \param ec Error code
-        broken_promise() : future_error{make_error_code(future_errc::broken_promise)} {}
+        broken_promise()
+            : future_error{ make_error_code(future_errc::broken_promise) } {}
     };
 
     /// \brief Class for errors when a promise is not delivered properly
-    class promise_already_satisfied : public future_error {
-      public:
-        promise_already_satisfied() : future_error{make_error_code(future_errc::promise_already_satisfied)} {}
+    class promise_already_satisfied : public future_error
+    {
+    public:
+        promise_already_satisfied()
+            : future_error{ make_error_code(
+                future_errc::promise_already_satisfied) } {}
     };
 
-    class future_already_retrieved : public future_error {
-      public:
-        future_already_retrieved() : future_error{make_error_code(future_errc::future_already_retrieved)} {}
+    class future_already_retrieved : public future_error
+    {
+    public:
+        future_already_retrieved()
+            : future_error{ make_error_code(
+                future_errc::future_already_retrieved) } {}
     };
 
-    class promise_uninitialized : public future_error {
-      public:
-        promise_uninitialized() : future_error{make_error_code(future_errc::no_state)} {}
+    class promise_uninitialized : public future_error
+    {
+    public:
+        promise_uninitialized()
+            : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    class packaged_task_uninitialized : public future_error {
-      public:
-        packaged_task_uninitialized() : future_error{make_error_code(future_errc::no_state)} {}
+    class packaged_task_uninitialized : public future_error
+    {
+    public:
+        packaged_task_uninitialized()
+            : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    class future_uninitialized : public future_error {
-      public:
-        future_uninitialized() : future_error{make_error_code(future_errc::no_state)} {}
+    class future_uninitialized : public future_error
+    {
+    public:
+        future_uninitialized()
+            : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
     /** @} */
@@ -3880,13 +4455,6 @@ namespace futures {
 #endif // FUTURES_FUTURE_ERROR_H
 
 // #include <futures/futures/detail/relocker.h>
-//
-// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)
-//
-// Distributed under the Boost Software License, Version 1.0.
-// https://www.boost.org/LICENSE_1_0.txt
-//
-
 #ifndef FUTURES_RELOCKER_H
 #define FUTURES_RELOCKER_H
 
@@ -3913,7 +4481,7 @@ namespace futures::detail {
         }
 
         /// \brief Copy constructor is deleted
-        relocker(const relocker &)          = delete;
+        relocker(const relocker &) = delete;
         relocker(relocker &&other) noexcept = delete;
 
         /// \brief Copy assignment is deleted
@@ -4364,8 +4932,9 @@ namespace futures {
 
             /// \brief Mutex for threads that want to wait on the result
             ///
-            /// While the shared state is lock-free, it also includes a mutex that can be used for communication between
-            /// futures, such as waiter futures.
+            /// While the shared state is lock-free, it also includes a mutex
+            /// that can be used for communication between futures, such as
+            /// waiter futures.
             ///
             /// This is used when one thread intents to wait for the result
             /// of a future. The mutex is not used for lazy futures or if
@@ -4840,7 +5409,7 @@ namespace futures {
         class enable_stop_token
         {
         public:
-            enable_stop_token()                           = default;
+            enable_stop_token() = default;
             enable_stop_token(const enable_stop_token &c) = default;
             /// \brief Move construct/assign helper for the
             /// When the basic future is being moved, the stop source gets
@@ -4888,8 +5457,8 @@ namespace futures {
         class disable_stop_token
         {
         public:
-            disable_stop_token()                                = default;
-            disable_stop_token(const disable_stop_token &c)     = default;
+            disable_stop_token() = default;
+            disable_stop_token(const disable_stop_token &c) = default;
             disable_stop_token(disable_stop_token &&c) noexcept = default;
             disable_stop_token &
             operator=(const disable_stop_token &c)
@@ -4941,7 +5510,7 @@ namespace futures {
             template <class Executor>
             bool
             then(
-                const Executor                          &ex,
+                const Executor &ex,
                 continuations_state::continuation_type &&fn) {
                 if (not static_cast<Derived *>(this)->valid()) {
                     throw std::future_error(std::future_errc::no_state);
@@ -5044,14 +5613,14 @@ namespace futures {
         /// \name Public types
         /// @{
 
-        using value_type                            = T;
+        using value_type = T;
 
-        using is_shared                             = Shared;
-        using is_lazy_continuable                   = LazyContinuable;
-        using is_stoppable                          = Stoppable;
-        static constexpr bool is_shared_v           = Shared::value;
+        using is_shared = Shared;
+        using is_lazy_continuable = LazyContinuable;
+        using is_stoppable = Stoppable;
+        static constexpr bool is_shared_v = Shared::value;
         static constexpr bool is_lazy_continuable_v = LazyContinuable::value;
-        static constexpr bool is_stoppable_v        = Stoppable::value;
+        static constexpr bool is_stoppable_v = Stoppable::value;
 
 #ifndef FUTURES_DOXYGEN
         using lazy_continuations_base = detail::lazy_continuations_base<
@@ -5196,7 +5765,7 @@ namespace futures {
             lazy_continuations_base::operator=(
                 other); // Copy reference to continuations
             stop_token_base::operator=(other); // Copy reference to stop state
-            join_                    = other.join_;
+            join_ = other.join_;
             state_ = other.state_; // Make it point to the same shared state
             other.detach();        // Detach other to ensure it won't block at
                                    // destruction
@@ -5215,7 +5784,7 @@ namespace futures {
             lazy_continuations_base::operator=(
                 std::move(other)); // Get control of continuations
             stop_token_base::operator=(std::move(other)); // Move stop state
-            join_                    = other.join_;
+            join_ = other.join_;
             state_ = other.state_; // Make it point to the same shared state
             other.state_.reset();
             other.detach(); // Detach other to ensure it won't block at
@@ -5261,7 +5830,7 @@ namespace futures {
         /// future supports stop tokens
         ///
         /// \return Whether the request was made
-        bool                      request_stop() noexcept;
+        bool request_stop() noexcept;
 
         /// \brief Get this future's stop source
         ///
@@ -5277,7 +5846,7 @@ namespace futures {
         /// future supports stop tokens
         ///
         /// \return The stop token
-        [[nodiscard]] stop_token  get_stop_token() const noexcept;
+        [[nodiscard]] stop_token get_stop_token() const noexcept;
 #endif
 
         /// \brief Wait until all futures have a valid result and retrieves it
@@ -5443,7 +6012,7 @@ namespace futures {
 
         /// \name Members
         /// @{
-        bool                             join_{ true };
+        bool join_{ true };
 
         /// \brief Pointer to shared state
         std::shared_ptr<shared_state<T>> state_{};
@@ -5573,740 +6142,13 @@ namespace futures {
 
 #endif // FUTURES_BASIC_FUTURE_H
 
-// #include <futures/futures/promise.h>
-//
-//
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_PROMISE_H
-#define FUTURES_PROMISE_H
-
-// #include <memory>
-
-
-// #include <futures/futures/detail/empty_base.h>
-
-// #include <futures/futures/detail/shared_state.h>
-
-// #include <futures/futures/detail/to_address.h>
-//
-// Copyright (c) alandefreitas 12/1/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_TO_ADDRESS_H
-#define FUTURES_TO_ADDRESS_H
-
-/// \file
-/// Replicate the C++20 to_address functionality in C++17
-
-// #include <memory>
-
-
-namespace futures::detail {
-    /// \brief Obtain the address represented by p without forming a reference to the object pointed to by p
-    /// This is the "fancy pointer" overload: If the expression std::pointer_traits<Ptr>::to_address(p) is
-    /// well-formed, returns the result of that expression. Otherwise, returns std::to_address(p.operator->()).
-    /// \tparam T Element type
-    /// \param v Element pointer
-    /// \return Element address
-    template <class T> constexpr T *to_address(T *v) noexcept { return v; }
-
-    /// \brief Obtain the address represented by p without forming a reference to the object pointed to by p
-    /// This is the "raw pointer overload": If T is a function type, the program is ill-formed. Otherwise,
-    /// returns p unmodified.
-    /// \tparam T Element type
-    /// \param v Raw pointer
-    /// \return Element address
-    template <class T> inline typename std::pointer_traits<T>::element_type *to_address(const T &v) noexcept {
-        return to_address(v.operator->());
-    }
-} // namespace futures::detail
-
-#endif // FUTURES_TO_ADDRESS_H
-
-
-// #include <futures/futures/basic_future.h>
-
-
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-    /** \addtogroup shared_state Shared State
-     *
-     * \brief Shared state objects
-     *
-     *  @{
-     */
-
-    /// \brief Common members to promises of all types
-    ///
-    /// This includes a pointer to the corresponding shared_state for the future and the functions
-    /// to manage the promise.
-    ///
-    /// The specific promise specialization will only differ by their set_value functions.
-    ///
-    template <typename R> class promise_base {
-      public:
-        /// \brief Create the base promise with std::allocator
-        ///
-        /// Use std::allocator_arg tag to dispatch and select allocator aware constructor
-        promise_base() : promise_base{std::allocator_arg, std::allocator<promise_base>{}} {}
-
-        /// \brief Create a base promise setting the shared state with the specified allocator
-        ///
-        /// This function allocates memory for and allocates an initial promise_shared_state (the future value)
-        /// with the specified allocator. This object is stored in the internal intrusive pointer as the
-        /// future shared state.
-        template <typename Allocator>
-        promise_base(std::allocator_arg_t, Allocator alloc)
-            : shared_state_(std::allocate_shared<shared_state<R>>(alloc)) {}
-
-        /// \brief No copy constructor
-        promise_base(promise_base const &) = delete;
-
-        /// \brief Move constructor
-        promise_base(promise_base &&other) noexcept
-            : obtained_{other.obtained_}, shared_state_{std::move(other.shared_state_)} {
-            other.obtained_ = false;
-        }
-
-        /// \brief No copy assignment
-        promise_base &operator=(promise_base const &) = delete;
-
-        /// \brief Move assignment
-        promise_base &operator=(promise_base &&other) noexcept {
-            if (this != &other) {
-                promise_base tmp{std::move(other)};
-                swap(tmp);
-            }
-            return *this;
-        }
-
-        /// \brief Destructor
-        ///
-        /// This promise owns the shared state, so we need to warn the shared state when it's destroyed.
-        virtual ~promise_base() {
-            if (shared_state_ && obtained_) {
-                shared_state_->signal_promise_destroyed();
-            }
-        }
-
-        /// \brief Gets a future that shares its state with this promise
-        ///
-        /// This function constructs a future object that shares its state with this promise.
-        /// Because this library handles more than a single future type, the future type we want is
-        /// a template parameter.
-        ///
-        /// This function expects future type constructors to accept pointers to shared states.
-        template <class Future = futures::cfuture<R>> Future get_future() {
-            if (obtained_) {
-                throw future_already_retrieved{};
-            }
-            if (!shared_state_) {
-                throw promise_uninitialized{};
-            }
-            obtained_ = true;
-            return Future{shared_state_};
-        }
-
-        /// \brief Set the promise result as an exception
-        /// \note The set_value operation is only available at the concrete derived class,
-        /// where we know the class type
-        void set_exception(std::exception_ptr p) {
-            if (!shared_state_) {
-                throw promise_uninitialized{};
-            }
-            shared_state_->set_exception(p);
-        }
-
-        /// \brief Set the promise result as an exception
-        template <typename E
-#ifndef FUTURES_DOXYGEN
-                  ,
-                  std::enable_if_t<std::is_base_of_v<std::exception, E>, int> = 0
-#endif
-                  >
-        void set_exception(E e) {
-            set_exception(std::make_exception_ptr(e));
-        }
-
-      protected:
-        /// \brief Swap the value of two promises
-        void swap(promise_base &other) noexcept {
-            std::swap(obtained_, other.obtained_);
-            shared_state_.swap(other.shared_state_);
-        }
-
-        /// \brief Intrusive pointer to the future corresponding to this promise
-        constexpr std::shared_ptr<shared_state<R>> &get_shared_state() { return shared_state_; };
-
-      private:
-        /// \brief True if the future has already obtained the shared state
-        bool obtained_{false};
-
-        /// \brief Intrusive pointer to the future corresponding to this promise
-        std::shared_ptr<shared_state<R>> shared_state_{};
-    };
-
-    /// \brief A shared state that will later be acquired by a future type
-    ///
-    /// The difference between the promise specializations is only in how they handle
-    /// their set_value functions.
-    ///
-    /// \tparam R The shared state type
-    template <typename R> class promise : public promise_base<R> {
-      public:
-        /// \brief Create the promise for type R
-        using promise_base<R>::promise_base;
-
-        /// \brief Copy and set the promise value so it can be obtained by the future
-        /// \param value lvalue reference to the shared state value
-        void set_value(R const &value) {
-            if (!promise_base<R>::get_shared_state()) {
-                throw promise_uninitialized{};
-            }
-            promise_base<R>::get_shared_state()->set_value(value);
-        }
-
-        /// \brief Move and set the promise value so it can be obtained by the future
-        /// \param value rvalue reference to the shared state value
-        void set_value(R &&value) {
-            if (!promise_base<R>::get_shared_state()) {
-                throw promise_uninitialized{};
-            }
-            promise_base<R>::get_shared_state()->set_value(std::move(value));
-        }
-
-        /// \brief Swap the value of two promises
-        void swap(promise &other) noexcept { promise_base<R>::swap(other); }
-    };
-
-    /// \brief A shared state that will later be acquired by a future type
-    template <typename R> class promise<R &> : public promise_base<R &> {
-      public:
-        /// \brief Create the promise for type R&
-        using promise_base<R &>::promise_base;
-
-        /// \brief Set the promise value so it can be obtained by the future
-        void set_value(R &value) {
-            if (!promise_base<R &>::get_shared_state()) {
-                throw promise_uninitialized{};
-            }
-            promise_base<R &>::get_shared_state()->set_value(value);
-        }
-
-        /// \brief Swap the value of two promises
-        void swap(promise &other) noexcept { promise_base<R &>::swap(other); }
-    };
-
-    /// \brief A shared state that will later be acquired by a future type
-    template <> class promise<void> : public promise_base<void> {
-      public:
-        /// \brief Create the promise for type void
-        using promise_base<void>::promise_base;
-
-        /// \brief Set the promise value, so it can be obtained by the future
-        void set_value() { // NOLINT(readability-make-member-function-const)
-            if (!promise_base<void>::get_shared_state()) {
-                throw promise_uninitialized{};
-            }
-            promise_base<void>::get_shared_state()->set_value();
-        }
-
-        /// \brief Swap the value of two promises
-        void swap(promise &other) noexcept { promise_base<void>::swap(other); }
-    };
-
-    /// \brief Swap the value of two promises
-    template <typename R> void swap(promise<R> &l, promise<R> &r) noexcept { l.swap(r); }
-
-    /** @} */
-    /** @} */
-} // namespace futures
-
-#endif // FUTURES_PROMISE_H
-
-// #include <futures/futures/packaged_task.h>
-//
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_PACKAGED_TASK_H
-#define FUTURES_PACKAGED_TASK_H
-
-// #include <futures/futures/basic_future.h>
-
-// #include <futures/futures/detail/shared_task.h>
-//
-// Copyright (c) alandefreitas 12/1/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_SHARED_TASK_H
-#define FUTURES_SHARED_TASK_H
-
-// #include <futures/futures/detail/empty_base.h>
-
-// #include <futures/futures/detail/shared_state.h>
-
-// #include <futures/futures/detail/to_address.h>
-
-
-namespace futures::detail {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-
-    /// \brief Members common to shared tasks
-    ///
-    /// While the main purpose of shared_state_base is to differentiate the versions of `set_value`, the main purpose
-    /// of this task base class is to nullify the function type and allocator from the concrete task implementation
-    /// in the final packaged task.
-    ///
-    /// \tparam R Type returned by the task callable
-    /// \tparam Args Argument types to run the task callable
-    template <typename R, typename... Args> class shared_task_base : public shared_state<R> {
-      public:
-        /// \brief Virtual task destructor
-        virtual ~shared_task_base() = default;
-
-        /// \brief Virtual function to run the task with its Args
-        /// \param args Arguments
-        virtual void run(Args &&...args) = 0;
-
-        /// \brief Reset the state
-        ///
-        /// This function returns a new pointer to this shared task where we reallocate everything
-        ///
-        /// \return New pointer to a shared_task
-        virtual std::shared_ptr<shared_task_base> reset() = 0;
-    };
-
-    /// \brief A shared task object, that also stores the function to create the shared state
-    ///
-    /// A shared_task extends the shared state with a task. A task is an extension of and analogous with shared states.
-    /// The main difference is that tasks also define a function that specify how to create the state, with the `run`
-    /// function.
-    ///
-    /// In practice, a shared_task are to a packaged_task what a shared state is to a promise.
-    ///
-    /// \tparam R Type returned by the task callable
-    /// \tparam Args Argument types to run the task callable
-    template <typename Fn, typename Allocator, typename R, typename... Args>
-    class shared_task : public shared_task_base<R, Args...>
-#ifndef FUTURES_DOXYGEN
-        ,
-                        public maybe_empty<Fn>,
-                        public maybe_empty<
-                            /* allocator_type */ typename std::allocator_traits<Allocator>::template rebind_alloc<
-                                shared_task<Fn, Allocator, R, Args...>>>
-#endif
-    {
-      public:
-        /// \brief Allocator used to allocate this task object type
-        using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<shared_task>;
-
-        /// \brief Construct a task object for the specified allocator and function, copying the function
-        shared_task(const allocator_type &alloc, const Fn &fn)
-            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{fn}, maybe_empty<allocator_type>{alloc} {}
-
-        /// \brief Construct a task object for the specified allocator and function, moving the function
-        shared_task(const allocator_type &alloc, Fn &&fn)
-            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{std::move(fn)}, maybe_empty<allocator_type>{alloc} {}
-
-        /// \brief No copy constructor
-        shared_task(shared_task const &) = delete;
-
-        /// \brief No copy assignment
-        shared_task &operator=(shared_task const &) = delete;
-
-        /// \brief Virtual shared task destructor
-        virtual ~shared_task() = default;
-
-        /// \brief Run the task function with the given arguments and use the result to set the shared state value
-        /// \param args Arguments
-        void run(Args &&...args) final {
-            try {
-                if constexpr (std::is_same_v<R, void>) {
-                    std::apply(fn(), std::make_tuple(std::forward<Args>(args)...));
-                    this->set_value();
-                } else {
-                    this->set_value(std::apply(fn(), std::make_tuple(std::forward<Args>(args)...)));
-                }
-            } catch (...) {
-                this->set_exception(std::current_exception());
-            }
-        }
-
-        /// \brief Reallocate and reconstruct a task object
-        ///
-        /// This constructs a task object of same type from scratch.
-        typename std::shared_ptr<shared_task_base<R, Args...>> reset() final {
-            return std::allocate_shared<shared_task>(alloc(), alloc(), std::move(fn()));
-        }
-
-      private:
-        /// @name Maybe-empty internal members
-        /// @{
-
-        /// \brief Internal function object representing the task function
-        const Fn &fn() const { return maybe_empty<Fn>::get(); }
-
-        /// \brief Internal function object representing the task function
-        Fn &fn() { return maybe_empty<Fn>::get(); }
-
-        /// \brief Internal function object representing the task function
-        const allocator_type &alloc() const { return maybe_empty<allocator_type>::get(); }
-
-        /// \brief Internal function object representing the task function
-        allocator_type &alloc() { return maybe_empty<allocator_type>::get(); }
-
-        /// @}
-    };
-
-    /** @} */ // \addtogroup futures Futures
-} // namespace futures::detail
-
-#endif // FUTURES_SHARED_TASK_H
-
-
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-    /** \addtogroup shared_state Shared State
-     *  @{
-     */
-
-#ifndef FUTURES_DOXYGEN
-    /// \brief Undefined packaged task class
-    template <typename Signature> class packaged_task;
-#endif
-
-    /// \brief A packaged task that sets a shared state when done
-    ///
-    /// A packaged task holds a task to be executed and a shared state for its result.
-    ///
-    /// It's very similar to a promise where the shared state is replaced by a shared task.
-    ///
-    /// \tparam R Return type
-    /// \tparam Args Task arguments
-#ifndef FUTURES_DOXYGEN
-    template <typename R, typename... Args>
-#else
-    template <typename Signature>
-#endif
-    class packaged_task<R(Args...)> {
-      public:
-        /// \brief Constructs a std::packaged_task object with no task and no shared state
-        packaged_task() = default;
-
-        /// \brief Construct a packaged task from a function with the default std allocator
-        ///
-        /// \par Constraints
-        /// This constructor only participates in overload resolution if Fn is not a packaged task itself.
-        ///
-        /// \tparam Fn Function type
-        /// \param fn The callable target to execute
-        template <typename Fn
-#ifndef FUTURES_DOXYGEN
-                  ,
-                  typename = std::enable_if_t<!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
-#endif
-                  >
-        explicit packaged_task(Fn &&fn)
-            : packaged_task{std::allocator_arg, std::allocator<packaged_task>{}, std::forward<Fn>(fn)} {
-        }
-
-        /// \brief Constructs a std::packaged_task object with a shared state and a copy of the task
-        ///
-        /// This function constructs a std::packaged_task object with a shared state and a copy of the task, initialized
-        /// with std::forward<Fn>(fn). It uses the provided allocator to allocate memory necessary to store the task.
-        ///
-        /// \par Constraints
-        /// This constructor does not participate in overload resolution if std::decay<Fn>::type is the same type as
-        /// std::packaged_task<R(ArgTypes...)>.
-        ///
-        /// \tparam Fn Function type
-        /// \tparam Allocator Allocator type
-        /// \param alloc The allocator to use when storing the task
-        /// \param fn The callable target to execute
-        template <typename Fn, typename Allocator
-#ifndef FUTURES_DOXYGEN
-                  ,
-                  typename = std::enable_if_t<!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
-#endif
-                  >
-        explicit packaged_task(std::allocator_arg_t, const Allocator &alloc, Fn &&fn) {
-            task_ = std::allocate_shared<detail::shared_task<std::decay_t<Fn>, Allocator, R, Args...>>(
-                alloc, alloc, std::forward<Fn>(fn));
-        }
-
-        /// \brief The copy constructor is deleted, std::packaged_task is move-only.
-        packaged_task(packaged_task const &) = delete;
-
-        /// \brief Constructs a std::packaged_task with the shared state and task formerly owned by other
-        packaged_task(packaged_task &&other) noexcept
-            : future_retrieved_{other.future_retrieved_}, task_{std::move(other.task_)} {
-            other.future_retrieved_ = false;
-        }
-
-        /// \brief The copy assignment is deleted, std::packaged_task is move-only.
-        packaged_task &operator=(packaged_task const &) = delete;
-
-        /// \brief Assigns a std::packaged_task with the shared state and task formerly owned by other
-        packaged_task &operator=(packaged_task &&other) noexcept {
-            if (this != &other) {
-                packaged_task tmp{std::move(other)};
-                swap(tmp);
-            }
-            return *this;
-        }
-
-        /// \brief Destructs the task object
-        ~packaged_task() {
-            if (task_ && future_retrieved_) {
-                task_->signal_promise_destroyed();
-            }
-        }
-
-        /// \brief Checks if the task object has a valid function
-        ///
-        /// \return true if *this has a shared state, false otherwise
-        [[nodiscard]] bool valid() const noexcept { return task_ != nullptr; }
-
-        /// \brief Swaps two task objects
-        ///
-        /// This function exchanges the shared states and stored tasks of *this and other
-        ///
-        /// \param other packaged task whose state to swap with
-        void swap(packaged_task &other) noexcept {
-            std::swap(future_retrieved_, other.future_retrieved_);
-            task_.swap(other.task_);
-        }
-
-        /// \brief Returns a future object associated with the promised result
-        ///
-        /// This function constructs a future object that shares its state with this promise
-        /// Because this library handles more than a single future type, the future type we want is
-        /// a template parameter. This function expects future type constructors to accept pointers
-        /// to shared states.
-        template <class Future = cfuture<R>> Future get_future() {
-            if (future_retrieved_) {
-                throw future_already_retrieved{};
-            }
-            if (!valid()) {
-                throw packaged_task_uninitialized{};
-            }
-            future_retrieved_ = true;
-            return Future{std::static_pointer_cast<shared_state<R>>(task_)};
-        }
-
-        /// \brief Executes the function and set the shared state
-        ///
-        /// Calls the stored task with args as the arguments. The return value of the task or any exceptions thrown are
-        /// stored in the shared state
-        /// The shared state is made ready and any threads waiting for this are unblocked.
-        ///
-        /// \param args the parameters to pass on invocation of the stored task
-        void operator()(Args... args) {
-            if (!valid()) {
-                throw packaged_task_uninitialized{};
-            }
-            task_->run(std::forward<Args>(args)...);
-        }
-
-        /// \brief Resets the shared state abandoning any stored results of previous executions
-        ///
-        /// Resets the state abandoning the results of previous executions. A new shared state is constructed.
-        /// Equivalent to *this = packaged_task(std::move(f)), where f is the stored task.
-        void reset() {
-            if (!valid()) {
-                throw packaged_task_uninitialized{};
-            }
-            task_ = task_->reset();
-            future_retrieved_ = false;
-        }
-
-      private:
-        /// \brief True if the corresponding future has already been retrieved
-        bool future_retrieved_{false};
-
-        /// \brief The function this task should execute
-        std::shared_ptr<detail::shared_task_base<R, Args...>> task_{};
-    };
-
-    /// \brief Specializes the std::swap algorithm
-    template <typename Signature> void swap(packaged_task<Signature> &l, packaged_task<Signature> &r) noexcept {
-        l.swap(r);
-    }
-
-    /** @} */
-    /** @} */
-} // namespace futures
-
-#endif // FUTURES_PACKAGED_TASK_H
-
-// #include <futures/futures/async.h>
-//
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_ASYNC_H
-#define FUTURES_ASYNC_H
-
-// #include <futures/executor/inline_executor.h>
-//
-// Created by Alan Freitas on 8/17/21.
-//
-
-#ifndef FUTURES_INLINE_EXECUTOR_H
-#define FUTURES_INLINE_EXECUTOR_H
-
-// #include <futures/config/asio_include.h>
-
-// #include <futures/executor/is_executor.h>
-
-
-namespace futures {
-    /** \addtogroup executors Executors
-     *  @{
-     */
-
-    /// \brief A minimal executor that runs anything in the local thread in the default context
-    ///
-    /// Although simple, it needs to meet the executor requirements:
-    /// - Executor concept
-    /// - Ability to query the execution context
-    ///     - Result being derived from execution_context
-    /// - The execute function
-    /// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
-    struct inline_executor {
-        asio::execution_context *context_{nullptr};
-
-        constexpr bool operator==(const inline_executor &other) const noexcept { return context_ == other.context_; }
-
-        constexpr bool operator!=(const inline_executor &other) const noexcept { return !(*this == other); }
-
-        [[nodiscard]] constexpr asio::execution_context &query(asio::execution::context_t) const noexcept {
-            return *context_;
-        }
-
-        static constexpr asio::execution::blocking_t::never_t query(asio::execution::blocking_t) noexcept {
-            return asio::execution::blocking_t::never;
-        }
-
-        template <class F> void execute(F f) const { f(); }
-    };
-
-    /// \brief Get the inline execution context
-    asio::execution_context &inline_execution_context() {
-        static asio::execution_context context;
-        return context;
-    }
-
-    /// \brief Make an inline executor object
-    inline_executor make_inline_executor() {
-        asio::execution_context &ctx = inline_execution_context();
-        return inline_executor{&ctx};
-    }
-
-    /** @} */  // \addtogroup executors Executors
-} // namespace futures
-
-#ifdef FUTURES_USE_BOOST_ASIO
-namespace boost {
-#endif
-    namespace asio {
-        /// \brief Ensure asio and our internal functions see inline_executor as an executor
-        ///
-        /// This traits ensures asio and our internal functions see inline_executor as an executor,
-        /// as asio traits don't always work.
-        ///
-        /// This is quite a workaround until things don't improve with our executor traits.
-        ///
-        /// Ideally, we would have our own executor traits and let asio pick up from those.
-        ///
-        template <> class is_executor<futures::inline_executor> : public std::true_type {};
-
-        namespace traits {
-#if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
-            template <typename F> struct execute_member<futures::inline_executor, F> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef void result_type;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
-            template <> struct equality_comparable<futures::inline_executor> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
-            template <> struct query_member<futures::inline_executor, asio::execution::context_t> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef asio::execution_context &result_type;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
-            template <typename Property>
-            struct query_static_constexpr_member<
-                futures::inline_executor, Property,
-                typename enable_if<std::is_convertible<Property, asio::execution::blocking_t>::value>::type> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef asio::execution::blocking_t::never_t result_type;
-                static constexpr result_type value() noexcept { return result_type(); }
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
-
-        } // namespace traits
-    }     // namespace asio
-#ifdef FUTURES_USE_BOOST_ASIO
-}
-#endif
-
-#endif // FUTURES_INLINE_EXECUTOR_H
-
-
-// #include <futures/futures/detail/empty_base.h>
-
-// #include <futures/futures/detail/traits/async_result_of.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_ASYNC_RESULT_OF_H
-#define FUTURES_ASYNC_RESULT_OF_H
-
 // #include <futures/futures/detail/traits/async_result_value_type.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_ASYNC_RESULT_VALUE_TYPE_H
 #define FUTURES_ASYNC_RESULT_VALUE_TYPE_H
 
-// #include <futures/futures/detail/traits/type_member_or_void.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
+// #include <futures/futures/stop_token.h>
 
+// #include <futures/futures/detail/traits/type_member_or_void.h>
 #ifndef FUTURES_TYPE_MEMBER_OR_VOID_H
 #define FUTURES_TYPE_MEMBER_OR_VOID_H
 
@@ -6320,18 +6162,23 @@ namespace futures::detail {
 
     /// \brief Return T::type or void as a placeholder if T::type doesn't exist
     /// This class is meant to avoid errors in std::conditional
-    template <class, class = void> struct type_member_or_void { using type = void; };
-    template <class T> struct type_member_or_void<T, std::void_t<typename T::type>> {
+    template <class, class = void>
+    struct type_member_or_void
+    {
+        using type = void;
+    };
+    template <class T>
+    struct type_member_or_void<T, std::void_t<typename T::type>>
+    {
         using type = typename T::type;
     };
-    template <class T> using type_member_or_void_t = typename type_member_or_void<T>::type;
+    template <class T>
+    using type_member_or_void_t = typename type_member_or_void<T>::type;
 
     /** @} */
-}
+} // namespace futures::detail
 
 #endif // FUTURES_TYPE_MEMBER_OR_VOID_H
-
-// #include <futures/futures/stop_token.h>
 
 
 namespace futures::detail {
@@ -6339,244 +6186,59 @@ namespace futures::detail {
      *  @{
      */
 
-    /// \brief The return type of a callable given to futures::async with the Args...
-    /// This is the value type of the future object returned by async.
-    /// In typical implementations this is usually the same as result_of_t<Function, Args...>.
-    /// However, our implementation is a little different as the stop_token is provided by the
-    /// async function and is thus not a part of Args, so both paths need to be considered.
+    /// \brief The return type of a callable given to futures::async with the
+    /// Args... This is the value type of the future object returned by async.
+    /// In typical implementations this is usually the same as
+    /// result_of_t<Function, Args...>. However, our implementation is a little
+    /// different as the stop_token is provided by the async function and is
+    /// thus not a part of Args, so both paths need to be considered.
     template <typename Function, typename... Args>
-    using async_result_value_type =
-        std::conditional<std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
-                           type_member_or_void_t<std::invoke_result<std::decay_t<Function>, stop_token, Args...>>,
-                           type_member_or_void_t<std::invoke_result<std::decay_t<Function>, Args...>>>;
+    using async_result_value_type = std::conditional<
+        std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
+        type_member_or_void_t<
+            std::invoke_result<std::decay_t<Function>, stop_token, Args...>>,
+        type_member_or_void_t<
+            std::invoke_result<std::decay_t<Function>, Args...>>>;
 
     template <typename Function, typename... Args>
-    using async_result_value_type_t = typename async_result_value_type<Function, Args...>::type;
+    using async_result_value_type_t =
+        typename async_result_value_type<Function, Args...>::type;
 
     /** @} */
-}
+} // namespace futures::detail
 
 
 #endif // FUTURES_ASYNC_RESULT_VALUE_TYPE_H
 
-// #include <futures/futures/basic_future.h>
-
 
 namespace futures::detail {
     /** \addtogroup futures Futures
      *  @{
      */
 
-    /// \brief The future type that results from calling async with a function <Function, Args...>
-    /// This is the future type returned by async. In typical implementations this is usually
-    /// the same as future<result_of_t<Function, Args...>>. However, our implementation is a
-    /// little different as the stop_token is provided by the async function and can thus
-    /// influence the resulting future type, so both paths need to be considered.
-    /// Whenever we call async, we return a future with lazy continuations by default because
-    /// we don't know if the user will need efficient continuations. Also, when the function
-    /// expects a stop token, we return a jfuture.
+    /// \brief The future type that results from calling async with a function
+    /// <Function, Args...> This is the future type returned by async. In
+    /// typical implementations this is usually the same as
+    /// future<result_of_t<Function, Args...>>. However, our implementation is a
+    /// little different as the stop_token is provided by the async function and
+    /// can thus influence the resulting future type, so both paths need to be
+    /// considered. Whenever we call async, we return a future with lazy
+    /// continuations by default because we don't know if the user will need
+    /// efficient continuations. Also, when the function expects a stop token,
+    /// we return a jfuture.
     template <typename Function, typename... Args>
-    using async_result_of = std::conditional<std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
-                                               jcfuture<async_result_value_type_t<Function, Args...>>,
-                                               cfuture<async_result_value_type_t<Function, Args...>>>;
+    using async_result_of = std::conditional<
+        std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
+        jcfuture<async_result_value_type_t<Function, Args...>>,
+        cfuture<async_result_value_type_t<Function, Args...>>>;
 
     template <typename Function, typename... Args>
     using async_result_of_t = typename async_result_of<Function, Args...>::type;
 
     /** @} */
-} // namespace futures
+} // namespace futures::detail
 
 #endif // FUTURES_ASYNC_RESULT_OF_H
-
-
-// #include <futures/futures/await.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_AWAIT_H
-#define FUTURES_AWAIT_H
-
-// #include <type_traits>
-
-
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-
-    /** \addtogroup waiting Waiting
-     *
-     * \brief Basic function to wait for futures
-     *
-     * This module defines a variety of auxiliary functions to wait for futures.
-     *
-     *  @{
-     */
-
-    /// \brief Very simple syntax sugar for types that pass the @ref is_future concept
-    ///
-    /// This syntax is most useful for cases where we are immediately requesting the future result.
-    ///
-    /// The function also makes the syntax optionally a little closer to languages such as javascript.
-    ///
-    /// \tparam Future A future type
-    ///
-    /// \return The result of the future object
-    template <typename Future
-#ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
-#endif
-              >
-    decltype(auto) await(Future &&f) {
-        return f.get();
-    }
-
-    /** @} */
-    /** @} */
-} // namespace futures
-
-#endif // FUTURES_AWAIT_H
-
-// #include <futures/futures/launch.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
-#ifndef FUTURES_LAUNCH_H
-#define FUTURES_LAUNCH_H
-
-namespace futures {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-    /** \addtogroup launch Launch
-     *
-     * \brief Functions and policies for launching asynchronous tasks
-     *
-     * This module defines functions for conveniently launching asynchronous tasks and
-     * policies to determine how executors should handle these tasks.
-     *
-     *  @{
-     */
-    /** \addtogroup launch-policies Launch Policies
-     *
-     * \brief Launch policies for asynchronous tasks
-     *
-     * Launch policies determine how executors should launch and handle a task.
-     *
-     *  @{
-     */
-
-    /// \brief Specifies the launch policy for a task executed by the @ref futures::async function
-    ///
-    /// std::async creates a new thread for each asynchronous operation, which usually entails in only
-    /// two execution policies: new thread or inline. Because futures::async use executors, there are
-    /// many more policies and ways to use these executors beyond yes/no.
-    ///
-    /// Most of the time, we want the executor/post policy for executors. So as the @ref async function
-    /// also accepts executors directly, this option can often be ignored, and is here mostly here for
-    /// compatibility with the std::async.
-    ///
-    /// When only the policy is provided, async will try to generate the proper executor for that policy.
-    /// When the executor and the policy is provided, we might only have some conflict for the deferred
-    /// policy, which does not use an executor in std::launch. In the context of executors, the deferred
-    /// policy means the function is only posted to the executor when its result is requested.
-    enum class launch {
-        /// no policy
-        none = 0b0000'0000,
-        /// execute on a new thread regardless of executors (same as std::async::async)
-        new_thread = 0b0000'0001,
-        /// execute on a new thread regardless of executors (same as std::async::async)
-        async = 0b0000'0001,
-        /// execute on the calling thread when result is requested (same as std::async::deferred)
-        deferred = 0b0000'0010,
-        /// execute on the calling thread when result is requested (same as std::async::deferred)
-        lazy = 0b0000'0010,
-        /// inherit from context
-        inherit = 0b0000'0100,
-        /// execute on the calling thread now (uses inline executor)
-        inline_now = 0b0000'1000,
-        /// execute on the calling thread now (uses inline executor)
-        sync = 0b0000'1000,
-        /// enqueue task in the executor
-        post = 0b0001'0000,
-        /// run immediately if inside the executor
-        executor = 0b0001'0000,
-        /// run immediately if inside the executor
-        dispatch = 0b0010'0000,
-        /// run immediately if inside the executor
-        executor_now = 0b0010'0000,
-        /// enqueue task for later in the executor
-        executor_later = 0b0100'0000,
-        /// enqueue task for later in the executor
-        defer = 0b0100'0000,
-        /// both async and deferred are OK
-        any = async | deferred
-    };
-
-    /// \brief operator & for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy both policies
-    constexpr launch operator&(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) & static_cast<int>(y));
-    }
-
-    /// \brief operator | for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy any of the policies
-    constexpr launch operator|(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) | static_cast<int>(y));
-    }
-
-    /// \brief operator ^ for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy any policy set in only one of them
-    constexpr launch operator^(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) ^ static_cast<int>(y));
-    }
-
-    /// \brief operator ~ for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \return A launch policy that attempts to satisfy the opposite of the policies set
-    constexpr launch operator~(launch x) { return static_cast<launch>(~static_cast<int>(x)); }
-
-    /// \brief operator &= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &operator&=(launch &x, launch y) { return x = x & y; }
-
-    /// \brief operator |= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &operator|=(launch &x, launch y) { return x = x | y; }
-
-    /// \brief operator ^= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &operator^=(launch &x, launch y) { return x = x ^ y; }
-    /** @} */
-    /** @} */
-    /** @} */
-} // namespace futures
-
-#endif // FUTURES_LAUNCH_H
 
 
 namespace futures {
@@ -6590,36 +6252,48 @@ namespace futures {
      *
      * \brief Function to schedule and launch future tasks
      *
-     * This module contains function we can use to launch and schedule tasks. If possible, tasks should be
-     * scheduled lazily instead of launched eagerly to avoid a race between the task and its dependencies.
+     * This module contains function we can use to launch and schedule tasks. If
+     * possible, tasks should be scheduled lazily instead of launched eagerly to
+     * avoid a race between the task and its dependencies.
      *
-     * When tasks are scheduled eagerly, the function @ref async provides an alternatives to launch tasks on specific
-     * executors instead of creating a new thread for each asynchronous task.
+     * When tasks are scheduled eagerly, the function @ref async provides an
+     * alternatives to launch tasks on specific executors instead of creating a
+     * new thread for each asynchronous task.
      *
      *  @{
      */
 
     namespace detail {
-        enum class schedule_future_policy {
-            /// \brief Internal tag indicating the executor should post the execution
+        enum class schedule_future_policy
+        {
+            /// \brief Internal tag indicating the executor should post the
+            /// execution
             post,
-            /// \brief Internal tag indicating the executor should dispatch the execution
+            /// \brief Internal tag indicating the executor should dispatch the
+            /// execution
             dispatch,
-            /// \brief Internal tag indicating the executor should defer the execution
+            /// \brief Internal tag indicating the executor should defer the
+            /// execution
             defer,
         };
 
-        /// \brief A single trait to validate and constraint futures::async input types
+        /// \brief A single trait to validate and constraint futures::async
+        /// input types
         template <class Executor, class Function, typename... Args>
-        using is_valid_async_input = std::disjunction<is_executor_then_function<Executor, Function, Args...>,
-                                                      is_executor_then_stoppable_function<Executor, Function, Args...>>;
+        using is_valid_async_input = std::disjunction<
+            is_executor_then_function<Executor, Function, Args...>,
+            is_executor_then_stoppable_function<Executor, Function, Args...>>;
 
-        /// \brief A single trait to validate and constraint futures::async input types
+        /// \brief A single trait to validate and constraint futures::async
+        /// input types
         template <class Executor, class Function, typename... Args>
-        constexpr bool is_valid_async_input_v = is_valid_async_input<Executor, Function, Args...>::value;
+        constexpr bool is_valid_async_input_v
+            = is_valid_async_input<Executor, Function, Args...>::value;
 
         /// \brief Create a new stop source for the new shared state
-        template <bool expects_stop_token> auto create_stop_source() {
+        template <bool expects_stop_token>
+        auto
+        create_stop_source() {
             if constexpr (expects_stop_token) {
                 stop_source ss;
                 return std::make_pair(ss, ss.get_token());
@@ -6628,28 +6302,45 @@ namespace futures {
             }
         }
 
-        /// This function is defined as a functor to facilitate friendship in basic_future
-        struct async_future_scheduler {
+        /// This function is defined as a functor to facilitate friendship in
+        /// basic_future
+        struct async_future_scheduler
+        {
             /// This is a functor to fulfill a promise in a packaged task
-            /// Handle to fulfill promise. Asio requires us to create a handle because
-            /// callables need to be *copy constructable*. Continuations also require us to create an
-            /// extra handle because we need to run them after the function is over.
+            /// Handle to fulfill promise. Asio requires us to create a handle
+            /// because callables need to be *copy constructable*. Continuations
+            /// also require us to create an extra handle because we need to run
+            /// them after the function is over.
             template <class StopToken, class Function, class Task, class... Args>
             class promise_fulfill_handle
-                : public maybe_empty<StopToken>, // stop token for stopping the process is represented in base class
-                  public maybe_empty<std::tuple<Args...>> // arguments bound to the function to fulfill the promise also
-                                                          // have empty base opt
+                : public maybe_empty<StopToken>
+                , // stop token for stopping the process is represented in base
+                  // class
+                  public maybe_empty<std::tuple<
+                      Args...>> // arguments bound to the function to fulfill
+                                // the promise also have empty base opt
             {
-              public:
-                promise_fulfill_handle(Task &&pt, std::tuple<Args...> &&args, continuations_source cs,
-                                       const StopToken &st)
-                    : maybe_empty<StopToken>(st), maybe_empty<std::tuple<Args...>>(std::move(args)),
-                      pt_(std::forward<Task>(pt)), continuations_(std::move(cs)) {}
+            public:
+                promise_fulfill_handle(
+                    Task &&pt,
+                    std::tuple<Args...> &&args,
+                    continuations_source cs,
+                    const StopToken &st)
+                    : maybe_empty<StopToken>(st),
+                      maybe_empty<std::tuple<Args...>>(std::move(args)),
+                      pt_(std::forward<Task>(pt)),
+                      continuations_(std::move(cs)) {}
 
-                void operator()() {
+                void
+                operator()() {
                     // Fulfill promise
-                    if constexpr (std::is_invocable_v<Function, StopToken, Args...>) {
-                        std::apply(pt_, std::tuple_cat(std::make_tuple(token()), std::move(args())));
+                    if constexpr (
+                        std::is_invocable_v<Function, StopToken, Args...>) {
+                        std::apply(
+                            pt_,
+                            std::tuple_cat(
+                                std::make_tuple(token()),
+                                std::move(args())));
                     } else {
                         std::apply(pt_, std::move(args()));
                     }
@@ -6657,20 +6348,37 @@ namespace futures {
                     continuations_.request_run();
                 }
 
-                /// \brief Get stop token from the base class as function for convenience
-                const StopToken &token() const { return maybe_empty<StopToken>::get(); }
+                /// \brief Get stop token from the base class as function for
+                /// convenience
+                const StopToken &
+                token() const {
+                    return maybe_empty<StopToken>::get();
+                }
 
-                /// \brief Get stop token from the base class as function for convenience
-                StopToken &token() { return maybe_empty<StopToken>::get(); }
+                /// \brief Get stop token from the base class as function for
+                /// convenience
+                StopToken &
+                token() {
+                    return maybe_empty<StopToken>::get();
+                }
 
-                /// \brief Get args from the base class as function for convenience
-                const std::tuple<Args...> &args() const { return maybe_empty<std::tuple<Args...>>::get(); }
+                /// \brief Get args from the base class as function for
+                /// convenience
+                const std::tuple<Args...> &
+                args() const {
+                    return maybe_empty<std::tuple<Args...>>::get();
+                }
 
-                /// \brief Get args from the base class as function for convenience
-                std::tuple<Args...> &args() { return maybe_empty<std::tuple<Args...>>::get(); }
+                /// \brief Get args from the base class as function for
+                /// convenience
+                std::tuple<Args...> &
+                args() {
+                    return maybe_empty<std::tuple<Args...>>::get();
+                }
 
-              private:
-                /// \brief Task we need to fulfill the promise and its shared state
+            private:
+                /// \brief Task we need to fulfill the promise and its shared
+                /// state
                 Task pt_;
 
                 /// \brief Continuation source for next futures
@@ -6678,39 +6386,62 @@ namespace futures {
             };
 
             /// \brief Schedule the function in the executor
-            /// This is the internal function async uses to finally schedule the function after setting the
-            /// default parameters and converting policies into scheduling strategies.
-            template <typename Executor, typename Function, typename... Args
+            /// This is the internal function async uses to finally schedule the
+            /// function after setting the default parameters and converting
+            /// policies into scheduling strategies.
+            template <
+                typename Executor,
+                typename Function,
+                typename... Args
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<is_valid_async_input_v<Executor, Function, Args...>, int> = 0
+                ,
+                std::enable_if_t<
+                    is_valid_async_input_v<Executor, Function, Args...>,
+                    int> = 0
 #endif
-                      >
-            async_result_of_t<Function, Args...> operator()(schedule_future_policy policy, const Executor &ex,
-                                                            Function &&f, Args &&...args) const {
-                using future_value_type = async_result_value_type_t<Function, Args...>;
+                >
+            async_result_of_t<Function, Args...>
+            operator()(
+                schedule_future_policy policy,
+                const Executor &ex,
+                Function &&f,
+                Args &&...args) const {
+                using future_value_type
+                    = async_result_value_type_t<Function, Args...>;
                 using future_type = async_result_of_t<Function, Args...>;
 
                 // Shared sources
-                constexpr bool expects_stop_token = std::is_invocable_v<Function, stop_token, Args...>;
-                auto [s_source, s_token] = create_stop_source<expects_stop_token>();
+                constexpr bool expects_stop_token = std::
+                    is_invocable_v<Function, stop_token, Args...>;
+                auto [s_source, s_token] = create_stop_source<
+                    expects_stop_token>();
                 continuations_source cs;
 
                 // Set up shared state
-                using packaged_task_type =
-                    std::conditional_t<expects_stop_token,
-                                       packaged_task<future_value_type(stop_token, std::decay_t<Args>...)>,
-                                       packaged_task<future_value_type(std::decay_t<Args>...)>>;
-                packaged_task_type pt{std::forward<Function>(f)};
-                future_type result{pt.template get_future<future_type>()};
+                using packaged_task_type = std::conditional_t<
+                    expects_stop_token,
+                    packaged_task<
+                        future_value_type(stop_token, std::decay_t<Args>...)>,
+                    packaged_task<future_value_type(std::decay_t<Args>...)>>;
+                packaged_task_type pt{ std::forward<Function>(f) };
+                future_type result{ pt.template get_future<future_type>() };
                 result.set_continuations_source(cs);
                 if constexpr (expects_stop_token) {
                     result.set_stop_source(s_source);
                 }
-                promise_fulfill_handle<std::decay_t<decltype(s_token)>, Function, packaged_task_type, Args...>
-                    fulfill_promise(std::move(pt), std::make_tuple(std::forward<Args>(args)...), cs, s_token);
+                promise_fulfill_handle<
+                    std::decay_t<decltype(s_token)>,
+                    Function,
+                    packaged_task_type,
+                    Args...>
+                    fulfill_promise(
+                        std::move(pt),
+                        std::make_tuple(std::forward<Args>(args)...),
+                        cs,
+                        s_token);
 
-                // Fire-and-forget: Post a handle running the complete function to the executor
+                // Fire-and-forget: Post a handle running the complete function
+                // to the executor
                 switch (policy) {
                 case schedule_future_policy::dispatch:
                     asio::dispatch(ex, std::move(fulfill_promise));
@@ -6728,7 +6459,8 @@ namespace futures {
         constexpr async_future_scheduler schedule_future;
     } // namespace detail
 
-    /// \brief Launch an asynchronous task with the specified executor and policy
+    /// \brief Launch an asynchronous task with the specified executor and
+    /// policy
     ///
     /// \par Example
     /// \code
@@ -6749,12 +6481,17 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Executor, typename Function, typename... Args
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_valid_async_input_v<Executor, Function, Args...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_valid_async_input_v<Executor, Function, Args...>,
+            int> = 0
 #endif
-              >
+        >
 #ifndef FUTURES_DOXYGEN
     decltype(auto)
 #else
@@ -6762,20 +6499,31 @@ namespace futures {
 #endif
     async(launch policy, const Executor &ex, Function &&f, Args &&...args) {
         // Unwrap policies
-        const bool new_thread_policy = (policy & launch::new_thread) == launch::new_thread;
-        const bool deferred_policy = (policy & launch::deferred) == launch::deferred;
-        const bool inline_now_policy = (policy & launch::inline_now) == launch::inline_now;
-        const bool executor_policy = (policy & launch::executor) == launch::executor;
-        const bool executor_now_policy = (policy & launch::executor_now) == launch::executor_now;
-        const bool executor_later_policy = (policy & launch::executor_later) == launch::executor_later;
+        const bool new_thread_policy = (policy & launch::new_thread)
+                                       == launch::new_thread;
+        const bool deferred_policy = (policy & launch::deferred)
+                                     == launch::deferred;
+        const bool inline_now_policy = (policy & launch::inline_now)
+                                       == launch::inline_now;
+        const bool executor_policy = (policy & launch::executor)
+                                     == launch::executor;
+        const bool executor_now_policy = (policy & launch::executor_now)
+                                         == launch::executor_now;
+        const bool executor_later_policy = (policy & launch::executor_later)
+                                           == launch::executor_later;
 
         // Define executor
-        const bool use_default_executor = executor_policy && executor_now_policy && executor_later_policy;
-        const bool use_new_thread_executor = (!use_default_executor) && new_thread_policy;
-        const bool use_inline_later_executor = (!use_default_executor) && deferred_policy;
-        const bool use_inline_executor = (!use_default_executor) && inline_now_policy;
-        const bool no_executor_defined =
-            !(use_default_executor || use_new_thread_executor || use_inline_later_executor || use_inline_executor);
+        const bool use_default_executor = executor_policy && executor_now_policy
+                                          && executor_later_policy;
+        const bool use_new_thread_executor = (!use_default_executor)
+                                             && new_thread_policy;
+        const bool use_inline_later_executor = (!use_default_executor)
+                                               && deferred_policy;
+        const bool use_inline_executor = (!use_default_executor)
+                                         && inline_now_policy;
+        const bool no_executor_defined = !(
+            use_default_executor || use_new_thread_executor
+            || use_inline_later_executor || use_inline_executor);
 
         // Define schedule policy
         detail::schedule_future_policy schedule_policy;
@@ -6791,16 +6539,20 @@ namespace futures {
             schedule_policy = detail::schedule_future_policy::post;
         }
 
-        return detail::schedule_future(schedule_policy, ex, std::forward<Function>(f), std::forward<Args>(args)...);
+        return detail::schedule_future(
+            schedule_policy,
+            ex,
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
     /// \brief Launch a task with a custom executor instead of policies.
     ///
-    /// This version of the async function will always use the specified executor instead of
-    /// creating a new thread.
+    /// This version of the async function will always use the specified
+    /// executor instead of creating a new thread.
     ///
-    /// If no executor is provided, then the function is run in a default executor created from
-    /// the default thread pool.
+    /// If no executor is provided, then the function is run in a default
+    /// executor created from the default thread pool.
     ///
     /// \tparam Executor Executor from an execution context
     /// \tparam Function A callable object
@@ -6811,22 +6563,32 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Executor, typename Function, typename... Args
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_valid_async_input_v<Executor, Function, Args...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_valid_async_input_v<Executor, Function, Args...>,
+            int> = 0
 #endif
-              >
+        >
 #ifndef FUTURES_DOXYGEN
     detail::async_result_of_t<Function, Args...>
 #else
     __implementation_defined__
 #endif
     async(const Executor &ex, Function &&f, Args &&...args) {
-        return async(launch::async, ex, std::forward<Function>(f), std::forward<Args>(args)...);
+        return async(
+            launch::async,
+            ex,
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief Launch an async function according to the specified policy with the default executor
+    /// \brief Launch an async function according to the specified policy with
+    /// the default executor
     ///
     /// \tparam Function A callable object
     /// \tparam Args Arguments for the Function
@@ -6836,22 +6598,31 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Function, typename... Args
+    template <
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_async_input_non_executor_v<Function, Args...>,
+            int> = 0
 #endif
-              >
+        >
 #ifndef FUTURES_DOXYGEN
     detail::async_result_of_t<Function, Args...>
 #else
     __implementation_defined__
 #endif
     async(launch policy, Function &&f, Args &&...args) {
-        return async(policy, make_default_executor(), std::forward<Function>(f), std::forward<Args>(args)...);
+        return async(
+            policy,
+            make_default_executor(),
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief Launch an async function with the default executor of type @ref default_executor_type
+    /// \brief Launch an async function with the default executor of type @ref
+    /// default_executor_type
     ///
     /// \tparam Executor Executor from an execution context
     /// \tparam Function A callable object
@@ -6861,20 +6632,27 @@ namespace futures {
     /// \param args Function arguments
     ///
     /// \return A future object with the function results
-    template <typename Function, typename... Args
+    template <
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_async_input_non_executor_v<Function, Args...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_async_input_non_executor_v<Function, Args...>,
+            int> = 0
 #endif
-              >
+        >
 #ifndef FUTURES_DOXYGEN
     detail::async_result_of_t<Function, Args...>
 #else
     __implementation_defined__
 #endif
     async(Function &&f, Args &&...args) {
-        return async(launch::async, ::futures::make_default_executor(), std::forward<Function>(f),
-                     std::forward<Args>(args)...);
+        return async(
+            launch::async,
+            ::futures::make_default_executor(),
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
     /** @} */
@@ -6884,29 +6662,707 @@ namespace futures {
 
 #endif // FUTURES_ASYNC_H
 
-// #include <futures/futures/wait_for_all.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
+// #include <futures/futures/await.h>
 
+// #include <futures/futures/basic_future.h>
+
+// #include <futures/futures/packaged_task.h>
+#ifndef FUTURES_PACKAGED_TASK_H
+#define FUTURES_PACKAGED_TASK_H
+
+// #include <futures/futures/basic_future.h>
+
+// #include <futures/futures/detail/shared_task.h>
+#ifndef FUTURES_SHARED_TASK_H
+#define FUTURES_SHARED_TASK_H
+
+// #include <futures/futures/detail/empty_base.h>
+
+// #include <futures/futures/detail/shared_state.h>
+
+// #include <futures/futures/detail/to_address.h>
+#ifndef FUTURES_TO_ADDRESS_H
+#define FUTURES_TO_ADDRESS_H
+
+/// \file
+/// Replicate the C++20 to_address functionality in C++17
+
+// #include <memory>
+
+
+namespace futures::detail {
+    /// \brief Obtain the address represented by p without forming a reference
+    /// to the object pointed to by p This is the "fancy pointer" overload: If
+    /// the expression std::pointer_traits<Ptr>::to_address(p) is well-formed,
+    /// returns the result of that expression. Otherwise, returns
+    /// std::to_address(p.operator->()). \tparam T Element type \param v Element
+    /// pointer \return Element address
+    template <class T>
+    constexpr T *
+    to_address(T *v) noexcept {
+        return v;
+    }
+
+    /// \brief Obtain the address represented by p without forming a reference
+    /// to the object pointed to by p This is the "raw pointer overload": If T
+    /// is a function type, the program is ill-formed. Otherwise, returns p
+    /// unmodified. \tparam T Element type \param v Raw pointer \return Element
+    /// address
+    template <class T>
+    inline typename std::pointer_traits<T>::element_type *
+    to_address(const T &v) noexcept {
+        return to_address(v.operator->());
+    }
+} // namespace futures::detail
+
+#endif // FUTURES_TO_ADDRESS_H
+
+
+namespace futures::detail {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+
+    /// \brief Members common to shared tasks
+    ///
+    /// While the main purpose of shared_state_base is to differentiate the
+    /// versions of `set_value`, the main purpose of this task base class is to
+    /// nullify the function type and allocator from the concrete task
+    /// implementation in the final packaged task.
+    ///
+    /// \tparam R Type returned by the task callable
+    /// \tparam Args Argument types to run the task callable
+    template <typename R, typename... Args>
+    class shared_task_base : public shared_state<R>
+    {
+    public:
+        /// \brief Virtual task destructor
+        virtual ~shared_task_base() = default;
+
+        /// \brief Virtual function to run the task with its Args
+        /// \param args Arguments
+        virtual void
+        run(Args &&...args)
+            = 0;
+
+        /// \brief Reset the state
+        ///
+        /// This function returns a new pointer to this shared task where we
+        /// reallocate everything
+        ///
+        /// \return New pointer to a shared_task
+        virtual std::shared_ptr<shared_task_base>
+        reset() = 0;
+    };
+
+    /// \brief A shared task object, that also stores the function to create the
+    /// shared state
+    ///
+    /// A shared_task extends the shared state with a task. A task is an
+    /// extension of and analogous with shared states. The main difference is
+    /// that tasks also define a function that specify how to create the state,
+    /// with the `run` function.
+    ///
+    /// In practice, a shared_task are to a packaged_task what a shared state is
+    /// to a promise.
+    ///
+    /// \tparam R Type returned by the task callable
+    /// \tparam Args Argument types to run the task callable
+    template <typename Fn, typename Allocator, typename R, typename... Args>
+    class shared_task
+        : public shared_task_base<R, Args...>
+#ifndef FUTURES_DOXYGEN
+        , public maybe_empty<Fn>
+        , public maybe_empty<
+              /* allocator_type */ typename std::allocator_traits<Allocator>::
+                  template rebind_alloc<shared_task<Fn, Allocator, R, Args...>>>
+#endif
+    {
+    public:
+        /// \brief Allocator used to allocate this task object type
+        using allocator_type = typename std::allocator_traits<
+            Allocator>::template rebind_alloc<shared_task>;
+
+        /// \brief Construct a task object for the specified allocator and
+        /// function, copying the function
+        shared_task(const allocator_type &alloc, const Fn &fn)
+            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{ fn },
+              maybe_empty<allocator_type>{ alloc } {}
+
+        /// \brief Construct a task object for the specified allocator and
+        /// function, moving the function
+        shared_task(const allocator_type &alloc, Fn &&fn)
+            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{ std::move(fn) },
+              maybe_empty<allocator_type>{ alloc } {}
+
+        /// \brief No copy constructor
+        shared_task(shared_task const &) = delete;
+
+        /// \brief No copy assignment
+        shared_task &
+        operator=(shared_task const &)
+            = delete;
+
+        /// \brief Virtual shared task destructor
+        virtual ~shared_task() = default;
+
+        /// \brief Run the task function with the given arguments and use the
+        /// result to set the shared state value \param args Arguments
+        void
+        run(Args &&...args) final {
+            try {
+                if constexpr (std::is_same_v<R, void>) {
+                    std::apply(
+                        fn(),
+                        std::make_tuple(std::forward<Args>(args)...));
+                    this->set_value();
+                } else {
+                    this->set_value(std::apply(
+                        fn(),
+                        std::make_tuple(std::forward<Args>(args)...)));
+                }
+            }
+            catch (...) {
+                this->set_exception(std::current_exception());
+            }
+        }
+
+        /// \brief Reallocate and reconstruct a task object
+        ///
+        /// This constructs a task object of same type from scratch.
+        typename std::shared_ptr<shared_task_base<R, Args...>>
+        reset() final {
+            return std::allocate_shared<
+                shared_task>(alloc(), alloc(), std::move(fn()));
+        }
+
+    private:
+        /// @name Maybe-empty internal members
+        /// @{
+
+        /// \brief Internal function object representing the task function
+        const Fn &
+        fn() const {
+            return maybe_empty<Fn>::get();
+        }
+
+        /// \brief Internal function object representing the task function
+        Fn &
+        fn() {
+            return maybe_empty<Fn>::get();
+        }
+
+        /// \brief Internal function object representing the task function
+        const allocator_type &
+        alloc() const {
+            return maybe_empty<allocator_type>::get();
+        }
+
+        /// \brief Internal function object representing the task function
+        allocator_type &
+        alloc() {
+            return maybe_empty<allocator_type>::get();
+        }
+
+        /// @}
+    };
+
+    /** @} */ // \addtogroup futures Futures
+} // namespace futures::detail
+
+#endif // FUTURES_SHARED_TASK_H
+
+
+namespace futures {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup shared_state Shared State
+     *  @{
+     */
+
+#ifndef FUTURES_DOXYGEN
+    /// \brief Undefined packaged task class
+    template <typename Signature>
+    class packaged_task;
+#endif
+
+    /// \brief A packaged task that sets a shared state when done
+    ///
+    /// A packaged task holds a task to be executed and a shared state for its
+    /// result.
+    ///
+    /// It's very similar to a promise where the shared state is replaced by a
+    /// shared task.
+    ///
+    /// \tparam R Return type
+    /// \tparam Args Task arguments
+#ifndef FUTURES_DOXYGEN
+    template <typename R, typename... Args>
+#else
+    template <typename Signature>
+#endif
+    class packaged_task<R(Args...)>
+    {
+    public:
+        /// \brief Constructs a std::packaged_task object with no task and no
+        /// shared state
+        packaged_task() = default;
+
+        /// \brief Construct a packaged task from a function with the default
+        /// std allocator
+        ///
+        /// \par Constraints
+        /// This constructor only participates in overload resolution if Fn is
+        /// not a packaged task itself.
+        ///
+        /// \tparam Fn Function type
+        /// \param fn The callable target to execute
+        template <
+            typename Fn
+#ifndef FUTURES_DOXYGEN
+            ,
+            typename = std::enable_if_t<
+                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
+#endif
+            >
+        explicit packaged_task(Fn &&fn)
+            : packaged_task{ std::allocator_arg,
+                             std::allocator<packaged_task>{},
+                             std::forward<Fn>(fn) } {
+        }
+
+        /// \brief Constructs a std::packaged_task object with a shared state
+        /// and a copy of the task
+        ///
+        /// This function constructs a std::packaged_task object with a shared
+        /// state and a copy of the task, initialized with std::forward<Fn>(fn).
+        /// It uses the provided allocator to allocate memory necessary to store
+        /// the task.
+        ///
+        /// \par Constraints
+        /// This constructor does not participate in overload resolution if
+        /// std::decay<Fn>::type is the same type as
+        /// std::packaged_task<R(ArgTypes...)>.
+        ///
+        /// \tparam Fn Function type
+        /// \tparam Allocator Allocator type
+        /// \param alloc The allocator to use when storing the task
+        /// \param fn The callable target to execute
+        template <
+            typename Fn,
+            typename Allocator
+#ifndef FUTURES_DOXYGEN
+            ,
+            typename = std::enable_if_t<
+                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
+#endif
+            >
+        explicit packaged_task(
+            std::allocator_arg_t,
+            const Allocator &alloc,
+            Fn &&fn) {
+            task_ = std::allocate_shared<
+                detail::shared_task<std::decay_t<Fn>, Allocator, R, Args...>>(
+                alloc,
+                alloc,
+                std::forward<Fn>(fn));
+        }
+
+        /// \brief The copy constructor is deleted, std::packaged_task is
+        /// move-only.
+        packaged_task(packaged_task const &) = delete;
+
+        /// \brief Constructs a std::packaged_task with the shared state and
+        /// task formerly owned by other
+        packaged_task(packaged_task &&other) noexcept
+            : future_retrieved_{ other.future_retrieved_ },
+              task_{ std::move(other.task_) } {
+            other.future_retrieved_ = false;
+        }
+
+        /// \brief The copy assignment is deleted, std::packaged_task is
+        /// move-only.
+        packaged_task &
+        operator=(packaged_task const &)
+            = delete;
+
+        /// \brief Assigns a std::packaged_task with the shared state and task
+        /// formerly owned by other
+        packaged_task &
+        operator=(packaged_task &&other) noexcept {
+            if (this != &other) {
+                packaged_task tmp{ std::move(other) };
+                swap(tmp);
+            }
+            return *this;
+        }
+
+        /// \brief Destructs the task object
+        ~packaged_task() {
+            if (task_ && future_retrieved_) {
+                task_->signal_promise_destroyed();
+            }
+        }
+
+        /// \brief Checks if the task object has a valid function
+        ///
+        /// \return true if *this has a shared state, false otherwise
+        [[nodiscard]] bool
+        valid() const noexcept {
+            return task_ != nullptr;
+        }
+
+        /// \brief Swaps two task objects
+        ///
+        /// This function exchanges the shared states and stored tasks of *this
+        /// and other
+        ///
+        /// \param other packaged task whose state to swap with
+        void
+        swap(packaged_task &other) noexcept {
+            std::swap(future_retrieved_, other.future_retrieved_);
+            task_.swap(other.task_);
+        }
+
+        /// \brief Returns a future object associated with the promised result
+        ///
+        /// This function constructs a future object that shares its state with
+        /// this promise Because this library handles more than a single future
+        /// type, the future type we want is a template parameter. This function
+        /// expects future type constructors to accept pointers to shared states.
+        template <class Future = cfuture<R>>
+        Future
+        get_future() {
+            if (future_retrieved_) {
+                throw future_already_retrieved{};
+            }
+            if (!valid()) {
+                throw packaged_task_uninitialized{};
+            }
+            future_retrieved_ = true;
+            return Future{ std::static_pointer_cast<shared_state<R>>(task_) };
+        }
+
+        /// \brief Executes the function and set the shared state
+        ///
+        /// Calls the stored task with args as the arguments. The return value
+        /// of the task or any exceptions thrown are stored in the shared state
+        /// The shared state is made ready and any threads waiting for this are
+        /// unblocked.
+        ///
+        /// \param args the parameters to pass on invocation of the stored task
+        void
+        operator()(Args... args) {
+            if (!valid()) {
+                throw packaged_task_uninitialized{};
+            }
+            task_->run(std::forward<Args>(args)...);
+        }
+
+        /// \brief Resets the shared state abandoning any stored results of
+        /// previous executions
+        ///
+        /// Resets the state abandoning the results of previous executions. A
+        /// new shared state is constructed. Equivalent to *this =
+        /// packaged_task(std::move(f)), where f is the stored task.
+        void
+        reset() {
+            if (!valid()) {
+                throw packaged_task_uninitialized{};
+            }
+            task_ = task_->reset();
+            future_retrieved_ = false;
+        }
+
+    private:
+        /// \brief True if the corresponding future has already been retrieved
+        bool future_retrieved_{ false };
+
+        /// \brief The function this task should execute
+        std::shared_ptr<detail::shared_task_base<R, Args...>> task_{};
+    };
+
+    /// \brief Specializes the std::swap algorithm
+    template <typename Signature>
+    void
+    swap(packaged_task<Signature> &l, packaged_task<Signature> &r) noexcept {
+        l.swap(r);
+    }
+
+    /** @} */
+    /** @} */
+} // namespace futures
+
+#endif // FUTURES_PACKAGED_TASK_H
+
+// #include <futures/futures/promise.h>
+#ifndef FUTURES_PROMISE_H
+#define FUTURES_PROMISE_H
+
+// #include <futures/futures/basic_future.h>
+
+// #include <futures/futures/detail/empty_base.h>
+
+// #include <futures/futures/detail/shared_state.h>
+
+// #include <futures/futures/detail/to_address.h>
+
+// #include <memory>
+
+
+namespace futures {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup shared_state Shared State
+     *
+     * \brief Shared state objects
+     *
+     *  @{
+     */
+
+    /// \brief Common members to promises of all types
+    ///
+    /// This includes a pointer to the corresponding shared_state for the future
+    /// and the functions to manage the promise.
+    ///
+    /// The specific promise specialization will only differ by their set_value
+    /// functions.
+    ///
+    template <typename R>
+    class promise_base
+    {
+    public:
+        /// \brief Create the base promise with std::allocator
+        ///
+        /// Use std::allocator_arg tag to dispatch and select allocator aware
+        /// constructor
+        promise_base()
+            : promise_base{ std::allocator_arg,
+                            std::allocator<promise_base>{} } {}
+
+        /// \brief Create a base promise setting the shared state with the
+        /// specified allocator
+        ///
+        /// This function allocates memory for and allocates an initial
+        /// promise_shared_state (the future value) with the specified
+        /// allocator. This object is stored in the internal intrusive pointer
+        /// as the future shared state.
+        template <typename Allocator>
+        promise_base(std::allocator_arg_t, Allocator alloc)
+            : shared_state_(std::allocate_shared<shared_state<R>>(alloc)) {}
+
+        /// \brief No copy constructor
+        promise_base(promise_base const &) = delete;
+
+        /// \brief Move constructor
+        promise_base(promise_base &&other) noexcept
+            : obtained_{ other.obtained_ },
+              shared_state_{ std::move(other.shared_state_) } {
+            other.obtained_ = false;
+        }
+
+        /// \brief No copy assignment
+        promise_base &
+        operator=(promise_base const &)
+            = delete;
+
+        /// \brief Move assignment
+        promise_base &
+        operator=(promise_base &&other) noexcept {
+            if (this != &other) {
+                promise_base tmp{ std::move(other) };
+                swap(tmp);
+            }
+            return *this;
+        }
+
+        /// \brief Destructor
+        ///
+        /// This promise owns the shared state, so we need to warn the shared
+        /// state when it's destroyed.
+        virtual ~promise_base() {
+            if (shared_state_ && obtained_) {
+                shared_state_->signal_promise_destroyed();
+            }
+        }
+
+        /// \brief Gets a future that shares its state with this promise
+        ///
+        /// This function constructs a future object that shares its state with
+        /// this promise. Because this library handles more than a single future
+        /// type, the future type we want is a template parameter.
+        ///
+        /// This function expects future type constructors to accept pointers to
+        /// shared states.
+        template <class Future = futures::cfuture<R>>
+        Future
+        get_future() {
+            if (obtained_) {
+                throw future_already_retrieved{};
+            }
+            if (!shared_state_) {
+                throw promise_uninitialized{};
+            }
+            obtained_ = true;
+            return Future{ shared_state_ };
+        }
+
+        /// \brief Set the promise result as an exception
+        /// \note The set_value operation is only available at the concrete
+        /// derived class, where we know the class type
+        void
+        set_exception(std::exception_ptr p) {
+            if (!shared_state_) {
+                throw promise_uninitialized{};
+            }
+            shared_state_->set_exception(p);
+        }
+
+        /// \brief Set the promise result as an exception
+        template <
+            typename E
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<std::is_base_of_v<std::exception, E>, int> = 0
+#endif
+            >
+        void
+        set_exception(E e) {
+            set_exception(std::make_exception_ptr(e));
+        }
+
+    protected:
+        /// \brief Swap the value of two promises
+        void
+        swap(promise_base &other) noexcept {
+            std::swap(obtained_, other.obtained_);
+            shared_state_.swap(other.shared_state_);
+        }
+
+        /// \brief Intrusive pointer to the future corresponding to this promise
+        constexpr std::shared_ptr<shared_state<R>> &
+        get_shared_state() {
+            return shared_state_;
+        };
+
+    private:
+        /// \brief True if the future has already obtained the shared state
+        bool obtained_{ false };
+
+        /// \brief Intrusive pointer to the future corresponding to this promise
+        std::shared_ptr<shared_state<R>> shared_state_{};
+    };
+
+    /// \brief A shared state that will later be acquired by a future type
+    ///
+    /// The difference between the promise specializations is only in how they
+    /// handle their set_value functions.
+    ///
+    /// \tparam R The shared state type
+    template <typename R>
+    class promise : public promise_base<R>
+    {
+    public:
+        /// \brief Create the promise for type R
+        using promise_base<R>::promise_base;
+
+        /// \brief Copy and set the promise value so it can be obtained by the
+        /// future \param value lvalue reference to the shared state value
+        void
+        set_value(R const &value) {
+            if (!promise_base<R>::get_shared_state()) {
+                throw promise_uninitialized{};
+            }
+            promise_base<R>::get_shared_state()->set_value(value);
+        }
+
+        /// \brief Move and set the promise value so it can be obtained by the
+        /// future \param value rvalue reference to the shared state value
+        void
+        set_value(R &&value) {
+            if (!promise_base<R>::get_shared_state()) {
+                throw promise_uninitialized{};
+            }
+            promise_base<R>::get_shared_state()->set_value(std::move(value));
+        }
+
+        /// \brief Swap the value of two promises
+        void
+        swap(promise &other) noexcept {
+            promise_base<R>::swap(other);
+        }
+    };
+
+    /// \brief A shared state that will later be acquired by a future type
+    template <typename R>
+    class promise<R &> : public promise_base<R &>
+    {
+    public:
+        /// \brief Create the promise for type R&
+        using promise_base<R &>::promise_base;
+
+        /// \brief Set the promise value so it can be obtained by the future
+        void
+        set_value(R &value) {
+            if (!promise_base<R &>::get_shared_state()) {
+                throw promise_uninitialized{};
+            }
+            promise_base<R &>::get_shared_state()->set_value(value);
+        }
+
+        /// \brief Swap the value of two promises
+        void
+        swap(promise &other) noexcept {
+            promise_base<R &>::swap(other);
+        }
+    };
+
+    /// \brief A shared state that will later be acquired by a future type
+    template <>
+    class promise<void> : public promise_base<void>
+    {
+    public:
+        /// \brief Create the promise for type void
+        using promise_base<void>::promise_base;
+
+        /// \brief Set the promise value, so it can be obtained by the future
+        void
+        set_value() { // NOLINT(readability-make-member-function-const)
+            if (!promise_base<void>::get_shared_state()) {
+                throw promise_uninitialized{};
+            }
+            promise_base<void>::get_shared_state()->set_value();
+        }
+
+        /// \brief Swap the value of two promises
+        void
+        swap(promise &other) noexcept {
+            promise_base<void>::swap(other);
+        }
+    };
+
+    /// \brief Swap the value of two promises
+    template <typename R>
+    void
+    swap(promise<R> &l, promise<R> &r) noexcept {
+        l.swap(r);
+    }
+
+    /** @} */
+    /** @} */
+} // namespace futures
+
+#endif // FUTURES_PROMISE_H
+
+// #include <futures/futures/wait_for_all.h>
 #ifndef FUTURES_WAIT_FOR_ALL_H
 #define FUTURES_WAIT_FOR_ALL_H
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
+// #include <futures/futures/traits/is_future.h>
 
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #ifndef FUTURES_RANGES_RANGE_CONCEPTS_HPP
 #define FUTURES_RANGES_RANGE_CONCEPTS_HPP
 
@@ -6928,40 +7384,12 @@ namespace std {
 #endif
 
 // #include <futures/algorithm/detail/traits/range/meta/meta.h>
-/// \file meta.hpp Tiny meta-programming library.
-//
-// Meta library
-//
-//  Copyright Eric Niebler 2014-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/meta
-//
-
 #ifndef META_HPP
 #define META_HPP
 
 // #include <cstddef>
 
 // #include <futures/algorithm/detail/traits/range/meta/meta_fwd.h>
-/// \file meta_fwd.hpp Forward declarations
-//
-// Meta library
-//
-//  Copyright Eric Niebler 2014-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/meta
-//
-
 #ifndef META_FWD_HPP
 #define META_FWD_HPP
 
@@ -10190,24 +10618,6 @@ namespace futures::detail::meta {
 
 
 // #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-/// \file
-//  CPP, the Concepts PreProcessor library
-//
-//  Copyright Eric Niebler 2018-present
-//  Copyright (c) 2018-present, Facebook, Inc.
-//  Copyright (c) 2020-present, Google LLC.
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef CPP_CONCEPTS_HPP
 #define CPP_CONCEPTS_HPP
 
@@ -10220,18 +10630,6 @@ namespace futures::detail::meta {
 // #include <type_traits>
 
 // #include <futures/algorithm/detail/traits/range/concepts/swap.h>
-/// \file
-// Concepts library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-
 #ifndef CPP_SWAP_HPP
 #define CPP_SWAP_HPP
 
@@ -10489,18 +10887,6 @@ namespace futures::detail::concepts {
 #endif
 
 // #include <futures/algorithm/detail/traits/range/concepts/type_traits.h>
-/// \file
-// Concepts library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-
 #ifndef CPP_TYPE_TRAITS_HPP
 #define CPP_TYPE_TRAITS_HPP
 
@@ -11792,19 +12178,6 @@ namespace futures::detail::concepts
 
 
 // #include <futures/algorithm/detail/traits/range/range_fwd.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_RANGE_FWD_HPP
 #define FUTURES_RANGES_RANGE_FWD_HPP
 
@@ -11817,22 +12190,6 @@ namespace futures::detail::concepts
 
 
 // #include <futures/algorithm/detail/traits/range/concepts/compare.h>
-/// \file
-//  CPP, the Concepts PreProcessor library
-//
-//  Copyright Eric Niebler 2018-present
-//  Copyright (c) 2020-present, Google LLC.
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef CPP_COMPARE_HPP
 #define CPP_COMPARE_HPP
 
@@ -11840,22 +12197,6 @@ namespace futures::detail::concepts
 
 #include <compare>
 // #include <futures/algorithm/detail/traits/range/compare.h>
-/// \file
-//  CPP, the Concepts PreProcessor library
-//
-//  Copyright Eric Niebler 2018-present
-//  Copyright (c) 2020-present, Google LLC.
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_COMPARE_HPP
 #define FUTURES_RANGES_COMPARE_HPP
 
@@ -11929,19 +12270,6 @@ namespace futures::detail::concepts
 
 
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_CONFIG_HPP
 #define FUTURES_RANGES_DETAIL_CONFIG_HPP
 
@@ -12641,18 +12969,6 @@ namespace futures::detail {
 #endif
 
 // #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_STATIC_CONST_HPP
 #define FUTURES_RANGES_UTILITY_STATIC_CONST_HPP
 
@@ -12669,19 +12985,6 @@ namespace futures::detail {
 #endif
 
 // #include <futures/algorithm/detail/traits/range/version.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2017-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_VERSION_HPP
 #define FUTURES_RANGES_VERSION_HPP
 
@@ -12727,18 +13030,6 @@ namespace futures::detail {
 /// Numeric utilities
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -13392,18 +13683,6 @@ namespace futures::detail {
 RANGES_DIAGNOSTIC_POP
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -13419,19 +13698,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/functional/comparisons.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_FUNCTIONAL_COMPARISONS_HPP
 #define FUTURES_RANGES_FUNCTIONAL_COMPARISONS_HPP
 
@@ -13442,18 +13708,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -13572,18 +13826,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -13598,19 +13840,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_ITERATOR_CONCEPTS_HPP
 #define FUTURES_RANGES_ITERATOR_CONCEPTS_HPP
 
@@ -13631,19 +13860,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/functional/comparisons.h>
 
 // #include <futures/algorithm/detail/traits/range/functional/concepts.h>
-
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_FUNCTIONAL_CONCEPTS_HPP
 #define FUTURES_RANGES_FUNCTIONAL_CONCEPTS_HPP
 
@@ -13651,19 +13867,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/functional/invoke.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_FUNCTIONAL_INVOKE_HPP
 #define FUTURES_RANGES_FUNCTIONAL_INVOKE_HPP
 
@@ -13685,18 +13888,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -13894,18 +14085,6 @@ namespace futures::detail {
 RANGES_DIAGNOSTIC_POP
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -13921,18 +14100,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14025,18 +14192,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14051,18 +14206,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/functional/identity.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_FUNCTIONAL_IDENTITY_HPP
 #define FUTURES_RANGES_FUNCTIONAL_IDENTITY_HPP
 
@@ -14070,18 +14213,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14129,18 +14260,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14157,20 +14276,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/functional/invoke.h>
 
 // #include <futures/algorithm/detail/traits/range/iterator/access.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_ITERATOR_ACCESS_HPP
 #define FUTURES_RANGES_ITERATOR_ACCESS_HPP
 
@@ -14182,19 +14287,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/std/detail/associated_types.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-2014, 2016-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_STD_DETAIL_ASSOCIATED_TYPES_HPP
 #define FUTURES_RANGES_STD_DETAIL_ASSOCIATED_TYPES_HPP
 
@@ -14205,18 +14297,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14420,18 +14500,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14456,19 +14524,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/utility/move.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_MOVE_HPP
 #define FUTURES_RANGES_UTILITY_MOVE_HPP
 
@@ -14485,18 +14540,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14555,18 +14598,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14583,21 +14614,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/utility/static_const.h>
 
 // #include <futures/algorithm/detail/traits/range/utility/swap.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-// The implementation of swap (see below) has been adapted from libc++
-// (http://libcxx.llvm.org).
-
 #ifndef FUTURES_RANGES_UTILITY_SWAP_HPP
 #define FUTURES_RANGES_UTILITY_SWAP_HPP
 
@@ -14611,18 +14627,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14672,18 +14676,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14699,18 +14691,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -14962,18 +14942,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -14988,19 +14956,6 @@ RANGES_DIAGNOSTIC_POP
 #endif // FUTURES_RANGES_ITERATOR_ACCESS_HPP
 
 // #include <futures/algorithm/detail/traits/range/iterator/traits.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_ITERATOR_TRAITS_HPP
 #define FUTURES_RANGES_ITERATOR_TRAITS_HPP
 
@@ -15021,19 +14976,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/iterator/access.h>
  // for iter_move, iter_swap
 // #include <futures/algorithm/detail/traits/range/utility/common_type.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_COMMON_TYPE_HPP
 #define FUTURES_RANGES_UTILITY_COMMON_TYPE_HPP
 
@@ -15052,18 +14994,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -15218,18 +15148,6 @@ RANGES_DIAGNOSTIC_POP
 /// \endcond
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -15245,18 +15163,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -15398,18 +15304,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -15429,18 +15323,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -16243,18 +16125,6 @@ namespace futures::detail {
 #endif // defined(__GLIBCXX__) || (defined(_LIBCPP_VERSION) && _LIBCPP_VERSION <= 3900)
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -16271,19 +16141,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/iterator/traits.h>
 
 // #include <futures/algorithm/detail/traits/range/range/access.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_RANGE_ACCESS_HPP
 #define FUTURES_RANGES_RANGE_ACCESS_HPP
 
@@ -16316,18 +16173,6 @@ namespace std {
 // #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
 
 // #include <futures/algorithm/detail/traits/range/iterator/reverse_iterator.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2014-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_ITERATOR_REVERSE_ITERATOR_HPP
 #define FUTURES_RANGES_ITERATOR_REVERSE_ITERATOR_HPP
 
@@ -16338,19 +16183,6 @@ namespace std {
 
 
 // #include <futures/algorithm/detail/traits/range/iterator/basic_iterator.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2014-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_ITERATOR_BASIC_ITERATOR_HPP
 #define FUTURES_RANGES_ITERATOR_BASIC_ITERATOR_HPP
 
@@ -16369,20 +16201,6 @@ namespace std {
 
 
 // #include <futures/algorithm/detail/traits/range/detail/range_access.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2014-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_RANGE_ACCESS_HPP
 #define FUTURES_RANGES_DETAIL_RANGE_ACCESS_HPP
 
@@ -16404,18 +16222,6 @@ namespace std {
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -16734,18 +16540,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -16764,17 +16558,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/iterator/traits.h>
 
 // #include <futures/algorithm/detail/traits/range/utility/addressof.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_UTILITY_ADDRESSOF_HPP
 #define FUTURES_RANGES_UTILITY_ADDRESSOF_HPP
 
@@ -16793,18 +16576,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -16868,18 +16639,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -16894,20 +16653,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/utility/box.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//  Copyright Casey Carter 2016
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_BOX_HPP
 #define FUTURES_RANGES_UTILITY_BOX_HPP
 
@@ -16928,19 +16673,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/utility/get.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_GET_HPP
 #define FUTURES_RANGES_UTILITY_GET_HPP
 
@@ -16951,17 +16683,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/adl_get.h>
-// Range v3 library
-//
-//  Copyright Casey Carter 2018
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-
 #ifndef FUTURES_RANGES_DETAIL_ADL_GET_HPP
 #define FUTURES_RANGES_DETAIL_ADL_GET_HPP
 
@@ -16975,18 +16696,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -17123,18 +16832,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -17150,18 +16847,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -17226,18 +16911,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -17253,18 +16926,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -17519,18 +17180,6 @@ namespace futures::detail {
 RANGES_DIAGNOSTIC_POP
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -17547,19 +17196,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/utility/move.h>
 
 // #include <futures/algorithm/detail/traits/range/utility/semiregular_box.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_SEMIREGULAR_BOX_HPP
 #define FUTURES_RANGES_UTILITY_SEMIREGULAR_BOX_HPP
 
@@ -17582,18 +17218,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/functional/invoke.h>
 
 // #include <futures/algorithm/detail/traits/range/functional/reference_wrapper.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
 #ifndef FUTURES_RANGES_FUNCTIONAL_REFERENCE_WRAPPER_HPP
 #define FUTURES_RANGES_FUNCTIONAL_REFERENCE_WRAPPER_HPP
 
@@ -17616,18 +17240,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -17757,18 +17369,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -17785,19 +17385,6 @@ RANGES_DIAGNOSTIC_POP
 // #include <futures/algorithm/detail/traits/range/utility/get.h>
 
 // #include <futures/algorithm/detail/traits/range/utility/in_place.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_UTILITY_IN_PLACE_HPP
 #define FUTURES_RANGES_UTILITY_IN_PLACE_HPP
 
@@ -17808,18 +17395,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -17855,18 +17430,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -17882,18 +17445,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -18156,18 +17707,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -18185,18 +17724,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -19013,18 +18540,6 @@ namespace std {
 RANGES_DIAGNOSTIC_POP
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -19042,18 +18557,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -19172,18 +18675,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -19203,18 +18694,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -19795,18 +19274,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -19821,19 +19288,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/range/primitives.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2014-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_RANGE_PRIMITIVES_HPP
 #define FUTURES_RANGES_RANGE_PRIMITIVES_HPP
 
@@ -19853,18 +19307,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -20151,18 +19593,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -20177,19 +19607,6 @@ RANGES_DIAGNOSTIC_POP
 #endif
 
 // #include <futures/algorithm/detail/traits/range/range/traits.h>
-/// \file
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_RANGE_TRAITS_HPP
 #define FUTURES_RANGES_RANGE_TRAITS_HPP
 
@@ -20213,18 +19630,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -20339,18 +19744,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -20366,18 +19759,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 // #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 #define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
 // #include <futures/algorithm/detail/traits/range/detail/config.h>
@@ -20644,18 +20025,6 @@ namespace futures::detail {
 } // namespace futures::detail
 
 // #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-// Range v3 library
-//
-//  Copyright Eric Niebler 2013-present
-//
-//  Use, modification and distribution is subject to the
-//  Boost Software License, Version 1.0. (See accompanying
-//  file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-//
-// Project home: https://github.com/ericniebler/range-v3
-//
-
 #ifndef RANGES_PROLOGUE_INCLUDED
 #error "Including epilogue, but prologue not included!"
 #endif
@@ -20668,9 +20037,6 @@ RANGES_DIAGNOSTIC_POP
 
 
 #endif
-
-// #include <futures/futures/traits/is_future.h>
-
 
 // #include <type_traits>
 
@@ -20685,24 +20051,28 @@ namespace futures {
 
     /// \brief Wait for a sequence of futures to be ready
     ///
-    /// This function waits for all futures in the range [`first`, `last`) to be ready.
-    /// It simply waits iteratively for each of the futures to be ready.
+    /// This function waits for all futures in the range [`first`, `last`) to be
+    /// ready. It simply waits iteratively for each of the futures to be ready.
     ///
     /// \note This function is adapted from boost::wait_for_all
     ///
     /// \see
-    /// [boost.thread wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+    /// [boost.thread
+    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
     ///
     /// \tparam Iterator Iterator type in a range of futures
     /// \param first Iterator to the first element in the range
     /// \param last Iterator to one past the last element in the range
-    template <typename Iterator
+    template <
+        typename Iterator
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+        ,
+        typename std::
+            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
 #endif
-              >
-    void wait_for_all(Iterator first, Iterator last) {
+        >
+    void
+    wait_for_all(Iterator first, Iterator last) {
         for (Iterator it = first; it != last; ++it) {
             it->wait();
         }
@@ -20716,17 +20086,22 @@ namespace futures {
     /// \note This function is adapted from boost::wait_for_all
     ///
     /// \see
-    /// [boost.thread wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+    /// [boost.thread
+    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
     ///
     /// \tparam Range A range of futures type
     /// \param r Range of futures
-    template <typename Range
+    template <
+        typename Range
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<detail::range<Range> && is_future_v<detail::range_value_t<Range>>, int> = 0
+        ,
+        typename std::enable_if_t<
+            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            int> = 0
 #endif
-              >
-    void wait_for_all(Range &&r) {
+        >
+    void
+    wait_for_all(Range &&r) {
         wait_for_all(std::begin(r), std::end(r));
     }
 
@@ -20734,23 +20109,29 @@ namespace futures {
     ///
     /// This function waits for all specified futures `fs`... to be ready.
     ///
-    /// It creates a compile-time fixed-size data structure to store references to all of the futures and then
-    /// waits for each of the futures to be ready.
+    /// It creates a compile-time fixed-size data structure to store references
+    /// to all of the futures and then waits for each of the futures to be
+    /// ready.
     ///
     /// \note This function is adapted from boost::wait_for_all
     ///
     /// \see
-    /// [boost.thread wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+    /// [boost.thread
+    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
     ///
     /// \tparam Fs A list of future types
     /// \param fs A list of future objects
-    template <typename... Fs
+    template <
+        typename... Fs
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int> = 0
+        ,
+        typename std::enable_if_t<
+            std::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int> = 0
 #endif
-              >
-    void wait_for_all(Fs &&...fs) {
+        >
+    void
+    wait_for_all(Fs &&...fs) {
         (fs.wait(), ...);
     }
 
@@ -20761,31 +20142,18 @@ namespace futures {
 #endif // FUTURES_WAIT_FOR_ALL_H
 
 // #include <futures/futures/wait_for_any.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_WAIT_FOR_ANY_H
 #define FUTURES_WAIT_FOR_ANY_H
+
+// #include <futures/futures/traits/is_future.h>
 
 // #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/futures/detail/waiter_for_any.h>
-//
-// Copyright (c) alandefreitas 12/15/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_WAITER_FOR_ANY_H
 #define FUTURES_WAITER_FOR_ANY_H
 
 // #include <futures/futures/detail/lock.h>
-//
-// Copyright (c) alandefreitas 12/15/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_LOCK_H
 #define FUTURES_LOCK_H
 
@@ -20797,17 +20165,22 @@ namespace futures::detail {
      *  @{
      */
 
-    /// \brief Try to lock range of mutexes in a way that all of them should work
+    /// \brief Try to lock range of mutexes in a way that all of them should
+    /// work
     ///
-    /// Calls try_lock() on each of the Lockable objects in the supplied range. If any of the calls to try_lock()
-    /// returns false then all locks acquired are released and an iterator referencing the failed lock is returned.
+    /// Calls try_lock() on each of the Lockable objects in the supplied range.
+    /// If any of the calls to try_lock() returns false then all locks acquired
+    /// are released and an iterator referencing the failed lock is returned.
     ///
-    /// If any of the try_lock() operations on the supplied Lockable objects throws an exception any locks acquired by
-    /// the function will be released before the function exits.
+    /// If any of the try_lock() operations on the supplied Lockable objects
+    /// throws an exception any locks acquired by the function will be released
+    /// before the function exits.
     ///
-    /// \throws exception Any exceptions thrown by calling try_lock() on the supplied Lockable objects
+    /// \throws exception Any exceptions thrown by calling try_lock() on the
+    /// supplied Lockable objects
     ///
-    /// \post All the supplied Lockable objects are locked by the calling thread.
+    /// \post All the supplied Lockable objects are locked by the calling
+    /// thread.
     ///
     /// \see
     /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.lock_functions.try_lock_range
@@ -20815,16 +20188,20 @@ namespace futures::detail {
     /// \tparam Iterator Range iterator type
     /// \param first Iterator to first mutex in the range
     /// \param last Iterator to one past the last mutex in the range
-    /// \return Iterator to first element that could *not* be locked, or `end` if all the supplied Lockable objects are
-    /// now locked
-    template <typename Iterator, std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
-    Iterator try_lock(Iterator first, Iterator last) {
+    /// \return Iterator to first element that could *not* be locked, or `end`
+    /// if all the supplied Lockable objects are now locked
+    template <
+        typename Iterator,
+        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+    Iterator
+    try_lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
 
         // Handle trivial cases
         if (const bool empty_range = first == last; empty_range) {
             return last;
-        } else if (const bool single_element = std::next(first) == last; single_element) {
+        } else if (const bool single_element = std::next(first) == last;
+                   single_element) {
             if (first->try_lock()) {
                 return last;
             } else {
@@ -20834,14 +20211,17 @@ namespace futures::detail {
 
         // General cases: Try to lock first and already return if fails
         std::unique_lock<lock_type> guard_first(*first, std::try_to_lock);
-        if (const bool locking_failed = !guard_first.owns_lock(); locking_failed) {
+        if (const bool locking_failed = !guard_first.owns_lock();
+            locking_failed) {
             return first;
         }
 
-        // While first is locked by guard_first, try to lock the other elements in the range
+        // While first is locked by guard_first, try to lock the other elements
+        // in the range
         const Iterator failed_mutex_it = try_lock(std::next(first), last);
         if (const bool none_failed = failed_mutex_it == last; none_failed) {
-            // Break the association of the associated mutex (i.e. don't unlock at destruction)
+            // Break the association of the associated mutex (i.e. don't unlock
+            // at destruction)
             guard_first.release();
         }
         return failed_mutex_it;
@@ -20849,15 +20229,19 @@ namespace futures::detail {
 
     /// \brief Lock range of mutexes in a way that avoids deadlock
     ///
-    /// Locks the Lockable objects in the range [`first`, `last`) supplied as arguments in an unspecified and
-    /// indeterminate order in a way that avoids deadlock. It is safe to call this function concurrently from multiple
-    /// threads for any set of mutexes (or other lockable objects) in any order without risk of deadlock. If any of the
-    /// lock() or try_lock() operations on the supplied Lockable objects throws an exception any locks acquired by the
-    /// function will be released before the function exits.
+    /// Locks the Lockable objects in the range [`first`, `last`) supplied as
+    /// arguments in an unspecified and indeterminate order in a way that avoids
+    /// deadlock. It is safe to call this function concurrently from multiple
+    /// threads for any set of mutexes (or other lockable objects) in any order
+    /// without risk of deadlock. If any of the lock() or try_lock() operations
+    /// on the supplied Lockable objects throws an exception any locks acquired
+    /// by the function will be released before the function exits.
     ///
-    /// \throws exception Any exceptions thrown by calling lock() or try_lock() on the supplied Lockable objects
+    /// \throws exception Any exceptions thrown by calling lock() or try_lock()
+    /// on the supplied Lockable objects
     ///
-    /// \post All the supplied Lockable objects are locked by the calling thread.
+    /// \post All the supplied Lockable objects are locked by the calling
+    /// thread.
     ///
     /// \see
     /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.lock_functions
@@ -20865,12 +20249,17 @@ namespace futures::detail {
     /// \tparam Iterator Range iterator type
     /// \param first Iterator to first mutex in the range
     /// \param last Iterator to one past the last mutex in the range
-    template <typename Iterator, std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
-    void lock(Iterator first, Iterator last) {
+    template <
+        typename Iterator,
+        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+    void
+    lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
 
-        /// \brief Auxiliary lock guard for a range of mutexes recursively using this lock function
-        struct range_lock_guard {
+        /// \brief Auxiliary lock guard for a range of mutexes recursively using
+        /// this lock function
+        struct range_lock_guard
+        {
             /// Iterator to first locked mutex in the range
             Iterator begin;
 
@@ -20878,18 +20267,24 @@ namespace futures::detail {
             Iterator end;
 
             /// \brief Construct a lock guard for a range of mutexes
-            range_lock_guard(Iterator first, Iterator last) : begin(first), end(last) {
-                // The range lock guard recursively calls the same lock function we use here
+            range_lock_guard(Iterator first, Iterator last)
+                : begin(first), end(last) {
+                // The range lock guard recursively calls the same lock function
+                // we use here
                 futures::detail::lock(begin, end);
             }
 
             range_lock_guard(const range_lock_guard &) = delete;
-            range_lock_guard &operator=(const range_lock_guard &) = delete;
+            range_lock_guard &
+            operator=(const range_lock_guard &)
+                = delete;
 
             range_lock_guard(range_lock_guard &&other) noexcept
-                : begin(std::exchange(other.begin, Iterator{})), end(std::exchange(other.end, Iterator{})){}
+                : begin(std::exchange(other.begin, Iterator{})),
+                  end(std::exchange(other.end, Iterator{})) {}
 
-            range_lock_guard &operator=(range_lock_guard && other) noexcept {
+            range_lock_guard &
+            operator=(range_lock_guard &&other) noexcept {
                 if (this == &other) {
                     return *this;
                 }
@@ -20907,13 +20302,17 @@ namespace futures::detail {
             }
 
             /// \brief Make the range empty so nothing is unlocked at destruction
-            void release() { begin = end; }
+            void
+            release() {
+                begin = end;
+            }
         };
 
         // Handle trivial cases
         if (const bool empty_range = first == last; empty_range) {
             return;
-        } else if (const bool single_element = std::next(first) == last; single_element) {
+        } else if (const bool single_element = std::next(first) == last;
+                   single_element) {
             first->lock();
             return;
         }
@@ -20928,15 +20327,18 @@ namespace futures::detail {
 
         // Alternate between two locking strategies
         for (;;) {
-            // A deferred lock assumes the algorithm might lock the first lock later
+            // A deferred lock assumes the algorithm might lock the first lock
+            // later
             std::unique_lock<lock_type> first_lock(*first, std::defer_lock);
             if (currently_using_first_strategy) {
                 // First strategy: Lock first, then _try_ to lock the others
                 first_lock.lock();
                 const Iterator failed_lock_it = try_lock(next, last);
-                if (const bool no_lock_failed = failed_lock_it == last; no_lock_failed) {
+                if (const bool no_lock_failed = failed_lock_it == last;
+                    no_lock_failed) {
                     // !SUCCESS!
-                    // Breaks the association of the associated mutex (i.e. don't unlock first_lock)
+                    // Breaks the association of the associated mutex (i.e.
+                    // don't unlock first_lock)
                     first_lock.release();
                     return;
                 } else {
@@ -20953,7 +20355,8 @@ namespace futures::detail {
                 if (first_lock.try_lock()) {
                     // Try to lock [second, next)
                     const Iterator failed_lock = try_lock(second, next);
-                    if (const bool all_locked = failed_lock == next; all_locked) {
+                    if (const bool all_locked = failed_lock == next; all_locked)
+                    {
                         // !SUCCESS!
                         // Don't let it unlock
                         first_lock.release();
@@ -21158,7 +20561,7 @@ namespace futures::detail {
             using shared_lock_vector = std::shared_ptr<lock_vector>;
 
             /// \brief Number of futures locked
-            std::size_t count{0};
+            std::size_t count{ 0 };
 
             /// \brief Locks for each future in the range
             shared_lock_vector locks;
@@ -21225,9 +20628,6 @@ namespace futures::detail {
 
 #endif // FUTURES_WAITER_FOR_ANY_H
 
-// #include <futures/futures/traits/is_future.h>
-
-
 // #include <type_traits>
 
 
@@ -21241,27 +20641,32 @@ namespace futures {
 
     /// \brief Wait for any future in a sequence to be ready
     ///
-    /// This function waits for any future in the range [`first`, `last`) to be ready.
+    /// This function waits for any future in the range [`first`, `last`) to be
+    /// ready.
     ///
-    /// Unlike @ref wait_for_all, this function requires special data structures to allow that
-    /// to happen without blocking.
+    /// Unlike @ref wait_for_all, this function requires special data structures
+    /// to allow that to happen without blocking.
     ///
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator Iterator type in a range of futures
     /// \param first Iterator to the first element in the range
     /// \param last Iterator to one past the last element in the range
     /// \return Iterator to the first future that got ready
-    template <typename Iterator
+    template <
+        typename Iterator
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+        ,
+        typename std::
+            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
 #endif
-              >
-    Iterator wait_for_any(Iterator first, Iterator last) {
+        >
+    Iterator
+    wait_for_any(Iterator first, Iterator last) {
         if (const bool is_empty = first == last; is_empty) {
             return last;
         } else if (const bool is_single = std::next(first) == last; is_single) {
@@ -21277,23 +20682,29 @@ namespace futures {
     /// \brief Wait for any future in a sequence to be ready
     ///
     /// This function waits for any future in the range `r` to be ready.
-    /// This function requires special data structures to allow that to happen without blocking.
+    /// This function requires special data structures to allow that to happen
+    /// without blocking.
     ///
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator A range of futures type
     /// \param r Range of futures
     /// \return Iterator to the first future that got ready
-    template <typename Range
+    template <
+        typename Range
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<detail::range<Range> && is_future_v<detail::range_value_t<Range>>, int> = 0
+        ,
+        typename std::enable_if_t<
+            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            int> = 0
 #endif
-              >
-    detail::iterator_t<Range> wait_for_any(Range &&r) {
+        >
+    detail::iterator_t<Range>
+    wait_for_any(Range &&r) {
         return wait_for_any(std::begin(r), std::end(r));
     }
 
@@ -21304,18 +20715,23 @@ namespace futures {
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Fs A list of future types
     /// \param fs A list of future objects
     /// \return Index of the first future that got ready
-    template <typename... Fs
+    template <
+        typename... Fs
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int> = 0
+        ,
+        typename std::enable_if_t<
+            std::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int> = 0
 #endif
-              >
-    std::size_t wait_for_any(Fs &&...fs) {
+        >
+    std::size_t
+    wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         if constexpr (const bool is_empty = size == 0; is_empty) {
             return 0;
@@ -21335,71 +20751,21 @@ namespace futures {
 
 #endif // FUTURES_WAIT_FOR_ANY_H
 
-// #include <futures/futures/await.h>
-
 
 // Adaptors
 // #include <futures/adaptor/ready_future.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_READY_FUTURE_H
 #define FUTURES_READY_FUTURE_H
 
-// #include <future>
+// #include <futures/futures/basic_future.h>
 
-
-// #include <futures/futures/detail/traits/has_is_ready.h>
-//
-// Created by alandefreitas on 10/15/21.
-//
-
-#ifndef FUTURES_HAS_IS_READY_H
-#define FUTURES_HAS_IS_READY_H
-
-// #include <type_traits>
-
-
-namespace futures::detail {
-    /** \addtogroup futures Futures
-     *  @{
-     */
-    /** \addtogroup future-traits Future Traits
-     *  @{
-     */
-
-    /// Check if a type implements the is_ready function and it returns bool
-    /// This is what we use to identify the return type of a future type candidate
-    /// However, this doesn't mean the type is a future in the terms of the is_future concept
-    template <typename T, typename = void> struct has_is_ready : std::false_type {};
-
-    template <typename T>
-    struct has_is_ready<T, std::void_t<decltype(std::declval<T>().is_ready())>>
-        : std::is_same<bool, decltype(std::declval<T>().is_ready())> {};
-
-    template <typename T> constexpr bool has_is_ready_v = has_is_ready<T>::value;
-
-    /** @} */
-    /** @} */
-} // namespace futures::detail
-
-#endif // FUTURES_HAS_IS_READY_H
-
+// #include <futures/futures/promise.h>
 
 // #include <futures/futures/traits/future_return.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_FUTURE_RETURN_H
 #define FUTURES_FUTURE_RETURN_H
 
 // #include <futures/adaptor/detail/traits/is_reference_wrapper.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_IS_REFERENCE_WRAPPER_H
 #define FUTURES_IS_REFERENCE_WRAPPER_H
 
@@ -21415,13 +20781,18 @@ namespace futures {
      */
 
     /// Check if type is a reference_wrapper
-    template <typename> struct is_reference_wrapper : std::false_type {};
+    template <typename>
+    struct is_reference_wrapper : std::false_type
+    {};
 
-    template <class T> struct is_reference_wrapper<std::reference_wrapper<T>> : std::true_type {};
+    template <class T>
+    struct is_reference_wrapper<std::reference_wrapper<T>> : std::true_type
+    {};
 
-    template <class T> constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    template <class T>
+    constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_REFERENCE_WRAPPER_H
@@ -21439,23 +20810,61 @@ namespace futures {
 
     /// Determine the type to be stored and returned by a future object
     template <class T>
-    using future_return = std::conditional<is_reference_wrapper_v<std::decay_t<T>>, T &, std::decay_t<T>>;
+    using future_return = std::conditional<
+        is_reference_wrapper_v<std::decay_t<T>>,
+        T &,
+        std::decay_t<T>>;
 
     /// Determine the type to be stored and returned by a future object
-    template <class T> using future_return_t = typename future_return<T>::type;
+    template <class T>
+    using future_return_t = typename future_return<T>::type;
 
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_FUTURE_RETURN_H
 
 // #include <futures/futures/traits/is_future.h>
 
+// #include <futures/futures/detail/traits/has_is_ready.h>
+#ifndef FUTURES_HAS_IS_READY_H
+#define FUTURES_HAS_IS_READY_H
 
-// #include <futures/futures/basic_future.h>
+// #include <type_traits>
 
-// #include <futures/futures/promise.h>
+
+namespace futures::detail {
+    /** \addtogroup futures Futures
+     *  @{
+     */
+    /** \addtogroup future-traits Future Traits
+     *  @{
+     */
+
+    /// Check if a type implements the is_ready function and it returns bool
+    /// This is what we use to identify the return type of a future type
+    /// candidate However, this doesn't mean the type is a future in the terms
+    /// of the is_future concept
+    template <typename T, typename = void>
+    struct has_is_ready : std::false_type
+    {};
+
+    template <typename T>
+    struct has_is_ready<T, std::void_t<decltype(std::declval<T>().is_ready())>>
+        : std::is_same<bool, decltype(std::declval<T>().is_ready())>
+    {};
+
+    template <typename T>
+    constexpr bool has_is_ready_v = has_is_ready<T>::value;
+
+    /** @} */
+    /** @} */
+} // namespace futures::detail
+
+#endif // FUTURES_HAS_IS_READY_H
+
+// #include <future>
 
 
 namespace futures {
@@ -21465,20 +20874,26 @@ namespace futures {
 
     /// \brief Check if a future is ready
     ///
-    /// Although basic_future has its more efficient is_ready function, this free function
-    /// allows us to query other futures that don't implement is_ready, such as std::future.
-    template <typename Future
+    /// Although basic_future has its more efficient is_ready function, this
+    /// free function allows us to query other futures that don't implement
+    /// is_ready, such as std::future.
+    template <
+        typename Future
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
+        ,
+        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
 #endif
-              >
-    bool is_ready(Future &&f) {
-        assert(f.valid() && "Undefined behaviour. Checking if an invalid future is ready.");
+        >
+    bool
+    is_ready(Future &&f) {
+        assert(
+            f.valid()
+            && "Undefined behaviour. Checking if an invalid future is ready.");
         if constexpr (detail::has_is_ready_v<Future>) {
             return f.is_ready();
         } else {
-            return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+            return f.wait_for(std::chrono::seconds(0))
+                   == std::future_status::ready;
         }
     }
 
@@ -21487,7 +20902,9 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T, typename Future = future<typename std::decay_t<T>>> Future make_ready_future(T &&value) {
+    template <typename T, typename Future = future<typename std::decay_t<T>>>
+    Future
+    make_ready_future(T &&value) {
         using decay_type = typename std::decay_t<T>;
         promise<decay_type> p;
         Future result = p.template get_future<Future>();
@@ -21500,7 +20917,9 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T, typename Future = future<T &>> Future make_ready_future(std::reference_wrapper<T> value) {
+    template <typename T, typename Future = future<T &>>
+    Future
+    make_ready_future(std::reference_wrapper<T> value) {
         promise<T &> p;
         Future result = p.template get_future<Future>();
         p.set_value(value);
@@ -21512,7 +20931,9 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename Future = future<void>> Future make_ready_future() {
+    template <typename Future = future<void>>
+    Future
+    make_ready_future() {
         promise<void> p;
         auto result = p.get_future<Future>();
         p.set_value();
@@ -21524,12 +20945,17 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    template <typename T> cfuture<typename std::decay<T>> make_ready_cfuture(T &&value) {
-        return make_ready_future<T, cfuture<typename std::decay<T>>>(std::forward<T>(value));
+    template <typename T>
+    cfuture<typename std::decay<T>>
+    make_ready_cfuture(T &&value) {
+        return make_ready_future<T, cfuture<typename std::decay<T>>>(
+            std::forward<T>(value));
     }
 
     /// \brief Make a placeholder @ref cfuture object that is ready
-    template <typename T> cfuture<T &> make_ready_cfuture(std::reference_wrapper<T> value) {
+    template <typename T>
+    cfuture<T &>
+    make_ready_cfuture(std::reference_wrapper<T> value) {
         return make_ready_future<T, cfuture<T &>>(value);
     }
 
@@ -21538,19 +20964,27 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline cfuture<void> make_ready_cfuture() { return make_ready_future<cfuture<void>>(); }
+    inline cfuture<void>
+    make_ready_cfuture() {
+        return make_ready_future<cfuture<void>>();
+    }
 
     /// \brief Make a placeholder @ref jcfuture object that is ready
     ///
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    template <typename T> jcfuture<typename std::decay<T>> make_ready_jcfuture(T &&value) {
-        return make_ready_future<T, jcfuture<typename std::decay<T>>>(std::forward<T>(value));
+    template <typename T>
+    jcfuture<typename std::decay<T>>
+    make_ready_jcfuture(T &&value) {
+        return make_ready_future<T, jcfuture<typename std::decay<T>>>(
+            std::forward<T>(value));
     }
 
     /// \brief Make a placeholder @ref cfuture object that is ready
-    template <typename T> jcfuture<T &> make_ready_jcfuture(std::reference_wrapper<T> value) {
+    template <typename T>
+    jcfuture<T &>
+    make_ready_jcfuture(std::reference_wrapper<T> value) {
         return make_ready_future<T, jcfuture<T &>>(value);
     }
 
@@ -21559,25 +20993,36 @@ namespace futures {
     /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// \return A cfuture associated with the shared state that is created.
-    inline jcfuture<void> make_ready_jcfuture() { return make_ready_future<jcfuture<void>>(); }
+    inline jcfuture<void>
+    make_ready_jcfuture() {
+        return make_ready_future<jcfuture<void>>();
+    }
 
-    /// \brief Make a placeholder future object that is ready with an exception from an exception ptr
+    /// \brief Make a placeholder future object that is ready with an exception
+    /// from an exception ptr
     ///
-    /// \see https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
+    /// \see
+    /// https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <typename T, typename Future = future<T>> future<T> make_exceptional_future(std::exception_ptr ex) {
+    template <typename T, typename Future = future<T>>
+    future<T>
+    make_exceptional_future(std::exception_ptr ex) {
         promise<T> p;
         p.set_exception(ex);
         return p.template get_future<Future>();
     }
 
-    /// \brief Make a placeholder future object that is ready with from any exception
+    /// \brief Make a placeholder future object that is ready with from any
+    /// exception
     ///
-    /// \see https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
+    /// \see
+    /// https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
     /// \return A future associated with the shared state that is created.
-    template <class T, typename Future = future<T>, class E> future<T> make_exceptional_future(E ex) {
+    template <class T, typename Future = future<T>, class E>
+    future<T>
+    make_exceptional_future(E ex) {
         promise<T> p;
         p.set_exception(std::make_exception_ptr(ex));
         return p.template get_future<Future>();
@@ -21588,22 +21033,10 @@ namespace futures {
 #endif // FUTURES_READY_FUTURE_H
 
 // #include <futures/adaptor/then.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_THEN_H
 #define FUTURES_THEN_H
 
-// #include <future>
-
-
 // #include <futures/adaptor/detail/continuation_unwrap.h>
-//
-// Copyright (c) alandefreitas 12/5/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_CONTINUATION_UNWRAP_H
 #define FUTURES_CONTINUATION_UNWRAP_H
 
@@ -21612,18 +21045,12 @@ namespace futures {
 // #include <futures/futures/traits/is_future.h>
 
 // #include <futures/futures/traits/unwrap_future.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_UNWRAP_FUTURE_H
 #define FUTURES_UNWRAP_FUTURE_H
 
-// #include <futures/adaptor/detail/traits/has_get.h>
-//
-// Created by alandefreitas on 10/15/21.
-//
+// #include <futures/futures/traits/is_future.h>
 
+// #include <futures/adaptor/detail/traits/has_get.h>
 #ifndef FUTURES_HAS_GET_H
 #define FUTURES_HAS_GET_H
 
@@ -21637,19 +21064,23 @@ namespace futures {
 
     namespace detail {
         /// Check if a type implements the get function
-        /// This is what we use to identify the return type of a future type candidate
-        /// However, this doesn't mean the type is a future in the terms of the is_future concept
-        template <typename T, typename = void> struct has_get : std::false_type {};
+        /// This is what we use to identify the return type of a future type
+        /// candidate However, this doesn't mean the type is a future in the
+        /// terms of the is_future concept
+        template <typename T, typename = void>
+        struct has_get : std::false_type
+        {};
 
-        template <typename T> struct has_get<T, std::void_t<decltype(std::declval<T>().get())>> : std::true_type {};
-    } // namespace detail
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+        template <typename T>
+        struct has_get<T, std::void_t<decltype(std::declval<T>().get())>>
+            : std::true_type
+        {};
+    }         // namespace detail
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_HAS_GET_H
-
-// #include <futures/futures/traits/is_future.h>
 
 
 namespace futures {
@@ -21666,35 +21097,40 @@ namespace futures {
     /// Primary template handles non-future types
     ///
     /// \note Not to be confused with continuation unwrapping
-    template <typename T, class Enable = void> struct unwrap_future { using type = void; };
+    template <typename T, class Enable = void>
+    struct unwrap_future
+    {
+        using type = void;
+    };
 
-    /// \brief Determine type a future object holds (specialization for types that implement `get()`)
+    /// \brief Determine type a future object holds (specialization for types
+    /// that implement `get()`)
     ///
     /// Template for types that implement ::get()
     ///
     /// \note Not to be confused with continuation unwrapping
     template <typename Future>
-    struct unwrap_future<Future, std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>> {
-        using type = std::decay_t<decltype(std::declval<std::decay_t<Future>>().get())>;
+    struct unwrap_future<
+        Future,
+        std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>>
+    {
+        using type = std::decay_t<
+            decltype(std::declval<std::decay_t<Future>>().get())>;
     };
 
     /// \brief Determine type a future object holds
     ///
     /// \note Not to be confused with continuation unwrapping
-    template <class T> using unwrap_future_t = typename unwrap_future<T>::type;
+    template <class T>
+    using unwrap_future_t = typename unwrap_future<T>::type;
 
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_UNWRAP_FUTURE_H
 
 // #include <futures/adaptor/detail/move_or_copy.h>
-//
-// Copyright (c) alandefreitas 12/14/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_MOVE_OR_COPY_H
 #define FUTURES_MOVE_OR_COPY_H
 
@@ -21711,11 +21147,13 @@ namespace futures::detail {
 
     /// \brief Move or share a future, depending on the type of future input
     ///
-    /// Create another future with the state of the before future (usually for a continuation function).
-    /// This state should be copied to the new callback function.
-    /// Shared futures can be copied. Normal futures should be moved.
+    /// Create another future with the state of the before future (usually for a
+    /// continuation function). This state should be copied to the new callback
+    /// function. Shared futures can be copied. Normal futures should be moved.
     /// \return The moved future or the shared future
-    template <class Future> constexpr decltype(auto) move_or_copy(Future &&before) {
+    template <class Future>
+    constexpr decltype(auto)
+    move_or_copy(Future &&before) {
         if constexpr (is_shared_future_v<Future>) {
             return std::forward<Future>(before);
         } else {
@@ -21725,14 +21163,10 @@ namespace futures::detail {
 
     /** @} */ // \addtogroup future-traits Future Traits
     /** @} */ // \addtogroup futures Futures
-}
+} // namespace futures::detail
 #endif // FUTURES_MOVE_OR_COPY_H
 
 // #include <futures/adaptor/detail/traits/is_callable.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_IS_CALLABLE_H
 #define FUTURES_IS_CALLABLE_H
 
@@ -21745,55 +21179,58 @@ namespace futures {
      */
 
     /// \brief Check if something is callable, regardless of the arguments
-    template <typename T> struct is_callable {
-      private:
+    template <typename T>
+    struct is_callable
+    {
+    private:
         typedef char (&yes)[1];
         typedef char (&no)[2];
 
-        struct Fallback {
-            void operator()();
+        struct Fallback
+        {
+            void
+            operator()();
         };
-        struct Derived : T, Fallback {};
+        struct Derived
+            : T
+            , Fallback
+        {};
 
-        template <typename U, U> struct Check;
+        template <typename U, U>
+        struct Check;
 
-        template <typename> static yes test(...);
+        template <typename>
+        static yes
+        test(...);
 
-        template <typename C> static no test(Check<void (Fallback::*)(), &C::operator()> *);
+        template <typename C>
+        static no
+        test(Check<void (Fallback::*)(), &C::operator()> *);
 
-      public:
+    public:
         static const bool value = sizeof(test<Derived>(0)) == sizeof(yes);
     };
 
     template <typename T>
     constexpr bool is_callable_v = is_callable<T>::value;
 
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_CALLABLE_H
 
 // #include <futures/adaptor/detail/traits/is_single_type_tuple.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TUPLE_TYPE_IS_SINGLE_TYPE_TUPLE_H
 #define FUTURES_TUPLE_TYPE_IS_SINGLE_TYPE_TUPLE_H
 
 // #include <futures/adaptor/detail/traits/is_tuple.h>
-//
-// Created by Alan Freitas on 8/19/21.
-//
-
 #ifndef FUTURES_IS_TUPLE_H
 #define FUTURES_IS_TUPLE_H
 
-// #include <type_traits>
-
 // #include <tuple>
+
+// #include <type_traits>
 
 
 namespace futures {
@@ -21805,17 +21242,30 @@ namespace futures {
      */
 
     /// Check if type is a tuple
-    template <typename> struct is_tuple : std::false_type {};
+    template <typename>
+    struct is_tuple : std::false_type
+    {};
 
-    template <typename... Args> struct is_tuple<std::tuple<Args...>> : std::true_type {};
-    template <typename... Args> struct is_tuple<const std::tuple<Args...>> : std::true_type {};
-    template <typename... Args> struct is_tuple<std::tuple<Args...> &> : std::true_type {};
-    template <typename... Args> struct is_tuple<std::tuple<Args...> &&> : std::true_type {};
-    template <typename... Args> struct is_tuple<const std::tuple<Args...> &> : std::true_type {};
+    template <typename... Args>
+    struct is_tuple<std::tuple<Args...>> : std::true_type
+    {};
+    template <typename... Args>
+    struct is_tuple<const std::tuple<Args...>> : std::true_type
+    {};
+    template <typename... Args>
+    struct is_tuple<std::tuple<Args...> &> : std::true_type
+    {};
+    template <typename... Args>
+    struct is_tuple<std::tuple<Args...> &&> : std::true_type
+    {};
+    template <typename... Args>
+    struct is_tuple<const std::tuple<Args...> &> : std::true_type
+    {};
 
-    template <class T> constexpr bool is_tuple_v = is_tuple<T>::value;
-    /** @} */  // \addtogroup future-traits Future Traits
-    /** @} */  // \addtogroup futures Futures
+    template <class T>
+    constexpr bool is_tuple_v = is_tuple<T>::value;
+    /** @} */ // \addtogroup future-traits Future Traits
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_IS_TUPLE_H
@@ -21827,17 +21277,28 @@ namespace futures {
 
 namespace futures::detail {
     /// \brief Check if all types in a tuple match a predicate
-    template <class L> struct is_single_type_tuple : is_tuple<L> {};
+    template <class L>
+    struct is_single_type_tuple : is_tuple<L>
+    {};
 
-    template <class T1> struct is_single_type_tuple<std::tuple<T1>> : std::true_type {};
+    template <class T1>
+    struct is_single_type_tuple<std::tuple<T1>> : std::true_type
+    {};
 
-    template <class T1, class T2> struct is_single_type_tuple<std::tuple<T1, T2>> : std::is_same<T1, T2> {};
+    template <class T1, class T2>
+    struct is_single_type_tuple<std::tuple<T1, T2>> : std::is_same<T1, T2>
+    {};
 
     template <class T1, class T2, class... Tn>
     struct is_single_type_tuple<std::tuple<T1, T2, Tn...>>
-        : std::bool_constant<std::is_same_v<T1, T2> && is_single_type_tuple<std::tuple<T2, Tn...>>::value> {};
+        : std::bool_constant<
+              std::is_same_v<
+                  T1,
+                  T2> && is_single_type_tuple<std::tuple<T2, Tn...>>::value>
+    {};
 
-    template <class L> constexpr bool is_single_type_tuple_v = is_single_type_tuple<L>::value;
+    template <class L>
+    constexpr bool is_single_type_tuple_v = is_single_type_tuple<L>::value;
 
 } // namespace futures::detail
 
@@ -21846,11 +21307,6 @@ namespace futures::detail {
 // #include <futures/adaptor/detail/traits/is_tuple.h>
 
 // #include <futures/adaptor/detail/traits/is_tuple_invocable.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_IS_TUPLE_INVOCABLE_H
 #define FUTURES_IS_TUPLE_INVOCABLE_H
 
@@ -21864,16 +21320,20 @@ namespace futures::detail {
      *  @{
      */
 
-    /// \brief Check if a function can be invoked with the elements of a tuple as arguments, as in std::apply
+    /// \brief Check if a function can be invoked with the elements of a tuple
+    /// as arguments, as in std::apply
     template <typename Function, typename Tuple>
-    struct is_tuple_invocable : std::false_type {};
+    struct is_tuple_invocable : std::false_type
+    {};
 
     template <typename Function, class... Args>
     struct is_tuple_invocable<Function, std::tuple<Args...>>
-        : std::is_invocable<Function, Args...> {};
+        : std::is_invocable<Function, Args...>
+    {};
 
     template <typename Function, typename Tuple>
-    constexpr bool is_tuple_invocable_v = is_tuple_invocable<Function, Tuple>::value;
+    constexpr bool is_tuple_invocable_v = is_tuple_invocable<Function, Tuple>::
+        value;
 
     /** @} */
 } // namespace futures::detail
@@ -21881,19 +21341,10 @@ namespace futures::detail {
 #endif // FUTURES_IS_TUPLE_INVOCABLE_H
 
 // #include <futures/adaptor/detail/traits/is_when_any_result.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_IS_WHEN_ANY_RESULT_H
 #define FUTURES_IS_WHEN_ANY_RESULT_H
 
 // #include <futures/adaptor/when_any_result.h>
-//
-// Created by Alan Freitas on 8/20/21.
-//
-
 #ifndef FUTURES_WHEN_ANY_RESULT_H
 #define FUTURES_WHEN_ANY_RESULT_H
 
@@ -21904,20 +21355,22 @@ namespace futures {
 
     /// \brief Result type for when_any_future objects
     ///
-    /// This is defined in a separate file because many other concepts depend on this definition,
-    /// especially the inferences for unwrapping `then` continuations, regardless of the when_any algorithm.
-    template <typename Sequence> struct when_any_result {
+    /// This is defined in a separate file because many other concepts depend on
+    /// this definition, especially the inferences for unwrapping `then`
+    /// continuations, regardless of the when_any algorithm.
+    template <typename Sequence>
+    struct when_any_result
+    {
         using size_type = std::size_t;
         using sequence_type = Sequence;
 
-        size_type index{static_cast<size_type>(-1)};
+        size_type index{ static_cast<size_type>(-1) };
         sequence_type tasks;
     };
 
 
-
     /** @} */
-}
+} // namespace futures
 
 #endif // FUTURES_WHEN_ANY_RESULT_H
 
@@ -21930,46 +21383,60 @@ namespace futures::detail {
      */
 
     /// Check if type is a when_any_result
-    template <typename> struct is_when_any_result : std::false_type {};
-    template <typename Sequence> struct is_when_any_result<when_any_result<Sequence>> : std::true_type {};
-    template <typename Sequence> struct is_when_any_result<const when_any_result<Sequence>> : std::true_type {};
-    template <typename Sequence> struct is_when_any_result<when_any_result<Sequence> &> : std::true_type {};
-    template <typename Sequence> struct is_when_any_result<when_any_result<Sequence> &&> : std::true_type {};
-    template <typename Sequence> struct is_when_any_result<const when_any_result<Sequence> &> : std::true_type {};
-    template <class T> constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
+    template <typename>
+    struct is_when_any_result : std::false_type
+    {};
+    template <typename Sequence>
+    struct is_when_any_result<when_any_result<Sequence>> : std::true_type
+    {};
+    template <typename Sequence>
+    struct is_when_any_result<const when_any_result<Sequence>> : std::true_type
+    {};
+    template <typename Sequence>
+    struct is_when_any_result<when_any_result<Sequence> &> : std::true_type
+    {};
+    template <typename Sequence>
+    struct is_when_any_result<when_any_result<Sequence> &&> : std::true_type
+    {};
+    template <typename Sequence>
+    struct is_when_any_result<const when_any_result<Sequence> &>
+        : std::true_type
+    {};
+    template <class T>
+    constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
 
     /** @} */
-}
+} // namespace futures::detail
 
 
 #endif // FUTURES_IS_WHEN_ANY_RESULT_H
 
 // #include <futures/adaptor/detail/traits/tuple_type_all_of.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TUPLE_TYPE_ALL_OF_H
 #define FUTURES_TUPLE_TYPE_ALL_OF_H
+
+// #include <futures/adaptor/detail/traits/is_tuple.h>
 
 // #include <tuple>
 
 // #include <type_traits>
 
 
-// #include <futures/adaptor/detail/traits/is_tuple.h>
-
-
 namespace futures::detail {
     /// \brief Check if all types in a tuple match a predicate
-    template <class T, template <class...> class P> struct tuple_type_all_of : is_tuple<T> {};
+    template <class T, template <class...> class P>
+    struct tuple_type_all_of : is_tuple<T>
+    {};
 
-    template <class T1, template <class...> class P> struct tuple_type_all_of<std::tuple<T1>, P> : P<T1> {};
+    template <class T1, template <class...> class P>
+    struct tuple_type_all_of<std::tuple<T1>, P> : P<T1>
+    {};
 
     template <class T1, class... Tn, template <class...> class P>
     struct tuple_type_all_of<std::tuple<T1, Tn...>, P>
-        : std::bool_constant<P<T1>::value && tuple_type_all_of<std::tuple<Tn...>, P>::value> {};
+        : std::bool_constant<
+              P<T1>::value && tuple_type_all_of<std::tuple<Tn...>, P>::value>
+    {};
 
     template <class L, template <class...> class P>
     constexpr bool tuple_type_all_of_v = tuple_type_all_of<L, P>::value;
@@ -21979,11 +21446,6 @@ namespace futures::detail {
 #endif // FUTURES_TUPLE_TYPE_ALL_OF_H
 
 // #include <futures/adaptor/detail/traits/tuple_type_concat.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TUPLE_TYPE_CONCAT_H
 #define FUTURES_TUPLE_TYPE_CONCAT_H
 
@@ -21992,37 +21454,41 @@ namespace futures::detail {
 
 namespace futures::detail {
     /// \brief Concatenate type lists
-    /// The detail functions related to type lists assume we use std::tuple for all type lists
-    template<class...> struct tuple_type_concat {
+    /// The detail functions related to type lists assume we use std::tuple for
+    /// all type lists
+    template <class...>
+    struct tuple_type_concat
+    {
         using type = std::tuple<>;
     };
 
-    template<class T1> struct tuple_type_concat<T1> {
+    template <class T1>
+    struct tuple_type_concat<T1>
+    {
         using type = T1;
     };
 
     template <class... First, class... Second>
-    struct tuple_type_concat<std::tuple<First...>, std::tuple<Second...>> {
+    struct tuple_type_concat<std::tuple<First...>, std::tuple<Second...>>
+    {
         using type = std::tuple<First..., Second...>;
     };
 
-    template<class T1, class... Tn>
-    struct tuple_type_concat<T1, Tn...> {
-        using type = typename tuple_type_concat<T1, typename tuple_type_concat<Tn...>::type>::type;
+    template <class T1, class... Tn>
+    struct tuple_type_concat<T1, Tn...>
+    {
+        using type = typename tuple_type_concat<
+            T1,
+            typename tuple_type_concat<Tn...>::type>::type;
     };
 
-    template<class... Tn>
+    template <class... Tn>
     using tuple_type_concat_t = typename tuple_type_concat<Tn...>::type;
-}
+} // namespace futures::detail
 
 #endif // FUTURES_TUPLE_TYPE_CONCAT_H
 
 // #include <futures/adaptor/detail/traits/tuple_type_transform.h>
-//
-// Copyright (c) alandefreitas 12/4/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TUPLE_TYPE_TRANSFORM_H
 #define FUTURES_TUPLE_TYPE_TRANSFORM_H
 
@@ -22033,12 +21499,15 @@ namespace futures::detail {
 
 namespace futures::detail {
     /// \brief Transform all types in a tuple
-    template <class L, template <class...> class P> struct tuple_type_transform {
+    template <class L, template <class...> class P>
+    struct tuple_type_transform
+    {
         using type = std::tuple<>;
     };
 
     template <class... Tn, template <class...> class P>
-    struct tuple_type_transform<std::tuple<Tn...>, P> {
+    struct tuple_type_transform<std::tuple<Tn...>, P>
+    {
         using type = std::tuple<typename P<Tn>::type...>;
     };
 
@@ -22050,11 +21519,6 @@ namespace futures::detail {
 #endif // FUTURES_TUPLE_TYPE_TRANSFORM_H
 
 // #include <futures/adaptor/detail/traits/type_member_or.h>
-//
-// Copyright (c) alandefreitas 12/5/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TYPE_MEMBER_OR_H
 #define FUTURES_TYPE_MEMBER_OR_H
 
@@ -22066,15 +21530,22 @@ namespace futures::detail {
      *  @{
      */
 
-    /// \brief Return T::type or a second type as a placeholder if T::type doesn't exist
-    /// This class is meant to avoid errors in std::conditional
-    template <class, class Placeholder = void, class = void> struct type_member_or { using type = Placeholder; };
+    /// \brief Return T::type or a second type as a placeholder if T::type
+    /// doesn't exist This class is meant to avoid errors in std::conditional
+    template <class, class Placeholder = void, class = void>
+    struct type_member_or
+    {
+        using type = Placeholder;
+    };
 
-    template <class T, class Placeholder> struct type_member_or<T, Placeholder, std::void_t<typename T::type>> {
+    template <class T, class Placeholder>
+    struct type_member_or<T, Placeholder, std::void_t<typename T::type>>
+    {
         using type = typename T::type;
     };
 
-    template <class T, class Placeholder> using type_member_or_t = typename type_member_or<T>::type;
+    template <class T, class Placeholder>
+    using type_member_or_t = typename type_member_or<T>::type;
 
     /** @} */
 } // namespace futures::detail
@@ -22082,10 +21553,6 @@ namespace futures::detail {
 #endif // FUTURES_TYPE_MEMBER_OR_H
 
 // #include <futures/adaptor/detail/tuple_algorithm.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_TUPLE_ALGORITHM_H
 #define FUTURES_TUPLE_ALGORITHM_H
 
@@ -22100,231 +21567,357 @@ namespace futures {
      */
 
     namespace detail {
-        template<class Function, class... Args, std::size_t... Is>
-        static void for_each_impl(const std::tuple<Args...> &t, Function &&fn, std::index_sequence<Is...>) {
+        template <class Function, class... Args, std::size_t... Is>
+        static void
+        for_each_impl(
+            const std::tuple<Args...> &t,
+            Function &&fn,
+            std::index_sequence<Is...>) {
             (fn(std::get<Is>(t)), ...);
         }
     } // namespace detail
 
     /// \brief tuple_for_each for tuples
-    template<class Function, class... Args>
-    static void tuple_for_each(const std::tuple<Args...> &t, Function &&fn) {
-        detail::for_each_impl(t, std::forward<Function>(fn), std::index_sequence_for<Args...>{});
+    template <class Function, class... Args>
+    static void
+    tuple_for_each(const std::tuple<Args...> &t, Function &&fn) {
+        detail::for_each_impl(
+            t,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args...>{});
     }
 
     namespace detail {
-        template<class Function, class... Args1, class... Args2, std::size_t... Is>
-        static void for_each_paired_impl(std::tuple<Args1...> &t1, std::tuple<Args2...> &t2, Function &&fn,
-                                         std::index_sequence<Is...>) {
+        template <
+            class Function,
+            class... Args1,
+            class... Args2,
+            std::size_t... Is>
+        static void
+        for_each_paired_impl(
+            std::tuple<Args1...> &t1,
+            std::tuple<Args2...> &t2,
+            Function &&fn,
+            std::index_sequence<Is...>) {
             (fn(std::get<Is>(t1), std::get<Is>(t2)), ...);
         }
     } // namespace detail
 
     /// \brief for_each_paired for paired tuples of same size
-    template<class Function, class... Args1, class... Args2>
-    static void for_each_paired(std::tuple<Args1...> &t1, std::tuple<Args2...> &t2, Function &&fn) {
-        static_assert(std::tuple_size_v<std::tuple<Args1...>> == std::tuple_size_v<std::tuple<Args2...>>);
-        detail::for_each_paired_impl(t1, t2, std::forward<Function>(fn), std::index_sequence_for<Args1...>{});
+    template <class Function, class... Args1, class... Args2>
+    static void
+    for_each_paired(
+        std::tuple<Args1...> &t1,
+        std::tuple<Args2...> &t2,
+        Function &&fn) {
+        static_assert(
+            std::tuple_size_v<std::tuple<
+                Args1...>> == std::tuple_size_v<std::tuple<Args2...>>);
+        detail::for_each_paired_impl(
+            t1,
+            t2,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args1...>{});
     }
 
     namespace detail {
-        template<class Function, class... Args1, class T, size_t N, std::size_t... Is>
-        static void for_each_paired_impl(std::tuple<Args1...> &t, std::array<T, N> &a, Function &&fn,
-                                         std::index_sequence<Is...>) {
+        template <
+            class Function,
+            class... Args1,
+            class T,
+            size_t N,
+            std::size_t... Is>
+        static void
+        for_each_paired_impl(
+            std::tuple<Args1...> &t,
+            std::array<T, N> &a,
+            Function &&fn,
+            std::index_sequence<Is...>) {
             (fn(std::get<Is>(t), a[Is]), ...);
         }
     } // namespace detail
 
     /// \brief for_each_paired for paired tuples and arrays of same size
-    template<class Function, class... Args1, class T, size_t N>
-    static void for_each_paired(std::tuple<Args1...> &t, std::array<T, N> &a, Function &&fn) {
+    template <class Function, class... Args1, class T, size_t N>
+    static void
+    for_each_paired(
+        std::tuple<Args1...> &t,
+        std::array<T, N> &a,
+        Function &&fn) {
         static_assert(std::tuple_size_v<std::tuple<Args1...>> == N);
-        detail::for_each_paired_impl(t, a, std::forward<Function>(fn), std::index_sequence_for<Args1...>{});
+        detail::for_each_paired_impl(
+            t,
+            a,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args1...>{});
     }
 
     /// \brief find_if for tuples
-    template<class Function, size_t t_idx = 0, class... Args>
-    static size_t tuple_find_if(const std::tuple<Args...> &t, Function &&fn) {
+    template <class Function, size_t t_idx = 0, class... Args>
+    static size_t
+    tuple_find_if(const std::tuple<Args...> &t, Function &&fn) {
         if constexpr (t_idx == std::tuple_size_v<std::decay_t<decltype(t)>>) {
             return t_idx;
         } else {
             if (fn(std::get<t_idx>(t))) {
                 return t_idx;
             }
-            return tuple_find_if<Function, t_idx + 1, Args...>(t, std::forward<Function>(fn));
+            return tuple_find_if<Function, t_idx + 1, Args...>(
+                t,
+                std::forward<Function>(fn));
         }
     }
 
     namespace detail {
-        template<class Function, class... Args, std::size_t... Is>
-        static bool all_of_impl(const std::tuple<Args...> &t, Function &&fn, std::index_sequence<Is...>) {
+        template <class Function, class... Args, std::size_t... Is>
+        static bool
+        all_of_impl(
+            const std::tuple<Args...> &t,
+            Function &&fn,
+            std::index_sequence<Is...>) {
             return (fn(std::get<Is>(t)) && ...);
         }
     } // namespace detail
 
     /// \brief all_of for tuples
-    template<class Function, class... Args>
-    static bool tuple_all_of(const std::tuple<Args...> &t, Function &&fn) {
-        return detail::all_of_impl(t, std::forward<Function>(fn), std::index_sequence_for<Args...>{});
+    template <class Function, class... Args>
+    static bool
+    tuple_all_of(const std::tuple<Args...> &t, Function &&fn) {
+        return detail::all_of_impl(
+            t,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args...>{});
     }
 
     namespace detail {
-        template<class Function, class... Args, std::size_t... Is>
-        static bool any_of_impl(const std::tuple<Args...> &t, Function &&fn, std::index_sequence<Is...>) {
+        template <class Function, class... Args, std::size_t... Is>
+        static bool
+        any_of_impl(
+            const std::tuple<Args...> &t,
+            Function &&fn,
+            std::index_sequence<Is...>) {
             return (fn(std::get<Is>(t)) || ...);
         }
     } // namespace detail
 
     /// \brief any_of for tuples
-    template<class Function, class... Args>
-    static bool tuple_any_of(const std::tuple<Args...> &t, Function &&fn) {
-        return detail::any_of_impl(t, std::forward<Function>(fn), std::index_sequence_for<Args...>{});
+    template <class Function, class... Args>
+    static bool
+    tuple_any_of(const std::tuple<Args...> &t, Function &&fn) {
+        return detail::any_of_impl(
+            t,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args...>{});
     }
 
     /// \brief Apply a function to a single tuple element at runtime
     /// The function must, of course, be valid for all tuple elements
-    template<class Function, class Tuple, size_t current_tuple_idx = 0,
-            std::enable_if_t<is_callable_v < Function> &&is_tuple_v<Tuple> &&
-            (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
-    int> = 0>
+    template <
+        class Function,
+        class Tuple,
+        size_t current_tuple_idx = 0,
+        std::enable_if_t<
+            is_callable_v<
+                Function> && is_tuple_v<Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int> = 0>
 
-    constexpr static auto apply(Function &&fn, Tuple &&t, std::size_t idx) {
+    constexpr static auto
+    apply(Function &&fn, Tuple &&t, std::size_t idx) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
             return fn(std::get<current_tuple_idx>(t));
-        } else if constexpr (current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>) {
-            return apply < Function, Tuple, current_tuple_idx + 1 > (std::forward<Function>(fn), std::forward<Tuple>(t),
-                    idx);
+        } else if constexpr (
+            current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>)
+        {
+            return apply<Function, Tuple, current_tuple_idx + 1>(
+                std::forward<Function>(fn),
+                std::forward<Tuple>(t),
+                idx);
         } else {
-            detail::throw_exception<std::out_of_range>("apply:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>(
+                "apply:: tuple idx out of range");
         }
     }
 
     /// \brief Return the i-th element from a tuple whose types are the same
-    /// The return expression function must, of course, be valid for all tuple elements
-    template<
-            class Tuple, size_t current_tuple_idx = 0,
-            std::enable_if_t<
-                    is_tuple_v < Tuple> &&(current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>), int> = 0>
+    /// The return expression function must, of course, be valid for all tuple
+    /// elements
+    template <
+        class Tuple,
+        size_t current_tuple_idx = 0,
+        std::enable_if_t<
+            is_tuple_v<
+                Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int> = 0>
 
-    constexpr static decltype(auto) get(Tuple &&t, std::size_t idx) {
+    constexpr static decltype(auto)
+    get(Tuple &&t, std::size_t idx) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
             return std::get<current_tuple_idx>(t);
-        } else if constexpr (current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>) {
-            return get < Tuple, current_tuple_idx + 1 > (std::forward<Tuple>(t), idx);
+        } else if constexpr (
+            current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>)
+        {
+            return get<Tuple, current_tuple_idx + 1>(
+                std::forward<Tuple>(t),
+                idx);
         } else {
-            detail::throw_exception<std::out_of_range>("get:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>(
+                "get:: tuple idx out of range");
         }
     }
 
-    /// \brief Return the i-th element from a tuple with a transformation function whose return is always the same
-    /// The return expression function must, of course, be valid for all tuple elements
-    template<
-            class Tuple, size_t current_tuple_idx = 0, class TransformFn,
-            std::enable_if_t<
-                    is_tuple_v < Tuple> &&(current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>), int> = 0>
+    /// \brief Return the i-th element from a tuple with a transformation
+    /// function whose return is always the same The return expression function
+    /// must, of course, be valid for all tuple elements
+    template <
+        class Tuple,
+        size_t current_tuple_idx = 0,
+        class TransformFn,
+        std::enable_if_t<
+            is_tuple_v<
+                Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int> = 0>
 
-    constexpr static decltype(auto) get(Tuple &&t, std::size_t idx, TransformFn &&transform) {
+    constexpr static decltype(auto)
+    get(Tuple &&t, std::size_t idx, TransformFn &&transform) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
             return transform(std::get<current_tuple_idx>(t));
-        } else if constexpr (current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>) {
-            return get < Tuple, current_tuple_idx + 1 > (std::forward<Tuple>(t), idx, transform);
+        } else if constexpr (
+            current_tuple_idx + 1 < std::tuple_size_v<std::decay_t<Tuple>>)
+        {
+            return get<
+                Tuple,
+                current_tuple_idx + 1>(std::forward<Tuple>(t), idx, transform);
         } else {
-            detail::throw_exception<std::out_of_range>("get:: tuple idx out of range");
+            detail::throw_exception<std::out_of_range>(
+                "get:: tuple idx out of range");
         }
     }
 
     namespace detail {
-        template<class F, class FT, class Tuple, std::size_t... I>
-        constexpr decltype(auto) transform_and_apply_impl(F &&f, FT &&ft, Tuple &&t, std::index_sequence<I...>) {
-            return std::invoke(std::forward<F>(f), ft(std::get<I>(std::forward<Tuple>(t)))...);
+        template <class F, class FT, class Tuple, std::size_t... I>
+        constexpr decltype(auto)
+        transform_and_apply_impl(
+            F &&f,
+            FT &&ft,
+            Tuple &&t,
+            std::index_sequence<I...>) {
+            return std::invoke(
+                std::forward<F>(f),
+                ft(std::get<I>(std::forward<Tuple>(t)))...);
         }
     } // namespace detail
 
-    template<class F, class FT, class Tuple>
-    constexpr decltype(auto) transform_and_apply(F &&f, FT &&ft, Tuple &&t) {
+    template <class F, class FT, class Tuple>
+    constexpr decltype(auto)
+    transform_and_apply(F &&f, FT &&ft, Tuple &&t) {
         return detail::transform_and_apply_impl(
-                std::forward<F>(f), std::forward<FT>(ft), std::forward<Tuple>(t),
-                std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
+            std::forward<F>(f),
+            std::forward<FT>(ft),
+            std::forward<Tuple>(t),
+            std::make_index_sequence<
+                std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
     }
 
     namespace detail {
-        /// The tuple type after we filtered it with a template template predicate
-        template<template<typename> typename UnaryPredicate, typename Tuple>
+        /// The tuple type after we filtered it with a template template
+        /// predicate
+        template <template <typename> typename UnaryPredicate, typename Tuple>
         struct filtered_tuple_type;
 
-        /// The tuple type after we filtered it with a template template predicate
-        template<template<typename> typename UnaryPredicate, typename... Ts>
-        struct filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>> {
+        /// The tuple type after we filtered it with a template template
+        /// predicate
+        template <template <typename> typename UnaryPredicate, typename... Ts>
+        struct filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>
+        {
             /// If this element has to be kept, returns `std::tuple<Ts>`
             /// Otherwise returns `std::tuple<>`
-            template<class E>
-            using t_filtered_tuple_type_impl =
-            std::conditional_t<UnaryPredicate<E>::value, std::tuple<E>, std::tuple<>>;
+            template <class E>
+            using t_filtered_tuple_type_impl = std::conditional_t<
+                UnaryPredicate<E>::value,
+                std::tuple<E>,
+                std::tuple<>>;
 
             /// Determines the type that would be returned by `std::tuple_cat`
             ///  if it were called with instances of the types reported by
             ///  t_filtered_tuple_type_impl for each element
-            using type = decltype(std::tuple_cat(std::declval<t_filtered_tuple_type_impl<Ts>>()...));
+            using type = decltype(std::tuple_cat(
+                std::declval<t_filtered_tuple_type_impl<Ts>>()...));
         };
 
-        /// The tuple type after we filtered it with a template template predicate
-        template<template<typename> typename UnaryPredicate, typename Tuple>
+        /// The tuple type after we filtered it with a template template
+        /// predicate
+        template <template <typename> typename UnaryPredicate, typename Tuple>
         struct transformed_tuple;
 
-        /// The tuple type after we filtered it with a template template predicate
-        template<template<typename> typename UnaryPredicate, typename... Ts>
-        struct transformed_tuple<UnaryPredicate, std::tuple<Ts...>> {
+        /// The tuple type after we filtered it with a template template
+        /// predicate
+        template <template <typename> typename UnaryPredicate, typename... Ts>
+        struct transformed_tuple<UnaryPredicate, std::tuple<Ts...>>
+        {
             /// If this element has to be kept, returns `std::tuple<Ts>`
             /// Otherwise returns `std::tuple<>`
-            template<class E> using transformed_tuple_element_type = typename UnaryPredicate<E>::type;
+            template <class E>
+            using transformed_tuple_element_type = typename UnaryPredicate<
+                E>::type;
 
             /// Determines the type that would be returned by `std::tuple_cat`
             ///  if it were called with instances of the types reported by
             ///  transformed_tuple_element_type for each element
-            using type = decltype(std::tuple_cat(std::declval<transformed_tuple_element_type<Ts>>()...));
+            using type = decltype(std::tuple_cat(
+                std::declval<transformed_tuple_element_type<Ts>>()...));
         };
     } // namespace detail
 
     /// \brief Filter tuple elements based on their types
-    template<template<typename> typename UnaryPredicate, typename... Ts>
-    constexpr typename detail::filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
-    filter_if(const std::tuple<Ts...> &tup) {
+    template <template <typename> typename UnaryPredicate, typename... Ts>
+    constexpr typename detail::
+        filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
+        filter_if(const std::tuple<Ts...> &tup) {
         return std::apply(
-                [](auto... tuple_value) {
-                    return std::tuple_cat(std::conditional_t<UnaryPredicate<decltype(tuple_value)>::value,
-                            std::tuple<decltype(tuple_value)>, std::tuple<>>{}...);
-                },
-                tup);
+            [](auto... tuple_value) {
+            return std::tuple_cat(
+                std::conditional_t<
+                    UnaryPredicate<decltype(tuple_value)>::value,
+                    std::tuple<decltype(tuple_value)>,
+                    std::tuple<>>{}...);
+            },
+            tup);
     }
 
     /// \brief Remove tuple elements based on their types
-    template<template<typename> typename UnaryPredicate, typename... Ts>
-    constexpr typename detail::filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
-    remove_if(const std::tuple<Ts...> &tup) {
+    template <template <typename> typename UnaryPredicate, typename... Ts>
+    constexpr typename detail::
+        filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
+        remove_if(const std::tuple<Ts...> &tup) {
         return std::apply(
-                [](auto... tuple_value) {
-                    return std::tuple_cat(std::conditional_t<not UnaryPredicate<decltype(tuple_value)>::value,
-                            std::tuple<decltype(tuple_value)>, std::tuple<>>{}...);
-                },
-                tup);
+            [](auto... tuple_value) {
+            return std::tuple_cat(
+                std::conditional_t<
+                    not UnaryPredicate<decltype(tuple_value)>::value,
+                    std::tuple<decltype(tuple_value)>,
+                    std::tuple<>>{}...);
+            },
+            tup);
     }
 
     /// \brief Transform tuple elements based on their types
-    template<template<typename> typename UnaryPredicate, typename... Ts>
-    constexpr typename detail::transformed_tuple<UnaryPredicate, std::tuple<Ts...>>::type
-    transform(const std::tuple<Ts...> &tup) {
+    template <template <typename> typename UnaryPredicate, typename... Ts>
+    constexpr typename detail::
+        transformed_tuple<UnaryPredicate, std::tuple<Ts...>>::type
+        transform(const std::tuple<Ts...> &tup) {
         return std::apply(
-                [](auto... tuple_value) {
-                    return std::tuple_cat(
-                            std::tuple<typename UnaryPredicate<decltype(tuple_value)>::type>{tuple_value}...);
-                },
-                tup);
+            [](auto... tuple_value) {
+            return std::tuple_cat(
+                std::tuple<typename UnaryPredicate<decltype(tuple_value)>::type>{
+                    tuple_value }...);
+            },
+            tup);
     }
 
-    /** @} */  // \addtogroup futures Futures
+    /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_TUPLE_ALGORITHM_H
@@ -22951,6 +22544,7 @@ namespace futures::detail {
 
 #endif // FUTURES_CONTINUATION_UNWRAP_H
 
+// #include <future>
 
 // #include <version>
 
@@ -22960,126 +22554,177 @@ namespace futures {
      *
      * \brief Functions to create new futures from existing functions.
      *
-     * This module defines functions we can use to create new futures from existing futures. Future adaptors
-     * are future types of whose values are dependant on the condition of other future objects.
+     * This module defines functions we can use to create new futures from
+     * existing futures. Future adaptors are future types of whose values are
+     * dependant on the condition of other future objects.
      *
      *  @{
      */
 
     /// \brief Schedule a continuation function to a future
     ///
-    /// This creates a continuation that gets executed when the before future is over.
-    /// The continuation needs to be invocable with the return type of the previous future.
+    /// This creates a continuation that gets executed when the before future is
+    /// over. The continuation needs to be invocable with the return type of the
+    /// previous future.
     ///
-    /// This function works for all kinds of futures but behavior depends on the input:
-    /// - If previous future is continuable, attach the function to the continuation list
-    /// - If previous future is not continuable (such as std::future), post to execution with deferred policy
-    /// In both cases, the result becomes a cfuture or jcfuture.
+    /// This function works for all kinds of futures but behavior depends on the
+    /// input:
+    /// - If previous future is continuable, attach the function to the
+    /// continuation list
+    /// - If previous future is not continuable (such as std::future), post to
+    /// execution with deferred policy In both cases, the result becomes a
+    /// cfuture or jcfuture.
     ///
     /// Stop tokens are also propagated:
     /// - If after function expects a stop token:
-    ///   - If previous future is stoppable and not-shared: return jcfuture with shared stop source
-    ///   - Otherwise:                                      return jcfuture with new stop source
+    ///   - If previous future is stoppable and not-shared: return jcfuture with
+    ///   shared stop source
+    ///   - Otherwise:                                      return jcfuture with
+    ///   new stop source
     /// - If after function does not expect a stop token:
-    ///   - If previous future is stoppable and not-shared: return jcfuture with shared stop source
-    ///   - Otherwise:                                      return cfuture with no stop source
+    ///   - If previous future is stoppable and not-shared: return jcfuture with
+    ///   shared stop source
+    ///   - Otherwise:                                      return cfuture with
+    ///   no stop source
     ///
     /// \return A continuation to the before future
-    template <typename Executor, typename Function, class Future
+    template <
+        typename Executor,
+        typename Function,
+        class Future
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
-                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
-                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            is_executor_v<std::decay_t<
+                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            int> = 0
 #endif
-              >
-    decltype(auto) then(const Executor &ex, Future &&before, Function &&after) {
-        return detail::internal_then(ex, std::forward<Future>(before), std::forward<Function>(after));
+        >
+    decltype(auto)
+    then(const Executor &ex, Future &&before, Function &&after) {
+        return detail::internal_then(
+            ex,
+            std::forward<Future>(before),
+            std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future, allow an executor as second parameter
+    /// \brief Schedule a continuation function to a future, allow an executor
+    /// as second parameter
     ///
     /// \see @ref then
-    template <class Future, typename Executor, typename Function
+    template <
+        class Future,
+        typename Executor,
+        typename Function
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
-                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
-                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            is_executor_v<std::decay_t<
+                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            int> = 0
 #endif
-              >
-    decltype(auto) then(Future &&before, const Executor &ex, Function &&after) {
-        return then(ex, std::forward<Future>(before), std::forward<Function>(after));
+        >
+    decltype(auto)
+    then(Future &&before, const Executor &ex, Function &&after) {
+        return then(
+            ex,
+            std::forward<Future>(before),
+            std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future with the default executor
+    /// \brief Schedule a continuation function to a future with the default
+    /// executor
     ///
     /// \return A continuation to the before future
     ///
     /// \see @ref then
-    template <class Future, typename Function
+    template <
+        class Future,
+        typename Function
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<!is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> &&
-                                   is_future_v<std::decay_t<Future>> &&
-                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            !is_executor_v<std::decay_t<
+                Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            int> = 0
 #endif
-              >
-    decltype(auto) then(Future &&before, Function &&after) {
-        return then(::futures::make_default_executor(), std::forward<Future>(before), std::forward<Function>(after));
+        >
+    decltype(auto)
+    then(Future &&before, Function &&after) {
+        return then(
+            ::futures::make_default_executor(),
+            std::forward<Future>(before),
+            std::forward<Function>(after));
     }
 
     /// \brief Operator to schedule a continuation function to a future
     ///
     /// \return A continuation to the before future
-    template <class Future, typename Function
+    template <
+        class Future,
+        typename Function
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<!is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> &&
-                                   is_future_v<std::decay_t<Future>> &&
-                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            !is_executor_v<std::decay_t<
+                Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            int> = 0
 #endif
-              >
-    auto operator>>(Future &&before, Function &&after) {
+        >
+    auto
+    operator>>(Future &&before, Function &&after) {
         return then(std::forward<Future>(before), std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future with a custom executor
+    /// \brief Schedule a continuation function to a future with a custom
+    /// executor
     ///
     /// \return A continuation to the before future
-    template <class Executor, class Future, typename Function
+    template <
+        class Executor,
+        class Future,
+        typename Function
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
-                                   !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> &&
-                                   detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            is_executor_v<std::decay_t<
+                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            int> = 0
 #endif
-              >
-    auto operator>>(Future &&before, std::pair<const Executor &, Function &> &&after) {
-        return then(after.first, std::forward<Future>(before), std::forward<Function>(after.second));
+        >
+    auto
+    operator>>(
+        Future &&before,
+        std::pair<const Executor &, Function &> &&after) {
+        return then(
+            after.first,
+            std::forward<Future>(before),
+            std::forward<Function>(after.second));
     }
 
-    /// \brief Create a proxy pair to schedule a continuation function to a future with a custom executor
+    /// \brief Create a proxy pair to schedule a continuation function to a
+    /// future with a custom executor
     ///
-    /// For this operation, we needed an operator with higher precedence than operator>>
-    /// Our options are: +, -, *, /, %, &, !, ~.
-    /// Although + seems like an obvious choice, % is the one that leads to less conflict with other functions.
+    /// For this operation, we needed an operator with higher precedence than
+    /// operator>> Our options are: +, -, *, /, %, &, !, ~. Although + seems
+    /// like an obvious choice, % is the one that leads to less conflict with
+    /// other functions.
     ///
     /// \return A proxy pair to schedule execution
-    template <class Executor, typename Function, typename... Args
+    template <
+        class Executor,
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<is_executor_v<std::decay_t<Executor>> && !is_executor_v<std::decay_t<Function>> &&
-                                   !is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            is_executor_v<std::decay_t<
+                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
+            int> = 0
 #endif
-              >
-    auto operator%(const Executor &ex, Function &&after) {
+        >
+    auto
+    operator%(const Executor &ex, Function &&after) {
         return std::make_pair(std::cref(ex), std::ref(after));
     }
 
@@ -23089,48 +22734,38 @@ namespace futures {
 #endif // FUTURES_THEN_H
 
 // #include <futures/adaptor/when_all.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_WHEN_ALL_H
 #define FUTURES_WHEN_ALL_H
 
 /// \file Implement the when_all functionality for futures and executors
 ///
-/// Because all tasks need to be done to achieve the result, the algorithm doesn't depend much
-/// on the properties of the underlying futures. The thread that is awaiting just needs sleep
-/// and await for each of the internal futures.
+/// Because all tasks need to be done to achieve the result, the algorithm
+/// doesn't depend much on the properties of the underlying futures. The thread
+/// that is awaiting just needs sleep and await for each of the internal
+/// futures.
 ///
-/// The usual approach, without our future concepts, like in returning another std::future, is
-/// to start another polling thread, which sets a promise when all other futures are ready.
-/// If the futures support lazy continuations, these promises can be set from the previous
-/// objects. However, this has an obvious cost for such a trivial operation, given that the
-/// solutions is already available in the underlying futures.
+/// The usual approach, without our future concepts, like in returning another
+/// std::future, is to start another polling thread, which sets a promise when
+/// all other futures are ready. If the futures support lazy continuations,
+/// these promises can be set from the previous objects. However, this has an
+/// obvious cost for such a trivial operation, given that the solutions is
+/// already available in the underlying futures.
 ///
-/// Instead, we implement one more future type `when_all_future` that can query if the
-/// futures are ready and waits for them to be ready whenever get() is called.
-/// This proxy object can then be converted to a regular future if the user needs to.
+/// Instead, we implement one more future type `when_all_future` that can query
+/// if the futures are ready and waits for them to be ready whenever get() is
+/// called. This proxy object can then be converted to a regular future if the
+/// user needs to.
 ///
-/// This has a disadvantage over futures with lazy continuations because we might need
-/// to schedule another task if we need notifications from this future. However,
-/// we avoid scheduling another task right now, so this is, at worst, as good as
-/// the common approach of wrapping it into another existing future type.
+/// This has a disadvantage over futures with lazy continuations because we
+/// might need to schedule another task if we need notifications from this
+/// future. However, we avoid scheduling another task right now, so this is, at
+/// worst, as good as the common approach of wrapping it into another existing
+/// future type.
 ///
-/// If the input futures are not shared, they are moved into `when_all_future` and are invalidated,
-/// as usual. The `when_all_future` cannot be shared.
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-// #include <futures/adaptor/detail/traits/is_tuple.h>
-
-// #include <futures/adaptor/detail/tuple_algorithm.h>
+/// If the input futures are not shared, they are moved into `when_all_future`
+/// and are invalidated, as usual. The `when_all_future` cannot be shared.
 
 // #include <futures/futures/traits/to_future.h>
-//
-// Created by Alan Freitas on 8/19/21.
-//
-
 #ifndef FUTURES_TO_FUTURE_H
 #define FUTURES_TO_FUTURE_H
 
@@ -23141,32 +22776,52 @@ namespace futures {
     /// - Lambdas become futures
     ///
     /// The primary template handles non-future types
-    template <typename T, class Enable = void> struct to_future { using type = void; };
+    template <typename T, class Enable = void>
+    struct to_future
+    {
+        using type = void;
+    };
 
-    /// \brief Trait to convert input type to its proper future type (specialization for future types)
+    /// \brief Trait to convert input type to its proper future type
+    /// (specialization for future types)
     ///
     /// - Futures become their decayed versions
     /// - Lambdas become futures
     ///
     /// The primary template handles non-future types
-    template <typename Future> struct to_future<Future, std::enable_if_t<is_future_v<std::decay_t<Future>>>> {
+    template <typename Future>
+    struct to_future<Future, std::enable_if_t<is_future_v<std::decay_t<Future>>>>
+    {
         using type = std::decay_t<Future>;
     };
 
-    /// \brief Trait to convert input type to its proper future type (specialization for functions)
+    /// \brief Trait to convert input type to its proper future type
+    /// (specialization for functions)
     ///
     /// - Futures become their decayed versions
     /// - Lambdas become futures
     ///
     /// The primary template handles non-future types
-    template <typename Lambda> struct to_future<Lambda, std::enable_if_t<std::is_invocable_v<std::decay_t<Lambda>>>> {
-        using type = futures::cfuture<std::invoke_result_t<std::decay_t<Lambda>>>;
+    template <typename Lambda>
+    struct to_future<
+        Lambda,
+        std::enable_if_t<std::is_invocable_v<std::decay_t<Lambda>>>>
+    {
+        using type = futures::cfuture<
+            std::invoke_result_t<std::decay_t<Lambda>>>;
     };
 
-    template <class T> using to_future_t = typename to_future<T>::type;
+    template <class T>
+    using to_future_t = typename to_future<T>::type;
 } // namespace futures
 
 #endif // FUTURES_TO_FUTURE_H
+
+// #include <futures/adaptor/detail/traits/is_tuple.h>
+
+// #include <futures/adaptor/detail/tuple_algorithm.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/futures/detail/small_vector.h>
 
@@ -23176,67 +22831,84 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Proxy future class referring to the result of a conjunction of futures from @ref when_all
+    /// \brief Proxy future class referring to the result of a conjunction of
+    /// futures from @ref when_all
     ///
-    /// This class implements the behavior of the `when_all` operation as another future type,
-    /// which can handle heterogeneous future objects.
+    /// This class implements the behavior of the `when_all` operation as
+    /// another future type, which can handle heterogeneous future objects.
     ///
-    /// This future type logically checks the results of other futures in place to avoid creating a
-    /// real conjunction of futures that would need to be polling (or be a lazy continuation)
-    /// on another thread.
+    /// This future type logically checks the results of other futures in place
+    /// to avoid creating a real conjunction of futures that would need to be
+    /// polling (or be a lazy continuation) on another thread.
     ///
-    /// If the user does want to poll on another thread, then this can be converted into a cfuture
-    /// as usual with async. If the other future holds the when_all_state as part of its state,
-    /// then it can become another future.
-    template <class Sequence> class when_all_future {
-      private:
+    /// If the user does want to poll on another thread, then this can be
+    /// converted into a cfuture as usual with async. If the other future holds
+    /// the when_all_state as part of its state, then it can become another
+    /// future.
+    template <class Sequence>
+    class when_all_future
+    {
+    private:
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
-        static constexpr bool sequence_is_range = futures::detail::range<sequence_type>;
+        static constexpr bool sequence_is_range = futures::detail::range<
+            sequence_type>;
         static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
 
-      public:
+    public:
         /// \brief Default constructor.
-        /// Constructs a when_all_future with no shared state. After construction, valid() == false
+        /// Constructs a when_all_future with no shared state. After
+        /// construction, valid() == false
         when_all_future() noexcept = default;
 
-        /// \brief Move a sequence of futures into the when_all_future constructor.
-        /// The sequence is moved into this future object and the objects from which the
-        /// sequence was created get invalidated
-        explicit when_all_future(sequence_type &&v) noexcept : v(std::move(v)) {}
+        /// \brief Move a sequence of futures into the when_all_future
+        /// constructor. The sequence is moved into this future object and the
+        /// objects from which the sequence was created get invalidated
+        explicit when_all_future(sequence_type &&v) noexcept
+            : v(std::move(v)) {}
 
         /// \brief Move constructor.
-        /// Constructs a when_all_future with the shared state of other using move semantics.
-        /// After construction, other.valid() == false
-        when_all_future(when_all_future &&other) noexcept : v(std::move(other.v)) {}
+        /// Constructs a when_all_future with the shared state of other using
+        /// move semantics. After construction, other.valid() == false
+        when_all_future(when_all_future &&other) noexcept
+            : v(std::move(other.v)) {}
 
         /// \brief when_all_future is not CopyConstructible
         when_all_future(const when_all_future &other) = delete;
 
         /// \brief Releases any shared state.
-        /// - If the return object or provider holds the last reference to its shared state, the shared state is
-        /// destroyed
-        /// - the return object or provider gives up its reference to its shared state
-        /// This means we just need to let the internal futures destroy themselves
+        /// - If the return object or provider holds the last reference to its
+        /// shared state, the shared state is destroyed
+        /// - the return object or provider gives up its reference to its shared
+        /// state This means we just need to let the internal futures destroy
+        /// themselves
         ~when_all_future() = default;
 
         /// \brief Assigns the contents of another future object.
-        /// Releases any shared state and move-assigns the contents of other to *this.
-        /// After the assignment, other.valid() == false and this->valid() will yield the same value as
-        /// other.valid() before the assignment.
-        when_all_future &operator=(when_all_future &&other) noexcept { v = std::move(other.v); }
+        /// Releases any shared state and move-assigns the contents of other to
+        /// *this. After the assignment, other.valid() == false and
+        /// this->valid() will yield the same value as other.valid() before the
+        /// assignment.
+        when_all_future &
+        operator=(when_all_future &&other) noexcept {
+            v = std::move(other.v);
+        }
 
         /// \brief Assigns the contents of another future object.
         /// when_all_future is not CopyAssignable.
-        when_all_future &operator=(const when_all_future &other) = delete;
+        when_all_future &
+        operator=(const when_all_future &other)
+            = delete;
 
         /// \brief Wait until all futures have a valid result and retrieves it
         /// It effectively calls wait() in order to wait for the result.
-        /// The behavior is undefined if valid() is false before the call to this function.
-        /// Any shared state is released. valid() is false after a call to this method.
-        /// The value v stored in the shared state, as std::move(v)
-        sequence_type get() {
+        /// The behavior is undefined if valid() is false before the call to
+        /// this function. Any shared state is released. valid() is false after
+        /// a call to this method. The value v stored in the shared state, as
+        /// std::move(v)
+        sequence_type
+        get() {
             // Check if the sequence is valid
             if (not valid()) {
                 throw std::future_error(std::future_errc::no_state);
@@ -23248,9 +22920,12 @@ namespace futures {
         }
 
         /// \brief Checks if the future refers to a shared state
-        [[nodiscard]] bool valid() const noexcept {
+        [[nodiscard]] bool
+        valid() const noexcept {
             if constexpr (sequence_is_range) {
-                return std::all_of(v.begin(), v.end(), [](auto &&f) { return f.valid(); });
+                return std::all_of(v.begin(), v.end(), [](auto &&f) {
+                    return f.valid();
+                });
             } else {
                 return tuple_all_of(v, [](auto &&f) { return f.valid(); });
             }
@@ -23258,8 +22933,10 @@ namespace futures {
 
         /// \brief Blocks until the result becomes available.
         /// valid() == true after the call.
-        /// The behavior is undefined if valid() == false before the call to this function
-        void wait() const {
+        /// The behavior is undefined if valid() == false before the call to
+        /// this function
+        void
+        wait() const {
             // Check if the sequence is valid
             if (not valid()) {
                 throw std::future_error(std::future_errc::no_state);
@@ -23272,10 +22949,12 @@ namespace futures {
         }
 
         /// \brief Waits for the result to become available.
-        /// Blocks until specified timeout_duration has elapsed or the result becomes available, whichever comes
-        /// first.
+        /// Blocks until specified timeout_duration has elapsed or the result
+        /// becomes available, whichever comes first.
         template <class Rep, class Period>
-        [[nodiscard]] std::future_status wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) const {
+        [[nodiscard]] std::future_status
+        wait_for(
+            const std::chrono::duration<Rep, Period> &timeout_duration) const {
             constexpr bool is_compile_time_empty = []() {
                 if constexpr (sequence_is_tuple) {
                     return std::tuple_size_v<sequence_type> == 0;
@@ -23299,24 +22978,35 @@ namespace futures {
                 using duration_type = std::chrono::duration<Rep, Period>;
                 using namespace std::chrono;
                 auto start_time = system_clock::now();
-                duration_type total_elapsed = duration_cast<duration_type>(nanoseconds(0));
+                duration_type total_elapsed = duration_cast<duration_type>(
+                    nanoseconds(0));
                 auto equal_fn = [&](auto &&f) {
-                    std::future_status s = f.wait_for(timeout_duration - total_elapsed);
-                    total_elapsed = duration_cast<duration_type>(system_clock::now() - start_time);
-                    const bool when_all_impossible = s != std::future_status::ready;
-                    return when_all_impossible || total_elapsed > timeout_duration;
+                    std::future_status s = f.wait_for(
+                        timeout_duration - total_elapsed);
+                    total_elapsed = duration_cast<duration_type>(
+                        system_clock::now() - start_time);
+                    const bool when_all_impossible
+                        = s != std::future_status::ready;
+                    return when_all_impossible
+                           || total_elapsed > timeout_duration;
                 };
                 if constexpr (sequence_is_range) {
                     // Use a hack to "break" for_each loops with find_if
                     auto it = std::find_if(v.begin(), v.end(), equal_fn);
-                    return (it == v.end()) ? std::future_status::ready : it->wait_for(seconds(0));
+                    return (it == v.end()) ?
+                               std::future_status::ready :
+                               it->wait_for(seconds(0));
                 } else {
                     auto idx = tuple_find_if(v, equal_fn);
                     if (idx == std::tuple_size<sequence_type>()) {
                         return std::future_status::ready;
                     } else {
-                        std::future_status s =
-                            apply([](auto &&el) -> std::future_status { return el.wait_for(seconds(0)); }, v, idx);
+                        std::future_status s = apply(
+                            [](auto &&el) -> std::future_status {
+                                return el.wait_for(seconds(0));
+                            },
+                            v,
+                            idx);
                         return s;
                     }
                 }
@@ -23324,25 +23014,36 @@ namespace futures {
         }
 
         /// \brief wait_until waits for a result to become available.
-        /// It blocks until specified timeout_time has been reached or the result becomes available, whichever comes
-        /// first
+        /// It blocks until specified timeout_time has been reached or the
+        /// result becomes available, whichever comes first
         template <class Clock, class Duration>
-        std::future_status wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time) const {
+        std::future_status
+        wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time)
+            const {
             auto now_time = std::chrono::system_clock::now();
-            return now_time > timeout_time ? wait_for(std::chrono::seconds(0))
-                                           : wait_for(timeout_time - std::chrono::system_clock::now());
+            return now_time > timeout_time ?
+                       wait_for(std::chrono::seconds(0)) :
+                       wait_for(
+                           timeout_time - std::chrono::system_clock::now());
         }
 
         /// \brief Allow move the underlying sequence somewhere else
-        /// The when_all_future is left empty and should now be considered invalid.
-        /// This is useful for the algorithm that merges two wait_all_future objects without
-        /// forcing encapsulation of the merge function.
-        sequence_type &&release() { return std::move(v); }
+        /// The when_all_future is left empty and should now be considered
+        /// invalid. This is useful for the algorithm that merges two
+        /// wait_all_future objects without forcing encapsulation of the merge
+        /// function.
+        sequence_type &&
+        release() {
+            return std::move(v);
+        }
 
         /// \brief Request the stoppable futures to stop
-        bool request_stop() noexcept {
+        bool
+        request_stop() noexcept {
             bool any_request = false;
-            auto f_request_stop = [&](auto &&f) { any_request = any_request || f.request_stop(); };
+            auto f_request_stop = [&](auto &&f) {
+                any_request = any_request || f.request_stop();
+            };
             if constexpr (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), f_request_stop);
             } else {
@@ -23351,14 +23052,17 @@ namespace futures {
             return any_request;
         }
 
-      private:
+    private:
         /// \brief Internal wait_all_future state
         sequence_type v;
     };
 
 #ifndef FUTURES_DOXYGEN
-    /// \brief Specialization explicitly setting when_all_future<T> as a type of future
-    template <typename T> struct is_future<when_all_future<T>> : std::true_type {};
+    /// \brief Specialization explicitly setting when_all_future<T> as a type of
+    /// future
+    template <typename T>
+    struct is_future<when_all_future<T>> : std::true_type
+    {};
 #endif
 
     namespace detail {
@@ -23367,81 +23071,144 @@ namespace futures {
         ///@{
 
         /// \brief Check if type is a when_all_future as a type
-        template <typename> struct is_when_all_future : std::false_type {};
-        template <typename Sequence> struct is_when_all_future<when_all_future<Sequence>> : std::true_type {};
+        template <typename>
+        struct is_when_all_future : std::false_type
+        {};
+        template <typename Sequence>
+        struct is_when_all_future<when_all_future<Sequence>> : std::true_type
+        {};
 
         /// \brief Check if type is a when_all_future as constant bool
-        template <class T> constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
-
-        /// \brief Check if a type can be used in a future conjunction (when_all or operator&& for futures)
         template <class T>
-        using is_valid_when_all_argument =
-            std::disjunction<is_future<std::decay_t<T>>, std::is_invocable<std::decay_t<T>>>;
-        template <class T> constexpr bool is_valid_when_all_argument_v = is_valid_when_all_argument<T>::value;
+        constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
+
+        /// \brief Check if a type can be used in a future conjunction (when_all
+        /// or operator&& for futures)
+        template <class T>
+        using is_valid_when_all_argument = std::disjunction<
+            is_future<std::decay_t<T>>,
+            std::is_invocable<std::decay_t<T>>>;
+        template <class T>
+        constexpr bool is_valid_when_all_argument_v
+            = is_valid_when_all_argument<T>::value;
 
         /// \brief Trait to identify valid when_all inputs
-        template <class...> struct are_valid_when_all_arguments : std::true_type {};
-        template <class B1> struct are_valid_when_all_arguments<B1> : is_valid_when_all_argument<B1> {};
+        template <class...>
+        struct are_valid_when_all_arguments : std::true_type
+        {};
+        template <class B1>
+        struct are_valid_when_all_arguments<B1> : is_valid_when_all_argument<B1>
+        {};
         template <class B1, class... Bn>
         struct are_valid_when_all_arguments<B1, Bn...>
-            : std::conditional_t<is_valid_when_all_argument_v<B1>, are_valid_when_all_arguments<Bn...>,
-                                 std::false_type> {};
+            : std::conditional_t<
+                  is_valid_when_all_argument_v<B1>,
+                  are_valid_when_all_arguments<Bn...>,
+                  std::false_type>
+        {};
         template <class... Args>
-        constexpr bool are_valid_when_all_arguments_v = are_valid_when_all_arguments<Args...>::value;
+        constexpr bool are_valid_when_all_arguments_v
+            = are_valid_when_all_arguments<Args...>::value;
         /// @}
 
-        /// \name Helpers and traits for operator&& on futures, functions and when_all futures
+        /// \name Helpers and traits for operator&& on futures, functions and
+        /// when_all futures
         /// @{
 
-        /// \brief Check if type is a when_all_future with tuples as a sequence type
-        template <typename T, class Enable = void> struct is_when_all_tuple_future : std::false_type {};
+        /// \brief Check if type is a when_all_future with tuples as a sequence
+        /// type
+        template <typename T, class Enable = void>
+        struct is_when_all_tuple_future : std::false_type
+        {};
         template <typename Sequence>
-        struct is_when_all_tuple_future<when_all_future<Sequence>, std::enable_if_t<is_tuple_v<Sequence>>>
-            : std::true_type {};
-        template <class T> constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<T>::value;
+        struct is_when_all_tuple_future<
+            when_all_future<Sequence>,
+            std::enable_if_t<is_tuple_v<Sequence>>> : std::true_type
+        {};
+        template <class T>
+        constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<
+            T>::value;
 
-        /// \brief Check if all template parameters are when_all_future with tuples as a sequence type
-        template <class...> struct are_when_all_tuple_futures : std::true_type {};
-        template <class B1> struct are_when_all_tuple_futures<B1> : is_when_all_tuple_future<std::decay_t<B1>> {};
+        /// \brief Check if all template parameters are when_all_future with
+        /// tuples as a sequence type
+        template <class...>
+        struct are_when_all_tuple_futures : std::true_type
+        {};
+        template <class B1>
+        struct are_when_all_tuple_futures<B1>
+            : is_when_all_tuple_future<std::decay_t<B1>>
+        {};
         template <class B1, class... Bn>
         struct are_when_all_tuple_futures<B1, Bn...>
-            : std::conditional_t<is_when_all_tuple_future_v<std::decay_t<B1>>, are_when_all_tuple_futures<Bn...>,
-                                 std::false_type> {};
+            : std::conditional_t<
+                  is_when_all_tuple_future_v<std::decay_t<B1>>,
+                  are_when_all_tuple_futures<Bn...>,
+                  std::false_type>
+        {};
         template <class... Args>
-        constexpr bool are_when_all_tuple_futures_v = are_when_all_tuple_futures<Args...>::value;
+        constexpr bool are_when_all_tuple_futures_v
+            = are_when_all_tuple_futures<Args...>::value;
 
-        /// \brief Check if type is a when_all_future with a range as a sequence type
-        template <typename T, class Enable = void> struct is_when_all_range_future : std::false_type {};
+        /// \brief Check if type is a when_all_future with a range as a sequence
+        /// type
+        template <typename T, class Enable = void>
+        struct is_when_all_range_future : std::false_type
+        {};
         template <typename Sequence>
-        struct is_when_all_range_future<when_all_future<Sequence>, std::enable_if_t<futures::detail::range<Sequence>>>
-            : std::true_type {};
-        template <class T> constexpr bool is_when_all_range_future_v = is_when_all_range_future<T>::value;
+        struct is_when_all_range_future<
+            when_all_future<Sequence>,
+            std::enable_if_t<futures::detail::range<Sequence>>> : std::true_type
+        {};
+        template <class T>
+        constexpr bool is_when_all_range_future_v = is_when_all_range_future<
+            T>::value;
 
-        /// \brief Check if all template parameters are when_all_future with tuples as a sequence type
-        template <class...> struct are_when_all_range_futures : std::true_type {};
-        template <class B1> struct are_when_all_range_futures<B1> : is_when_all_range_future<B1> {};
+        /// \brief Check if all template parameters are when_all_future with
+        /// tuples as a sequence type
+        template <class...>
+        struct are_when_all_range_futures : std::true_type
+        {};
+        template <class B1>
+        struct are_when_all_range_futures<B1> : is_when_all_range_future<B1>
+        {};
         template <class B1, class... Bn>
         struct are_when_all_range_futures<B1, Bn...>
-            : std::conditional_t<is_when_all_range_future_v<B1>, are_when_all_range_futures<Bn...>, std::false_type> {};
+            : std::conditional_t<
+                  is_when_all_range_future_v<B1>,
+                  are_when_all_range_futures<Bn...>,
+                  std::false_type>
+        {};
         template <class... Args>
-        constexpr bool are_when_all_range_futures_v = are_when_all_range_futures<Args...>::value;
+        constexpr bool are_when_all_range_futures_v
+            = are_when_all_range_futures<Args...>::value;
 
-        /// \brief Constructs a when_all_future that is a concatenation of all when_all_futures in args
-        /// It's important to be able to merge when_all_future objects because of operator&&
-        /// When the user asks for f1 && f2 && f3, we want that to return a single future that
-        /// waits for <f1,f2,f3> rather than a future that wait for two futures <f1,<f2,f3>>
-        /// \note This function only participates in overload resolution if all types in
-        /// std::decay_t<WhenAllFutures>... are specializations of when_all_future with a tuple sequence type
-        /// \overload "Merging" a single when_all_future of tuples. Overload provided for symmetry.
-        template <class WhenAllFuture, std::enable_if_t<is_when_all_tuple_future_v<WhenAllFuture>, int> = 0>
-        decltype(auto) when_all_future_cat(WhenAllFuture &&arg0) {
+        /// \brief Constructs a when_all_future that is a concatenation of all
+        /// when_all_futures in args It's important to be able to merge
+        /// when_all_future objects because of operator&& When the user asks for
+        /// f1 && f2 && f3, we want that to return a single future that waits
+        /// for <f1,f2,f3> rather than a future that wait for two futures
+        /// <f1,<f2,f3>> \note This function only participates in overload
+        /// resolution if all types in std::decay_t<WhenAllFutures>... are
+        /// specializations of when_all_future with a tuple sequence type
+        /// \overload "Merging" a single when_all_future of tuples. Overload
+        /// provided for symmetry.
+        template <
+            class WhenAllFuture,
+            std::enable_if_t<is_when_all_tuple_future_v<WhenAllFuture>, int> = 0>
+        decltype(auto)
+        when_all_future_cat(WhenAllFuture &&arg0) {
             return std::forward<WhenAllFuture>(arg0);
         }
 
         /// \overload Merging a two when_all_future objects of tuples
-        template <class WhenAllFuture1, class WhenAllFuture2,
-                  std::enable_if_t<are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>, int> = 0>
-        decltype(auto) when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
+        template <
+            class WhenAllFuture1,
+            class WhenAllFuture2,
+            std::enable_if_t<
+                are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>,
+                int> = 0>
+        decltype(auto)
+        when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
             auto s2 = std::move(std::forward<WhenAllFuture2>(arg1).release());
             auto s = std::tuple_cat(std::move(s1), std::move(s2));
@@ -23449,11 +23216,18 @@ namespace futures {
         }
 
         /// \overload Merging two+ when_all_future of tuples
-        template <class WhenAllFuture1, class... WhenAllFutures,
-                  std::enable_if_t<are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>, int> = 0>
-        decltype(auto) when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
+        template <
+            class WhenAllFuture1,
+            class... WhenAllFutures,
+            std::enable_if_t<
+                are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>,
+                int> = 0>
+        decltype(auto)
+        when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
-            auto s2 = std::move(when_all_future_cat(std::forward<WhenAllFutures>(args)...).release());
+            auto s2 = std::move(
+                when_all_future_cat(std::forward<WhenAllFutures>(args)...)
+                    .release());
             auto s = std::tuple_cat(std::move(s1), std::move(s2));
             return when_all_future(std::move(s));
         }
@@ -23462,7 +23236,9 @@ namespace futures {
         // - futures need to be moved
         // - shared futures need to be copied
         // - lambdas need to be posted
-        template <typename F> constexpr decltype(auto) move_share_or_post(F &&f) {
+        template <typename F>
+        constexpr decltype(auto)
+        move_share_or_post(F &&f) {
             if constexpr (is_shared_future_v<std::decay_t<F>>) {
                 return std::forward<F>(f);
             } else if constexpr (is_future_v<std::decay_t<F>>) {
@@ -23474,26 +23250,34 @@ namespace futures {
         ///@}
     } // namespace detail
 
-    /// \brief Create a future object that becomes ready when the range of input futures becomes ready
+    /// \brief Create a future object that becomes ready when the range of input
+    /// futures becomes ready
     ///
-    /// This function does not participate in overload resolution unless InputIt's value type (i.e.,
-    /// typename std::iterator_traits<InputIt>::value_type) is a std::future or
+    /// This function does not participate in overload resolution unless
+    /// InputIt's value type (i.e., typename
+    /// std::iterator_traits<InputIt>::value_type) is a std::future or
     /// std::shared_future.
     ///
-    /// This overload uses a small vector for avoid further allocations for such a simple operation.
+    /// This overload uses a small vector for avoid further allocations for such
+    /// a simple operation.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class InputIt
+    template <
+        class InputIt
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_valid_when_all_argument_v<typename std::iterator_traits<InputIt>::value_type>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_valid_when_all_argument_v<
+                typename std::iterator_traits<InputIt>::value_type>,
+            int> = 0
 #endif
-              >
-    when_all_future<detail::small_vector<to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+        >
+    when_all_future<detail::small_vector<
+        to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
         // Infer types
-        using input_type = std::decay_t<typename std::iterator_traits<InputIt>::value_type>;
+        using input_type = std::decay_t<
+            typename std::iterator_traits<InputIt>::value_type>;
         constexpr bool input_is_future = is_future_v<input_type>;
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
@@ -23514,92 +23298,124 @@ namespace futures {
             }
         } else /* if constexpr (input_is_invocable) */ {
             static_assert(input_is_invocable);
-            std::transform(first, last, std::back_inserter(v),
-                           [](auto &&f) { return std::move(futures::async(std::forward<decltype(f)>(f))); });
+            std::transform(first, last, std::back_inserter(v), [](auto &&f) {
+                return std::move(futures::async(std::forward<decltype(f)>(f)));
+            });
         }
 
         return when_all_future<sequence_type>(std::move(v));
     }
 
-    /// \brief Create a future object that becomes ready when the range of input futures becomes ready
+    /// \brief Create a future object that becomes ready when the range of input
+    /// futures becomes ready
     ///
-    /// This function does not participate in overload resolution unless the range type @ref is_future.
+    /// This function does not participate in overload resolution unless the
+    /// range type @ref is_future.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class Range
+    template <
+        class Range
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
+        ,
+        std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
 #endif
-              >
-    when_all_future<detail::small_vector<
-        to_future_t<typename std::iterator_traits<typename std::decay_t<Range>::iterator>::value_type>>>
+        >
+    when_all_future<
+        detail::small_vector<to_future_t<typename std::iterator_traits<
+            typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
-        return when_all(std::begin(std::forward<Range>(r)), std::end(std::forward<Range>(r)));
+        return when_all(
+            std::begin(std::forward<Range>(r)),
+            std::end(std::forward<Range>(r)));
     }
 
-    /// \brief Create a future object that becomes ready when all of the input futures become ready
+    /// \brief Create a future object that becomes ready when all of the input
+    /// futures become ready
     ///
-    /// This function does not participate in overload resolution unless every argument is either a (possibly
-    /// cv-qualified) shared_future or a cv-unqualified future, as defined by the trait @ref is_future.
+    /// This function does not participate in overload resolution unless every
+    /// argument is either a (possibly cv-qualified) shared_future or a
+    /// cv-unqualified future, as defined by the trait @ref is_future.
     ///
     /// \return Future object of type @ref when_all_future
-    template <class... Futures
+    template <
+        class... Futures
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::are_valid_when_all_arguments_v<Futures...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::are_valid_when_all_arguments_v<Futures...>,
+            int> = 0
 #endif
-              >
-    when_all_future<std::tuple<to_future_t<Futures>...>> when_all(Futures &&...futures) {
+        >
+    when_all_future<std::tuple<to_future_t<Futures>...>>
+    when_all(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<to_future_t<Futures>...>;
 
         // Create sequence (and infer types as we go)
-        sequence_type v = std::make_tuple((detail::move_share_or_post(futures))...);
+        sequence_type v = std::make_tuple(
+            (detail::move_share_or_post(futures))...);
 
         return when_all_future<sequence_type>(std::move(v));
     }
 
-    /// \brief Operator to create a future object that becomes ready when all of the input futures are ready
+    /// \brief Operator to create a future object that becomes ready when all of
+    /// the input futures are ready
     ///
-    /// Cperator&& works for futures and functions (which are converted to futures with the default executor)
-    /// If the future is a when_all_future itself, then it gets merged instead of becoming a child future
-    /// of another when_all_future.
+    /// Cperator&& works for futures and functions (which are converted to
+    /// futures with the default executor) If the future is a when_all_future
+    /// itself, then it gets merged instead of becoming a child future of
+    /// another when_all_future.
     ///
-    /// When the user asks for f1 && f2 && f3, we want that to return a single future that
-    /// waits for <f1,f2,f3> rather than a future that wait for two futures <f1,<f2,f3>>.
+    /// When the user asks for f1 && f2 && f3, we want that to return a single
+    /// future that waits for <f1,f2,f3> rather than a future that wait for two
+    /// futures <f1,<f2,f3>>.
     ///
-    /// This emulates the usual behavior we expect from other types with operator&&.
+    /// This emulates the usual behavior we expect from other types with
+    /// operator&&.
     ///
-    /// Note that this default behaviour is different from when_all(...), which doesn't merge
-    /// the when_all_future objects by default, because they are variadic functions and
-    /// this intention can be controlled explicitly:
+    /// Note that this default behaviour is different from when_all(...), which
+    /// doesn't merge the when_all_future objects by default, because they are
+    /// variadic functions and this intention can be controlled explicitly:
     /// - when_all(f1,f2,f3) -> <f1,f2,f3>
     /// - when_all(f1,when_all(f2,f3)) -> <f1,<f2,f3>>
     ///
     /// \return @ref when_all_future object that concatenates all futures
     template <
-        class T1, class T2
+        class T1,
+        class T2
 #ifndef FUTURES_DOXYGEN
         ,
-        std::enable_if_t<detail::is_valid_when_all_argument_v<T1> && detail::is_valid_when_all_argument_v<T2>, int> = 0
+        std::enable_if_t<
+            detail::is_valid_when_all_argument_v<
+                T1> && detail::is_valid_when_all_argument_v<T2>,
+            int> = 0
 #endif
         >
-    auto operator&&(T1 &&lhs, T2 &&rhs) {
+    auto
+    operator&&(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;
         constexpr bool second_is_when_all = detail::is_when_all_future_v<T2>;
-        constexpr bool both_are_when_all = first_is_when_all && second_is_when_all;
+        constexpr bool both_are_when_all = first_is_when_all
+                                           && second_is_when_all;
         if constexpr (both_are_when_all) {
             // Merge when all futures with operator&&
-            return detail::when_all_future_cat(std::forward<T1>(lhs), std::forward<T2>(rhs));
+            return detail::when_all_future_cat(
+                std::forward<T1>(lhs),
+                std::forward<T2>(rhs));
         } else {
             // At least one of the arguments is not a when_all_future.
-            // Any such argument might be another future or a function which needs to become a future.
-            // Thus, we need a function to maybe convert these functions to futures.
+            // Any such argument might be another future or a function which
+            // needs to become a future. Thus, we need a function to maybe
+            // convert these functions to futures.
             auto maybe_make_future = [](auto &&f) {
-                if constexpr (std::is_invocable_v<decltype(f)> && not is_future_v<decltype(f)>) {
-                    // Convert to future with the default executor if not a future yet
-                    return asio::post(make_default_executor(), asio::use_future(std::forward<decltype(f)>(f)));
+                if constexpr (
+                    std::is_invocable_v<
+                        decltype(f)> && not is_future_v<decltype(f)>) {
+                    // Convert to future with the default executor if not a
+                    // future yet
+                    return asio::post(
+                        make_default_executor(),
+                        asio::use_future(std::forward<decltype(f)>(f)));
                 } else {
                     if constexpr (is_shared_future_v<decltype(f)>) {
                         return std::forward<decltype(f)>(f);
@@ -23609,16 +23425,24 @@ namespace futures {
                 }
             };
             // Simplest case, join futures in a new when_all_future
-            constexpr bool none_are_when_all = not first_is_when_all && not second_is_when_all;
+            constexpr bool none_are_when_all = not first_is_when_all
+                                               && not second_is_when_all;
             if constexpr (none_are_when_all) {
-                return when_all(maybe_make_future(std::forward<T1>(lhs)), maybe_make_future(std::forward<T2>(rhs)));
+                return when_all(
+                    maybe_make_future(std::forward<T1>(lhs)),
+                    maybe_make_future(std::forward<T2>(rhs)));
             } else if constexpr (first_is_when_all) {
-                // If one of them is a when_all_future, then we need to concatenate the results
-                // rather than creating a child in the sequence. To concatenate them, the
-                // one that is not a when_all_future needs to become one.
-                return detail::when_all_future_cat(lhs, when_all(maybe_make_future(std::forward<T2>(rhs))));
+                // If one of them is a when_all_future, then we need to
+                // concatenate the results rather than creating a child in the
+                // sequence. To concatenate them, the one that is not a
+                // when_all_future needs to become one.
+                return detail::when_all_future_cat(
+                    lhs,
+                    when_all(maybe_make_future(std::forward<T2>(rhs))));
             } else /* if constexpr (second_is_when_all) */ {
-                return detail::when_all_future_cat(when_all(maybe_make_future(std::forward<T1>(lhs))), rhs);
+                return detail::when_all_future_cat(
+                    when_all(maybe_make_future(std::forward<T1>(lhs))),
+                    rhs);
             }
         }
     }
@@ -23629,10 +23453,6 @@ namespace futures {
 #endif // FUTURES_WHEN_ALL_H
 
 // #include <futures/adaptor/when_any.h>
-//
-// Created by Alan Freitas on 8/18/21.
-//
-
 #ifndef FUTURES_WHEN_ANY_H
 #define FUTURES_WHEN_ANY_H
 
@@ -25286,55 +25106,25 @@ namespace futures {
 
 
 #endif // FUTURES_FUTURES_H
-//
-// Created by Alan Freitas on 8/24/21.
-//
-
 #ifndef FUTURES_ALGORITHM_H
 #define FUTURES_ALGORITHM_H
 
 
-// #include <futures/algorithm/traits/algorithm_traits.h>
-//
-// Created by Alan Freitas on 8/20/21.
-//
-
-#ifndef FUTURES_ALGORITHM_TRAITS_H
-#define FUTURES_ALGORITHM_TRAITS_H
-
-/// \file Identify traits for algorithms, like we do for other types
-///
-/// The traits help us generate auxiliary algorithm overloads
-/// This is somewhat similar to the pattern of traits and algorithms for ranges and views
-/// It allows us to get algorithm overloads for free, including default inference of the best execution policies
-///
-/// \see https://en.cppreference.com/w/cpp/ranges/transform_view
-/// \see https://en.cppreference.com/w/cpp/ranges/view
-///
-
-#include <execution>
-
-#ifdef __has_include
-#if __has_include(<version>)
-// #include <version>
-
-#endif
-#endif
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
+// #include <futures/algorithm/all_of.h>
+#ifndef FUTURES_ALL_OF_H
+#define FUTURES_ALL_OF_H
 
 // #include <futures/algorithm/partitioner/partitioner.h>
 #ifndef FUTURES_PARTITIONER_H
 #define FUTURES_PARTITIONER_H
 
-// #include <futures/adaptor/detail/traits/has_get.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+// #include <futures/algorithm/traits/is_input_iterator.h>
 
 // #include <futures/algorithm/traits/is_range.h>
 
-// #include <futures/algorithm/traits/is_input_iterator.h>
+// #include <futures/adaptor/detail/traits/has_get.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <thread>
 
@@ -25465,8 +25255,7 @@ namespace futures {
         class I,
         class S,
         std::enable_if_t<
-            is_input_iterator_v<
-                I> && futures::detail::sentinel_for<S, I>,
+            is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
             int> = 0>
     default_partitioner
     make_default_partitioner(I first, S last) {
@@ -25522,9 +25311,37 @@ namespace futures {
 } // namespace futures
 
 #endif // FUTURES_PARTITIONER_H
+// #include <futures/algorithm/traits/algorithm_traits.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_H
+#define FUTURES_ALGORITHM_TRAITS_H
+
+/// \file Identify traits for algorithms, like we do for other types
+///
+/// The traits help us generate auxiliary algorithm overloads
+/// This is somewhat similar to the pattern of traits and algorithms for ranges
+/// and views It allows us to get algorithm overloads for free, including
+/// default inference of the best execution policies
+///
+/// \see https://en.cppreference.com/w/cpp/ranges/transform_view
+/// \see https://en.cppreference.com/w/cpp/ranges/view
+///
+
+#include <execution>
+
+#ifdef __has_include
+#    if __has_include(<version>)
+// #include <version>
+
+#    endif
+#endif
+
+// #include <futures/algorithm/partitioner/partitioner.h>
+
 // #include <futures/executor/default_executor.h>
 
 // #include <futures/executor/inline_executor.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 
 namespace futures {
@@ -25537,16 +25354,20 @@ namespace futures {
      */
 
     /// Class representing a type for a sequenced_policy tag
-    class sequenced_policy {};
+    class sequenced_policy
+    {};
 
     /// Class representing a type for a parallel_policy tag
-    class parallel_policy {};
+    class parallel_policy
+    {};
 
     /// Class representing a type for a parallel_unsequenced_policy tag
-    class parallel_unsequenced_policy {};
+    class parallel_unsequenced_policy
+    {};
 
     /// Class representing a type for an unsequenced_policy tag
-    class unsequenced_policy {};
+    class unsequenced_policy
+    {};
 
     /// @name Instances of the execution policy types
 
@@ -25562,26 +25383,39 @@ namespace futures {
     /// \brief Tag used in algorithms for an unsequenced_policy
     inline constexpr unsequenced_policy unseq{};
 
-    /// \brief Checks whether T is a standard or implementation-defined execution policy type.
+    /// \brief Checks whether T is a standard or implementation-defined
+    /// execution policy type.
     template <class T>
     struct is_execution_policy
-        : std::disjunction<std::is_same<T, sequenced_policy>, std::is_same<T, parallel_policy>,
-                           std::is_same<T, parallel_unsequenced_policy>, std::is_same<T, unsequenced_policy>> {};
+        : std::disjunction<
+              std::is_same<T, sequenced_policy>,
+              std::is_same<T, parallel_policy>,
+              std::is_same<T, parallel_unsequenced_policy>,
+              std::is_same<T, unsequenced_policy>>
+    {};
 
-    /// \brief Checks whether T is a standard or implementation-defined execution policy type.
-    template <class T> inline constexpr bool is_execution_policy_v = is_execution_policy<T>::value;
+    /// \brief Checks whether T is a standard or implementation-defined
+    /// execution policy type.
+    template <class T>
+    inline constexpr bool is_execution_policy_v = is_execution_policy<T>::value;
 
-    /// \brief Make an executor appropriate to a given policy and a pair of iterators
-    /// This depends, of course, of the default executors we have available and
-    template <class E, class I, class S
+    /// \brief Make an executor appropriate to a given policy and a pair of
+    /// iterators This depends, of course, of the default executors we have
+    /// available and
+    template <
+        class E,
+        class I,
+        class S
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I> &&
-                                   futures::detail::sentinel_for<S, I>,
-                               int> = 0
+        ,
+        std::enable_if_t<
+            !is_executor_v<
+                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
+            int> = 0
 #endif
-              >
-    constexpr decltype(auto) make_policy_executor() {
+        >
+    constexpr decltype(auto)
+    make_policy_executor() {
         if constexpr (!std::is_same_v<E, sequenced_policy>) {
             return make_default_executor();
         } else {
@@ -25597,302 +25431,454 @@ namespace futures {
 
     namespace detail {
 
-        /// \brief CRTP class with the overloads for classes that look for elements in a sequence with an unary function
-        /// This includes algorithms such as for_each, any_of, all_of, ...
-        template <class Derived> class unary_invoke_algorithm_functor {
-          public:
-            template <class E, class P, class I, class S, class Fun
+        /// \brief CRTP class with the overloads for classes that look for
+        /// elements in a sequence with an unary function This includes
+        /// algorithms such as for_each, any_of, all_of, ...
+        template <class Derived>
+        class unary_invoke_algorithm_functor
+        {
+        public:
+            template <
+                class E,
+                class P,
+                class I,
+                class S,
+                class Fun
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                           is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                           futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                           std::is_copy_constructible_v<Fun>,
-                                       int> = 0>
+                ,
+                std::enable_if_t<
+                    is_executor_v<
+                        E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    int> = 0>
 #endif
-            decltype(auto) operator()(const E &ex, P p, I first, S last, Fun f) const {
+            decltype(auto)
+            operator()(const E &ex, P p, I first, S last, Fun f) const {
                 return Derived().run(ex, std::forward<P>(p), first, last, f);
             }
 
             /// \overload execution policy instead of executor
             /// we can't however, count on std::is_execution_policy being defined
-            template <class E, class P, class I, class S, class Fun
+            template <
+                class E,
+                class P,
+                class I,
+                class S,
+                class Fun
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                           is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                           futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                           std::is_copy_constructible_v<Fun>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    !is_executor_v<
+                        E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(const E &, P p, I first, S last, Fun f) const {
-                return Derived().operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
+                >
+            decltype(auto)
+            operator()(const E &, P p, I first, S last, Fun f) const {
+                return Derived().operator()(
+                    make_policy_executor<E, I, S>(),
+                    std::forward<P>(p),
+                    first,
+                    last,
+                    f);
             }
 
             /// \overload Ranges
             template <
-                class E, class P, class R, class Fun
+                class E,
+                class P,
+                class R,
+                class Fun
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_range_partitioner_v<P, R> &&
-                                     futures::detail::input_range<R> &&
-                                     futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> &&
-                                     std::is_copy_constructible_v<Fun>,
-                                 int> = 0
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
+                        P,
+                        R> && futures::detail::input_range<R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &ex, P p, R &&r, Fun f) const {
-                return Derived().operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+            decltype(auto)
+            operator()(const E &ex, P p, R &&r, Fun f) const {
+                return Derived().operator()(
+                    ex,
+                    std::forward<P>(p),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default parallel executor
-            template <class P, class I, class S, class Fun
+            template <
+                class P,
+                class I,
+                class S,
+                class Fun
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                           futures::detail::sentinel_for<S, I> &&
-                                           futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                           std::is_copy_constructible_v<Fun>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    is_partitioner_v<
+                        P,
+                        I,
+                        S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(P p, I first, S last, Fun f) const {
-                return Derived().operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
+                >
+            decltype(auto)
+            operator()(P p, I first, S last, Fun f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    std::forward<P>(p),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default parallel executor
             template <
-                class P, class R, class Fun
+                class P,
+                class R,
+                class Fun
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_range_partitioner_v<P, R> && futures::detail::input_range<R> &&
-                                     futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> &&
-                                     std::is_copy_constructible_v<Fun>,
-                                 int> = 0
+                std::enable_if_t<
+                    is_range_partitioner_v<
+                        P,
+                        R> && futures::detail::input_range<R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(P p, R &&r, Fun f) const {
-                return Derived().operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
-                                            std::move(f));
+            decltype(auto)
+            operator()(P p, R &&r, Fun f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    std::forward<P>(p),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default partitioner
-            template <class E, class I, class S, class Fun
+            template <
+                class E,
+                class I,
+                class S,
+                class Fun
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<
-                          (is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
-                              futures::detail::sentinel_for<S, I> &&
-                              futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                          int> = 0
+                ,
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
+                        I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(const E &ex, I first, S last, Fun f) const {
-                return Derived().operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
+                >
+            decltype(auto)
+            operator()(const E &ex, I first, S last, Fun f) const {
+                return Derived().operator()(
+                    ex,
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default partitioner
             template <
-                class E, class R, class Fun
+                class E,
+                class R,
+                class Fun
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_range<R> &&
-                                     futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> &&
-                                     std::is_copy_constructible_v<Fun>,
-                                 int> = 0
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
+                        R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &ex, R &&r, Fun f) const {
-                return Derived().operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r),
-                                            std::end(r), std::move(f));
+            decltype(auto)
+            operator()(const E &ex, R &&r, Fun f) const {
+                return Derived().operator()(
+                    ex,
+                    make_default_partitioner(std::forward<R>(r)),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default executor / default partitioner
-            template <class I, class S, class Fun
+            template <
+                class I,
+                class S,
+                class Fun
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                           futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                           std::is_copy_constructible_v<Fun>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    is_input_iterator_v<
+                        I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(I first, S last, Fun f) const {
-                return Derived().operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
-                                            std::move(f));
+                >
+            decltype(auto)
+            operator()(I first, S last, Fun f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default executor / default partitioner
             template <
-                class R, class Fun
+                class R,
+                class Fun
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<futures::detail::input_range<R> &&
-                                     futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> &&
-                                     std::is_copy_constructible_v<Fun>,
-                                 int> = 0
+                std::enable_if_t<
+                    futures::detail::input_range<
+                        R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(R &&r, Fun f) const {
-                return Derived().operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
-                                            std::end(r), std::move(f));
+            decltype(auto)
+            operator()(R &&r, Fun f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    make_default_partitioner(r),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
-            /// \brief Struct holding the overload for the full async variant of all algorithms
+            /// \brief Struct holding the overload for the full async variant of
+            /// all algorithms
             ///
-            /// The async object represents the exact same overloads for the algorithms, with only
-            /// two relevant differences:
-            /// 1) the first task in the algorithm should not happen in the inline executor
-            /// 2) the function returns future<...> on which we can wait for the algorithm to finish
-            struct async_functor {
-
+            /// The async object represents the exact same overloads for the
+            /// algorithms, with only two relevant differences: 1) the first
+            /// task in the algorithm should not happen in the inline executor
+            /// 2) the function returns future<...> on which we can wait for the
+            /// algorithm to finish
+            struct async_functor
+            {
             } async;
         };
 
-        /// \brief CRTP class with the overloads for classes that look for elements in a sequence with an unary function
-        /// This includes algorithms such as for_each, any_of, all_of, ...
-        template <class Derived> class value_cmp_algorithm_functor {
-          public:
+        /// \brief CRTP class with the overloads for classes that look for
+        /// elements in a sequence with an unary function This includes
+        /// algorithms such as for_each, any_of, all_of, ...
+        template <class Derived>
+        class value_cmp_algorithm_functor
+        {
+        public:
             template <
-                class E, class P, class I, class S, class T
+                class E,
+                class P,
+                class I,
+                class S,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                     futures::detail::sentinel_for<S, I> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                                 int> = 0
+                std::enable_if_t<
+                    is_executor_v<
+                        E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &ex, P p, I first, S last, T f) const {
+            decltype(auto)
+            operator()(const E &ex, P p, I first, S last, T f) const {
                 return Derived().run(ex, std::forward<P>(p), first, last, f);
             }
 
             /// \overload execution policy instead of executor
             /// we can't however, count on std::is_execution_policy being defined
             template <
-                class E, class P, class I, class S, class T
+                class E,
+                class P,
+                class I,
+                class S,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<!is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                     is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                                 int> = 0
+                std::enable_if_t<
+                    !is_executor_v<
+                        E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &, P p, I first, S last, T f) const {
-                return Derived().operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
+            decltype(auto)
+            operator()(const E &, P p, I first, S last, T f) const {
+                return Derived().operator()(
+                    make_policy_executor<E, I, S>(),
+                    std::forward<P>(p),
+                    first,
+                    last,
+                    f);
             }
 
             /// \overload Ranges
-            template <class E, class P, class R, class T
+            template <
+                class E,
+                class P,
+                class R,
+                class T
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_range_partitioner_v<P, R> &&
-                                           futures::detail::input_range<R> &&
-                                           futures::detail::indirectly_binary_invocable_<
-                                               futures::detail::equal_to, T *, futures::detail::iterator_t<R>> &&
-                                           std::is_copy_constructible_v<T>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
+                        P,
+                        R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(const E &ex, P p, R &&r, T f) const {
-                return Derived().operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+                >
+            decltype(auto)
+            operator()(const E &ex, P p, R &&r, T f) const {
+                return Derived().operator()(
+                    ex,
+                    std::forward<P>(p),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default parallel executor
             template <
-                class P, class I, class S, class T
+                class P,
+                class I,
+                class S,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                     futures::detail::sentinel_for<S, I> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I> &&
-                                     std::is_copy_constructible_v<T>,
-                                 int> = 0
+                std::enable_if_t<
+                    is_partitioner_v<
+                        P,
+                        I,
+                        S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I> && std::is_copy_constructible_v<T>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(P p, I first, S last, T f) const {
-                return Derived().operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
+            decltype(auto)
+            operator()(P p, I first, S last, T f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    std::forward<P>(p),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default parallel executor
-            template <class P, class R, class T
+            template <
+                class P,
+                class R,
+                class T
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<is_range_partitioner_v<P, R> && futures::detail::input_range<R> &&
-                                           futures::detail::indirectly_binary_invocable_<
-                                               futures::detail::equal_to, T *, futures::detail::iterator_t<R>> &&
-                                           std::is_copy_constructible_v<T>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    is_range_partitioner_v<
+                        P,
+                        R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(P p, R &&r, T f) const {
-                return Derived().operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r),
-                                            std::move(f));
+                >
+            decltype(auto)
+            operator()(P p, R &&r, T f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    std::forward<P>(p),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default partitioner
             template <
-                class E, class I, class S, class T
+                class E,
+                class I,
+                class S,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
-                                     futures::detail::sentinel_for<S, I> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                                 int> = 0
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
+                        I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &ex, I first, S last, T f) const {
-                return Derived().operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
+            decltype(auto)
+            operator()(const E &ex, I first, S last, T f) const {
+                return Derived().operator()(
+                    ex,
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default partitioner
             template <
-                class E, class R, class T
+                class E,
+                class R,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_range<R> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *,
-                                                                                   futures::detail::iterator_t<R>> &&
-                                     std::is_copy_constructible_v<T>,
-                                 int> = 0
+                std::enable_if_t<
+                    (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
+                        R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(const E &ex, R &&r, T f) const {
-                return Derived().operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r),
-                                            std::end(r), std::move(f));
+            decltype(auto)
+            operator()(const E &ex, R &&r, T f) const {
+                return Derived().operator()(
+                    ex,
+                    make_default_partitioner(std::forward<R>(r)),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
 
             /// \overload Iterators / default executor / default partitioner
             template <
-                class I, class S, class T
+                class I,
+                class S,
+                class T
 #ifndef FUTURES_DOXYGEN
                 ,
-                std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                     futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                                 int> = 0
+                std::enable_if_t<
+                    is_input_iterator_v<
+                        I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    int> = 0
 #endif
                 >
-            decltype(auto) operator()(I first, S last, T f) const {
-                return Derived().operator()(make_default_executor(), make_default_partitioner(first, last), first, last,
-                                            std::move(f));
+            decltype(auto)
+            operator()(I first, S last, T f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
             }
 
             /// \overload Ranges / default executor / default partitioner
-            template <class R, class T
+            template <
+                class R,
+                class T
 #ifndef FUTURES_DOXYGEN
-                      ,
-                      std::enable_if_t<futures::detail::input_range<R> &&
-                                           futures::detail::indirectly_binary_invocable_<
-                                               futures::detail::equal_to, T *, futures::detail::iterator_t<R>> &&
-                                           std::is_copy_constructible_v<T>,
-                                       int> = 0
+                ,
+                std::enable_if_t<
+                    futures::detail::input_range<
+                        R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                    int> = 0
 #endif
-                      >
-            decltype(auto) operator()(R &&r, T f) const {
-                return Derived().operator()(make_default_executor(), make_default_partitioner(r), std::begin(r),
-                                            std::end(r), std::move(f));
+                >
+            decltype(auto)
+            operator()(R &&r, T f) const {
+                return Derived().operator()(
+                    make_default_executor(),
+                    make_default_partitioner(r),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
             }
         };
     } // namespace detail
@@ -25902,31 +25888,11 @@ namespace futures {
 
 #endif // FUTURES_ALGORITHM_TRAITS_H
 
-
-// #include <futures/algorithm/all_of.h>
-
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
-#ifndef FUTURES_ALL_OF_H
-#define FUTURES_ALL_OF_H
-
-// #include <execution>
-
-#include <variant>
+// #include <futures/futures.h>
 
 // #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
 // #include <futures/algorithm/detail/try_async.h>
-//
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
-//
-
 #ifndef FUTURES_TRY_ASYNC_H
 #define FUTURES_TRY_ASYNC_H
 
@@ -25947,28 +25913,37 @@ namespace futures {
     /// - A future that indicates if the task got scheduled yet
     /// - A token for canceling the task
     ///
-    /// This is mostly useful for recursive tasks, where there might not be room in the executor for
-    /// a new task, as depending on recursive tasks for which there is no room is the executor might
-    /// block execution.
+    /// This is mostly useful for recursive tasks, where there might not be room
+    /// in the executor for a new task, as depending on recursive tasks for
+    /// which there is no room is the executor might block execution.
     ///
-    /// Although this is a general solution to allow any executor in the algorithms, executor traits
-    /// to identify capacity in executor are much more desirable.
+    /// Although this is a general solution to allow any executor in the
+    /// algorithms, executor traits to identify capacity in executor are much
+    /// more desirable.
     ///
-    template <typename Executor, typename Function, typename... Args
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
 #ifndef FUTURES_DOXYGEN
-              ,
-              std::enable_if_t<detail::is_valid_async_input_v<Executor, Function, Args...>, int> = 0
+        ,
+        std::enable_if_t<
+            detail::is_valid_async_input_v<Executor, Function, Args...>,
+            int> = 0
 #endif
-              >
-    decltype(auto) try_async(const Executor &ex, Function &&f, Args &&...args) {
+        >
+    decltype(auto)
+    try_async(const Executor &ex, Function &&f, Args &&...args) {
         // Communication flags
         std::promise<void> started_token;
         std::future<void> started = started_token.get_future();
         stop_source cancel_source;
 
         // Wrap the task in a lambda that sets and checks the flags
-        auto do_task = [p = std::move(started_token), cancel_token = cancel_source.get_token(),
-                        f](Args &&...args) mutable {
+        auto do_task =
+            [p = std::move(started_token),
+             cancel_token = cancel_source.get_token(),
+             f](Args &&...args) mutable {
             p.set_value();
             if (cancel_token.stop_requested()) {
                 detail::throw_exception<std::runtime_error>("task cancelled");
@@ -25977,28 +25952,33 @@ namespace futures {
         };
 
         // Make it copy constructable
-        auto do_task_ptr = std::make_shared<decltype(do_task)>(std::move(do_task));
-        auto do_task_handle = [do_task_ptr](Args &&...args) { return (*do_task_ptr)(std::forward<Args>(args)...); };
+        auto do_task_ptr = std::make_shared<decltype(do_task)>(
+            std::move(do_task));
+        auto do_task_handle = [do_task_ptr](Args &&...args) {
+            return (*do_task_ptr)(std::forward<Args>(args)...);
+        };
 
         // Launch async
-        using internal_result_type = std::decay_t<decltype(std::invoke(f, std::forward<Args>(args)...))>;
-        cfuture<internal_result_type> rhs = async(ex, do_task_handle, std::forward<Args>(args)...);
+        using internal_result_type = std::decay_t<
+            decltype(std::invoke(f, std::forward<Args>(args)...))>;
+        cfuture<internal_result_type>
+            rhs = async(ex, do_task_handle, std::forward<Args>(args)...);
 
         // Return future and tokens
-        return std::make_tuple(std::move(rhs), std::move(started), cancel_source);
+        return std::
+            make_tuple(std::move(rhs), std::move(started), cancel_source);
     }
 
 
     /** @} */
-}
+} // namespace futures
 
 
 #endif // FUTURES_TRY_ASYNC_H
 
-// #include <futures/algorithm/partitioner/partitioner.h>
+// #include <execution>
 
-// #include <futures/futures.h>
-
+#include <variant>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -26006,8 +25986,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref all_of function
-    class all_of_functor : public detail::unary_invoke_algorithm_functor<all_of_functor> {
-      public:
+    class all_of_functor
+        : public detail::unary_invoke_algorithm_functor<all_of_functor>
+    {
+    public:
         /// \brief Complete overload of the all_of algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -26020,24 +26002,35 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c all_of
-        template <class E, class P, class I, class S, class Fun
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun
 #ifndef FUTURES_DOXYGEN
-                  ,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                       is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                       futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0
+            ,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0
 #endif
-                  >
-        bool run(const E &ex, P p, I first, S last, Fun f) const {
+            >
+        bool
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::all_of(first, last, f);
             }
 
             // Run all_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
             // Run all_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -26051,7 +26044,8 @@ namespace futures {
                 if (!lhs) {
                     return false;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
                 }
             }
         }
@@ -26066,28 +26060,22 @@ namespace futures {
 #endif // FUTURES_ALL_OF_H
 
 // #include <futures/algorithm/any_of.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_ANY_OF_H
 #define FUTURES_ANY_OF_H
+
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
 
 // #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
 
 
 namespace futures {
@@ -26096,8 +26084,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref any_of function
-    class any_of_functor : public detail::unary_invoke_algorithm_functor<any_of_functor> {
-      public:
+    class any_of_functor
+        : public detail::unary_invoke_algorithm_functor<any_of_functor>
+    {
+    public:
         /// \brief Complete overload of the any_of algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -26110,23 +26100,35 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c any_of
-        template <class E, class P, class I, class S, class Fun
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun
 #ifndef FUTURES_DOXYGEN
-                  ,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0
+            ,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0
 #endif
-                  >
-        bool run(const E &ex, P p, I first, S last, Fun f) const {
+            >
+        bool
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::any_of(first, last, f);
             }
 
             // Run any_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
             // Run any_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -26140,7 +26142,8 @@ namespace futures {
                 if (lhs) {
                     return true;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
                 }
             }
         }
@@ -26154,29 +26157,23 @@ namespace futures {
 
 #endif // FUTURES_ANY_OF_H
 
-// #include <futures/algorithm/none_of.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
+// #include <futures/algorithm/count.h>
+#ifndef FUTURES_COUNT_H
+#define FUTURES_COUNT_H
 
-#ifndef FUTURES_NONE_OF_H
-#define FUTURES_NONE_OF_H
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
 
 // #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
 
 
 namespace futures {
@@ -26184,10 +26181,102 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref none_of function
-    class none_of_functor : public detail::unary_invoke_algorithm_functor<none_of_functor> {
-      public:
-        /// \brief Complete overload of the none_of algorithm
+    /// \brief Functor representing the overloads for the @ref count function
+    class count_functor
+        : public detail::value_cmp_algorithm_functor<count_functor>
+    {
+    public:
+        /// \brief Complete overload of the count algorithm
+        /// \tparam E Executor type
+        /// \tparam P Partitioner type
+        /// \tparam I Iterator type
+        /// \tparam S Sentinel iterator type
+        /// \tparam T Value to compare
+        /// \param ex Executor
+        /// \param p Partitioner
+        /// \param first Iterator to first element in the range
+        /// \param last Iterator to (last + 1)-th element in the range
+        /// \param value Value
+        /// \brief function template \c count
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                int> = 0>
+        futures::detail::iter_difference_t<I>
+        run(const E &ex, P p, I first, S last, T v) const {
+            auto middle = p(first, last);
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
+                return std::count(first, last, v);
+            }
+
+            // Run count on rhs: [middle, last]
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, v);
+            });
+
+            // Run count on lhs: [first, middle]
+            bool lhs = operator()(ex, p, first, middle, v);
+
+            // Wait for rhs
+            if (is_ready(rhs_started)) {
+                return lhs + rhs.get();
+            } else {
+                rhs_cancel.request_stop();
+                rhs.detach();
+                return lhs
+                       + operator()(make_inline_executor(), p, middle, last, v);
+            }
+        }
+    };
+
+    /// \brief Returns the number of elements matching an element
+    inline constexpr count_functor count;
+
+    /** @}*/ // \addtogroup algorithms Algorithms
+} // namespace futures
+
+#endif // FUTURES_COUNT_H
+
+// #include <futures/algorithm/count_if.h>
+#ifndef FUTURES_COUNT_IF_H
+#define FUTURES_COUNT_IF_H
+
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
+
+// #include <execution>
+
+// #include <variant>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /// \brief Functor representing the overloads for the @ref count_if function
+    class count_if_functor
+        : public detail::unary_invoke_algorithm_functor<count_if_functor>
+    {
+    public:
+        /// \brief Complete overload of the count_if algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
         /// \tparam I Iterator type
@@ -26198,232 +26287,73 @@ namespace futures {
         /// \param first Iterator to first element in the range
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
-        /// \brief function template \c none_of
-        template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        bool run(const E &ex, P p, I first, S last, Fun f) const {
+        /// \brief function template \c count_if
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_difference_t<I>
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
-                return std::none_of(first, last, f);
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
+                return std::count_if(first, last, f);
             }
 
-            // Run none_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            // Run count_if on rhs: [middle, last]
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
-            // Run none_of on lhs: [first, middle]
+            // Run count_if on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
 
             // Wait for rhs
             if (is_ready(rhs_started)) {
-                return lhs && rhs.get();
+                return lhs + rhs.get();
             } else {
                 rhs_cancel.request_stop();
                 rhs.detach();
-                if (!lhs) {
-                    return false;
-                } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
-                }
+                return lhs
+                       + operator()(make_inline_executor(), p, middle, last, f);
             }
         }
     };
 
-    /// \brief Checks if a predicate is true for none of the elements in a range
-    inline constexpr none_of_functor none_of;
+    /// \brief Returns the number of elements satisfying specific criteria
+    inline constexpr count_if_functor count_if;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
-#endif // FUTURES_NONE_OF_H
-
-// #include <futures/algorithm/for_each.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
-#ifndef FUTURES_FOR_EACH_H
-#define FUTURES_FOR_EACH_H
-
-// #include <execution>
-
-// #include <variant>
-
-
-// #include <futures/algorithm/partitioner/partitioner.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/futures.h>
-
-// #include <futures/futures/detail/empty_base.h>
-
-
-namespace futures {
-    /** \addtogroup algorithms Algorithms
-     *  @{
-     */
-
-    /// \brief Functor representing the overloads for the @ref for_each function
-    class for_each_functor : public detail::unary_invoke_algorithm_functor<for_each_functor> {
-      public:
-        // Let only unary_invoke_algorithm_functor access the primary sort function template
-        friend detail::unary_invoke_algorithm_functor<for_each_functor>;
-
-      private:
-        /// \brief Internal class that takes care of the sorting tasks and its incomplete tasks
-        ///
-        /// If we could make sure no executors would ever block, recursion wouldn't be a problem, and
-        /// we wouldn't need this class. In fact, this is what most related libraries do, counting on
-        /// the executor to be some kind of work stealing thread pool.
-        ///
-        /// However, we cannot count on that, or these algorithms wouldn't work for many executors in which
-        /// we are interested, such as an io_context or a thread pool that doesn't steel work (like asio's).
-        /// So we need to separate the process of launching the tasks from the process of waiting for them.
-        /// Fortunately, we can count that most executors wouldn't need this blocking procedure very often,
-        /// because that's what usually make them useful executors. We also assume that, unlike in the other
-        /// applications, the cost of this reading lock is trivial compared to the cost of the whole
-        /// procedure.
-        ///
-        template <class Executor> class sorter : public detail::maybe_empty<Executor> {
-          public:
-            explicit sorter(const Executor &ex) : detail::maybe_empty<Executor>(ex) {}
-
-            /// \brief Get executor from the base class as a function for convenience
-            const Executor &ex() const { return detail::maybe_empty<Executor>::get(); }
-
-            /// \brief Get executor from the base class as a function for convenience
-            Executor &ex() { return detail::maybe_empty<Executor>::get(); }
-
-            template <class P, class I, class S, class Fun> void launch_sort_tasks(P p, I first, S last, Fun f) {
-                auto middle = p(first, last);
-                const bool too_small = middle == last;
-                constexpr bool cannot_parallelize =
-                    std::is_same_v<Executor, inline_executor> || futures::detail::forward_iterator<I>;
-                if (too_small || cannot_parallelize) {
-                    std::for_each(first, last, f);
-                } else {
-                    // Run for_each on rhs: [middle, last]
-                    cfuture<void> rhs_task =
-                        futures::async(ex(), [this, p, middle, last, f] { launch_sort_tasks(p, middle, last, f); });
-
-                    // Run for_each on lhs: [first, middle]
-                    launch_sort_tasks(p, first, middle, f);
-
-                    // When lhs is ready, we check on rhs
-                    if (!is_ready(rhs_task)) {
-                        // Put rhs_task on the list of tasks we need to await later
-                        // This ensures we only deal with the task queue if we really need to
-                        std::unique_lock write_lock(tasks_mutex_);
-                        tasks_.emplace_back(std::move(rhs_task));
-                    }
-                }
-            }
-
-            /// \brief Wait for all tasks to finish
-            ///
-            /// This might sound like it should be as simple as a when_all(tasks_).
-            /// However, while we wait for some tasks here, the running tasks might be enqueuing more tasks,
-            /// so we still need a read lock here. The number of times this happens and the relative cost
-            /// of this operation should still be negligible, compared to other applications.
-            ///
-            /// \return `true` if we had to wait for any tasks
-            bool wait_for_sort_tasks() {
-                tasks_mutex_.lock_shared();
-                bool waited_any = false;
-                while (!tasks_.empty()) {
-                    tasks_mutex_.unlock_shared();
-                    tasks_mutex_.lock();
-                    detail::small_vector<futures::cfuture<void>> stolen_tasks(std::make_move_iterator(tasks_.begin()),
-                                                                               std::make_move_iterator(tasks_.end()));
-                    tasks_.clear();
-                    tasks_mutex_.unlock();
-                    when_all(stolen_tasks).wait();
-                    waited_any = true;
-                }
-                return waited_any;
-            }
-
-            template <class P, class I, class S, class Fun> void sort(P p, I first, S last, Fun f) {
-                launch_sort_tasks(p, first, last, f);
-                wait_for_sort_tasks();
-            }
-
-          private:
-            detail::small_vector<futures::cfuture<void>> tasks_;
-            std::shared_mutex tasks_mutex_;
-        };
-
-        /// \brief Complete overload of the for_each algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c for_each
-        template <class FullAsync = std::false_type, class E, class P, class I, class S, class Fun
-#ifndef FUTURES_DOXYGEN
-                  ,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                       is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                       futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0
-#endif
-                  >
-        auto run(const E &ex, P p, I first, S last, Fun f) const {
-            if constexpr (FullAsync::value) {
-                // If full async, launching the tasks and solving small tasks also happen asynchronously
-                return async(ex, [ex, p, first, last, f]() { sorter<E>(ex).sort(p, first, last, f); });
-            } else {
-                // Else, we try to solve small tasks and launching other tasks if it's worth splitting the problem
-                sorter<E>(ex).sort(p, first, last, f);
-            }
-        }
-    };
-
-    /// \brief Applies a function to a range of elements
-    inline constexpr for_each_functor for_each;
-
-    /** @}*/ // \addtogroup algorithms Algorithms
-} // namespace futures
-
-#endif // FUTURES_FOR_EACH_H
+#endif // FUTURES_COUNT_IF_H
 
 // #include <futures/algorithm/find.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_FIND_H
 #define FUTURES_FIND_H
 
-// #include <execution>
-
-// #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
+// #include <futures/algorithm/partitioner/partitioner.h>
 
 // #include <futures/algorithm/traits/algorithm_traits.h>
 
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
 // #include <futures/algorithm/detail/try_async.h>
 
-// #include <futures/algorithm/partitioner/partitioner.h>
+// #include <execution>
+
+// #include <variant>
 
 
 namespace futures {
@@ -26432,8 +26362,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref find function
-    class find_functor : public detail::value_cmp_algorithm_functor<find_functor> {
-      public:
+    class find_functor
+        : public detail::value_cmp_algorithm_functor<find_functor>
+    {
+    public:
         /// \brief Complete overload of the find algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -26446,19 +26378,31 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param value Value
         /// \brief function template \c find
-        template <class E, class P, class I, class S, class T,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> &&
-                                       futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                                   int> = 0>
-        I run(const E &ex, P p, I first, S last, const T &v) const {
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                int> = 0>
+        I
+        run(const E &ex, P p, I first, S last, const T &v) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::find(first, last, v);
             }
 
             // Run find on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, v); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, v);
+            });
 
             // Run find on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, v);
@@ -26477,7 +26421,8 @@ namespace futures {
                 if (lhs != middle) {
                     return lhs;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, v);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, v);
                 }
             }
         }
@@ -26492,28 +26437,22 @@ namespace futures {
 #endif // FUTURES_FIND_H
 
 // #include <futures/algorithm/find_if.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_FIND_IF_H
 #define FUTURES_FIND_IF_H
+
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
 
 // #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
 
 
 namespace futures {
@@ -26522,8 +26461,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref find_if function
-    class find_if_functor : public detail::unary_invoke_algorithm_functor<find_if_functor> {
-      public:
+    class find_if_functor
+        : public detail::unary_invoke_algorithm_functor<find_if_functor>
+    {
+    public:
         /// \brief Complete overload of the find_if algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -26536,19 +26477,31 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c find_if
-        template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        I run(const E &ex, P p, I first, S last, Fun f) const {
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        I
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::find_if(first, last, f);
             }
 
             // Run find_if on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
             // Run find_if on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, f);
@@ -26567,7 +26520,8 @@ namespace futures {
                 if (lhs != middle) {
                     return lhs;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
                 }
             }
         }
@@ -26582,28 +26536,22 @@ namespace futures {
 #endif // FUTURES_FIND_IF_H
 
 // #include <futures/algorithm/find_if_not.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
-
 #ifndef FUTURES_FIND_IF_NOT_H
 #define FUTURES_FIND_IF_NOT_H
+
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
 
 // #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
 
 
 namespace futures {
@@ -26611,9 +26559,12 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref find_if_not function
-    class find_if_not_functor : public detail::unary_invoke_algorithm_functor<find_if_not_functor> {
-      public:
+    /// \brief Functor representing the overloads for the @ref find_if_not
+    /// function
+    class find_if_not_functor
+        : public detail::unary_invoke_algorithm_functor<find_if_not_functor>
+    {
+    public:
         /// \brief Complete overload of the find_if_not algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -26626,19 +26577,31 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c find_if_not
-        template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        I run(const E &ex, P p, I first, S last, Fun f) const {
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        I
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::find_if_not(first, last, f);
             }
 
             // Run find_if_not on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
             // Run find_if_not on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, f);
@@ -26657,7 +26620,8 @@ namespace futures {
                 if (lhs != middle) {
                     return lhs;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
                 }
             }
         }
@@ -26671,29 +26635,25 @@ namespace futures {
 
 #endif // FUTURES_FIND_IF_NOT_H
 
-// #include <futures/algorithm/count.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
+// #include <futures/algorithm/for_each.h>
+#ifndef FUTURES_FOR_EACH_H
+#define FUTURES_FOR_EACH_H
 
-#ifndef FUTURES_COUNT_H
-#define FUTURES_COUNT_H
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
+
+// #include <futures/futures/detail/empty_base.h>
 
 // #include <execution>
 
 // #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
 
 
 namespace futures {
@@ -26701,91 +26661,128 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref count function
-    class count_functor : public detail::value_cmp_algorithm_functor<count_functor> {
-      public:
-        /// \brief Complete overload of the count algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam T Value to compare
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param value Value
-        /// \brief function template \c count
-        template <class E, class P, class I, class S, class T,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> &&
-                                       futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T*, I>,
-                                   int> = 0>
-        futures::detail::iter_difference_t<I> run(const E &ex, P p, I first, S last, T v) const {
-            auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
-                return std::count(first, last, v);
+    /// \brief Functor representing the overloads for the @ref for_each function
+    class for_each_functor
+        : public detail::unary_invoke_algorithm_functor<for_each_functor>
+    {
+    public:
+        // Let only unary_invoke_algorithm_functor access the primary sort
+        // function template
+        friend detail::unary_invoke_algorithm_functor<for_each_functor>;
+
+    private:
+        /// \brief Internal class that takes care of the sorting tasks and its
+        /// incomplete tasks
+        ///
+        /// If we could make sure no executors would ever block, recursion
+        /// wouldn't be a problem, and we wouldn't need this class. In fact,
+        /// this is what most related libraries do, counting on the executor to
+        /// be some kind of work stealing thread pool.
+        ///
+        /// However, we cannot count on that, or these algorithms wouldn't work
+        /// for many executors in which we are interested, such as an io_context
+        /// or a thread pool that doesn't steel work (like asio's). So we need
+        /// to separate the process of launching the tasks from the process of
+        /// waiting for them. Fortunately, we can count that most executors
+        /// wouldn't need this blocking procedure very often, because that's
+        /// what usually make them useful executors. We also assume that, unlike
+        /// in the other applications, the cost of this reading lock is trivial
+        /// compared to the cost of the whole procedure.
+        ///
+        template <class Executor>
+        class sorter : public detail::maybe_empty<Executor>
+        {
+        public:
+            explicit sorter(const Executor &ex)
+                : detail::maybe_empty<Executor>(ex) {}
+
+            /// \brief Get executor from the base class as a function for
+            /// convenience
+            const Executor &
+            ex() const {
+                return detail::maybe_empty<Executor>::get();
             }
 
-            // Run count on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, v); });
-
-            // Run count on lhs: [first, middle]
-            bool lhs = operator()(ex, p, first, middle, v);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                return lhs + rhs.get();
-            } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                return lhs + operator()(make_inline_executor(), p, middle, last, v);
+            /// \brief Get executor from the base class as a function for
+            /// convenience
+            Executor &
+            ex() {
+                return detail::maybe_empty<Executor>::get();
             }
-        }
-    };
 
-    /// \brief Returns the number of elements matching an element
-    inline constexpr count_functor count;
+            template <class P, class I, class S, class Fun>
+            void
+            launch_sort_tasks(P p, I first, S last, Fun f) {
+                auto middle = p(first, last);
+                const bool too_small = middle == last;
+                constexpr bool cannot_parallelize
+                    = std::is_same_v<
+                          Executor,
+                          inline_executor> || futures::detail::forward_iterator<I>;
+                if (too_small || cannot_parallelize) {
+                    std::for_each(first, last, f);
+                } else {
+                    // Run for_each on rhs: [middle, last]
+                    cfuture<void> rhs_task = futures::
+                        async(ex(), [this, p, middle, last, f] {
+                            launch_sort_tasks(p, middle, last, f);
+                        });
 
-    /** @}*/ // \addtogroup algorithms Algorithms
-} // namespace futures
+                    // Run for_each on lhs: [first, middle]
+                    launch_sort_tasks(p, first, middle, f);
 
-#endif // FUTURES_COUNT_H
+                    // When lhs is ready, we check on rhs
+                    if (!is_ready(rhs_task)) {
+                        // Put rhs_task on the list of tasks we need to await
+                        // later This ensures we only deal with the task queue
+                        // if we really need to
+                        std::unique_lock write_lock(tasks_mutex_);
+                        tasks_.emplace_back(std::move(rhs_task));
+                    }
+                }
+            }
 
-// #include <futures/algorithm/count_if.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
+            /// \brief Wait for all tasks to finish
+            ///
+            /// This might sound like it should be as simple as a
+            /// when_all(tasks_). However, while we wait for some tasks here,
+            /// the running tasks might be enqueuing more tasks, so we still
+            /// need a read lock here. The number of times this happens and the
+            /// relative cost of this operation should still be negligible,
+            /// compared to other applications.
+            ///
+            /// \return `true` if we had to wait for any tasks
+            bool
+            wait_for_sort_tasks() {
+                tasks_mutex_.lock_shared();
+                bool waited_any = false;
+                while (!tasks_.empty()) {
+                    tasks_mutex_.unlock_shared();
+                    tasks_mutex_.lock();
+                    detail::small_vector<futures::cfuture<void>> stolen_tasks(
+                        std::make_move_iterator(tasks_.begin()),
+                        std::make_move_iterator(tasks_.end()));
+                    tasks_.clear();
+                    tasks_mutex_.unlock();
+                    when_all(stolen_tasks).wait();
+                    waited_any = true;
+                }
+                return waited_any;
+            }
 
-#ifndef FUTURES_COUNT_IF_H
-#define FUTURES_COUNT_IF_H
+            template <class P, class I, class S, class Fun>
+            void
+            sort(P p, I first, S last, Fun f) {
+                launch_sort_tasks(p, first, last, f);
+                wait_for_sort_tasks();
+            }
 
-// #include <execution>
+        private:
+            detail::small_vector<futures::cfuture<void>> tasks_;
+            std::shared_mutex tasks_mutex_;
+        };
 
-// #include <variant>
-
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-
-// #include <futures/futures.h>
-
-// #include <futures/algorithm/traits/algorithm_traits.h>
-
-// #include <futures/algorithm/detail/try_async.h>
-
-// #include <futures/algorithm/partitioner/partitioner.h>
-
-
-namespace futures {
-    /** \addtogroup algorithms Algorithms
-     *  @{
-     */
-
-    /// \brief Functor representing the overloads for the @ref count_if function
-    class count_if_functor : public detail::unary_invoke_algorithm_functor<count_if_functor> {
-      public:
-        /// \brief Complete overload of the count_if algorithm
+        /// \brief Complete overload of the for_each algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
         /// \tparam I Iterator type
@@ -26796,67 +26793,158 @@ namespace futures {
         /// \param first Iterator to first element in the range
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
-        /// \brief function template \c count_if
-        template <class E, class P, class I, class S, class Fun,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        futures::detail::iter_difference_t<I> run(const E &ex, P p, I first, S last, Fun f) const {
-            auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
-                return std::count_if(first, last, f);
-            }
-
-            // Run count_if on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
-
-            // Run count_if on lhs: [first, middle]
-            bool lhs = operator()(ex, p, first, middle, f);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                return lhs + rhs.get();
+        /// \brief function template \c for_each
+        template <
+            class FullAsync = std::false_type,
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0
+#endif
+            >
+        auto
+        run(const E &ex, P p, I first, S last, Fun f) const {
+            if constexpr (FullAsync::value) {
+                // If full async, launching the tasks and solving small tasks
+                // also happen asynchronously
+                return async(ex, [ex, p, first, last, f]() {
+                    sorter<E>(ex).sort(p, first, last, f);
+                });
             } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                return lhs + operator()(make_inline_executor(), p, middle, last, f);
+                // Else, we try to solve small tasks and launching other tasks
+                // if it's worth splitting the problem
+                sorter<E>(ex).sort(p, first, last, f);
             }
         }
     };
 
-    /// \brief Returns the number of elements satisfying specific criteria
-    inline constexpr count_if_functor count_if;
+    /// \brief Applies a function to a range of elements
+    inline constexpr for_each_functor for_each;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
-#endif // FUTURES_COUNT_IF_H
+#endif // FUTURES_FOR_EACH_H
 
-// #include <futures/algorithm/reduce.h>
-//
-// Created by Alan Freitas on 8/16/21.
-//
+// #include <futures/algorithm/none_of.h>
+#ifndef FUTURES_NONE_OF_H
+#define FUTURES_NONE_OF_H
 
-#ifndef FUTURES_REDUCE_H
-#define FUTURES_REDUCE_H
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
+// #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
 
 // #include <variant>
 
-#include <numeric>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
 
+    /// \brief Functor representing the overloads for the @ref none_of function
+    class none_of_functor
+        : public detail::unary_invoke_algorithm_functor<none_of_functor>
+    {
+    public:
+        /// \brief Complete overload of the none_of algorithm
+        /// \tparam E Executor type
+        /// \tparam P Partitioner type
+        /// \tparam I Iterator type
+        /// \tparam S Sentinel iterator type
+        /// \tparam Fun Function type
+        /// \param ex Executor
+        /// \param p Partitioner
+        /// \param first Iterator to first element in the range
+        /// \param last Iterator to (last + 1)-th element in the range
+        /// \param f Function
+        /// \brief function template \c none_of
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        bool
+        run(const E &ex, P p, I first, S last, Fun f) const {
+            auto middle = p(first, last);
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
+                return std::none_of(first, last, f);
+            }
 
-// #include <futures/futures.h>
+            // Run none_of on rhs: [middle, last]
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
+
+            // Run none_of on lhs: [first, middle]
+            bool lhs = operator()(ex, p, first, middle, f);
+
+            // Wait for rhs
+            if (is_ready(rhs_started)) {
+                return lhs && rhs.get();
+            } else {
+                rhs_cancel.request_stop();
+                rhs.detach();
+                if (!lhs) {
+                    return false;
+                } else {
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
+                }
+            }
+        }
+    };
+
+    /// \brief Checks if a predicate is true for none of the elements in a range
+    inline constexpr none_of_functor none_of;
+
+    /** @}*/ // \addtogroup algorithms Algorithms
+} // namespace futures
+
+#endif // FUTURES_NONE_OF_H
+
+// #include <futures/algorithm/reduce.h>
+#ifndef FUTURES_REDUCE_H
+#define FUTURES_REDUCE_H
+
+// #include <futures/algorithm/partitioner/partitioner.h>
 
 // #include <futures/algorithm/traits/algorithm_traits.h>
 
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+
 // #include <futures/algorithm/detail/try_async.h>
 
-// #include <futures/algorithm/partitioner/partitioner.h>
+// #include <execution>
+
+#include <numeric>
+// #include <variant>
 
 
 namespace futures {
@@ -26865,14 +26953,13 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref reduce function
-    class reduce_functor {
-      public:
+    class reduce_functor
+    {
+    public:
         /// \brief Complete overload of the reduce algorithm
-        /// The reduce algorithm is equivalent to a version std::accumulate where the binary operation
-        /// is applied out of order.
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
+        /// The reduce algorithm is equivalent to a version std::accumulate
+        /// where the binary operation is applied out of order. \tparam E
+        /// Executor type \tparam P Partitioner type \tparam I Iterator type
         /// \tparam S Sentinel iterator type
         /// \tparam Fun Function type
         /// \param ex Executor
@@ -26882,14 +26969,25 @@ namespace futures {
         /// \param i Initial value for the reduction
         /// \param f Function
         template <
-            class E, class P, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                 futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        T operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>()) const {
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+            const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::reduce(first, last, i, f);
             }
 
@@ -26907,20 +27005,34 @@ namespace futures {
             } else {
                 rhs_cancel.request_stop();
                 rhs.detach();
-                T i_rhs = operator()(make_inline_executor(), p, middle, last, i, f);
+                T i_rhs =
+                operator()(make_inline_executor(), p, middle, last, i, f);
                 return f(lhs, i_rhs);
             }
         }
 
         /// \overload default init value
-        template <class E, class P, class I, class S, class Fun = std::plus<>,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        futures::detail::iter_value_t<I> operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>()) const {
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_value_t<I>
+        operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>())
+            const {
             if (first != last) {
-                return operator()(ex, std::forward<P>(p), std::next(first), last, *first, f);
+                return operator()(
+                    ex,
+                    std::forward<P>(p),
+                    std::next(first),
+                    last,
+                    *first,
+                    f);
             } else {
                 return futures::detail::iter_value_t<I>{};
             }
@@ -26928,191 +27040,356 @@ namespace futures {
 
         /// \overload execution policy instead of executor
         template <
-            class E, class P, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                 is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 std::is_same_v<futures::detail::iter_value_t<I>, T> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        T operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, i, f);
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                not is_executor_v<
+                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>())
+            const {
+            return operator()(
+                make_policy_executor<E, I, S>(),
+                std::forward<P>(p),
+                first,
+                last,
+                i,
+                f);
         }
 
         /// \overload execution policy instead of executor / default init value
         template <
-            class E, class P, class I, class S, class Fun = std::plus<>,
-            std::enable_if_t<not is_executor_v<E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> &&
-                                 is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        futures::detail::iter_value_t<I> operator()(const E &, P p, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(make_policy_executor<E, I, S>(), std::forward<P>(p), first, last, f);
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                not is_executor_v<
+                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_value_t<I>
+        operator()(const E &, P p, I first, S last, Fun f = std::plus<>())
+            const {
+            return operator()(
+                make_policy_executor<E, I, S>(),
+                std::forward<P>(p),
+                first,
+                last,
+                f);
         }
 
         /// \overload Ranges
-        template <class E, class P, class R, class T, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      (is_executor_v<E> || is_execution_policy_v<E>)&&is_range_partitioner_v<P, R> &&
-                          futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        T operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), i, std::move(f));
+        template <
+            class E,
+            class P,
+            class R,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
+                    P,
+                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                std::forward<P>(p),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
         }
 
         /// \overload Ranges / default init value
-        template <class E, class P, class R, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      (is_executor_v<E> || is_execution_policy_v<E>)&&is_range_partitioner_v<P, R> &&
-                          futures::detail::input_range<R> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        futures::detail::range_value_t<R> operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(ex, std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+        template <
+            class E,
+            class P,
+            class R,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
+                    P,
+                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::range_value_t<R>
+        operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                std::forward<P>(p),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
         }
 
         /// \overload Iterators / default parallel executor
         template <
-            class P, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 std::is_same_v<futures::detail::iter_value_t<I>, T> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        T operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), std::forward<P>(p), first, last, i, std::move(f));
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_partitioner_v<
+                    P,
+                    I,
+                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                std::forward<P>(p),
+                first,
+                last,
+                i,
+                std::move(f));
         }
 
         /// \overload Iterators / default parallel executor / default init value
         template <
-            class P, class I, class S, class Fun = std::plus<>,
-            std::enable_if_t<is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        futures::detail::iter_value_t<I> operator()(P p, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), std::forward<P>(p), first, last, std::move(f));
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_partitioner_v<
+                    P,
+                    I,
+                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_value_t<I>
+        operator()(P p, I first, S last, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                std::forward<P>(p),
+                first,
+                last,
+                std::move(f));
         }
 
         /// \overload Ranges / default parallel executor
         template <
-            class P, class R, class T, class Fun = std::plus<>,
+            class P,
+            class R,
+            class T,
+            class Fun = std::plus<>,
             std::enable_if_t<
-                is_range_partitioner_v<P, R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> &&
-                    futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                    std::is_copy_constructible_v<Fun>,
+                is_range_partitioner_v<
+                    P,
+                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
                 int> = 0>
-        T operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r), i, std::move(f));
+        T
+        operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                std::forward<P>(p),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
         }
 
         /// \overload Ranges / default parallel executor / default init value
-        template <class P, class R, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      is_range_partitioner_v<P, R> && futures::detail::input_range<R> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        futures::detail::range_value_t<R> operator()(P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), std::forward<P>(p), std::begin(r), std::end(r), std::move(f));
+        template <
+            class P,
+            class R,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_range_partitioner_v<
+                    P,
+                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::range_value_t<R>
+        operator()(P p, R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                std::forward<P>(p),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
         }
 
         /// \overload Iterators / default partitioner
         template <
-            class E, class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
-                                 futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        T operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(ex, make_default_partitioner(first, last), first, last, i, std::move(f));
+            class E,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
+                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>())
+            const {
+            return operator()(
+                ex,
+                make_default_partitioner(first, last),
+                first,
+                last,
+                i,
+                std::move(f));
         }
 
         /// \overload Iterators / default partitioner / default init value
-        template <class E, class I, class S, class Fun = std::plus<>,
-                  std::enable_if_t<(is_executor_v<E> || is_execution_policy_v<E>)&&is_input_iterator_v<I> &&
-                                       futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0>
-        futures::detail::iter_value_t<I> operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(ex, make_default_partitioner(first, last), first, last, std::move(f));
+        template <
+            class E,
+            class I,
+            class S,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
+                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_value_t<I>
+        operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(first, last),
+                first,
+                last,
+                std::move(f));
         }
 
         /// \overload Ranges / default partitioner
-        template <class E, class R, class T, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      (is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_range<R> &&
-                          std::is_same_v<futures::detail::range_value_t<R>, T> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        T operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r), i, std::move(f));
+        template <
+            class E,
+            class R,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
+                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(std::forward<R>(r)),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
         }
 
         /// \overload Ranges / default partitioner / default init value
-        template <class E, class R, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      (is_executor_v<E> || is_execution_policy_v<E>)&&futures::detail::input_range<R> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        futures::detail::range_value_t<R> operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
-            return operator()(ex, make_default_partitioner(std::forward<R>(r)), std::begin(r), std::end(r), std::move(f));
+        template <
+            class E,
+            class R,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
+                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::range_value_t<R>
+        operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(std::forward<R>(r)),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
         }
 
         /// \overload Iterators / default executor / default partitioner
         template <
-            class I, class S, class T, class Fun = std::plus<>,
-            std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 std::is_same_v<futures::detail::iter_value_t<I>, T> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        T operator()(I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), make_default_partitioner(first, last), first, last, i, std::move(f));
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_input_iterator_v<
+                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(I first, S last, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(first, last),
+                first,
+                last,
+                i,
+                std::move(f));
         }
 
-        /// \overload Iterators / default executor / default partitioner / default init value
+        /// \overload Iterators / default executor / default partitioner /
+        /// default init value
         template <
-            class I, class S, class Fun = std::plus<>,
-            std::enable_if_t<is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                 futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                             int> = 0>
-        futures::detail::iter_value_t<I> operator()(I first, S last, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), make_default_partitioner(first, last), first, last, std::move(f));
+            class I,
+            class S,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                is_input_iterator_v<
+                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::iter_value_t<I>
+        operator()(I first, S last, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(first, last),
+                first,
+                last,
+                std::move(f));
         }
 
         /// \overload Ranges / default executor / default partitioner
-        template <class R, class T, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        T operator()(R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), make_default_partitioner(r), std::begin(r), std::end(r), i,
-                       std::move(f));
+        template <
+            class R,
+            class T,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                futures::detail::input_range<
+                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        T
+        operator()(R &&r, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(r),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
         }
 
-        /// \overload Ranges / default executor / default partitioner / default init value
-        template <class R, class Fun = std::plus<>,
-                  std::enable_if_t<
-                      futures::detail::input_range<R> &&
-                          futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> &&
-                          std::is_copy_constructible_v<Fun>,
-                      int> = 0>
-        futures::detail::range_value_t<R> operator()(R &&r, Fun f = std::plus<>()) const {
-            return operator()(make_default_executor(), make_default_partitioner(r), std::begin(r), std::end(r), std::move(f));
+        /// \overload Ranges / default executor / default partitioner / default
+        /// init value
+        template <
+            class R,
+            class Fun = std::plus<>,
+            std::enable_if_t<
+                futures::detail::input_range<
+                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                int> = 0>
+        futures::detail::range_value_t<R>
+        operator()(R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(r),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
         }
     };
 
-    /// \brief Sums up (or accumulate with a custom function) a range of elements, except out of order
+    /// \brief Sums up (or accumulate with a custom function) a range of
+    /// elements, except out of order
     inline constexpr reduce_functor reduce;
 
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_REDUCE_H
+
+// #include <futures/algorithm/traits/algorithm_traits.h>
 
 
 

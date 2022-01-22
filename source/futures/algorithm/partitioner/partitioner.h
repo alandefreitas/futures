@@ -1,10 +1,10 @@
 #ifndef FUTURES_PARTITIONER_H
 #define FUTURES_PARTITIONER_H
 
+#include <futures/algorithm/traits/is_input_iterator.h>
+#include <futures/algorithm/traits/is_range.h>
 #include <futures/adaptor/detail/traits/has_get.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
-#include <futures/algorithm/traits/is_range.h>
-#include <futures/algorithm/traits/is_input_iterator.h>
 #include <thread>
 
 /// \file Default partitioners
@@ -133,8 +133,7 @@ namespace futures {
         class I,
         class S,
         std::enable_if_t<
-            is_input_iterator_v<
-                I> && futures::detail::sentinel_for<S, I>,
+            is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
             int> = 0>
     default_partitioner
     make_default_partitioner(I first, S last) {

@@ -3,7 +3,8 @@
 //
 
 /** \file
- * \brief A very simple amalgamator to generate the single header version of futures
+ * \brief A very simple amalgamator to generate the single header version of
+ * futures
  */
 
 #include <algorithm>
@@ -13,30 +14,70 @@
 #include <optional>
 #include <regex>
 #include <string>
-#include <string_view>
 #include <vector>
+#include <string_view>
 
 namespace fs = std::filesystem;
 
-struct config {
+struct config
+{
     std::vector<fs::path> entry_points;
     std::vector<fs::path> include_paths;
     fs::path output;
     std::vector<fs::path> double_include;
-    bool show_progress{false};
+    bool remove_leading_comments{ true };
+    bool show_progress{ false };
 };
 
-bool parse_config(config &c, const std::vector<std::string_view> &args) {
-    auto is_key = [&](std::string_view arg) { return !arg.empty() && arg.front() == '-'; };
+std::string
+consume_leading_comments(std::ifstream &t) {
+    std::string line;
+    while (std::getline(t, line)) {
+        if (auto pos = line.find_first_not_of(' ');
+            pos != std::string::npos
+            && std::string_view(line).substr(pos, 2) == "//")
+        {
+            continue;
+        }
+        if (std::all_of(line.begin(), line.end(), [](char line_c) {
+                return std::isspace(line_c);
+            }))
+        {
+            continue;
+        }
+        return line;
+    }
+    return "";
+}
 
+constexpr
+bool
+is_key(std::string_view arg) {
+    return !arg.empty() && arg.front() == '-';
+};
+
+constexpr bool
+is_false(std::string_view value) {
+    return is_key(value) || value.empty() || value == "false"
+           || value == "FALSE" || value == "0";
+}
+
+bool
+parse_config(config &c, const std::vector<std::string_view> &args) {
     auto find_key = [&](std::string_view key) {
         return std::find_if(args.begin(), args.end(), [&](std::string_view arg) {
             return is_key(arg) && arg.substr(arg.find_first_not_of('-')) == key;
         });
     };
 
-    if (find_key("show_progress") != args.end()) {
-        c.show_progress = true;
+    auto key_it = find_key("show_progress");
+    if (key_it != args.end()) {
+        c.show_progress = is_key(*key_it) || !is_false(*key_it);
+    }
+
+    key_it = find_key("remove_leading_comments");
+    if (key_it != args.end()) {
+        c.remove_leading_comments = is_key(*key_it) || !is_false(*key_it);
     }
 
     auto get_values = [&](std::string_view key) {
@@ -45,21 +86,23 @@ bool parse_config(config &c, const std::vector<std::string_view> &args) {
             return std::make_pair(arg_begin, arg_begin);
         }
         ++arg_begin;
-        return std::make_pair(arg_begin, std::find_if(arg_begin, args.end(), is_key));
+        return std::
+            make_pair(arg_begin, std::find_if(arg_begin, args.end(), is_key));
     };
 
     auto [entry_points_begin, entry_points_end] = get_values("entry_points");
-    c.entry_points = {entry_points_begin, entry_points_end};
+    c.entry_points = { entry_points_begin, entry_points_end };
     if (c.entry_points.empty()) {
         std::cerr << "No entry points provided\n";
         return false;
     }
 
-    auto [double_include_begin, double_include_end] = get_values("double_include");
-    c.double_include = {double_include_begin, double_include_end};
+    auto [double_include_begin, double_include_end] = get_values(
+        "double_include");
+    c.double_include = { double_include_begin, double_include_end };
 
     auto [include_paths_begin, include_paths_end] = get_values("include_paths");
-    c.include_paths = {include_paths_begin, include_paths_end};
+    c.include_paths = { include_paths_begin, include_paths_end };
     if (c.include_paths.empty()) {
         std::cerr << "No include paths provided\n";
         return false;
@@ -76,14 +119,23 @@ bool parse_config(config &c, const std::vector<std::string_view> &args) {
         }
         return true;
     };
-    if (!std::all_of(c.include_paths.begin(), c.include_paths.end(), exist_as_directory)) {
+    if (!std::all_of(
+            c.include_paths.begin(),
+            c.include_paths.end(),
+            exist_as_directory))
+    {
         return false;
     }
 
     auto make_absolute = [&](fs::path &p) {
         if (p.is_relative()) {
-            auto contains_path = [&](const fs::path &include_path) { return fs::exists(include_path / p); };
-            auto it = std::find_if(c.include_paths.begin(), c.include_paths.end(), contains_path);
+            auto contains_path = [&](const fs::path &include_path) {
+                return fs::exists(include_path / p);
+            };
+            auto it = std::find_if(
+                c.include_paths.begin(),
+                c.include_paths.end(),
+                contains_path);
             if (it == c.include_paths.end()) {
                 std::cerr << "No include path contains " << p << "\n";
                 return false;
@@ -93,10 +145,16 @@ bool parse_config(config &c, const std::vector<std::string_view> &args) {
         }
         return true;
     };
-    if (!std::all_of(c.entry_points.begin(), c.entry_points.end(), make_absolute)) {
+    if (!std::
+            all_of(c.entry_points.begin(), c.entry_points.end(), make_absolute))
+    {
         return false;
     }
-    if (!std::all_of(c.double_include.begin(), c.double_include.end(), make_absolute)) {
+    if (!std::all_of(
+            c.double_include.begin(),
+            c.double_include.end(),
+            make_absolute))
+    {
         return false;
     }
 
@@ -111,10 +169,18 @@ bool parse_config(config &c, const std::vector<std::string_view> &args) {
         }
         return true;
     };
-    if (!std::all_of(c.entry_points.begin(), c.entry_points.end(), exists_as_regular)) {
+    if (!std::all_of(
+            c.entry_points.begin(),
+            c.entry_points.end(),
+            exists_as_regular))
+    {
         return false;
     }
-    if (!std::all_of(c.double_include.begin(), c.double_include.end(), exists_as_regular)) {
+    if (!std::all_of(
+            c.double_include.begin(),
+            c.double_include.end(),
+            exists_as_regular))
+    {
         return false;
     }
 
@@ -131,13 +197,17 @@ bool parse_config(config &c, const std::vector<std::string_view> &args) {
     return true;
 }
 
-bool parse_config(config &c, int argc, char **argv) {
+bool
+parse_config(config &c, int argc, char **argv) {
     std::vector<std::string_view> args(argv, argv + argc);
     return parse_config(c, args);
 }
 
-std::pair<fs::path, bool> find_file(const std::vector<fs::path> &include_paths, const std::ssub_match &filename) {
-    for (const auto &path : include_paths) {
+std::pair<fs::path, bool>
+find_file(
+    const std::vector<fs::path> &include_paths,
+    const std::ssub_match &filename) {
+    for (const auto &path: include_paths) {
         auto p = path / filename.str();
         if (fs::exists(p)) {
             return std::make_pair(p, true);
@@ -146,7 +216,8 @@ std::pair<fs::path, bool> find_file(const std::vector<fs::path> &include_paths, 
     return std::make_pair(fs::path(filename.first, filename.second), false);
 }
 
-int main(int argc, char **argv) {
+int
+main(int argc, char **argv) {
     config c;
     if (!parse_config(c, argc, argv)) {
         return 1;
@@ -155,31 +226,51 @@ int main(int argc, char **argv) {
     std::string content;
     std::vector<fs::path> patched_files;
 
-    for (auto const &entry_point : c.entry_points) {
+    for (std::size_t i = 0; i < c.entry_points.size(); ++i) {
+        auto const &entry_point = c.entry_points[i];
         std::ifstream t(entry_point);
-        content.append(std::istreambuf_iterator<char>(t), std::istreambuf_iterator<char>());
+        if (i != 0 && c.remove_leading_comments) {
+            std::string last_line = consume_leading_comments(t);
+            last_line.push_back('\n');
+            content.append(last_line);
+        }
+        content.append(
+            std::istreambuf_iterator<char>(t),
+            std::istreambuf_iterator<char>());
         patched_files.emplace_back(entry_point);
     }
     std::sort(patched_files.begin(), patched_files.end());
 
-    std::regex include_expression("(^|\n) *# *include *< *([a-zA-Z_/\\. ]+) *>");
+    std::regex include_expression(
+        "(^|\n) *# *include *< *([a-zA-Z_/\\. ]+) *>");
     auto search_begin(content.cbegin());
     std::smatch include_match;
-    while (std::regex_search(search_begin, content.cend(), include_match, include_expression)) {
+    while (std::regex_search(
+        search_begin,
+        content.cend(),
+        include_match,
+        include_expression))
+    {
         // Identify file
-        auto [file_path, exists_in_source] = find_file(c.include_paths, include_match[2]);
-        double perc = static_cast<double>(search_begin - content.cbegin()) / content.size();
+        auto [file_path, exists_in_source]
+            = find_file(c.include_paths, include_match[2]);
+        double perc = static_cast<double>(search_begin - content.cbegin())
+                      / content.size();
         if (c.show_progress) {
             std::cout << "- " << 100 * perc << "% - " << file_path << "\n";
         }
 
         // Check if already included
-        auto [lb, ub] = std::equal_range(patched_files.begin(), patched_files.end(), file_path);
-        const bool already_patched = lb != patched_files.end() && *lb == file_path;
+        auto [lb, ub] = std::
+            equal_range(patched_files.begin(), patched_files.end(), file_path);
+        const bool already_patched = lb != patched_files.end()
+                                     && *lb == file_path;
 
         // Patch comment
         std::string patch;
-        if (bool include_helper_comment = exists_in_source || already_patched; include_helper_comment) {
+        if (bool include_helper_comment = exists_in_source || already_patched;
+            include_helper_comment)
+        {
             patch += include_match[1];
             patch += "// #include <";
             patch += include_match[2];
@@ -192,7 +283,14 @@ int main(int argc, char **argv) {
                 patch += include_match[0];
             } else {
                 std::ifstream t(file_path);
-                patch.append(std::istreambuf_iterator<char>(t), std::istreambuf_iterator<char>());
+                if (c.remove_leading_comments) {
+                    std::string last_line = consume_leading_comments(t);
+                    last_line.push_back('\n');
+                    patch.append(last_line);
+                }
+                patch.append(
+                    std::istreambuf_iterator<char>(t),
+                    std::istreambuf_iterator<char>());
             }
         }
 
@@ -201,8 +299,13 @@ int main(int argc, char **argv) {
         content.replace(include_match[0].first, include_match[0].second, patch);
 
         // Marked file as included
-        if (!already_patched &&
-            std::find(c.double_include.begin(), c.double_include.end(), file_path) == c.double_include.end()) {
+        if (!already_patched
+            && std::find(
+                   c.double_include.begin(),
+                   c.double_include.end(),
+                   file_path)
+                   == c.double_include.end())
+        {
             patched_files.emplace(ub, file_path);
         }
 

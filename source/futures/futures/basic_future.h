@@ -1,5 +1,8 @@
 //
-// Created by Alan Freitas on 8/21/21.
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_BASIC_FUTURE_H
@@ -141,7 +144,7 @@ namespace futures {
         class enable_stop_token
         {
         public:
-            enable_stop_token()                           = default;
+            enable_stop_token() = default;
             enable_stop_token(const enable_stop_token &c) = default;
             /// \brief Move construct/assign helper for the
             /// When the basic future is being moved, the stop source gets
@@ -189,8 +192,8 @@ namespace futures {
         class disable_stop_token
         {
         public:
-            disable_stop_token()                                = default;
-            disable_stop_token(const disable_stop_token &c)     = default;
+            disable_stop_token() = default;
+            disable_stop_token(const disable_stop_token &c) = default;
             disable_stop_token(disable_stop_token &&c) noexcept = default;
             disable_stop_token &
             operator=(const disable_stop_token &c)
@@ -242,7 +245,7 @@ namespace futures {
             template <class Executor>
             bool
             then(
-                const Executor                          &ex,
+                const Executor &ex,
                 continuations_state::continuation_type &&fn) {
                 if (not static_cast<Derived *>(this)->valid()) {
                     throw std::future_error(std::future_errc::no_state);
@@ -345,14 +348,14 @@ namespace futures {
         /// \name Public types
         /// @{
 
-        using value_type                            = T;
+        using value_type = T;
 
-        using is_shared                             = Shared;
-        using is_lazy_continuable                   = LazyContinuable;
-        using is_stoppable                          = Stoppable;
-        static constexpr bool is_shared_v           = Shared::value;
+        using is_shared = Shared;
+        using is_lazy_continuable = LazyContinuable;
+        using is_stoppable = Stoppable;
+        static constexpr bool is_shared_v = Shared::value;
         static constexpr bool is_lazy_continuable_v = LazyContinuable::value;
-        static constexpr bool is_stoppable_v        = Stoppable::value;
+        static constexpr bool is_stoppable_v = Stoppable::value;
 
 #ifndef FUTURES_DOXYGEN
         using lazy_continuations_base = detail::lazy_continuations_base<
@@ -497,7 +500,7 @@ namespace futures {
             lazy_continuations_base::operator=(
                 other); // Copy reference to continuations
             stop_token_base::operator=(other); // Copy reference to stop state
-            join_                    = other.join_;
+            join_ = other.join_;
             state_ = other.state_; // Make it point to the same shared state
             other.detach();        // Detach other to ensure it won't block at
                                    // destruction
@@ -516,7 +519,7 @@ namespace futures {
             lazy_continuations_base::operator=(
                 std::move(other)); // Get control of continuations
             stop_token_base::operator=(std::move(other)); // Move stop state
-            join_                    = other.join_;
+            join_ = other.join_;
             state_ = other.state_; // Make it point to the same shared state
             other.state_.reset();
             other.detach(); // Detach other to ensure it won't block at
@@ -562,7 +565,7 @@ namespace futures {
         /// future supports stop tokens
         ///
         /// \return Whether the request was made
-        bool                      request_stop() noexcept;
+        bool request_stop() noexcept;
 
         /// \brief Get this future's stop source
         ///
@@ -578,7 +581,7 @@ namespace futures {
         /// future supports stop tokens
         ///
         /// \return The stop token
-        [[nodiscard]] stop_token  get_stop_token() const noexcept;
+        [[nodiscard]] stop_token get_stop_token() const noexcept;
 #endif
 
         /// \brief Wait until all futures have a valid result and retrieves it
@@ -744,7 +747,7 @@ namespace futures {
 
         /// \name Members
         /// @{
-        bool                             join_{ true };
+        bool join_{ true };
 
         /// \brief Pointer to shared state
         std::shared_ptr<shared_state<T>> state_{};

@@ -1,6 +1,8 @@
 //
-// Copyright (c) alandefreitas 11/30/21.
-// See accompanying file LICENSE
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_SHARED_STATE_H
@@ -424,8 +426,9 @@ namespace futures {
 
             /// \brief Mutex for threads that want to wait on the result
             ///
-            /// While the shared state is lock-free, it also includes a mutex that can be used for communication between
-            /// futures, such as waiter futures.
+            /// While the shared state is lock-free, it also includes a mutex
+            /// that can be used for communication between futures, such as
+            /// waiter futures.
             ///
             /// This is used when one thread intents to wait for the result
             /// of a future. The mutex is not used for lazy futures or if

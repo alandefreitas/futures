@@ -232,7 +232,8 @@ namespace futures::detail {
                     std::make_move_iterator(rhs.end()));
             } else {
                 if constexpr (std::is_empty_v<allocator_type>) {
-                    maybe_empty<Allocator>::get() = rhs.maybe_empty<Allocator>::get();
+                    maybe_empty<Allocator>::get() = rhs.maybe_empty<
+                        Allocator>::get();
                 } else {
                     maybe_empty<Allocator>::get() = (std::move(rhs.alloc_));
                 }

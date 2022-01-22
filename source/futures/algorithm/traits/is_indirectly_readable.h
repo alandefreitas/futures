@@ -8,9 +8,9 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
 #define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
 
-#include <futures/algorithm/traits/iter_value.h>
 #include <futures/algorithm/traits/iter_reference.h>
 #include <futures/algorithm/traits/iter_rvalue_reference.h>
+#include <futures/algorithm/traits/iter_value.h>
 #include <type_traits>
 
 namespace futures {
@@ -32,13 +32,11 @@ namespace futures {
             iter_value_t<T>,
             iter_reference_t<T>,
             iter_rvalue_reference_t<T>,
-            decltype(*std::declval<T>())
-        >> : std::true_type
+            decltype(*std::declval<T>())>> : std::true_type
     {};
 #endif
     template <class T>
-    bool constexpr is_indirectly_readable_v = is_indirectly_readable<
-        T>::value;
+    bool constexpr is_indirectly_readable_v = is_indirectly_readable<T>::value;
 
 } // namespace futures
 

@@ -9,6 +9,7 @@
 #define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_VALUE_TYPE_H
 
 #include <type_traits>
+#include <iterator>
 
 namespace futures {
     /** A C++17 type trait equivalent to the C++20
@@ -23,12 +24,15 @@ namespace futures {
     {};
 
     template <class T>
-    struct has_iterator_traits_value_type<T, std::void_t<typename std::iterator_traits<T>::value_type>>
+    struct has_iterator_traits_value_type<
+        T,
+        std::void_t<typename std::iterator_traits<T>::value_type>>
         : std::true_type
     {};
 #endif
     template <class T>
-    bool constexpr has_iterator_traits_value_type_v = has_iterator_traits_value_type<T>::value;
+    bool constexpr has_iterator_traits_value_type_v
+        = has_iterator_traits_value_type<T>::value;
 
 } // namespace futures
 

@@ -1,5 +1,8 @@
 //
-// Created by Alan Freitas on 8/1/21.
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_FUTURES_H
@@ -14,46 +17,59 @@
 /// - continuable
 /// - TBB
 ///
-/// However, we use std::future and the ASIO proposed standard executors (P0443r13, P1348r0, and P1393r0) to allow
-/// for better interoperability with the C++ standard.
+/// However, we use std::future and the ASIO proposed standard executors
+/// (P0443r13, P1348r0, and P1393r0) to allow for better interoperability with
+/// the C++ standard.
 /// - the async function can accept any standard executor
-/// - the async function will use a reasonable default thread pool when no executor is provided
-/// - future-concepts allows for new future classes to extend functionality while reusing algorithms
+/// - the async function will use a reasonable default thread pool when no
+/// executor is provided
+/// - future-concepts allows for new future classes to extend functionality
+/// while reusing algorithms
 /// - a cancellable future class is provided for more sensitive use cases
 /// - the API can be updated as the standard gets updated
-/// - the standard algorithms are reimplemented with a preference for parallel operations
+/// - the standard algorithms are reimplemented with a preference for parallel
+/// operations
 ///
-/// This interoperability comes at a price for continuations, as we might need to poll for when_all/when_any/then
-/// events, because std::future does not have internal continuations.
+/// This interoperability comes at a price for continuations, as we might need
+/// to poll for when_all/when_any/then events, because std::future does not have
+/// internal continuations.
 ///
-/// Although we attempt to replicate these features without recreating the future class with internal continuations,
-/// we use a number of heuristics to avoid polling for when_all/when_any/then:
-/// - we allow for other future-like classes to be implemented through a future-concept and provide these
+/// Although we attempt to replicate these features without recreating the
+/// future class with internal continuations, we use a number of heuristics to
+/// avoid polling for when_all/when_any/then:
+/// - we allow for other future-like classes to be implemented through a
+/// future-concept and provide these
 ///   functionalities at a lower cost whenever we can
-/// - `when_all` (or operator&&) returns a when_all_future class, which does not create a new std::future at all
+/// - `when_all` (or operator&&) returns a when_all_future class, which does not
+/// create a new std::future at all
 ///    and can check directly if futures are ready
-/// - `when_any` (or operator||) returns a when_any_future class, which implements a number of heuristics to avoid
-///    polling, limit polling time, increased pooling intervals, and only launching the necessary continuation futures
-///    for long tasks. (although when_all always takes longer than when_any, when_any involves a number of heuristics
-///    that influence its performance)
-/// - `then` (or operator>>) returns a new future object that sleeps while the previous future isn't ready
-/// - when the standard supports that, this approach based on concepts also serve as extension points to allow
-///   for these proxy classes to change their behavior to some other algorithm that makes more sense for futures
-///   that support continuations, cancellation, progress, queries, .... More interestingly, the concepts allow
-///   for all these possible future types to interoperate.
+/// - `when_any` (or operator||) returns a when_any_future class, which
+/// implements a number of heuristics to avoid
+///    polling, limit polling time, increased pooling intervals, and only
+///    launching the necessary continuation futures for long tasks. (although
+///    when_all always takes longer than when_any, when_any involves a number of
+///    heuristics that influence its performance)
+/// - `then` (or operator>>) returns a new future object that sleeps while the
+/// previous future isn't ready
+/// - when the standard supports that, this approach based on concepts also
+/// serve as extension points to allow
+///   for these proxy classes to change their behavior to some other algorithm
+///   that makes more sense for futures that support continuations,
+///   cancellation, progress, queries, .... More interestingly, the concepts
+///   allow for all these possible future types to interoperate.
 ///
 /// \see https://en.cppreference.com/w/cpp/experimental/concurrency
 /// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
 /// \see https://github.com/Amanieu/asyncplusplus
 
 // Future classes
-#include <futures/futures/basic_future.h>
-#include <futures/futures/promise.h>
-#include <futures/futures/packaged_task.h>
 #include <futures/futures/async.h>
+#include <futures/futures/await.h>
+#include <futures/futures/basic_future.h>
+#include <futures/futures/packaged_task.h>
+#include <futures/futures/promise.h>
 #include <futures/futures/wait_for_all.h>
 #include <futures/futures/wait_for_any.h>
-#include <futures/futures/await.h>
 
 // Adaptors
 #include <futures/adaptor/ready_future.h>

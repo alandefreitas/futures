@@ -1,20 +1,21 @@
 
 //
-// Created by Alan Freitas on 8/16/21.
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_ALL_OF_H
 #define FUTURES_ALL_OF_H
 
+#include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/algorithm/traits/algorithm_traits.h>
+#include <futures/futures.h>
+#include <futures/algorithm/detail/traits/range/range/concepts.h>
+#include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
-
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
-
-#include <futures/algorithm/traits/algorithm_traits.h>
-#include <futures/algorithm/detail/try_async.h>
-#include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/futures.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -22,8 +23,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref all_of function
-    class all_of_functor : public detail::unary_invoke_algorithm_functor<all_of_functor> {
-      public:
+    class all_of_functor
+        : public detail::unary_invoke_algorithm_functor<all_of_functor>
+    {
+    public:
         /// \brief Complete overload of the all_of algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
@@ -36,24 +39,35 @@ namespace futures {
         /// \param last Iterator to (last + 1)-th element in the range
         /// \param f Function
         /// \brief function template \c all_of
-        template <class E, class P, class I, class S, class Fun
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun
 #ifndef FUTURES_DOXYGEN
-                  ,
-                  std::enable_if_t<is_executor_v<E> && is_partitioner_v<P, I, S> &&
-                                       is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> &&
-                                       futures::detail::indirectly_unary_invocable<Fun, I> &&
-                                       std::is_copy_constructible_v<Fun>,
-                                   int> = 0
+            ,
+            std::enable_if_t<
+                is_executor_v<
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                int> = 0
 #endif
-                  >
-        bool run(const E &ex, P p, I first, S last, Fun f) const {
+            >
+        bool
+        run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last || std::is_same_v<E, inline_executor> || futures::detail::forward_iterator<I>) {
+            if (middle == last
+                || std::is_same_v<
+                    E,
+                    inline_executor> || futures::detail::forward_iterator<I>)
+            {
                 return std::all_of(first, last, f);
             }
 
             // Run all_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() { return operator()(ex, p, middle, last, f); });
+            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
+                return operator()(ex, p, middle, last, f);
+            });
 
             // Run all_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -67,7 +81,8 @@ namespace futures {
                 if (!lhs) {
                     return false;
                 } else {
-                    return operator()(make_inline_executor(), p, middle, last, f);
+                    return
+                    operator()(make_inline_executor(), p, middle, last, f);
                 }
             }
         }

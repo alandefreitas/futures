@@ -25,9 +25,7 @@ namespace futures {
     {};
 
     template <class T>
-    struct iter_reference<
-        T,
-        std::void_t<iter_value_t<T>>>
+    struct iter_reference<T, std::void_t<iter_value_t<T>>>
     {
         using type = std::add_lvalue_reference<iter_value_t<T>>;
     };

@@ -163,18 +163,22 @@ SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 IncludeBlocks: Merge
 IncludeCategories:
-  - Regex:           '^["<]futures/config/'        # config
+  - Regex:           '^["<]futures/.*/detail/prologue.h'  # config
     Priority:        1
-  - Regex:           '^["<]futures/.*/detail/'     # details
-    Priority:        3
-  - Regex:           '^["<]futures/'               # internal
+  - Regex:           '^["<]futures/.*/detail/epilogue.h'  # config
+    Priority:        10
+  - Regex:           '^["<]futures/config/'        # config
     Priority:        2
-  - Regex:           '^(["<](boost|small|asio)/)'  # external
+  - Regex:           '^["<]futures/.*/detail/'     # details
     Priority:        4
-  - Regex:           '<[[:alnum:].]+>'             # C++
+  - Regex:           '^["<]futures/'               # internal
+    Priority:        3
+  - Regex:           '^(["<](boost|small|asio)/)'  # external
     Priority:        5
-  - Regex:           '.*'                          # any other
+  - Regex:           '<[[:alnum:].]+>'             # C++
     Priority:        6
+  - Regex:           '.*'                          # any other
+    Priority:        7
 
 # Comments
 FixNamespaceComments: true

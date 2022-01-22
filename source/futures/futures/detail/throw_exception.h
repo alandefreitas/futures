@@ -1,6 +1,8 @@
 //
-// Copyright (c) alandefreitas 12/7/21.
-// See accompanying file LICENSE
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_THROW_EXCEPTION_H
@@ -12,26 +14,33 @@ namespace futures::detail {
      */
 
     /// \brief Throw an exception but terminate if we can't throw
-    template <typename Ex> [[noreturn]] void throw_exception(Ex &&ex) {
+    template <typename Ex>
+    [[noreturn]] void
+    throw_exception(Ex &&ex) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS
         throw static_cast<Ex &&>(ex);
 #else
-        (void)ex;
+        (void) ex;
         std::terminate();
 #endif
     }
 
     /// \brief Construct and throw an exception but terminate otherwise
-    template <typename Ex, typename... Args> [[noreturn]] void throw_exception(Args &&...args) {
+    template <typename Ex, typename... Args>
+    [[noreturn]] void
+    throw_exception(Args &&...args) {
         throw_exception(Ex(std::forward<Args>(args)...));
     }
 
     /// \brief Throw an exception but terminate if we can't throw
-    template <typename ThrowFn, typename CatchFn> void catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {
+    template <typename ThrowFn, typename CatchFn>
+    void
+    catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS
         try {
             return static_cast<ThrowFn &&>(thrower)();
-        } catch (std::exception &) {
+        }
+        catch (std::exception &) {
             return static_cast<CatchFn &&>(catcher)();
         }
 #else

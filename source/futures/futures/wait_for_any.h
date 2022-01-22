@@ -1,15 +1,16 @@
 //
-// Copyright (c) alandefreitas 12/3/21.
-// See accompanying file LICENSE
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_WAIT_FOR_ANY_H
 #define FUTURES_WAIT_FOR_ANY_H
 
+#include <futures/futures/traits/is_future.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/futures/detail/waiter_for_any.h>
-#include <futures/futures/traits/is_future.h>
-
 #include <type_traits>
 
 namespace futures {
@@ -22,27 +23,32 @@ namespace futures {
 
     /// \brief Wait for any future in a sequence to be ready
     ///
-    /// This function waits for any future in the range [`first`, `last`) to be ready.
+    /// This function waits for any future in the range [`first`, `last`) to be
+    /// ready.
     ///
-    /// Unlike @ref wait_for_all, this function requires special data structures to allow that
-    /// to happen without blocking.
+    /// Unlike @ref wait_for_all, this function requires special data structures
+    /// to allow that to happen without blocking.
     ///
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator Iterator type in a range of futures
     /// \param first Iterator to the first element in the range
     /// \param last Iterator to one past the last element in the range
     /// \return Iterator to the first future that got ready
-    template <typename Iterator
+    template <
+        typename Iterator
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+        ,
+        typename std::
+            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
 #endif
-              >
-    Iterator wait_for_any(Iterator first, Iterator last) {
+        >
+    Iterator
+    wait_for_any(Iterator first, Iterator last) {
         if (const bool is_empty = first == last; is_empty) {
             return last;
         } else if (const bool is_single = std::next(first) == last; is_single) {
@@ -58,23 +64,29 @@ namespace futures {
     /// \brief Wait for any future in a sequence to be ready
     ///
     /// This function waits for any future in the range `r` to be ready.
-    /// This function requires special data structures to allow that to happen without blocking.
+    /// This function requires special data structures to allow that to happen
+    /// without blocking.
     ///
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Iterator A range of futures type
     /// \param r Range of futures
     /// \return Iterator to the first future that got ready
-    template <typename Range
+    template <
+        typename Range
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<detail::range<Range> && is_future_v<detail::range_value_t<Range>>, int> = 0
+        ,
+        typename std::enable_if_t<
+            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            int> = 0
 #endif
-              >
-    detail::iterator_t<Range> wait_for_any(Range &&r) {
+        >
+    detail::iterator_t<Range>
+    wait_for_any(Range &&r) {
         return wait_for_any(std::begin(r), std::end(r));
     }
 
@@ -85,18 +97,23 @@ namespace futures {
     /// \note This function is adapted from `boost::wait_for_any`
     ///
     /// \see
-    /// [boost.thread wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
+    /// [boost.thread
+    /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// \tparam Fs A list of future types
     /// \param fs A list of future objects
     /// \return Index of the first future that got ready
-    template <typename... Fs
+    template <
+        typename... Fs
 #ifndef FUTURES_DOXYGEN
-              ,
-              typename std::enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int> = 0
+        ,
+        typename std::enable_if_t<
+            std::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int> = 0
 #endif
-              >
-    std::size_t wait_for_any(Fs &&...fs) {
+        >
+    std::size_t
+    wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         if constexpr (const bool is_empty = size == 0; is_empty) {
             return 0;

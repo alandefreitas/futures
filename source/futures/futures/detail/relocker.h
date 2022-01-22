@@ -31,7 +31,7 @@ namespace futures::detail {
         }
 
         /// \brief Copy constructor is deleted
-        relocker(const relocker &)          = delete;
+        relocker(const relocker &) = delete;
         relocker(relocker &&other) noexcept = delete;
 
         /// \brief Copy assignment is deleted

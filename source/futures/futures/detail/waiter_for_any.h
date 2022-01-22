@@ -1,6 +1,8 @@
 //
-// Copyright (c) alandefreitas 12/15/21.
-// See accompanying file LICENSE
+// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
+//
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 
 #ifndef FUTURES_WAITER_FOR_ANY_H
@@ -185,7 +187,7 @@ namespace futures::detail {
             using shared_lock_vector = std::shared_ptr<lock_vector>;
 
             /// \brief Number of futures locked
-            std::size_t count{0};
+            std::size_t count{ 0 };
 
             /// \brief Locks for each future in the range
             shared_lock_vector locks;
