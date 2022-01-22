@@ -9,7 +9,7 @@
 #define FUTURES_FIND_IF_NOT_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/algorithm/traits/algorithm_traits.h>
+#include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
@@ -24,9 +24,10 @@ namespace futures {
     /// \brief Functor representing the overloads for the @ref find_if_not
     /// function
     class find_if_not_functor
-        : public detail::unary_invoke_algorithm_functor<find_if_not_functor>
+        : public unary_invoke_algorithm_functor<find_if_not_functor>
     {
-    public:
+        friend unary_invoke_algorithm_functor<find_if_not_functor>;
+
         /// \brief Complete overload of the find_if_not algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type

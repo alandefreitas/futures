@@ -9,7 +9,7 @@
 #define FUTURES_COUNT_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/algorithm/traits/algorithm_traits.h>
+#include <futures/algorithm/traits/value_cmp_algorithm.h>
 #include <futures/futures.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
@@ -22,10 +22,10 @@ namespace futures {
      */
 
     /// \brief Functor representing the overloads for the @ref count function
-    class count_functor
-        : public detail::value_cmp_algorithm_functor<count_functor>
+    class count_functor : public value_cmp_algorithm_functor<count_functor>
     {
-    public:
+        friend value_cmp_algorithm_functor<count_functor>;
+
         /// \brief Complete overload of the count algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type

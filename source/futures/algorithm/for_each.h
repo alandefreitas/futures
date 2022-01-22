@@ -9,7 +9,7 @@
 #define FUTURES_FOR_EACH_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/algorithm/traits/algorithm_traits.h>
+#include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
@@ -24,14 +24,10 @@ namespace futures {
 
     /// \brief Functor representing the overloads for the @ref for_each function
     class for_each_functor
-        : public detail::unary_invoke_algorithm_functor<for_each_functor>
+        : public unary_invoke_algorithm_functor<for_each_functor>
     {
-    public:
-        // Let only unary_invoke_algorithm_functor access the primary sort
-        // function template
-        friend detail::unary_invoke_algorithm_functor<for_each_functor>;
+        friend unary_invoke_algorithm_functor<for_each_functor>;
 
-    private:
         /// \brief Internal class that takes care of the sorting tasks and its
         /// incomplete tasks
         ///

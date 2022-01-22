@@ -9,7 +9,7 @@
 #define FUTURES_NONE_OF_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/algorithm/traits/algorithm_traits.h>
+#include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
 #include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
@@ -23,9 +23,10 @@ namespace futures {
 
     /// \brief Functor representing the overloads for the @ref none_of function
     class none_of_functor
-        : public detail::unary_invoke_algorithm_functor<none_of_functor>
+        : public unary_invoke_algorithm_functor<none_of_functor>
     {
-    public:
+        friend unary_invoke_algorithm_functor<none_of_functor>;
+
         /// \brief Complete overload of the none_of algorithm
         /// \tparam E Executor type
         /// \tparam P Partitioner type
