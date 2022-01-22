@@ -247,10 +247,10 @@ namespace futures {
             then(
                 const Executor &ex,
                 continuations_state::continuation_type &&fn) {
-                if (not static_cast<Derived *>(this)->valid()) {
+                if (!static_cast<Derived *>(this)->valid()) {
                     throw std::future_error(std::future_errc::no_state);
                 }
-                if (not static_cast<Derived *>(this)->is_ready()
+                if (!static_cast<Derived *>(this)->is_ready()
                     && continuations_source_.run_possible())
                 {
                     return continuations_source_

@@ -753,7 +753,7 @@ namespace futures {
                         }
                     }
                 }
-                while (not notifiers_started());
+                while (!notifiers_started());
             }
 
             // wait for ready_notified to be set to true by a notifier task
@@ -786,8 +786,7 @@ namespace futures {
                     return ready_notified;
                 });
             } else {
-                while (
-                    not ready_notified_cv
+                while (!ready_notified_cv
                             .wait_for(lock, std::chrono::seconds(1), [this]() {
                                 return ready_notified;
                             }))
@@ -818,7 +817,7 @@ namespace futures {
         void
         request_notifiers_stop_and_wait() {
             // Check if we have notifiers
-            if (not thread_notifiers_set && not lazy_notifiers_set) {
+            if (!thread_notifiers_set && !lazy_notifiers_set) {
                 return;
             }
 
@@ -849,7 +848,7 @@ namespace futures {
         void
         request_notifiers_stop() {
             // Check if we have notifiers
-            if (not thread_notifiers_set && not lazy_notifiers_set) {
+            if (!thread_notifiers_set && !lazy_notifiers_set) {
                 return;
             }
 
@@ -995,7 +994,7 @@ namespace futures {
                     //   when moving.
                     if (!future.valid() || ::futures::is_ready(future)) {
                         std::lock_guard lk(ready_notified_mutex);
-                        if (not ready_notified) {
+                        if (!ready_notified) {
                             ready_notified = true;
                             ready_notified_cv.notify_one();
                         }
@@ -1041,7 +1040,7 @@ namespace futures {
                     // We found out about a future that's ready: notify the
                     // when_any_future object
                     std::lock_guard lk(ready_notified_mutex);
-                    if (not ready_notified) {
+                    if (!ready_notified) {
                         ready_notified = true;
                         // Notify any thread that might be waiting for this event
                         ready_notified_cv.notify_one();
@@ -1064,13 +1063,13 @@ namespace futures {
                 constexpr bool internal_setting_lazy = SettingLazyContinuables::
                     value;
                 constexpr bool internal_setting_thread
-                    = not SettingLazyContinuables::value;
+                    = !SettingLazyContinuables::value;
                 if constexpr (internal_setting_lazy && internal_lazy_continuable)
                 {
                     // Execute notifier task inline whenever `future` is done
                     future.then(make_inline_executor(), executor_handle);
                 } else if constexpr (
-                    internal_setting_thread && not internal_lazy_continuable) {
+                    internal_setting_thread && !internal_lazy_continuable) {
                     // Execute notifier task in a new thread because we don't
                     // have the executor context to be sure. We detach it here
                     // but can still control the cancel_token and the future.
@@ -1093,7 +1092,7 @@ namespace futures {
                 {
                     return;
                 } else if constexpr (
-                    not is_lazy_continuable_v<
+                    !is_lazy_continuable_v<
                         typename sequence_type::
                             value_type> && setting_notifiers_as_continuations)
                 {
@@ -1620,8 +1619,8 @@ namespace futures {
                 }
             };
             // Simplest case, join futures in a new when_any_future
-            constexpr bool none_are_when_any = not first_is_when_any
-                                               && not second_is_when_any;
+            constexpr bool none_are_when_any = !first_is_when_any
+                                               && !second_is_when_any;
             if constexpr (none_are_when_any) {
                 return when_any(
                     maybe_make_future(std::forward<T1>(lhs)),

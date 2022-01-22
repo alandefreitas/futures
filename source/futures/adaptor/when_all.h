@@ -126,7 +126,7 @@ namespace futures {
         sequence_type
         get() {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
@@ -154,7 +154,7 @@ namespace futures {
         void
         wait() const {
             // Check if the sequence is valid
-            if (not valid()) {
+            if (!valid()) {
                 throw std::future_error(std::future_errc::no_state);
             }
             if constexpr (sequence_is_range) {
@@ -188,7 +188,7 @@ namespace futures {
                 }
 
                 // Check if the sequence is valid
-                if (not valid()) {
+                if (!valid()) {
                     throw std::future_error(std::future_errc::no_state);
                 }
                 using duration_type = std::chrono::duration<Rep, Period>;
@@ -626,7 +626,7 @@ namespace futures {
             auto maybe_make_future = [](auto &&f) {
                 if constexpr (
                     std::is_invocable_v<
-                        decltype(f)> && not is_future_v<decltype(f)>) {
+                        decltype(f)> && !is_future_v<decltype(f)>) {
                     // Convert to future with the default executor if not a
                     // future yet
                     return asio::post(
@@ -641,8 +641,8 @@ namespace futures {
                 }
             };
             // Simplest case, join futures in a new when_all_future
-            constexpr bool none_are_when_all = not first_is_when_all
-                                               && not second_is_when_all;
+            constexpr bool none_are_when_all = !first_is_when_all
+                                               && !second_is_when_all;
             if constexpr (none_are_when_all) {
                 return when_all(
                     maybe_make_future(std::forward<T1>(lhs)),

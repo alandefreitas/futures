@@ -13,7 +13,7 @@ TEST_CASE(TEST_CASE_PREFIX "Futures types") {
         for (int32_t i = 0; i < thread_pool_replicates; ++i) {
             auto fn = [] { return 2; };
             using Function = decltype(fn);
-            STATIC_REQUIRE(not std::is_invocable_v<std::decay_t<Function>, stop_token>);
+            STATIC_REQUIRE(!std::is_invocable_v<std::decay_t<Function>, stop_token>);
             cfuture<int32_t> r = async([] { return 2; });
             REQUIRE(r.valid());
             REQUIRE(r.get() == 2);

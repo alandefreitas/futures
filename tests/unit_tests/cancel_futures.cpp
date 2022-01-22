@@ -53,7 +53,7 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
         auto cont = [](int32_t count) { return static_cast<double>(count) * 1.2; };
         jcfuture<double> f2 = then(f, cont);
         REQUIRE_FALSE(f.valid());
-        REQUIRE(not is_ready(f2));
+        REQUIRE(!is_ready(f2));
         std::this_thread::sleep_for(std::chrono::milliseconds(60));
 
         SECTION("Stop from source copy") {

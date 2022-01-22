@@ -10,7 +10,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Shared stop source") {
     using namespace std::literals;
     jcfuture<int> f1 = async(
         [&](const stop_token &st, int count) {
-            while (not st.stop_requested()) {
+            while (!st.stop_requested()) {
                 std::this_thread::sleep_for(1ms);
                 ++count;
             }
@@ -33,7 +33,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Independent stop source") {
     using namespace std::literals;
     jcfuture<int> f1 = async(
         [&](const stop_token &st, int count) {
-            while (not st.stop_requested()) {
+            while (!st.stop_requested()) {
                 std::this_thread::sleep_for(1ms);
                 ++count;
             }
@@ -42,7 +42,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Independent stop source") {
         10);
 
     jcfuture<int> f2 = then(f1, [&](const stop_token &st, int count) {
-        while (not st.stop_requested()) {
+        while (!st.stop_requested()) {
             std::this_thread::sleep_for(1ms);
             ++count;
         }

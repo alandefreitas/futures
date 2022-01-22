@@ -117,7 +117,7 @@ namespace futures {
             class T,
             class Fun = std::plus<>,
             std::enable_if_t<
-                not is_executor_v<
+                !is_executor_v<
                     E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                 int> = 0>
         T
@@ -140,7 +140,7 @@ namespace futures {
             class S,
             class Fun = std::plus<>,
             std::enable_if_t<
-                not is_executor_v<
+                !is_executor_v<
                     E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
                 int> = 0>
         futures::detail::iter_value_t<I>
