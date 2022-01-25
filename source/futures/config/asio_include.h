@@ -25,21 +25,39 @@
 #endif
 
 /*
- * Check what versions of asio are available
+ * Check what versions of asio are available.
  *
- * We use __has_include<...> because we are targeting C++17
+ * We use __has_include<...> as a first alternative. If this fails,
+ * we use some common assumptions.
  *
  */
-#if __has_include(<asio.hpp>)
-#    define FUTURES_HAS_ASIO
+#if defined __has_include
+#    if __has_include(<asio.hpp>)
+#        define FUTURES_HAS_ASIO
+#    endif
 #endif
 
-#if __has_include(<boost/asio.hpp>)
-#    define FUTURES_HAS_BOOST_ASIO
+#if defined __has_include
+#    if __has_include(<boost/asio.hpp>)
+#        define FUTURES_HAS_BOOST_ASIO
+#    endif
 #endif
 
+// Recur to simple assumptions when not available.
 #if !defined(FUTURES_HAS_BOOST_ASIO) && !defined(FUTURES_HAS_ASIO)
-#    error Asio headers not found
+#    if FUTURES_PREFER_BOOST_DEPENDENCIES // user prefers boost -> assume boost
+#        define FUTURES_HAS_BOOST_ASIO
+#    elif FUTURES_PREFER_STANDALONE_DEPENDENCIES // user prefers asio -> asio
+#        define FUTURES_HAS_ASIO
+#    elif ASIO_STANDALONE // standalone is included -> assume standalone
+#        define FUTURES_HAS_ASIO
+#    elif BOOST_CXX_VERSION // boost is included -> assume boost
+#        define FUTURES_HAS_BOOST_ASIO
+#    elif FUTURES_STANDALONE // futures is standalone -> assume standalone
+#        define FUTURES_HAS_ASIO
+#    else // otherwise -> assume boost
+#        define FUTURES_HAS_BOOST_ASIO
+#    endif
 #endif
 
 /*

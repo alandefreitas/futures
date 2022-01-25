@@ -20,8 +20,8 @@ find_package(Threads)
 # the interface target. The user can later choose what to use.
 # When boost is not found, we do not provide an alternative FetchContents because
 # boost is a very large library.
-set(boost_VERSION_LOCK 1.76.0)
-set(boost_VERSION_REQUIREMENT ^1.76.0)
+set(boost_VERSION_LOCK 1.78.0)
+set(boost_VERSION_REQUIREMENT ^1.78.0)
 set_local_module_hints(boost ${boost_VERSION_LOCK} ${boost_VERSION_REQUIREMENT})
 
 # Look for lock version
