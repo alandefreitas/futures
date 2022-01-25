@@ -19,11 +19,12 @@
 /// \see https://en.cppreference.com/w/cpp/ranges/view
 ///
 
+#include <futures/algorithm/comparisons/equal_to.h>
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/policies.h>
+#include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
 #include <futures/executor/default_executor.h>
 #include <futures/executor/inline_executor.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <execution>
 
 namespace futures {
@@ -51,14 +52,19 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, P p, I first, S last, T f) const {
-            return Derived().run(ex, std::forward<P>(p), first, last, f);
+            return Derived().run(ex, p, first, last, f);
         }
 
         /// \overload execution policy instead of executor
@@ -72,19 +78,21 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                !is_executor_v<E> &&
+                is_execution_policy_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &, P p, I first, S last, T f) const {
-            return Derived().operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                f);
+            return Derived()
+                .run(make_policy_executor<E, I, S>(), p, first, last, f);
         }
 
         /// \overload Ranges
@@ -96,20 +104,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, P p, R &&r, T f) const {
-            return Derived().operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            return Derived()
+                .run(ex, p, std::begin(r), std::end(r), std::move(f));
         }
 
         /// \overload Iterators / default parallel executor
@@ -121,21 +129,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(P p, I first, S last, T f) const {
-            return Derived().operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                std::move(f));
+            return Derived()
+                .run(make_default_executor(), p, first, last, std::move(f));
         }
 
         /// \overload Ranges / default parallel executor
@@ -146,17 +153,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(P p, R &&r, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
-                std::forward<P>(p),
+                p,
                 std::begin(r),
                 std::end(r),
                 std::move(f));
@@ -171,14 +181,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, I first, S last, T f) const {
-            return Derived().operator()(
+            return operator()(
                 ex,
                 make_default_partitioner(first, last),
                 first,
@@ -194,14 +208,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, R &&r, T f) const {
-            return Derived().operator()(
+            return operator()(
                 ex,
                 make_default_partitioner(std::forward<R>(r)),
                 std::begin(r),
@@ -217,14 +235,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
+                // clang-format off
                 is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(I first, S last, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
                 make_default_partitioner(first, last),
                 first,
@@ -239,14 +261,17 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(R &&r, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
                 make_default_partitioner(r),
                 std::begin(r),

@@ -255,7 +255,7 @@ main(int argc, char **argv) {
         auto [file_path, exists_in_source]
             = find_file(c.include_paths, include_match[2]);
         double perc = static_cast<double>(search_begin - content.cbegin())
-                      / content.size();
+                      / static_cast<double>(content.size());
         if (c.show_progress) {
             std::cout << "- " << 100 * perc << "% - " << file_path << "\n";
         }
@@ -316,6 +316,9 @@ main(int argc, char **argv) {
         }
     }
 
+    if (c.show_progress) {
+        std::cout << "- 100% - Saving " << c.output << "\n";
+    }
     std::ofstream fout(c.output);
     fout << content;
 

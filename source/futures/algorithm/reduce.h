@@ -9,8 +9,8 @@
 #define FUTURES_REDUCE_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/algorithm/traits/binary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <numeric>
@@ -20,12 +20,19 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
 
     /// \brief Functor representing the overloads for the @ref reduce function
     class reduce_functor
+        : public binary_invoke_algorithm_functor<reduce_functor>
     {
-    public:
+        friend binary_invoke_algorithm_functor<reduce_functor>;
+
         /// \brief Complete overload of the reduce algorithm
+        ///
         /// The reduce algorithm is equivalent to a version std::accumulate
         /// where the binary operation is applied out of order. \tparam E
         /// Executor type \tparam P Partitioner type \tparam I Iterator type
@@ -43,19 +50,30 @@ namespace futures {
             class I,
             class S,
             class T,
-            class Fun = std::plus<>,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
+                int> = 0
+#endif
+            >
         T
-        operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+        run(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::reduce(first, last, i, f);
             }
@@ -79,381 +97,14 @@ namespace futures {
                 return f(lhs, i_rhs);
             }
         }
-
-        /// \overload default init value
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>())
-            const {
-            if (first != last) {
-                return operator()(
-                    ex,
-                    std::forward<P>(p),
-                    std::next(first),
-                    last,
-                    *first,
-                    f);
-            } else {
-                return futures::detail::iter_value_t<I>{};
-            }
-        }
-
-        /// \overload execution policy instead of executor
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>())
-            const {
-            return operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                i,
-                f);
-        }
-
-        /// \overload execution policy instead of executor / default init value
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &, P p, I first, S last, Fun f = std::plus<>())
-            const {
-            return operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                f);
-        }
-
-        /// \overload Ranges
-        template <
-            class E,
-            class P,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default init value
-        template <
-            class E,
-            class P,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default parallel executor
-        template <
-            class P,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default parallel executor / default init value
-        template <
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(P p, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default parallel executor
-        template <
-            class P,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default parallel executor / default init value
-        template <
-            class P,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default partitioner
-        template <
-            class E,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>())
-            const {
-            return operator()(
-                ex,
-                make_default_partitioner(first, last),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default partitioner / default init value
-        template <
-            class E,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default partitioner
-        template <
-            class E,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(std::forward<R>(r)),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default partitioner / default init value
-        template <
-            class E,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(std::forward<R>(r)),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default executor / default partitioner
-        template <
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(first, last),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default executor / default partitioner /
-        /// default init value
-        template <
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default executor / default partitioner
-        template <
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                futures::detail::input_range<
-                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(r),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default executor / default partitioner / default
-        /// init value
-        template <
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(r),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
     };
 
     /// \brief Sums up (or accumulate with a custom function) a range of
     /// elements, except out of order
     inline constexpr reduce_functor reduce;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_REDUCE_H

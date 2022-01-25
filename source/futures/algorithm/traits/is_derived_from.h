@@ -14,7 +14,16 @@
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 derived_from concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 derived_from concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -27,8 +36,10 @@ namespace futures {
               std::is_convertible<const volatile Derived*, const volatile Base*>>
     {};
 #endif
-    template <class T>
-    bool constexpr is_derived_from_v = is_derived_from<T>::value;
+    template <class Derived, class Base>
+    bool constexpr is_derived_from_v = is_derived_from<Derived, Base>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 

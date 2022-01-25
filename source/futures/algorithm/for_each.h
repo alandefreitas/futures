@@ -11,7 +11,6 @@
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
 #include <futures/futures/detail/empty_base.h>
 #include <execution>
@@ -19,6 +18,9 @@
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+    /** \addtogroup functions Functions
      *  @{
      */
 
@@ -75,7 +77,7 @@ namespace futures {
                 constexpr bool cannot_parallelize
                     = std::is_same_v<
                           Executor,
-                          inline_executor> || futures::detail::forward_iterator<I>;
+                          inline_executor> || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     std::for_each(first, last, f);
                 } else {
@@ -162,7 +164,7 @@ namespace futures {
             ,
             std::enable_if_t<
                 is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && is_sentinel_for_v<S, I> && is_indirectly_unary_invocable_v<Fun, I> && std::is_copy_constructible_v<Fun>,
                 int> = 0
 #endif
             >
@@ -185,7 +187,8 @@ namespace futures {
     /// \brief Applies a function to a range of elements
     inline constexpr for_each_functor for_each;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FOR_EACH_H

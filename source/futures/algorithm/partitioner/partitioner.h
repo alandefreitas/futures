@@ -2,11 +2,13 @@
 #define FUTURES_PARTITIONER_H
 
 #include <futures/algorithm/traits/is_input_iterator.h>
+#include <futures/algorithm/traits/is_input_range.h>
 #include <futures/algorithm/traits/is_range.h>
+#include <futures/algorithm/traits/is_sentinel_for.h>
+#include <futures/executor/default_executor.h>
 #include <futures/adaptor/detail/traits/has_get.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
-#include <thread>
 #include <algorithm>
+#include <thread>
 
 /// \file Default partitioners
 /// A partitioner is a light callable object that takes a pair of iterators and
@@ -67,15 +69,12 @@ namespace futures {
     class thread_partitioner
     {
         std::size_t min_grain_size_;
-        std::size_t num_threads_;
+        std::size_t num_threads_{hardware_concurrency()};
         std::thread::id last_thread_id_{};
 
     public:
         explicit thread_partitioner(std::size_t min_grain_size)
-            : min_grain_size_(min_grain_size),
-              num_threads_(std::max(
-                  std::thread::hardware_concurrency(),
-                  static_cast<unsigned int>(1))) {}
+            : min_grain_size_(min_grain_size) {}
 
         template <typename I, typename S>
         auto
@@ -134,7 +133,7 @@ namespace futures {
         class I,
         class S,
         std::enable_if_t<
-            is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
+            is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
             int> = 0>
     default_partitioner
     make_default_partitioner(I first, S last) {
@@ -147,7 +146,7 @@ namespace futures {
     /// The default partitioner type and parameters might change
     template <
         class R,
-        std::enable_if_t<futures::detail::input_range<R>, int> = 0>
+        std::enable_if_t<is_input_range_v<R>, int> = 0>
     default_partitioner
     make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
@@ -174,12 +173,13 @@ namespace futures {
     template <class T, class R, typename = void>
     struct is_range_partitioner : std::false_type
     {};
+
     template <class T, class R>
     struct is_range_partitioner<T, R, std::enable_if_t<is_range_v<R>>>
         : is_partitioner<
               T,
-              futures::detail::range_common_iterator_t<R>,
-              futures::detail::range_common_iterator_t<R>>
+              iterator_t<R>,
+              iterator_t<R>>
     {};
 
     template <class T, class R>

@@ -8,10 +8,11 @@
 #ifndef FUTURES_FIND_H
 #define FUTURES_FIND_H
 
+#include <futures/algorithm/comparisons/equal_to.h>
 #include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
 #include <futures/algorithm/traits/value_cmp_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
@@ -21,11 +22,13 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref find function
-    class find_functor
-        : public value_cmp_algorithm_functor<find_functor>
-    {
+    /** \addtogroup functions Functions
+     *  @{
+     */
 
+    /// \brief Functor representing the overloads for the @ref find function
+    class find_functor : public value_cmp_algorithm_functor<find_functor>
+    {
         friend value_cmp_algorithm_functor<find_functor>;
 
         /// \brief Complete overload of the find algorithm
@@ -45,26 +48,37 @@ namespace futures {
             class P,
             class I,
             class S,
-            class T,
+            class T
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         I
         run(const E &ex, P p, I first, S last, const T &v) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::find(first, last, v);
             }
 
             // Run find on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, v);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, v, this]() {
+                      return operator()(ex, p, middle, last, v);
+                  });
 
             // Run find on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, v);
@@ -93,7 +107,8 @@ namespace futures {
     /// \brief Finds the first element equal to another element
     inline constexpr find_functor find;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FIND_H

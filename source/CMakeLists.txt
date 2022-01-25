@@ -69,10 +69,10 @@ add_custom_command(
         "futures/futures.h"
         "futures/algorithm.h"
         --double_include
-        "futures/algorithm/detail/traits/range/detail/epilogue.h"
-        "futures/algorithm/detail/traits/range/detail/prologue.h"
         --output
         "${FUTURES_ROOT_DIR}/source/single-header/futures/futures.h"
+        --remove_leading_comments
+        --show_progress
         DEPENDS amalgamator ${FUTURES_HEADERS}
         COMMENT "Creating single-header library"
         VERBATIM

@@ -11,7 +11,16 @@
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 input_or_output_iterator
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 input_or_output_iterator
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -31,6 +40,9 @@ namespace futures {
     template <class T>
     bool constexpr is_input_or_output_iterator_v = is_input_or_output_iterator<
         T>::value;
+
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 

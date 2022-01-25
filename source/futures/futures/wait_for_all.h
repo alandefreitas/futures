@@ -8,8 +8,10 @@
 #ifndef FUTURES_WAIT_FOR_ALL_H
 #define FUTURES_WAIT_FOR_ALL_H
 
+#include <futures/algorithm/traits/iter_value.h>
+#include <futures/algorithm/traits/is_range.h>
+#include <futures/algorithm/traits/range_value.h>
 #include <futures/futures/traits/is_future.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <type_traits>
 
 namespace futures {
@@ -39,7 +41,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::
-            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+            enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
 #endif
         >
     void
@@ -67,13 +69,14 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::enable_if_t<
-            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
             int> = 0
 #endif
         >
     void
     wait_for_all(Range &&r) {
-        wait_for_all(std::begin(r), std::end(r));
+        using std::begin;
+        wait_for_all(begin(r), end(r));
     }
 
     /// \brief Wait for a sequence of futures to be ready

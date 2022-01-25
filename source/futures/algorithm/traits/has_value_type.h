@@ -11,7 +11,16 @@
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 has-member-value-type concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 has-member-value-type concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -28,6 +37,8 @@ namespace futures {
 #endif
     template <class T>
     bool constexpr has_value_type_v = has_value_type<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 

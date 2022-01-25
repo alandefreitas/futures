@@ -11,7 +11,6 @@
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
@@ -20,6 +19,10 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
 
     /// \brief Functor representing the overloads for the @ref find_if_not
     /// function
@@ -45,26 +48,38 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         I
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::find_if_not(first, last, f);
             }
 
             // Run find_if_not on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run find_if_not on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, f);
@@ -93,7 +108,8 @@ namespace futures {
     /// \brief Finds the first element not satisfying specific criteria
     inline constexpr find_if_not_functor find_if_not;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FIND_IF_NOT_H

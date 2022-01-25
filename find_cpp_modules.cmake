@@ -59,8 +59,8 @@ endif()
 # and the FindAsio.cmake script should look for these headers.
 
 # Set local hints, if any
-set(Asio_VERSION_LOCK 1.20.0)
-set(Asio_VERSION_REQUIREMENT ^1.20.0)
+set(Asio_VERSION_LOCK 1.21.0)
+set(Asio_VERSION_REQUIREMENT ^1.21.0)
 set_local_module_hints(asio ${Asio_VERSION_LOCK} ${Asio_VERSION_REQUIREMENT})
 
 # CMake options and hints
@@ -103,7 +103,8 @@ if (NOT Asio_FOUND)
     if (NOT Asio_SOURCE_DIR)
         message("Downloading asio...")
         FetchContent_Declare(Asio
-                URL https://sourceforge.net/projects/asio/files/asio/1.20.0%20%28Stable%29/asio-1.20.0.tar.bz2/download
+                GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+                GIT_TAG        asio-1-21-0
                 SOURCE_DIR ${Asio_SOURCE_HINT}
                 BINARY_DIR ${Asio_BINARY_HINT}
                 )
@@ -124,7 +125,11 @@ if (NOT Asio_FOUND)
     if (NOT EXISTS ${Asio_INSTALL_HINT})
         file(MAKE_DIRECTORY ${Asio_INSTALL_HINT})
     endif ()
-    file(INSTALL ${Asio_SOURCE_HINT}/include DESTINATION ${Asio_INSTALL_HINT})
+    if (EXISTS ${Asio_SOURCE_HINT}/include)
+        file(INSTALL ${Asio_SOURCE_HINT}/include DESTINATION ${Asio_INSTALL_HINT})
+    elseif(EXISTS ${Asio_SOURCE_HINT}/asio/include)
+        file(INSTALL ${Asio_SOURCE_HINT}/asio/include DESTINATION ${Asio_INSTALL_HINT})
+    endif()
 
     # Find package again
     # ASIO requires a custom FindAsio.cmake

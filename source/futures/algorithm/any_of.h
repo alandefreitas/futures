@@ -9,9 +9,9 @@
 #define FUTURES_ANY_OF_H
 
 #include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/algorithm/traits/is_forward_iterator.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
@@ -20,10 +20,12 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
 
     /// \brief Functor representing the overloads for the @ref any_of function
-    class any_of_functor
-        : public unary_invoke_algorithm_functor<any_of_functor>
+    class any_of_functor : public unary_invoke_algorithm_functor<any_of_functor>
     {
         friend unary_invoke_algorithm_functor<any_of_functor>;
 
@@ -48,26 +50,32 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
         bool
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+            if (bool is_always_sequential
+                = std::is_same_v<E, inline_executor> || is_forward_iterator_v<I>;
+                is_always_sequential || middle == last)
             {
                 return std::any_of(first, last, f);
             }
 
             // Run any_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run any_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -91,7 +99,8 @@ namespace futures {
     /// \brief Checks if a predicate is true for any of the elements in a range
     inline constexpr any_of_functor any_of;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_ANY_OF_H

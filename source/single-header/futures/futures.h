@@ -95,21 +95,37 @@
 #endif
 
 /*
- * Check what versions of asio are available
+ * Check what versions of asio are available.
  *
- * We use __has_include<...> because we are targeting C++17
+ * We use __has_include<...> as a first alternative. If this fails,
+ * we use some common assumptions.
  *
  */
-#if __has_include(<asio.hpp>)
-#    define FUTURES_HAS_ASIO
+#if defined __has_include
+#    if __has_include(<asio.hpp>)
+#        define FUTURES_HAS_ASIO
+#    endif
 #endif
 
-#if __has_include(<boost/asio.hpp>)
-#    define FUTURES_HAS_BOOST_ASIO
+#if defined __has_include
+#    if __has_include(<boost/asio.hpp>)
+#        define FUTURES_HAS_BOOST_ASIO
+#    endif
 #endif
 
+// Recur to simple assumptions when not available.
 #if !defined(FUTURES_HAS_BOOST_ASIO) && !defined(FUTURES_HAS_ASIO)
-#    error Asio headers not found
+#    if FUTURES_PREFER_BOOST_DEPENDENCIES
+#        define FUTURES_HAS_BOOST_ASIO
+#    elif FUTURES_PREFER_STANDALONE_DEPENDENCIES
+#        define FUTURES_HAS_ASIO
+#    elif BOOST_CXX_VERSION
+#        define FUTURES_HAS_BOOST_ASIO
+#    elif FUTURES_STANDALONE
+#        define FUTURES_HAS_ASIO
+#    else
+#        define FUTURES_HAS_BOOST_ASIO
+#    endif
 #endif
 
 /*
@@ -1420,7 +1436,16 @@ namespace futures::detail {
 #include <iterator>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20
      * "has-iterator-traits-value-type" concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1441,6 +1466,8 @@ namespace futures {
     template <class T>
     bool constexpr has_iterator_traits_value_type_v
         = has_iterator_traits_value_type<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
@@ -1466,7 +1493,15 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 has-member-element-type
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+    /** \brief A C++17 type trait equivalent to the C++20 has-member-element-type
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1484,6 +1519,8 @@ namespace futures {
 #endif
     template <class T>
     bool constexpr has_element_type_v = has_element_type<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
@@ -1499,7 +1536,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 has-member-value-type concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 has-member-value-type concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -1516,6 +1562,8 @@ namespace futures {
 #endif
     template <class T>
     bool constexpr has_value_type_v = has_value_type<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
@@ -1529,18 +1577,32 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 remove_cvref
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+    /** \brief A C++17 type trait equivalent to the C++20 remove_cvref
      * concept
      */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using remove_cvref = __see_below__;
+#else
     template <class T>
     struct remove_cvref
     {
         using type = std::remove_cv_t<std::remove_reference_t<T>>;
     };
+#endif
 
     template <class T>
     using remove_cvref_t = typename remove_cvref<T>::type;
 
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
@@ -1552,7 +1614,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 iter_value
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_value
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1626,6 +1697,9 @@ namespace futures {
     template <class T>
     using iter_value_t = typename iter_value<T>::type;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_VALUE_H
@@ -1636,7 +1710,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 iter_reference
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_reference
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1657,6 +1740,9 @@ namespace futures {
     template <class T>
     using iter_reference_t = typename iter_reference<T>::type;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
@@ -1673,7 +1759,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 iter_rvalue_reference
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_rvalue_reference
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1693,6 +1788,9 @@ namespace futures {
     template <class T>
     using iter_rvalue_reference_t = typename iter_rvalue_reference<T>::type;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_H
@@ -1703,7 +1801,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 indirectly_readable
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 indirectly_readable
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1726,6 +1833,8 @@ namespace futures {
 #endif
     template <class T>
     bool constexpr is_indirectly_readable_v = is_indirectly_readable<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
@@ -1739,7 +1848,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 input_or_output_iterator
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 input_or_output_iterator
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -1760,6 +1878,9 @@ namespace futures {
     bool constexpr is_input_or_output_iterator_v = is_input_or_output_iterator<
         T>::value;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_H
@@ -1768,7 +1889,16 @@ namespace futures {
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 input_iterator concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 input_iterator concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -1783,20 +1913,31 @@ namespace futures {
 #endif
     template <class T>
     bool constexpr is_input_iterator_v = is_input_iterator<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
 
 // #include <futures/algorithm/traits/is_range.h>
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
-#define FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_RANGE_H
 
 // #include <type_traits>
 
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 range concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 range concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -1810,16 +1951,22 @@ namespace futures {
     struct is_range<
         T,
         std::void_t<
+            // clang-format off
             decltype(*begin(std::declval<T>())),
-            decltype(*end(std::declval<T>()))>> : std::true_type
+            decltype(*end(std::declval<T>()))
+            // clang-format on
+            >> : std::true_type
     {};
 #endif
     template <class T>
     bool constexpr is_range_v = is_range<T>::value;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_RANGE_H
 
 // #include <futures/futures/detail/empty_base.h>
 
@@ -7360,12683 +7507,115 @@ namespace futures {
 #ifndef FUTURES_WAIT_FOR_ALL_H
 #define FUTURES_WAIT_FOR_ALL_H
 
+// #include <futures/algorithm/traits/iter_value.h>
+
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/range_value.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
+#define FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
+
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/iter_value.h>
+
+// #include <futures/algorithm/traits/iterator.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_ITERATOR_T_H
+#define FUTURES_ALGORITHM_TRAITS_ITERATOR_T_H
+
+// #include <futures/algorithm/traits/has_element_type.h>
+
+// #include <futures/algorithm/traits/has_iterator_traits_value_type.h>
+
+// #include <futures/algorithm/traits/has_value_type.h>
+
+// #include <futures/algorithm/traits/remove_cvref.h>
+
+// #include <iterator>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iterator_t
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using iterator = __see_below__;
+#else
+    template <class T, class = void>
+    struct iterator
+    {};
+
+    template <class T>
+    struct iterator<T, std::void_t<decltype(begin(std::declval<T&>()))>>
+    {
+        using type = decltype(begin(std::declval<T&>()));
+    };
+#endif
+    template <class T>
+    using iterator_t = typename iterator<T>::type;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_ITERATOR_T_H
+
+// #include <iterator>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 range_value
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class R>
+    using range_value = __see_below__;
+#else
+    template <class R, class = void>
+    struct range_value
+    {};
+
+    template <class R>
+    struct range_value<R, std::enable_if_t<is_range_v<R>>>
+    {
+        using type = iter_value_t<iterator_t<R>>;
+    };
+#endif
+    template <class R>
+    using range_value_t = typename range_value<R>::type;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
+
 // #include <futures/futures/traits/is_future.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-#ifndef FUTURES_RANGES_RANGE_CONCEPTS_HPP
-#define FUTURES_RANGES_RANGE_CONCEPTS_HPP
-
-#include <initializer_list>
-// #include <type_traits>
-
-// #include <utility>
-
-
-#ifdef __has_include
-#if __has_include(<span>)
-namespace std {
-    template <class T, std::size_t Extent> class span;
-}
-#endif
-#if __has_include(<string_view>)
-#include <string_view>
-#endif
-#endif
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-#ifndef META_HPP
-#define META_HPP
-
-// #include <cstddef>
-
-// #include <futures/algorithm/detail/traits/range/meta/meta_fwd.h>
-#ifndef META_FWD_HPP
-#define META_FWD_HPP
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-#ifdef __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-variable-declarations"
-#endif
-
-#define META_CXX_STD_14 201402L
-#define META_CXX_STD_17 201703L
-
-#if defined(_MSVC_LANG) && _MSVC_LANG > __cplusplus // Older clangs define _MSVC_LANG < __cplusplus
-#define META_CXX_VER _MSVC_LANG
-#else
-#define META_CXX_VER __cplusplus
-#endif
-
-#if defined(__apple_build_version__) || defined(__clang__)
-#if defined(__apple_build_version__) || (defined(__clang__) && __clang_major__ < 6)
-#define META_WORKAROUND_LLVM_28385 // https://llvm.org/bugs/show_bug.cgi?id=28385
-#endif
-
-#elif defined(_MSC_VER)
-#define META_HAS_MAKE_INTEGER_SEQ 1
-#if _MSC_VER < 1920
-#define META_WORKAROUND_MSVC_702792 // Bogus C4018 comparing constant expressions with dependent type
-#define META_WORKAROUND_MSVC_703656 // ICE with pack expansion inside decltype in alias template
-#endif
-
-#if _MSC_VER < 1921
-#define META_WORKAROUND_MSVC_756112 // fold expression + alias templates in template argument
-#endif
-
-#elif defined(__GNUC__)
-#define META_WORKAROUND_GCC_86356 // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86356
-#if __GNUC__ < 8
-#define META_WORKAROUND_GCC_UNKNOWN1 // Older GCCs don't like fold + debug + -march=native
-#endif
-#if __GNUC__ == 5 && __GNUC_MINOR__ == 1
-#define META_WORKAROUND_GCC_66405 // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66405
-#endif
-#if __GNUC__ < 5
-#define META_WORKAROUND_CWG_1558 // https://wg21.link/cwg1558
-#endif
-#endif
-
-#ifndef META_CXX_VARIABLE_TEMPLATES
-#ifdef __cpp_variable_templates
-#define META_CXX_VARIABLE_TEMPLATES __cpp_variable_templates
-#else
-#define META_CXX_VARIABLE_TEMPLATES (META_CXX_VER >= META_CXX_STD_14)
-#endif
-#endif
-
-#ifndef META_CXX_INLINE_VARIABLES
-#ifdef __cpp_inline_variables
-#define META_CXX_INLINE_VARIABLES __cpp_inline_variables
-#else
-#define META_CXX_INLINE_VARIABLES (META_CXX_VER >= META_CXX_STD_17)
-#endif
-#endif
-
-#ifndef META_INLINE_VAR
-#if META_CXX_INLINE_VARIABLES
-#define META_INLINE_VAR inline
-#else
-#define META_INLINE_VAR
-#endif
-#endif
-
-#ifndef META_CXX_INTEGER_SEQUENCE
-#ifdef __cpp_lib_integer_sequence
-#define META_CXX_INTEGER_SEQUENCE __cpp_lib_integer_sequence
-#else
-#define META_CXX_INTEGER_SEQUENCE (META_CXX_VER >= META_CXX_STD_14)
-#endif
-#endif
-
-#ifndef META_HAS_MAKE_INTEGER_SEQ
-#ifdef __has_builtin
-#if __has_builtin(__make_integer_seq)
-#define META_HAS_MAKE_INTEGER_SEQ 1
-#endif
-#endif
-#endif
-#ifndef META_HAS_MAKE_INTEGER_SEQ
-#define META_HAS_MAKE_INTEGER_SEQ 0
-#endif
-
-#ifndef META_HAS_TYPE_PACK_ELEMENT
-#ifdef __has_builtin
-#if __has_builtin(__type_pack_element)
-#define META_HAS_TYPE_PACK_ELEMENT 1
-#endif
-#endif
-#endif
-#ifndef META_HAS_TYPE_PACK_ELEMENT
-#define META_HAS_TYPE_PACK_ELEMENT 0
-#endif
-
-#if !defined(META_DEPRECATED) && !defined(META_DISABLE_DEPRECATED_WARNINGS)
-#if defined(__cpp_attribute_deprecated) || META_CXX_VER >= META_CXX_STD_14
-#define META_DEPRECATED(...) [[deprecated(__VA_ARGS__)]]
-#elif defined(__clang__) || defined(__GNUC__)
-#define META_DEPRECATED(...) __attribute__((deprecated(__VA_ARGS__)))
-#endif
-#endif
-#ifndef META_DEPRECATED
-#define META_DEPRECATED(...)
-#endif
-
-#ifndef META_CXX_FOLD_EXPRESSIONS
-#ifdef __cpp_fold_expressions
-#define META_CXX_FOLD_EXPRESSIONS __cpp_fold_expressions
-#else
-#define META_CXX_FOLD_EXPRESSIONS (META_CXX_VER >= META_CXX_STD_17)
-#endif
-#endif
-
-#if META_CXX_FOLD_EXPRESSIONS
-#if !META_CXX_VARIABLE_TEMPLATES
-#error Fold expressions, but no variable templates?
-#endif
-#endif
-
-#if (defined(__cpp_concepts) && __cpp_concepts > 0) || defined(META_DOXYGEN_INVOKED)
-#if !META_CXX_VARIABLE_TEMPLATES
-#error Concepts, but no variable templates?
-#endif
-#if __cpp_concepts <= 201507L && !defined(META_DOXYGEN_INVOKED)
-#define META_CONCEPT concept bool
-// TS concepts subsumption barrier for atomic expressions
-#define META_CONCEPT_BARRIER(...) ::futures::detail::meta::detail::barrier<__VA_ARGS__>
-#else
-#define META_CONCEPT concept
-#define META_CONCEPT_BARRIER(...) __VA_ARGS__
-#endif
-#define META_TYPE_CONSTRAINT(...) __VA_ARGS__
-#else
-#define META_TYPE_CONSTRAINT(...) typename
-#endif
-
-#if (defined(__cpp_lib_type_trait_variable_templates) && __cpp_lib_type_trait_variable_templates > 0)
-#define META_CXX_TRAIT_VARIABLE_TEMPLATES 1
-#else
-#define META_CXX_TRAIT_VARIABLE_TEMPLATES 0
-#endif
-
-#if defined(__clang__)
-#define META_IS_SAME(...) __is_same(__VA_ARGS__)
-#elif defined(__GNUC__) && __GNUC__ >= 6
-#define META_IS_SAME(...) __is_same_as(__VA_ARGS__)
-#elif META_CXX_TRAIT_VARIABLE_TEMPLATES
-#define META_IS_SAME(...) std::is_same_v<__VA_ARGS__>
-#else
-#define META_IS_SAME(...) std::is_same<__VA_ARGS__>::value
-#endif
-
-#if defined(__GNUC__) || defined(_MSC_VER)
-#define META_IS_BASE_OF(...) __is_base_of(__VA_ARGS__)
-#elif META_CXX_TRAIT_VARIABLE_TEMPLATES
-#define META_IS_BASE_OF(...) std::is_base_of_v<__VA_ARGS__>
-#else
-#define META_IS_BASE_OF(...) std::is_base_of<__VA_ARGS__>::value
-#endif
-
-#if defined(__clang__) || defined(_MSC_VER) || (defined(__GNUC__) && __GNUC__ >= 8)
-#define META_IS_CONSTRUCTIBLE(...) __is_constructible(__VA_ARGS__)
-#elif META_CXX_TRAIT_VARIABLE_TEMPLATES
-#define META_IS_CONSTRUCTIBLE(...) std::is_constructible_v<__VA_ARGS__>
-#else
-#define META_IS_CONSTRUCTIBLE(...) std::is_constructible<__VA_ARGS__>::value
-#endif
-
-/// \cond
-// Non-portable forward declarations of standard containers
-#ifdef _LIBCPP_VERSION
-#define META_BEGIN_NAMESPACE_STD _LIBCPP_BEGIN_NAMESPACE_STD
-#define META_END_NAMESPACE_STD _LIBCPP_END_NAMESPACE_STD
-#elif defined(_MSVC_STL_VERSION)
-#define META_BEGIN_NAMESPACE_STD _STD_BEGIN
-#define META_END_NAMESPACE_STD _STD_END
-#else
-#define META_BEGIN_NAMESPACE_STD namespace std {
-#define META_END_NAMESPACE_STD }
-#endif
-
-#if defined(__GLIBCXX__)
-#define META_BEGIN_NAMESPACE_VERSION _GLIBCXX_BEGIN_NAMESPACE_VERSION
-#define META_END_NAMESPACE_VERSION _GLIBCXX_END_NAMESPACE_VERSION
-#define META_BEGIN_NAMESPACE_CONTAINER _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
-#define META_END_NAMESPACE_CONTAINER _GLIBCXX_END_NAMESPACE_CONTAINER
-#else
-#define META_BEGIN_NAMESPACE_VERSION
-#define META_END_NAMESPACE_VERSION
-#define META_BEGIN_NAMESPACE_CONTAINER
-#define META_END_NAMESPACE_CONTAINER
-#endif
-
-#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 4000
-#define META_TEMPLATE_VIS _LIBCPP_TEMPLATE_VIS
-#elif defined(_LIBCPP_VERSION)
-#define META_TEMPLATE_VIS _LIBCPP_TYPE_VIS_ONLY
-#else
-#define META_TEMPLATE_VIS
-#endif
-/// \endcond
-
-namespace futures::detail::meta {
-#if META_CXX_INTEGER_SEQUENCE
-    using std::integer_sequence;
-#else
-    template <typename T, T...> struct integer_sequence;
-#endif
-
-    template <typename... Ts> struct list;
-
-    template <typename T> struct id;
-
-    template <template <typename...> class> struct quote;
-
-    template <typename T, template <T...> class F> struct quote_i;
-
-    template <template <typename...> class C, typename... Ts> struct defer;
-
-    template <typename T, template <T...> class C, T... Is> struct defer_i;
-
-#if META_CXX_VARIABLE_TEMPLATES || defined(META_DOXYGEN_INVOKED)
-    /// is_v
-    /// Test whether a type \p T is an instantiation of class
-    /// template \p C.
-    /// \ingroup trait
-    template <typename, template <typename...> class> META_INLINE_VAR constexpr bool is_v = false;
-    template <typename... Ts, template <typename...> class C> META_INLINE_VAR constexpr bool is_v<C<Ts...>, C> = true;
-#endif
-
-#ifdef META_CONCEPT
-    namespace ranges_detail {
-        template <bool B> META_INLINE_VAR constexpr bool barrier = B;
-
-        template <class T, T> struct require_constant; // not defined
-    }                                                  // namespace ranges_detail
-
-    template <typename...> META_CONCEPT is_true = META_CONCEPT_BARRIER(true);
-
-    template <typename T, typename U> META_CONCEPT same_as = META_CONCEPT_BARRIER(META_IS_SAME(T, U));
-
-    template <template <typename...> class C, typename... Ts> META_CONCEPT valid = requires { typename C<Ts...>; };
-
-    template <typename T, template <T...> class C, T... Is> META_CONCEPT valid_i = requires { typename C<Is...>; };
-
-    template <typename T> META_CONCEPT trait = requires { typename T::type; };
-
-    template <typename T> META_CONCEPT invocable = requires { typename quote<T::template invoke>; };
-
-    template <typename T> META_CONCEPT list_like = is_v<T, list>;
-
-    // clang-format off
-    template <typename T>
-    META_CONCEPT integral = requires
-    {
-        typename T::type;
-        typename T::value_type;
-        typename T::type::value_type;
-    }
-    && same_as<typename T::value_type, typename T::type::value_type>
-#if META_CXX_TRAIT_VARIABLE_TEMPLATES
-    && std::is_integral_v<typename T::value_type>
-#else
-    && std::is_integral<typename T::value_type>::value
-#endif
-
-    && requires
-    {
-        // { T::value } -> same_as<const typename T::value_type&>;
-        T::value;
-        requires same_as<decltype(T::value), const typename T::value_type>;
-        typename ranges_detail::require_constant<decltype(T::value), T::value>;
-
-        // { T::type::value } -> same_as<const typename T::value_type&>;
-        T::type::value;
-        requires same_as<decltype(T::type::value), const typename T::value_type>;
-        typename ranges_detail::require_constant<decltype(T::type::value), T::type::value>;
-        requires T::value == T::type::value;
-
-        // { T{}() } -> same_as<typename T::value_type>;
-        T{}();
-        requires same_as<decltype(T{}()), typename T::value_type>;
-        typename ranges_detail::require_constant<decltype(T{}()), T{}()>;
-        requires T{}() == T::value;
-
-        // { T{} } -> typename T::value_type;
-    };
-        // clang-format on
-#endif // META_CONCEPT
-
-    namespace extension {
-        template <META_TYPE_CONSTRAINT(invocable) F, typename L> struct apply;
-    }
-} // namespace futures::detail::meta
-
-#ifdef __clang__
-#pragma GCC diagnostic pop
-#endif
-
-#endif
-
-// #include <initializer_list>
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-#ifdef __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wdocumentation-deprecated-sync"
-#pragma GCC diagnostic ignored "-Wmissing-variable-declarations"
-#endif
-
-/// \defgroup meta Meta
-///
-/// A tiny metaprogramming library
-
-/// \defgroup trait Trait
-/// Trait invocation/composition.
-/// \ingroup meta
-
-/// \defgroup invocation Invocation
-/// Trait invocation
-/// \ingroup trait
-
-/// \defgroup composition Composition
-/// Trait composition
-/// \ingroup trait
-
-/// \defgroup logical Logical
-/// Logical operations
-/// \ingroup meta
-
-/// \defgroup algorithm Algorithms
-/// Algorithms.
-/// \ingroup meta
-
-/// \defgroup query Query/Search
-/// Query and search algorithms
-/// \ingroup algorithm
-
-/// \defgroup transformation Transformation
-/// Transformation algorithms
-/// \ingroup algorithm
-
-/// \defgroup runtime Runtime
-/// Runtime algorithms
-/// \ingroup algorithm
-
-/// \defgroup datatype Datatype
-/// Datatypes.
-/// \ingroup meta
-
-/// \defgroup list list_like
-/// \ingroup datatype
-
-/// \defgroup integral Integer sequence
-/// Equivalent to C++14's `std::integer_sequence`
-/// \ingroup datatype
-
-/// \defgroup extension Extension
-/// Extend meta with your own datatypes.
-/// \ingroup datatype
-
-/// \defgroup math Math
-/// Integral constant arithmetic.
-/// \ingroup meta
-
-/// \defgroup lazy_trait lazy
-/// \ingroup trait
-
-/// \defgroup lazy_invocation lazy
-/// \ingroup invocation
-
-/// \defgroup lazy_composition lazy
-/// \ingroup composition
-
-/// \defgroup lazy_logical lazy
-/// \ingroup logical
-
-/// \defgroup lazy_query lazy
-/// \ingroup query
-
-/// \defgroup lazy_transformation lazy
-/// \ingroup transformation
-
-/// \defgroup lazy_list lazy
-/// \ingroup list
-
-/// \defgroup lazy_datatype lazy
-/// \ingroup datatype
-
-/// \defgroup lazy_math lazy
-/// \ingroup math
-
-/// Tiny metaprogramming library
-namespace futures::detail::meta {
-    namespace ranges_detail {
-        /// Returns a \p T nullptr
-        template <typename T> constexpr T *_nullptr_v() { return nullptr; }
-
-#if META_CXX_VARIABLE_TEMPLATES
-        template <typename T> META_INLINE_VAR constexpr T *nullptr_v = nullptr;
-#endif
-    } // namespace ranges_detail
-
-    /// An empty type.
-    /// \ingroup datatype
-    struct nil_ {};
-
-    /// Type alias for \p T::type.
-    /// \ingroup invocation
-    template <META_TYPE_CONSTRAINT(trait) T> using _t = typename T::type;
-
-#if META_CXX_VARIABLE_TEMPLATES || defined(META_DOXYGEN_INVOKED)
-    /// Variable alias for \c T::type::value
-    /// \note Requires C++14 or greater.
-    /// \ingroup invocation
-    template <META_TYPE_CONSTRAINT(integral) T> constexpr typename T::type::value_type _v = T::type::value;
-#endif
-
-    /// Lazy versions of meta actions
-    namespace lazy {
-        /// \sa `futures::detail::meta::_t`
-        /// \ingroup lazy_invocation
-        template <typename T> using _t = defer<_t, T>;
-    } // namespace lazy
-
-    /// An integral constant wrapper for \c std::size_t.
-    /// \ingroup integral
-    template <std::size_t N> using size_t = std::integral_constant<std::size_t, N>;
-
-    /// An integral constant wrapper for \c bool.
-    /// \ingroup integral
-    template <bool B> using bool_ = std::integral_constant<bool, B>;
-
-    /// An integral constant wrapper for \c int.
-    /// \ingroup integral
-    template <int I> using int_ = std::integral_constant<int, I>;
-
-    /// An integral constant wrapper for \c char.
-    /// \ingroup integral
-    template <char Ch> using char_ = std::integral_constant<char, Ch>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // Math operations
-    /// An integral constant wrapper around the result of incrementing the wrapped integer \c
-    /// T::type::value.
-    template <META_TYPE_CONSTRAINT(integral) T>
-    using inc = std::integral_constant<decltype(T::type::value + 1), T::type::value + 1>;
-
-    /// An integral constant wrapper around the result of decrementing the wrapped integer \c
-    /// T::type::value.
-    template <META_TYPE_CONSTRAINT(integral) T>
-    using dec = std::integral_constant<decltype(T::type::value - 1), T::type::value - 1>;
-
-    /// An integral constant wrapper around the result of adding the two wrapped integers
-    /// \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using plus = std::integral_constant<decltype(T::type::value + U::type::value), T::type::value + U::type::value>;
-
-    /// An integral constant wrapper around the result of subtracting the two wrapped integers
-    /// \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using minus = std::integral_constant<decltype(T::type::value - U::type::value), T::type::value - U::type::value>;
-
-    /// An integral constant wrapper around the result of multiplying the two wrapped integers
-    /// \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using multiplies =
-        std::integral_constant<decltype(T::type::value * U::type::value), T::type::value * U::type::value>;
-
-    /// An integral constant wrapper around the result of dividing the two wrapped integers \c
-    /// T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using divides = std::integral_constant<decltype(T::type::value / U::type::value), T::type::value / U::type::value>;
-
-    /// An integral constant wrapper around the result of negating the wrapped integer
-    /// \c T::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T>
-    using negate = std::integral_constant<decltype(-T::type::value), -T::type::value>;
-
-    /// An integral constant wrapper around the remainder of dividing the two wrapped integers
-    /// \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using modulus = std::integral_constant<decltype(T::type::value % U::type::value), T::type::value % U::type::value>;
-
-    /// A Boolean integral constant wrapper around the result of comparing \c T::type::value and
-    /// \c U::type::value for equality.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using equal_to = bool_<T::type::value == U::type::value>;
-
-    /// A Boolean integral constant wrapper around the result of comparing \c T::type::value and
-    /// \c U::type::value for inequality.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using not_equal_to = bool_<T::type::value != U::type::value>;
-
-    /// A Boolean integral constant wrapper around \c true if \c T::type::value is greater than
-    /// \c U::type::value; \c false, otherwise.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using greater = bool_<(T::type::value > U::type::value)>;
-
-    /// A Boolean integral constant wrapper around \c true if \c T::type::value is less than \c
-    /// U::type::value; \c false, otherwise.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using less = bool_<(T::type::value < U::type::value)>;
-
-    /// A Boolean integral constant wrapper around \c true if \c T::type::value is greater than
-    /// or equal to \c U::type::value; \c false, otherwise.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using greater_equal = bool_<(T::type::value >= U::type::value)>;
-
-    /// A Boolean integral constant wrapper around \c true if \c T::type::value is less than or
-    /// equal to \c U::type::value; \c false, otherwise.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using less_equal = bool_<(T::type::value <= U::type::value)>;
-
-    /// An integral constant wrapper around the result of bitwise-and'ing the two wrapped
-    /// integers \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using bit_and = std::integral_constant<decltype(T::type::value & U::type::value), T::type::value & U::type::value>;
-
-    /// An integral constant wrapper around the result of bitwise-or'ing the two wrapped
-    /// integers \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using bit_or = std::integral_constant<decltype(T::type::value | U::type::value), T::type::value | U::type::value>;
-
-    /// An integral constant wrapper around the result of bitwise-exclusive-or'ing the two
-    /// wrapped integers \c T::type::value and \c U::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T, META_TYPE_CONSTRAINT(integral) U>
-    using bit_xor = std::integral_constant<decltype(T::type::value ^ U::type::value), T::type::value ^ U::type::value>;
-
-    /// An integral constant wrapper around the result of bitwise-complementing the wrapped
-    /// integer \c T::type::value.
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral) T>
-    using bit_not = std::integral_constant<decltype(~T::type::value), ~T::type::value>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::int'
-        /// \ingroup lazy_math
-        template <typename T> using inc = defer<inc, T>;
-
-        /// \sa 'futures::detail::meta::dec'
-        /// \ingroup lazy_math
-        template <typename T> using dec = defer<dec, T>;
-
-        /// \sa 'futures::detail::meta::plus'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using plus = defer<plus, T, U>;
-
-        /// \sa 'futures::detail::meta::minus'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using minus = defer<minus, T, U>;
-
-        /// \sa 'futures::detail::meta::multiplies'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using multiplies = defer<multiplies, T, U>;
-
-        /// \sa 'futures::detail::meta::divides'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using divides = defer<divides, T, U>;
-
-        /// \sa 'futures::detail::meta::negate'
-        /// \ingroup lazy_math
-        template <typename T> using negate = defer<negate, T>;
-
-        /// \sa 'futures::detail::meta::modulus'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using modulus = defer<modulus, T, U>;
-
-        /// \sa 'futures::detail::meta::equal_to'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using equal_to = defer<equal_to, T, U>;
-
-        /// \sa 'futures::detail::meta::not_equal_t'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using not_equal_to = defer<not_equal_to, T, U>;
-
-        /// \sa 'futures::detail::meta::greater'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using greater = defer<greater, T, U>;
-
-        /// \sa 'futures::detail::meta::less'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using less = defer<less, T, U>;
-
-        /// \sa 'futures::detail::meta::greater_equal'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using greater_equal = defer<greater_equal, T, U>;
-
-        /// \sa 'futures::detail::meta::less_equal'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using less_equal = defer<less_equal, T, U>;
-
-        /// \sa 'futures::detail::meta::bit_and'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using bit_and = defer<bit_and, T, U>;
-
-        /// \sa 'futures::detail::meta::bit_or'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using bit_or = defer<bit_or, T, U>;
-
-        /// \sa 'futures::detail::meta::bit_xor'
-        /// \ingroup lazy_math
-        template <typename T, typename U> using bit_xor = defer<bit_xor, T, U>;
-
-        /// \sa 'futures::detail::meta::bit_not'
-        /// \ingroup lazy_math
-        template <typename T> using bit_not = defer<bit_not, T>;
-    } // namespace lazy
-
-    /// \cond
-    namespace ranges_detail {
-        enum class indices_strategy_ { done, repeat, recurse };
-
-        constexpr indices_strategy_ strategy_(std::size_t cur, std::size_t end) {
-            return cur >= end       ? indices_strategy_::done
-                   : cur * 2 <= end ? indices_strategy_::repeat
-                                    : indices_strategy_::recurse;
-        }
-
-        template <typename T> constexpr std::size_t range_distance_(T begin, T end) {
-            return begin <= end ? static_cast<std::size_t>(end - begin)
-                                : throw "The start of the integer_sequence must not be "
-                                        "greater than the end";
-        }
-
-        template <std::size_t End, typename State, indices_strategy_ Status_> struct make_indices_ {
-            using type = State;
-        };
-
-        template <typename T, T, typename> struct coerce_indices_ {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // integer_sequence
-#if !META_CXX_INTEGER_SEQUENCE
-    /// A container for a sequence of compile-time integer constants.
-    /// \ingroup integral
-    template <typename T, T... Is> struct integer_sequence {
-        using value_type = T;
-        /// \return `sizeof...(Is)`
-        static constexpr std::size_t size() noexcept { return sizeof...(Is); }
-    };
-#endif
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // index_sequence
-    /// A container for a sequence of compile-time integer constants of type
-    /// \c std::size_t
-    /// \ingroup integral
-    template <std::size_t... Is> using index_sequence = integer_sequence<std::size_t, Is...>;
-
-#if META_HAS_MAKE_INTEGER_SEQ && !defined(META_DOXYGEN_INVOKED)
-    // Implement make_integer_sequence and make_index_sequence with the
-    // __make_integer_seq builtin on compilers that provide it. (Redirect
-    // through decltype to workaround suspected clang bug.)
-    /// \cond
-    namespace ranges_detail {
-        template <typename T, T N> __make_integer_seq<integer_sequence, T, N> make_integer_sequence_();
-    }
-    /// \endcond
-
-    template <typename T, T N> using make_integer_sequence = decltype(ranges_detail::make_integer_sequence_<T, N>());
-
-    template <std::size_t N> using make_index_sequence = make_integer_sequence<std::size_t, N>;
-#else
-    /// Generate \c index_sequence containing integer constants [0,1,2,...,N-1].
-    /// \par Complexity
-    /// \f$ O(log(N)) \f$.
-    /// \ingroup integral
-    template <std::size_t N>
-    using make_index_sequence = _t<ranges_detail::make_indices_<N, index_sequence<0>, ranges_detail::strategy_(1, N)>>;
-
-    /// Generate \c integer_sequence containing integer constants [0,1,2,...,N-1].
-    /// \par Complexity
-    /// \f$ O(log(N)) \f$.
-    /// \ingroup integral
-    template <typename T, T N>
-    using make_integer_sequence = _t<ranges_detail::coerce_indices_<T, 0, make_index_sequence<static_cast<std::size_t>(N)>>>;
-#endif
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // integer_range
-    /// Makes the integer sequence <tt>[From, To)</tt>.
-    /// \par Complexity
-    /// \f$ O(log(To - From)) \f$.
-    /// \ingroup integral
-    template <typename T, T From, T To>
-    using integer_range = _t<ranges_detail::coerce_indices_<T, From, make_index_sequence<ranges_detail::range_distance_(From, To)>>>;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename, typename> struct concat_indices_ {};
-
-        template <std::size_t... Is, std::size_t... Js>
-        struct concat_indices_<index_sequence<Is...>, index_sequence<Js...>> {
-            using type = index_sequence<Is..., (Js + sizeof...(Is))...>;
-        };
-
-        template <> struct make_indices_<0u, index_sequence<0>, indices_strategy_::done> {
-            using type = index_sequence<>;
-        };
-
-        template <std::size_t End, std::size_t... Values>
-        struct make_indices_<End, index_sequence<Values...>, indices_strategy_::repeat>
-            : make_indices_<End, index_sequence<Values..., (Values + sizeof...(Values))...>,
-                            ranges_detail::strategy_(sizeof...(Values) * 2, End)> {};
-
-        template <std::size_t End, std::size_t... Values>
-        struct make_indices_<End, index_sequence<Values...>, indices_strategy_::recurse>
-            : concat_indices_<index_sequence<Values...>, make_index_sequence<End - sizeof...(Values)>> {};
-
-        template <typename T, T Offset, std::size_t... Values>
-        struct coerce_indices_<T, Offset, index_sequence<Values...>> {
-            using type = integer_sequence<T, static_cast<T>(static_cast<T>(Values) + Offset)...>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Evaluate the invocable \p Fn with the arguments \p Args.
-    /// \ingroup invocation
-    template <META_TYPE_CONSTRAINT(invocable) Fn, typename... Args>
-    using invoke = typename Fn::template invoke<Args...>;
-
-    /// Lazy versions of meta actions
-    namespace lazy {
-        /// \sa `futures::detail::meta::invoke`
-        /// \ingroup lazy_invocation
-        template <typename Fn, typename... Args> using invoke = defer<invoke, Fn, Args...>;
-    } // namespace lazy
-
-    /// A trait that always returns its argument \p T. It is also an invocable
-    /// that always returns \p T.
-    /// \ingroup trait
-    /// \ingroup invocation
-    template <typename T> struct id {
-#if defined(META_WORKAROUND_CWG_1558) && !defined(META_DOXYGEN_INVOKED)
-        // Redirect through decltype for compilers that have not
-        // yet implemented CWG 1558:
-        static id impl(void *);
-
-        template <typename... Ts> using invoke = _t<decltype(id::impl(static_cast<list<Ts...> *>(nullptr)))>;
-#else
-        template <typename...> using invoke = T;
-#endif
-
-        using type = T;
-    };
-
-    /// An alias for type \p T. Useful in non-deduced contexts.
-    /// \ingroup trait
-    template <typename T> using id_t = _t<id<T>>;
-
-    namespace lazy {
-        /// \sa `futures::detail::meta::id`
-        /// \ingroup lazy_trait
-        /// \ingroup lazy_invocation
-        template <typename T> using id = defer<id, T>;
-    } // namespace lazy
-
-    /// An alias for `void`.
-    /// \ingroup trait
-#if defined(META_WORKAROUND_CWG_1558) && !defined(META_DOXYGEN_INVOKED)
-    // Redirect through decltype for compilers that have not
-    // yet implemented CWG 1558:
-    template <typename... Ts> using void_ = invoke<id<void>, Ts...>;
-#else
-    template <typename...> using void_ = void;
-#endif
-
-#if META_CXX_VARIABLE_TEMPLATES
-#ifdef META_CONCEPT
-    /// `true` if `T::type` exists and names a type; `false` otherwise.
-    /// \ingroup trait
-    template <typename T> META_INLINE_VAR constexpr bool is_trait_v = trait<T>;
-
-    /// `true` if `T::invoke` exists and names a class template; `false` otherwise.
-    /// \ingroup trait
-    template <typename T> META_INLINE_VAR constexpr bool is_callable_v = invocable<T>;
-#else  // ^^^ Concepts / No concepts vvv
-    /// \cond
-    namespace ranges_detail {
-        template <typename, typename = void> META_INLINE_VAR constexpr bool is_trait_ = false;
-
-        template <typename T> META_INLINE_VAR constexpr bool is_trait_<T, void_<typename T::type>> = true;
-
-        template <typename, typename = void> META_INLINE_VAR constexpr bool is_callable_ = false;
-
-        template <typename T> META_INLINE_VAR constexpr bool is_callable_<T, void_<quote<T::template invoke>>> = true;
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// `true` if `T::type` exists and names a type; `false` otherwise.
-    /// \ingroup trait
-    template <typename T> META_INLINE_VAR constexpr bool is_trait_v = ranges_detail::is_trait_<T>;
-
-    /// `true` if `T::invoke` exists and names a class template; `false` otherwise.
-    /// \ingroup trait
-    template <typename T> META_INLINE_VAR constexpr bool is_callable_v = ranges_detail::is_callable_<T>;
-#endif // Concepts vs. variable templates
-
-    /// An alias for `std::true_type` if `T::type` exists and names a type; otherwise, it's an
-    /// alias for `std::false_type`.
-    /// \ingroup trait
-    template <typename T> using is_trait = bool_<is_trait_v<T>>;
-
-    /// An alias for `std::true_type` if `T::invoke` exists and names a class template;
-    /// otherwise, it's an alias for `std::false_type`.
-    /// \ingroup trait
-    template <typename T> using is_callable = bool_<is_callable_v<T>>;
-#else // ^^^ META_CXX_VARIABLE_TEMPLATES / !META_CXX_VARIABLE_TEMPLATES vvv
-    /// \cond
-    namespace ranges_detail {
-        template <typename, typename = void> struct is_trait_ { using type = std::false_type; };
-
-        template <typename T> struct is_trait_<T, void_<typename T::type>> { using type = std::true_type; };
-
-        template <typename, typename = void> struct is_callable_ { using type = std::false_type; };
-
-        template <typename T> struct is_callable_<T, void_<quote<T::template invoke>>> { using type = std::true_type; };
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename T> using is_trait = _t<ranges_detail::is_trait_<T>>;
-
-    /// An alias for `std::true_type` if `T::invoke` exists and names a class
-    /// template or alias template; otherwise, it's an alias for
-    /// `std::false_type`.
-    /// \ingroup trait
-    template <typename T> using is_callable = _t<ranges_detail::is_callable_<T>>;
-#endif
-
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <template <typename...> class, typename...> struct defer_ {};
-
-        template <template <typename...> class C, typename... Ts>
-        requires valid<C, Ts...>
-        struct defer_<C, Ts...> {
-            using type = C<Ts...>;
-        };
-
-        template <typename T, template <T...> class, T...> struct defer_i_ {};
-
-        template <typename T, template <T...> class C, T... Is>
-        requires valid_i<T, C, Is...>
-        struct defer_i_<T, C, Is...> {
-            using type = C<Is...>;
-        };
-#elif defined(META_WORKAROUND_MSVC_703656) // ^^^ Concepts / MSVC workaround vvv
-        template <typename, template <typename...> class, typename...> struct _defer_ {};
-
-        template <template <typename...> class C, typename... Ts> struct _defer_<void_<C<Ts...>>, C, Ts...> {
-            using type = C<Ts...>;
-        };
-
-        template <template <typename...> class C, typename... Ts> using defer_ = _defer_<void, C, Ts...>;
-
-        template <typename, typename T, template <T...> class, T...> struct _defer_i_ {};
-
-        template <typename T, template <T...> class C, T... Is> struct _defer_i_<void_<C<Is...>>, T, C, Is...> {
-            using type = C<Is...>;
-        };
-
-        template <typename T, template <T...> class C, T... Is> using defer_i_ = _defer_i_<void, T, C, Is...>;
-#else                                      // ^^^ workaround ^^^ / vvv no workaround vvv
-        template <template <typename...> class C, typename... Ts, template <typename...> class D = C>
-        id<D<Ts...>> try_defer_(int);
-        template <template <typename...> class C, typename... Ts> nil_ try_defer_(long);
-
-        template <template <typename...> class C, typename... Ts>
-        using defer_ = decltype(ranges_detail::try_defer_<C, Ts...>(0));
-
-        template <typename T, template <T...> class C, T... Is, template <T...> class D = C>
-        id<D<Is...>> try_defer_i_(int);
-        template <typename T, template <T...> class C, T... Is> nil_ try_defer_i_(long);
-
-        template <typename T, template <T...> class C, T... Is>
-        using defer_i_ = decltype(ranges_detail::try_defer_i_<T, C, Is...>(0));
-#endif                                     // Concepts vs. MSVC vs. Other
-
-        template <typename T> using _t_t = _t<_t<T>>;
-    } // namespace ranges_detail
-    /// \endcond
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // defer
-    /// A wrapper that defers the instantiation of a template \p C with type parameters \p Ts in
-    /// a \c lambda or \c let expression.
-    ///
-    /// In the code below, the lambda would ideally be written as
-    /// `lambda<_a,_b,push_back<_a,_b>>`, however this fails since `push_back` expects its first
-    /// argument to be a list, not a placeholder. Instead, we express it using \c defer as
-    /// follows:
-    ///
-    /// \code
-    /// template <typename L>
-    /// using reverse = reverse_fold<L, list<>, lambda<_a, _b, defer<push_back, _a, _b>>>;
-    /// \endcode
-    ///
-    /// \ingroup invocation
-    template <template <typename...> class C, typename... Ts> struct defer : ranges_detail::defer_<C, Ts...> {};
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // defer_i
-    /// A wrapper that defers the instantiation of a template \p C with integral constant
-    /// parameters \p Is in a \c lambda or \c let expression.
-    /// \sa `defer`
-    /// \ingroup invocation
-    template <typename T, template <T...> class C, T... Is> struct defer_i : ranges_detail::defer_i_<T, C, Is...> {};
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // defer_trait
-    /// A wrapper that defers the instantiation of a trait \p C with type parameters \p Ts in a
-    /// \c lambda or \c let expression.
-    /// \sa `defer`
-    /// \ingroup invocation
-    template <template <typename...> class C, typename... Ts>
-    using defer_trait = defer<ranges_detail::_t_t, ranges_detail::defer_<C, Ts...>>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // defer_trait_i
-    /// A wrapper that defers the instantiation of a trait \p C with integral constant
-    /// parameters \p Is in a \c lambda or \c let expression.
-    /// \sa `defer_i`
-    /// \ingroup invocation
-    template <typename T, template <T...> class C, T... Is>
-    using defer_trait_i = defer<ranges_detail::_t_t, ranges_detail::defer_i_<T, C, Is...>>;
-
-    /// An alias that computes the size of the type \p T.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup trait
-    template <typename T> using sizeof_ = futures::detail::meta::size_t<sizeof(T)>;
-
-    /// An alias that computes the alignment required for any instance of the type \p T.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup trait
-    template <typename T> using alignof_ = futures::detail::meta::size_t<alignof(T)>;
-
-    namespace lazy {
-        /// \sa `futures::detail::meta::sizeof_`
-        /// \ingroup lazy_trait
-        template <typename T> using sizeof_ = defer<sizeof_, T>;
-
-        /// \sa `futures::detail::meta::alignof_`
-        /// \ingroup lazy_trait
-        template <typename T> using alignof_ = defer<alignof_, T>;
-    } // namespace lazy
-
-#if META_CXX_VARIABLE_TEMPLATES
-    /// is
-    /// Test whether a type \p T is an instantiation of class
-    /// template \p C.
-    /// \ingroup trait
-    template <typename T, template <typename...> class C> using is = bool_<is_v<T, C>>;
-#else
-    /// is
-    /// \cond
-    namespace ranges_detail {
-        template <typename, template <typename...> class> struct is_ : std::false_type {};
-
-        template <typename... Ts, template <typename...> class C> struct is_<C<Ts...>, C> : std::true_type {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Test whether a type \c T is an instantiation of class
-    /// template \c C.
-    /// \ingroup trait
-    template <typename T, template <typename...> class C> using is = _t<ranges_detail::is_<T, C>>;
-#endif
-
-    /// Compose the Invocables \p Fns in the parameter pack \p Ts.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable)... Fns> struct compose_ {};
-
-    template <META_TYPE_CONSTRAINT(invocable) Fn0> struct compose_<Fn0> {
-        template <typename... Ts> using invoke = invoke<Fn0, Ts...>;
-    };
-
-    template <META_TYPE_CONSTRAINT(invocable) Fn0, META_TYPE_CONSTRAINT(invocable)... Fns>
-    struct compose_<Fn0, Fns...> {
-        template <typename... Ts> using invoke = invoke<Fn0, invoke<compose_<Fns...>, Ts...>>;
-    };
-
-    template <typename... Fns> using compose = compose_<Fns...>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::compose'
-        /// \ingroup lazy_composition
-        template <typename... Fns> using compose = defer<compose, Fns...>;
-    } // namespace lazy
-
-    /// Turn a template \p C into an invocable.
-    /// \ingroup composition
-    template <template <typename...> class C> struct quote {
-        // Indirection through defer here needed to avoid Core issue 1430
-        // https://wg21.link/cwg1430
-        template <typename... Ts> using invoke = _t<defer<C, Ts...>>;
-    };
-
-    /// Turn a template \p C taking literals of type \p T into a
-    /// invocable.
-    /// \ingroup composition
-    template <typename T, template <T...> class C> struct quote_i {
-        // Indirection through defer_i here needed to avoid Core issue 1430
-        // https://wg21.link/cwg1430
-        template <META_TYPE_CONSTRAINT(integral)... Ts> using invoke = _t<defer_i<T, C, Ts::type::value...>>;
-    };
-
-#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 && !defined(META_DOXYGEN_INVOKED)
-    template <template <typename...> class C> struct quote_trait {
-        template <typename... Ts> using invoke = _t<invoke<quote<C>, Ts...>>;
-    };
-
-    template <typename T, template <T...> class C> struct quote_trait_i {
-        template <typename... Ts> using invoke = _t<invoke<quote_i<T, C>, Ts...>>;
-    };
-#else
-    // clang-format off
-    /// Turn a trait template \p C into an invocable.
-    /// \code
-    /// static_assert(std::is_same_v<invoke<quote_trait<std::add_const>, int>, int const>, "");
-    /// \endcode
-    /// \ingroup composition
-    template <template <typename...> class C>
-    using quote_trait = compose<quote<_t>, quote<C>>;
-
-    /// Turn a trait template \p C taking literals of type \p T into an invocable.
-    /// \ingroup composition
-    template <typename T, template <T...> class C>
-    using quote_trait_i = compose<quote<_t>, quote_i<T, C>>;
-    // clang-format on
-#endif
-
-    /// An invocable that partially applies the invocable
-    /// \p Fn by binding the arguments \p Ts to the \e front of \p Fn.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable) Fn, typename... Ts> struct bind_front {
-        template <typename... Us> using invoke = invoke<Fn, Ts..., Us...>;
-    };
-
-    /// An invocable that partially applies the invocable \p Fn by binding the
-    /// arguments \p Us to the \e back of \p Fn.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable) Fn, typename... Us> struct bind_back {
-        template <typename... Ts> using invoke = invoke<Fn, Ts..., Us...>;
-    };
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::bind_front'
-        /// \ingroup lazy_composition
-        template <typename Fn, typename... Ts> using bind_front = defer<bind_front, Fn, Ts...>;
-
-        /// \sa 'futures::detail::meta::bind_back'
-        /// \ingroup lazy_composition
-        template <typename Fn, typename... Ts> using bind_back = defer<bind_back, Fn, Ts...>;
-    } // namespace lazy
-
-    /// Extend meta with your own datatypes.
-    namespace extension {
-        /// A trait that unpacks the types in the type list \p L into the invocable
-        /// \p Fn.
-        /// \ingroup extension
-        template <META_TYPE_CONSTRAINT(invocable) Fn, typename L> struct apply {};
-
-        template <META_TYPE_CONSTRAINT(invocable) Fn, typename Ret, typename... Args>
-        struct apply<Fn, Ret(Args...)> : lazy::invoke<Fn, Ret, Args...> {};
-
-        template <META_TYPE_CONSTRAINT(invocable) Fn, template <typename...> class T, typename... Ts>
-        struct apply<Fn, T<Ts...>> : lazy::invoke<Fn, Ts...> {};
-
-        template <META_TYPE_CONSTRAINT(invocable) Fn, typename T, T... Is>
-        struct apply<Fn, integer_sequence<T, Is...>> : lazy::invoke<Fn, std::integral_constant<T, Is>...> {};
-    } // namespace extension
-
-    /// Applies the invocable \p Fn using the types in the type list \p L as
-    /// arguments.
-    /// \ingroup invocation
-    template <META_TYPE_CONSTRAINT(invocable) Fn, typename L> using apply = _t<extension::apply<Fn, L>>;
-
-    namespace lazy {
-        template <typename Fn, typename L> using apply = defer<apply, Fn, L>;
-    }
-
-    /// An invocable that takes a bunch of arguments, bundles them into a type
-    /// list, and then calls the invocable \p Fn with the type list \p Q.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable) Fn, META_TYPE_CONSTRAINT(invocable) Q = quote<list>>
-    using curry = compose<Fn, Q>;
-
-    /// An invocable that takes a type list, unpacks the types, and then
-    /// calls the invocable \p Fn with the types.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable) Fn> using uncurry = bind_front<quote<apply>, Fn>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::curry'
-        /// \ingroup lazy_composition
-        template <typename Fn, typename Q = quote<list>> using curry = defer<curry, Fn, Q>;
-
-        /// \sa 'futures::detail::meta::uncurry'
-        /// \ingroup lazy_composition
-        template <typename Fn> using uncurry = defer<uncurry, Fn>;
-    } // namespace lazy
-
-    /// An invocable that reverses the order of the first two arguments.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable) Fn> struct flip {
-      private:
-        template <typename... Ts> struct impl {};
-        template <typename A, typename B, typename... Ts> struct impl<A, B, Ts...> : lazy::invoke<Fn, B, A, Ts...> {};
-
-      public:
-        template <typename... Ts> using invoke = _t<impl<Ts...>>;
-    };
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::flip'
-        /// \ingroup lazy_composition
-        template <typename Fn> using flip = defer<flip, Fn>;
-    } // namespace lazy
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename...> struct on_ {};
-        template <typename Fn, typename... Gs> struct on_<Fn, Gs...> {
-            template <typename... Ts> using invoke = invoke<Fn, invoke<compose<Gs...>, Ts>...>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Use as `on<Fn, Gs...>`. Creates an invocable that applies invocable \c Fn to the
-    /// result of applying invocable `compose<Gs...>` to all the arguments.
-    /// \ingroup composition
-    template <META_TYPE_CONSTRAINT(invocable)... Fns> using on_ = ranges_detail::on_<Fns...>;
-
-    template <typename... Fns> using on = on_<Fns...>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::on'
-        /// \ingroup lazy_composition
-        template <typename Fn, typename G> using on = defer<on, Fn, G>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // conditional_t
-    /// \cond
-    namespace ranges_detail {
-        template <bool> struct _cond { template <typename Then, typename Else> using invoke = Then; };
-        template <> struct _cond<false> { template <typename Then, typename Else> using invoke = Else; };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Select one type or another depending on a compile-time Boolean.
-    /// \ingroup logical
-    template <bool If, typename Then, typename Else = void>
-    using conditional_t = typename ranges_detail::_cond<If>::template invoke<Then, Else>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // if_
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename...> struct _if_ {};
-
-        template <integral If> struct _if_<If> : std::enable_if<_v<If>> {};
-
-        template <integral If, typename Then> struct _if_<If, Then> : std::enable_if<_v<If>, Then> {};
-
-        template <integral If, typename Then, typename Else>
-        struct _if_<If, Then, Else> : std::conditional<_v<If>, Then, Else> {};
-#elif defined(__clang__)
-        // Clang is faster with this implementation
-        template <typename, typename = bool> struct _if_ {};
-
-        template <typename If>
-        struct _if_<list<If>, decltype(bool(If::type::value))> : std::enable_if<If::type::value> {};
-
-        template <typename If, typename Then>
-        struct _if_<list<If, Then>, decltype(bool(If::type::value))> : std::enable_if<If::type::value, Then> {};
-
-        template <typename If, typename Then, typename Else>
-        struct _if_<list<If, Then, Else>, decltype(bool(If::type::value))>
-            : std::conditional<If::type::value, Then, Else> {};
-#else
-        // GCC seems to prefer this implementation
-        template <typename, typename = std::true_type> struct _if_ {};
-
-        template <typename If> struct _if_<list<If>, bool_<If::type::value>> { using type = void; };
-
-        template <typename If, typename Then> struct _if_<list<If, Then>, bool_<If::type::value>> {
-            using type = Then;
-        };
-
-        template <typename If, typename Then, typename Else> struct _if_<list<If, Then, Else>, bool_<If::type::value>> {
-            using type = Then;
-        };
-
-        template <typename If, typename Then, typename Else>
-        struct _if_<list<If, Then, Else>, bool_<!If::type::value>> {
-            using type = Else;
-        };
-#endif
-    } // namespace ranges_detail
-      /// \endcond
-
-    /// Select one type or another depending on a compile-time Boolean.
-    /// \ingroup logical
-#ifdef META_CONCEPT
-    template <typename... Args> using if_ = _t<ranges_detail::_if_<Args...>>;
-
-    /// Select one type or another depending on a compile-time Boolean.
-    /// \ingroup logical
-    template <bool If, typename... Args> using if_c = _t<ranges_detail::_if_<bool_<If>, Args...>>;
-#else
-    template <typename... Args> using if_ = _t<ranges_detail::_if_<list<Args...>>>;
-
-    template <bool If, typename... Args> using if_c = _t<ranges_detail::_if_<list<bool_<If>, Args...>>>;
-#endif
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::if_'
-        /// \ingroup lazy_logical
-        template <typename... Args> using if_ = defer<if_, Args...>;
-
-        /// \sa 'futures::detail::meta::if_c'
-        /// \ingroup lazy_logical
-        template <bool If, typename... Args> using if_c = if_<bool_<If>, Args...>;
-    } // namespace lazy
-
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename...> struct _and_ {};
-
-        template <> struct _and_<> : std::true_type {};
-
-        template <integral B, typename... Bs>
-        requires(bool(B::type::value)) struct _and_<B, Bs...> : _and_<Bs...> {
-        };
-
-        template <integral B, typename... Bs>
-        requires(!bool(B::type::value)) struct _and_<B, Bs...> : std::false_type {
-        };
-
-        template <typename...> struct _or_ {};
-
-        template <> struct _or_<> : std::false_type {};
-
-        template <integral B, typename... Bs>
-        requires(bool(B::type::value)) struct _or_<B, Bs...> : std::true_type {
-        };
-
-        template <integral B, typename... Bs>
-        requires(!bool(B::type::value)) struct _or_<B, Bs...> : _or_<Bs...> {
-        };
-#else
-        template <bool> struct _and_ { template <typename...> using invoke = std::true_type; };
-
-        template <> struct _and_<false> {
-            template <typename B, typename... Bs>
-            using invoke = invoke<if_c<!B::type::value, id<std::false_type>, _and_<0 == sizeof...(Bs)>>, Bs...>;
-        };
-
-        template <bool> struct _or_ { template <typename = void> using invoke = std::false_type; };
-
-        template <> struct _or_<false> {
-            template <typename B, typename... Bs>
-            using invoke = invoke<if_c<B::type::value, id<std::true_type>, _or_<0 == sizeof...(Bs)>>, Bs...>;
-        };
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Logically negate the Boolean parameter
-    /// \ingroup logical
-    template <bool B> using not_c = bool_<!B>;
-
-    /// Logically negate the integral constant-wrapped Boolean parameter.
-    /// \ingroup logical
-    template <META_TYPE_CONSTRAINT(integral) B> using not_ = not_c<B::type::value>;
-
-#if META_CXX_FOLD_EXPRESSIONS && !defined(META_WORKAROUND_GCC_UNKNOWN1)
-    template <bool... Bs> META_INLINE_VAR constexpr bool and_v = (true && ... && Bs);
-
-    /// Logically AND together all the Boolean parameters
-    /// \ingroup logical
-    template <bool... Bs>
-#if defined(META_WORKAROUND_MSVC_756112) || defined(META_WORKAROUND_GCC_86356)
-    using and_c = bool_<and_v<Bs...>>;
-#else
-    using and_c = bool_<(true && ... && Bs)>;
-#endif
-#else
-#if defined(META_WORKAROUND_GCC_66405)
-    template <bool... Bs>
-    using and_c = futures::detail::meta::bool_<META_IS_SAME(integer_sequence<bool, true, Bs...>, integer_sequence<bool, Bs..., true>)>;
-#else
-    template <bool... Bs>
-    struct and_c : futures::detail::meta::bool_<META_IS_SAME(integer_sequence<bool, Bs...>, integer_sequence<bool, (Bs || true)...>)> {};
-#endif
-#if META_CXX_VARIABLE_TEMPLATES
-    template <bool... Bs>
-    META_INLINE_VAR constexpr bool and_v = META_IS_SAME(integer_sequence<bool, Bs...>,
-                                                        integer_sequence<bool, (Bs || true)...>);
-#endif
-#endif
-
-    /// Logically AND together all the integral constant-wrapped Boolean
-    /// parameters, \e without short-circuiting.
-    /// \ingroup logical
-    template <META_TYPE_CONSTRAINT(integral)... Bs> using strict_and_ = and_c<Bs::type::value...>;
-
-    template <typename... Bs> using strict_and = strict_and_<Bs...>;
-
-    /// Logically AND together all the integral constant-wrapped Boolean
-    /// parameters, \e with short-circuiting.
-    /// \ingroup logical
-    template <typename... Bs>
-#ifdef META_CONCEPT
-    using and_ = _t<ranges_detail::_and_<Bs...>>;
-#else
-    // Make a trip through defer<> to avoid CWG1430
-    // https://wg21.link/cwg1430
-    using and_ = _t<defer<ranges_detail::_and_<0 == sizeof...(Bs)>::template invoke, Bs...>>;
-#endif
-
-    /// Logically OR together all the Boolean parameters
-    /// \ingroup logical
-#if META_CXX_FOLD_EXPRESSIONS && !defined(META_WORKAROUND_GCC_UNKNOWN1)
-    template <bool... Bs> META_INLINE_VAR constexpr bool or_v = (false || ... || Bs);
-
-    template <bool... Bs>
-#if defined(META_WORKAROUND_MSVC_756112) || defined(META_WORKAROUND_GCC_86356)
-    using or_c = bool_<or_v<Bs...>>;
-#else
-    using or_c = bool_<(false || ... || Bs)>;
-#endif
-#else
-    template <bool... Bs>
-    struct or_c : futures::detail::meta::bool_<!META_IS_SAME(integer_sequence<bool, Bs...>, integer_sequence<bool, (Bs && false)...>)> {
-    };
-#if META_CXX_VARIABLE_TEMPLATES
-    template <bool... Bs>
-    META_INLINE_VAR constexpr bool or_v =
-        !META_IS_SAME(integer_sequence<bool, Bs...>, integer_sequence<bool, (Bs && false)...>);
-#endif
-#endif
-
-    /// Logically OR together all the integral constant-wrapped Boolean
-    /// parameters, \e without short-circuiting.
-    /// \ingroup logical
-    template <META_TYPE_CONSTRAINT(integral)... Bs> using strict_or_ = or_c<Bs::type::value...>;
-
-    template <typename... Bs> using strict_or = strict_or_<Bs...>;
-
-    /// Logically OR together all the integral constant-wrapped Boolean
-    /// parameters, \e with short-circuiting.
-    /// \ingroup logical
-    template <typename... Bs>
-#ifdef META_CONCEPT
-    using or_ = _t<ranges_detail::_or_<Bs...>>;
-#else
-    // Make a trip through defer<> to avoid CWG1430
-    // https://wg21.link/cwg1430
-    using or_ = _t<defer<ranges_detail::_or_<0 == sizeof...(Bs)>::template invoke, Bs...>>;
-#endif
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::and_'
-        /// \ingroup lazy_logical
-        template <typename... Bs> using and_ = defer<and_, Bs...>;
-
-        /// \sa 'futures::detail::meta::or_'
-        /// \ingroup lazy_logical
-        template <typename... Bs> using or_ = defer<or_, Bs...>;
-
-        /// \sa 'futures::detail::meta::not_'
-        /// \ingroup lazy_logical
-        template <typename B> using not_ = defer<not_, B>;
-
-        /// \sa 'futures::detail::meta::strict_and'
-        /// \ingroup lazy_logical
-        template <typename... Bs> using strict_and = defer<strict_and, Bs...>;
-
-        /// \sa 'futures::detail::meta::strict_or'
-        /// \ingroup lazy_logical
-        template <typename... Bs> using strict_or = defer<strict_or, Bs...>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // fold
-    /// \cond
-    namespace ranges_detail {
-        template <typename, typename, typename> struct fold_ {};
-
-        template <typename Fn, typename T0, typename T1, typename T2, typename T3, typename T4, typename T5,
-                  typename T6, typename T7, typename T8, typename T9>
-        struct compose10_ {
-            template <typename X, typename Y> using F = invoke<Fn, X, Y>;
-
-            template <typename S>
-            using invoke = F<F<F<F<F<F<F<F<F<F<_t<S>, T0>, T1>, T2>, T3>, T4>, T5>, T6>, T7>, T8>, T9>;
-        };
-
-#ifdef META_CONCEPT
-        template <typename Fn> struct compose_ {
-            template <typename X, typename Y> using F = invoke<Fn, X, Y>;
-
-            template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                      typename T7, typename T8, typename T9, typename State>
-            using invoke = F<F<F<F<F<F<F<F<F<F<State, T0>, T1>, T2>, T3>, T4>, T5>, T6>, T7>, T8>, T9>;
-        };
-
-        template <typename State, typename Fn> struct fold_<list<>, State, Fn> { using type = State; };
-
-        template <typename Head, typename... Tail, typename State, typename Fn>
-        requires valid<invoke, Fn, State, Head>
-        struct fold_<list<Head, Tail...>, State, Fn> : fold_<list<Tail...>, invoke<Fn, State, Head>, Fn> {
-        };
-
-        template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                  typename T7, typename T8, typename T9, typename... Tail, typename State, typename Fn>
-        requires valid<invoke, compose_<Fn>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, State>
-        struct fold_<list<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, Tail...>, State, Fn>
-            : fold_<list<Tail...>, invoke<compose_<Fn>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, State>, Fn> {
-        };
-#else  // ^^^ Concepts / no Concepts vvv
-        template <typename Fn, typename T0> struct compose1_ {
-            template <typename X> using invoke = invoke<Fn, _t<X>, T0>;
-        };
-
-        template <typename State, typename Fn> struct fold_<list<>, State, Fn> : State {};
-
-        template <typename Head, typename... Tail, typename State, typename Fn>
-        struct fold_<list<Head, Tail...>, State, Fn>
-            : fold_<list<Tail...>, lazy::invoke<compose1_<Fn, Head>, State>, Fn> {};
-
-        template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                  typename T7, typename T8, typename T9, typename... Tail, typename State, typename Fn>
-        struct fold_<list<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, Tail...>, State, Fn>
-            : fold_<list<Tail...>, lazy::invoke<compose10_<Fn, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, State>, Fn> {};
-#endif // META_CONCEPT
-    }  // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list constructed by doing a left fold of the list \p L using
-    /// binary invocable \p Fn and initial state \p State. That is, the \c State_N for
-    /// the list element \c A_N is computed by `Fn(State_N-1, A_N) -> State_N`.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename State, META_TYPE_CONSTRAINT(invocable) Fn>
-#ifdef META_CONCEPT
-    using fold = _t<ranges_detail::fold_<L, State, Fn>>;
-#else
-    using fold = _t<ranges_detail::fold_<L, id<State>, Fn>>;
-#endif
-
-    /// An alias for `futures::detail::meta::fold`.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename State, META_TYPE_CONSTRAINT(invocable) Fn>
-    using accumulate = fold<L, State, Fn>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::foldl'
-        /// \ingroup lazy_transformation
-        template <typename L, typename State, typename Fn> using fold = defer<fold, L, State, Fn>;
-
-        /// \sa 'futures::detail::meta::accumulate'
-        /// \ingroup lazy_transformation
-        template <typename L, typename State, typename Fn> using accumulate = defer<accumulate, L, State, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // reverse_fold
-    /// \cond
-    namespace ranges_detail {
-        template <typename, typename, typename> struct reverse_fold_ {};
-
-        template <typename State, typename Fn> struct reverse_fold_<list<>, State, Fn> { using type = State; };
-
-#ifdef META_CONCEPT
-        template <typename Head, typename... L, typename State, typename Fn>
-        requires trait<reverse_fold_<list<L...>, State, Fn>>
-        struct reverse_fold_<list<Head, L...>, State, Fn>
-            : lazy::invoke<Fn, _t<reverse_fold_<list<L...>, State, Fn>>, Head> {
-        };
-#else
-        template <typename Head, typename... Tail, typename State, typename Fn>
-        struct reverse_fold_<list<Head, Tail...>, State, Fn>
-            : lazy::invoke<compose1_<Fn, Head>, reverse_fold_<list<Tail...>, State, Fn>> {};
-#endif
-
-        template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                  typename T7, typename T8, typename T9, typename... Tail, typename State, typename Fn>
-        struct reverse_fold_<list<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, Tail...>, State, Fn>
-            : lazy::invoke<compose10_<Fn, T9, T8, T7, T6, T5, T4, T3, T2, T1, T0>,
-                           reverse_fold_<list<Tail...>, State, Fn>> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list constructed by doing a right fold of the list \p L using
-    /// binary invocable \p Fn and initial state \p State. That is, the \c State_N for the list
-    /// element \c A_N is computed by `Fn(A_N, State_N+1) -> State_N`.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename State, META_TYPE_CONSTRAINT(invocable) Fn>
-    using reverse_fold = _t<ranges_detail::reverse_fold_<L, State, Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::foldr'
-        /// \ingroup lazy_transformation
-        template <typename L, typename State, typename Fn> using reverse_fold = defer<reverse_fold, L, State, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // npos
-    /// A special value used to indicate no matches. It equals the maximum
-    /// value representable by std::size_t.
-    /// \ingroup list
-    using npos = futures::detail::meta::size_t<std::size_t(-1)>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // list
-    /// A list of types.
-    /// \ingroup list
-    template <typename... Ts> struct list {
-        using type = list;
-        /// \return `sizeof...(Ts)`
-        static constexpr std::size_t size() noexcept { return sizeof...(Ts); }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // size
-    /// An integral constant wrapper that is the size of the \c futures::detail::meta::list
-    /// \p L.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L> using size = futures::detail::meta::size_t<L::size()>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::size'
-        /// \ingroup lazy_list
-        template <typename L> using size = defer<size, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // concat
-    /// \cond
-    namespace ranges_detail {
-        template <typename... Lists> struct concat_ {};
-
-        template <> struct concat_<> { using type = list<>; };
-
-        template <typename... L1> struct concat_<list<L1...>> { using type = list<L1...>; };
-
-        template <typename... L1, typename... L2> struct concat_<list<L1...>, list<L2...>> {
-            using type = list<L1..., L2...>;
-        };
-
-        template <typename... L1, typename... L2, typename... L3>
-        struct concat_<list<L1...>, list<L2...>, list<L3...>> {
-            using type = list<L1..., L2..., L3...>;
-        };
-
-        template <typename... L1, typename... L2, typename... L3, typename... Rest>
-        struct concat_<list<L1...>, list<L2...>, list<L3...>, Rest...> : concat_<list<L1..., L2..., L3...>, Rest...> {};
-
-        template <typename... L1, typename... L2, typename... L3, typename... L4, typename... L5, typename... L6,
-                  typename... L7, typename... L8, typename... L9, typename... L10, typename... Rest>
-        struct concat_<list<L1...>, list<L2...>, list<L3...>, list<L4...>, list<L5...>, list<L6...>, list<L7...>,
-                       list<L8...>, list<L9...>, list<L10...>, Rest...>
-            : concat_<list<L1..., L2..., L3..., L4..., L5..., L6..., L7..., L8..., L9..., L10...>, Rest...> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Concatenates several lists into a single list.
-    /// \pre The parameters must all be instantiations of \c futures::detail::meta::list.
-    /// \par Complexity
-    /// \f$ O(L) \f$ where \f$ L \f$ is the number of lists in the list of lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like)... Ls> using concat_ = _t<ranges_detail::concat_<Ls...>>;
-
-    template <typename... Lists> using concat = concat_<Lists...>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::concat'
-        /// \ingroup lazy_transformation
-        template <typename... Lists> using concat = defer<concat, Lists...>;
-    } // namespace lazy
-
-    /// Joins a list of lists into a single list.
-    /// \pre The parameter must be an instantiation of \c futures::detail::meta::list\<T...\>
-    /// where each \c T is itself an instantiation of \c futures::detail::meta::list.
-    /// \par Complexity
-    /// \f$ O(L) \f$ where \f$ L \f$ is the number of lists in the list of
-    /// lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) ListOfLists> using join = apply<quote<concat>, ListOfLists>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::join'
-        /// \ingroup lazy_transformation
-        template <typename ListOfLists> using join = defer<join, ListOfLists>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // transform
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename... Args> struct transform_ {};
-
-        template <typename... Ts, invocable Fn>
-        requires and_v<valid<invoke, Fn, Ts>...>
-        struct transform_<list<Ts...>, Fn> {
-            using type = list<invoke<Fn, Ts>...>;
-        };
-
-        template <typename... Ts, typename... Us, invocable Fn>
-        requires and_v<valid<invoke, Fn, Ts, Us>...>
-        struct transform_<list<Ts...>, list<Us...>, Fn> {
-            using type = list<invoke<Fn, Ts, Us>...>;
-        };
-#else
-        template <typename, typename = void> struct transform_ {};
-
-        template <typename... Ts, typename Fn> struct transform_<list<list<Ts...>, Fn>, void_<invoke<Fn, Ts>...>> {
-            using type = list<invoke<Fn, Ts>...>;
-        };
-
-        template <typename... Ts0, typename... Ts1, typename Fn>
-        struct transform_<list<list<Ts0...>, list<Ts1...>, Fn>, void_<invoke<Fn, Ts0, Ts1>...>> {
-            using type = list<invoke<Fn, Ts0, Ts1>...>;
-        };
-#endif
-    } // namespace ranges_detail
-      /// \endcond
-
-    /// Return a new \c futures::detail::meta::list constructed by transforming all the
-    /// elements in \p L with the unary invocable \p Fn. \c transform can
-    /// also be called with two lists of the same length and a binary
-    /// invocable, in which case it returns a new list constructed with the
-    /// results of calling \c Fn with each element in the lists, pairwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-#ifdef META_CONCEPT
-    template <typename... Args> using transform = _t<ranges_detail::transform_<Args...>>;
-#else
-    template <typename... Args> using transform = _t<ranges_detail::transform_<list<Args...>>>;
-#endif
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::transform'
-        /// \ingroup lazy_transformation
-        template <typename... Args> using transform = defer<transform, Args...>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // repeat_n
-    /// \cond
-    namespace ranges_detail {
-        template <typename T, std::size_t> using first_ = T;
-
-        template <typename T, typename Ints> struct repeat_n_c_ {};
-
-        template <typename T, std::size_t... Is> struct repeat_n_c_<T, index_sequence<Is...>> {
-            using type = list<first_<T, Is>...>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Generate `list<T,T,T...T>` of size \p N arguments.
-    /// \par Complexity
-    /// \f$ O(log N) \f$.
-    /// \ingroup list
-    template <std::size_t N, typename T = void> using repeat_n_c = _t<ranges_detail::repeat_n_c_<T, make_index_sequence<N>>>;
-
-    /// Generate `list<T,T,T...T>` of size \p N arguments.
-    /// \par Complexity
-    /// \f$ O(log N) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(integral) N, typename T = void> using repeat_n = repeat_n_c<N::type::value, T>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::repeat_n'
-        /// \ingroup lazy_list
-        template <typename N, typename T = void> using repeat_n = defer<repeat_n, N, T>;
-
-        /// \sa 'futures::detail::meta::repeat_n_c'
-        /// \ingroup lazy_list
-        template <std::size_t N, typename T = void> using repeat_n_c = defer<repeat_n, futures::detail::meta::size_t<N>, T>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // at
-    /// \cond
-    namespace ranges_detail {
-#if META_HAS_TYPE_PACK_ELEMENT && !defined(META_DOXYGEN_INVOKED)
-        template <typename L, std::size_t N, typename = void> struct at_ {};
-
-        template <typename... Ts, std::size_t N> struct at_<list<Ts...>, N, void_<__type_pack_element<N, Ts...>>> {
-            using type = __type_pack_element<N, Ts...>;
-        };
-#else
-        template <typename VoidPtrs> struct at_impl_;
-
-        template <typename... VoidPtrs> struct at_impl_<list<VoidPtrs...>> {
-            static nil_ eval(...);
-
-            template <typename T, typename... Us> static T eval(VoidPtrs..., T *, Us *...);
-        };
-
-        template <typename L, std::size_t N> struct at_ {};
-
-        template <typename... Ts, std::size_t N>
-        struct at_<list<Ts...>, N>
-            : decltype(at_impl_<repeat_n_c<N, void *>>::eval(static_cast<id<Ts> *>(nullptr)...)) {};
-#endif // META_HAS_TYPE_PACK_ELEMENT
-    }  // namespace ranges_detail
-    /// \endcond
-
-    /// Return the \p N th element in the \c futures::detail::meta::list \p L.
-    /// \par Complexity
-    /// Amortized \f$ O(1) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L, std::size_t N> using at_c = _t<ranges_detail::at_<L, N>>;
-
-    /// Return the \p N th element in the \c futures::detail::meta::list \p L.
-    /// \par Complexity
-    /// Amortized \f$ O(1) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(integral) N> using at = at_c<L, N::type::value>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::at'
-        /// \ingroup lazy_list
-        template <typename L, typename N> using at = defer<at, L, N>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // drop
-    /// \cond
-    namespace ranges_detail {
-        ///////////////////////////////////////////////////////////////////////////////////////
-        /// drop_impl_
-        template <typename VoidPtrs> struct drop_impl_ { static nil_ eval(...); };
-
-        template <typename... VoidPtrs> struct drop_impl_<list<VoidPtrs...>> {
-            static nil_ eval(...);
-
-            template <typename... Ts> static id<list<Ts...>> eval(VoidPtrs..., id<Ts> *...);
-        };
-
-        template <> struct drop_impl_<list<>> { template <typename... Ts> static id<list<Ts...>> eval(id<Ts> *...); };
-
-        template <typename L, std::size_t N> struct drop_ {};
-
-        template <typename... Ts, std::size_t N>
-        struct drop_<list<Ts...>, N>
-#if META_CXX_VARIABLE_TEMPLATES
-            : decltype(drop_impl_<repeat_n_c<N, void *>>::eval(ranges_detail::nullptr_v<id<Ts>>...))
-#else
-            : decltype(drop_impl_<repeat_n_c<N, void *>>::eval(ranges_detail::_nullptr_v<id<Ts>>()...))
-#endif
-        {
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list by removing the first \p N elements from \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, std::size_t N> using drop_c = _t<ranges_detail::drop_<L, N>>;
-
-    /// Return a new \c futures::detail::meta::list by removing the first \p N elements from \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(integral) N>
-    using drop = drop_c<L, N::type::value>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::drop'
-        /// \ingroup lazy_transformation
-        template <typename L, typename N> using drop = defer<drop, L, N>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // front
-    /// \cond
-    namespace ranges_detail {
-        template <typename L> struct front_ {};
-
-        template <typename Head, typename... Tail> struct front_<list<Head, Tail...>> { using type = Head; };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return the first element in \c futures::detail::meta::list \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L> using front = _t<ranges_detail::front_<L>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::front'
-        /// \ingroup lazy_list
-        template <typename L> using front = defer<front, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // back
-    /// \cond
-    namespace ranges_detail {
-        template <typename L> struct back_ {};
-
-        template <typename Head, typename... Tail> struct back_<list<Head, Tail...>> {
-            using type = at_c<list<Head, Tail...>, sizeof...(Tail)>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return the last element in \c futures::detail::meta::list \p L.
-    /// \par Complexity
-    /// Amortized \f$ O(1) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L> using back = _t<ranges_detail::back_<L>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::back'
-        /// \ingroup lazy_list
-        template <typename L> using back = defer<back, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // push_front
-    /// Return a new \c futures::detail::meta::list by adding the element \c T to the front of \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename... Ts>
-    using push_front = apply<bind_front<quote<list>, Ts...>, L>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::push_front'
-        /// \ingroup lazy_transformation
-        template <typename... Ts> using push_front = defer<push_front, Ts...>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // pop_front
-    /// \cond
-    namespace ranges_detail {
-        template <typename L> struct pop_front_ {};
-
-        template <typename Head, typename... L> struct pop_front_<list<Head, L...>> { using type = list<L...>; };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list by removing the first element from the
-    /// front of \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L> using pop_front = _t<ranges_detail::pop_front_<L>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::pop_front'
-        /// \ingroup lazy_transformation
-        template <typename L> using pop_front = defer<pop_front, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // push_back
-    /// Return a new \c futures::detail::meta::list by adding the element \c T to the back of \p L.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \note \c pop_back not provided because it cannot be made to meet the
-    /// complexity guarantees one would expect.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename... Ts>
-    using push_back = apply<bind_back<quote<list>, Ts...>, L>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::push_back'
-        /// \ingroup lazy_transformation
-        template <typename... Ts> using push_back = defer<push_back, Ts...>;
-    } // namespace lazy
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename T, typename U> using min_ = if_<less<U, T>, U, T>;
-
-        template <typename T, typename U> using max_ = if_<less<U, T>, T, U>;
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// An integral constant wrapper around the minimum of `Ts::type::value...`
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral)... Ts>
-    using min_ = fold<pop_front<list<Ts...>>, front<list<Ts...>>, quote<ranges_detail::min_>>;
-
-    template <typename... Ts> using min = min_<Ts...>;
-
-    /// An integral constant wrapper around the maximum of `Ts::type::value...`
-    /// \ingroup math
-    template <META_TYPE_CONSTRAINT(integral)... Ts>
-    using max_ = fold<pop_front<list<Ts...>>, front<list<Ts...>>, quote<ranges_detail::max_>>;
-
-    template <typename... Ts> using max = max_<Ts...>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::min'
-        /// \ingroup lazy_math
-        template <typename... Ts> using min = defer<min, Ts...>;
-
-        /// \sa 'futures::detail::meta::max'
-        /// \ingroup lazy_math
-        template <typename... Ts> using max = defer<max, Ts...>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // empty
-    /// An Boolean integral constant wrapper around \c true if \p L is an
-    /// empty type list; \c false, otherwise.
-    /// \par Complexity
-    /// \f$ O(1) \f$.
-    /// \ingroup list
-    template <META_TYPE_CONSTRAINT(list_like) L> using empty = bool_<0 == size<L>::type::value>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::empty'
-        /// \ingroup lazy_list
-        template <typename L> using empty = defer<empty, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // pair
-    /// A list with exactly two elements
-    /// \ingroup list
-    template <typename F, typename S> using pair = list<F, S>;
-
-    /// Retrieve the first element of the \c pair \p Pair
-    /// \ingroup list
-    template <typename Pair> using first = front<Pair>;
-
-    /// Retrieve the first element of the \c pair \p Pair
-    /// \ingroup list
-    template <typename Pair> using second = front<pop_front<Pair>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::first'
-        /// \ingroup lazy_list
-        template <typename Pair> using first = defer<first, Pair>;
-
-        /// \sa 'futures::detail::meta::second'
-        /// \ingroup lazy_list
-        template <typename Pair> using second = defer<second, Pair>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // find_index
-    /// \cond
-    namespace ranges_detail {
-        // With thanks to Peter Dimov:
-        constexpr std::size_t find_index_i_(bool const *const first, bool const *const last, std::size_t N = 0) {
-            return first == last ? npos::value : *first ? N : find_index_i_(first + 1, last, N + 1);
-        }
-
-        template <typename L, typename T> struct find_index_ {};
-
-        template <typename V> struct find_index_<list<>, V> { using type = npos; };
-
-        template <typename... T, typename V> struct find_index_<list<T...>, V> {
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(T)] = {META_IS_SAME(T, V)...};
-#else
-            static constexpr bool s_v[] = {META_IS_SAME(T, V)...};
-#endif
-            using type = size_t<find_index_i_(s_v, s_v + sizeof...(T))>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Finds the index of the first occurrence of the type \p T within the list \p L.
-    /// Returns `#futures::detail::meta::npos` if the type \p T was not found.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    /// \sa `futures::detail::meta::npos`
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T> using find_index = _t<ranges_detail::find_index_<L, T>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::find_index'
-        /// \ingroup lazy_query
-        template <typename L, typename T> using find_index = defer<find_index, L, T>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // reverse_find_index
-    /// \cond
-    namespace ranges_detail {
-        // With thanks to Peter Dimov:
-        constexpr std::size_t reverse_find_index_i_(bool const *const first, bool const *const last, std::size_t N) {
-            return first == last ? npos::value : *(last - 1) ? N - 1 : reverse_find_index_i_(first, last - 1, N - 1);
-        }
-
-        template <typename L, typename T> struct reverse_find_index_ {};
-
-        template <typename V> struct reverse_find_index_<list<>, V> { using type = npos; };
-
-        template <typename... T, typename V> struct reverse_find_index_<list<T...>, V> {
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(T)] = {META_IS_SAME(T, V)...};
-#else
-            static constexpr bool s_v[] = {META_IS_SAME(T, V)...};
-#endif
-            using type = size_t<reverse_find_index_i_(s_v, s_v + sizeof...(T), sizeof...(T))>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Finds the index of the last occurrence of the type \p T within the
-    /// list \p L. Returns `#futures::detail::meta::npos` if the type \p T was not found.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    /// \sa `#futures::detail::meta::npos`
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T>
-    using reverse_find_index = _t<ranges_detail::reverse_find_index_<L, T>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::reverse_find_index'
-        /// \ingroup lazy_query
-        template <typename L, typename T> using reverse_find_index = defer<reverse_find_index, L, T>;
-    } // namespace lazy
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    // find
-    /// Return the tail of the list \p L starting at the first occurrence of
-    /// \p T, if any such element exists; the empty list, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T> using find = drop<L, min<find_index<L, T>, size<L>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::find'
-        /// \ingroup lazy_query
-        template <typename L, typename T> using find = defer<find, L, T>;
-    } // namespace lazy
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    // reverse_find
-    /// \cond
-    namespace ranges_detail {
-        template <typename L, typename T, typename State = list<>> struct reverse_find_ {};
-
-        template <typename T, typename State> struct reverse_find_<list<>, T, State> { using type = State; };
-
-        template <typename Head, typename... L, typename T, typename State>
-        struct reverse_find_<list<Head, L...>, T, State> : reverse_find_<list<L...>, T, State> {};
-
-        template <typename... L, typename T, typename State>
-        struct reverse_find_<list<T, L...>, T, State> : reverse_find_<list<L...>, T, list<T, L...>> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return the tail of the list \p L starting at the last occurrence of \p T, if any such
-    /// element exists; the empty list, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T>
-    using reverse_find = drop<L, min<reverse_find_index<L, T>, size<L>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::rfind'
-        /// \ingroup lazy_query
-        template <typename L, typename T> using reverse_find = defer<reverse_find, L, T>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // find_if
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename L, typename Fn> struct find_if_ {};
-
-        template <typename Fn> struct find_if_<list<>, Fn> { using type = list<>; };
-
-        template <typename Head, typename... L, typename Fn>
-        requires integral<invoke<Fn, Head>>
-        struct find_if_<list<Head, L...>, Fn> : if_<invoke<Fn, Head>, id<list<Head, L...>>, find_if_<list<L...>, Fn>> {
-        };
-#else
-        constexpr bool const *find_if_i_(bool const *const begin, bool const *const end) {
-            return begin == end || *begin ? begin : find_if_i_(begin + 1, end);
-        }
-
-        template <typename L, typename Fn, typename = void> struct find_if_ {};
-
-        template <typename Fn> struct find_if_<list<>, Fn> { using type = list<>; };
-
-        template <typename... L, typename Fn>
-        struct find_if_<list<L...>, Fn, void_<integer_sequence<bool, bool(invoke<Fn, L>::type::value)...>>> {
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(L)] = {invoke<Fn, L>::type::value...};
-#else
-            static constexpr bool s_v[] = {invoke<Fn, L>::type::value...};
-#endif
-            using type = drop_c<list<L...>, ranges_detail::find_if_i_(s_v, s_v + sizeof...(L)) - s_v>;
-        };
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return the tail of the list \p L starting at the first element `A`
-    /// such that `invoke<Fn, A>::%value` is \c true, if any such element
-    /// exists; the empty list, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using find_if = _t<ranges_detail::find_if_<L, Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::find_if'
-        /// \ingroup lazy_query
-        template <typename L, typename Fn> using find_if = defer<find_if, L, Fn>;
-    } // namespace lazy
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    // reverse_find_if
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename L, typename Fn, typename State = list<>> struct reverse_find_if_ {};
-
-        template <typename Fn, typename State> struct reverse_find_if_<list<>, Fn, State> { using type = State; };
-
-        template <typename Head, typename... L, typename Fn, typename State>
-        requires integral<invoke<Fn, Head>>
-        struct reverse_find_if_<list<Head, L...>, Fn, State>
-            : reverse_find_if_<list<L...>, Fn, if_<invoke<Fn, Head>, list<Head, L...>, State>> {
-        };
-#else
-        constexpr bool const *reverse_find_if_i_(bool const *const begin, bool const *const pos,
-                                                 bool const *const end) {
-            return begin == pos ? end : *(pos - 1) ? pos - 1 : reverse_find_if_i_(begin, pos - 1, end);
-        }
-
-        template <typename L, typename Fn, typename = void> struct reverse_find_if_ {};
-
-        template <typename Fn> struct reverse_find_if_<list<>, Fn> { using type = list<>; };
-
-        template <typename... L, typename Fn>
-        struct reverse_find_if_<list<L...>, Fn, void_<integer_sequence<bool, bool(invoke<Fn, L>::type::value)...>>> {
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(L)] = {invoke<Fn, L>::type::value...};
-#else
-            static constexpr bool s_v[] = {invoke<Fn, L>::type::value...};
-#endif
-            using type =
-                drop_c<list<L...>, ranges_detail::reverse_find_if_i_(s_v, s_v + sizeof...(L), s_v + sizeof...(L)) - s_v>;
-        };
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return the tail of the list \p L starting at the last element `A`
-    /// such that `invoke<Fn, A>::%value` is \c true, if any such element
-    /// exists; the empty list, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using reverse_find_if = _t<ranges_detail::reverse_find_if_<L, Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::rfind_if'
-        /// \ingroup lazy_query
-        template <typename L, typename Fn> using reverse_find_if = defer<reverse_find_if, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // replace
-    /// \cond
-    namespace ranges_detail {
-        template <typename L, typename T, typename U> struct replace_ {};
-
-        template <typename... L, typename T, typename U> struct replace_<list<L...>, T, U> {
-            using type = list<if_c<META_IS_SAME(T, L), U, L>...>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list where all instances of type \p T have
-    /// been replaced with \p U.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T, typename U> using replace = _t<ranges_detail::replace_<L, T, U>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::replace'
-        /// \ingroup lazy_transformation
-        template <typename L, typename T, typename U> using replace = defer<replace, T, U>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // replace_if
-    /// \cond
-    namespace ranges_detail {
-#ifdef META_CONCEPT
-        template <typename L, typename C, typename U> struct replace_if_ {};
-
-        template <typename... L, typename C, typename U>
-        requires and_v<integral<invoke<C, L>>...>
-        struct replace_if_<list<L...>, C, U> {
-            using type = list<if_<invoke<C, L>, U, L>...>;
-        };
-#else
-        template <typename L, typename C, typename U, typename = void> struct replace_if_ {};
-
-        template <typename... L, typename C, typename U>
-        struct replace_if_<list<L...>, C, U, void_<integer_sequence<bool, bool(invoke<C, L>::type::value)...>>> {
-            using type = list<if_<invoke<C, L>, U, L>...>;
-        };
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list where all elements \c A of the list \p L
-    /// for which `invoke<C,A>::%value` is \c true have been replaced with
-    /// \p U.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, typename C, typename U>
-    using replace_if = _t<ranges_detail::replace_if_<L, C, U>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::replace_if'
-        /// \ingroup lazy_transformation
-        template <typename L, typename C, typename U> using replace_if = defer<replace_if, C, U>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // count
-    namespace ranges_detail {
-        template <typename, typename> struct count_ {};
-
-#if (defined(META_CONCEPT) || META_CXX_VARIABLE_TEMPLATES) && META_CXX_FOLD_EXPRESSIONS
-        template <typename... Ts, typename T> struct count_<list<Ts...>, T> {
-            using type = futures::detail::meta::size_t<((std::size_t)META_IS_SAME(T, Ts) + ...)>;
-        };
-#else
-        constexpr std::size_t count_i_(bool const *const begin, bool const *const end, std::size_t n) {
-            return begin == end ? n : ranges_detail::count_i_(begin + 1, end, n + *begin);
-        }
-
-        template <typename T> struct count_<list<>, T> { using type = futures::detail::meta::size_t<0>; };
-
-        template <typename... L, typename T> struct count_<list<L...>, T> {
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(L)] = {META_IS_SAME(T, L)...};
-#else
-            static constexpr bool s_v[] = {META_IS_SAME(T, L)...};
-#endif
-            using type = futures::detail::meta::size_t<ranges_detail::count_i_(s_v, s_v + sizeof...(L), 0u)>;
-        };
-#endif
-    } // namespace ranges_detail
-
-    /// Count the number of times a type \p T appears in the list \p L.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T> using count = _t<ranges_detail::count_<L, T>>;
-
-    namespace lazy {
-        /// \sa `futures::detail::meta::count`
-        /// \ingroup lazy_query
-        template <typename L, typename T> using count = defer<count, L, T>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // count_if
-    namespace ranges_detail {
-#if defined(META_CONCEPT) && META_CXX_FOLD_EXPRESSIONS
-        template <typename, typename> struct count_if_ {};
-
-        template <typename... Ts, typename Fn>
-        requires(integral<invoke<Fn, Ts>> &&...) struct count_if_<list<Ts...>, Fn> {
-            using type = futures::detail::meta::size_t<((std::size_t)(bool)_v<invoke<Fn, Ts>> + ...)>;
-        };
-#else
-        template <typename L, typename Fn, typename = void> struct count_if_ {};
-
-        template <typename Fn> struct count_if_<list<>, Fn> { using type = futures::detail::meta::size_t<0>; };
-
-        template <typename... L, typename Fn>
-        struct count_if_<list<L...>, Fn, void_<integer_sequence<bool, bool(invoke<Fn, L>::type::value)...>>> {
-#if META_CXX_FOLD_EXPRESSIONS
-            using type = futures::detail::meta::size_t<((std::size_t)(bool)invoke<Fn, L>::type::value + ...)>;
-#else
-#ifdef META_WORKAROUND_LLVM_28385
-            static constexpr bool s_v[sizeof...(L)] = {invoke<Fn, L>::type::value...};
-#else
-            static constexpr bool s_v[] = {invoke<Fn, L>::type::value...};
-#endif
-            using type = futures::detail::meta::size_t<ranges_detail::count_i_(s_v, s_v + sizeof...(L), 0u)>;
-#endif // META_CXX_FOLD_EXPRESSIONS
-        };
-#endif // META_CONCEPT
-    }  // namespace ranges_detail
-
-    /// Count the number of times the predicate \p Fn evaluates to true for all the elements in
-    /// the list \p L.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using count_if = _t<ranges_detail::count_if_<L, Fn>>;
-
-    namespace lazy {
-        /// \sa `futures::detail::meta::count_if`
-        /// \ingroup lazy_query
-        template <typename L, typename Fn> using count_if = defer<count_if, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // filter
-    /// \cond
-    namespace ranges_detail {
-        template <typename Pred> struct filter_ {
-            template <typename A> using invoke = if_c<invoke<Pred, A>::type::value, list<A>, list<>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Returns a new futures::detail::meta::list where only those elements of \p L that satisfy the
-    /// Callable \p Pred such that `invoke<Pred,A>::%value` is \c true are present.
-    /// That is, those elements that don't satisfy the \p Pred are "removed".
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <typename L, typename Pred> using filter = join<transform<L, ranges_detail::filter_<Pred>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::filter'
-        /// \ingroup lazy_transformation
-        template <typename L, typename Fn> using filter = defer<filter, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // static_const
-    ///\cond
-    namespace ranges_detail {
-        template <typename T> struct static_const { static constexpr T value{}; };
-
-        // Avoid potential ODR violations with global objects:
-        template <typename T> constexpr T static_const<T>::value;
-    } // namespace ranges_detail
-
-    ///\endcond
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // for_each
-    /// \cond
-    namespace ranges_detail {
-        struct for_each_fn {
-            template <class Fn, class... Args> constexpr auto operator()(list<Args...>, Fn f) const -> Fn {
-                return (void)std::initializer_list<int>{((void)f(Args{}), 0)...}, f;
-            }
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-#if META_CXX_INLINE_VARIABLES
-    /// `for_each(L, Fn)` calls the \p Fn for each
-    /// argument in the \p L.
-    /// \ingroup runtime
-    inline constexpr ranges_detail::for_each_fn for_each{};
-#else
-    ///\cond
-    namespace {
-        /// \endcond
-
-        /// `for_each(List, UnaryFunction)` calls the \p UnaryFunction for each
-        /// argument in the \p List.
-        /// \ingroup runtime
-        constexpr auto &&for_each = ranges_detail::static_const<ranges_detail::for_each_fn>::value;
-
-        /// \cond
-    } // namespace
-      /// \endcond
-#endif
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // transpose
-    /// Given a list of lists of types \p ListOfLists, transpose the elements from the lists.
-    /// \par Complexity
-    /// \f$ O(N \times M) \f$, where \f$ N \f$ is the size of the outer list, and
-    /// \f$ M \f$ is the size of the inner lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) ListOfLists>
-    using transpose =
-        fold<ListOfLists, repeat_n<size<front<ListOfLists>>, list<>>, bind_back<quote<transform>, quote<push_back>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::transpose'
-        /// \ingroup lazy_transformation
-        template <typename ListOfLists> using transpose = defer<transpose, ListOfLists>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // zip_with
-    /// Given a list of lists of types \p ListOfLists and an invocable \p Fn, construct a new
-    /// list by calling \p Fn with the elements from the lists pairwise.
-    /// \par Complexity
-    /// \f$ O(N \times M) \f$, where \f$ N \f$ is the size of the outer list, and
-    /// \f$ M \f$ is the size of the inner lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(invocable) Fn, META_TYPE_CONSTRAINT(list_like) ListOfLists>
-    using zip_with = transform<transpose<ListOfLists>, uncurry<Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::zip_with'
-        /// \ingroup lazy_transformation
-        template <typename Fn, typename ListOfLists> using zip_with = defer<zip_with, Fn, ListOfLists>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // zip
-    /// Given a list of lists of types \p ListOfLists, construct a new list by grouping the
-    /// elements from the lists pairwise into `futures::detail::meta::list`s.
-    /// \par Complexity
-    /// \f$ O(N \times M) \f$, where \f$ N \f$ is the size of the outer list, and \f$ M \f$
-    /// is the size of the inner lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) ListOfLists> using zip = transpose<ListOfLists>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::zip'
-        /// \ingroup lazy_transformation
-        template <typename ListOfLists> using zip = defer<zip, ListOfLists>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // as_list
-    /// \cond
-    namespace ranges_detail {
-        template <typename T> using uncvref_t = _t<std::remove_cv<_t<std::remove_reference<T>>>>;
-
-        // Indirection here needed to avoid Core issue 1430
-        // https://wg21.link/cwg1430
-        template <typename Sequence> struct as_list_ : lazy::invoke<uncurry<quote<list>>, Sequence> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Turn a type into an instance of \c futures::detail::meta::list in a way determined by
-    /// \c futures::detail::meta::apply.
-    /// \ingroup list
-    template <typename Sequence> using as_list = _t<ranges_detail::as_list_<ranges_detail::uncvref_t<Sequence>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::as_list'
-        /// \ingroup lazy_list
-        template <typename Sequence> using as_list = defer<as_list, Sequence>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // reverse
-    /// \cond
-    namespace ranges_detail {
-        template <typename L, typename State = list<>> struct reverse_ : lazy::fold<L, State, quote<push_front>> {};
-
-        template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6,
-                  typename T7, typename T8, typename T9, typename... Ts, typename... Us>
-        struct reverse_<list<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, Ts...>, list<Us...>>
-            : reverse_<list<Ts...>, list<T9, T8, T7, T6, T5, T4, T3, T2, T1, T0, Us...>> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list by reversing the elements in the list \p L.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L> using reverse = _t<ranges_detail::reverse_<L>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::reverse'
-        /// \ingroup lazy_transformation
-        template <typename L> using reverse = defer<reverse, L>;
-    } // namespace lazy
-
-    /// Logically negate the result of invocable \p Fn.
-    /// \ingroup trait
-    template <META_TYPE_CONSTRAINT(invocable) Fn> using not_fn = compose<quote<not_>, Fn>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::not_fn'
-        /// \ingroup lazy_trait
-        template <typename Fn> using not_fn = defer<not_fn, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // all_of
-    /// A Boolean integral constant wrapper around \c true if `invoke<Fn, A>::%value` is \c true
-    /// for all elements \c A in \c futures::detail::meta::list \p L; \c false, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using all_of = empty<find_if<L, not_fn<Fn>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::all_of'
-        /// \ingroup lazy_query
-        template <typename L, typename Fn> using all_of = defer<all_of, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // any_of
-    /// A Boolean integral constant wrapper around \c true if `invoke<Fn, A>::%value` is
-    /// \c true for any element \c A in \c futures::detail::meta::list \p L; \c false, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using any_of = not_<empty<find_if<L, Fn>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::any_of'
-        /// \ingroup lazy_query
-        template <typename L, typename Fn> using any_of = defer<any_of, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // none_of
-    /// A Boolean integral constant wrapper around \c true if `invoke<Fn, A>::%value` is
-    /// \c false for all elements \c A in \c futures::detail::meta::list \p L; \c false, otherwise.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using none_of = empty<find_if<L, Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::none_of'
-        /// \ingroup lazy_query
-        template <typename L, META_TYPE_CONSTRAINT(invocable) Fn> using none_of = defer<none_of, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // in
-    /// A Boolean integral constant wrapper around \c true if there is at least one occurrence
-    /// of \p T in \p L.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup query
-    template <META_TYPE_CONSTRAINT(list_like) L, typename T> using in = not_<empty<find<L, T>>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::in'
-        /// \ingroup lazy_query
-        template <typename L, typename T> using in = defer<in, L, T>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // inherit
-    /// \cond
-    namespace ranges_detail {
-        template <typename L> struct inherit_ {};
-
-        template <typename... L> struct inherit_<list<L...>> : L... { using type = inherit_; };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// A type that inherits from all the types in the list
-    /// \pre The types in the list must be unique
-    /// \pre All the types in the list must be non-final class types
-    /// \ingroup datatype
-    template <META_TYPE_CONSTRAINT(list_like) L> using inherit = futures::detail::meta::_t<ranges_detail::inherit_<L>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::inherit'
-        /// \ingroup lazy_datatype
-        template <typename L> using inherit = defer<inherit, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // unique
-    /// \cond
-    namespace ranges_detail {
-        template <typename Set, typename T> struct in_ {};
-
-        template <typename... Set, typename T>
-        struct in_<list<Set...>, T> : bool_<META_IS_BASE_OF(id<T>, inherit<list<id<Set>...>>)> {};
-
-        template <typename Set, typename T> struct insert_back_ {};
-
-        template <typename... Set, typename T> struct insert_back_<list<Set...>, T> {
-            using type = if_<in_<list<Set...>, T>, list<Set...>, list<Set..., T>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Return a new \c futures::detail::meta::list where all duplicate elements have been removed.
-    /// \par Complexity
-    /// \f$ O(N^2) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L> using unique = fold<L, list<>, quote_trait<ranges_detail::insert_back_>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::unique'
-        /// \ingroup lazy_transformation
-        template <typename L> using unique = defer<unique, L>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // partition
-    /// \cond
-    namespace ranges_detail {
-        template <typename Fn> struct partition_ {
-#ifdef META_CONCEPT
-            template <typename, typename>
-#else
-            template <typename, typename, typename = void>
-#endif
-            struct impl {
-            };
-            template <typename... Yes, typename... No, typename A>
-#ifdef META_CONCEPT
-            requires integral<invoke<Fn, A>>
-            struct impl<pair<list<Yes...>, list<No...>>, A>
-#else
-            struct impl<pair<list<Yes...>, list<No...>>, A, void_<bool_<invoke<Fn, A>::type::value>>>
-#endif
-            {
-                using type = if_<invoke<Fn, A>, pair<list<Yes..., A>, list<No...>>, pair<list<Yes...>, list<No..., A>>>;
-            };
-
-            template <typename State, typename A> using invoke = _t<impl<State, A>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Returns a pair of lists, where the elements of \p L that satisfy the
-    /// invocable \p Fn such that `invoke<Fn,A>::%value` is \c true are present in the
-    /// first list and the rest are in the second.
-    /// \par Complexity
-    /// \f$ O(N) \f$.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using partition = fold<L, pair<list<>, list<>>, ranges_detail::partition_<Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::partition'
-        /// \ingroup lazy_transformation
-        template <typename L, typename Fn> using partition = defer<partition, L, Fn>;
-    } // namespace lazy
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // sort
-    /// \cond
-    namespace ranges_detail {
-        template <META_TYPE_CONSTRAINT(invocable) Fn, typename A, typename B, typename... Ts>
-        using part_ = partition<list<B, Ts...>, bind_back<Fn, A>>;
-#ifdef META_CONCEPT
-        template <list_like L, invocable Fn>
-#else
-        template <typename, typename, typename = void>
-#endif
-        struct sort_ {
-        };
-        template <typename Fn> struct sort_<list<>, Fn> { using type = list<>; };
-
-        template <typename A, typename Fn> struct sort_<list<A>, Fn> { using type = list<A>; };
-
-        template <typename A, typename B, typename... Ts, typename Fn>
-#ifdef META_CONCEPT
-        requires trait<sort_<first<part_<Fn, A, B, Ts...>>, Fn>> && trait<sort_<second<part_<Fn, A, B, Ts...>>, Fn>>
-        struct sort_<list<A, B, Ts...>, Fn>
-#else
-        struct sort_<list<A, B, Ts...>, Fn, void_<_t<sort_<first<part_<Fn, A, B, Ts...>>, Fn>>>>
-#endif
-        {
-            using P = part_<Fn, A, B, Ts...>;
-            using type = concat<_t<sort_<first<P>, Fn>>, list<A>, _t<sort_<second<P>, Fn>>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    // clang-format off
-    /// Return a new \c futures::detail::meta::list that is sorted according to invocable predicate \p Fn.
-    /// \par Complexity
-    /// Expected: \f$ O(N log N) \f$
-    /// Worst case: \f$ O(N^2) \f$.
-    /// \code
-    /// using L0 = list<char[5], char[3], char[2], char[6], char[1], char[5], char[10]>;
-    /// using L1 = futures::detail::meta::sort<L0, lambda<_a, _b, lazy::less<lazy::sizeof_<_a>, lazy::sizeof_<_b>>>>;
-    /// static_assert(std::is_same_v<L1, list<char[1], char[2], char[3], char[5], char[5], char[6], char[10]>>, "");
-    /// \endcode
-    /// \ingroup transformation
-    // clang-format on
-    template <META_TYPE_CONSTRAINT(list_like) L, META_TYPE_CONSTRAINT(invocable) Fn>
-    using sort = _t<ranges_detail::sort_<L, Fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::sort'
-        /// \ingroup lazy_transformation
-        template <typename L, typename Fn> using sort = defer<sort, L, Fn>;
-    } // namespace lazy
-
-    ////////////////////////////////////////////////////////////////////////////
-    // lambda_
-    /// \cond
-    namespace ranges_detail {
-        template <typename T, int = 0> struct protect_;
-
-        template <typename, int = 0> struct vararg_;
-
-        template <typename T, int = 0> struct is_valid_;
-
-        // Returns which branch to evaluate
-        template <typename If, typename... Ts>
-#ifdef META_CONCEPT
-        using lazy_if_ = lazy::_t<defer<_if_, If, protect_<Ts>...>>;
-#else
-        using lazy_if_ = lazy::_t<defer<_if_, list<If, protect_<Ts>...>>>;
-#endif
-
-        template <typename A, typename T, typename Fn, typename Ts> struct subst1_ { using type = list<list<T>>; };
-        template <typename T, typename Fn, typename Ts> struct subst1_<Fn, T, Fn, Ts> { using type = list<>; };
-        template <typename A, typename T, typename Fn, typename Ts> struct subst1_<vararg_<A>, T, Fn, Ts> {
-            using type = list<Ts>;
-        };
-
-        template <typename As, typename Ts>
-        using substitutions_ =
-            push_back<join<transform<concat<As, repeat_n_c<size<Ts>{} + 2 - size<As>{}, back<As>>>,
-                                     concat<Ts, repeat_n_c<2, back<As>>>,
-                                     bind_back<quote_trait<subst1_>, back<As>, drop_c<Ts, size<As>{} - 2>>>>,
-                      list<back<As>>>;
-
-#if 0 // def META_CONCEPT
-        template <list_like As, list_like Ts>
-        requires (_v<size<Ts>> + 2 >= _v<size<As>>)
-        using substitutions = substitutions_<As, Ts>;
-#else // ^^^ concepts / no concepts vvv
-        template <typename As, typename Ts>
-        using substitutions =
-#ifdef META_WORKAROUND_MSVC_702792
-            invoke<if_c<(size<Ts>::value + 2 >= size<As>::value), quote<substitutions_>>, As, Ts>;
-#else  // ^^^ workaround ^^^ / vvv no workaround vvv
-            invoke<if_c<(size<Ts>{} + 2 >= size<As>{}), quote<substitutions_>>, As, Ts>;
-#endif // META_WORKAROUND_MSVC_702792
-#endif // META_CONCEPT
-
-        template <typename T> struct is_vararg_ : std::false_type {};
-        template <typename T> struct is_vararg_<vararg_<T>> : std::true_type {};
-
-        template <META_TYPE_CONSTRAINT(list_like) Tags>
-        using is_variadic_ = is_vararg_<at<push_front<Tags, void>, dec<size<Tags>>>>;
-
-        template <META_TYPE_CONSTRAINT(list_like) Tags, bool IsVariadic = is_variadic_<Tags>::value> struct lambda_;
-
-        // Non-variadic lambda implementation
-        template <typename... As> struct lambda_<list<As...>, false> {
-          private:
-            static constexpr std::size_t arity = sizeof...(As) - 1;
-            using Tags = list<As...>; // Includes the lambda body as the last arg!
-            using Fn = back<Tags>;
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args> struct impl;
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args>
-            using lazy_impl_ = lazy::_t<defer<impl, T, protect_<Args>>>;
-#if 0 // def META_CONCEPT
-            template <typename, list_like>
-#else
-            template <typename, typename, typename = void>
-#endif
-            struct subst_ {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-#if 0 // def META_CONCEPT
-            requires valid<C, _t<impl<Ts, Args>>...> struct subst_<defer<C, Ts...>, Args>
-#else
-            struct subst_<defer<C, Ts...>, Args, void_<C<_t<impl<Ts, Args>>...>>>
-#endif
-            {
-                using type = C<_t<impl<Ts, Args>>...>;
-            };
-            template <typename T, template <T...> class C, T... Is, typename Args>
-#if 0 // def META_CONCEPT
-            requires valid_i<T, C, Is...> struct subst_<defer_i<T, C, Is...>, Args>
-#else
-            struct subst_<defer_i<T, C, Is...>, Args, void_<C<Is...>>>
-#endif
-            {
-                using type = C<Is...>;
-            };
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args>
-            struct impl
-                : if_c<(reverse_find_index<Tags, T>() != npos()), lazy::at<Args, reverse_find_index<Tags, T>>, id<T>> {
-            };
-            template <typename T, typename Args> struct impl<protect_<T>, Args> { using type = T; };
-            template <typename T, typename Args> struct impl<is_valid_<T>, Args> {
-                using type = is_trait<impl<T, Args>>;
-            };
-            template <typename If, typename... Ts, typename Args>
-            struct impl<defer<if_, If, Ts...>, Args> // Short-circuit if_
-                : impl<lazy_impl_<lazy_if_<If, Ts...>, Args>, Args> {};
-            template <typename B, typename... Bs, typename Args>
-            struct impl<defer<and_, B, Bs...>, Args> // Short-circuit and_
-                : impl<lazy_impl_<lazy_if_<B, lazy::and_<Bs...>, protect_<std::false_type>>, Args>, Args> {};
-            template <typename B, typename... Bs, typename Args>
-            struct impl<defer<or_, B, Bs...>, Args> // Short-circuit or_
-                : impl<lazy_impl_<lazy_if_<B, protect_<std::true_type>, lazy::or_<Bs...>>, Args>, Args> {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-            struct impl<defer<C, Ts...>, Args> : subst_<defer<C, Ts...>, Args> {};
-            template <typename T, template <T...> class C, T... Is, typename Args>
-            struct impl<defer_i<T, C, Is...>, Args> : subst_<defer_i<T, C, Is...>, Args> {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-            struct impl<C<Ts...>, Args> : subst_<defer<C, Ts...>, Args> {};
-            template <typename... Ts, typename Args> struct impl<lambda_<list<Ts...>, false>, Args> {
-                using type =
-                    compose<uncurry<lambda_<list<As..., Ts...>, false>>, curry<bind_front<quote<concat>, Args>>>;
-            };
-            template <typename... Bs, typename Args> struct impl<lambda_<list<Bs...>, true>, Args> {
-                using type = compose<typename lambda_<list<As..., Bs...>, true>::thunk,
-                                     bind_front<quote<concat>, transform<Args, quote<list>>>,
-                                     curry<bind_front<quote<substitutions>, list<Bs...>>>>;
-            };
-
-          public:
-            template <typename... Ts>
-#ifdef META_CONCEPT
-            requires(sizeof...(Ts) == arity) using invoke = _t<impl<Fn, list<Ts..., Fn>>>;
-#else
-            using invoke = _t<if_c<sizeof...(Ts) == arity, impl<Fn, list<Ts..., Fn>>>>;
-#endif
-        };
-
-        // Lambda with variadic placeholder (broken out due to less efficient compile-time
-        // resource usage)
-        template <typename... As> struct lambda_<list<As...>, true> {
-          private:
-            template <META_TYPE_CONSTRAINT(list_like) T, bool IsVar> friend struct lambda_;
-            using Tags = list<As...>; // Includes the lambda body as the last arg!
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args> struct impl;
-            template <META_TYPE_CONSTRAINT(list_like) Args> using eval_impl_ = bind_back<quote_trait<impl>, Args>;
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args>
-            using lazy_impl_ = lazy::_t<defer<impl, T, protect_<Args>>>;
-            template <template <typename...> class C, META_TYPE_CONSTRAINT(list_like) Args,
-                      META_TYPE_CONSTRAINT(list_like) Ts>
-            using try_subst_ = apply<quote<C>, join<transform<Ts, eval_impl_<Args>>>>;
-#if 0 // def META_CONCEPT
-            template <typename, list_like>
-#else
-            template <typename, typename, typename = void>
-#endif
-            struct subst_ {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-#if 0 // def META_CONCEPT
-            requires is_true<try_subst_<C, Args, list<Ts...>>> struct subst_<defer<C, Ts...>, Args>
-#else
-            struct subst_<defer<C, Ts...>, Args, void_<try_subst_<C, Args, list<Ts...>>>>
-#endif
-            {
-                using type = list<try_subst_<C, Args, list<Ts...>>>;
-            };
-            template <typename T, template <T...> class C, T... Is, typename Args>
-#if 0 // def META_CONCEPT
-            requires valid_i<T, C, Is...> struct subst_<defer_i<T, C, Is...>, Args>
-#else
-            struct subst_<defer_i<T, C, Is...>, Args, void_<C<Is...>>>
-#endif
-            {
-                using type = list<C<Is...>>;
-            };
-            template <typename T, META_TYPE_CONSTRAINT(list_like) Args>
-            struct impl : if_c<(reverse_find_index<Tags, T>() != npos()), lazy::at<Args, reverse_find_index<Tags, T>>,
-                               id<list<T>>> {};
-            template <typename T, typename Args> struct impl<protect_<T>, Args> { using type = list<T>; };
-            template <typename T, typename Args> struct impl<is_valid_<T>, Args> {
-                using type = list<is_trait<impl<T, Args>>>;
-            };
-            template <typename If, typename... Ts, typename Args>
-            struct impl<defer<if_, If, Ts...>, Args> // Short-circuit if_
-                : impl<lazy_impl_<lazy_if_<If, Ts...>, Args>, Args> {};
-            template <typename B, typename... Bs, typename Args>
-            struct impl<defer<and_, B, Bs...>, Args> // Short-circuit and_
-                : impl<lazy_impl_<lazy_if_<B, lazy::and_<Bs...>, protect_<std::false_type>>, Args>, Args> {};
-            template <typename B, typename... Bs, typename Args>
-            struct impl<defer<or_, B, Bs...>, Args> // Short-circuit or_
-                : impl<lazy_impl_<lazy_if_<B, protect_<std::true_type>, lazy::or_<Bs...>>, Args>, Args> {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-            struct impl<defer<C, Ts...>, Args> : subst_<defer<C, Ts...>, Args> {};
-            template <typename T, template <T...> class C, T... Is, typename Args>
-            struct impl<defer_i<T, C, Is...>, Args> : subst_<defer_i<T, C, Is...>, Args> {};
-            template <template <typename...> class C, typename... Ts, typename Args>
-            struct impl<C<Ts...>, Args> : subst_<defer<C, Ts...>, Args> {};
-            template <typename... Bs, bool IsVar, typename Args> struct impl<lambda_<list<Bs...>, IsVar>, Args> {
-                using type =
-                    list<compose<typename lambda_<list<As..., Bs...>, true>::thunk, bind_front<quote<concat>, Args>,
-                                 curry<bind_front<quote<substitutions>, list<Bs...>>>>>;
-            };
-            struct thunk {
-                template <typename S, typename R = _t<impl<back<Tags>, S>>>
-#ifdef META_CONCEPT
-                requires(_v<size<R>> == 1) using invoke = front<R>;
-#else
-                using invoke = if_c<size<R>{} == 1, front<R>>;
-#endif
-            };
-
-          public:
-            template <typename... Ts> using invoke = invoke<thunk, substitutions<Tags, list<Ts...>>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // lambda
-    /// For creating anonymous Invocables.
-    /// \code
-    /// using L = lambda<_a, _b, std::pair<_b, std::pair<_a, _a>>>;
-    /// using P = invoke<L, int, short>;
-    /// static_assert(std::is_same_v<P, std::pair<short, std::pair<int, int>>>, "");
-    /// \endcode
-    /// \ingroup trait
-    template <typename... Ts>
-#ifdef META_CONCEPT
-    requires(sizeof...(Ts) > 0) using lambda = ranges_detail::lambda_<list<Ts...>>;
-#else
-    using lambda = if_c<(sizeof...(Ts) > 0), ranges_detail::lambda_<list<Ts...>>>;
-#endif
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // is_valid
-    /// For testing whether a deferred computation will succeed in a \c let or a \c lambda.
-    /// \ingroup trait
-    template <typename T> using is_valid = ranges_detail::is_valid_<T>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // vararg
-    /// For defining variadic placeholders.
-    template <typename T> using vararg = ranges_detail::vararg_<T>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // protect
-    /// For preventing the evaluation of a nested `defer`ed computation in a \c let or
-    /// \c lambda expression.
-    template <typename T> using protect = ranges_detail::protect_<T>;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // var
-    /// For use when defining local variables in \c futures::detail::meta::let expressions
-    /// \sa `futures::detail::meta::let`
-    template <typename Tag, typename Value> struct var;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename...> struct let_ {};
-        template <typename Fn> struct let_<Fn> { using type = lazy::invoke<lambda<Fn>>; };
-        template <typename Tag, typename Value, typename... Rest> struct let_<var<Tag, Value>, Rest...> {
-            using type = lazy::invoke<lambda<Tag, _t<let_<Rest...>>>, Value>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// A lexically scoped expression with local variables.
-    ///
-    /// \code
-    /// template <typename T, typename L>
-    /// using find_index_ = let<
-    ///     var<_a, L>,
-    ///     var<_b, lazy::find<_a, T>>,
-    ///     lazy::if_<
-    ///         std::is_same<_b, list<>>,
-    ///         futures::detail::meta::npos,
-    ///         lazy::minus<lazy::size<_a>, lazy::size<_b>>>>;
-    /// static_assert(find_index_<int, list<short, int, float>>{} == 1, "");
-    /// static_assert(find_index_<double, list<short, int, float>>{} == futures::detail::meta::npos{}, "");
-    /// \endcode
-    /// \ingroup trait
-    template <typename... As> using let = _t<_t<ranges_detail::let_<As...>>>;
-
-    namespace lazy {
-        /// \sa `futures::detail::meta::let`
-        /// \ingroup lazy_trait
-        template <typename... As> using let = defer<let, As...>;
-    } // namespace lazy
-
-    // Some argument placeholders for use in \c lambda expressions.
-    /// \ingroup trait
-    inline namespace placeholders {
-        // regular placeholders:
-        struct _a;
-        struct _b;
-        struct _c;
-        struct _d;
-        struct _e;
-        struct _f;
-        struct _g;
-        struct _h;
-        struct _i;
-
-        // variadic placeholders:
-        using _args = vararg<void>;
-        using _args_a = vararg<_a>;
-        using _args_b = vararg<_b>;
-        using _args_c = vararg<_c>;
-    } // namespace placeholders
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // cartesian_product
-    /// \cond
-    namespace ranges_detail {
-        template <typename M2, typename M> struct cartesian_product_fn {
-            template <typename X> struct lambda0 {
-                template <typename Xs> using lambda1 = list<push_front<Xs, X>>;
-                using type = join<transform<M2, quote<lambda1>>>;
-            };
-            using type = join<transform<M, quote_trait<lambda0>>>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Given a list of lists \p ListOfLists, return a new list of lists that is the Cartesian
-    /// Product. Like the `sequence` function from the Haskell Prelude.
-    /// \par Complexity
-    /// \f$ O(N \times M) \f$, where \f$ N \f$ is the size of the outer list, and
-    /// \f$ M \f$ is the size of the inner lists.
-    /// \ingroup transformation
-    template <META_TYPE_CONSTRAINT(list_like) ListOfLists>
-    using cartesian_product = reverse_fold<ListOfLists, list<list<>>, quote_trait<ranges_detail::cartesian_product_fn>>;
-
-    namespace lazy {
-        /// \sa 'futures::detail::meta::cartesian_product'
-        /// \ingroup lazy_transformation
-        template <typename ListOfLists> using cartesian_product = defer<cartesian_product, ListOfLists>;
-    } // namespace lazy
-
-    /// \cond
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // add_const_if
-    namespace ranges_detail {
-        template <bool> struct add_const_if { template <typename T> using invoke = T const; };
-        template <> struct add_const_if<false> { template <typename T> using invoke = T; };
-    } // namespace ranges_detail
-    template <bool If> using add_const_if_c = ranges_detail::add_const_if<If>;
-    template <META_TYPE_CONSTRAINT(integral) If> using add_const_if = add_const_if_c<If::type::value>;
-    /// \endcond
-
-    /// \cond
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // const_if
-    template <bool If, typename T> using const_if_c = typename add_const_if_c<If>::template invoke<T>;
-    template <typename If, typename T> using const_if = typename add_const_if<If>::template invoke<T>;
-    /// \endcond
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename State, typename Ch>
-        using atoi_ = if_c<(Ch::value >= '0' && Ch::value <= '9'),
-                           std::integral_constant<typename State::value_type, State::value * 10 + (Ch::value - '0')>>;
-    }
-    /// \endcond
-
-    inline namespace literals {
-        /// A user-defined literal that generates objects of type \c futures::detail::meta::size_t.
-        /// \ingroup integral
-        template <char... Chs>
-        constexpr fold<list<char_<Chs>...>, futures::detail::meta::size_t<0>, quote<ranges_detail::atoi_>> operator"" _z() {
-            return {};
-        }
-    } // namespace literals
-} // namespace futures::detail::meta
-
-/// \cond
-// Non-portable forward declarations of standard containers
-#ifndef META_NO_STD_FORWARD_DECLARATIONS
-#if defined(__apple_build_version__) || (defined(__clang__) && __clang_major__ < 6)
-META_BEGIN_NAMESPACE_STD
-META_BEGIN_NAMESPACE_VERSION
-template <class> class META_TEMPLATE_VIS allocator;
-template <class, class> struct META_TEMPLATE_VIS pair;
-template <class> struct META_TEMPLATE_VIS hash;
-template <class> struct META_TEMPLATE_VIS less;
-template <class> struct META_TEMPLATE_VIS equal_to;
-template <class> struct META_TEMPLATE_VIS char_traits;
-#if defined(_GLIBCXX_USE_CXX11_ABI) && _GLIBCXX_USE_CXX11_ABI
-inline namespace __cxx11 {
-#endif
-    template <class, class, class> class META_TEMPLATE_VIS basic_string;
-#if defined(_GLIBCXX_USE_CXX11_ABI) && _GLIBCXX_USE_CXX11_ABI
-}
-#endif
-META_END_NAMESPACE_VERSION
-META_BEGIN_NAMESPACE_CONTAINER
-#if defined(__GLIBCXX__)
-inline namespace __cxx11 {
-#endif
-    template <class, class> class META_TEMPLATE_VIS list;
-#if defined(__GLIBCXX__)
-}
-#endif
-template <class, class> class META_TEMPLATE_VIS forward_list;
-template <class, class> class META_TEMPLATE_VIS vector;
-template <class, class> class META_TEMPLATE_VIS deque;
-template <class, class, class, class> class META_TEMPLATE_VIS map;
-template <class, class, class, class> class META_TEMPLATE_VIS multimap;
-template <class, class, class> class META_TEMPLATE_VIS set;
-template <class, class, class> class META_TEMPLATE_VIS multiset;
-template <class, class, class, class, class> class META_TEMPLATE_VIS unordered_map;
-template <class, class, class, class, class> class META_TEMPLATE_VIS unordered_multimap;
-template <class, class, class, class> class META_TEMPLATE_VIS unordered_set;
-template <class, class, class, class> class META_TEMPLATE_VIS unordered_multiset;
-template <class, class> class META_TEMPLATE_VIS queue;
-template <class, class, class> class META_TEMPLATE_VIS priority_queue;
-template <class, class> class META_TEMPLATE_VIS stack;
-META_END_NAMESPACE_CONTAINER
-META_END_NAMESPACE_STD
-
-namespace futures::detail::meta {
-    namespace ranges_detail {
-        template <typename T, typename A = std::allocator<T>> using std_list = std::list<T, A>;
-        template <typename T, typename A = std::allocator<T>> using std_forward_list = std::forward_list<T, A>;
-        template <typename T, typename A = std::allocator<T>> using std_vector = std::vector<T, A>;
-        template <typename T, typename A = std::allocator<T>> using std_deque = std::deque<T, A>;
-        template <typename T, typename C = std::char_traits<T>, typename A = std::allocator<T>>
-        using std_basic_string = std::basic_string<T, C, A>;
-        template <typename K, typename V, typename C = std::less<K>, typename A = std::allocator<std::pair<K const, V>>>
-        using std_map = std::map<K, V, C, A>;
-        template <typename K, typename V, typename C = std::less<K>, typename A = std::allocator<std::pair<K const, V>>>
-        using std_multimap = std::multimap<K, V, C, A>;
-        template <typename K, typename C = std::less<K>, typename A = std::allocator<K>>
-        using std_set = std::set<K, C, A>;
-        template <typename K, typename C = std::less<K>, typename A = std::allocator<K>>
-        using std_multiset = std::multiset<K, C, A>;
-        template <typename K, typename V, typename H = std::hash<K>, typename C = std::equal_to<K>,
-                  typename A = std::allocator<std::pair<K const, V>>>
-        using std_unordered_map = std::unordered_map<K, V, H, C, A>;
-        template <typename K, typename V, typename H = std::hash<K>, typename C = std::equal_to<K>,
-                  typename A = std::allocator<std::pair<K const, V>>>
-        using std_unordered_multimap = std::unordered_multimap<K, V, H, C, A>;
-        template <typename K, typename H = std::hash<K>, typename C = std::equal_to<K>, typename A = std::allocator<K>>
-        using std_unordered_set = std::unordered_set<K, H, C, A>;
-        template <typename K, typename H = std::hash<K>, typename C = std::equal_to<K>, typename A = std::allocator<K>>
-        using std_unordered_multiset = std::unordered_multiset<K, H, C, A>;
-        template <typename T, typename C = std_deque<T>> using std_queue = std::queue<T, C>;
-        template <typename T, typename C = std_vector<T>, class D = std::less<typename C::value_type>>
-        using std_priority_queue = std::priority_queue<T, C, D>;
-        template <typename T, typename C = std_deque<T>> using std_stack = std::stack<T, C>;
-    } // namespace ranges_detail
-
-    template <> struct quote<::std::list> : quote<ranges_detail::std_list> {};
-    template <> struct quote<::std::deque> : quote<ranges_detail::std_deque> {};
-    template <> struct quote<::std::forward_list> : quote<ranges_detail::std_forward_list> {};
-    template <> struct quote<::std::vector> : quote<ranges_detail::std_vector> {};
-    template <> struct quote<::std::basic_string> : quote<ranges_detail::std_basic_string> {};
-    template <> struct quote<::std::map> : quote<ranges_detail::std_map> {};
-    template <> struct quote<::std::multimap> : quote<ranges_detail::std_multimap> {};
-    template <> struct quote<::std::set> : quote<ranges_detail::std_set> {};
-    template <> struct quote<::std::multiset> : quote<ranges_detail::std_multiset> {};
-    template <> struct quote<::std::unordered_map> : quote<ranges_detail::std_unordered_map> {};
-    template <> struct quote<::std::unordered_multimap> : quote<ranges_detail::std_unordered_multimap> {};
-    template <> struct quote<::std::unordered_set> : quote<ranges_detail::std_unordered_set> {};
-    template <> struct quote<::std::unordered_multiset> : quote<ranges_detail::std_unordered_multiset> {};
-    template <> struct quote<::std::queue> : quote<ranges_detail::std_queue> {};
-    template <> struct quote<::std::priority_queue> : quote<ranges_detail::std_priority_queue> {};
-    template <> struct quote<::std::stack> : quote<ranges_detail::std_stack> {};
-} // namespace futures::detail::meta
-
-#endif
-#endif
-/// \endcond
-
-#ifdef __clang__
-#pragma GCC diagnostic pop
-#endif
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-#ifndef CPP_CONCEPTS_HPP
-#define CPP_CONCEPTS_HPP
-
-// clang-format off
-
-// #include <initializer_list>
-
-// #include <utility>
-
-// #include <type_traits>
-
-// #include <futures/algorithm/detail/traits/range/concepts/swap.h>
-#ifndef CPP_SWAP_HPP
-#define CPP_SWAP_HPP
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-#include <tuple>
-// #include <type_traits>
-
-// #include <utility>
-
-
-// Note: constexpr implies inline, to retain the same visibility
-// C++14 constexpr functions are inline in C++11
-#if (defined(__cpp_constexpr) && __cpp_constexpr >= 201304L) || (!defined(__cpp_constexpr) && __cplusplus >= 201402L)
-#define CPP_CXX14_CONSTEXPR constexpr
-#else
-#define CPP_CXX14_CONSTEXPR inline
-#endif
-
-#ifndef CPP_CXX_INLINE_VARIABLES
-#ifdef __cpp_inline_variables
-#define CPP_CXX_INLINE_VARIABLES __cpp_inline_variables
-#elif defined(__clang__) && (__clang_major__ > 3 || __clang_major__ == 3 && __clang_minor__ == 9) &&                   \
-    __cplusplus > 201402L
-#define CPP_CXX_INLINE_VARIABLES 201606L
-#else
-#define CPP_CXX_INLINE_VARIABLES __cplusplus
-#endif // __cpp_inline_variables
-#endif // CPP_CXX_INLINE_VARIABLES
-
-#if defined(_MSC_VER) && !defined(__clang__)
-#if _MSC_VER < 1926
-#define CPP_WORKAROUND_MSVC_895622 // Error when phase 1 name binding finds only deleted function
-#endif                             // _MSC_VER < 1926
-#endif                             // MSVC
-
-#if CPP_CXX_INLINE_VARIABLES < 201606L
-#define CPP_INLINE_VAR
-#define CPP_INLINE_VARIABLE(type, name)                                                                                \
-    inline namespace {                                                                                                 \
-        constexpr auto &name = ::futures::detail::concepts::ranges_detail::static_const<type>::value;                                          \
-    }                                                                                                                  \
-    /**/
-#else // CPP_CXX_INLINE_VARIABLES >= 201606L
-#define CPP_INLINE_VAR inline
-#define CPP_INLINE_VARIABLE(type, name)                                                                                \
-    inline constexpr type name{};                                                                                      \
-    /**/
-#endif // CPP_CXX_INLINE_VARIABLES
-
-#if CPP_CXX_INLINE_VARIABLES < 201606L
-#define CPP_DEFINE_CPO(type, name)                                                                                     \
-    inline namespace {                                                                                                 \
-        constexpr auto &name = ::futures::detail::concepts::ranges_detail::static_const<type>::value;                                          \
-    }                                                                                                                  \
-    /**/
-#else // CPP_CXX_INLINE_VARIABLES >= 201606L
-#define CPP_DEFINE_CPO(type, name)                                                                                     \
-    inline namespace _ {                                                                                               \
-        inline constexpr type name{};                                                                                  \
-    }                                                                                                                  \
-    /**/
-#endif // CPP_CXX_INLINE_VARIABLES
-
-#if defined(_MSC_VER) && !defined(__clang__)
-#define CPP_DIAGNOSTIC_PUSH __pragma(warning(push))
-#define CPP_DIAGNOSTIC_POP __pragma(warning(pop))
-#define CPP_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME
-#define CPP_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
-#define CPP_DIAGNOSTIC_IGNORE_CPP2A_COMPAT
-#else // ^^^ defined(_MSC_VER) ^^^ / vvv !defined(_MSC_VER) vvv
-#if defined(__GNUC__) || defined(__clang__)
-#define CPP_PRAGMA(X) _Pragma(#X)
-#define CPP_DIAGNOSTIC_PUSH CPP_PRAGMA(GCC diagnostic push)
-#define CPP_DIAGNOSTIC_POP CPP_PRAGMA(GCC diagnostic pop)
-#define CPP_DIAGNOSTIC_IGNORE_PRAGMAS CPP_PRAGMA(GCC diagnostic ignored "-Wpragmas")
-#define CPP_DIAGNOSTIC_IGNORE(X)                                                                                       \
-    CPP_DIAGNOSTIC_IGNORE_PRAGMAS                                                                                      \
-    CPP_PRAGMA(GCC diagnostic ignored "-Wunknown-pragmas")                                                             \
-    CPP_PRAGMA(GCC diagnostic ignored X)
-#define CPP_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME                                                                       \
-    CPP_DIAGNOSTIC_IGNORE("-Wunknown-warning-option")                                                                  \
-    CPP_DIAGNOSTIC_IGNORE("-Winit-list-lifetime")
-#define CPP_DIAGNOSTIC_IGNORE_FLOAT_EQUAL CPP_DIAGNOSTIC_IGNORE("-Wfloat-equal")
-#define CPP_DIAGNOSTIC_IGNORE_CPP2A_COMPAT CPP_DIAGNOSTIC_IGNORE("-Wc++2a-compat")
-#else
-#define CPP_DIAGNOSTIC_PUSH
-#define CPP_DIAGNOSTIC_POP
-#define CPP_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME
-#define CPP_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
-#define CPP_DIAGNOSTIC_IGNORE_CPP2A_COMPAT
-#endif
-#endif // MSVC/Generic configuration switch
-
-namespace futures::detail::concepts {
-    /// \cond
-    namespace ranges_detail {
-        template <typename T>
-        CPP_INLINE_VAR constexpr bool is_movable_v =
-            std::is_object<T>::value &&std::is_move_constructible<T>::value &&std::is_move_assignable<T>::value;
-
-        template <typename T> struct static_const { static constexpr T const value{}; };
-        template <typename T> constexpr T const static_const<T>::value;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename T> struct is_swappable;
-
-    template <typename T> struct is_nothrow_swappable;
-
-    template <typename T, typename U> struct is_swappable_with;
-
-    template <typename T, typename U> struct is_nothrow_swappable_with;
-
-    template <typename T, typename U = T>
-    CPP_CXX14_CONSTEXPR futures::detail::meta::if_c<std::is_move_constructible<T>::value && std::is_assignable<T &, U>::value, T>
-    exchange(T &t,
-             U &&u) noexcept(std::is_nothrow_move_constructible<T>::value &&std::is_nothrow_assignable<T &, U>::value) {
-        T tmp((T &&) t);
-        t = (U &&) u;
-        CPP_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME
-        return tmp;
-    }
-
-    /// \cond
-    namespace adl_swap_detail {
-        struct nope {};
-
-        // Intentionally create an ambiguity with std::swap, which is
-        // (possibly) unconstrained.
-        template <typename T> nope swap(T &, T &) = delete;
-
-        template <typename T, std::size_t N> nope swap(T (&)[N], T (&)[N]) = delete;
-
-#ifdef CPP_WORKAROUND_MSVC_895622
-        nope swap();
-#endif
-
-        template <typename T, typename U> decltype(swap(std::declval<T>(), std::declval<U>())) try_adl_swap_(int);
-
-        template <typename T, typename U> nope try_adl_swap_(long);
-
-        template <typename T, typename U = T>
-        CPP_INLINE_VAR constexpr bool is_adl_swappable_v =
-            !META_IS_SAME(decltype(adl_swap_detail::try_adl_swap_<T, U>(42)), nope);
-
-        struct swap_fn {
-            // Dispatch to user-defined swap found via ADL:
-            template <typename T, typename U>
-            CPP_CXX14_CONSTEXPR futures::detail::meta::if_c<is_adl_swappable_v<T, U>> operator()(T &&t, U &&u) const
-                noexcept(noexcept(swap((T &&) t, (U &&) u))) {
-                swap((T &&) t, (U &&) u);
-            }
-
-            // For intrinsically swappable (i.e., movable) types for which
-            // a swap overload cannot be found via ADL, swap by moving.
-            template <typename T>
-            CPP_CXX14_CONSTEXPR futures::detail::meta::if_c<!is_adl_swappable_v<T &> && ranges_detail::is_movable_v<T>> operator()(T &a,
-                                                                                                           T &b) const
-                noexcept(noexcept(b = concepts::exchange(a, (T &&) b))) {
-                b = concepts::exchange(a, (T &&) b);
-            }
-
-            // For arrays of intrinsically swappable (i.e., movable) types
-            // for which a swap overload cannot be found via ADL, swap array
-            // elements by moving.
-            template <typename T, typename U, std::size_t N>
-            CPP_CXX14_CONSTEXPR
-                futures::detail::meta::if_c<!is_adl_swappable_v<T (&)[N], U (&)[N]> && is_swappable_with<T &, U &>::value>
-                operator()(T (&t)[N], U (&u)[N]) const noexcept(is_nothrow_swappable_with<T &, U &>::value) {
-                for (std::size_t i = 0; i < N; ++i)
-                    (*this)(t[i], u[i]);
-            }
-
-            // For rvalue pairs and tuples of swappable types, swap the
-            // members. This permits code like:
-            //   futures::detail::swap(std::tie(a,b,c), std::tie(d,e,f));
-            template <typename F0, typename S0, typename F1, typename S1>
-            CPP_CXX14_CONSTEXPR futures::detail::meta::if_c<is_swappable_with<F0, F1>::value && is_swappable_with<S0, S1>::value>
-            operator()(std::pair<F0, S0> &&left, std::pair<F1, S1> &&right) const
-                noexcept(is_nothrow_swappable_with<F0, F1>::value &&is_nothrow_swappable_with<S0, S1>::value) {
-                swap_fn()(static_cast<std::pair<F0, S0> &&>(left).first,
-                          static_cast<std::pair<F1, S1> &&>(right).first);
-                swap_fn()(static_cast<std::pair<F0, S0> &&>(left).second,
-                          static_cast<std::pair<F1, S1> &&>(right).second);
-            }
-
-            template <typename... Ts, typename... Us>
-            CPP_CXX14_CONSTEXPR futures::detail::meta::if_c<futures::detail::meta::and_c<is_swappable_with<Ts, Us>::value...>::value>
-            operator()(std::tuple<Ts...> &&left, std::tuple<Us...> &&right) const
-                noexcept(futures::detail::meta::and_c<is_nothrow_swappable_with<Ts, Us>::value...>::value) {
-                swap_fn::impl(static_cast<std::tuple<Ts...> &&>(left), static_cast<std::tuple<Us...> &&>(right),
-                              futures::detail::meta::make_index_sequence<sizeof...(Ts)>{});
-            }
-
-          private:
-            template <typename... Ts> static constexpr int ignore_unused(Ts &&...) { return 0; }
-            template <typename T, typename U, std::size_t... Is>
-            CPP_CXX14_CONSTEXPR static void impl(T &&left, U &&right, futures::detail::meta::index_sequence<Is...>) {
-                (void)swap_fn::ignore_unused(
-                    (swap_fn()(std::get<Is>(static_cast<T &&>(left)), std::get<Is>(static_cast<U &&>(right))), 42)...);
-            }
-        };
-
-        template <typename T, typename U, typename = void> struct is_swappable_with_ : std::false_type {};
-
-        template <typename T, typename U>
-        struct is_swappable_with_<T, U,
-                                  futures::detail::meta::void_<decltype(swap_fn()(std::declval<T>(), std::declval<U>())),
-                                              decltype(swap_fn()(std::declval<U>(), std::declval<T>()))>>
-            : std::true_type {};
-
-        template <typename T, typename U>
-        struct is_nothrow_swappable_with_
-            : futures::detail::meta::bool_<noexcept(swap_fn()(std::declval<T>(), std::declval<U>())) &&noexcept(
-                  swap_fn()(std::declval<U>(), std::declval<T>()))> {};
-
-        // Q: Should std::reference_wrapper be considered a proxy wrt swapping rvalues?
-        // A: No. Its operator= is currently defined to reseat the references, so
-        //    std::swap(ra, rb) already means something when ra and rb are (lvalue)
-        //    reference_wrappers. That reseats the reference wrappers but leaves the
-        //    referents unmodified. Treating rvalue reference_wrappers differently would
-        //    be confusing.
-
-        // Q: Then why is it OK to "re"-define swap for pairs and tuples of references?
-        // A: Because as defined above, swapping an rvalue tuple of references has the same
-        //    semantics as swapping an lvalue tuple of references. Rather than reseat the
-        //    references, assignment happens *through* the references.
-
-        // Q: But I have an iterator whose operator* returns an rvalue
-        //    std::reference_wrapper<T>. How do I make it model indirectly_swappable?
-        // A: With an overload of iter_swap.
-    } // namespace adl_swap_detail
-    /// \endcond
-
-    /// \ingroup group-utility
-    template <typename T, typename U> struct is_swappable_with : adl_swap_detail::is_swappable_with_<T, U> {};
-
-    /// \ingroup group-utility
-    template <typename T, typename U>
-    struct is_nothrow_swappable_with
-        : futures::detail::meta::and_<is_swappable_with<T, U>, adl_swap_detail::is_nothrow_swappable_with_<T, U>> {};
-
-    /// \ingroup group-utility
-    template <typename T> struct is_swappable : is_swappable_with<T &, T &> {};
-
-    /// \ingroup group-utility
-    template <typename T> struct is_nothrow_swappable : is_nothrow_swappable_with<T &, T &> {};
-
-    /// \ingroup group-utility
-    /// \relates adl_swap_detail::swap_fn
-    CPP_DEFINE_CPO(adl_swap_detail::swap_fn, swap)
-} // namespace futures::detail::concepts
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/concepts/type_traits.h>
-#ifndef CPP_TYPE_TRAITS_HPP
-#define CPP_TYPE_TRAITS_HPP
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-// #include <tuple>
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-namespace futures::detail::concepts {
-    template <typename T> using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename From, typename To>
-        using is_convertible = std::is_convertible<futures::detail::meta::_t<std::add_rvalue_reference<From>>, To>;
-
-        template <bool> struct if_else_ { template <typename, typename U> using invoke = U; };
-        template <> struct if_else_<true> { template <typename T, typename> using invoke = T; };
-        template <bool B, typename T, typename U> using if_else_t = futures::detail::meta::invoke<if_else_<B>, T, U>;
-
-        template <bool> struct if_ {};
-        template <> struct if_<true> { template <typename T> using invoke = T; };
-        template <bool B, typename T = void> using if_t = futures::detail::meta::invoke<if_<B>, T>;
-
-        template <typename From, typename To> struct _copy_cv_ { using type = To; };
-        template <typename From, typename To> struct _copy_cv_<From const, To> { using type = To const; };
-        template <typename From, typename To> struct _copy_cv_<From volatile, To> { using type = To volatile; };
-        template <typename From, typename To> struct _copy_cv_<From const volatile, To> {
-            using type = To const volatile;
-        };
-        template <typename From, typename To> using _copy_cv = futures::detail::meta::_t<_copy_cv_<From, To>>;
-
-        ////////////////////////////////////////////////////////////////////////////////////////
-        template <typename T, typename U, typename = void> struct _builtin_common;
-
-        template <typename T, typename U> using _builtin_common_t = futures::detail::meta::_t<_builtin_common<T, U>>;
-
-        template <typename T, typename U> using _cond_res = decltype(true ? std::declval<T>() : std::declval<U>());
-
-        template <typename T, typename U, typename R = _builtin_common_t<T &, U &>>
-        using _rref_res = if_else_t<std::is_reference<R>::value, futures::detail::meta::_t<std::remove_reference<R>> &&, R>;
-
-        template <typename T, typename U> using _lref_res = _cond_res<_copy_cv<T, U> &, _copy_cv<U, T> &>;
-
-        template <typename T> struct as_cref_ { using type = T const &; };
-        template <typename T> struct as_cref_<T &> { using type = T const &; };
-        template <typename T> struct as_cref_<T &&> { using type = T const &; };
-        template <> struct as_cref_<void> { using type = void; };
-        template <> struct as_cref_<void const> { using type = void const; };
-
-        template <typename T> using as_cref_t = typename as_cref_<T>::type;
-
-        template <typename T> using decay_t = typename std::decay<T>::type;
-
-#if !defined(__GNUC__) || defined(__clang__)
-        template <typename T, typename U, typename = void> struct _builtin_common_3 {};
-        template <typename T, typename U>
-        struct _builtin_common_3<T, U, futures::detail::meta::void_<_cond_res<as_cref_t<T>, as_cref_t<U>>>>
-            : std::decay<_cond_res<as_cref_t<T>, as_cref_t<U>>> {};
-        template <typename T, typename U, typename = void> struct _builtin_common_2 : _builtin_common_3<T, U> {};
-        template <typename T, typename U>
-        struct _builtin_common_2<T, U, futures::detail::meta::void_<_cond_res<T, U>>> : std::decay<_cond_res<T, U>> {};
-        template <typename T, typename U, typename /* = void */> struct _builtin_common : _builtin_common_2<T, U> {};
-        template <typename T, typename U>
-        struct _builtin_common<
-            T &&, U &&,
-            if_t<is_convertible<T &&, _rref_res<T, U>>::value && is_convertible<U &&, _rref_res<T, U>>::value>> {
-            using type = _rref_res<T, U>;
-        };
-        template <typename T, typename U> struct _builtin_common<T &, U &> : futures::detail::meta::defer<_lref_res, T, U> {};
-        template <typename T, typename U>
-        struct _builtin_common<T &, U &&, if_t<is_convertible<U &&, _builtin_common_t<T &, U const &>>::value>>
-            : _builtin_common<T &, U const &> {};
-        template <typename T, typename U> struct _builtin_common<T &&, U &> : _builtin_common<U &, T &&> {};
-#else
-        template <typename T, typename U, typename = void> struct _builtin_common_3 {};
-        template <typename T, typename U>
-        struct _builtin_common_3<T, U, futures::detail::meta::void_<_cond_res<as_cref_t<T>, as_cref_t<U>>>>
-            : std::decay<_cond_res<as_cref_t<T>, as_cref_t<U>>> {};
-        template <typename T, typename U, typename = void> struct _builtin_common_2 : _builtin_common_3<T, U> {};
-        template <typename T, typename U>
-        struct _builtin_common_2<T, U, futures::detail::meta::void_<_cond_res<T, U>>> : std::decay<_cond_res<T, U>> {};
-        template <typename T, typename U, typename /* = void */> struct _builtin_common : _builtin_common_2<T, U> {};
-        template <typename T, typename U, typename = void> struct _builtin_common_rr : _builtin_common_2<T &&, U &&> {};
-        template <typename T, typename U>
-        struct _builtin_common_rr<
-            T, U, if_t<is_convertible<T &&, _rref_res<T, U>>::value && is_convertible<U &&, _rref_res<T, U>>::value>> {
-            using type = _rref_res<T, U>;
-        };
-        template <typename T, typename U> struct _builtin_common<T &&, U &&> : _builtin_common_rr<T, U> {};
-        template <typename T, typename U> struct _builtin_common<T &, U &> : futures::detail::meta::defer<_lref_res, T, U> {};
-        template <typename T, typename U, typename = void> struct _builtin_common_lr : _builtin_common_2<T &, T &&> {};
-        template <typename T, typename U>
-        struct _builtin_common_lr<T, U, if_t<is_convertible<U &&, _builtin_common_t<T &, U const &>>::value>>
-            : _builtin_common<T &, U const &> {};
-        template <typename T, typename U> struct _builtin_common<T &, U &&> : _builtin_common_lr<T, U> {};
-        template <typename T, typename U> struct _builtin_common<T &&, U &> : _builtin_common<U &, T &&> {};
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// \addtogroup group-utility Utility
-    /// @{
-    ///
-
-    /// Users should specialize this to hook the \c common_with concept
-    /// until \c std gets a SFINAE-friendly \c std::common_type and there's
-    /// some sane way to deal with cv and ref qualifiers.
-    template <typename... Ts> struct common_type {};
-
-    template <typename T> struct common_type<T> : std::decay<T> {};
-
-    template <typename T, typename U>
-    struct common_type<T, U>
-        : ranges_detail::if_else_t<(META_IS_SAME(ranges_detail::decay_t<T>, T) && META_IS_SAME(ranges_detail::decay_t<U>, U)),
-                            futures::detail::meta::defer<ranges_detail::_builtin_common_t, T, U>,
-                            common_type<ranges_detail::decay_t<T>, ranges_detail::decay_t<U>>> {};
-
-    template <typename... Ts> using common_type_t = typename common_type<Ts...>::type;
-
-    template <typename T, typename U, typename... Vs>
-    struct common_type<T, U, Vs...> : futures::detail::meta::lazy::fold<futures::detail::meta::list<U, Vs...>, T, futures::detail::meta::quote<common_type_t>> {};
-
-    /// @}
-
-    /// \addtogroup group-utility Utility
-    /// @{
-    ///
-
-    /// Users can specialize this to hook the \c common_reference_with concept.
-    /// \sa `common_reference`
-    template <typename T, typename U, template <typename> class TQual, template <typename> class UQual>
-    struct basic_common_reference {};
-
-    /// \cond
-    namespace ranges_detail {
-        using _rref = futures::detail::meta::quote_trait<std::add_rvalue_reference>;
-        using _lref = futures::detail::meta::quote_trait<std::add_lvalue_reference>;
-
-        template <typename> struct _xref { template <typename T> using invoke = T; };
-        template <typename T> struct _xref<T &&> {
-            template <typename U> using invoke = futures::detail::meta::_t<std::add_rvalue_reference<futures::detail::meta::invoke<_xref<T>, U>>>;
-        };
-        template <typename T> struct _xref<T &> {
-            template <typename U> using invoke = futures::detail::meta::_t<std::add_lvalue_reference<futures::detail::meta::invoke<_xref<T>, U>>>;
-        };
-        template <typename T> struct _xref<T const> { template <typename U> using invoke = U const; };
-        template <typename T> struct _xref<T volatile> { template <typename U> using invoke = U volatile; };
-        template <typename T> struct _xref<T const volatile> { template <typename U> using invoke = U const volatile; };
-
-        template <typename T, typename U>
-        using _basic_common_reference = basic_common_reference<remove_cvref_t<T>, remove_cvref_t<U>,
-                                                               _xref<T>::template invoke, _xref<U>::template invoke>;
-
-        template <typename T, typename U, typename = void>
-        struct _common_reference2 : if_else_t<futures::detail::meta::is_trait<_basic_common_reference<T, U>>::value,
-                                              _basic_common_reference<T, U>, common_type<T, U>> {};
-
-        template <typename T, typename U>
-        struct _common_reference2<T, U, if_t<std::is_reference<_builtin_common_t<T, U>>::value>>
-            : _builtin_common<T, U> {};
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// Users can specialize this to hook the \c common_reference_with concept.
-    /// \sa `basic_common_reference`
-    template <typename... Ts> struct common_reference {};
-
-    template <typename T> struct common_reference<T> { using type = T; };
-
-    template <typename T, typename U> struct common_reference<T, U> : ranges_detail::_common_reference2<T, U> {};
-
-    template <typename... Ts> using common_reference_t = typename common_reference<Ts...>::type;
-
-    template <typename T, typename U, typename... Vs>
-    struct common_reference<T, U, Vs...> : futures::detail::meta::lazy::fold<futures::detail::meta::list<U, Vs...>, T, futures::detail::meta::quote<common_reference_t>> {
-    };
-    /// @}
-} // namespace futures::detail::concepts
-
-#endif
-
-
-// Disable buggy clang compatibility warning about "requires" and "concept" being
-// C++20 keywords.
-// https://bugs.llvm.org/show_bug.cgi?id=43708
-#if defined(__clang__) && __cplusplus <= 201703L
-#define CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                \
-    CPP_DIAGNOSTIC_PUSH                                                                 \
-    CPP_DIAGNOSTIC_IGNORE_CPP2A_COMPAT
-
-#define CPP_PP_IGNORE_CXX2A_COMPAT_END                                                  \
-    CPP_DIAGNOSTIC_POP
-
-#else
-#define CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN
-#define CPP_PP_IGNORE_CXX2A_COMPAT_END
-#endif
-
-#if defined(_MSC_VER) && !defined(__clang__)
-#define CPP_WORKAROUND_MSVC_779763 // FATAL_UNREACHABLE calling constexpr function via template parameter
-#define CPP_WORKAROUND_MSVC_784772 // Failure to invoke *explicit* bool conversion in a constant expression
-#endif
-
-#if !defined(CPP_CXX_CONCEPTS)
-#ifdef CPP_DOXYGEN_INVOKED
-#define CPP_CXX_CONCEPTS 201800L
-#elif defined(__cpp_concepts) && __cpp_concepts > 0
-// gcc-6 concepts are too buggy to use
-#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 7
-#define CPP_CXX_CONCEPTS __cpp_concepts
-#else
-#define CPP_CXX_CONCEPTS 0L
-#endif
-#else
-#define CPP_CXX_CONCEPTS 0L
-#endif
-#endif
-
-#define CPP_PP_CAT_(X, ...)  X ## __VA_ARGS__
-#define CPP_PP_CAT(X, ...)   CPP_PP_CAT_(X, __VA_ARGS__)
-
-#define CPP_PP_EVAL_(X, ARGS) X ARGS
-#define CPP_PP_EVAL(X, ...) CPP_PP_EVAL_(X, (__VA_ARGS__))
-
-#define CPP_PP_EVAL2_(X, ARGS) X ARGS
-#define CPP_PP_EVAL2(X, ...) CPP_PP_EVAL2_(X, (__VA_ARGS__))
-
-#define CPP_PP_EXPAND(...) __VA_ARGS__
-#define CPP_PP_EAT(...)
-
-#define CPP_PP_FIRST(LIST) CPP_PP_FIRST_ LIST
-#define CPP_PP_FIRST_(...) __VA_ARGS__ CPP_PP_EAT
-
-#define CPP_PP_SECOND(LIST) CPP_PP_SECOND_ LIST
-#define CPP_PP_SECOND_(...) CPP_PP_EXPAND
-
-#define CPP_PP_CHECK(...) CPP_PP_EXPAND(CPP_PP_CHECK_N(__VA_ARGS__, 0,))
-#define CPP_PP_CHECK_N(x, n, ...) n
-#define CPP_PP_PROBE(x) x, 1,
-#define CPP_PP_PROBE_N(x, n) x, n,
-
-#define CPP_PP_IS_PAREN(x) CPP_PP_CHECK(CPP_PP_IS_PAREN_PROBE x)
-#define CPP_PP_IS_PAREN_PROBE(...) CPP_PP_PROBE(~)
-
-// CPP_CXX_VA_OPT
-#ifndef CPP_CXX_VA_OPT
-#if __cplusplus > 201703L
-#define CPP_CXX_VA_OPT_(...) CPP_PP_CHECK(__VA_OPT__(,) 1)
-#define CPP_CXX_VA_OPT CPP_CXX_VA_OPT_(~)
-#else
-#define CPP_CXX_VA_OPT 0
-#endif
-#endif // CPP_CXX_VA_OPT
-
-// The final CPP_PP_EXPAND here is to avoid
-// https://stackoverflow.com/questions/5134523/msvc-doesnt-expand-va-args-correctly
-#define CPP_PP_COUNT(...)                                                       \
-    CPP_PP_EXPAND(CPP_PP_COUNT_(__VA_ARGS__,                                    \
-        50, 49, 48, 47, 46, 45, 44, 43, 42, 41,                                 \
-        40, 39, 38, 37, 36, 35, 34, 33, 32, 31,                                 \
-        30, 29, 28, 27, 26, 25, 24, 23, 22, 21,                                 \
-        20, 19, 18, 17, 16, 15, 14, 13, 12, 11,                                 \
-        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,))
-
-#define CPP_PP_COUNT_(                                                          \
-    _01, _02, _03, _04, _05, _06, _07, _08, _09, _10,                           \
-    _11, _12, _13, _14, _15, _16, _17, _18, _19, _20,                           \
-    _21, _22, _23, _24, _25, _26, _27, _28, _29, _30,                           \
-    _31, _32, _33, _34, _35, _36, _37, _38, _39, _40,                           \
-    _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, N, ...)                   \
-    N
-
-#define CPP_PP_IIF(BIT) CPP_PP_CAT_(CPP_PP_IIF_, BIT)
-#define CPP_PP_IIF_0(TRUE, ...) __VA_ARGS__
-#define CPP_PP_IIF_1(TRUE, ...) TRUE
-
-#define CPP_PP_LPAREN (
-#define CPP_PP_RPAREN )
-
-#define CPP_PP_NOT(BIT) CPP_PP_CAT_(CPP_PP_NOT_, BIT)
-#define CPP_PP_NOT_0 1
-#define CPP_PP_NOT_1 0
-
-#define CPP_PP_EMPTY()
-#define CPP_PP_COMMA() ,
-#define CPP_PP_LBRACE() {
-#define CPP_PP_RBRACE() }
-#define CPP_PP_COMMA_IIF(X)                                                     \
-    CPP_PP_IIF(X)(CPP_PP_EMPTY, CPP_PP_COMMA)()
-
-#define CPP_PP_FOR_EACH(M, ...)                                                 \
-    CPP_PP_FOR_EACH_N(CPP_PP_COUNT(__VA_ARGS__), M, __VA_ARGS__)
-#define CPP_PP_FOR_EACH_N(N, M, ...)                                            \
-    CPP_PP_CAT(CPP_PP_FOR_EACH_, N)(M, __VA_ARGS__)
-#define CPP_PP_FOR_EACH_1(M, _1)                                                \
-    M(_1)
-#define CPP_PP_FOR_EACH_2(M, _1, _2)                                            \
-    M(_1), M(_2)
-#define CPP_PP_FOR_EACH_3(M, _1, _2, _3)                                        \
-    M(_1), M(_2), M(_3)
-#define CPP_PP_FOR_EACH_4(M, _1, _2, _3, _4)                                    \
-    M(_1), M(_2), M(_3), M(_4)
-#define CPP_PP_FOR_EACH_5(M, _1, _2, _3, _4, _5)                                \
-    M(_1), M(_2), M(_3), M(_4), M(_5)
-#define CPP_PP_FOR_EACH_6(M, _1, _2, _3, _4, _5, _6)                            \
-    M(_1), M(_2), M(_3), M(_4), M(_5), M(_6)
-#define CPP_PP_FOR_EACH_7(M, _1, _2, _3, _4, _5, _6, _7)                        \
-    M(_1), M(_2), M(_3), M(_4), M(_5), M(_6), M(_7)
-#define CPP_PP_FOR_EACH_8(M, _1, _2, _3, _4, _5, _6, _7, _8)                    \
-    M(_1), M(_2), M(_3), M(_4), M(_5), M(_6), M(_7), M(_8)
-
-#define CPP_PP_PROBE_EMPTY_PROBE_CPP_PP_PROBE_EMPTY                             \
-    CPP_PP_PROBE(~)
-
-#define CPP_PP_PROBE_EMPTY()
-#define CPP_PP_IS_NOT_EMPTY(...)                                                \
-    CPP_PP_EVAL(                                                                \
-        CPP_PP_CHECK,                                                           \
-        CPP_PP_CAT(                                                             \
-            CPP_PP_PROBE_EMPTY_PROBE_,                                          \
-            CPP_PP_PROBE_EMPTY __VA_ARGS__ ()))
-
-#if defined(_MSC_VER) && !defined(__clang__) && (__cplusplus <= 201703L)
-#define CPP_BOOL(...) ::futures::detail::meta::bool_<__VA_ARGS__>::value
-#define CPP_TRUE_FN                                                             \
-    !::futures::detail::concepts::ranges_detail::instance_<                                             \
-        decltype(CPP_true_fn(::futures::detail::concepts::ranges_detail::xNil{}))>
-
-#define CPP_NOT(...) (!CPP_BOOL(__VA_ARGS__))
-#else
-#define CPP_BOOL(...) __VA_ARGS__
-#define CPP_TRUE_FN CPP_true_fn(::futures::detail::concepts::ranges_detail::xNil{})
-#define CPP_NOT(...) (!(__VA_ARGS__))
-#endif
-
-#define CPP_assert(...)                                                         \
-    static_assert(static_cast<bool>(__VA_ARGS__),                               \
-        "Concept assertion failed : " #__VA_ARGS__)
-
-#define CPP_assert_msg static_assert
-
-#if CPP_CXX_CONCEPTS || defined(CPP_DOXYGEN_INVOKED)
-#define CPP_concept META_CONCEPT
-#define CPP_and &&
-
-#else
-#define CPP_concept CPP_INLINE_VAR constexpr bool
-#define CPP_and CPP_and_sfinae
-
-#endif
-
-////////////////////////////////////////////////////////////////////////////////
-// CPP_template
-// Usage:
-//   CPP_template(typename A, typename B)
-//     (requires Concept1<A> CPP_and Concept2<B>)
-//   void foo(A a, B b)
-//   {}
-#if CPP_CXX_CONCEPTS
-#define CPP_template(...) template<__VA_ARGS__ CPP_TEMPLATE_AUX_
-#define CPP_template_def CPP_template
-#define CPP_member
-#define CPP_ctor(TYPE) TYPE CPP_CTOR_IMPL_1_
-
-#if defined(CPP_DOXYGEN_INVOKED) && CPP_DOXYGEN_INVOKED
-/// INTERNAL ONLY
-#define CPP_CTOR_IMPL_1_(...) (__VA_ARGS__) CPP_CTOR_IMPL_2_
-#define CPP_CTOR_IMPL_2_(...) __VA_ARGS__ `
-#else
-/// INTERNAL ONLY
-#define CPP_CTOR_IMPL_1_(...) (__VA_ARGS__) CPP_PP_EXPAND
-#endif
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_(...)                                                  \
-    > CPP_PP_CAT(                                                               \
-        CPP_TEMPLATE_AUX_,                                                      \
-        CPP_TEMPLATE_AUX_WHICH_(__VA_ARGS__,))(__VA_ARGS__)
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_WHICH_(FIRST, ...)                                     \
-    CPP_PP_EVAL(                                                                \
-        CPP_PP_CHECK,                                                           \
-        CPP_PP_CAT(CPP_TEMPLATE_PROBE_CONCEPT_, FIRST))
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_PROBE_CONCEPT_concept                                      \
-    CPP_PP_PROBE(~)
-
-#if defined(CPP_DOXYGEN_INVOKED) && CPP_DOXYGEN_INVOKED
-// A template with a requires clause. Turn the requires clause into
-// a Doxygen precondition block.
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_0(...) __VA_ARGS__`
-#define requires requires `
-
-#else
-// A template with a requires clause
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_0(...) __VA_ARGS__
-#endif
-
-// A concept definition
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_1(DECL, ...)                                           \
-    CPP_concept CPP_CONCEPT_NAME_(DECL) = __VA_ARGS__
-
-#define CPP_concept_ref(NAME, ...)                                              \
-    CPP_PP_CAT(NAME, _concept_)<__VA_ARGS__>
-
-#else // ^^^^ with concepts / without concepts vvvv
-
-#define CPP_template CPP_template_sfinae
-#define CPP_template_def CPP_template_def_sfinae
-#define CPP_member CPP_member_sfinae
-#define CPP_ctor CPP_ctor_sfinae
-#define CPP_concept_ref(NAME, ...)                                              \
-    (1u == sizeof(CPP_PP_CAT(NAME, _concept_)(                                  \
-        (::futures::detail::concepts::ranges_detail::tag<__VA_ARGS__>*)nullptr)))
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_ CPP_TEMPLATE_SFINAE_AUX_
-
-#endif
-
-#define CPP_template_sfinae(...)                                                \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                            \
-    template<__VA_ARGS__ CPP_TEMPLATE_SFINAE_AUX_
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_PROBE_CONCEPT_concept                               \
-    CPP_PP_PROBE(~)
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_AUX_WHICH_(FIRST, ...)                              \
-    CPP_PP_EVAL(                                                                \
-        CPP_PP_CHECK,                                                           \
-        CPP_PP_CAT(CPP_TEMPLATE_SFINAE_PROBE_CONCEPT_, FIRST))
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_AUX_(...)                                           \
-    CPP_PP_CAT(                                                                 \
-        CPP_TEMPLATE_SFINAE_AUX_,                                               \
-        CPP_TEMPLATE_SFINAE_AUX_WHICH_(__VA_ARGS__,))(__VA_ARGS__)
-
-// A template with a requires clause
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_AUX_0(...) ,                                        \
-    bool CPP_true = true,                                                       \
-    std::enable_if_t<                                                           \
-        CPP_PP_CAT(CPP_TEMPLATE_SFINAE_AUX_3_, __VA_ARGS__) &&                  \
-        CPP_BOOL(CPP_true),                                                     \
-        int> = 0>                                                               \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END
-
-// A concept definition
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_AUX_1(DECL, ...) ,                                  \
-        bool CPP_true = true,                                                   \
-        std::enable_if_t<__VA_ARGS__ && CPP_BOOL(CPP_true), int> = 0>           \
-    auto CPP_CONCEPT_NAME_(DECL)(                                               \
-        ::futures::detail::concepts::ranges_detail::tag<CPP_CONCEPT_PARAMS_(DECL)>*)                    \
-        -> char(&)[1];                                                          \
-    auto CPP_CONCEPT_NAME_(DECL)(...) -> char(&)[2]                             \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END
-
-/// INTERNAL ONLY
-#define CPP_CONCEPT_NAME_(DECL)                                                 \
-    CPP_PP_EVAL(                                                                \
-        CPP_PP_CAT,                                                             \
-        CPP_PP_EVAL(CPP_PP_FIRST, CPP_EAT_CONCEPT_(DECL)), _concept_)
-
-/// INTERNAL ONLY
-#define CPP_CONCEPT_PARAMS_(DECL)                                               \
-    CPP_PP_EVAL(CPP_PP_SECOND, CPP_EAT_CONCEPT_(DECL))
-
-/// INTERNAL ONLY
-#define CPP_EAT_CONCEPT_(DECL)                                                  \
-    CPP_PP_CAT(CPP_EAT_CONCEPT_, DECL)
-
-/// INTERNAL ONLY
-#define CPP_EAT_CONCEPT_concept
-
-#define CPP_and_sfinae                                                          \
-    && CPP_BOOL(CPP_true), int> = 0, std::enable_if_t<
-
-#define CPP_template_def_sfinae(...)                                            \
-    template<__VA_ARGS__ CPP_TEMPLATE_DEF_SFINAE_AUX_
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_DEF_SFINAE_AUX_(...) ,                                     \
-    bool CPP_true,                                                              \
-    std::enable_if_t<                                                           \
-        CPP_PP_CAT(CPP_TEMPLATE_SFINAE_AUX_3_, __VA_ARGS__) &&                  \
-        CPP_BOOL(CPP_true),                                                     \
-        int>>
-
-#define CPP_and_sfinae_def                                                      \
-    && CPP_BOOL(CPP_true), int>, std::enable_if_t<
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_SFINAE_AUX_3_requires
-
-#define CPP_member_sfinae                                                       \
-    CPP_broken_friend_member
-
-#define CPP_ctor_sfinae(TYPE)                                                   \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                            \
-    TYPE CPP_CTOR_SFINAE_IMPL_1_
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_IMPL_1_(...)                                            \
-    (__VA_ARGS__                                                                \
-        CPP_PP_COMMA_IIF(                                                       \
-            CPP_PP_NOT(CPP_PP_IS_NOT_EMPTY(__VA_ARGS__)))                       \
-    CPP_CTOR_SFINAE_REQUIRES
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_PROBE_NOEXCEPT_noexcept                                 \
-    CPP_PP_PROBE(~)
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_MAKE_PROBE(FIRST,...)                                   \
-    CPP_PP_CAT(CPP_CTOR_SFINAE_PROBE_NOEXCEPT_, FIRST)
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_REQUIRES(...)                                           \
-    CPP_PP_CAT(                                                                 \
-        CPP_CTOR_SFINAE_REQUIRES_,                                              \
-        CPP_PP_EVAL(                                                            \
-            CPP_PP_CHECK,                                                       \
-            CPP_CTOR_SFINAE_MAKE_PROBE(__VA_ARGS__,)))(__VA_ARGS__)
-
-// No noexcept-clause:
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_REQUIRES_0(...)                                         \
-    std::enable_if_t<                                                           \
-        CPP_PP_CAT(CPP_TEMPLATE_SFINAE_AUX_3_, __VA_ARGS__) && CPP_TRUE_FN,     \
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {})                                                                     \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END
-
-// Yes noexcept-clause:
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_REQUIRES_1(...)                                         \
-    std::enable_if_t<                                                           \
-        CPP_PP_EVAL(CPP_PP_CAT,                                                 \
-            CPP_TEMPLATE_SFINAE_AUX_3_,                                         \
-            CPP_PP_CAT(CPP_CTOR_SFINAE_EAT_NOEXCEPT_, __VA_ARGS__)) && CPP_TRUE_FN,\
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {})                                                                     \
-    CPP_PP_EXPAND(CPP_PP_CAT(CPP_CTOR_SFINAE_SHOW_NOEXCEPT_, __VA_ARGS__)))
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_EAT_NOEXCEPT_noexcept(...)
-
-/// INTERNAL ONLY
-#define CPP_CTOR_SFINAE_SHOW_NOEXCEPT_noexcept(...)                             \
-    noexcept(__VA_ARGS__)                                                       \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END                                              \
-    CPP_PP_EAT CPP_PP_LPAREN
-
-#ifdef CPP_DOXYGEN_INVOKED
-#define CPP_broken_friend_ret(...)                                              \
-    __VA_ARGS__ CPP_PP_EXPAND
-
-#else // ^^^ CPP_DOXYGEN_INVOKED / not CPP_DOXYGEN_INVOKED vvv
-#define CPP_broken_friend_ret(...)                                              \
-    ::futures::detail::concepts::return_t<                                                       \
-        __VA_ARGS__,                                                            \
-        std::enable_if_t<CPP_BROKEN_FRIEND_RETURN_TYPE_AUX_
-
-/// INTERNAL ONLY
-#define CPP_BROKEN_FRIEND_RETURN_TYPE_AUX_(...)                                 \
-    CPP_BROKEN_FRIEND_RETURN_TYPE_AUX_3_(CPP_PP_CAT(                            \
-        CPP_TEMPLATE_AUX_2_, __VA_ARGS__))
-
-/// INTERNAL ONLY
-#define CPP_TEMPLATE_AUX_2_requires
-
-/// INTERNAL ONLY
-#define CPP_BROKEN_FRIEND_RETURN_TYPE_AUX_3_(...)                               \
-    __VA_ARGS__ && CPP_TRUE_FN>>
-
-#ifdef CPP_WORKAROUND_MSVC_779763
-#define CPP_broken_friend_member                                                \
-    template<::futures::detail::concepts::ranges_detail::CPP_true_t const &CPP_true_fn =                \
-        ::futures::detail::concepts::ranges_detail::CPP_true_fn_>
-
-#else // ^^^ workaround / no workaround vvv
-#define CPP_broken_friend_member                                                \
-    template<bool (&CPP_true_fn)(::futures::detail::concepts::ranges_detail::xNil) =                    \
-        ::futures::detail::concepts::ranges_detail::CPP_true_fn>
-
-#endif // CPP_WORKAROUND_MSVC_779763
-#endif
-
-#if CPP_CXX_CONCEPTS
-#define CPP_requires(NAME, REQS)                                                \
-CPP_concept CPP_PP_CAT(NAME, _requires_) =                                      \
-    CPP_PP_CAT(CPP_REQUIRES_, REQS)
-
-#define CPP_requires_ref(NAME, ...)                                             \
-    CPP_PP_CAT(NAME, _requires_)<__VA_ARGS__>
-
-/// INTERNAL ONLY
-#define CPP_REQUIRES_requires(...)                                              \
-    requires(__VA_ARGS__) CPP_REQUIRES_AUX_
-
-/// INTERNAL ONLY
-#define CPP_REQUIRES_AUX_(...)                                                  \
-    { __VA_ARGS__; }
-
-#else
-#define CPP_requires(NAME, REQS)                                                \
-    auto CPP_PP_CAT(NAME, _requires_test_)                                      \
-    CPP_REQUIRES_AUX_(NAME, CPP_REQUIRES_ ## REQS)
-
-#define CPP_requires_ref(NAME, ...)                                             \
-    (1u == sizeof(CPP_PP_CAT(NAME, _requires_)(                                 \
-        (::futures::detail::concepts::ranges_detail::tag<__VA_ARGS__>*)nullptr)))
-
-/// INTERNAL ONLY
-#define CPP_REQUIRES_requires(...)                                              \
-    (__VA_ARGS__) -> decltype CPP_REQUIRES_RETURN_
-
-/// INTERNAL ONLY
-#define CPP_REQUIRES_RETURN_(...) (__VA_ARGS__, void()) {}
-
-/// INTERNAL ONLY
-#define CPP_REQUIRES_AUX_(NAME, ...)                                            \
-    __VA_ARGS__                                                                 \
-    template<typename... As>                                                    \
-    auto CPP_PP_CAT(NAME, _requires_)(                                          \
-        ::futures::detail::concepts::ranges_detail::tag<As...> *,                                       \
-        decltype(&CPP_PP_CAT(NAME, _requires_test_)<As...>) = nullptr)          \
-        -> char(&)[1];                                                          \
-    auto CPP_PP_CAT(NAME, _requires_)(...) -> char(&)[2]
-
-#endif
-
-#if CPP_CXX_CONCEPTS
-
-#if defined(CPP_DOXYGEN_INVOKED) && CPP_DOXYGEN_INVOKED
-#define CPP_ret(...)                                                            \
-    __VA_ARGS__ CPP_RET_AUX_
-#define CPP_RET_AUX_(...) __VA_ARGS__ `
-#else
-#define CPP_ret(...)                                                            \
-    __VA_ARGS__ CPP_PP_EXPAND
-#endif
-
-#else
-#define CPP_ret                                                                 \
-    CPP_broken_friend_ret
-
-#endif
-
-////////////////////////////////////////////////////////////////////////////////
-// CPP_fun
-#if CPP_CXX_CONCEPTS
-
-#if defined(CPP_DOXYGEN_INVOKED) && CPP_DOXYGEN_INVOKED
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_1_(...)                                                    \
-    (__VA_ARGS__)                                                               \
-    CPP_FUN_IMPL_2_
-#define CPP_FUN_IMPL_2_(...)                                                    \
-    __VA_ARGS__ `
-#else
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_1_(...)                                                    \
-    (__VA_ARGS__)                                                               \
-    CPP_PP_EXPAND
-#endif
-
-#define CPP_fun(X) X CPP_FUN_IMPL_1_
-#else
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_1_(...)                                                    \
-    (__VA_ARGS__                                                                \
-        CPP_PP_COMMA_IIF(                                                       \
-            CPP_PP_NOT(CPP_PP_IS_NOT_EMPTY(__VA_ARGS__)))                       \
-    CPP_FUN_IMPL_REQUIRES
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_REQUIRES(...)                                              \
-    CPP_PP_EVAL2_(                                                              \
-        CPP_FUN_IMPL_SELECT_CONST_,                                             \
-        (__VA_ARGS__,)                                                          \
-    )(__VA_ARGS__)
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_(MAYBE_CONST, ...)                            \
-    CPP_PP_CAT(CPP_FUN_IMPL_SELECT_CONST_,                                      \
-        CPP_PP_EVAL(CPP_PP_CHECK, CPP_PP_CAT(                                   \
-            CPP_PP_PROBE_CONST_PROBE_, MAYBE_CONST)))
-
-/// INTERNAL ONLY
-#define CPP_PP_PROBE_CONST_PROBE_const CPP_PP_PROBE(~)
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_1(...)                                        \
-    CPP_PP_EVAL(                                                                \
-        CPP_FUN_IMPL_SELECT_CONST_NOEXCEPT_,                                    \
-        CPP_PP_CAT(CPP_FUN_IMPL_EAT_CONST_, __VA_ARGS__),)(                     \
-        CPP_PP_CAT(CPP_FUN_IMPL_EAT_CONST_, __VA_ARGS__))
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_NOEXCEPT_(MAYBE_NOEXCEPT, ...)                \
-    CPP_PP_CAT(CPP_FUN_IMPL_SELECT_CONST_NOEXCEPT_,                             \
-        CPP_PP_EVAL2(CPP_PP_CHECK, CPP_PP_CAT(                                  \
-            CPP_PP_PROBE_NOEXCEPT_PROBE_, MAYBE_NOEXCEPT)))
-
-/// INTERNAL ONLY
-#define CPP_PP_PROBE_NOEXCEPT_PROBE_noexcept CPP_PP_PROBE(~)
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_NOEXCEPT_0(...)                               \
-    std::enable_if_t<                                                           \
-        CPP_PP_EVAL(                                                            \
-            CPP_PP_CAT,                                                         \
-            CPP_FUN_IMPL_EAT_REQUIRES_,                                         \
-            __VA_ARGS__) && CPP_TRUE_FN,                                           \
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {}) const                                                               \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_NOEXCEPT_1(...)                               \
-    std::enable_if_t<                                                           \
-        CPP_PP_EVAL(                                                            \
-            CPP_PP_CAT,                                                         \
-            CPP_FUN_IMPL_EAT_REQUIRES_,                                         \
-            CPP_PP_CAT(CPP_FUN_IMPL_EAT_NOEXCEPT_, __VA_ARGS__)) && CPP_TRUE_FN,   \
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {}) const                                                               \
-    CPP_PP_EXPAND(CPP_PP_CAT(CPP_FUN_IMPL_SHOW_NOEXCEPT_, __VA_ARGS__)))
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_EAT_NOEXCEPT_noexcept(...)
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SHOW_NOEXCEPT_noexcept(...)                                \
-    noexcept(__VA_ARGS__) CPP_PP_IGNORE_CXX2A_COMPAT_END                        \
-    CPP_PP_EAT CPP_PP_LPAREN
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_CONST_0(...)                                        \
-    CPP_PP_EVAL_(                                                               \
-        CPP_FUN_IMPL_SELECT_NONCONST_NOEXCEPT_,                                 \
-        (__VA_ARGS__,)                                                          \
-    )(__VA_ARGS__)
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_NONCONST_NOEXCEPT_(MAYBE_NOEXCEPT, ...)             \
-    CPP_PP_CAT(CPP_FUN_IMPL_SELECT_NONCONST_NOEXCEPT_,                          \
-          CPP_PP_EVAL2(CPP_PP_CHECK, CPP_PP_CAT(                                \
-            CPP_PP_PROBE_NOEXCEPT_PROBE_, MAYBE_NOEXCEPT)))
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_NONCONST_NOEXCEPT_0(...)                            \
-    std::enable_if_t<                                                           \
-        CPP_PP_CAT(CPP_FUN_IMPL_EAT_REQUIRES_, __VA_ARGS__) && CPP_TRUE_FN,        \
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {})                                                                     \
-    CPP_PP_IGNORE_CXX2A_COMPAT_END
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_SELECT_NONCONST_NOEXCEPT_1(...)                            \
-    std::enable_if_t<                                                           \
-        CPP_PP_EVAL(                                                            \
-            CPP_PP_CAT,                                                         \
-            CPP_FUN_IMPL_EAT_REQUIRES_,                                         \
-            CPP_PP_CAT(CPP_FUN_IMPL_EAT_NOEXCEPT_, __VA_ARGS__)                 \
-        ) && CPP_TRUE_FN,                                                          \
-        ::futures::detail::concepts::ranges_detail::Nil                                                 \
-    > = {})                                                                     \
-    CPP_PP_EXPAND(CPP_PP_CAT(CPP_FUN_IMPL_SHOW_NOEXCEPT_, __VA_ARGS__)))
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_EAT_CONST_const
-
-/// INTERNAL ONLY
-#define CPP_FUN_IMPL_EAT_REQUIRES_requires
-
-////////////////////////////////////////////////////////////////////////////////
-// CPP_fun
-// Usage:
-//   template <typename A, typename B>
-//   void CPP_fun(foo)(A a, B b)([const]opt [noexcept(true)]opt
-//       requires Concept1<A> && Concept2<B>)
-//   {}
-//
-// Note: This macro cannot be used when the last function argument is a
-//       parameter pack.
-#define CPP_fun(X) CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN X CPP_FUN_IMPL_1_
-#endif
-
-////////////////////////////////////////////////////////////////////////////////
-// CPP_auto_fun
-// Usage:
-//   template <typename A, typename B>
-//   auto CPP_auto_fun(foo)(A a, B b)([const]opt [noexcept(cond)]opt)opt
-//   (
-//       return a + b
-//   )
-#define CPP_auto_fun(X) X CPP_AUTO_FUN_IMPL_
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_IMPL_(...) (__VA_ARGS__) CPP_AUTO_FUN_RETURNS_
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_RETURNS_(...)                                              \
-    CPP_PP_EVAL2_(                                                              \
-        CPP_AUTO_FUN_SELECT_RETURNS_,                                           \
-        (__VA_ARGS__,)                                                          \
-    )(__VA_ARGS__)
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_SELECT_RETURNS_(MAYBE_CONST, ...)                          \
-    CPP_PP_CAT(CPP_AUTO_FUN_RETURNS_CONST_,                                     \
-        CPP_PP_EVAL(CPP_PP_CHECK, CPP_PP_CAT(                                   \
-            CPP_PP_PROBE_CONST_MUTABLE_PROBE_, MAYBE_CONST)))
-
-/// INTERNAL ONLY
-#define CPP_PP_PROBE_CONST_MUTABLE_PROBE_const CPP_PP_PROBE_N(~, 1)
-
-/// INTERNAL ONLY
-#define CPP_PP_PROBE_CONST_MUTABLE_PROBE_mutable CPP_PP_PROBE_N(~, 2)
-
-/// INTERNAL ONLY
-#define CPP_PP_EAT_MUTABLE_mutable
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_RETURNS_CONST_2(...)                                       \
-    CPP_PP_CAT(CPP_PP_EAT_MUTABLE_, __VA_ARGS__) CPP_AUTO_FUN_RETURNS_CONST_0
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_RETURNS_CONST_1(...)                                       \
-    __VA_ARGS__ CPP_AUTO_FUN_RETURNS_CONST_0
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_RETURNS_CONST_0(...)                                       \
-    CPP_PP_EVAL(CPP_AUTO_FUN_DECLTYPE_NOEXCEPT_,                                \
-        CPP_PP_CAT(CPP_AUTO_FUN_RETURNS_, __VA_ARGS__))
-
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_RETURNS_return
-
-#ifdef __cpp_guaranteed_copy_elision
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_DECLTYPE_NOEXCEPT_(...)                                    \
-    noexcept(noexcept(__VA_ARGS__)) -> decltype(__VA_ARGS__)                    \
-    { return (__VA_ARGS__); }
-
-#else
-/// INTERNAL ONLY
-#define CPP_AUTO_FUN_DECLTYPE_NOEXCEPT_(...)                                    \
-    noexcept(noexcept(decltype(__VA_ARGS__)(__VA_ARGS__))) ->                   \
-    decltype(__VA_ARGS__)                                                       \
-    { return (__VA_ARGS__); }
-
-#endif
-
-namespace futures::detail::concepts
-{
-    template<bool B>
-    using bool_ = std::integral_constant<bool, B>;
-
-#if defined(__cpp_fold_expressions) && __cpp_fold_expressions >= 201603
-    template<bool...Bs>
-    CPP_INLINE_VAR constexpr bool and_v = (Bs &&...);
-
-    template<bool...Bs>
-    CPP_INLINE_VAR constexpr bool or_v = (Bs ||...);
-#else
-    namespace ranges_detail
-    {
-        template<bool...>
-        struct bools;
-    } // namespace ranges_detail
-
-    template<bool...Bs>
-    CPP_INLINE_VAR constexpr bool and_v =
-        META_IS_SAME(ranges_detail::bools<Bs..., true>, ranges_detail::bools<true, Bs...>);
-
-    template<bool...Bs>
-    CPP_INLINE_VAR constexpr bool or_v =
-        !META_IS_SAME(ranges_detail::bools<Bs..., false>, ranges_detail::bools<false, Bs...>);
-#endif
-
-    template<typename>
-    struct return_t_
-    {
-        template<typename T>
-        using invoke = T;
-    };
-
-    template<typename T, typename EnableIf>
-    using return_t = futures::detail::meta::invoke<return_t_<EnableIf>, T>;
-
-    namespace ranges_detail
-    {
-        struct ignore
-        {
-            template<class... Args>
-            constexpr ignore(Args&&...) noexcept {}
-        };
-
-        template<class>
-        constexpr bool true_()
-        {
-            return true;
-        }
-
-        template<typename...>
-        struct tag;
-
-        template<typename T>
-        CPP_INLINE_VAR constexpr T instance_ = T{};
-
-        template<typename>
-        constexpr bool requires_()
-        {
-            return true;
-        }
-
-        struct Nil
-        {};
-
-#ifdef CPP_WORKAROUND_MSVC_779763
-        enum class xNil {};
-
-        struct CPP_true_t
-        {
-            constexpr bool operator()(Nil) const noexcept
-            {
-                return true;
-            }
-            constexpr bool operator()(xNil) const noexcept
-            {
-                return true;
-            }
-        };
-
-        CPP_INLINE_VAR constexpr CPP_true_t CPP_true_fn_ {};
-
-        constexpr bool CPP_true_fn(xNil)
-        {
-            return true;
-        }
-#else
-        using xNil = Nil;
-#endif
-
-        constexpr bool CPP_true_fn(Nil)
-        {
-            return true;
-        }
-    } // namespace ranges_detail
-
-#if defined(__clang__) || defined(_MSC_VER)
-    template<bool B>
-    std::enable_if_t<B> requires_()
-    {}
-#else
-    template<bool B>
-    CPP_INLINE_VAR constexpr std::enable_if_t<B, int> requires_ = 0;
-#endif
-
-    inline namespace defs
-    {
-        ////////////////////////////////////////////////////////////////////////
-        // Utility concepts
-        ////////////////////////////////////////////////////////////////////////
-
-        template<bool B>
-        CPP_concept is_true = B;
-
-        template<typename... Args>
-        CPP_concept type = true;
-
-        template<class T, template<typename...> class Trait, typename... Args>
-        CPP_concept satisfies =
-            static_cast<bool>(Trait<T, Args...>::type::value);
-
-        ////////////////////////////////////////////////////////////////////////
-        // Core language concepts
-        ////////////////////////////////////////////////////////////////////////
-
-        template<typename A, typename B>
-        CPP_concept same_as =
-            META_IS_SAME(A, B) && META_IS_SAME(B, A);
-
-        /// \cond
-        template<typename A, typename B>
-        CPP_concept not_same_as_ =
-            (!same_as<remove_cvref_t<A>, remove_cvref_t<B>>);
-
-        // Workaround bug in the Standard Library:
-        // From cannot be an incomplete class type despite that
-        // is_convertible<X, Y> should be equivalent to is_convertible<X&&, Y>
-        // in such a case.
-        template<typename From, typename To>
-        CPP_concept implicitly_convertible_to =
-            std::is_convertible<std::add_rvalue_reference_t<From>, To>::value;
-
-        template<typename From, typename To>
-        CPP_requires(explicitly_convertible_to_,
-            requires(From(*from)()) //
-            (
-                static_cast<To>(from())
-            ));
-        template<typename From, typename To>
-        CPP_concept explicitly_convertible_to =
-            CPP_requires_ref(concepts::explicitly_convertible_to_, From, To);
-        /// \endcond
-
-        template<typename From, typename To>
-        CPP_concept convertible_to =
-            implicitly_convertible_to<From, To> &&
-            explicitly_convertible_to<From, To>;
-
-        CPP_template(typename T, typename U)(
-        concept (derived_from_)(T, U),
-            convertible_to<T const volatile *, U const volatile *>
-        );
-        template<typename T, typename U>
-        CPP_concept derived_from =
-            META_IS_BASE_OF(U, T) &&
-            CPP_concept_ref(concepts::derived_from_, T, U);
-
-        CPP_template(typename T, typename U)(
-        concept (common_reference_with_)(T, U),
-            same_as<common_reference_t<T, U>, common_reference_t<U, T>> CPP_and
-            convertible_to<T, common_reference_t<T, U>> CPP_and
-            convertible_to<U, common_reference_t<T, U>>
-        );
-        template<typename T, typename U>
-        CPP_concept common_reference_with =
-            CPP_concept_ref(concepts::common_reference_with_, T, U);
-
-        CPP_template(typename T, typename U)(
-        concept (common_with_)(T, U),
-            same_as<common_type_t<T, U>, common_type_t<U, T>> CPP_and
-            convertible_to<T, common_type_t<T, U>> CPP_and
-            convertible_to<U, common_type_t<T, U>> CPP_and
-            common_reference_with<
-                std::add_lvalue_reference_t<T const>,
-                std::add_lvalue_reference_t<U const>> CPP_and
-            common_reference_with<
-                std::add_lvalue_reference_t<common_type_t<T, U>>,
-                common_reference_t<
-                    std::add_lvalue_reference_t<T const>,
-                    std::add_lvalue_reference_t<U const>>>
-        );
-        template<typename T, typename U>
-        CPP_concept common_with =
-            CPP_concept_ref(concepts::common_with_, T, U);
-
-        template<typename T>
-        CPP_concept integral =
-            std::is_integral<T>::value;
-
-        template<typename T>
-        CPP_concept signed_integral =
-            integral<T> &&
-            std::is_signed<T>::value;
-
-        template<typename T>
-        CPP_concept unsigned_integral =
-            integral<T> &&
-            !signed_integral<T>;
-
-        template<typename T, typename U>
-        CPP_requires(assignable_from_,
-            requires(T t, U && u) //
-            (
-                t = (U &&) u,
-                requires_<same_as<T, decltype(t = (U &&) u)>>
-            ));
-        template<typename T, typename U>
-        CPP_concept assignable_from =
-            std::is_lvalue_reference<T>::value &&
-            common_reference_with<ranges_detail::as_cref_t<T>, ranges_detail::as_cref_t<U>> &&
-            CPP_requires_ref(defs::assignable_from_, T, U);
-
-        template<typename T>
-        CPP_requires(swappable_,
-            requires(T & t, T & u) //
-            (
-                concepts::swap(t, u)
-            ));
-        template<typename T>
-        CPP_concept swappable =
-            CPP_requires_ref(defs::swappable_, T);
-
-        template<typename T, typename U>
-        CPP_requires(swappable_with_,
-            requires(T && t, U && u) //
-            (
-                concepts::swap((T &&) t, (T &&) t),
-                concepts::swap((U &&) u, (U &&) u),
-                concepts::swap((U &&) u, (T &&) t),
-                concepts::swap((T &&) t, (U &&) u)
-            ));
-        template<typename T, typename U>
-        CPP_concept swappable_with =
-            common_reference_with<ranges_detail::as_cref_t<T>, ranges_detail::as_cref_t<U>> &&
-            CPP_requires_ref(defs::swappable_with_, T, U);
-
-    }  // inline namespace defs
-
-    namespace ranges_detail
-    {
-        template<typename T>
-        CPP_concept boolean_testable_impl_ = convertible_to<T, bool>;
-
-        template<typename T>
-        CPP_requires(boolean_testable_frag_,
-            requires(T && t) //
-            (
-                !(T&&) t,
-                concepts::requires_<boolean_testable_impl_<decltype(!(T&&) t)>>
-            ));
-
-        template<typename T>
-        CPP_concept boolean_testable_ =
-            CPP_requires_ref(boolean_testable_frag_, T) &&
-            boolean_testable_impl_<T>;
-
-        CPP_DIAGNOSTIC_PUSH
-        CPP_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
-
-        template<typename T, typename U>
-        CPP_requires(weakly_equality_comparable_with_frag_,
-            requires(ranges_detail::as_cref_t<T> t, ranges_detail::as_cref_t<U> u) //
-            (
-                concepts::requires_<boolean_testable_<decltype(t == u)>>,
-                concepts::requires_<boolean_testable_<decltype(t != u)>>,
-                concepts::requires_<boolean_testable_<decltype(u == t)>>,
-                concepts::requires_<boolean_testable_<decltype(u != t)>>
-            ));
-        template<typename T, typename U>
-        CPP_concept weakly_equality_comparable_with_ =
-            CPP_requires_ref(weakly_equality_comparable_with_frag_, T, U);
-
-        template<typename T, typename U>
-        CPP_requires(partially_ordered_with_frag_,
-            requires(ranges_detail::as_cref_t<T>& t, ranges_detail::as_cref_t<U>& u) //
-            (
-                concepts::requires_<boolean_testable_<decltype(t < u)>>,
-                concepts::requires_<boolean_testable_<decltype(t > u)>>,
-                concepts::requires_<boolean_testable_<decltype(t <= u)>>,
-                concepts::requires_<boolean_testable_<decltype(t >= u)>>,
-                concepts::requires_<boolean_testable_<decltype(u < t)>>,
-                concepts::requires_<boolean_testable_<decltype(u > t)>>,
-                concepts::requires_<boolean_testable_<decltype(u <= t)>>,
-                concepts::requires_<boolean_testable_<decltype(u >= t)>>
-            ));
-        template<typename T, typename U>
-        CPP_concept partially_ordered_with_ =
-            CPP_requires_ref(partially_ordered_with_frag_, T, U);
-
-        CPP_DIAGNOSTIC_POP
-    } // namespace ranges_detail
-
-    inline namespace defs
-    {
-        ////////////////////////////////////////////////////////////////////////
-        // Comparison concepts
-        ////////////////////////////////////////////////////////////////////////
-
-        template<typename T>
-        CPP_concept equality_comparable =
-            ranges_detail::weakly_equality_comparable_with_<T, T>;
-
-        CPP_template(typename T, typename U)(
-        concept (equality_comparable_with_)(T, U),
-            equality_comparable<
-                common_reference_t<ranges_detail::as_cref_t<T>, ranges_detail::as_cref_t<U>>>
-        );
-        template<typename T, typename U>
-        CPP_concept equality_comparable_with =
-            equality_comparable<T> &&
-            equality_comparable<U> &&
-            ranges_detail::weakly_equality_comparable_with_<T, U> &&
-            common_reference_with<ranges_detail::as_cref_t<T>, ranges_detail::as_cref_t<U>> &&
-            CPP_concept_ref(concepts::equality_comparable_with_, T, U);
-
-        template<typename T>
-        CPP_concept totally_ordered =
-            equality_comparable<T> &&
-            ranges_detail::partially_ordered_with_<T, T>;
-
-        CPP_template(typename T, typename U)(
-        concept (totally_ordered_with_)(T, U),
-            totally_ordered<
-                common_reference_t<
-                    ranges_detail::as_cref_t<T>,
-                    ranges_detail::as_cref_t<U>>> CPP_and
-            ranges_detail::partially_ordered_with_<T, U>);
-
-        template<typename T, typename U>
-        CPP_concept totally_ordered_with =
-            totally_ordered<T> &&
-            totally_ordered<U> &&
-            equality_comparable_with<T, U> &&
-            CPP_concept_ref(concepts::totally_ordered_with_, T, U);
-
-        ////////////////////////////////////////////////////////////////////////
-        // Object concepts
-        ////////////////////////////////////////////////////////////////////////
-
-        template<typename T>
-        CPP_concept destructible =
-            std::is_nothrow_destructible<T>::value;
-
-        template<typename T, typename... Args>
-        CPP_concept constructible_from =
-            destructible<T> &&
-            META_IS_CONSTRUCTIBLE(T, Args...);
-
-        template<typename T>
-        CPP_concept default_constructible =
-            constructible_from<T>;
-
-        template<typename T>
-        CPP_concept move_constructible =
-            constructible_from<T, T> &&
-            convertible_to<T, T>;
-
-        CPP_template(typename T)(
-        concept (copy_constructible_)(T),
-            constructible_from<T, T &> &&
-            constructible_from<T, T const &> &&
-            constructible_from<T, T const> &&
-            convertible_to<T &, T> &&
-            convertible_to<T const &, T> &&
-            convertible_to<T const, T>);
-        template<typename T>
-        CPP_concept copy_constructible =
-            move_constructible<T> &&
-            CPP_concept_ref(concepts::copy_constructible_, T);
-
-        CPP_template(typename T)(
-        concept (move_assignable_)(T),
-            assignable_from<T &, T>
-        );
-        template<typename T>
-        CPP_concept movable =
-            std::is_object<T>::value &&
-            move_constructible<T> &&
-            CPP_concept_ref(concepts::move_assignable_, T) &&
-            swappable<T>;
-
-        CPP_template(typename T)(
-        concept (copy_assignable_)(T),
-            assignable_from<T &, T const &>
-        );
-        template<typename T>
-        CPP_concept copyable =
-            copy_constructible<T> &&
-            movable<T> &&
-            CPP_concept_ref(concepts::copy_assignable_, T);
-
-        template<typename T>
-        CPP_concept semiregular =
-            copyable<T> &&
-            default_constructible<T>;
-            // Axiom: copies are independent. See Fundamentals of Generic
-            // Programming http://www.stepanovpapers.com/DeSt98.pdf
-
-        template<typename T>
-        CPP_concept regular =
-            semiregular<T> &&
-            equality_comparable<T>;
-
-    } // inline namespace defs
-} // namespace futures::detail::concepts
-
-#endif // FUTURES_RANGES_UTILITY_CONCEPTS_HPP
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-#ifndef FUTURES_RANGES_RANGE_FWD_HPP
-#define FUTURES_RANGES_RANGE_FWD_HPP
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/compare.h>
-#ifndef CPP_COMPARE_HPP
-#define CPP_COMPARE_HPP
-
-#if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) && __has_include(<compare>)
-
-#include <compare>
-// #include <futures/algorithm/detail/traits/range/compare.h>
-#ifndef FUTURES_RANGES_COMPARE_HPP
-#define FUTURES_RANGES_COMPARE_HPP
-
-#if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) && __has_include(<compare>)
-
-// #include <compare>
-
-// #include <type_traits>
-
-
-namespace futures::detail {
-    template <typename... Ts> struct common_comparison_category { using type = void; };
-
-    template <typename... Ts>
-    requires((std::is_same_v<Ts, std::partial_ordering> || std::is_same_v<Ts, std::weak_ordering> ||
-              std::is_same_v<Ts, std::strong_ordering>)&&...) struct common_comparison_category<Ts...>
-        : std::common_type<Ts...> {
-    };
-
-    template <typename... Ts> using common_comparison_category_t = typename common_comparison_category<Ts...>::type;
-} // namespace futures::detail
-
-#endif // __cplusplus
-#endif // FUTURES_RANGES_COMPARE_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// clang-format off
-
-namespace futures::detail::concepts
-{
-    // Note: concepts in this file can use C++20 concepts, since operator<=> isn't available in
-    // compilers that don't support core concepts.
-    namespace ranges_detail
-    {
-        template<typename T, typename Cat>
-        concept compares_as = same_as<futures::detail::common_comparison_category_t<T, Cat>, Cat>;
-    } // namespace ranges_detail
-
-    inline namespace defs
-    {
-        template<typename T, typename Cat = std::partial_ordering>
-        concept three_way_comparable =
-            ranges_detail::weakly_equality_comparable_with_<T, T> &&
-            ranges_detail::partially_ordered_with_<T ,T> &&
-            requires(ranges_detail::as_cref_t<T>& a, ranges_detail::as_cref_t<T>& b) {
-                { a <=> b } -> ranges_detail::compares_as<Cat>;
-            };
-
-        template<typename T, typename U, typename Cat = std::partial_ordering>
-        concept three_way_comparable_with =
-            three_way_comparable<T, Cat> &&
-            three_way_comparable<U, Cat> &&
-            common_reference_with<ranges_detail::as_cref_t<T>&, ranges_detail::as_cref_t<U>&> &&
-            three_way_comparable<common_reference_t<ranges_detail::as_cref_t<T>&, ranges_detail::as_cref_t<U>&>> &&
-            ranges_detail::partially_ordered_with_<T, U> &&
-            requires(ranges_detail::as_cref_t<T>& t, ranges_detail::as_cref_t<U>& u) {
-                { t <=> u } -> ranges_detail::compares_as<Cat>;
-                { u <=> t } -> ranges_detail::compares_as<Cat>;
-            };
-    } // inline namespace defs
-} // namespace futures::detail::concepts
-
-// clang-format on
-
-#endif // __cplusplus
-#endif // CPP_COMPARE_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-#ifndef FUTURES_RANGES_DETAIL_CONFIG_HPP
-#define FUTURES_RANGES_DETAIL_CONFIG_HPP
-
-// Grab some version information.
-#ifndef __has_include
-#include <iosfwd>
-#elif __has_include(<version>)
-#include <version>
-#else
-// #include <iosfwd>
-
-#endif
-
-#if (defined(NDEBUG) && !defined(RANGES_ENSURE_MSG)) ||                                                                \
-    (!defined(NDEBUG) && !defined(RANGES_ASSERT) &&                                                                    \
-     ((defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5 || defined(__MINGW32__))) ||                          \
-      defined(_MSVC_STL_VERSION)))
-#include <cstdio>
-// #include <cstdlib>
-
-
-namespace futures::detail {
-    namespace ranges_detail {
-        template <typename = void> [[noreturn]] void assert_failure(char const *file, int line, char const *msg) {
-            std::fprintf(stderr, "%s(%d): %s\n", file, line, msg);
-            std::abort();
-        }
-    } // namespace ranges_detail
-} // namespace futures::detail
-
-#endif
-
-#ifndef RANGES_ASSERT
-// Always use our hand-rolled assert implementation on older GCCs, which do
-// not allow assert to be used in a constant expression, and on MSVC whose
-// assert is not marked [[noreturn]].
-#if !defined(NDEBUG) && ((defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5 || defined(__MINGW32__))) ||       \
-                         defined(_MSVC_STL_VERSION))
-#define RANGES_ASSERT(...)                                                                                             \
-    static_cast<void>((__VA_ARGS__)                                                                                    \
-                          ? void(0)                                                                                    \
-                          : ::futures::detail::ranges_detail::assert_failure(__FILE__, __LINE__, "assertion failed: " #__VA_ARGS__))
-#else
-// #include <cassert>
-
-#define RANGES_ASSERT assert
-#endif
-#endif
-
-// #include <futures/algorithm/detail/traits/range/meta/meta_fwd.h>
-
-
-#ifndef RANGES_ASSUME
-#if defined(__clang__) || defined(__GNUC__)
-#define RANGES_ASSUME(COND) static_cast<void>((COND) ? void(0) : __builtin_unreachable())
-#elif defined(_MSC_VER)
-#define RANGES_ASSUME(COND) static_cast<void>(__assume(COND))
-#else
-#define RANGES_ASSUME(COND) static_cast<void>(COND)
-#endif
-#endif // RANGES_ASSUME
-
-#ifndef RANGES_EXPECT
-#ifdef NDEBUG
-#define RANGES_EXPECT(COND) RANGES_ASSUME(COND)
-#else // NDEBUG
-#define RANGES_EXPECT(COND) RANGES_ASSERT(COND)
-#endif // NDEBUG
-#endif // RANGES_EXPECT
-
-#ifndef RANGES_ENSURE_MSG
-#if defined(NDEBUG)
-#define RANGES_ENSURE_MSG(COND, MSG)                                                                                   \
-    static_cast<void>((COND) ? void(0) : ::futures::detail::ranges_detail::assert_failure(__FILE__, __LINE__, "ensure failed: " MSG))
-#else
-#define RANGES_ENSURE_MSG(COND, MSG) RANGES_ASSERT((COND) && MSG)
-#endif
-#endif
-
-#ifndef RANGES_ENSURE
-#define RANGES_ENSURE(...) RANGES_ENSURE_MSG((__VA_ARGS__), #__VA_ARGS__)
-#endif
-
-#define RANGES_DECLTYPE_AUTO_RETURN(...)                                                                               \
-    ->decltype(__VA_ARGS__) { return (__VA_ARGS__); }                                                                  \
-    /**/
-
-#define RANGES_DECLTYPE_AUTO_RETURN_NOEXCEPT(...)                                                                      \
-    noexcept(noexcept(decltype(__VA_ARGS__)(__VA_ARGS__)))->decltype(__VA_ARGS__) { return (__VA_ARGS__); }            \
-    /**/
-
-#define RANGES_AUTO_RETURN_NOEXCEPT(...)                                                                               \
-    noexcept(noexcept(decltype(__VA_ARGS__)(__VA_ARGS__))) { return (__VA_ARGS__); }                                   \
-    /**/
-
-#define RANGES_DECLTYPE_NOEXCEPT(...) noexcept(noexcept(decltype(__VA_ARGS__)(__VA_ARGS__)))->decltype(__VA_ARGS__) /**/
-
-// Non-portable forward declarations of standard containers
-#define RANGES_BEGIN_NAMESPACE_STD META_BEGIN_NAMESPACE_STD
-#define RANGES_END_NAMESPACE_STD META_END_NAMESPACE_STD
-#define RANGES_BEGIN_NAMESPACE_VERSION META_BEGIN_NAMESPACE_VERSION
-#define RANGES_END_NAMESPACE_VERSION META_END_NAMESPACE_VERSION
-#define RANGES_BEGIN_NAMESPACE_CONTAINER META_BEGIN_NAMESPACE_CONTAINER
-#define RANGES_END_NAMESPACE_CONTAINER META_END_NAMESPACE_CONTAINER
-
-// Database of feature versions
-#define RANGES_CXX_STATIC_ASSERT_11 200410L
-#define RANGES_CXX_STATIC_ASSERT_14 RANGES_CXX_STATIC_ASSERT_11
-#define RANGES_CXX_STATIC_ASSERT_17 201411L
-#define RANGES_CXX_VARIABLE_TEMPLATES_11 0L
-#define RANGES_CXX_VARIABLE_TEMPLATES_14 201304L
-#define RANGES_CXX_VARIABLE_TEMPLATES_17 RANGES_CXX_VARIABLE_TEMPLATES_14
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED_11 0L
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED_14 201309L
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED_17 RANGES_CXX_ATTRIBUTE_DEPRECATED_14
-#define RANGES_CXX_CONSTEXPR_11 200704L
-#define RANGES_CXX_CONSTEXPR_14 201304L
-#define RANGES_CXX_CONSTEXPR_17 201603L
-#define RANGES_CXX_CONSTEXPR_LAMBDAS 201603L
-#define RANGES_CXX_RANGE_BASED_FOR_11 200907L
-#define RANGES_CXX_RANGE_BASED_FOR_14 RANGES_CXX_RANGE_BASED_FOR_11
-#define RANGES_CXX_RANGE_BASED_FOR_17 201603L
-#define RANGES_CXX_LIB_IS_FINAL_11 0L
-#define RANGES_CXX_LIB_IS_FINAL_14 201402L
-#define RANGES_CXX_LIB_IS_FINAL_17 RANGES_CXX_LIB_IS_FINAL_14
-#define RANGES_CXX_RETURN_TYPE_DEDUCTION_11 0L
-#define RANGES_CXX_RETURN_TYPE_DEDUCTION_14 201304L
-#define RANGES_CXX_RETURN_TYPE_DEDUCTION_17 RANGES_CXX_RETURN_TYPE_DEDUCTION_14
-#define RANGES_CXX_GENERIC_LAMBDAS_11 0L
-#define RANGES_CXX_GENERIC_LAMBDAS_14 201304L
-#define RANGES_CXX_GENERIC_LAMBDAS_17 RANGES_CXX_GENERIC_LAMBDAS_14
-#define RANGES_CXX_STD_11 201103L
-#define RANGES_CXX_STD_14 201402L
-#define RANGES_CXX_STD_17 201703L
-#define RANGES_CXX_THREAD_LOCAL_PRE_STANDARD 200000L // Arbitrary number between 0 and C++11
-#define RANGES_CXX_THREAD_LOCAL_11 RANGES_CXX_STD_11
-#define RANGES_CXX_THREAD_LOCAL_14 RANGES_CXX_THREAD_LOCAL_11
-#define RANGES_CXX_THREAD_LOCAL_17 RANGES_CXX_THREAD_LOCAL_14
-#define RANGES_CXX_INLINE_VARIABLES_11 0L
-#define RANGES_CXX_INLINE_VARIABLES_14 0L
-#define RANGES_CXX_INLINE_VARIABLES_17 201606L
-#define RANGES_CXX_COROUTINES_11 0L
-#define RANGES_CXX_COROUTINES_14 0L
-#define RANGES_CXX_COROUTINES_17 0L
-#define RANGES_CXX_COROUTINES_TS1 201703L
-#define RANGES_CXX_DEDUCTION_GUIDES_11 0L
-#define RANGES_CXX_DEDUCTION_GUIDES_14 0L
-#define RANGES_CXX_DEDUCTION_GUIDES_17 201606L
-#define RANGES_CXX_IF_CONSTEXPR_11 0L
-#define RANGES_CXX_IF_CONSTEXPR_14 0L
-#define RANGES_CXX_IF_CONSTEXPR_17 201606L
-#define RANGES_CXX_ALIGNED_NEW_11 0L
-#define RANGES_CXX_ALIGNED_NEW_14 0L
-#define RANGES_CXX_ALIGNED_NEW_17 201606L
-
-// Implementation-specific diagnostic control
-#if defined(_MSC_VER) && !defined(__clang__)
-#define RANGES_DIAGNOSTIC_PUSH __pragma(warning(push))
-#define RANGES_DIAGNOSTIC_POP __pragma(warning(pop))
-#define RANGES_DIAGNOSTIC_IGNORE_PRAGMAS __pragma(warning(disable : 4068))
-#define RANGES_DIAGNOSTIC_IGNORE(X) RANGES_DIAGNOSTIC_IGNORE_PRAGMAS __pragma(warning(disable : X))
-#define RANGES_DIAGNOSTIC_IGNORE_SHADOWING RANGES_DIAGNOSTIC_IGNORE(4456)
-#define RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-#define RANGES_DIAGNOSTIC_IGNORE_MISMATCHED_TAGS RANGES_DIAGNOSTIC_IGNORE(4099)
-#define RANGES_DIAGNOSTIC_IGNORE_GLOBAL_CONSTRUCTORS
-#define RANGES_DIAGNOSTIC_IGNORE_SIGN_CONVERSION
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_INTERNAL
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_MEMBER
-#define RANGES_DIAGNOSTIC_IGNORE_ZERO_LENGTH_ARRAY
-#define RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#define RANGES_DIAGNOSTIC_IGNORE_CXX2A_COMPAT
-#define RANGES_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
-#define RANGES_DIAGNOSTIC_IGNORE_MISSING_BRACES
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_FUNC_TEMPLATE
-#define RANGES_DIAGNOSTIC_IGNORE_INCONSISTENT_OVERRIDE
-#define RANGES_DIAGNOSTIC_IGNORE_RANGE_LOOP_ANALYSIS
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS RANGES_DIAGNOSTIC_IGNORE(4996)
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_THIS_CAPTURE
-#define RANGES_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME
-// Ignores both "divide by zero" and "mod by zero":
-#define RANGES_DIAGNOSTIC_IGNORE_DIVIDE_BY_ZERO RANGES_DIAGNOSTIC_IGNORE(4723 4724)
-#define RANGES_DIAGNOSTIC_IGNORE_UNSIGNED_MATH RANGES_DIAGNOSTIC_IGNORE(4146)
-#define RANGES_DIAGNOSTIC_IGNORE_TRUNCATION RANGES_DIAGNOSTIC_IGNORE(4244)
-#define RANGES_DIAGNOSTIC_IGNORE_MULTIPLE_ASSIGNMENT_OPERATORS RANGES_DIAGNOSTIC_IGNORE(4522)
-#define RANGES_DIAGNOSTIC_IGNORE_VOID_PTR_DEREFERENCE
-#define RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define RANGES_CXX_VER _MSVC_LANG
-
-#if _MSC_VER < 1920 || _MSVC_LANG < 201703L
-#error range-v3 requires Visual Studio 2019 with the /std:c++17 (or /std:c++latest) and /permissive- options.
-#endif
-
-#if _MSC_VER < 1927
-#define RANGES_WORKAROUND_MSVC_895622 // Error when phase 1 name binding finds only
-                                      // deleted function
-
-#if _MSC_VER < 1925
-#define RANGES_WORKAROUND_MSVC_779708 // ADL for operands of function type [No workaround]
-
-#if _MSC_VER < 1923
-#define RANGES_WORKAROUND_MSVC_573728 // rvalues of array types bind to lvalue references
-                                      // [no workaround]
-#define RANGES_WORKAROUND_MSVC_934330 // Deduction guide not correctly preferred to copy
-                                      // deduction candidate [No workaround]
-
-#if _MSC_VER < 1922
-#define RANGES_WORKAROUND_MSVC_756601 // constexpr friend non-template erroneously
-                                      // rejected with C3615
-#define RANGES_WORKAROUND_MSVC_793042 // T[0] sometimes accepted as a valid type in SFINAE
-                                      // context
-
-#if _MSC_VER < 1921
-#define RANGES_WORKAROUND_MSVC_785522 // SFINAE failure for error in immediate context
-#define RANGES_WORKAROUND_MSVC_786376 // Assertion casting anonymous union member in
-                                      // trailing-return-type
-#define RANGES_WORKAROUND_MSVC_787074 // Over-eager substitution of dependent type in
-                                      // non-instantiated nested class template
-#define RANGES_WORKAROUND_MSVC_790554 // Assert for return type that uses dependent
-                                      // default non-type template argument
-#endif                                // _MSC_VER < 1921
-#endif                                // _MSC_VER < 1922
-#endif                                // _MSC_VER < 1923
-#endif                                // _MSC_VER < 1925
-#endif                                // _MSC_VER < 1926
-
-#if 1                                 // Fixed in 1920, but more bugs hiding behind workaround
-#define RANGES_WORKAROUND_MSVC_701385 // Yet another alias expansion error
-#endif
-
-#define RANGES_WORKAROUND_MSVC_249830 // constexpr and arguments that aren't subject to
-                                      // lvalue-to-rvalue conversion
-#define RANGES_WORKAROUND_MSVC_677925 // Bogus C2676 "binary '++': '_Ty' does not define
-                                      // this operator"
-#define RANGES_WORKAROUND_MSVC_683388 // decltype(*i) is incorrectly an rvalue reference
-                                      // for pointer-to-array i
-#define RANGES_WORKAROUND_MSVC_688606 // SFINAE failing to account for access control
-                                      // during specialization matching
-#define RANGES_WORKAROUND_MSVC_786312 // Yet another mixed-pack-expansion failure
-#define RANGES_WORKAROUND_MSVC_792338 // Failure to match specialization enabled via call
-                                      // to constexpr function
-#define RANGES_WORKAROUND_MSVC_835948 // Silent bad codegen destroying sized_generator [No
-                                      // workaround]
-#define RANGES_WORKAROUND_MSVC_934264 // Explicitly-defaulted inherited default
-                                      // constructor is not correctly implicitly constexpr
-#if _MSVC_LANG <= 201703L
-#define RANGES_WORKAROUND_MSVC_OLD_LAMBDA
-#endif
-
-#elif defined(__GNUC__) || defined(__clang__)
-#define RANGES_PRAGMA(X) _Pragma(#X)
-#define RANGES_DIAGNOSTIC_PUSH RANGES_PRAGMA(GCC diagnostic push)
-#define RANGES_DIAGNOSTIC_POP RANGES_PRAGMA(GCC diagnostic pop)
-#define RANGES_DIAGNOSTIC_IGNORE_PRAGMAS RANGES_PRAGMA(GCC diagnostic ignored "-Wpragmas")
-#define RANGES_DIAGNOSTIC_IGNORE(X)                                                                                    \
-    RANGES_DIAGNOSTIC_IGNORE_PRAGMAS                                                                                   \
-    RANGES_PRAGMA(GCC diagnostic ignored "-Wunknown-pragmas")                                                          \
-    RANGES_PRAGMA(GCC diagnostic ignored "-Wunknown-warning-option")                                                   \
-    RANGES_PRAGMA(GCC diagnostic ignored X)
-#define RANGES_DIAGNOSTIC_IGNORE_SHADOWING RANGES_DIAGNOSTIC_IGNORE("-Wshadow")
-#define RANGES_DIAGNOSTIC_IGNORE_INDENTATION RANGES_DIAGNOSTIC_IGNORE("-Wmisleading-indentation")
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL RANGES_DIAGNOSTIC_IGNORE("-Wundefined-internal")
-#define RANGES_DIAGNOSTIC_IGNORE_MISMATCHED_TAGS RANGES_DIAGNOSTIC_IGNORE("-Wmismatched-tags")
-#define RANGES_DIAGNOSTIC_IGNORE_SIGN_CONVERSION RANGES_DIAGNOSTIC_IGNORE("-Wsign-conversion")
-#define RANGES_DIAGNOSTIC_IGNORE_FLOAT_EQUAL RANGES_DIAGNOSTIC_IGNORE("-Wfloat-equal")
-#define RANGES_DIAGNOSTIC_IGNORE_MISSING_BRACES RANGES_DIAGNOSTIC_IGNORE("-Wmissing-braces")
-#define RANGES_DIAGNOSTIC_IGNORE_GLOBAL_CONSTRUCTORS RANGES_DIAGNOSTIC_IGNORE("-Wglobal-constructors")
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_INTERNAL RANGES_DIAGNOSTIC_IGNORE("-Wunneeded-internal-declaration")
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_MEMBER RANGES_DIAGNOSTIC_IGNORE("-Wunneeded-member-function")
-#define RANGES_DIAGNOSTIC_IGNORE_ZERO_LENGTH_ARRAY RANGES_DIAGNOSTIC_IGNORE("-Wzero-length-array")
-#define RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT RANGES_DIAGNOSTIC_IGNORE("-Wc++1z-compat")
-#define RANGES_DIAGNOSTIC_IGNORE_CXX2A_COMPAT RANGES_DIAGNOSTIC_IGNORE("-Wc++2a-compat")
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_FUNC_TEMPLATE RANGES_DIAGNOSTIC_IGNORE("-Wundefined-func-template")
-#define RANGES_DIAGNOSTIC_IGNORE_INCONSISTENT_OVERRIDE RANGES_DIAGNOSTIC_IGNORE("-Winconsistent-missing-override")
-#define RANGES_DIAGNOSTIC_IGNORE_RANGE_LOOP_ANALYSIS RANGES_DIAGNOSTIC_IGNORE("-Wrange-loop-analysis")
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS RANGES_DIAGNOSTIC_IGNORE("-Wdeprecated-declarations")
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_THIS_CAPTURE RANGES_DIAGNOSTIC_IGNORE("-Wdeprecated-this-capture")
-#define RANGES_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME RANGES_DIAGNOSTIC_IGNORE("-Winit-list-lifetime")
-#define RANGES_DIAGNOSTIC_IGNORE_DIVIDE_BY_ZERO
-#define RANGES_DIAGNOSTIC_IGNORE_UNSIGNED_MATH
-#define RANGES_DIAGNOSTIC_IGNORE_TRUNCATION
-#define RANGES_DIAGNOSTIC_IGNORE_MULTIPLE_ASSIGNMENT_OPERATORS
-#define RANGES_DIAGNOSTIC_IGNORE_VOID_PTR_DEREFERENCE RANGES_DIAGNOSTIC_IGNORE("-Wvoid-ptr-dereference")
-#define RANGES_DIAGNOSTIC_KEYWORD_MACRO RANGES_DIAGNOSTIC_IGNORE("-Wkeyword-macro")
-
-#define RANGES_WORKAROUND_CWG_1554
-#ifdef __clang__
-#if __clang_major__ < 4
-#define RANGES_WORKAROUND_CLANG_23135 // constexpr leads to premature instantiation on
-                                      // clang-3.x
-#endif
-#define RANGES_WORKAROUND_CLANG_43400 // template friend is redefinition of itself
-#else                                 // __GNUC__
-#if __GNUC__ < 6
-#define RANGES_WORKAROUND_GCC_UNFILED0 /* Workaround old GCC name lookup bug */
-#endif
-#if __GNUC__ == 7 || __GNUC__ == 8
-#define RANGES_WORKAROUND_GCC_91525 /* Workaround strange GCC ICE */
-#endif
-#if __GNUC__ >= 9
-#if __GNUC__ == 9 && __GNUC_MINOR__ < 3 && __cplusplus == RANGES_CXX_STD_17
-#define RANGES_WORKAROUND_GCC_91923 // Failure-to-SFINAE with class type NTTP in C++17
-#endif
-#endif
-#endif
-
-#else
-#define RANGES_DIAGNOSTIC_PUSH
-#define RANGES_DIAGNOSTIC_POP
-#define RANGES_DIAGNOSTIC_IGNORE_PRAGMAS
-#define RANGES_DIAGNOSTIC_IGNORE_SHADOWING
-#define RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-#define RANGES_DIAGNOSTIC_IGNORE_MISMATCHED_TAGS
-#define RANGES_DIAGNOSTIC_IGNORE_GLOBAL_CONSTRUCTORS
-#define RANGES_DIAGNOSTIC_IGNORE_SIGN_CONVERSION
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_INTERNAL
-#define RANGES_DIAGNOSTIC_IGNORE_UNNEEDED_MEMBER
-#define RANGES_DIAGNOSTIC_IGNORE_ZERO_LENGTH_ARRAY
-#define RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#define RANGES_DIAGNOSTIC_IGNORE_CXX2A_COMPAT
-#define RANGES_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
-#define RANGES_DIAGNOSTIC_IGNORE_MISSING_BRACES
-#define RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_FUNC_TEMPLATE
-#define RANGES_DIAGNOSTIC_IGNORE_INCONSISTENT_OVERRIDE
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS
-#define RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_THIS_CAPTURE
-#define RANGES_DIAGNOSTIC_IGNORE_INIT_LIST_LIFETIME
-#define RANGES_DIAGNOSTIC_IGNORE_DIVIDE_BY_ZERO
-#define RANGES_DIAGNOSTIC_IGNORE_UNSIGNED_MATH
-#define RANGES_DIAGNOSTIC_IGNORE_TRUNCATION
-#define RANGES_DIAGNOSTIC_IGNORE_MULTIPLE_ASSIGNMENT_OPERATORS
-#define RANGES_DIAGNOSTIC_IGNORE_VOID_PTR_DEREFERENCE
-#define RANGES_DIAGNOSTIC_KEYWORD_MACRO
-#endif
-
-// Configuration via feature-test macros, with fallback to __cplusplus
-#ifndef RANGES_CXX_VER
-#define RANGES_CXX_VER __cplusplus
-#endif
-
-#define RANGES_CXX_FEATURE_CONCAT2(y, z) RANGES_CXX_##y##_##z
-#define RANGES_CXX_FEATURE_CONCAT(y, z) RANGES_CXX_FEATURE_CONCAT2(y, z)
-
-#if RANGES_CXX_VER >= RANGES_CXX_STD_17
-#define RANGES_CXX_STD RANGES_CXX_STD_17
-#define RANGES_CXX_FEATURE(x) RANGES_CXX_FEATURE_CONCAT(x, 17)
-#elif RANGES_CXX_VER >= RANGES_CXX_STD_14
-#define RANGES_CXX_STD RANGES_CXX_STD_14
-#define RANGES_CXX_FEATURE(x) RANGES_CXX_FEATURE_CONCAT(x, 14)
-#else
-#define RANGES_CXX_STD RANGES_CXX_STD_11
-#define RANGES_CXX_FEATURE(x) RANGES_CXX_FEATURE_CONCAT(x, 11)
-#endif
-
-#ifndef RANGES_CXX_STATIC_ASSERT
-#ifdef __cpp_static_assert
-#define RANGES_CXX_STATIC_ASSERT __cpp_static_assert
-#else
-#define RANGES_CXX_STATIC_ASSERT RANGES_CXX_FEATURE(STATIC_ASSERT)
-#endif
-#endif
-
-#ifndef RANGES_CXX_VARIABLE_TEMPLATES
-#ifdef __cpp_variable_templates
-#define RANGES_CXX_VARIABLE_TEMPLATES __cpp_variable_templates
-#else
-#define RANGES_CXX_VARIABLE_TEMPLATES RANGES_CXX_FEATURE(VARIABLE_TEMPLATES)
-#endif
-#endif
-
-#if (defined(__cpp_lib_type_trait_variable_templates) && __cpp_lib_type_trait_variable_templates > 0) ||               \
-    RANGES_CXX_VER >= RANGES_CXX_STD_17
-#define RANGES_CXX_TRAIT_VARIABLE_TEMPLATES 1
-#else
-#define RANGES_CXX_TRAIT_VARIABLE_TEMPLATES 0
-#endif
-
-#ifndef RANGES_CXX_ATTRIBUTE_DEPRECATED
-#ifdef __has_cpp_attribute
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED __has_cpp_attribute(deprecated)
-#elif defined(__cpp_attribute_deprecated)
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED __cpp_attribute_deprecated
-#else
-#define RANGES_CXX_ATTRIBUTE_DEPRECATED RANGES_CXX_FEATURE(ATTRIBUTE_DEPRECATED)
-#endif
-#endif
-
-#ifndef RANGES_CXX_CONSTEXPR
-#ifdef __cpp_constexpr
-#define RANGES_CXX_CONSTEXPR __cpp_constexpr
-#else
-#define RANGES_CXX_CONSTEXPR RANGES_CXX_FEATURE(CONSTEXPR)
-#endif
-#endif
-
-#ifndef RANGES_CXX_RANGE_BASED_FOR
-#ifdef __cpp_range_based_for
-#define RANGES_CXX_RANGE_BASED_FOR __cpp_range_based_for
-#else
-#define RANGES_CXX_RANGE_BASED_FOR RANGES_CXX_FEATURE(RANGE_BASED_FOR)
-#endif
-#endif
-
-#ifndef RANGES_CXX_LIB_IS_FINAL
-// #include <type_traits>
-
-#ifdef __cpp_lib_is_final
-#define RANGES_CXX_LIB_IS_FINAL __cpp_lib_is_final
-#else
-#define RANGES_CXX_LIB_IS_FINAL RANGES_CXX_FEATURE(LIB_IS_FINAL)
-#endif
-#endif
-
-#ifndef RANGES_CXX_RETURN_TYPE_DEDUCTION
-#ifdef __cpp_return_type_deduction
-#define RANGES_CXX_RETURN_TYPE_DEDUCTION __cpp_return_type_deduction
-#else
-#define RANGES_CXX_RETURN_TYPE_DEDUCTION RANGES_CXX_FEATURE(RETURN_TYPE_DEDUCTION)
-#endif
-#endif
-
-#ifndef RANGES_CXX_GENERIC_LAMBDAS
-#ifdef __cpp_generic_lambdas
-#define RANGES_CXX_GENERIC_LAMBDAS __cpp_generic_lambdas
-#else
-#define RANGES_CXX_GENERIC_LAMBDAS RANGES_CXX_FEATURE(GENERIC_LAMBDAS)
-#endif
-#endif
-
-#ifndef RANGES_CXX_THREAD_LOCAL
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED <= 70100
-#define RANGES_CXX_THREAD_LOCAL 0
-#elif defined(__IPHONE_OS_VERSION_MIN_REQUIRED) ||                                                                     \
-    (defined(__clang__) && (defined(__CYGWIN__) || defined(__apple_build_version__)))
-// BUGBUG avoid unresolved __cxa_thread_atexit
-#define RANGES_CXX_THREAD_LOCAL RANGES_CXX_THREAD_LOCAL_PRE_STANDARD
-#else
-#define RANGES_CXX_THREAD_LOCAL RANGES_CXX_FEATURE(THREAD_LOCAL)
-#endif
-#endif
-
-#if !defined(RANGES_DEPRECATED) && !defined(RANGES_DISABLE_DEPRECATED_WARNINGS)
-#if defined(__GNUC__) && !defined(__clang__)
-// GCC's support for [[deprecated("message")]] is unusably buggy.
-#define RANGES_DEPRECATED(MSG) __attribute__((deprecated(MSG)))
-#elif RANGES_CXX_ATTRIBUTE_DEPRECATED &&                                                                               \
-    !((defined(__clang__) || defined(__GNUC__)) && RANGES_CXX_STD < RANGES_CXX_STD_14)
-#define RANGES_DEPRECATED(MSG) [[deprecated(MSG)]]
-#elif defined(__clang__) || defined(__GNUC__)
-#define RANGES_DEPRECATED(MSG) __attribute__((deprecated(MSG)))
-#endif
-#endif
-#ifndef RANGES_DEPRECATED
-#define RANGES_DEPRECATED(MSG)
-#endif
-
-#if !defined(RANGES_DEPRECATED_HEADER) && !defined(RANGES_DISABLE_DEPRECATED_WARNINGS)
-#ifdef __GNUC__
-#define RANGES_DEPRECATED_HEADER(MSG) RANGES_PRAGMA(GCC warning MSG)
-#elif defined(_MSC_VER)
-#define RANGES_STRINGIZE_(MSG) #MSG
-#define RANGES_STRINGIZE(MSG) RANGES_STRINGIZE_(MSG)
-#define RANGES_DEPRECATED_HEADER(MSG) __pragma(message(__FILE__ "(" RANGES_STRINGIZE(__LINE__) ") : Warning: " MSG))
-#endif
-#else
-#define RANGES_DEPRECATED_HEADER(MSG) /**/
-#endif
-// #ifndef RANGES_DEPRECATED_HEADER
-// #define RANGES_DEPRECATED_HEADER(MSG)
-// #endif
-
-#ifndef RANGES_CXX_COROUTINES
-#if defined(__cpp_coroutines) && defined(__has_include)
-#if __has_include(<coroutine>)
-#define RANGES_CXX_COROUTINES __cpp_coroutines
-#define RANGES_COROUTINES_HEADER <coroutine>
-#define RANGES_COROUTINES_NS std
-#elif __has_include(<experimental/coroutine>)
-#define RANGES_CXX_COROUTINES __cpp_coroutines
-#define RANGES_COROUTINES_HEADER <experimental/coroutine>
-#define RANGES_COROUTINES_NS std::experimental
-#endif
-#endif
-#ifndef RANGES_CXX_COROUTINES
-#define RANGES_CXX_COROUTINES RANGES_CXX_FEATURE(COROUTINES)
-#endif
-#endif
-
-// RANGES_CXX14_CONSTEXPR macro (see also BOOST_CXX14_CONSTEXPR)
-// Note: constexpr implies inline, to retain the same visibility
-// C++14 constexpr functions are inline in C++11
-#if RANGES_CXX_CONSTEXPR >= RANGES_CXX_CONSTEXPR_14
-#define RANGES_CXX14_CONSTEXPR constexpr
-#else
-#define RANGES_CXX14_CONSTEXPR inline
-#endif
-
-#ifdef NDEBUG
-#define RANGES_NDEBUG_CONSTEXPR constexpr
-#else
-#define RANGES_NDEBUG_CONSTEXPR inline
-#endif
-
-#ifndef RANGES_CXX_INLINE_VARIABLES
-#ifdef __cpp_inline_variables
-#define RANGES_CXX_INLINE_VARIABLES __cpp_inline_variables
-#elif defined(__clang__) && (__clang_major__ == 3 && __clang_minor__ == 9) && RANGES_CXX_VER > RANGES_CXX_STD_14
-// Clang 3.9 supports inline variables in C++17 mode, but doesn't define
-// __cpp_inline_variables
-#define RANGES_CXX_INLINE_VARIABLES RANGES_CXX_INLINE_VARIABLES_17
-#else
-#define RANGES_CXX_INLINE_VARIABLES RANGES_CXX_FEATURE(INLINE_VARIABLES)
-#endif // __cpp_inline_variables
-#endif // RANGES_CXX_INLINE_VARIABLES
-
-#if RANGES_CXX_INLINE_VARIABLES < RANGES_CXX_INLINE_VARIABLES_17 && !defined(RANGES_DOXYGEN_INVOKED)
-#define RANGES_INLINE_VAR
-#define RANGES_INLINE_VARIABLE(type, name)                                                                             \
-    namespace {                                                                                                        \
-        constexpr auto &name = ::futures::detail::static_const<type>::value;                                                    \
-    }
-#else // RANGES_CXX_INLINE_VARIABLES >= RANGES_CXX_INLINE_VARIABLES_17
-#define RANGES_INLINE_VAR inline
-#define RANGES_INLINE_VARIABLE(type, name)                                                                             \
-    inline constexpr type name{};                                                                                      \
-    /**/
-#endif // RANGES_CXX_INLINE_VARIABLES
-
-#if defined(RANGES_DOXYGEN_INVOKED)
-#define RANGES_DEFINE_CPO(type, name)                                                                                  \
-    inline constexpr type name{};                                                                                      \
-    /**/
-#elif RANGES_CXX_INLINE_VARIABLES < RANGES_CXX_INLINE_VARIABLES_17
-#define RANGES_DEFINE_CPO(type, name)                                                                                  \
-    namespace {                                                                                                        \
-        constexpr auto &name = ::futures::detail::static_const<type>::value;                                                    \
-    }                                                                                                                  \
-    /**/
-#else // RANGES_CXX_INLINE_VARIABLES >= RANGES_CXX_INLINE_VARIABLES_17
-#define RANGES_DEFINE_CPO(type, name)                                                                                  \
-    namespace _ {                                                                                                      \
-        inline constexpr type name{};                                                                                  \
-    }                                                                                                                  \
-    using namespace _;                                                                                                 \
-    /**/
-#endif // RANGES_CXX_INLINE_VARIABLES
-
-#ifndef RANGES_DOXYGEN_INVOKED
-#define RANGES_HIDDEN_DETAIL(...) __VA_ARGS__
-#else
-#define RANGES_HIDDEN_DETAIL(...)
-#endif
-
-#ifndef RANGES_DOXYGEN_INVOKED
-#define RANGES_ADL_BARRIER_FOR(S) S##_ns
-#define RANGES_STRUCT_WITH_ADL_BARRIER(S)                                                                              \
-    _ranges_adl_barrier_noop_;                                                                                         \
-    namespace RANGES_ADL_BARRIER_FOR(S) {                                                                              \
-        struct S;                                                                                                      \
-    }                                                                                                                  \
-    using RANGES_ADL_BARRIER_FOR(S)::S;                                                                                \
-    struct RANGES_ADL_BARRIER_FOR(S)::S /**/
-#else
-#define RANGES_ADL_BARRIER_FOR(S)
-#define RANGES_STRUCT_WITH_ADL_BARRIER(S) S
-#endif
-
-#ifndef RANGES_DOXYGEN_INVOKED
-#define RANGES_FUNC_BEGIN(NAME) struct NAME##_fn {
-#define RANGES_FUNC_END(NAME)                                                                                          \
-    }                                                                                                                  \
-    ;                                                                                                                  \
-    RANGES_INLINE_VARIABLE(NAME##_fn, NAME)
-#define RANGES_FUNC(NAME) operator() RANGES_FUNC_CONST_ /**/
-#define RANGES_FUNC_CONST_(...) (__VA_ARGS__) const
-#else
-#define RANGES_FUNC_BEGIN(NAME)
-#define RANGES_FUNC_END(NAME)
-#define RANGES_FUNC(NAME) NAME
-#endif
-
-#ifndef RANGES_CXX_DEDUCTION_GUIDES
-#if defined(__clang__) && defined(__apple_build_version__)
-// Apple's clang version doesn't do deduction guides very well.
-#define RANGES_CXX_DEDUCTION_GUIDES 0
-#elif defined(__cpp_deduction_guides)
-#define RANGES_CXX_DEDUCTION_GUIDES __cpp_deduction_guides
-#else
-#define RANGES_CXX_DEDUCTION_GUIDES RANGES_CXX_FEATURE(DEDUCTION_GUIDES)
-#endif // __cpp_deduction_guides
-#endif // RANGES_CXX_DEDUCTION_GUIDES
-
-// __VA_OPT__
-#ifndef RANGES_CXX_VA_OPT
-#if __cplusplus > 201703L
-#define RANGES_CXX_THIRD_ARG_(A, B, C, ...) C
-#define RANGES_CXX_VA_OPT_I_(...) RANGES_CXX_THIRD_ARG_(__VA_OPT__(, ), 1, 0, ?)
-#define RANGES_CXX_VA_OPT RANGES_CXX_VA_OPT_I_(?)
-#else
-#define RANGES_CXX_VA_OPT 0
-#endif
-#endif // RANGES_CXX_VA_OPT
-
-#ifndef RANGES_CXX_IF_CONSTEXPR
-#ifdef __cpp_if_constexpr
-#define RANGES_CXX_IF_CONSTEXPR __cpp_if_constexpr
-#else
-#define RANGES_CXX_IF_CONSTEXPR RANGES_CXX_FEATURE(IF_CONSTEXPR)
-#endif
-#endif // RANGES_CXX_IF_CONSTEXPR
-
-// Its not enough for the compiler to support this; the stdlib must support it too.
-#ifndef RANGES_CXX_ALIGNED_NEW
-#if (!defined(_LIBCPP_VERSION) || (_LIBCPP_VERSION >= 4000 && !defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION))) &&         \
-    (!defined(__GLIBCXX__) || (defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE >= 7))
-#if defined(__cpp_aligned_new)
-#define RANGES_CXX_ALIGNED_NEW __cpp_aligned_new
-#else
-#define RANGES_CXX_ALIGNED_NEW RANGES_CXX_FEATURE(ALIGNED_NEW)
-#endif
-#else // _LIBCPP_VERSION < 4000 || __GLIBCXX__ < 20170502
-#define RANGES_CXX_ALIGNED_NEW 0L
-#endif
-#endif // RANGES_CXX_ALIGNED_NEW
-
-#if defined(__clang__)
-#define RANGES_IS_SAME(...) __is_same(__VA_ARGS__)
-#elif defined(__GNUC__) && __GNUC__ >= 6
-#define RANGES_IS_SAME(...) __is_same_as(__VA_ARGS__)
-#elif RANGES_CXX_TRAIT_VARIABLE_TEMPLATES
-#define RANGES_IS_SAME(...) std::is_same_v<__VA_ARGS__>
-#else
-#define RANGES_IS_SAME(...) std::is_same<__VA_ARGS__>::value
-#endif
-
-// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93667
-#if defined(__has_cpp_attribute) && __has_cpp_attribute(no_unique_address) &&                                          \
-    !(defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 10)
-#define RANGES_NO_UNIQUE_ADDRESS [[no_unique_address]]
-#else
-#define RANGES_NO_UNIQUE_ADDRESS
-#endif
-
-#if defined(__clang__)
-#if __has_attribute(no_sanitize)
-#define RANGES_INTENDED_MODULAR_ARITHMETIC __attribute__((__no_sanitize__("unsigned-integer-overflow")))
-#else
-#define RANGES_INTENDED_MODULAR_ARITHMETIC
-#endif
-#else
-#define RANGES_INTENDED_MODULAR_ARITHMETIC
-#endif
-
-#ifndef RANGES_CONSTEXPR_IF
-#if RANGES_CXX_IF_CONSTEXPR >= RANGES_CXX_IF_CONSTEXPR_17
-#define RANGES_CONSTEXPR_IF(...) false) \
-    {} else if constexpr(__VA_ARGS__
-#else
-#define RANGES_CONSTEXPR_IF(...) __VA_ARGS__
-#endif
-#endif // RANGES_CONSTEXPR_IF
-
-#if !defined(RANGES_BROKEN_CPO_LOOKUP) && !defined(RANGES_DOXYGEN_INVOKED) &&                                          \
-    (defined(RANGES_WORKAROUND_GCC_UNFILED0) || defined(RANGES_WORKAROUND_MSVC_895622))
-#define RANGES_BROKEN_CPO_LOOKUP 1
-#endif
-#ifndef RANGES_BROKEN_CPO_LOOKUP
-#define RANGES_BROKEN_CPO_LOOKUP 0
-#endif
-
-#ifndef RANGES_NODISCARD
-#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
-#if defined(__clang__) && __cplusplus < 201703L
-// clang complains about using nodiscard in C++14 mode.
-#define RANGES_NODISCARD                                                                                               \
-    RANGES_DIAGNOSTIC_PUSH                                                                                             \
-    RANGES_DIAGNOSTIC_IGNORE("-Wc++1z-extensions")                                                                     \
-    [[nodiscard]] RANGES_DIAGNOSTIC_POP /**/
-#else
-#define RANGES_NODISCARD [[nodiscard]]
-#endif
-#else
-#define RANGES_NODISCARD
-#endif
-#endif
-
-#ifndef RANGES_EMPTY_BASES
-#ifdef _MSC_VER
-#define RANGES_EMPTY_BASES __declspec(empty_bases)
-#else
-#define RANGES_EMPTY_BASES
-#endif
-#endif
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-#ifndef FUTURES_RANGES_UTILITY_STATIC_CONST_HPP
-#define FUTURES_RANGES_UTILITY_STATIC_CONST_HPP
-
-namespace futures::detail {
-    /// \ingroup group-utility
-
-    template <typename T> struct static_const { static constexpr T value{}; };
-
-    /// \ingroup group-utility
-    /// \sa `static_const`
-    template <typename T> constexpr T static_const<T>::value;
-} // namespace futures::detail
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/version.h>
-#ifndef FUTURES_RANGES_VERSION_HPP
-#define FUTURES_RANGES_VERSION_HPP
-
-#define RANGE_V3_MAJOR 0
-#define RANGE_V3_MINOR 11
-#define RANGE_V3_PATCHLEVEL 0
-
-#define RANGE_V3_VERSION (RANGE_V3_MAJOR * 10000 + RANGE_V3_MINOR * 100 + RANGE_V3_PATCHLEVEL)
-
-#endif
-
-
-/// \defgroup group-iterator Iterator
-/// Iterator functionality
-
-/// \defgroup group-iterator-concepts Iterator Concepts
-/// \ingroup group-iterator
-/// Iterator concepts
-
-/// \defgroup group-range Range
-/// Core range functionality
-
-/// \defgroup group-range-concepts Range Concepts
-/// \ingroup group-range
-/// Range concepts
-
-/// \defgroup group-algorithms Algorithms
-/// Iterator- and range-based algorithms, like the standard algorithms
-
-/// \defgroup group-views Views
-/// Lazy, non-owning, non-mutating, composable range views
-
-/// \defgroup group-actions Actions
-/// Eager, mutating, composable algorithms
-
-/// \defgroup group-utility Utility
-/// Utility classes
-
-/// \defgroup group-functional Functional
-/// Function and function object utilities
-
-/// \defgroup group-numerics Numerics
-/// Numeric utilities
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-
-namespace futures::detail {
-    /// \cond
-    namespace views {}
-
-    namespace actions {}
-
-// GCC either fails to accept an attribute on a namespace, or else
-// it ignores the deprecation attribute. Frustrating.
-#if (RANGES_CXX_VER < RANGES_CXX_STD_17 || defined(__GNUC__) && !defined(__clang__))
-    inline namespace v3 {
-        using namespace futures::detail;
-    }
-
-    namespace view = views;
-    namespace action = actions;
-#else
-    inline namespace RANGES_DEPRECATED("The name futures::detail::v3 namespace is deprecated. "
-                                       "Please discontinue using it.") v3 {
-        using namespace futures::detail;
-    }
-
-    namespace RANGES_DEPRECATED("The futures::detail::view namespace has been renamed to futures::detail::views. "
-                                "(Sorry!)") view {
-        using namespace views;
-    }
-
-    namespace RANGES_DEPRECATED("The futures::detail::action namespace has been renamed to futures::detail::actions. "
-                                "(Sorry!)") action {
-        using namespace actions;
-    }
-#endif
-
-    namespace _end_ {
-        struct fn;
-    }
-    using end_fn = _end_::fn;
-
-    namespace _size_ {
-        struct fn;
-    }
-
-    template <typename> struct result_of;
-
-    template <typename Sig>
-    using result_of_t RANGES_DEPRECATED("futures::detail::result_of_t is deprecated. "
-                                        "Please use futures::detail::invoke_result_t") = futures::detail::meta::_t<result_of<Sig>>;
-    /// \endcond
-
-    template <typename...> struct variant;
-
-    struct dangling;
-
-    struct make_pipeable_fn;
-
-    struct pipeable_base;
-
-    template <typename First, typename Second> struct composed;
-
-    template <typename... Fns> struct overloaded;
-
-    namespace actions {
-        template <typename ActionFn> struct action_closure;
-    }
-
-    namespace views {
-        template <typename ViewFn> struct view_closure;
-    }
-
-    struct advance_fn;
-
-    struct advance_to_fn;
-
-    struct advance_bounded_fn;
-
-    struct next_fn;
-
-    struct prev_fn;
-
-    struct distance_fn;
-
-    struct iter_size_fn;
-
-    template <typename T> struct indirectly_readable_traits;
-
-    template <typename T>
-    using readable_traits
-        RANGES_DEPRECATED("Please use futures::detail::indirectly_readable_traits") = indirectly_readable_traits<T>;
-
-    template <typename T> struct incrementable_traits;
-
-    struct view_base {};
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename T> struct difference_type_;
-
-        template <typename T> struct value_type_;
-    } // namespace ranges_detail
-
-    template <typename T>
-    using difference_type
-        RANGES_DEPRECATED("futures::detail::difference_type<T>::type is deprecated. Use "
-                          "futures::detail::incrementable_traits<T>::difference_type instead.") = ranges_detail::difference_type_<T>;
-
-    template <typename T>
-    using value_type
-        RANGES_DEPRECATED("futures::detail::value_type<T>::type is deprecated. Use "
-                          "futures::detail::indirectly_readable_traits<T>::value_type instead.") = ranges_detail::value_type_<T>;
-
-    template <typename T> struct size_type;
-    /// \endcond
-
-    /// \cond
-    namespace ranges_detail {
-        struct ignore_t {
-            ignore_t() = default;
-            template <typename T> constexpr ignore_t(T &&) noexcept {}
-            template <typename T> constexpr ignore_t const &operator=(T &&) const noexcept { return *this; }
-        };
-
-        struct value_init {
-            template <typename T> operator T() const { return T{}; }
-        };
-
-        struct make_compressed_pair_fn;
-
-        template <typename T> constexpr futures::detail::meta::_t<std::remove_reference<T>> &&move(T &&t) noexcept {
-            return static_cast<futures::detail::meta::_t<std::remove_reference<T>> &&>(t);
-        }
-
-        struct as_const_fn {
-            template <typename T> constexpr T const &operator()(T &t) const noexcept { return t; }
-            template <typename T> constexpr T const &&operator()(T &&t) const noexcept { return (T &&) t; }
-        };
-
-        RANGES_INLINE_VARIABLE(as_const_fn, as_const)
-
-        template <typename T> using as_const_t = decltype(as_const(std::declval<T>()));
-
-        template <typename T> using decay_t = futures::detail::meta::_t<std::decay<T>>;
-
-        template <typename T, typename R = futures::detail::meta::_t<std::remove_reference<T>>>
-        using as_ref_t = futures::detail::meta::_t<std::add_lvalue_reference<futures::detail::meta::_t<std::remove_const<R>>>>;
-
-        template <typename T, typename R = futures::detail::meta::_t<std::remove_reference<T>>>
-        using as_cref_t = futures::detail::meta::_t<std::add_lvalue_reference<R const>>;
-
-        struct get_first;
-        struct get_second;
-
-        template <typename Val1, typename Val2> struct replacer_fn;
-
-        template <typename Pred, typename Val> struct replacer_if_fn;
-
-        template <typename I> struct move_into_cursor;
-
-        template <typename Int> struct from_end_;
-
-        template <typename... Ts> constexpr int ignore_unused(Ts &&...) { return 42; }
-
-        template <int I> struct priority_tag : priority_tag<I - 1> {};
-
-        template <> struct priority_tag<0> {};
-
-#if defined(__clang__) && !defined(_LIBCPP_VERSION)
-        template <typename T, typename... Args>
-        RANGES_INLINE_VAR constexpr bool is_trivially_constructible_v = __is_trivially_constructible(T, Args...);
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_default_constructible_v = is_trivially_constructible_v<T>;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_copy_constructible_v = is_trivially_constructible_v<T, T const &>;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_move_constructible_v = is_trivially_constructible_v<T, T>;
-        template <typename T> RANGES_INLINE_VAR constexpr bool is_trivially_copyable_v = __is_trivially_copyable(T);
-        template <typename T, typename U>
-        RANGES_INLINE_VAR constexpr bool is_trivially_assignable_v = __is_trivially_assignable(T, U);
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_copy_assignable_v = is_trivially_assignable_v<T &, T const &>;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_move_assignable_v = is_trivially_assignable_v<T &, T>;
-
-        template <typename T, typename... Args>
-        struct is_trivially_constructible : futures::detail::meta::bool_<is_trivially_constructible_v<T, Args...>> {};
-        template <typename T>
-        struct is_trivially_default_constructible : futures::detail::meta::bool_<is_trivially_default_constructible_v<T>> {};
-        template <typename T>
-        struct is_trivially_copy_constructible : futures::detail::meta::bool_<is_trivially_copy_constructible_v<T>> {};
-        template <typename T>
-        struct is_trivially_move_constructible : futures::detail::meta::bool_<is_trivially_move_constructible_v<T>> {};
-        template <typename T> struct is_trivially_copyable : futures::detail::meta::bool_<is_trivially_copyable_v<T>> {};
-        template <typename T, typename U>
-        struct is_trivially_assignable : futures::detail::meta::bool_<is_trivially_assignable_v<T, U>> {};
-        template <typename T> struct is_trivially_copy_assignable : futures::detail::meta::bool_<is_trivially_copy_assignable_v<T>> {};
-        template <typename T> struct is_trivially_move_assignable : futures::detail::meta::bool_<is_trivially_move_assignable_v<T>> {};
-#else
-        using std::is_trivially_assignable;
-        using std::is_trivially_constructible;
-        using std::is_trivially_copy_assignable;
-        using std::is_trivially_copy_constructible;
-        using std::is_trivially_copyable;
-        using std::is_trivially_default_constructible;
-        using std::is_trivially_move_assignable;
-        using std::is_trivially_move_constructible;
-#if META_CXX_TRAIT_VARIABLE_TEMPLATES
-        using std::is_trivially_assignable_v;
-        using std::is_trivially_constructible_v;
-        using std::is_trivially_copy_assignable_v;
-        using std::is_trivially_copy_constructible_v;
-        using std::is_trivially_copyable_v;
-        using std::is_trivially_default_constructible_v;
-        using std::is_trivially_move_assignable_v;
-        using std::is_trivially_move_constructible_v;
-#else
-        template <typename T, typename... Args>
-        RANGES_INLINE_VAR constexpr bool is_trivially_constructible_v = is_trivially_constructible<T, Args...>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_default_constructible_v =
-            is_trivially_default_constructible<T>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_copy_constructible_v = is_trivially_copy_constructible<T>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_move_constructible_v = is_trivially_move_constructible<T>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_copyable_v = is_trivially_copyable<T>::value;
-        template <typename T, typename U>
-        RANGES_INLINE_VAR constexpr bool is_trivially_assignable_v = is_trivially_assignable<T, U>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_copy_assignable_v = is_trivially_copy_assignable<T>::value;
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivially_move_assignable_v = is_trivially_move_assignable<T>::value;
-#endif
-#endif
-
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_trivial_v =
-            is_trivially_copyable_v<T> &&is_trivially_default_constructible_v<T>;
-
-        template <typename T> struct is_trivial : futures::detail::meta::bool_<is_trivial_v<T>> {};
-
-#if RANGES_CXX_LIB_IS_FINAL > 0
-#if defined(__clang__) && !defined(_LIBCPP_VERSION)
-        template <typename T> RANGES_INLINE_VAR constexpr bool is_final_v = __is_final(T);
-
-        template <typename T> struct is_final : futures::detail::meta::bool_<is_final_v<T>> {};
-#else
-        using std::is_final;
-#if META_CXX_TRAIT_VARIABLE_TEMPLATES
-        using std::is_final_v;
-#else
-        template <typename T> RANGES_INLINE_VAR constexpr bool is_final_v = is_final<T>::value;
-#endif
-#endif
-#else
-        template <typename T> RANGES_INLINE_VAR constexpr bool is_final_v = false;
-
-        template <typename T> using is_final = std::false_type;
-#endif
-
-        // Work around libc++'s buggy std::is_function
-        // Function types here:
-        template <typename T> char (&is_function_impl_(priority_tag<0>))[1];
-
-        // Array types here:
-        template <typename T, typename = decltype((*(T *)0)[0])> char (&is_function_impl_(priority_tag<1>))[2];
-
-        // Anything that can be returned from a function here (including
-        // void and reference types):
-        template <typename T, typename = T (*)()> char (&is_function_impl_(priority_tag<2>))[3];
-
-        // Classes and unions (including abstract types) here:
-        template <typename T, typename = int T::*> char (&is_function_impl_(priority_tag<3>))[4];
-
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_function_v = sizeof(ranges_detail::is_function_impl_<T>(priority_tag<3>{})) == 1;
-
-        template <typename T> struct remove_rvalue_reference { using type = T; };
-
-        template <typename T> struct remove_rvalue_reference<T &&> { using type = T; };
-
-        template <typename T> using remove_rvalue_reference_t = futures::detail::meta::_t<remove_rvalue_reference<T>>;
-
-        // Workaround bug in the Standard Library:
-        // From cannot be an incomplete class type despite that
-        // is_convertible<X, Y> should be equivalent to is_convertible<X&&, Y>
-        // in such a case.
-        template <typename From, typename To>
-        using is_convertible = std::is_convertible<futures::detail::meta::_t<std::add_rvalue_reference<From>>, To>;
-    } // namespace ranges_detail
-    /// \endcond
-
-    struct begin_tag {};
-    struct end_tag {};
-    struct copy_tag {};
-    struct move_tag {};
-
-    template <typename T> using uncvref_t = futures::detail::meta::_t<std::remove_cv<futures::detail::meta::_t<std::remove_reference<T>>>>;
-
-    struct not_equal_to;
-    struct equal_to;
-    struct less;
-#if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) && __has_include(<compare>)
-    struct compare_three_way;
-#endif // __cplusplus
-    struct identity;
-    template <typename Pred> struct logical_negate;
-
-    enum cardinality : std::ptrdiff_t { infinite = -3, unknown = -2, finite = -1 };
-
-    template <typename Rng, typename Void = void> struct range_cardinality;
-
-    template <typename Rng> using is_finite = futures::detail::meta::bool_<range_cardinality<Rng>::value >= finite>;
-
-    template <typename Rng> using is_infinite = futures::detail::meta::bool_<range_cardinality<Rng>::value == infinite>;
-
-    template <typename S, typename I> RANGES_INLINE_VAR constexpr bool disable_sized_sentinel = false;
-
-    template <typename R> RANGES_INLINE_VAR constexpr bool enable_borrowed_range = false;
-
-    namespace ranges_detail {
-        template <typename R>
-        RANGES_DEPRECATED("Please use futures::detail::enable_borrowed_range instead.")
-        RANGES_INLINE_VAR constexpr bool enable_safe_range = enable_borrowed_range<R>;
-    } // namespace ranges_detail
-
-    using ranges_detail::enable_safe_range;
-
-    template <typename Cur> struct basic_mixin;
-
-    template <typename Cur> struct RANGES_EMPTY_BASES basic_iterator;
-
-    template <cardinality> struct basic_view : view_base {};
-
-    template <typename Derived, cardinality C = finite> struct view_facade;
-
-    template <typename Derived, typename BaseRng, cardinality C = range_cardinality<BaseRng>::value>
-    struct view_adaptor;
-
-    template <typename I, typename S> struct common_iterator;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I> struct cpp17_iterator_cursor;
-
-        template <typename I> using cpp17_iterator = basic_iterator<cpp17_iterator_cursor<I>>;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename First, typename Second> struct compressed_pair;
-
-    template <typename T> struct bind_element;
-
-    template <typename T> using bind_element_t = futures::detail::meta::_t<bind_element<T>>;
-
-    template <typename Derived, cardinality = finite> struct view_interface;
-
-    template <typename T> struct istream_view;
-
-    template <typename I, typename S = I> struct RANGES_EMPTY_BASES iterator_range;
-
-    template <typename I, typename S = I> struct sized_iterator_range;
-
-    template <typename T> struct reference_wrapper;
-
-    // Views
-    //
-    template <typename Rng, typename Pred> struct RANGES_EMPTY_BASES adjacent_filter_view;
-
-    namespace views {
-        struct adjacent_filter_fn;
-    }
-
-    template <typename Rng, typename Pred> struct RANGES_EMPTY_BASES adjacent_remove_if_view;
-
-    namespace views {
-        struct adjacent_remove_if_fn;
-    }
-
-    namespace views {
-        struct all_fn;
-    }
-
-    template <typename Rng> struct const_view;
-
-    namespace views {
-        struct const_fn;
-    }
-
-    template <typename I> struct counted_view;
-
-    namespace views {
-        struct counted_fn;
-    }
-
-    struct default_sentinel_t;
-
-    template <typename I> struct move_iterator;
-
-    template <typename I> using move_into_iterator = basic_iterator<ranges_detail::move_into_cursor<I>>;
-
-    template <typename Rng, bool = (bool)is_infinite<Rng>()> struct RANGES_EMPTY_BASES cycled_view;
-
-    namespace views {
-        struct cycle_fn;
-    }
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I> struct reverse_cursor;
-    }
-    /// \endcond
-
-    template <typename I> using reverse_iterator = basic_iterator<ranges_detail::reverse_cursor<I>>;
-
-    template <typename T> struct empty_view;
-
-    namespace views {
-        struct empty_fn;
-    }
-
-    template <typename Rng, typename Fun> struct group_by_view;
-
-    namespace views {
-        struct group_by_fn;
-    }
-
-    template <typename Rng> struct indirect_view;
-
-    namespace views {
-        struct indirect_fn;
-    }
-
-    struct unreachable_sentinel_t;
-
-    template <typename From, typename To = unreachable_sentinel_t> struct iota_view;
-
-    template <typename From, typename To = From> struct closed_iota_view;
-
-    namespace views {
-        struct iota_fn;
-        struct closed_iota_fn;
-    } // namespace views
-
-    template <typename Rng> struct join_view;
-
-    template <typename Rng, typename ValRng> struct join_with_view;
-
-    namespace views {
-        struct join_fn;
-    }
-
-    template <typename... Rngs> struct concat_view;
-
-    namespace views {
-        struct concat_fn;
-    }
-
-    template <typename Rng, typename Fun> struct partial_sum_view;
-
-    namespace views {
-        struct partial_sum_fn;
-    }
-
-    template <typename Rng> struct move_view;
-
-    namespace views {
-        struct move_fn;
-    }
-
-    template <typename Rng> struct ref_view;
-
-    namespace views {
-        struct ref_fn;
-    }
-
-    template <typename Val> struct repeat_view;
-
-    namespace views {
-        struct repeat_fn;
-    }
-
-    template <typename Rng> struct RANGES_EMPTY_BASES reverse_view;
-
-    namespace views {
-        struct reverse_fn;
-    }
-
-    template <typename Rng> struct slice_view;
-
-    namespace views {
-        struct slice_fn;
-    }
-
-    // template<typename Rng, typename Fun>
-    // struct split_view;
-
-    // namespace views
-    // {
-    //     struct split_fn;
-    // }
-
-    template <typename Rng> struct single_view;
-
-    namespace views {
-        struct single_fn;
-    }
-
-    template <typename Rng> struct stride_view;
-
-    namespace views {
-        struct stride_fn;
-    }
-
-    template <typename Rng> struct take_view;
-
-    namespace views {
-        struct take_fn;
-    }
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename Rng> struct is_random_access_common_;
-
-        template <typename Rng, bool IsRandomAccessCommon = is_random_access_common_<Rng>::value>
-        struct take_exactly_view_;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename Rng> using take_exactly_view = ranges_detail::take_exactly_view_<Rng>;
-
-    namespace views {
-        struct take_exactly_fn;
-    }
-
-    template <typename Rng, typename Pred> struct iter_take_while_view;
-
-    template <typename Rng, typename Pred> struct take_while_view;
-
-    namespace views {
-        struct iter_take_while_fn;
-        struct take_while_fn;
-    } // namespace views
-
-    template <typename Rng, typename Regex, typename SubMatchRange> struct tokenize_view;
-
-    namespace views {
-        struct tokenize_fn;
-    }
-
-    template <typename Rng, typename Fun> struct iter_transform_view;
-
-    template <typename Rng, typename Fun> struct transform_view;
-
-    namespace views {
-        struct transform_fn;
-    }
-
-    template <typename Rng, typename Val1, typename Val2>
-    using replace_view = iter_transform_view<Rng, ranges_detail::replacer_fn<Val1, Val2>>;
-
-    template <typename Rng, typename Pred, typename Val>
-    using replace_if_view = iter_transform_view<Rng, ranges_detail::replacer_if_fn<Pred, Val>>;
-
-    namespace views {
-        struct replace_fn;
-
-        struct replace_if_fn;
-    } // namespace views
-
-    template <typename Rng, typename Pred> struct trim_view;
-
-    namespace views {
-        struct trim_fn;
-    }
-
-    template <typename I> struct unbounded_view;
-
-    namespace views {
-        struct unbounded_fn;
-    }
-
-    template <typename Rng> using unique_view = adjacent_filter_view<Rng, logical_negate<equal_to>>;
-
-    namespace views {
-        struct unique_fn;
-    }
-
-    template <typename Rng> using keys_range_view = transform_view<Rng, ranges_detail::get_first>;
-
-    template <typename Rng> using values_view = transform_view<Rng, ranges_detail::get_second>;
-
-    namespace views {
-        struct keys_fn;
-
-        struct values_fn;
-    } // namespace views
-
-    template <typename Fun, typename... Rngs> struct iter_zip_with_view;
-
-    template <typename Fun, typename... Rngs> struct zip_with_view;
-
-    template <typename... Rngs> struct zip_view;
-
-    namespace views {
-        struct iter_zip_with_fn;
-
-        struct zip_with_fn;
-
-        struct zip_fn;
-    } // namespace views
-} // namespace futures::detail
-
-/// \cond
-namespace futures::detail {
-    // namespace futures::detail::concepts = ::futures::detail::concepts;
-    using namespace ::futures::detail::concepts::defs;
-    using ::futures::detail::concepts::and_v;
-} // namespace futures::detail
-/// \endcond
-
-RANGES_DIAGNOSTIC_POP
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/functional/comparisons.h>
-#ifndef FUTURES_RANGES_FUNCTIONAL_COMPARISONS_HPP
-#define FUTURES_RANGES_FUNCTIONAL_COMPARISONS_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-functional
-    /// @{
-    struct equal_to {
-        template(typename T, typename U)(
-            /// \pre
-            requires equality_comparable_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return (T &&) t == (U &&) u;
-        }
-        using is_transparent = void;
-    };
-
-    struct not_equal_to {
-        template(typename T, typename U)(
-            /// \pre
-            requires equality_comparable_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return !equal_to{}((T &&) t, (U &&) u);
-        }
-        using is_transparent = void;
-    };
-
-    struct less {
-        template(typename T, typename U)(
-            /// \pre
-            requires totally_ordered_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return (T &&) t < (U &&) u;
-        }
-        using is_transparent = void;
-    };
-
-    struct less_equal {
-        template(typename T, typename U)(
-            /// \pre
-            requires totally_ordered_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return !less{}((U &&) u, (T &&) t);
-        }
-        using is_transparent = void;
-    };
-
-    struct greater_equal {
-        template(typename T, typename U)(
-            /// \pre
-            requires totally_ordered_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return !less{}((T &&) t, (U &&) u);
-        }
-        using is_transparent = void;
-    };
-
-    struct greater {
-        template(typename T, typename U)(
-            /// \pre
-            requires totally_ordered_with<T, U>) constexpr bool
-        operator()(T &&t, U &&u) const {
-            return less{}((U &&) u, (T &&) t);
-        }
-        using is_transparent = void;
-    };
-
-    using ordered_less RANGES_DEPRECATED("Repace uses of futures::detail::ordered_less with futures::detail::less") = less;
-
-#if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) && __has_include(<compare>)
-    struct compare_three_way {
-        template(typename T, typename U)(
-            /// \pre
-            requires three_way_comparable_with<T, U>) constexpr auto
-        operator()(T &&t, U &&u) const -> decltype((T &&) t <=> (U &&) u) {
-            return (T &&) t <=> (U &&) u;
-        }
-
-        using is_transparent = void;
-    };
-#endif // __cplusplus
-
-    namespace cpp20 {
-        using ::futures::detail::equal_to;
-        using ::futures::detail::greater;
-        using ::futures::detail::greater_equal;
-        using ::futures::detail::less;
-        using ::futures::detail::less_equal;
-        using ::futures::detail::not_equal_to;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-#ifndef FUTURES_RANGES_ITERATOR_CONCEPTS_HPP
-#define FUTURES_RANGES_ITERATOR_CONCEPTS_HPP
-
-// #include <iterator>
-
-// #include <type_traits>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/functional/comparisons.h>
-
-// #include <futures/algorithm/detail/traits/range/functional/concepts.h>
-#ifndef FUTURES_RANGES_FUNCTIONAL_CONCEPTS_HPP
-#define FUTURES_RANGES_FUNCTIONAL_CONCEPTS_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/functional/invoke.h>
-#ifndef FUTURES_RANGES_FUNCTIONAL_INVOKE_HPP
-#define FUTURES_RANGES_FUNCTIONAL_INVOKE_HPP
-
-// #include <functional>
-
-// #include <type_traits>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS
-
-#ifndef RANGES_CONSTEXPR_INVOKE
-#ifdef RANGES_WORKAROUND_CLANG_23135
-#define RANGES_CONSTEXPR_INVOKE 0
-#else
-#define RANGES_CONSTEXPR_INVOKE 1
-#endif
-#endif
-
-namespace futures::detail {
-    /// \addtogroup group-functional
-    /// @{
-
-    /// \cond
-    namespace ranges_detail {
-        RANGES_DIAGNOSTIC_PUSH
-        RANGES_DIAGNOSTIC_IGNORE_VOID_PTR_DEREFERENCE
-
-        template <typename U> U &can_reference_(U &&);
-
-        // clang-format off
-        template<typename T>
-        CPP_requires(dereferenceable_part_,
-            requires(T && t) //
-            (
-                ranges_detail::can_reference_(*(T &&) t)
-            ));
-        template<typename T>
-        CPP_concept dereferenceable_ = //
-            CPP_requires_ref(ranges_detail::dereferenceable_part_, T);
-        // clang-format on
-
-        RANGES_DIAGNOSTIC_POP
-
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_reference_wrapper_v =
-            futures::detail::meta::is<T, reference_wrapper>::value || futures::detail::meta::is<T, std::reference_wrapper>::value;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename T>
-    RANGES_INLINE_VAR constexpr bool is_reference_wrapper_v = ranges_detail::is_reference_wrapper_v<ranges_detail::decay_t<T>>;
-
-    template <typename T> using is_reference_wrapper = futures::detail::meta::bool_<is_reference_wrapper_v<T>>;
-
-    /// \cond
-    template <typename T>
-    using is_reference_wrapper_t
-        RANGES_DEPRECATED("is_reference_wrapper_t is deprecated.") = futures::detail::meta::_t<is_reference_wrapper<T>>;
-    /// \endcond
-
-    struct invoke_fn {
-      private:
-        template(typename, typename T1)(
-            /// \pre
-            requires ranges_detail::dereferenceable_<T1>) static constexpr decltype(auto)
-            coerce(T1 &&t1, long) noexcept(noexcept(*static_cast<T1 &&>(t1))) {
-            return *static_cast<T1 &&>(t1);
-        }
-
-        template(typename T, typename T1)(
-            /// \pre
-            requires derived_from<ranges_detail::decay_t<T1>, T>) static constexpr T1 &&coerce(T1 &&t1, int) noexcept {
-            return static_cast<T1 &&>(t1);
-        }
-
-        template(typename, typename T1)(
-            /// \pre
-            requires ranges_detail::is_reference_wrapper_v<ranges_detail::decay_t<T1>>) static constexpr decltype(auto)
-            coerce(T1 &&t1, int) noexcept {
-            return static_cast<T1 &&>(t1).get();
-        }
-
-      public:
-        template <typename F, typename T, typename T1, typename... Args>
-        constexpr auto operator()(F T::*f, T1 &&t1, Args &&...args) const
-            noexcept(noexcept((invoke_fn::coerce<T>((T1 &&) t1, 0).*f)((Args &&) args...)))
-                -> decltype((invoke_fn::coerce<T>((T1 &&) t1, 0).*f)((Args &&) args...)) {
-            return (invoke_fn::coerce<T>((T1 &&) t1, 0).*f)((Args &&) args...);
-        }
-
-        template <typename D, typename T, typename T1>
-        constexpr auto operator()(D T::*f, T1 &&t1) const noexcept(noexcept(invoke_fn::coerce<T>((T1 &&) t1, 0).*f))
-            -> decltype(invoke_fn::coerce<T>((T1 &&) t1, 0).*f) {
-            return invoke_fn::coerce<T>((T1 &&) t1, 0).*f;
-        }
-
-        template <typename F, typename... Args>
-        CPP_PP_IIF(RANGES_CONSTEXPR_INVOKE)
-        (CPP_PP_EXPAND, CPP_PP_EAT)(constexpr) auto operator()(F &&f, Args &&...args) const
-            noexcept(noexcept(((F &&) f)((Args &&) args...))) -> decltype(((F &&) f)((Args &&) args...)) {
-            return ((F &&) f)((Args &&) args...);
-        }
-    };
-
-    RANGES_INLINE_VARIABLE(invoke_fn, invoke)
-
-#ifdef RANGES_WORKAROUND_MSVC_701385
-    /// \cond
-    namespace ranges_detail {
-        template <typename Void, typename Fun, typename... Args> struct _invoke_result_ {};
-
-        template <typename Fun, typename... Args>
-        struct _invoke_result_<futures::detail::meta::void_<decltype(invoke(std::declval<Fun>(), std::declval<Args>()...))>, Fun,
-                               Args...> {
-            using type = decltype(invoke(std::declval<Fun>(), std::declval<Args>()...));
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename Fun, typename... Args> using invoke_result = ranges_detail::_invoke_result_<void, Fun, Args...>;
-
-    template <typename Fun, typename... Args> using invoke_result_t = futures::detail::meta::_t<invoke_result<Fun, Args...>>;
-
-#else  // RANGES_WORKAROUND_MSVC_701385
-    template <typename Fun, typename... Args>
-    using invoke_result_t = decltype(invoke(std::declval<Fun>(), std::declval<Args>()...));
-
-    template <typename Fun, typename... Args> struct invoke_result : futures::detail::meta::defer<invoke_result_t, Fun, Args...> {};
-#endif // RANGES_WORKAROUND_MSVC_701385
-
-    /// \cond
-    namespace ranges_detail {
-        template <bool IsInvocable> struct is_nothrow_invocable_impl_ {
-            template <typename Fn, typename... Args> static constexpr bool apply() noexcept { return false; }
-        };
-        template <> struct is_nothrow_invocable_impl_<true> {
-            template <typename Fn, typename... Args> static constexpr bool apply() noexcept {
-                return noexcept(invoke(std::declval<Fn>(), std::declval<Args>()...));
-            }
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename Fn, typename... Args>
-    RANGES_INLINE_VAR constexpr bool is_invocable_v = futures::detail::meta::is_trait<invoke_result<Fn, Args...>>::value;
-
-    template <typename Fn, typename... Args>
-    RANGES_INLINE_VAR constexpr bool is_nothrow_invocable_v =
-        ranges_detail::is_nothrow_invocable_impl_<is_invocable_v<Fn, Args...>>::template apply<Fn, Args...>();
-
-    /// \cond
-    template <typename Sig>
-    struct RANGES_DEPRECATED("futures::detail::result_of is deprecated. "
-                             "Please use futures::detail::invoke_result") result_of {};
-
-    template <typename Fun, typename... Args>
-    struct RANGES_DEPRECATED("futures::detail::result_of is deprecated. "
-                             "Please use futures::detail::invoke_result") result_of<Fun(Args...)>
-        : futures::detail::meta::defer<invoke_result_t, Fun, Args...> {};
-    /// \endcond
-
-    namespace cpp20 {
-        using ::futures::detail::invoke;
-        using ::futures::detail::invoke_result;
-        using ::futures::detail::invoke_result_t;
-        using ::futures::detail::is_invocable_v;
-        using ::futures::detail::is_nothrow_invocable_v;
-    } // namespace cpp20
-
-    /// @}
-} // namespace futures::detail
-
-RANGES_DIAGNOSTIC_POP
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_FUNCTIONAL_INVOKE_HPP
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-functional
-    /// @{
-
-    // clang-format off
-    // WORKAROUND mysterious msvc bug
-#if defined(_MSC_VER)
-    template<typename Fun, typename... Args>
-    CPP_concept invocable =
-        std::is_invocable_v<Fun, Args...>;
-#else
-    template<typename Fun, typename... Args>
-    CPP_requires(invocable_,
-        requires(Fun && fn) //
-        (
-            invoke((Fun &&) fn, std::declval<Args>()...)
-        ));
-    template<typename Fun, typename... Args>
-    CPP_concept invocable =
-        CPP_requires_ref(::futures::detail::invocable_, Fun, Args...);
-#endif
-
-    template<typename Fun, typename... Args>
-    CPP_concept regular_invocable =
-        invocable<Fun, Args...>;
-        // Axiom: equality_preserving(invoke(f, args...))
-
-    template<typename Fun, typename... Args>
-    CPP_requires(predicate_,
-        requires(Fun && fn) //
-        (
-            concepts::requires_<
-                convertible_to<
-                    decltype(invoke((Fun &&) fn, std::declval<Args>()...)),
-                    bool>>
-        ));
-    template<typename Fun, typename... Args>
-    CPP_concept predicate =
-        regular_invocable<Fun, Args...> &&
-        CPP_requires_ref(::futures::detail::predicate_, Fun, Args...);
-
-    template<typename R, typename T, typename U>
-    CPP_concept relation =
-        predicate<R, T, T> &&
-        predicate<R, U, U> &&
-        predicate<R, T, U> &&
-        predicate<R, U, T>;
-
-    template<typename R, typename T, typename U>
-    CPP_concept strict_weak_order =
-        relation<R, T, U>;
-    // clang-format on
-
-    namespace cpp20 {
-        using ::futures::detail::invocable;
-        using ::futures::detail::predicate;
-        using ::futures::detail::regular_invocable;
-        using ::futures::detail::relation;
-        using ::futures::detail::strict_weak_order;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/functional/identity.h>
-#ifndef FUTURES_RANGES_FUNCTIONAL_IDENTITY_HPP
-#define FUTURES_RANGES_FUNCTIONAL_IDENTITY_HPP
-
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-functional
-    /// @{
-    struct identity {
-        template <typename T> constexpr T &&operator()(T &&t) const noexcept { return (T &&) t; }
-        using is_transparent = void;
-    };
-
-    /// \cond
-    using ident RANGES_DEPRECATED("Replace uses of futures::detail::ident with futures::detail::identity") = identity;
-    /// \endcond
-
-    namespace cpp20 {
-        using ::futures::detail::identity;
-    }
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/functional/invoke.h>
-
-// #include <futures/algorithm/detail/traits/range/iterator/access.h>
-#ifndef FUTURES_RANGES_ITERATOR_ACCESS_HPP
-#define FUTURES_RANGES_ITERATOR_ACCESS_HPP
-
-// #include <iterator>
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/std/detail/associated_types.h>
-#ifndef FUTURES_RANGES_STD_DETAIL_ASSOCIATED_TYPES_HPP
-#define FUTURES_RANGES_STD_DETAIL_ASSOCIATED_TYPES_HPP
-
-#include <climits>
-#include <cstdint>
-
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-iterator
-    /// @{
-
-    ////////////////////////////////////////////////////////////////////////////////////////
-    /// \cond
-    namespace ranges_detail {
-        struct nil_ {};
-
-        template <typename T, typename...> using always_ = T;
-
-#if defined(_MSC_VER) && !defined(__clang__) && !defined(__EDG__)
-        // MSVC laughs at your silly micro-optimizations and implements
-        // conditional_t, enable_if_t, is_object_v, and is_integral_v in the
-        // compiler.
-        using std::conditional_t;
-        using std::enable_if;
-        using std::enable_if_t;
-#else // ^^^ MSVC / not MSVC vvv
-        template <bool> struct _cond { template <typename, typename U> using invoke = U; };
-        template <> struct _cond<true> { template <typename T, typename> using invoke = T; };
-        template <bool B, typename T, typename U> using conditional_t = typename _cond<B>::template invoke<T, U>;
-
-        template <bool> struct enable_if {};
-        template <> struct enable_if<true> { template <typename T> using invoke = T; };
-        template <bool B, typename T = void> using enable_if_t = typename enable_if<B>::template invoke<T>;
-
-#ifndef __clang__
-        // NB: insufficient for MSVC, which (non-conformingly) allows function
-        // pointers to implicitly convert to void*.
-        void is_objptr_(void const volatile *);
-
-        // std::is_object, optimized for compile time.
-        template <typename T> constexpr bool is_object_(long) { return false; }
-        template <typename T>
-        constexpr bool is_object_(int, T *(*q)(T &) = nullptr, T *p = nullptr,
-                                  decltype(ranges_detail::is_objptr_(q(*p))) * = nullptr) {
-            return (void)p, (void)q, true;
-        }
-#endif // !__clang__
-
-        template <typename T> constexpr bool is_integral_(...) { return false; }
-        template <typename T, T = 1> constexpr bool is_integral_(long) { return true; }
-#if defined(__cpp_nontype_template_parameter_class) && __cpp_nontype_template_parameter_class > 0
-        template <typename T> constexpr bool is_integral_(int, int T::* = nullptr) { return false; }
-#endif
-#endif // detect MSVC
-
-        template <typename T> struct with_difference_type_ { using difference_type = T; };
-
-        template <typename T>
-        using difference_result_t = decltype(std::declval<T const &>() - std::declval<T const &>());
-
-        template <typename, typename = void> struct incrementable_traits_2_ {};
-
-        template <typename T>
-        struct incrementable_traits_2_<T,
-#if defined(_MSC_VER) && !defined(__clang__) && !defined(__EDG__)
-                                       std::enable_if_t<std::is_integral_v<difference_result_t<T>>>>
-#elif defined(RANGES_WORKAROUND_GCC_91923)
-                                       std::enable_if_t<std::is_integral<difference_result_t<T>>::value>>
-#else
-                                       always_<void, int[is_integral_<difference_result_t<T>>(0)]>>
-#endif // detect MSVC
-        {
-            using difference_type = std::make_signed_t<difference_result_t<T>>;
-        };
-
-        template <typename T, typename = void> struct incrementable_traits_1_ : incrementable_traits_2_<T> {};
-
-        template <typename T>
-        struct incrementable_traits_1_<T *>
-#ifdef __clang__
-            : conditional_t<__is_object(T), with_difference_type_<std::ptrdiff_t>, nil_>
-#elif defined(_MSC_VER) && !defined(__EDG__)
-            : conditional_t<std::is_object_v<T>, with_difference_type_<std::ptrdiff_t>, nil_>
-#else  // ^^^ MSVC / not MSVC vvv
-            : conditional_t<is_object_<T>(0), with_difference_type_<std::ptrdiff_t>, nil_>
-#endif // detect MSVC
-        {
-        };
-
-        template <typename T> struct incrementable_traits_1_<T, always_<void, typename T::difference_type>> {
-            using difference_type = typename T::difference_type;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename T> struct incrementable_traits : ranges_detail::incrementable_traits_1_<T> {};
-
-    template <typename T> struct incrementable_traits<T const> : incrementable_traits<T> {};
-
-    /// \cond
-    namespace ranges_detail {
-#ifdef __clang__
-        template <typename T, bool = __is_object(T)>
-#elif defined(_MSC_VER) && !defined(__EDG__)
-        template <typename T, bool = std::is_object_v<T>>
-#else  // ^^^ MSVC / not MSVC vvv
-        template <typename T, bool = is_object_<T>(0)>
-#endif // detect MSVC
-        struct with_value_type_ {
-        };
-        template <typename T> struct with_value_type_<T, true> { using value_type = T; };
-        template <typename T> struct with_value_type_<T const, true> { using value_type = T; };
-        template <typename T> struct with_value_type_<T volatile, true> { using value_type = T; };
-        template <typename T> struct with_value_type_<T const volatile, true> { using value_type = T; };
-        template <typename, typename = void> struct readable_traits_2_ {};
-        template <typename T>
-        struct readable_traits_2_<T, always_<void, typename T::element_type>>
-            : with_value_type_<typename T::element_type> {};
-        template <typename T, typename = void> struct readable_traits_1_ : readable_traits_2_<T> {};
-        template <typename T> struct readable_traits_1_<T[]> : with_value_type_<T> {};
-        template <typename T, std::size_t N> struct readable_traits_1_<T[N]> : with_value_type_<T> {};
-        template <typename T> struct readable_traits_1_<T *> : ranges_detail::with_value_type_<T> {};
-        template <typename T>
-        struct readable_traits_1_<T, always_<void, typename T::value_type>> : with_value_type_<typename T::value_type> {
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // Not to spec:
-    // * For class types with both member value_type and element_type, value_type is
-    //   preferred (see ericniebler/stl2#299).
-    template <typename T> struct indirectly_readable_traits : ranges_detail::readable_traits_1_<T> {};
-
-    template <typename T> struct indirectly_readable_traits<T const> : indirectly_readable_traits<T> {};
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename D = std::ptrdiff_t> struct std_output_iterator_traits {
-            using iterator_category = std::output_iterator_tag;
-            using difference_type = D;
-            using value_type = void;
-            using reference = void;
-            using pointer = void;
-        };
-
-        // For testing whether a particular instantiation of std::iterator_traits
-        // is user-specified or not.
-#if defined(_MSVC_STL_UPDATE) && defined(__cpp_lib_concepts) && _MSVC_STL_UPDATE >= 201908L
-        template <typename I>
-        inline constexpr bool is_std_iterator_traits_specialized_v = !std::_Is_from_primary<std::iterator_traits<I>>;
-#else
-#if defined(__GLIBCXX__)
-        template <typename I> char (&is_std_iterator_traits_specialized_impl_(std::__iterator_traits<I> *))[2];
-        template <typename I> char is_std_iterator_traits_specialized_impl_(void *);
-#elif defined(_LIBCPP_VERSION)
-        template <typename I, bool B>
-        char (&is_std_iterator_traits_specialized_impl_(std::__iterator_traits<I, B> *))[2];
-        template <typename I> char is_std_iterator_traits_specialized_impl_(void *);
-#elif defined(_MSVC_STL_VERSION)
-        template <typename I> char (&is_std_iterator_traits_specialized_impl_(std::_Iterator_traits_base<I> *))[2];
-        template <typename I> char is_std_iterator_traits_specialized_impl_(void *);
-#else
-        template <typename I> char (&is_std_iterator_traits_specialized_impl_(void *))[2];
-#endif
-        template <typename, typename T>
-        char (&is_std_iterator_traits_specialized_impl_(std::iterator_traits<T *> *))[2];
-
-        template <typename I>
-        RANGES_INLINE_VAR constexpr bool is_std_iterator_traits_specialized_v =
-            1 == sizeof(is_std_iterator_traits_specialized_impl_<I>(static_cast<std::iterator_traits<I> *>(nullptr)));
-
-        // The standard iterator_traits<T *> specialization(s) do not count
-        // as user-specialized. This will no longer be necessary in C++20.
-        // This helps with `T volatile*` and `void *`.
-        template <typename T> RANGES_INLINE_VAR constexpr bool is_std_iterator_traits_specialized_v<T *> = false;
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/move.h>
-#ifndef FUTURES_RANGES_UTILITY_MOVE_HPP
-#define FUTURES_RANGES_UTILITY_MOVE_HPP
-
-// #include <type_traits>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    namespace aux {
-        /// \ingroup group-utility
-        struct move_fn : move_tag {
-            template <typename T>
-            constexpr futures::detail::meta::_t<std::remove_reference<T>> &&operator()(T &&t) const //
-                noexcept {
-                return static_cast<futures::detail::meta::_t<std::remove_reference<T>> &&>(t);
-            }
-
-            /// \ingroup group-utility
-            /// \sa `move_fn`
-            template <typename T> friend constexpr decltype(auto) operator|(T &&t, move_fn move) noexcept {
-                return move(t);
-            }
-        };
-
-        /// \ingroup group-utility
-        /// \sa `move_fn`
-        RANGES_INLINE_VARIABLE(move_fn, move)
-
-        /// \ingroup group-utility
-        /// \sa `move_fn`
-        template <typename R>
-        using move_t =
-            futures::detail::meta::if_c<std::is_reference<R>::value, futures::detail::meta::_t<std::remove_reference<R>> &&, ranges_detail::decay_t<R>>;
-    } // namespace aux
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/swap.h>
-#ifndef FUTURES_RANGES_UTILITY_SWAP_HPP
-#define FUTURES_RANGES_UTILITY_SWAP_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/swap.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    template <typename T> using is_swappable = concepts::is_swappable<T>;
-
-    template <typename T> using is_nothrow_swappable = concepts::is_nothrow_swappable<T>;
-
-    template <typename T, typename U> using is_swappable_with = concepts::is_swappable_with<T, U>;
-
-    template <typename T, typename U> using is_nothrow_swappable_with = concepts::is_nothrow_swappable_with<T, U>;
-
-    using concepts::exchange;
-
-    /// \ingroup group-utility
-    /// \relates concepts::adl_swap_ranges_detail::swap_fn
-    RANGES_DEFINE_CPO(uncvref_t<decltype(concepts::swap)>, swap)
-
-    namespace cpp20 {
-        using ::futures::detail::swap;
-    }
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-iterator
-    /// @{
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I,
-#ifdef RANGES_WORKAROUND_MSVC_683388
-                  typename R = futures::detail::meta::conditional_t<
-                      std::is_pointer<uncvref_t<I>>::value && std::is_array<std::remove_pointer_t<uncvref_t<I>>>::value,
-                      std::add_lvalue_reference_t<std::remove_pointer_t<uncvref_t<I>>>, decltype(*std::declval<I &>())>,
-#else
-                  typename R = decltype(*std::declval<I &>()),
-#endif
-                  typename = R &>
-        using iter_reference_t_ = R;
-
-#if defined(RANGES_DEEP_STL_INTEGRATION) && RANGES_DEEP_STL_INTEGRATION && !defined(RANGES_DOXYGEN_INVOKED)
-        template <typename T>
-        using iter_value_t_ =
-            typename futures::detail::meta::conditional_t<is_std_iterator_traits_specialized_v<T>, std::iterator_traits<T>,
-                                         indirectly_readable_traits<T>>::value_type;
-#else
-        template <typename T> using iter_value_t_ = typename indirectly_readable_traits<T>::value_type;
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename R> using iter_reference_t = ranges_detail::iter_reference_t_<R>;
-
-    template <typename R> using iter_value_t = ranges_detail::iter_value_t_<uncvref_t<R>>;
-
-    /// \cond
-    namespace _iter_move_ {
-#if RANGES_BROKEN_CPO_LOOKUP
-        void iter_move(); // unqualified name lookup block
-#endif
-
-        template <typename T> decltype(iter_move(std::declval<T>())) try_adl_iter_move_(int);
-
-        template <typename T> void try_adl_iter_move_(long);
-
-        template <typename T>
-        RANGES_INLINE_VAR constexpr bool is_adl_indirectly_movable_v =
-            !RANGES_IS_SAME(void, decltype(_iter_move_::try_adl_iter_move_<T>(42)));
-
-        struct fn {
-            // clang-format off
-            template<typename I,
-                     typename = ranges_detail::enable_if_t<is_adl_indirectly_movable_v<I &>>>
-#ifndef RANGES_WORKAROUND_CLANG_23135
-            constexpr
-#endif // RANGES_WORKAROUND_CLANG_23135
-            auto CPP_auto_fun(operator())(I &&i)(const)
-            (
-                return iter_move(i)
-            )
-
-            template<
-                typename I,
-                typename = ranges_detail::enable_if_t<!is_adl_indirectly_movable_v<I &>>,
-                typename R = iter_reference_t<I>>
-#ifndef RANGES_WORKAROUND_CLANG_23135
-            constexpr
-#endif // RANGES_WORKAROUND_CLANG_23135
-            auto CPP_auto_fun(operator())(I &&i)(const)
-            (
-                return static_cast<aux::move_t<R>>(aux::move(*i))
-            )
-            // clang-format on
-        };
-    } // namespace _iter_move_
-    /// \endcond
-
-    RANGES_DEFINE_CPO(_iter_move_::fn, iter_move)
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I, typename O>
-        auto is_indirectly_movable_(I &(*i)(), O &(*o)(), iter_value_t<I> *v = nullptr)
-            -> always_<std::true_type, decltype(iter_value_t<I>(iter_move(i()))), decltype(*v = iter_move(i())),
-                       decltype(*o() = (iter_value_t<I> &&) * v), decltype(*o() = iter_move(i()))>;
-        template <typename I, typename O> auto is_indirectly_movable_(...) -> std::false_type;
-
-        template <typename I, typename O>
-        auto is_nothrow_indirectly_movable_(iter_value_t<I> *v)
-            -> futures::detail::meta::bool_<noexcept(iter_value_t<I>(iter_move(std::declval<I &>()))) &&noexcept(
-                *v = iter_move(std::declval<I &>())) &&noexcept(*std::declval<O &>() = (iter_value_t<I> &&) * v)
-                               &&noexcept(*std::declval<O &>() = iter_move(std::declval<I &>()))>;
-        template <typename I, typename O> auto is_nothrow_indirectly_movable_(...) -> std::false_type;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename I, typename O>
-    RANGES_INLINE_VAR constexpr bool is_indirectly_movable_v =
-        decltype(ranges_detail::is_indirectly_movable_<I, O>(nullptr, nullptr))::value;
-
-    template <typename I, typename O>
-    RANGES_INLINE_VAR constexpr bool is_nothrow_indirectly_movable_v =
-        decltype(ranges_detail::is_nothrow_indirectly_movable_<I, O>(nullptr))::value;
-
-    template <typename I, typename O> struct is_indirectly_movable : futures::detail::meta::bool_<is_indirectly_movable_v<I, O>> {};
-
-    template <typename I, typename O>
-    struct is_nothrow_indirectly_movable : futures::detail::meta::bool_<is_nothrow_indirectly_movable_v<I, O>> {};
-
-    /// \cond
-    namespace _iter_swap_ {
-        struct nope {};
-
-        // Q: Should std::reference_wrapper be considered a proxy wrt swapping rvalues?
-        // A: No. Its operator= is currently defined to reseat the references, so
-        //    std::swap(ra, rb) already means something when ra and rb are (lvalue)
-        //    reference_wrappers. That reseats the reference wrappers but leaves the
-        //    referents unmodified. Treating rvalue reference_wrappers differently would
-        //    be confusing.
-
-        // Q: Then why is it OK to "re"-define swap for pairs and tuples of references?
-        // A: Because as defined above, swapping an rvalue tuple of references has the
-        //    same semantics as swapping an lvalue tuple of references. Rather than
-        //    reseat the references, assignment happens *through* the references.
-
-        // Q: But I have an iterator whose operator* returns an rvalue
-        //    std::reference_wrapper<T>. How do I make it model indirectly_swappable?
-        // A: With an overload of iter_swap.
-
-        // Intentionally create an ambiguity with std::iter_swap, which is
-        // unconstrained.
-        template <typename T, typename U> nope iter_swap(T, U) = delete;
-
-#ifdef RANGES_WORKAROUND_MSVC_895622
-        nope iter_swap();
-#endif
-
-        template <typename T, typename U>
-        decltype(iter_swap(std::declval<T>(), std::declval<U>())) try_adl_iter_swap_(int);
-
-        template <typename T, typename U> nope try_adl_iter_swap_(long);
-
-        // Test whether an overload of iter_swap for a T and a U can be found
-        // via ADL with the iter_swap overload above participating in the
-        // overload set. This depends on user-defined iter_swap overloads
-        // being a better match than the overload in namespace std.
-        template <typename T, typename U>
-        RANGES_INLINE_VAR constexpr bool is_adl_indirectly_swappable_v =
-            !RANGES_IS_SAME(nope, decltype(_iter_swap_::try_adl_iter_swap_<T, U>(42)));
-
-        struct fn {
-            // *If* a user-defined iter_swap is found via ADL, call that:
-            template <typename T, typename U>
-            constexpr ranges_detail::enable_if_t<is_adl_indirectly_swappable_v<T, U>> operator()(T &&t, U &&u) const
-                noexcept(noexcept(iter_swap((T &&) t, (U &&) u))) {
-                (void)iter_swap((T &&) t, (U &&) u);
-            }
-
-            // *Otherwise*, for readable types with swappable reference
-            // types, call futures::detail::swap(*a, *b)
-            template <typename I0, typename I1>
-            constexpr ranges_detail::enable_if_t<!is_adl_indirectly_swappable_v<I0, I1> &&
-                                          is_swappable_with<iter_reference_t<I0>, iter_reference_t<I1>>::value>
-            operator()(I0 &&a, I1 &&b) const noexcept(noexcept(::futures::detail::swap(*a, *b))) {
-                ::futures::detail::swap(*a, *b);
-            }
-
-            // *Otherwise*, for readable types that are mutually
-            // indirectly_movable_storable, implement as:
-            //      iter_value_t<T0> tmp = iter_move(a);
-            //      *a = iter_move(b);
-            //      *b = std::move(tmp);
-            template <typename I0, typename I1>
-            constexpr ranges_detail::enable_if_t<!is_adl_indirectly_swappable_v<I0, I1> &&
-                                          !is_swappable_with<iter_reference_t<I0>, iter_reference_t<I1>>::value &&
-                                          is_indirectly_movable_v<I0, I1> && is_indirectly_movable_v<I1, I0>>
-            operator()(I0 &&a, I1 &&b) const
-                noexcept(is_nothrow_indirectly_movable_v<I0, I1> &&is_nothrow_indirectly_movable_v<I1, I0>) {
-                iter_value_t<I0> v0 = iter_move(a);
-                *a = iter_move(b);
-                *b = ranges_detail::move(v0);
-            }
-        };
-    } // namespace _iter_swap_
-    /// \endcond
-
-    /// \relates _iter_swap_::fn
-    RANGES_DEFINE_CPO(_iter_swap_::fn, iter_swap)
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename T, typename U>
-        auto is_indirectly_swappable_(T &(*t)(), U &(*u)())
-            -> ranges_detail::always_<std::true_type, decltype(iter_swap(t(), u()))>;
-        template <typename T, typename U> auto is_indirectly_swappable_(...) -> std::false_type;
-
-        template <typename T, typename U>
-        auto is_nothrow_indirectly_swappable_(int)
-            -> futures::detail::meta::bool_<noexcept(iter_swap(std::declval<T &>(), std::declval<U &>()))>;
-        template <typename T, typename U> auto is_nothrow_indirectly_swappable_(long) -> std::false_type;
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename T, typename U>
-    RANGES_INLINE_VAR constexpr bool is_indirectly_swappable_v =
-        decltype(ranges_detail::is_indirectly_swappable_<T, U>(nullptr, nullptr))::value;
-
-    template <typename T, typename U>
-    RANGES_INLINE_VAR constexpr bool is_nothrow_indirectly_swappable_v =
-        decltype(ranges_detail::is_nothrow_indirectly_swappable_<T, U>(0))::value;
-
-    template <typename T, typename U> struct is_indirectly_swappable : futures::detail::meta::bool_<is_indirectly_swappable_v<T, U>> {};
-
-    template <typename T, typename U>
-    struct is_nothrow_indirectly_swappable : futures::detail::meta::bool_<is_nothrow_indirectly_swappable_v<T, U>> {};
-
-    namespace cpp20 {
-        using ::futures::detail::iter_move;
-        using ::futures::detail::iter_reference_t;
-        using ::futures::detail::iter_swap;
-        using ::futures::detail::iter_value_t;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_ITERATOR_ACCESS_HPP
-
-// #include <futures/algorithm/detail/traits/range/iterator/traits.h>
-#ifndef FUTURES_RANGES_ITERATOR_TRAITS_HPP
-#define FUTURES_RANGES_ITERATOR_TRAITS_HPP
-
-// #include <iterator>
-
-// #include <type_traits>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/iterator/access.h>
- // for iter_move, iter_swap
-// #include <futures/algorithm/detail/traits/range/utility/common_type.h>
-#ifndef FUTURES_RANGES_UTILITY_COMMON_TYPE_HPP
-#define FUTURES_RANGES_UTILITY_COMMON_TYPE_HPP
-
-// #include <tuple>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/type_traits.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-// Sadly, this is necessary because of:
-//  - std::common_type is !SFINAE-friendly, and
-//  - The specification of std::common_type makes it impossibly
-//    difficult to specialize on user-defined types without spamming
-//    out a bajillion copies to handle all combinations of cv and ref
-//    qualifiers.
-
-namespace futures::detail {
-    template <typename... Ts> using common_type = concepts::common_type<Ts...>;
-
-    template <typename... Ts> using common_type_t = concepts::common_type_t<Ts...>;
-
-    template <typename... Ts> using common_reference = concepts::common_reference<Ts...>;
-
-    template <typename... Ts> using common_reference_t = concepts::common_reference_t<Ts...>;
-
-    /// \cond
-    template <typename F, typename S> struct common_pair;
-
-    template <typename... Ts> struct common_tuple;
-    /// \endcond
-} // namespace futures::detail
-
-/// \cond
-// Specializations for pair and tuple
-namespace futures::detail::concepts {
-    // common_type for std::pairs
-    template <typename F1, typename S1, typename F2, typename S2>
-    struct common_type<std::pair<F1, S1>, ::futures::detail::common_pair<F2, S2>>;
-
-    template <typename F1, typename S1, typename F2, typename S2>
-    struct common_type<::futures::detail::common_pair<F1, S1>, std::pair<F2, S2>>;
-
-    template <typename F1, typename S1, typename F2, typename S2>
-    struct common_type<::futures::detail::common_pair<F1, S1>, ::futures::detail::common_pair<F2, S2>>;
-
-    // common_type for std::tuples
-    template <typename... Ts, typename... Us> struct common_type<::futures::detail::common_tuple<Ts...>, std::tuple<Us...>>;
-
-    template <typename... Ts, typename... Us> struct common_type<std::tuple<Ts...>, ::futures::detail::common_tuple<Us...>>;
-
-    template <typename... Ts, typename... Us>
-    struct common_type<::futures::detail::common_tuple<Ts...>, ::futures::detail::common_tuple<Us...>>;
-
-    // A common reference for std::pairs
-    template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-              template <typename> class Qual2>
-    struct basic_common_reference<::futures::detail::common_pair<F1, S1>, std::pair<F2, S2>, Qual1, Qual2>;
-
-    template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-              template <typename> class Qual2>
-    struct basic_common_reference<std::pair<F1, S1>, ::futures::detail::common_pair<F2, S2>, Qual1, Qual2>;
-
-    template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-              template <typename> class Qual2>
-    struct basic_common_reference<::futures::detail::common_pair<F1, S1>, ::futures::detail::common_pair<F2, S2>, Qual1, Qual2>;
-
-    // A common reference for std::tuples
-    template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-    struct basic_common_reference<::futures::detail::common_tuple<Ts...>, std::tuple<Us...>, Qual1, Qual2>;
-
-    template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-    struct basic_common_reference<std::tuple<Ts...>, ::futures::detail::common_tuple<Us...>, Qual1, Qual2>;
-
-    template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-    struct basic_common_reference<::futures::detail::common_tuple<Ts...>, ::futures::detail::common_tuple<Us...>, Qual1, Qual2>;
-} // namespace futures::detail::concepts
-
-#if RANGES_CXX_VER > RANGES_CXX_STD_17
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_MISMATCHED_TAGS
-RANGES_BEGIN_NAMESPACE_STD
-RANGES_BEGIN_NAMESPACE_VERSION
-
-template <typename...> struct common_type;
-
-// common_type for std::pairs
-template <typename F1, typename S1, typename F2, typename S2>
-struct common_type<std::pair<F1, S1>, ::futures::detail::common_pair<F2, S2>>;
-
-template <typename F1, typename S1, typename F2, typename S2>
-struct common_type<::futures::detail::common_pair<F1, S1>, std::pair<F2, S2>>;
-
-template <typename F1, typename S1, typename F2, typename S2>
-struct common_type<::futures::detail::common_pair<F1, S1>, ::futures::detail::common_pair<F2, S2>>;
-
-// common_type for std::tuples
-template <typename... Ts, typename... Us> struct common_type<::futures::detail::common_tuple<Ts...>, std::tuple<Us...>>;
-
-template <typename... Ts, typename... Us> struct common_type<std::tuple<Ts...>, ::futures::detail::common_tuple<Us...>>;
-
-template <typename... Ts, typename... Us>
-struct common_type<::futures::detail::common_tuple<Ts...>, ::futures::detail::common_tuple<Us...>>;
-
-template <typename, typename, template <typename> class, template <typename> class> struct basic_common_reference;
-
-// A common reference for std::pairs
-template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-          template <typename> class Qual2>
-struct basic_common_reference<::futures::detail::common_pair<F1, S1>, std::pair<F2, S2>, Qual1, Qual2>;
-
-template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-          template <typename> class Qual2>
-struct basic_common_reference<std::pair<F1, S1>, ::futures::detail::common_pair<F2, S2>, Qual1, Qual2>;
-
-template <typename F1, typename S1, typename F2, typename S2, template <typename> class Qual1,
-          template <typename> class Qual2>
-struct basic_common_reference<::futures::detail::common_pair<F1, S1>, ::futures::detail::common_pair<F2, S2>, Qual1, Qual2>;
-
-// A common reference for std::tuples
-template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-struct basic_common_reference<::futures::detail::common_tuple<Ts...>, std::tuple<Us...>, Qual1, Qual2>;
-
-template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-struct basic_common_reference<std::tuple<Ts...>, ::futures::detail::common_tuple<Us...>, Qual1, Qual2>;
-
-template <typename... Ts, typename... Us, template <typename> class Qual1, template <typename> class Qual2>
-struct basic_common_reference<::futures::detail::common_tuple<Ts...>, ::futures::detail::common_tuple<Us...>, Qual1, Qual2>;
-
-RANGES_END_NAMESPACE_VERSION
-RANGES_END_NAMESPACE_STD
-RANGES_DIAGNOSTIC_POP
-#endif // RANGES_CXX_VER > RANGES_CXX_STD_17
-/// \endcond
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-iterator
-    /// @{
-
-    /// \cond
-    using input_iterator_tag RANGES_DEPRECATED("Please switch to the standard iterator tags") = std::input_iterator_tag;
-    using forward_iterator_tag
-        RANGES_DEPRECATED("Please switch to the standard iterator tags") = std::forward_iterator_tag;
-    using bidirectional_iterator_tag
-        RANGES_DEPRECATED("Please switch to the standard iterator tags") = std::bidirectional_iterator_tag;
-    using random_access_iterator_tag
-        RANGES_DEPRECATED("Please switch to the standard iterator tags") = std::random_access_iterator_tag;
-    /// \endcond
-
-    struct contiguous_iterator_tag : std::random_access_iterator_tag {};
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I, typename = iter_reference_t<I>, typename R = decltype(iter_move(std::declval<I &>())),
-                  typename = R &>
-        using iter_rvalue_reference_t = R;
-
-        template <typename I>
-        RANGES_INLINE_VAR constexpr bool
-            has_nothrow_iter_move_v = noexcept(iter_rvalue_reference_t<I>(::futures::detail::iter_move(std::declval<I &>())));
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename I> using iter_rvalue_reference_t = ranges_detail::iter_rvalue_reference_t<I>;
-
-    template <typename I> using iter_common_reference_t = common_reference_t<iter_reference_t<I>, iter_value_t<I> &>;
-
-#if defined(RANGES_DEEP_STL_INTEGRATION) && RANGES_DEEP_STL_INTEGRATION && !defined(RANGES_DOXYGEN_INVOKED)
-    template <typename T>
-    using iter_difference_t = typename futures::detail::meta::conditional_t<ranges_detail::is_std_iterator_traits_specialized_v<T>,
-                                                           std::iterator_traits<uncvref_t<T>>,
-                                                           incrementable_traits<uncvref_t<T>>>::difference_type;
-#else
-    template <typename T> using iter_difference_t = typename incrementable_traits<uncvref_t<T>>::difference_type;
-#endif
-
-    // Defined in <range/v3/iterator/access.hpp>
-    // template<typename T>
-    // using iter_value_t = ...
-
-    // Defined in <range/v3/iterator/access.hpp>
-    // template<typename R>
-    // using iter_reference_t = ranges_detail::iter_reference_t_<R>;
-
-    // Defined in <range/v3/range_fwd.hpp>:
-    // template<typename S, typename I>
-    // inline constexpr bool disable_sized_sentinel = false;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I>
-        using iter_size_t =
-            futures::detail::meta::_t<futures::detail::meta::conditional_t<std::is_integral<iter_difference_t<I>>::value,
-                                         std::make_unsigned<iter_difference_t<I>>, futures::detail::meta::id<iter_difference_t<I>>>>;
-
-        template <typename I> using iter_arrow_t = decltype(std::declval<I &>().operator->());
-
-        template <typename I>
-        using iter_pointer_t =
-            futures::detail::meta::_t<futures::detail::meta::conditional_t<futures::detail::meta::is_trait<futures::detail::meta::defer<iter_arrow_t, I>>::value,
-                                         futures::detail::meta::defer<iter_arrow_t, I>, std::add_pointer<iter_reference_t<I>>>>;
-
-        template <typename T> struct difference_type_ : futures::detail::meta::defer<iter_difference_t, T> {};
-
-        template <typename T> struct value_type_ : futures::detail::meta::defer<iter_value_t, T> {};
-
-        template <typename T> struct size_type_ : futures::detail::meta::defer<iter_size_t, T> {};
-    } // namespace ranges_detail
-
-    template <typename T>
-    using difference_type_t RANGES_DEPRECATED("futures::detail::difference_type_t is deprecated. Please use "
-                                              "futures::detail::iter_difference_t instead.") = iter_difference_t<T>;
-
-    template <typename T>
-    using value_type_t RANGES_DEPRECATED("futures::detail::value_type_t is deprecated. Please use "
-                                         "futures::detail::iter_value_t instead.") = iter_value_t<T>;
-
-    template <typename R>
-    using reference_t RANGES_DEPRECATED("futures::detail::reference_t is deprecated. Use futures::detail::iter_reference_t "
-                                        "instead.") = iter_reference_t<R>;
-
-    template <typename I>
-    using rvalue_reference_t RANGES_DEPRECATED("rvalue_reference_t is deprecated; "
-                                               "use iter_rvalue_reference_t instead") = iter_rvalue_reference_t<I>;
-
-    template <typename T>
-    struct RANGES_DEPRECATED("futures::detail::size_type is deprecated. Iterators do not have an associated "
-                             "size_type.") size_type : ranges_detail::size_type_<T> {};
-
-    template <typename I> using size_type_t RANGES_DEPRECATED("size_type_t is deprecated.") = ranges_detail::iter_size_t<I>;
-    /// \endcond
-
-    namespace cpp20 {
-        using ::futures::detail::iter_common_reference_t;
-        using ::futures::detail::iter_difference_t;
-        using ::futures::detail::iter_reference_t;
-        using ::futures::detail::iter_rvalue_reference_t;
-        using ::futures::detail::iter_value_t;
-
-        // Specialize these in the ::futures::detail:: namespace
-        using ::futures::detail::disable_sized_sentinel;
-        template <typename T> using incrementable_traits = ::futures::detail::incrementable_traits<T>;
-        template <typename T> using indirectly_readable_traits = ::futures::detail::indirectly_readable_traits<T>;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_ITERATOR_TRAITS_HPP
-
-
-#ifdef _GLIBCXX_DEBUG
-#include <debug/safe_iterator.h>
-#endif
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-iterator-concepts
-    /// @{
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I>
-        using iter_traits_t = futures::detail::meta::conditional_t<is_std_iterator_traits_specialized_v<I>, std::iterator_traits<I>, I>;
-
-#if defined(_GLIBCXX_DEBUG)
-        template(typename I, typename T, typename Seq)(
-            /// \pre
-            requires same_as<
-                I, __gnu_debug::_Safe_iterator<T *, Seq>>) auto iter_concept_(__gnu_debug::_Safe_iterator<T *, Seq>,
-                                                                              priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag
-#endif
-#if defined(__GLIBCXX__)
-            template(typename I, typename T, typename Seq)(
-                /// \pre
-                requires same_as<I, __gnu_cxx::__normal_iterator<
-                                        T *, Seq>>) auto iter_concept_(__gnu_cxx::__normal_iterator<T *, Seq>,
-                                                                       priority_tag<3>)
-                -> ::futures::detail::contiguous_iterator_tag;
-#endif
-#if defined(_LIBCPP_VERSION)
-        template(typename I, typename T)(
-            /// \pre
-            requires same_as<I, std::__wrap_iter<T *>>) auto iter_concept_(std::__wrap_iter<T *>, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-#endif
-#if defined(_MSVC_STL_VERSION) || defined(_IS_WRS)
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_Array_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_Array_const_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_Vector_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_Vector_const_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_String_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_String_const_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-        template(typename I)(
-            /// \pre
-            requires same_as<I, class I::_String_view_iterator>) auto iter_concept_(I, priority_tag<3>)
-            -> ::futures::detail::contiguous_iterator_tag;
-#endif
-        template(typename I, typename T)(
-            /// \pre
-            requires same_as<I, T *>) auto iter_concept_(T *, priority_tag<3>) -> ::futures::detail::contiguous_iterator_tag;
-        template <typename I> auto iter_concept_(I, priority_tag<2>) -> typename iter_traits_t<I>::iterator_concept;
-        template <typename I> auto iter_concept_(I, priority_tag<1>) -> typename iter_traits_t<I>::iterator_category;
-        template <typename I>
-        auto iter_concept_(I, priority_tag<0>)
-            -> enable_if_t<!is_std_iterator_traits_specialized_v<I>, std::random_access_iterator_tag>;
-
-        template <typename I> using iter_concept_t = decltype(iter_concept_<I>(std::declval<I>(), priority_tag<3>{}));
-
-        using ::futures::detail::concepts::ranges_detail::weakly_equality_comparable_with_;
-
-        template <typename I>
-        using readable_types_t = futures::detail::meta::list<iter_value_t<I>, iter_reference_t<I>, iter_rvalue_reference_t<I>>;
-    } // namespace ranges_detail
-      /// \endcond
-
-    // clang-format off
-    template(typename I)(
-    concept (readable_)(I),
-        // requires (I const i)
-        // (
-        //     { *i } -> same_as<iter_reference_t<I>>;
-        //     { iter_move(i) } -> same_as<iter_rvalue_reference_t<I>>;
-        // ) &&
-        same_as<iter_reference_t<I const>, iter_reference_t<I>> AND
-        same_as<iter_rvalue_reference_t<I const>, iter_rvalue_reference_t<I>> AND
-        common_reference_with<iter_reference_t<I> &&, iter_value_t<I> &> AND
-        common_reference_with<iter_reference_t<I> &&,
-                              iter_rvalue_reference_t<I> &&> AND
-        common_reference_with<iter_rvalue_reference_t<I> &&, iter_value_t<I> const &>
-    );
-
-    template<typename I>
-    CPP_concept indirectly_readable = //
-        CPP_concept_ref(::futures::detail::readable_, uncvref_t<I>);
-
-    template<typename I>
-    RANGES_DEPRECATED("Please use ::futures::detail::indirectly_readable instead")
-    RANGES_INLINE_VAR constexpr bool readable = //
-        indirectly_readable<I>;
-
-    template<typename O, typename T>
-    CPP_requires(writable_,
-        requires(O && o, T && t) //
-        (
-            *o = (T &&) t,
-            *(O &&) o = (T &&) t,
-            const_cast<iter_reference_t<O> const &&>(*o) = (T &&) t,
-            const_cast<iter_reference_t<O> const &&>(*(O &&) o) = (T &&) t
-        ));
-    template<typename O, typename T>
-    CPP_concept indirectly_writable = //
-        CPP_requires_ref(::futures::detail::writable_, O, T);
-
-    template<typename O, typename T>
-    RANGES_DEPRECATED("Please use ::futures::detail::indirectly_writable instead")
-    RANGES_INLINE_VAR constexpr bool writable = //
-        indirectly_writable<O, T>;
-    // clang-format on
-
-    /// \cond
-    namespace ranges_detail {
-#if RANGES_CXX_INLINE_VARIABLES >= RANGES_CXX_INLINE_VARIABLES_17
-        template <typename D> inline constexpr bool _is_integer_like_ = std::is_integral<D>::value;
-#else
-        template <typename D, typename = void> constexpr bool _is_integer_like_ = std::is_integral<D>::value;
-#endif
-
-        // gcc10 uses for std::futures::detail::range_difference_t<
-        // std::futures::detail::iota_view<size_t, size_t>> == __int128
-#if __SIZEOF_INT128__
-        __extension__ typedef __int128 int128_t;
-#if RANGES_CXX_INLINE_VARIABLES >= RANGES_CXX_INLINE_VARIABLES_17
-        template <> inline constexpr bool _is_integer_like_<int128_t> = true;
-#else
-        template <typename Enable> constexpr bool _is_integer_like_<int128_t, Enable> = true;
-#endif
-#endif // __SIZEOF_INT128__
-
-        // clang-format off
-        template<typename D>
-        CPP_concept integer_like_ = _is_integer_like_<D>;
-
-#ifdef RANGES_WORKAROUND_MSVC_792338
-        template<typename D, bool Signed = (D(-1) < D(0))>
-        constexpr bool _is_signed_(D *)
-        {
-            return Signed;
-        }
-        constexpr bool _is_signed_(void *)
-        {
-            return false;
-        }
-
-        template<typename D>
-        CPP_concept signed_integer_like_ =
-            integer_like_<D> && ranges_detail::_is_signed_((D*) nullptr);
-#else // ^^^ workaround / no workaround vvv
-        template(typename D)(
-        concept (signed_integer_like_impl_)(D),
-            integer_like_<D> AND
-            concepts::type<std::integral_constant<bool, (D(-1) < D(0))>> AND
-            std::integral_constant<bool, (D(-1) < D(0))>::value
-        );
-
-        template<typename D>
-        CPP_concept signed_integer_like_ =
-            integer_like_<D> &&
-            CPP_concept_ref(ranges_detail::signed_integer_like_impl_, D);
-#endif // RANGES_WORKAROUND_MSVC_792338
-       // clang-format on
-    } // namespace ranges_detail
-      /// \endcond
-
-    // clang-format off
-    template<typename I>
-    CPP_requires(weakly_incrementable_,
-        requires(I i) //
-        (
-            ++i,
-            i++,
-            concepts::requires_<same_as<I&, decltype(++i)>>
-        ));
-
-    template(typename I)(
-    concept (weakly_incrementable_)(I),
-        concepts::type<iter_difference_t<I>> AND
-        ranges_detail::signed_integer_like_<iter_difference_t<I>>);
-
-    template<typename I>
-    CPP_concept weakly_incrementable =
-        semiregular<I> &&
-        CPP_requires_ref(::futures::detail::weakly_incrementable_, I) &&
-        CPP_concept_ref(::futures::detail::weakly_incrementable_, I);
-
-    template<typename I>
-    CPP_requires(incrementable_,
-        requires(I i) //
-        (
-            concepts::requires_<same_as<I, decltype(i++)>>
-        ));
-    template<typename I>
-    CPP_concept incrementable =
-        regular<I> &&
-        weakly_incrementable<I> &&
-        CPP_requires_ref(::futures::detail::incrementable_, I);
-
-    template(typename I)(
-    concept (input_or_output_iterator_)(I),
-        ranges_detail::dereferenceable_<I&>
-    );
-
-    template<typename I>
-    CPP_concept input_or_output_iterator =
-        weakly_incrementable<I> &&
-        CPP_concept_ref(::futures::detail::input_or_output_iterator_, I);
-
-    template<typename S, typename I>
-    CPP_concept sentinel_for =
-        semiregular<S> &&
-        input_or_output_iterator<I> &&
-        ranges_detail::weakly_equality_comparable_with_<S, I>;
-
-    template<typename S, typename I>
-    CPP_requires(sized_sentinel_for_,
-        requires(S const & s, I const & i) //
-        (
-            s - i,
-            i - s,
-            concepts::requires_<same_as<iter_difference_t<I>, decltype(s - i)>>,
-            concepts::requires_<same_as<iter_difference_t<I>, decltype(i - s)>>
-        ));
-    template(typename S, typename I)(
-    concept (sized_sentinel_for_)(S, I),
-        (!disable_sized_sentinel<std::remove_cv_t<S>, std::remove_cv_t<I>>) AND
-        sentinel_for<S, I>);
-
-    template<typename S, typename I>
-    CPP_concept sized_sentinel_for =
-        CPP_concept_ref(sized_sentinel_for_, S, I) &&
-        CPP_requires_ref(::futures::detail::sized_sentinel_for_, S, I);
-
-    template<typename Out, typename T>
-    CPP_requires(output_iterator_,
-        requires(Out o, T && t) //
-        (
-            *o++ = (T &&) t
-        ));
-    template<typename Out, typename T>
-    CPP_concept output_iterator =
-        input_or_output_iterator<Out> &&
-        indirectly_writable<Out, T> &&
-        CPP_requires_ref(::futures::detail::output_iterator_, Out, T);
-
-    template(typename I, typename Tag)(
-    concept (with_category_)(I, Tag),
-        derived_from<ranges_detail::iter_concept_t<I>, Tag>
-    );
-
-    template<typename I>
-    CPP_concept input_iterator =
-        input_or_output_iterator<I> &&
-        indirectly_readable<I> &&
-        CPP_concept_ref(::futures::detail::with_category_, I, std::input_iterator_tag);
-
-    template<typename I>
-    CPP_concept forward_iterator =
-        input_iterator<I> &&
-        incrementable<I> &&
-        sentinel_for<I, I> &&
-        CPP_concept_ref(::futures::detail::with_category_, I, std::forward_iterator_tag);
-
-    template<typename I>
-    CPP_requires(bidirectional_iterator_,
-        requires(I i) //
-        (
-            --i,
-            i--,
-            concepts::requires_<same_as<I&, decltype(--i)>>,
-            concepts::requires_<same_as<I, decltype(i--)>>
-        ));
-    template<typename I>
-    CPP_concept bidirectional_iterator =
-        forward_iterator<I> &&
-        CPP_requires_ref(::futures::detail::bidirectional_iterator_, I) &&
-        CPP_concept_ref(::futures::detail::with_category_, I, std::bidirectional_iterator_tag);
-
-    template<typename I>
-    CPP_requires(random_access_iterator_,
-        requires(I i, iter_difference_t<I> n)
-        (
-            i + n,
-            n + i,
-            i - n,
-            i += n,
-            i -= n,
-            concepts::requires_<same_as<decltype(i + n), I>>,
-            concepts::requires_<same_as<decltype(n + i), I>>,
-            concepts::requires_<same_as<decltype(i - n), I>>,
-            concepts::requires_<same_as<decltype(i += n), I&>>,
-            concepts::requires_<same_as<decltype(i -= n), I&>>,
-            concepts::requires_<same_as<decltype(i[n]), iter_reference_t<I>>>
-        ));
-    template<typename I>
-    CPP_concept random_access_iterator =
-        bidirectional_iterator<I> &&
-        totally_ordered<I> &&
-        sized_sentinel_for<I, I> &&
-        CPP_requires_ref(::futures::detail::random_access_iterator_, I) &&
-        CPP_concept_ref(::futures::detail::with_category_, I, std::random_access_iterator_tag);
-
-    template(typename I)(
-    concept (contiguous_iterator_)(I),
-        std::is_lvalue_reference<iter_reference_t<I>>::value AND
-        same_as<iter_value_t<I>, uncvref_t<iter_reference_t<I>>> AND
-        derived_from<ranges_detail::iter_concept_t<I>, ::futures::detail::contiguous_iterator_tag>
-    );
-
-    template<typename I>
-    CPP_concept contiguous_iterator =
-        random_access_iterator<I> &&
-        CPP_concept_ref(::futures::detail::contiguous_iterator_, I);
-    // clang-format on
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // iterator_tag_of
-    template <typename Rng>
-    using iterator_tag_of =                              //
-        std::enable_if_t<                                //
-            input_iterator<Rng>,                         //
-            futures::detail::meta::conditional_t<                         //
-                contiguous_iterator<Rng>,                //
-                ::futures::detail::contiguous_iterator_tag,         //
-                futures::detail::meta::conditional_t<                     //
-                    random_access_iterator<Rng>,         //
-                    std::random_access_iterator_tag,     //
-                    futures::detail::meta::conditional_t<                 //
-                        bidirectional_iterator<Rng>,     //
-                        std::bidirectional_iterator_tag, //
-                        futures::detail::meta::conditional_t<             //
-                            forward_iterator<Rng>,       //
-                            std::forward_iterator_tag,   //
-                            std::input_iterator_tag>>>>>;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename, bool> struct iterator_category_ {};
-
-        template <typename I> struct iterator_category_<I, true> { using type = iterator_tag_of<I>; };
-
-        template <typename T, typename U = futures::detail::meta::_t<std::remove_const<T>>>
-        using iterator_category = iterator_category_<U, (bool)input_iterator<U>>;
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// \cond
-    // Generally useful to know if an iterator is single-pass or not:
-    // clang-format off
-    template<typename I>
-    CPP_concept single_pass_iterator_ =
-        input_or_output_iterator<I> && !forward_iterator<I>;
-    // clang-format on
-    /// \endcond
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // indirect_result_t
-    template <typename Fun, typename... Is>
-    using indirect_result_t = ranges_detail::enable_if_t<(bool)and_v<(bool)indirectly_readable<Is>...>,
-                                                  invoke_result_t<Fun, iter_reference_t<Is>...>>;
-
-    /// \cond
-    namespace ranges_detail {
-        // clang-format off
-        template(typename T1, typename T2, typename T3, typename T4)(
-        concept (common_reference_with_4_impl_)(T1, T2, T3, T4),
-            concepts::type<common_reference_t<T1, T2, T3, T4>>     AND
-            convertible_to<T1, common_reference_t<T1, T2, T3, T4>> AND
-            convertible_to<T2, common_reference_t<T1, T2, T3, T4>> AND
-            convertible_to<T3, common_reference_t<T1, T2, T3, T4>> AND
-            convertible_to<T4, common_reference_t<T1, T2, T3, T4>>
-        );
-
-        template<typename T1, typename T2, typename T3, typename T4>
-        CPP_concept common_reference_with_4_ =
-            CPP_concept_ref(ranges_detail::common_reference_with_4_impl_, T1, T2, T3, T4);
-        // axiom: all permutations of T1,T2,T3,T4 have the same
-        // common reference type.
-
-        template(typename F, typename I)(
-        concept (indirectly_unary_invocable_impl_)(F, I),
-            invocable<F &, iter_value_t<I> &> AND
-            invocable<F &, iter_reference_t<I>> AND
-            invocable<F &, iter_common_reference_t<I>> AND
-            common_reference_with<
-                invoke_result_t<F &, iter_value_t<I> &>,
-                invoke_result_t<F &, iter_reference_t<I>>>
-        );
-
-        template<typename F, typename I>
-        CPP_concept indirectly_unary_invocable_ =
-            indirectly_readable<I> &&
-            CPP_concept_ref(ranges_detail::indirectly_unary_invocable_impl_, F, I);
-        // clang-format on
-    } // namespace ranges_detail
-      /// \endcond
-
-    // clang-format off
-    template<typename F, typename I>
-    CPP_concept indirectly_unary_invocable =
-        ranges_detail::indirectly_unary_invocable_<F, I> &&
-        copy_constructible<F>;
-
-    template(typename F, typename I)(
-    concept (indirectly_regular_unary_invocable_)(F, I),
-        regular_invocable<F &, iter_value_t<I> &> AND
-        regular_invocable<F &, iter_reference_t<I>> AND
-        regular_invocable<F &, iter_common_reference_t<I>> AND
-        common_reference_with<
-            invoke_result_t<F &, iter_value_t<I> &>,
-            invoke_result_t<F &, iter_reference_t<I>>>
-    );
-
-    template<typename F, typename I>
-    CPP_concept indirectly_regular_unary_invocable =
-        indirectly_readable<I> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirectly_regular_unary_invocable_, F, I);
-
-    /// \cond
-    // Non-standard indirect invocable concepts
-    template(typename F, typename I1, typename I2)(
-    concept (indirectly_binary_invocable_impl_)(F, I1, I2),
-        invocable<F &, iter_value_t<I1> &, iter_value_t<I2> &> AND
-        invocable<F &, iter_value_t<I1> &, iter_reference_t<I2>> AND
-        invocable<F &, iter_reference_t<I1>, iter_value_t<I2> &> AND
-        invocable<F &, iter_reference_t<I1>, iter_reference_t<I2>> AND
-        invocable<F &, iter_common_reference_t<I1>, iter_common_reference_t<I2>> AND
-        ranges_detail::common_reference_with_4_<
-            invoke_result_t<F &, iter_value_t<I1> &, iter_value_t<I2> &>,
-            invoke_result_t<F &, iter_value_t<I1> &, iter_reference_t<I2>>,
-            invoke_result_t<F &, iter_reference_t<I1>, iter_value_t<I2> &>,
-            invoke_result_t<F &, iter_reference_t<I1>, iter_reference_t<I2>>>
-    );
-
-    template<typename F, typename I1, typename I2>
-    CPP_concept indirectly_binary_invocable_ =
-        indirectly_readable<I1> && indirectly_readable<I2> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirectly_binary_invocable_impl_, F, I1, I2);
-
-    template(typename F, typename I1, typename I2)(
-    concept (indirectly_regular_binary_invocable_impl_)(F, I1, I2),
-        regular_invocable<F &, iter_value_t<I1> &, iter_value_t<I2> &> AND
-        regular_invocable<F &, iter_value_t<I1> &, iter_reference_t<I2>> AND
-        regular_invocable<F &, iter_reference_t<I1>, iter_value_t<I2> &> AND
-        regular_invocable<F &, iter_reference_t<I1>, iter_reference_t<I2>> AND
-        regular_invocable<F &, iter_common_reference_t<I1>, iter_common_reference_t<I2>> AND
-        ranges_detail::common_reference_with_4_<
-            invoke_result_t<F &, iter_value_t<I1> &, iter_value_t<I2> &>,
-            invoke_result_t<F &, iter_value_t<I1> &, iter_reference_t<I2>>,
-            invoke_result_t<F &, iter_reference_t<I1>, iter_value_t<I2> &>,
-            invoke_result_t<F &, iter_reference_t<I1>, iter_reference_t<I2>>>
-    );
-
-    template<typename F, typename I1, typename I2>
-    CPP_concept indirectly_regular_binary_invocable_ =
-        indirectly_readable<I1> && indirectly_readable<I2> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirectly_regular_binary_invocable_impl_, F, I1, I2);
-    /// \endcond
-
-    template(typename F, typename I)(
-    concept (indirect_unary_predicate_)(F, I),
-        predicate<F &, iter_value_t<I> &> AND
-        predicate<F &, iter_reference_t<I>> AND
-        predicate<F &, iter_common_reference_t<I>>
-    );
-
-    template<typename F, typename I>
-    CPP_concept indirect_unary_predicate =
-        indirectly_readable<I> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirect_unary_predicate_, F, I);
-
-    template(typename F, typename I1, typename I2)(
-    concept (indirect_binary_predicate_impl_)(F, I1, I2),
-        predicate<F &, iter_value_t<I1> &, iter_value_t<I2> &> AND
-        predicate<F &, iter_value_t<I1> &, iter_reference_t<I2>> AND
-        predicate<F &, iter_reference_t<I1>, iter_value_t<I2> &> AND
-        predicate<F &, iter_reference_t<I1>, iter_reference_t<I2>> AND
-        predicate<F &, iter_common_reference_t<I1>, iter_common_reference_t<I2>>
-    );
-
-    template<typename F, typename I1, typename I2>
-    CPP_concept indirect_binary_predicate_ =
-        indirectly_readable<I1> && indirectly_readable<I2> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirect_binary_predicate_impl_, F, I1, I2);
-
-    template(typename F, typename I1, typename I2)(
-    concept (indirect_relation_)(F, I1, I2),
-        relation<F &, iter_value_t<I1> &, iter_value_t<I2> &> AND
-        relation<F &, iter_value_t<I1> &, iter_reference_t<I2>> AND
-        relation<F &, iter_reference_t<I1>, iter_value_t<I2> &> AND
-        relation<F &, iter_reference_t<I1>, iter_reference_t<I2>> AND
-        relation<F &, iter_common_reference_t<I1>, iter_common_reference_t<I2>>
-    );
-
-    template<typename F, typename I1, typename I2 = I1>
-    CPP_concept indirect_relation =
-        indirectly_readable<I1> && indirectly_readable<I2> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirect_relation_, F, I1, I2);
-
-    template(typename F, typename I1, typename I2)(
-    concept (indirect_strict_weak_order_)(F, I1, I2),
-        strict_weak_order<F &, iter_value_t<I1> &, iter_value_t<I2> &> AND
-        strict_weak_order<F &, iter_value_t<I1> &, iter_reference_t<I2>> AND
-        strict_weak_order<F &, iter_reference_t<I1>, iter_value_t<I2> &> AND
-        strict_weak_order<F &, iter_reference_t<I1>, iter_reference_t<I2>> AND
-        strict_weak_order<F &, iter_common_reference_t<I1>, iter_common_reference_t<I2>>
-    );
-
-    template<typename F, typename I1, typename I2 = I1>
-    CPP_concept indirect_strict_weak_order =
-        indirectly_readable<I1> && indirectly_readable<I2> &&
-        copy_constructible<F> &&
-        CPP_concept_ref(::futures::detail::indirect_strict_weak_order_, F, I1, I2);
-    // clang-format on
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // projected struct, for "projecting" a readable with a unary callable
-    /// \cond
-    namespace ranges_detail {
-        RANGES_DIAGNOSTIC_PUSH
-        RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-        template <typename I, typename Proj> struct projected_ {
-            struct type {
-                using reference = indirect_result_t<Proj &, I>;
-                using value_type = uncvref_t<reference>;
-                reference operator*() const;
-            };
-        };
-        RANGES_DIAGNOSTIC_POP
-
-        template <typename Proj> struct select_projected_ {
-            template <typename I>
-            using apply = futures::detail::meta::_t<
-                ranges_detail::enable_if_t<(bool)indirectly_regular_unary_invocable<Proj, I>, ranges_detail::projected_<I, Proj>>>;
-        };
-
-        template <> struct select_projected_<identity> {
-            template <typename I> using apply = ranges_detail::enable_if_t<(bool)indirectly_readable<I>, I>;
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename I, typename Proj> using projected = typename ranges_detail::select_projected_<Proj>::template apply<I>;
-
-    template <typename I, typename Proj>
-    struct incrementable_traits<ranges_detail::projected_<I, Proj>> : incrementable_traits<I> {};
-
-    // clang-format off
-    template(typename I, typename O)(
-    concept (indirectly_movable_)(I, O),
-        indirectly_writable<O, iter_rvalue_reference_t<I>>
-    );
-
-    template<typename I, typename O>
-    CPP_concept indirectly_movable =
-        indirectly_readable<I> && CPP_concept_ref(::futures::detail::indirectly_movable_, I, O);
-
-    template(typename I, typename O)(
-    concept (indirectly_movable_storable_)(I, O),
-        indirectly_writable<O, iter_value_t<I>> AND
-        movable<iter_value_t<I>> AND
-        constructible_from<iter_value_t<I>, iter_rvalue_reference_t<I>> AND
-        assignable_from<iter_value_t<I> &, iter_rvalue_reference_t<I>>
-    );
-
-    template<typename I, typename O>
-    CPP_concept indirectly_movable_storable =
-        indirectly_movable<I, O> &&
-        CPP_concept_ref(::futures::detail::indirectly_movable_storable_, I, O);
-
-    template(typename I, typename O)(
-    concept (indirectly_copyable_)(I, O),
-        indirectly_writable<O, iter_reference_t<I>>
-    );
-
-    template<typename I, typename O>
-    CPP_concept indirectly_copyable =
-        indirectly_readable<I> && CPP_concept_ref(::futures::detail::indirectly_copyable_, I, O);
-
-    template(typename I, typename O)(
-    concept (indirectly_copyable_storable_)(I, O),
-        indirectly_writable<O, iter_value_t<I> const &> AND
-        copyable<iter_value_t<I>> AND
-        constructible_from<iter_value_t<I>, iter_reference_t<I>> AND
-        assignable_from<iter_value_t<I> &, iter_reference_t<I>>
-    );
-
-    template<typename I, typename O>
-    CPP_concept indirectly_copyable_storable =
-        indirectly_copyable<I, O> &&
-        CPP_concept_ref(::futures::detail::indirectly_copyable_storable_, I, O);
-
-    template<typename I1, typename I2>
-    CPP_requires(indirectly_swappable_,
-        requires(I1 const i1, I2 const i2) //
-        (
-            ::futures::detail::iter_swap(i1, i2),
-            ::futures::detail::iter_swap(i1, i1),
-            ::futures::detail::iter_swap(i2, i2),
-            ::futures::detail::iter_swap(i2, i1)
-        ));
-    template<typename I1, typename I2 = I1>
-    CPP_concept indirectly_swappable =
-        indirectly_readable<I1> && //
-        indirectly_readable<I2> && //
-        CPP_requires_ref(::futures::detail::indirectly_swappable_, I1, I2);
-
-    template(typename C, typename I1, typename P1, typename I2, typename P2)(
-    concept (projected_indirect_relation_)(C, I1, P1, I2, P2),
-        indirect_relation<C, projected<I1, P1>, projected<I2, P2>>
-    );
-
-    template<typename I1, typename I2, typename C, typename P1 = identity,
-        typename P2 = identity>
-    CPP_concept indirectly_comparable =
-        CPP_concept_ref(::futures::detail::projected_indirect_relation_, C, I1, P1, I2, P2);
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // Composite concepts for use defining algorithms:
-    template<typename I>
-    CPP_concept permutable =
-        forward_iterator<I> &&
-        indirectly_swappable<I, I> &&
-        indirectly_movable_storable<I, I>;
-
-    template(typename C, typename I1, typename P1, typename I2, typename P2)(
-    concept (projected_indirect_strict_weak_order_)(C, I1, P1, I2, P2),
-        indirect_strict_weak_order<C, projected<I1, P1>, projected<I2, P2>>
-    );
-
-    template<typename I1, typename I2, typename Out, typename C = less,
-        typename P1 = identity, typename P2 = identity>
-    CPP_concept mergeable =
-        input_iterator<I1> &&
-        input_iterator<I2> &&
-        weakly_incrementable<Out> &&
-        indirectly_copyable<I1, Out> &&
-        indirectly_copyable<I2, Out> &&
-        CPP_concept_ref(::futures::detail::projected_indirect_strict_weak_order_, C, I1, P1, I2, P2);
-
-    template<typename I, typename C = less, typename P = identity>
-    CPP_concept sortable =
-        permutable<I> &&
-        CPP_concept_ref(::futures::detail::projected_indirect_strict_weak_order_, C, I, P, I, P);
-    // clang-format on
-
-    struct sentinel_tag {};
-    struct sized_sentinel_tag : sentinel_tag {};
-
-    template <typename S, typename I>
-    using sentinel_tag_of =               //
-        std::enable_if_t<                 //
-            sentinel_for<S, I>,           //
-            futures::detail::meta::conditional_t<          //
-                sized_sentinel_for<S, I>, //
-                sized_sentinel_tag,       //
-                sentinel_tag>>;
-
-    // Deprecated things:
-    /// \cond
-    template <typename I>
-    using iterator_category RANGES_DEPRECATED("iterator_category is deprecated. Use the iterator concepts instead") =
-        ranges_detail::iterator_category<I>;
-
-    template <typename I>
-    using iterator_category_t
-        RANGES_DEPRECATED("iterator_category_t is deprecated. Use the iterator concepts instead") =
-            futures::detail::meta::_t<ranges_detail::iterator_category<I>>;
-
-    template <typename Fun, typename... Is>
-    using indirect_invoke_result_t
-        RANGES_DEPRECATED("Please switch to indirect_result_t") = indirect_result_t<Fun, Is...>;
-
-    template <typename Fun, typename... Is>
-    struct RANGES_DEPRECATED("Please switch to indirect_result_t") indirect_invoke_result
-        : futures::detail::meta::defer<indirect_result_t, Fun, Is...> {};
-
-    template <typename Sig> struct indirect_result_of {};
-
-    template <typename Fun, typename... Is>
-    struct RANGES_DEPRECATED("Please switch to indirect_result_t") indirect_result_of<Fun(Is...)>
-        : futures::detail::meta::defer<indirect_result_t, Fun, Is...> {};
-
-    template <typename Sig>
-    using indirect_result_of_t
-        RANGES_DEPRECATED("Please switch to indirect_result_t") = futures::detail::meta::_t<indirect_result_of<Sig>>;
-    /// \endcond
-
-    namespace cpp20 {
-        using ::futures::detail::bidirectional_iterator;
-        using ::futures::detail::contiguous_iterator;
-        using ::futures::detail::forward_iterator;
-        using ::futures::detail::incrementable;
-        using ::futures::detail::indirect_relation;
-        using ::futures::detail::indirect_result_t;
-        using ::futures::detail::indirect_strict_weak_order;
-        using ::futures::detail::indirect_unary_predicate;
-        using ::futures::detail::indirectly_comparable;
-        using ::futures::detail::indirectly_copyable;
-        using ::futures::detail::indirectly_copyable_storable;
-        using ::futures::detail::indirectly_movable;
-        using ::futures::detail::indirectly_movable_storable;
-        using ::futures::detail::indirectly_readable;
-        using ::futures::detail::indirectly_regular_unary_invocable;
-        using ::futures::detail::indirectly_swappable;
-        using ::futures::detail::indirectly_unary_invocable;
-        using ::futures::detail::indirectly_writable;
-        using ::futures::detail::input_iterator;
-        using ::futures::detail::input_or_output_iterator;
-        using ::futures::detail::mergeable;
-        using ::futures::detail::output_iterator;
-        using ::futures::detail::permutable;
-        using ::futures::detail::projected;
-        using ::futures::detail::random_access_iterator;
-        using ::futures::detail::sentinel_for;
-        using ::futures::detail::sized_sentinel_for;
-        using ::futures::detail::sortable;
-        using ::futures::detail::weakly_incrementable;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-#ifdef _GLIBCXX_DEBUG
-// HACKHACK: workaround underconstrained operator- for libstdc++ debug iterator wrapper
-// by intentionally creating an ambiguity when the wrapped types don't support the
-// necessary operation.
-namespace __gnu_debug {
-    template(typename I1, typename I2, typename Seq)(
-        /// \pre
-        requires(!::futures::detail::sized_sentinel_for<I1, I2>)) //
-        void
-        operator-(_Safe_iterator<I1, Seq> const &, _Safe_iterator<I2, Seq> const &) = delete;
-
-    template(typename I1, typename Seq)(
-        /// \pre
-        requires(!::futures::detail::sized_sentinel_for<I1, I1>)) //
-        void
-        operator-(_Safe_iterator<I1, Seq> const &, _Safe_iterator<I1, Seq> const &) = delete;
-} // namespace __gnu_debug
-#endif
-
-#if defined(__GLIBCXX__) || (defined(_LIBCPP_VERSION) && _LIBCPP_VERSION <= 3900)
-// HACKHACK: workaround libc++ (https://llvm.org/bugs/show_bug.cgi?id=28421)
-// and libstdc++ (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71771)
-// underconstrained operator- for reverse_iterator by disabling sized_sentinel_for
-// when the base iterators do not model sized_sentinel_for.
-
-namespace futures::detail {
-    template <typename S, typename I>
-    /*inline*/ constexpr bool disable_sized_sentinel<std::reverse_iterator<S>, std::reverse_iterator<I>> =
-        !static_cast<bool>(sized_sentinel_for<I, S>);
-} // namespace futures::detail
-
-#endif // defined(__GLIBCXX__) || (defined(_LIBCPP_VERSION) && _LIBCPP_VERSION <= 3900)
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_ITERATOR_CONCEPTS_HPP
-
-// #include <futures/algorithm/detail/traits/range/iterator/traits.h>
-
-// #include <futures/algorithm/detail/traits/range/range/access.h>
-#ifndef FUTURES_RANGES_RANGE_ACCESS_HPP
-#define FUTURES_RANGES_RANGE_ACCESS_HPP
-
-// #include <functional>
- // for reference_wrapper (whose use with begin/end is deprecated)
-// #include <initializer_list>
-
-// #include <iterator>
-
-// #include <limits>
-
-// #include <utility>
-
-
-#ifdef __has_include
-#if __has_include(<span>)
-namespace std {
-    template <class T, std::size_t Extent> class span;
-}
-#endif
-#if __has_include(<string_view>)
-// #include <string_view>
-
-#endif
-#endif
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-
-// #include <futures/algorithm/detail/traits/range/iterator/reverse_iterator.h>
-#ifndef FUTURES_RANGES_ITERATOR_REVERSE_ITERATOR_HPP
-#define FUTURES_RANGES_ITERATOR_REVERSE_ITERATOR_HPP
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/iterator/basic_iterator.h>
-#ifndef FUTURES_RANGES_ITERATOR_BASIC_ITERATOR_HPP
-#define FUTURES_RANGES_ITERATOR_BASIC_ITERATOR_HPP
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/range_access.h>
-#ifndef FUTURES_RANGES_DETAIL_RANGE_ACCESS_HPP
-#define FUTURES_RANGES_DETAIL_RANGE_ACCESS_HPP
-
-// #include <cstddef>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-views
-    /// @{
-    struct range_access {
-        /// \cond
-      private:
-        template <typename T> static std::false_type single_pass_2_(long);
-        template <typename T> static typename T::single_pass single_pass_2_(int);
-
-        template <typename T> struct single_pass_ { using type = decltype(range_access::single_pass_2_<T>(42)); };
-
-        template <typename T> static std::false_type contiguous_2_(long);
-        template <typename T> static typename T::contiguous contiguous_2_(int);
-
-        template <typename T> struct contiguous_ { using type = decltype(range_access::contiguous_2_<T>(42)); };
-
-        template <typename T> static basic_mixin<T> mixin_base_2_(long);
-        template <typename T> static typename T::mixin mixin_base_2_(int);
-
-        template <typename Cur> struct mixin_base_ { using type = decltype(range_access::mixin_base_2_<Cur>(42)); };
-
-      public:
-        template <typename Cur> using single_pass_t = futures::detail::meta::_t<single_pass_<Cur>>;
-
-        template <typename Cur> using contiguous_t = futures::detail::meta::_t<contiguous_<Cur>>;
-
-        template <typename Cur> using mixin_base_t = futures::detail::meta::_t<mixin_base_<Cur>>;
-
-        // clang-format off
-        template<typename Rng>
-        static constexpr auto CPP_auto_fun(begin_cursor)(Rng &rng)
-        (
-            return rng.begin_cursor()
-        )
-        template<typename Rng>
-        static constexpr auto CPP_auto_fun(end_cursor)(Rng &rng)
-        (
-            return rng.end_cursor()
-        )
-
-        template<typename Rng>
-        static constexpr auto CPP_auto_fun(begin_adaptor)(Rng &rng)
-        (
-            return rng.begin_adaptor()
-        )
-        template<typename Rng>
-        static constexpr auto CPP_auto_fun(end_adaptor)(Rng &rng)
-        (
-            return rng.end_adaptor()
-        )
-
-        template<typename Cur>
-        static constexpr auto CPP_auto_fun(read)(Cur const &pos)
-        (
-            return pos.read()
-        )
-        template<typename Cur>
-        static constexpr auto CPP_auto_fun(arrow)(Cur const &pos)
-        (
-            return pos.arrow()
-        )
-        template<typename Cur>
-        static constexpr auto CPP_auto_fun(move)(Cur const &pos)
-        (
-            return pos.move()
-        )
-        template<typename Cur, typename T>
-        static constexpr auto CPP_auto_fun(write)(Cur &pos, T &&t)
-        (
-            return pos.write((T &&) t)
-        )
-        template<typename Cur>
-        static constexpr auto CPP_auto_fun(next)(Cur & pos)
-        (
-            return pos.next()
-        )
-        template<typename Cur, typename O>
-        static constexpr auto CPP_auto_fun(equal)(Cur const &pos, O const &other)
-        (
-            return pos.equal(other)
-        )
-        template<typename Cur>
-        static constexpr auto CPP_auto_fun(prev)(Cur & pos)
-        (
-            return pos.prev()
-        )
-        template<typename Cur, typename D>
-        static constexpr auto CPP_auto_fun(advance)(Cur & pos, D n)
-        (
-            return pos.advance(n)
-        )
-        template<typename Cur, typename O>
-        static constexpr auto CPP_auto_fun(distance_to)(Cur const &pos, O const &other)
-        (
-            return pos.distance_to(other)
-        )
-
-    private:
-        template<typename Cur>
-        using sized_cursor_difference_t = decltype(
-            range_access::distance_to(std::declval<Cur>(), std::declval<Cur>()));
-        // clang-format on
-
-        template <typename T> static std::ptrdiff_t cursor_difference_2_(ranges_detail::ignore_t);
-        template <typename T> static sized_cursor_difference_t<T> cursor_difference_2_(long);
-        template <typename T> static typename T::difference_type cursor_difference_2_(int);
-
-        template <typename T> using cursor_reference_t = decltype(std::declval<T const &>().read());
-
-        template <typename T> static futures::detail::meta::id<uncvref_t<cursor_reference_t<T>>> cursor_value_2_(long);
-        template <typename T> static futures::detail::meta::id<typename T::value_type> cursor_value_2_(int);
-
-#ifdef RANGES_WORKAROUND_CWG_1554
-        template <typename Cur> struct cursor_difference {
-            using type = decltype(range_access::cursor_difference_2_<Cur>(42));
-        };
-
-        template <typename Cur> struct cursor_value : decltype(range_access::cursor_value_2_<Cur>(42)) {};
-#endif // RANGES_WORKAROUND_CWG_1554
-      public:
-#ifdef RANGES_WORKAROUND_CWG_1554
-        template <typename Cur> using cursor_difference_t = futures::detail::meta::_t<cursor_difference<Cur>>;
-
-        template <typename Cur> using cursor_value_t = futures::detail::meta::_t<cursor_value<Cur>>;
-#else  // ^^^ workaround ^^^ / vvv no workaround vvv
-        template <typename Cur> using cursor_difference_t = decltype(range_access::cursor_difference_2_<Cur>(42));
-
-        template <typename Cur> using cursor_value_t = futures::detail::meta::_t<decltype(range_access::cursor_value_2_<Cur>(42))>;
-#endif // RANGES_WORKAROUND_CWG_1554
-
-        template <typename Cur> static constexpr Cur &pos(basic_iterator<Cur> &it) noexcept { return it.pos(); }
-        template <typename Cur> static constexpr Cur const &pos(basic_iterator<Cur> const &it) noexcept {
-            return it.pos();
-        }
-        template <typename Cur> static constexpr Cur &&pos(basic_iterator<Cur> &&it) noexcept {
-            return ranges_detail::move(it.pos());
-        }
-
-        template <typename Cur> static constexpr Cur cursor(basic_iterator<Cur> it) { return std::move(it.pos()); }
-        /// endcond
-    };
-    /// @}
-
-    /// \cond
-    namespace ranges_detail {
-        //
-        // Concepts that the range cursor must model
-        // clang-format off
-        //
-        template<typename T>
-        CPP_concept cursor =
-            semiregular<T> && semiregular<range_access::mixin_base_t<T>> &&
-            constructible_from<range_access::mixin_base_t<T>, T> &&
-            constructible_from<range_access::mixin_base_t<T>, T const &>;
-            // Axiom: mixin_base_t<T> has a member get(), accessible to derived classes,
-            //   which perfectly-returns the contained cursor object and does not throw
-            //   exceptions.
-
-        template<typename T>
-        CPP_requires(has_cursor_next_,
-            requires(T & t)
-            (
-                range_access::next(t)
-            ));
-        template<typename T>
-        CPP_concept has_cursor_next = CPP_requires_ref(ranges_detail::has_cursor_next_, T);
-
-        template<typename S, typename C>
-        CPP_requires(sentinel_for_cursor_,
-            requires(S & s, C & c) //
-            (
-                range_access::equal(c, s),
-                concepts::requires_<convertible_to<decltype(
-                    range_access::equal(c, s)), bool>>
-            ));
-        template<typename S, typename C>
-        CPP_concept sentinel_for_cursor =
-            semiregular<S> &&
-            cursor<C> &&
-            CPP_requires_ref(ranges_detail::sentinel_for_cursor_, S, C);
-
-        template<typename T>
-        CPP_requires(readable_cursor_,
-            requires(T & t) //
-            (
-                range_access::read(t)
-            ));
-        template<typename T>
-        CPP_concept readable_cursor = CPP_requires_ref(ranges_detail::readable_cursor_, T);
-
-        template<typename T>
-        CPP_requires(has_cursor_arrow_,
-            requires(T const & t) //
-            (
-                range_access::arrow(t)
-            ));
-        template<typename T>
-        CPP_concept has_cursor_arrow = CPP_requires_ref(ranges_detail::has_cursor_arrow_, T);
-
-        template<typename T, typename U>
-        CPP_requires(writable_cursor_,
-            requires(T & t, U && u) //
-            (
-                range_access::write(t, (U &&) u)
-            ));
-        template<typename T, typename U>
-        CPP_concept writable_cursor =
-            CPP_requires_ref(ranges_detail::writable_cursor_, T, U);
-
-        template<typename S, typename C>
-        CPP_requires(sized_sentinel_for_cursor_,
-            requires(S & s, C & c) //
-            (
-                range_access::distance_to(c, s),
-                concepts::requires_<signed_integer_like_<decltype(
-                    range_access::distance_to(c, s))>>
-            )
-        );
-        template<typename S, typename C>
-        CPP_concept sized_sentinel_for_cursor =
-            sentinel_for_cursor<S, C> &&
-            CPP_requires_ref(ranges_detail::sized_sentinel_for_cursor_, S, C);
-
-        template<typename T, typename U>
-        CPP_concept output_cursor =
-            writable_cursor<T, U> && cursor<T>;
-
-        template<typename T>
-        CPP_concept input_cursor =
-            readable_cursor<T> && cursor<T> && has_cursor_next<T>;
-
-        template<typename T>
-        CPP_concept forward_cursor =
-            input_cursor<T> && sentinel_for_cursor<T, T> &&
-            !range_access::single_pass_t<uncvref_t<T>>::value;
-
-        template<typename T>
-        CPP_requires(bidirectional_cursor_,
-            requires(T & t) //
-            (
-                range_access::prev(t)
-            ));
-        template<typename T>
-        CPP_concept bidirectional_cursor =
-            forward_cursor<T> &&
-            CPP_requires_ref(ranges_detail::bidirectional_cursor_, T);
-
-        template<typename T>
-        CPP_requires(random_access_cursor_,
-            requires(T & t) //
-            (
-                range_access::advance(t, range_access::distance_to(t, t))
-            ));
-        template<typename T>
-        CPP_concept random_access_cursor =
-            bidirectional_cursor<T> && //
-            sized_sentinel_for_cursor<T, T> && //
-            CPP_requires_ref(ranges_detail::random_access_cursor_, T);
-
-        template(class T)(
-            /// \pre
-            requires std::is_lvalue_reference<T>::value)
-        void is_lvalue_reference(T&&);
-
-        template<typename T>
-        CPP_requires(contiguous_cursor_,
-            requires(T & t) //
-            (
-                ranges_detail::is_lvalue_reference(range_access::read(t))
-            ));
-        template<typename T>
-        CPP_concept contiguous_cursor =
-            random_access_cursor<T> && //
-            range_access::contiguous_t<uncvref_t<T>>::value && //
-            CPP_requires_ref(ranges_detail::contiguous_cursor_, T);
-        // clang-format on
-
-        template <typename Cur, bool IsReadable> RANGES_INLINE_VAR constexpr bool is_writable_cursor_ = true;
-
-        template <typename Cur>
-        RANGES_INLINE_VAR constexpr bool
-            is_writable_cursor_<Cur, true> = (bool)writable_cursor<Cur, range_access::cursor_value_t<Cur>>;
-
-        template <typename Cur>
-        RANGES_INLINE_VAR constexpr bool is_writable_cursor_v = is_writable_cursor_<Cur, (bool)readable_cursor<Cur>>;
-    } // namespace ranges_detail
-    /// \endcond
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-
-// #include <futures/algorithm/detail/traits/range/iterator/traits.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/addressof.h>
-#ifndef FUTURES_RANGES_UTILITY_ADDRESSOF_HPP
-#define FUTURES_RANGES_UTILITY_ADDRESSOF_HPP
-
-// #include <memory>
-
-// #include <type_traits>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \cond
-    namespace ranges_detail {
-#ifdef __cpp_lib_addressof_constexpr
-        using std::addressof;
-#else
-        namespace check_addressof {
-            inline ignore_t operator&(ignore_t) { return {}; }
-            template <typename T> auto addressof(T &t) { return &t; }
-        } // namespace check_addressof
-
-        template <typename T> constexpr bool has_bad_addressof() {
-            return !std::is_scalar<T>::value &&
-                   !RANGES_IS_SAME(decltype(check_addressof::addressof(*(T *)nullptr)), ignore_t);
-        }
-
-        template(typename T)(
-            /// \pre
-            requires(has_bad_addressof<T>())) T *addressof(T &arg) noexcept {
-            return std::addressof(arg);
-        }
-
-        template(typename T)(
-            /// \pre
-            requires(!has_bad_addressof<T>())) constexpr T *addressof(T &arg) noexcept {
-            return &arg;
-        }
-
-        template <typename T> T const *addressof(T const &&) = delete;
-#endif
-    } // namespace ranges_detail
-    /// \endcond
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/box.h>
-#ifndef FUTURES_RANGES_UTILITY_BOX_HPP
-#define FUTURES_RANGES_UTILITY_BOX_HPP
-
-// #include <cstdlib>
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/get.h>
-#ifndef FUTURES_RANGES_UTILITY_GET_HPP
-#define FUTURES_RANGES_UTILITY_GET_HPP
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/adl_get.h>
-#ifndef FUTURES_RANGES_DETAIL_ADL_GET_HPP
-#define FUTURES_RANGES_DETAIL_ADL_GET_HPP
-
-// #include <cstddef>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \cond
-    namespace ranges_detail {
-        namespace _adl_get_ {
-            template <typename> void get();
-
-            template <std::size_t I, typename TupleLike>
-            constexpr auto adl_get(TupleLike &&t) noexcept -> decltype(get<I>(static_cast<TupleLike &&>(t))) {
-                return get<I>(static_cast<TupleLike &&>(t));
-            }
-            template <typename T, typename TupleLike>
-            constexpr auto adl_get(TupleLike &&t) noexcept -> decltype(get<T>(static_cast<TupleLike &&>(t))) {
-                return get<T>(static_cast<TupleLike &&>(t));
-            }
-        } // namespace _adl_get_
-        using _adl_get_::adl_get;
-    } // namespace ranges_detail
-
-    namespace _tuple_wrapper_ {
-        template <typename TupleLike> struct forward_tuple_interface : TupleLike {
-            forward_tuple_interface() = default;
-            using TupleLike::TupleLike;
-#if !defined(__clang__) || __clang_major__ > 3
-            CPP_member constexpr CPP_ctor(forward_tuple_interface)(TupleLike &&base)( //
-                noexcept(std::is_nothrow_move_constructible<TupleLike>::value)        //
-                requires move_constructible<TupleLike>)
-                : TupleLike(static_cast<TupleLike &&>(base)) {}
-            CPP_member constexpr CPP_ctor(forward_tuple_interface)(TupleLike const &base)( //
-                noexcept(std::is_nothrow_copy_constructible<TupleLike>::value)             //
-                requires copy_constructible<TupleLike>)
-                : TupleLike(base) {}
-#else
-            // Clang 3.x have a problem with inheriting constructors
-            // that causes the declarations in the preceeding PP block to get
-            // instantiated too early.
-            template(typename B = TupleLike)(
-                /// \pre
-                requires move_constructible<
-                    B>) constexpr forward_tuple_interface(TupleLike &&base) noexcept(std::
-                                                                                         is_nothrow_move_constructible<
-                                                                                             TupleLike>::value)
-                : TupleLike(static_cast<TupleLike &&>(base)) {}
-            template(typename B = TupleLike)(
-                /// \pre
-                requires copy_constructible<
-                    B>) constexpr forward_tuple_interface(TupleLike const
-                                                              &base) noexcept(std::
-                                                                                  is_nothrow_copy_constructible<
-                                                                                      TupleLike>::value)
-                : TupleLike(base) {}
-#endif
-
-            // clang-format off
-            template<std::size_t I, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> &wb)
-            (
-                return ranges_detail::adl_get<I>(static_cast<U &>(wb))
-            )
-            template<std::size_t I, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> const &wb)
-            (
-                return ranges_detail::adl_get<I>(static_cast<U const &>(wb))
-            )
-            template<std::size_t I, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> &&wb)
-            (
-                return ranges_detail::adl_get<I>(static_cast<U &&>(wb))
-            )
-            template<std::size_t I, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> const &&wb)
-            (
-                return ranges_detail::adl_get<I>(static_cast<U const &&>(wb))
-            )
-            template<typename T, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> &wb)
-            (
-                return ranges_detail::adl_get<T>(static_cast<U &>(wb))
-            )
-            template<typename T, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> const &wb)
-            (
-                return ranges_detail::adl_get<T>(static_cast<U const &>(wb))
-            )
-            template<typename T, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> &&wb)
-            (
-                return ranges_detail::adl_get<T>(static_cast<U &&>(wb))
-            )
-            template<typename T, typename U = TupleLike>
-            friend constexpr auto CPP_auto_fun(get)(
-                forward_tuple_interface<TupleLike> const &&wb)
-            (
-                return ranges_detail::adl_get<T>(static_cast<U const &&>(wb))
-            )
-            // clang-format on
-        };
-    } // namespace _tuple_wrapper_
-    /// \endcond
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_DETAIL_ADL_GET_HPP
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-utility Utility
-    /// @{
-    ///
-
-    /// \cond
-    namespace _get_ {
-        /// \endcond
-        // clang-format off
-        template<std::size_t I, typename TupleLike>
-        constexpr auto CPP_auto_fun(get)(TupleLike &&t)
-        (
-            return ranges_detail::adl_get<I>(static_cast<TupleLike &&>(t))
-        )
-        template<typename T, typename TupleLike>
-        constexpr auto CPP_auto_fun(get)(TupleLike &&t)
-        (
-            return ranges_detail::adl_get<T>(static_cast<TupleLike &&>(t))
-        )
-            // clang-format on
-
-            template <typename T>
-            T &get(futures::detail::meta::id_t<T> &value) noexcept {
-            return value;
-        }
-        template <typename T> T const &get(futures::detail::meta::id_t<T> const &value) noexcept { return value; }
-        template <typename T> T &&get(futures::detail::meta::id_t<T> &&value) noexcept { return static_cast<T &&>(value); }
-        /// \cond
-    } // namespace _get_
-    using namespace _get_;
-    /// \endcond
-
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS
-
-namespace futures::detail {
-    /// \addtogroup group-utility Utility
-    /// @{
-    ///
-
-    /// \cond
-    template <typename T> struct RANGES_DEPRECATED("The futures::detail::mutable_ class template is deprecated") mutable_ {
-        mutable T value;
-
-        CPP_member constexpr CPP_ctor(mutable_)()(
-            /// \pre
-            requires std::is_default_constructible<T>::value)
-            : value{} {}
-        constexpr explicit mutable_(T const &t) : value(t) {}
-        constexpr explicit mutable_(T &&t) : value(ranges_detail::move(t)) {}
-        mutable_ const &operator=(T const &t) const {
-            value = t;
-            return *this;
-        }
-        mutable_ const &operator=(T &&t) const {
-            value = ranges_detail::move(t);
-            return *this;
-        }
-        constexpr operator T &() const & { return value; }
-    };
-
-    template <typename T, T v> struct RANGES_DEPRECATED("The futures::detail::constant class template is deprecated") constant {
-        constant() = default;
-        constexpr explicit constant(T const &) {}
-        constant &operator=(T const &) { return *this; }
-        constant const &operator=(T const &) const { return *this; }
-        constexpr operator T() const { return v; }
-        constexpr T exchange(T const &) const { return v; }
-    };
-    /// \endcond
-
-    /// \cond
-    namespace ranges_detail {
-        // "box" has three different implementations that store a T differently:
-        enum class box_compress {
-            none,    // Nothing special: get() returns a reference to a T member subobject
-            ebo,     // Apply Empty Base Optimization: get() returns a reference to a T base
-                     // subobject
-            coalesce // Coalesce all Ts into one T: get() returns a reference to a static
-                     // T singleton
-        };
-
-        // Per N4582, lambda closures are *not*:
-        // - aggregates             ([expr.prim.lambda]/4)
-        // - default constructible_from  ([expr.prim.lambda]/p21)
-        // - copy assignable        ([expr.prim.lambda]/p21)
-        template <typename Fn>
-        using could_be_lambda =
-            futures::detail::meta::bool_<!std::is_default_constructible<Fn>::value && !std::is_copy_assignable<Fn>::value>;
-
-        template <typename> constexpr box_compress box_compression_(...) { return box_compress::none; }
-        template <typename T,
-                  typename = futures::detail::meta::if_<futures::detail::meta::strict_and<std::is_empty<T>,
-                                                        futures::detail::meta::bool_<!ranges_detail::is_final_v<T>>
-#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ == 6 && __GNUC_MINOR__ < 2
-                                                        // GCC 6.0 & 6.1 find empty lambdas' implicit conversion
-                                                        // to function pointer when doing overload resolution
-                                                        // for function calls. That causes hard errors.
-                                                        // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71117
-                                                        ,
-                                                        futures::detail::meta::not_<could_be_lambda<T>>
-#endif
-                                                        >>>
-        constexpr box_compress box_compression_(long) {
-            return box_compress::ebo;
-        }
-#ifndef RANGES_WORKAROUND_MSVC_249830
-        // MSVC pukes passing non-constant-expression objects to constexpr
-        // functions, so do not coalesce.
-        template <typename T, typename = futures::detail::meta::if_<futures::detail::meta::strict_and<std::is_empty<T>, ranges_detail::is_trivial<T>>>>
-        constexpr box_compress box_compression_(int) {
-            return box_compress::coalesce;
-        }
-#endif
-        template <typename T> constexpr box_compress box_compression() { return box_compression_<T>(0); }
-    } // namespace ranges_detail
-    /// \endcond
-
-    template <typename Element, typename Tag = void, ranges_detail::box_compress = ranges_detail::box_compression<Element>()>
-    class box {
-        Element value;
-
-      public:
-        CPP_member constexpr CPP_ctor(box)()(                               //
-            noexcept(std::is_nothrow_default_constructible<Element>::value) //
-            requires std::is_default_constructible<Element>::value)
-            : value{} {}
-#if defined(__cpp_conditional_explicit) && __cpp_conditional_explicit > 0
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>)
-                AND constructible_from<Element, E>) constexpr explicit(!convertible_to<E, Element>)
-            box(E &&e) noexcept(std::is_nothrow_constructible<Element, E>::value) //
-            : value(static_cast<E &&>(e)) {}
-#else
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND convertible_to<
-                E, Element>) constexpr box(E &&e) noexcept(std::is_nothrow_constructible<Element, E>::value)
-            : value(static_cast<E &&>(e)) {}
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND(
-                !convertible_to<
-                    E, Element>)) constexpr explicit box(E &&e) noexcept(std::is_nothrow_constructible<Element,
-                                                                                                       E>::value) //
-            : value(static_cast<E &&>(e)) {}
-#endif
-
-        constexpr Element &get() &noexcept { return value; }
-        constexpr Element const &get() const &noexcept { return value; }
-        constexpr Element &&get() &&noexcept { return ranges_detail::move(value); }
-        constexpr Element const &&get() const &&noexcept { return ranges_detail::move(value); }
-    };
-
-    template <typename Element, typename Tag> class box<Element, Tag, ranges_detail::box_compress::ebo> : Element {
-      public:
-        CPP_member constexpr CPP_ctor(box)()(                               //
-            noexcept(std::is_nothrow_default_constructible<Element>::value) //
-            requires std::is_default_constructible<Element>::value)
-            : Element{} {}
-#if defined(__cpp_conditional_explicit) && __cpp_conditional_explicit > 0
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>)
-                AND constructible_from<Element, E>) constexpr explicit(!convertible_to<E, Element>)
-            box(E &&e) noexcept(std::is_nothrow_constructible<Element, E>::value) //
-            : Element(static_cast<E &&>(e)) {}
-#else
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND convertible_to<
-                E, Element>) constexpr box(E &&e) noexcept(std::is_nothrow_constructible<Element, E>::value) //
-            : Element(static_cast<E &&>(e)) {}
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND(
-                !convertible_to<
-                    E, Element>)) constexpr explicit box(E &&e) noexcept(std::is_nothrow_constructible<Element,
-                                                                                                       E>::value) //
-            : Element(static_cast<E &&>(e)) {}
-#endif
-
-        constexpr Element &get() &noexcept { return *this; }
-        constexpr Element const &get() const &noexcept { return *this; }
-        constexpr Element &&get() &&noexcept { return ranges_detail::move(*this); }
-        constexpr Element const &&get() const &&noexcept { return ranges_detail::move(*this); }
-    };
-
-    template <typename Element, typename Tag> class box<Element, Tag, ranges_detail::box_compress::coalesce> {
-        static Element value;
-
-      public:
-        constexpr box() noexcept = default;
-
-#if defined(__cpp_conditional_explicit) && __cpp_conditional_explicit > 0
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>)
-                AND constructible_from<Element, E>) constexpr explicit(!convertible_to<E, Element>) box(E &&) noexcept {
-        }
-#else
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND
-                convertible_to<E, Element>) constexpr box(E &&) noexcept {}
-        template(typename E)(
-            /// \pre
-            requires(!same_as<box, ranges_detail::decay_t<E>>) AND constructible_from<Element, E> AND(
-                !convertible_to<E, Element>)) constexpr explicit box(E &&) noexcept {}
-#endif
-
-        constexpr Element &get() &noexcept { return value; }
-        constexpr Element const &get() const &noexcept { return value; }
-        constexpr Element &&get() &&noexcept { return ranges_detail::move(value); }
-        constexpr Element const &&get() const &&noexcept { return ranges_detail::move(value); }
-    };
-
-    template <typename Element, typename Tag> Element box<Element, Tag, ranges_detail::box_compress::coalesce>::value{};
-
-    /// \cond
-    namespace _get_ {
-        /// \endcond
-        // Get by tag type
-        template <typename Tag, typename Element, ranges_detail::box_compress BC>
-        constexpr Element &get(box<Element, Tag, BC> &b) noexcept {
-            return b.get();
-        }
-        template <typename Tag, typename Element, ranges_detail::box_compress BC>
-        constexpr Element const &get(box<Element, Tag, BC> const &b) noexcept {
-            return b.get();
-        }
-        template <typename Tag, typename Element, ranges_detail::box_compress BC>
-        constexpr Element &&get(box<Element, Tag, BC> &&b) noexcept {
-            return ranges_detail::move(b).get();
-        }
-        // Get by index
-        template <std::size_t I, typename Element, ranges_detail::box_compress BC>
-        constexpr Element &get(box<Element, futures::detail::meta::size_t<I>, BC> &b) noexcept {
-            return b.get();
-        }
-        template <std::size_t I, typename Element, ranges_detail::box_compress BC>
-        constexpr Element const &get(box<Element, futures::detail::meta::size_t<I>, BC> const &b) noexcept {
-            return b.get();
-        }
-        template <std::size_t I, typename Element, ranges_detail::box_compress BC>
-        constexpr Element &&get(box<Element, futures::detail::meta::size_t<I>, BC> &&b) noexcept {
-            return ranges_detail::move(b).get();
-        }
-        /// \cond
-    } // namespace _get_
-    /// \endcond
-    /// @}
-} // namespace futures::detail
-
-RANGES_DIAGNOSTIC_POP
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/move.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/semiregular_box.h>
-#ifndef FUTURES_RANGES_UTILITY_SEMIREGULAR_BOX_HPP
-#define FUTURES_RANGES_UTILITY_SEMIREGULAR_BOX_HPP
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/functional/concepts.h>
-
-// #include <futures/algorithm/detail/traits/range/functional/invoke.h>
-
-// #include <futures/algorithm/detail/traits/range/functional/reference_wrapper.h>
-#ifndef FUTURES_RANGES_FUNCTIONAL_REFERENCE_WRAPPER_HPP
-#define FUTURES_RANGES_FUNCTIONAL_REFERENCE_WRAPPER_HPP
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/functional/invoke.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/addressof.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-functional
-    /// @{
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename T> struct reference_wrapper_ {
-            T *t_ = nullptr;
-            constexpr reference_wrapper_() = default;
-            constexpr reference_wrapper_(T &t) noexcept : t_(ranges_detail::addressof(t)) {}
-            constexpr reference_wrapper_(T &&) = delete;
-            constexpr T &get() const noexcept { return *t_; }
-        };
-        template <typename T> struct reference_wrapper_<T &> : reference_wrapper_<T> {
-            using reference_wrapper_<T>::reference_wrapper_;
-        };
-        template <typename T> struct reference_wrapper_<T &&> {
-            T *t_ = nullptr;
-            constexpr reference_wrapper_() = default;
-            constexpr reference_wrapper_(T &&t) noexcept : t_(ranges_detail::addressof(t)) {}
-            constexpr T &&get() const noexcept { return static_cast<T &&>(*t_); }
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    // Can be used to store rvalue references in addition to lvalue references.
-    // Also, see: https://wg21.link/lwg2993
-    template <typename T> struct reference_wrapper : private ranges_detail::reference_wrapper_<T> {
-      private:
-        using base_ = ranges_detail::reference_wrapper_<T>;
-        using base_::t_;
-
-      public:
-        using type = futures::detail::meta::_t<std::remove_reference<T>>;
-        using reference = futures::detail::meta::if_<std::is_reference<T>, T, T &>;
-
-        constexpr reference_wrapper() = default;
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, reference_wrapper>) AND constructible_from<
-                base_, U>) constexpr reference_wrapper(U &&u) noexcept(std::is_nothrow_constructible<base_, U>::value)
-            : ranges_detail::reference_wrapper_<T>{static_cast<U &&>(u)} {}
-        constexpr reference get() const noexcept { return this->base_::get(); }
-        constexpr operator reference() const noexcept { return get(); }
-        template(typename...)(
-            /// \pre
-            requires(!std::is_rvalue_reference<T>::value)) //
-        operator std::reference_wrapper<type>() const noexcept {
-            return {get()};
-        }
-        // clang-format off
-        template<typename ...Args>
-        constexpr auto CPP_auto_fun(operator())(Args &&...args) (const)
-        (
-            return invoke(static_cast<reference>(*t_), static_cast<Args &&>(args)...)
-        )
-        // clang-format on
-    };
-
-    struct ref_fn {
-        template(typename T)(
-            /// \pre
-            requires(!is_reference_wrapper_v<T>)) //
-            reference_wrapper<T>
-            operator()(T &t) const {
-            return {t};
-        }
-        /// \overload
-        template <typename T> reference_wrapper<T> operator()(reference_wrapper<T> t) const { return t; }
-        /// \overload
-        template <typename T> reference_wrapper<T> operator()(std::reference_wrapper<T> t) const { return {t.get()}; }
-    };
-
-    /// \ingroup group-functional
-    /// \sa `ref_fn`
-    RANGES_INLINE_VARIABLE(ref_fn, ref)
-
-    template <typename T> using ref_t = decltype(ref(std::declval<T>()));
-
-    struct unwrap_reference_fn {
-        template <typename T> T &&operator()(T &&t) const noexcept { return static_cast<T &&>(t); }
-        /// \overload
-        template <typename T>
-        typename reference_wrapper<T>::reference operator()(reference_wrapper<T> t) const noexcept {
-            return t.get();
-        }
-        /// \overload
-        template <typename T> T &operator()(std::reference_wrapper<T> t) const noexcept { return t.get(); }
-        /// \overload
-        template <typename T> T &operator()(ref_view<T> t) const noexcept { return t.base(); }
-    };
-
-    /// \ingroup group-functional
-    /// \sa `unwrap_reference_fn`
-    RANGES_INLINE_VARIABLE(unwrap_reference_fn, unwrap_reference)
-
-    template <typename T> using unwrap_reference_t = decltype(unwrap_reference(std::declval<T>()));
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/get.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/in_place.h>
-#ifndef FUTURES_RANGES_UTILITY_IN_PLACE_HPP
-#define FUTURES_RANGES_UTILITY_IN_PLACE_HPP
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \ingroup group-utility
-    struct in_place_t {};
-    RANGES_INLINE_VARIABLE(in_place_t, in_place)
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \cond
-    template <typename T> struct semiregular_box;
-
-    namespace ranges_detail {
-        struct semiregular_get {
-            // clang-format off
-            template<typename T>
-            friend auto CPP_auto_fun(get)(futures::detail::meta::id_t<semiregular_box<T>> &t)
-            (
-                return t.get()
-            )
-            template<typename T>
-            friend auto CPP_auto_fun(get)(futures::detail::meta::id_t<semiregular_box<T>> const &t)
-            (
-                return t.get()
-            )
-            template<typename T>
-            friend auto CPP_auto_fun(get)(futures::detail::meta::id_t<semiregular_box<T>> &&t)
-            (
-                return ranges_detail::move(t).get()
-            )
-            // clang-format on
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    /// \addtogroup group-utility
-    /// @{
-    template <typename T> struct semiregular_box : private ranges_detail::semiregular_get {
-      private:
-        struct tag {};
-        template <typename... Args> void construct_from(Args &&...args) {
-            new ((void *)std::addressof(data_)) T(static_cast<Args &&>(args)...);
-            engaged_ = true;
-        }
-        void move_assign(T &&t, std::true_type) { data_ = ranges_detail::move(t); }
-        void move_assign(T &&t, std::false_type) {
-            reset();
-            construct_from(ranges_detail::move(t));
-        }
-        void copy_assign(T const &t, std::true_type) { data_ = t; }
-        void copy_assign(T &&t, std::false_type) {
-            reset();
-            construct_from(t);
-        }
-        constexpr semiregular_box(tag, std::false_type) noexcept {}
-        constexpr semiregular_box(tag, std::true_type) noexcept(std::is_nothrow_default_constructible<T>::value)
-            : data_{}, engaged_(true) {}
-        void reset() {
-            if (engaged_) {
-                data_.~T();
-                engaged_ = false;
-            }
-        }
-        union {
-            char ch_{};
-            T data_;
-        };
-        bool engaged_{false};
-
-      public:
-        constexpr semiregular_box() noexcept(std::is_nothrow_default_constructible<T>::value ||
-                                             !std::is_default_constructible<T>::value)
-            : semiregular_box(tag{}, std::is_default_constructible<T>{}) {}
-        semiregular_box(semiregular_box &&that) noexcept(std::is_nothrow_move_constructible<T>::value) {
-            if (that.engaged_)
-                this->construct_from(ranges_detail::move(that.data_));
-        }
-        semiregular_box(semiregular_box const &that) noexcept(std::is_nothrow_copy_constructible<T>::value) {
-            if (that.engaged_)
-                this->construct_from(that.data_);
-        }
-#if defined(__cpp_conditional_explicit) && 0 < __cpp_conditional_explicit
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, semiregular_box>) AND constructible_from<
-                T,
-                U>) explicit(!convertible_to<U,
-                                             T>) constexpr semiregular_box(U &&u) noexcept(std::
-                                                                                               is_nothrow_constructible<
-                                                                                                   T, U>::value)
-            : semiregular_box(in_place, static_cast<U &&>(u)) {}
-#else
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, semiregular_box>) AND constructible_from<T, U> AND(
-                !convertible_to<U, T>)) //
-            constexpr explicit semiregular_box(U &&u) noexcept(std::is_nothrow_constructible<T, U>::value)
-            : semiregular_box(in_place, static_cast<U &&>(u)) {}
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, semiregular_box>) AND constructible_from<T, U> AND convertible_to<
-                U, T>) constexpr semiregular_box(U &&u) noexcept(std::is_nothrow_constructible<T, U>::value)
-            : semiregular_box(in_place, static_cast<U &&>(u)) {}
-#endif
-        template(typename... Args)(
-            /// \pre
-            requires constructible_from<T, Args...>) constexpr semiregular_box(in_place_t, Args &&...args) //
-            noexcept(std::is_nothrow_constructible<T, Args...>::value)
-            : data_(static_cast<Args &&>(args)...), engaged_(true) {}
-        ~semiregular_box() { reset(); }
-        semiregular_box &operator=(semiregular_box &&that) noexcept(std::is_nothrow_move_constructible<T>::value &&
-                                                                    (!std::is_move_assignable<T>::value ||
-                                                                     std::is_nothrow_move_assignable<T>::value)) {
-            if (engaged_ && that.engaged_)
-                this->move_assign(ranges_detail::move(that.data_), std::is_move_assignable<T>());
-            else if (that.engaged_)
-                this->construct_from(ranges_detail::move(that.data_));
-            else if (engaged_)
-                this->reset();
-            return *this;
-        }
-        semiregular_box &operator=(semiregular_box const &that) noexcept(std::is_nothrow_copy_constructible<T>::value &&
-                                                                         (!std::is_copy_assignable<T>::value ||
-                                                                          std::is_nothrow_copy_assignable<T>::value)) {
-            if (engaged_ && that.engaged_)
-                this->copy_assign(that.data_, std::is_copy_assignable<T>());
-            else if (that.engaged_)
-                this->construct_from(that.data_);
-            else if (engaged_)
-                this->reset();
-            return *this;
-        }
-        constexpr T &get() &noexcept { return RANGES_ENSURE(engaged_), data_; }
-        constexpr T const &get() const &noexcept { return RANGES_ENSURE(engaged_), data_; }
-        constexpr T &&get() &&noexcept { return RANGES_ENSURE(engaged_), ranges_detail::move(data_); }
-        T const &&get() const && = delete;
-        constexpr operator T &() &noexcept { return get(); }
-        constexpr operator T const &() const &noexcept { return get(); }
-        constexpr operator T &&() &&noexcept { return ranges_detail::move(get()); }
-        operator T const &&() const && = delete;
-        // clang-format off
-        template(typename... Args)(
-            /// \pre
-            requires invocable<T &, Args...>)
-        constexpr decltype(auto) operator()(Args &&... args) &
-            noexcept(is_nothrow_invocable_v<T &, Args...>)
-        {
-            return invoke(data_, static_cast<Args &&>(args)...);
-        }
-        template(typename... Args)(
-            /// \pre
-            requires invocable<T const &, Args...>)
-        constexpr decltype(auto) operator()(Args &&... args) const &
-            noexcept(is_nothrow_invocable_v<T const &, Args...>)
-        {
-            return invoke(data_, static_cast<Args &&>(args)...);
-        }
-        template(typename... Args)(
-            /// \pre
-            requires invocable<T, Args...>)
-        constexpr decltype(auto) operator()(Args &&... args) &&
-            noexcept(is_nothrow_invocable_v<T, Args...>)
-        {
-            return invoke(static_cast<T &&>(data_), static_cast<Args &&>(args)...);
-        }
-        template<typename... Args>
-        void operator()(Args &&...) const && = delete;
-        // clang-format on
-    };
-
-    template <typename T>
-    struct semiregular_box<T &> : private futures::detail::reference_wrapper<T &>, private ranges_detail::semiregular_get {
-        semiregular_box() = default;
-        template(typename Arg)(
-            /// \pre
-            requires constructible_from<futures::detail::reference_wrapper<T &>, Arg &>)
-            semiregular_box(in_place_t, Arg &arg) noexcept //
-            : futures::detail::reference_wrapper<T &>(arg) {}
-        using futures::detail::reference_wrapper<T &>::get;
-        using futures::detail::reference_wrapper<T &>::operator T &;
-        using futures::detail::reference_wrapper<T &>::operator();
-
-#if defined(_MSC_VER)
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, semiregular_box>) AND constructible_from<
-                futures::detail::reference_wrapper<T &>,
-                U>) constexpr semiregular_box(U &&u) noexcept(std::
-                                                                  is_nothrow_constructible<
-                                                                      futures::detail::reference_wrapper<T &>, U>::value)
-            : futures::detail::reference_wrapper<T &>{static_cast<U &&>(u)} {}
-#else
-        using futures::detail::reference_wrapper<T &>::reference_wrapper;
-#endif
-    };
-
-    template <typename T>
-    struct semiregular_box<T &&> : private futures::detail::reference_wrapper<T &&>, private ranges_detail::semiregular_get {
-        semiregular_box() = default;
-        template(typename Arg)(
-            /// \pre
-            requires constructible_from<futures::detail::reference_wrapper<T &&>, Arg>)
-            semiregular_box(in_place_t, Arg &&arg) noexcept //
-            : futures::detail::reference_wrapper<T &&>(static_cast<Arg &&>(arg)) {}
-        using futures::detail::reference_wrapper<T &&>::get;
-        using futures::detail::reference_wrapper<T &&>::operator T &&;
-        using futures::detail::reference_wrapper<T &&>::operator();
-
-#if defined(_MSC_VER)
-        template(typename U)(
-            /// \pre
-            requires(!same_as<uncvref_t<U>, semiregular_box>) AND constructible_from<
-                futures::detail::reference_wrapper<T &&>,
-                U>) constexpr semiregular_box(U &&u) noexcept(std::
-                                                                  is_nothrow_constructible<
-                                                                      futures::detail::reference_wrapper<T &&>, U>::value)
-            : futures::detail::reference_wrapper<T &&>{static_cast<U &&>(u)} {}
-#else
-        using futures::detail::reference_wrapper<T &&>::reference_wrapper;
-#endif
-    };
-
-    template <typename T> using semiregular_box_t = futures::detail::meta::if_c<(bool)semiregular<T>, T, semiregular_box<T>>;
-
-    template <typename T, bool IsConst = false>
-    using semiregular_box_ref_or_val_t =
-        futures::detail::meta::if_c<(bool)semiregular<T>, futures::detail::meta::if_c<IsConst || std::is_empty<T>::value, T, reference_wrapper<T>>,
-                   reference_wrapper<futures::detail::meta::if_c<IsConst, semiregular_box<T> const, semiregular_box<T>>>>;
-    /// @}
-
-    /// \cond
-    template <typename T>
-    using semiregular_t RANGES_DEPRECATED("Please use semiregular_box_t instead.") = semiregular_box_t<T>;
-
-    template <typename T, bool IsConst = false>
-    using semiregular_ref_or_val_t RANGES_DEPRECATED("Please use semiregular_box_ref_or_val_t instead.") =
-        semiregular_box_ref_or_val_t<T, IsConst>;
-    /// \endcond
-
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_MULTIPLE_ASSIGNMENT_OPERATORS
-
-namespace futures::detail {
-    /// \addtogroup group-iterator Iterator
-    /// @{
-    ///
-    template <typename T> struct basic_mixin : private box<T> {
-        CPP_member constexpr CPP_ctor(basic_mixin)()(                 //
-            noexcept(std::is_nothrow_default_constructible<T>::value) //
-            requires default_constructible<T>)
-            : box<T>{} {}
-        CPP_member constexpr explicit CPP_ctor(basic_mixin)(T &&t)( //
-            noexcept(std::is_nothrow_move_constructible<T>::value)  //
-            requires move_constructible<T>)
-            : box<T>(ranges_detail::move(t)) {}
-        CPP_member constexpr explicit CPP_ctor(basic_mixin)(T const &t)( //
-            noexcept(std::is_nothrow_copy_constructible<T>::value)       //
-            requires copy_constructible<T>)
-            : box<T>(t) {}
-
-      protected:
-        using box<T>::get;
-    };
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename Cur> using cursor_reference_t = decltype(range_access::read(std::declval<Cur const &>()));
-
-        // Compute the rvalue reference type of a cursor
-        template <typename Cur> auto cursor_move(Cur const &cur, int) -> decltype(range_access::move(cur));
-        template <typename Cur> auto cursor_move(Cur const &cur, long) -> aux::move_t<cursor_reference_t<Cur>>;
-
-        template <typename Cur>
-        using cursor_rvalue_reference_t = decltype(ranges_detail::cursor_move(std::declval<Cur const &>(), 42));
-
-        // Define conversion operators from the proxy reference type
-        // to the common reference types, so that basic_iterator can model readable
-        // even with getters/setters.
-        template <typename Derived, typename Head> struct proxy_reference_conversion {
-            operator Head() const noexcept(noexcept(Head(Head(std::declval<Derived const &>().read_())))) {
-                return Head(static_cast<Derived const *>(this)->read_());
-            }
-        };
-
-        // Collect the reference types associated with cursors
-        template <typename Cur, bool IsReadable> struct cursor_traits_ {
-          private:
-            struct private_ {};
-
-          public:
-            using value_t_ = private_;
-            using reference_t_ = private_;
-            using rvalue_reference_t_ = private_;
-            using common_refs = futures::detail::meta::list<>;
-        };
-
-        template <typename Cur> struct cursor_traits_<Cur, true> {
-            using value_t_ = range_access::cursor_value_t<Cur>;
-            using reference_t_ = cursor_reference_t<Cur>;
-            using rvalue_reference_t_ = cursor_rvalue_reference_t<Cur>;
-
-          private:
-            using R1 = reference_t_;
-            using R2 = common_reference_t<reference_t_, value_t_ &>;
-            using R3 = common_reference_t<reference_t_, rvalue_reference_t_>;
-            using tmp1 = futures::detail::meta::list<value_t_, R1>;
-            using tmp2 = futures::detail::meta::if_<futures::detail::meta::in<tmp1, uncvref_t<R2>>, tmp1, futures::detail::meta::push_back<tmp1, R2>>;
-            using tmp3 = futures::detail::meta::if_<futures::detail::meta::in<tmp2, uncvref_t<R3>>, tmp2, futures::detail::meta::push_back<tmp2, R3>>;
-
-          public:
-            using common_refs = futures::detail::meta::unique<futures::detail::meta::pop_front<tmp3>>;
-        };
-
-        template <typename Cur> using cursor_traits = cursor_traits_<Cur, (bool)readable_cursor<Cur>>;
-
-        template <typename Cur> using cursor_value_t = typename cursor_traits<Cur>::value_t_;
-
-        template <typename Cur, bool IsReadable> struct basic_proxy_reference_;
-        template <typename Cur> using basic_proxy_reference = basic_proxy_reference_<Cur, (bool)readable_cursor<Cur>>;
-
-        // The One Proxy Reference type to rule them all. basic_iterator uses this
-        // as the return type of operator* when the cursor type has a set() member
-        // function of the correct signature (i.e., if it can accept a value_type &&).
-        template <typename Cur, bool IsReadable /*= (bool) readable_cursor<Cur>*/>
-        struct RANGES_EMPTY_BASES basic_proxy_reference_
-            : cursor_traits<Cur>
-            // The following adds conversion operators to the common reference
-            // types, so that basic_proxy_reference can model readable
-            ,
-              futures::detail::meta::inherit<futures::detail::meta::transform<
-                  typename cursor_traits<Cur>::common_refs,
-                  futures::detail::meta::bind_front<futures::detail::meta::quote<proxy_reference_conversion>, basic_proxy_reference_<Cur, IsReadable>>>> {
-          private:
-            Cur *cur_;
-            template <typename, bool> friend struct basic_proxy_reference_;
-            template <typename, typename> friend struct proxy_reference_conversion;
-            using typename cursor_traits<Cur>::value_t_;
-            using typename cursor_traits<Cur>::reference_t_;
-            using typename cursor_traits<Cur>::rvalue_reference_t_;
-            static_assert((bool)common_reference_with<value_t_ &, reference_t_>,
-                          "Your readable and writable cursor must have a value type and "
-                          "a reference type that share a common reference type. See the "
-                          "futures::detail::common_reference type trait.");
-            // BUGBUG make these private:
-          public:
-            constexpr reference_t_ read_() const
-                noexcept(noexcept(reference_t_(range_access::read(std::declval<Cur const &>())))) {
-                return range_access::read(*cur_);
-            }
-            template <typename T> constexpr void write_(T &&t) const { range_access::write(*cur_, (T &&) t); }
-            // public:
-            basic_proxy_reference_() = default;
-            basic_proxy_reference_(basic_proxy_reference_ const &) = default;
-            template(typename OtherCur)(
-                /// \pre
-                requires convertible_to<OtherCur *,
-                                        Cur *>) constexpr basic_proxy_reference_(basic_proxy_reference<OtherCur> const
-                                                                                     &that) noexcept
-                : cur_(that.cur_) {}
-            constexpr explicit basic_proxy_reference_(Cur &cur) noexcept : cur_(&cur) {}
-            CPP_member constexpr auto operator=(basic_proxy_reference_ &&that) -> CPP_ret(basic_proxy_reference_ &)(
-                /// \pre
-                requires readable_cursor<Cur>) {
-                return *this = that;
-            }
-            CPP_member constexpr auto operator=(basic_proxy_reference_ const &that)
-                -> CPP_ret(basic_proxy_reference_ &)(
-                    /// \pre
-                    requires readable_cursor<Cur>) {
-                this->write_(that.read_());
-                return *this;
-            }
-            CPP_member constexpr auto operator=(basic_proxy_reference_ &&that) const
-                -> CPP_ret(basic_proxy_reference_ const &)(
-                    /// \pre
-                    requires readable_cursor<Cur>) {
-                return *this = that;
-            }
-            CPP_member constexpr auto operator=(basic_proxy_reference_ const &that) const
-                -> CPP_ret(basic_proxy_reference_ const &)(
-                    /// \pre
-                    requires readable_cursor<Cur>) {
-                this->write_(that.read_());
-                return *this;
-            }
-            template(typename OtherCur)(
-                /// \pre
-                requires readable_cursor<OtherCur> AND
-                    writable_cursor<Cur, cursor_reference_t<OtherCur>>) constexpr basic_proxy_reference_ & //
-            operator=(basic_proxy_reference<OtherCur> &&that) {
-                return *this = that;
-            }
-            template(typename OtherCur)(
-                /// \pre
-                requires readable_cursor<OtherCur> AND
-                    writable_cursor<Cur, cursor_reference_t<OtherCur>>) constexpr basic_proxy_reference_ & //
-            operator=(basic_proxy_reference<OtherCur> const &that) {
-                this->write_(that.read_());
-                return *this;
-            }
-            template(typename OtherCur)(
-                /// \pre
-                requires readable_cursor<OtherCur> AND
-                    writable_cursor<Cur, cursor_reference_t<OtherCur>>) constexpr basic_proxy_reference_ const & //
-            operator=(basic_proxy_reference<OtherCur> &&that) const {
-                return *this = that;
-            }
-            template(typename OtherCur)(
-                /// \pre
-                requires readable_cursor<OtherCur> AND
-                    writable_cursor<Cur, cursor_reference_t<OtherCur>>) constexpr basic_proxy_reference_ const & //
-            operator=(basic_proxy_reference<OtherCur> const &that) const {
-                this->write_(that.read_());
-                return *this;
-            }
-            template(typename T)(
-                /// \pre
-                requires writable_cursor<Cur, T>) constexpr basic_proxy_reference_ &
-            operator=(T &&t) //
-            {
-                this->write_((T &&) t);
-                return *this;
-            }
-            template(typename T)(
-                /// \pre
-                requires writable_cursor<Cur, T>) constexpr basic_proxy_reference_ const &
-            operator=(T &&t) const {
-                this->write_((T &&) t);
-                return *this;
-            }
-        };
-
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator==(basic_proxy_reference_<Cur, IsReadable> const &x, cursor_value_t<Cur> const &y) {
-            return x.read_() == y;
-        }
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator!=(basic_proxy_reference_<Cur, IsReadable> const &x, cursor_value_t<Cur> const &y) {
-            return !(x == y);
-        }
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator==(cursor_value_t<Cur> const &x, basic_proxy_reference_<Cur, IsReadable> const &y) {
-            return x == y.read_();
-        }
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator!=(cursor_value_t<Cur> const &x, basic_proxy_reference_<Cur, IsReadable> const &y) {
-            return !(x == y);
-        }
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator==(basic_proxy_reference_<Cur, IsReadable> const &x, basic_proxy_reference_<Cur, IsReadable> const &y) {
-            return x.read_() == y.read_();
-        }
-        template(typename Cur, bool IsReadable)(
-            /// \pre
-            requires readable_cursor<Cur> AND equality_comparable<cursor_value_t<Cur>>) constexpr bool
-        operator!=(basic_proxy_reference_<Cur, IsReadable> const &x, basic_proxy_reference_<Cur, IsReadable> const &y) {
-            return !(x == y);
-        }
-
-        template <typename Cur>
-        using cpp20_iter_cat_of_t =                          //
-            std::enable_if_t<                                //
-                input_cursor<Cur>,                           //
-                futures::detail::meta::conditional_t<                         //
-                    contiguous_cursor<Cur>,                  //
-                    futures::detail::contiguous_iterator_tag,         //
-                    futures::detail::meta::conditional_t<                     //
-                        random_access_cursor<Cur>,           //
-                        std::random_access_iterator_tag,     //
-                        futures::detail::meta::conditional_t<                 //
-                            bidirectional_cursor<Cur>,       //
-                            std::bidirectional_iterator_tag, //
-                            futures::detail::meta::conditional_t<             //
-                                forward_cursor<Cur>,         //
-                                std::forward_iterator_tag,   //
-                                std::input_iterator_tag>>>>>;
-
-        // clang-format off
-        template(typename C)(
-        concept (cpp17_input_cursor_)(C),
-            // Either it is not single-pass, or else we can create a
-            // proxy for postfix increment.
-            !range_access::single_pass_t<uncvref_t<C>>::value ||
-            (move_constructible<range_access::cursor_value_t<C>> &&
-             constructible_from<range_access::cursor_value_t<C>, cursor_reference_t<C>>)
-        );
-
-        template<typename C>
-        CPP_concept cpp17_input_cursor =
-            input_cursor<C> &&
-            sentinel_for_cursor<C, C> &&
-            CPP_concept_ref(cpp17_input_cursor_, C);
-
-        template(typename C)(
-        concept (cpp17_forward_cursor_)(C),
-            std::is_reference<cursor_reference_t<C>>::value
-        );
-
-        template<typename C>
-        CPP_concept cpp17_forward_cursor =
-            forward_cursor<C> &&
-            CPP_concept_ref(cpp17_forward_cursor_, C);
-        // clang-format on
-
-        template <typename Category, typename Base = void> struct with_iterator_category : Base {
-            using iterator_category = Category;
-        };
-
-        template <typename Category> struct with_iterator_category<Category> { using iterator_category = Category; };
-
-        template <typename Cur>
-        using cpp17_iter_cat_of_t =                      //
-            std::enable_if_t<                            //
-                cpp17_input_cursor<Cur>,                 //
-                futures::detail::meta::conditional_t<                     //
-                    random_access_cursor<Cur>,           //
-                    std::random_access_iterator_tag,     //
-                    futures::detail::meta::conditional_t<                 //
-                        bidirectional_cursor<Cur>,       //
-                        std::bidirectional_iterator_tag, //
-                        futures::detail::meta::conditional_t<             //
-                            cpp17_forward_cursor<Cur>,   //
-                            std::forward_iterator_tag,   //
-                            std::input_iterator_tag>>>>;
-
-        template <typename Cur, typename = void>
-        struct readable_iterator_associated_types_base : range_access::mixin_base_t<Cur> {
-            readable_iterator_associated_types_base() = default;
-            using range_access::mixin_base_t<Cur>::mixin_base_t;
-            readable_iterator_associated_types_base(Cur &&cur)
-                : range_access::mixin_base_t<Cur>(static_cast<Cur &&>(cur)) {}
-            readable_iterator_associated_types_base(Cur const &cur) : range_access::mixin_base_t<Cur>(cur) {}
-        };
-
-        template <typename Cur>
-        struct readable_iterator_associated_types_base<Cur, always_<void, cpp17_iter_cat_of_t<Cur>>>
-            : range_access::mixin_base_t<Cur> {
-            using iterator_category = cpp17_iter_cat_of_t<Cur>;
-            readable_iterator_associated_types_base() = default;
-            using range_access::mixin_base_t<Cur>::mixin_base_t;
-            readable_iterator_associated_types_base(Cur &&cur)
-                : range_access::mixin_base_t<Cur>(static_cast<Cur &&>(cur)) {}
-            readable_iterator_associated_types_base(Cur const &cur) : range_access::mixin_base_t<Cur>(cur) {}
-        };
-
-        template <typename Cur, bool IsReadable /*= (bool) readable_cursor<Cur>*/>
-        struct iterator_associated_types_base_ : range_access::mixin_base_t<Cur> {
-            // BUGBUG
-            // protected:
-            using iter_reference_t = basic_proxy_reference<Cur>;
-            using const_reference_t = basic_proxy_reference<Cur const>;
-
-          public:
-            using reference = void;
-            using difference_type = range_access::cursor_difference_t<Cur>;
-
-            iterator_associated_types_base_() = default;
-            using range_access::mixin_base_t<Cur>::mixin_base_t;
-            iterator_associated_types_base_(Cur &&cur) : range_access::mixin_base_t<Cur>(static_cast<Cur &&>(cur)) {}
-            iterator_associated_types_base_(Cur const &cur) : range_access::mixin_base_t<Cur>(cur) {}
-        };
-
-        template <typename Cur> using cursor_arrow_t = decltype(range_access::arrow(std::declval<Cur const &>()));
-
-        template <typename Cur>
-        struct iterator_associated_types_base_<Cur, true> : readable_iterator_associated_types_base<Cur> {
-            // BUGBUG
-            // protected:
-            using iter_reference_t = futures::detail::meta::conditional_t<
-                is_writable_cursor_v<Cur const>, basic_proxy_reference<Cur const>,
-                futures::detail::meta::conditional_t<is_writable_cursor_v<Cur>, basic_proxy_reference<Cur>, cursor_reference_t<Cur>>>;
-            using const_reference_t = futures::detail::meta::conditional_t<is_writable_cursor_v<Cur const>,
-                                                          basic_proxy_reference<Cur const>, cursor_reference_t<Cur>>;
-
-          public:
-            using difference_type = range_access::cursor_difference_t<Cur>;
-            using value_type = range_access::cursor_value_t<Cur>;
-            using reference = iter_reference_t;
-            using iterator_concept = cpp20_iter_cat_of_t<Cur>;
-            using pointer = futures::detail::meta::_t<futures::detail::meta::conditional_t<(bool)has_cursor_arrow<Cur>, futures::detail::meta::defer<cursor_arrow_t, Cur>,
-                                                         std::add_pointer<reference>>>;
-            using common_reference = common_reference_t<reference, value_type &>;
-
-            iterator_associated_types_base_() = default;
-            using readable_iterator_associated_types_base<Cur>::readable_iterator_associated_types_base;
-            iterator_associated_types_base_(Cur &&cur)
-                : readable_iterator_associated_types_base<Cur>(static_cast<Cur &&>(cur)) {}
-            iterator_associated_types_base_(Cur const &cur) : readable_iterator_associated_types_base<Cur>(cur) {}
-        };
-
-        template <typename Cur>
-        using iterator_associated_types_base = iterator_associated_types_base_<Cur, (bool)readable_cursor<Cur>>;
-
-        template <typename Value> struct postfix_increment_proxy {
-          private:
-            Value cache_;
-
-          public:
-            template <typename T> constexpr postfix_increment_proxy(T &&t) : cache_(static_cast<T &&>(t)) {}
-            constexpr Value const &operator*() const noexcept { return cache_; }
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-#if RANGES_BROKEN_CPO_LOOKUP
-    namespace _basic_iterator_ {
-        template <typename> struct adl_hook {};
-    } // namespace _basic_iterator_
-#endif
-
-    template <typename Cur>
-    struct RANGES_EMPTY_BASES basic_iterator : ranges_detail::iterator_associated_types_base<Cur>
-#if RANGES_BROKEN_CPO_LOOKUP
-        ,
-                                               private _basic_iterator_::adl_hook<basic_iterator<Cur>>
-#endif
-    {
-      private:
-        template <typename> friend struct basic_iterator;
-        friend range_access;
-        using base_t = ranges_detail::iterator_associated_types_base<Cur>;
-        using mixin_t = range_access::mixin_base_t<Cur>;
-        static_assert((bool)ranges_detail::cursor<Cur>, "");
-        using assoc_types_ = ranges_detail::iterator_associated_types_base<Cur>;
-        using typename assoc_types_::const_reference_t;
-        using typename assoc_types_::iter_reference_t;
-        constexpr Cur &pos() noexcept { return this->mixin_t::basic_mixin::get(); }
-        constexpr Cur const &pos() const noexcept { return this->mixin_t::basic_mixin::get(); }
-
-      public:
-        using typename assoc_types_::difference_type;
-        constexpr basic_iterator() = default;
-        template(typename OtherCur)(
-            /// \pre
-            requires(!same_as<OtherCur, Cur>) AND convertible_to<OtherCur, Cur> AND
-                constructible_from<mixin_t, OtherCur>) constexpr basic_iterator(basic_iterator<OtherCur> that)
-            : base_t{std::move(that.pos())} {}
-        // Mix in any additional constructors provided by the mixin
-        using base_t::base_t;
-
-        explicit basic_iterator(Cur &&cur) : base_t(static_cast<Cur &&>(cur)) {}
-
-        explicit basic_iterator(Cur const &cur) : base_t(cur) {}
-
-        template(typename OtherCur)(
-            /// \pre
-            requires(!same_as<OtherCur, Cur>) AND convertible_to<OtherCur, Cur>) constexpr basic_iterator &
-        operator=(basic_iterator<OtherCur> that) {
-            pos() = std::move(that.pos());
-            return *this;
-        }
-
-        CPP_member constexpr auto operator*() const noexcept(noexcept(range_access::read(std::declval<Cur const &>())))
-            -> CPP_ret(const_reference_t)(
-                /// \pre
-                requires ranges_detail::readable_cursor<Cur> && (!ranges_detail::is_writable_cursor_v<Cur>)) {
-            return range_access::read(pos());
-        }
-        CPP_member constexpr auto operator*()                           //
-            noexcept(noexcept(iter_reference_t{std::declval<Cur &>()})) //
-            -> CPP_ret(iter_reference_t)(
-                /// \pre
-                requires ranges_detail::has_cursor_next<Cur> &&ranges_detail::is_writable_cursor_v<Cur>) {
-            return iter_reference_t{pos()};
-        }
-        CPP_member constexpr auto operator*() const noexcept(noexcept(const_reference_t{std::declval<Cur const &>()}))
-            -> CPP_ret(const_reference_t)(
-                /// \pre
-                requires ranges_detail::has_cursor_next<Cur> &&ranges_detail::is_writable_cursor_v<Cur const>) {
-            return const_reference_t{pos()};
-        }
-        CPP_member constexpr auto operator*() noexcept //
-            -> CPP_ret(basic_iterator &)(
-                /// \pre
-                requires(!ranges_detail::has_cursor_next<Cur>)) {
-            return *this;
-        }
-
-        // Use cursor's arrow() member, if any.
-        template(typename C = Cur)(
-            /// \pre
-            requires ranges_detail::has_cursor_arrow<C>) constexpr ranges_detail::cursor_arrow_t<C>
-        operator->() const noexcept(noexcept(range_access::arrow(std::declval<C const &>()))) {
-            return range_access::arrow(pos());
-        }
-        // Otherwise, if iter_reference_t is an lvalue reference to cv-qualified
-        // iter_value_t, return the address of **this.
-        template(typename C = Cur)(
-            /// \pre
-            requires(!ranges_detail::has_cursor_arrow<C>) AND ranges_detail::readable_cursor<C> AND
-                std::is_lvalue_reference<const_reference_t>::value AND
-                    same_as<typename ranges_detail::iterator_associated_types_base<C>::value_type,
-                            uncvref_t<const_reference_t>>) constexpr std::add_pointer_t<const_reference_t>
-        operator->() const noexcept(noexcept(*std::declval<basic_iterator const &>())) {
-            return ranges_detail::addressof(**this);
-        }
-
-        CPP_member constexpr auto operator++() //
-            -> CPP_ret(basic_iterator &)(
-                /// \pre
-                requires ranges_detail::has_cursor_next<Cur>) {
-            range_access::next(pos());
-            return *this;
-        }
-        CPP_member constexpr auto operator++() noexcept //
-            -> CPP_ret(basic_iterator &)(
-                /// \pre
-                requires(!ranges_detail::has_cursor_next<Cur>)) {
-            return *this;
-        }
-
-      private:
-        constexpr basic_iterator post_increment_(std::false_type, int) {
-            basic_iterator tmp{*this};
-            ++*this;
-            return tmp;
-        }
-        // Attempt to satisfy the C++17 iterator requirements by returning a
-        // proxy from postfix increment:
-        template(typename A = assoc_types_, typename V = typename A::value_type)(
-            /// \pre
-            requires constructible_from<V, typename A::reference> AND
-                move_constructible<V>) constexpr auto post_increment_(std::true_type, int) //
-            -> ranges_detail::postfix_increment_proxy<V> {
-            ranges_detail::postfix_increment_proxy<V> p{**this};
-            ++*this;
-            return p;
-        }
-        constexpr void post_increment_(std::true_type, long) { ++*this; }
-
-      public:
-        CPP_member constexpr auto operator++(int) {
-            return this->post_increment_(futures::detail::meta::bool_ < ranges_detail::input_cursor<Cur> && !ranges_detail::forward_cursor < Cur >> {},
-                                         0);
-        }
-
-        CPP_member constexpr auto operator--() -> CPP_ret(basic_iterator &)(
-            /// \pre
-            requires ranges_detail::bidirectional_cursor<Cur>) {
-            range_access::prev(pos());
-            return *this;
-        }
-        CPP_member constexpr auto operator--(int) //
-            -> CPP_ret(basic_iterator)(
-                /// \pre
-                requires ranges_detail::bidirectional_cursor<Cur>) {
-            basic_iterator tmp(*this);
-            --*this;
-            return tmp;
-        }
-        CPP_member constexpr auto operator+=(difference_type n) //
-            -> CPP_ret(basic_iterator &)(
-                /// \pre
-                requires ranges_detail::random_access_cursor<Cur>) {
-            range_access::advance(pos(), n);
-            return *this;
-        }
-        CPP_member constexpr auto operator-=(difference_type n) //
-            -> CPP_ret(basic_iterator &)(
-                /// \pre
-                requires ranges_detail::random_access_cursor<Cur>) {
-            range_access::advance(pos(), (difference_type)-n);
-            return *this;
-        }
-        CPP_member constexpr auto operator[](difference_type n) const //
-            -> CPP_ret(const_reference_t)(
-                /// \pre
-                requires ranges_detail::random_access_cursor<Cur>) {
-            return *(*this + n);
-        }
-
-#if !RANGES_BROKEN_CPO_LOOKUP
-        // Optionally support hooking iter_move when the cursor sports a
-        // move() member function.
-        template <typename C = Cur>
-        friend constexpr auto
-        iter_move(basic_iterator const &it) noexcept(noexcept(range_access::move(std::declval<C const &>())))
-            -> CPP_broken_friend_ret(decltype(range_access::move(std::declval<C const &>())))(
-                /// \pre
-                requires same_as<C, Cur> &&ranges_detail::input_cursor<Cur>) {
-            return range_access::move(it.pos());
-        }
-#endif
-    };
-
-    template(typename Cur, typename Cur2)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<Cur2, Cur>) constexpr bool
-    operator==(basic_iterator<Cur> const &left, basic_iterator<Cur2> const &right) {
-        return range_access::equal(range_access::pos(left), range_access::pos(right));
-    }
-    template(typename Cur, typename Cur2)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<Cur2, Cur>) constexpr bool
-    operator!=(basic_iterator<Cur> const &left, basic_iterator<Cur2> const &right) {
-        return !(left == right);
-    }
-    template(typename Cur, typename S)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<S, Cur>) constexpr bool
-    operator==(basic_iterator<Cur> const &left, S const &right) {
-        return range_access::equal(range_access::pos(left), right);
-    }
-    template(typename Cur, typename S)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<S, Cur>) constexpr bool
-    operator!=(basic_iterator<Cur> const &left, S const &right) {
-        return !(left == right);
-    }
-    template(typename S, typename Cur)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<S, Cur>) constexpr bool
-    operator==(S const &left, basic_iterator<Cur> const &right) {
-        return right == left;
-    }
-    template(typename S, typename Cur)(
-        /// \pre
-        requires ranges_detail::sentinel_for_cursor<S, Cur>) constexpr bool
-    operator!=(S const &left, basic_iterator<Cur> const &right) {
-        return right != left;
-    }
-
-    template(typename Cur)(
-        /// \pre
-        requires ranges_detail::random_access_cursor<Cur>) constexpr basic_iterator<Cur> //
-    operator+(basic_iterator<Cur> left, typename basic_iterator<Cur>::difference_type n) {
-        left += n;
-        return left;
-    }
-    template(typename Cur)(
-        /// \pre
-        requires ranges_detail::random_access_cursor<Cur>) constexpr basic_iterator<Cur> //
-    operator+(typename basic_iterator<Cur>::difference_type n, basic_iterator<Cur> right) {
-        right += n;
-        return right;
-    }
-    template(typename Cur)(
-        /// \pre
-        requires ranges_detail::random_access_cursor<Cur>) constexpr basic_iterator<Cur> //
-    operator-(basic_iterator<Cur> left, typename basic_iterator<Cur>::difference_type n) {
-        left -= n;
-        return left;
-    }
-    template(typename Cur2, typename Cur)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<Cur2, Cur>) constexpr
-        typename basic_iterator<Cur>::difference_type //
-        operator-(basic_iterator<Cur2> const &left, basic_iterator<Cur> const &right) {
-        return range_access::distance_to(range_access::pos(right), range_access::pos(left));
-    }
-    template(typename S, typename Cur)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<S, Cur>) constexpr typename basic_iterator<Cur>::difference_type //
-    operator-(S const &left, basic_iterator<Cur> const &right) {
-        return range_access::distance_to(range_access::pos(right), left);
-    }
-    template(typename Cur, typename S)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<S, Cur>) constexpr typename basic_iterator<Cur>::difference_type //
-    operator-(basic_iterator<Cur> const &left, S const &right) {
-        return -(right - left);
-    }
-    // Asymmetric comparisons
-    template(typename Left, typename Right)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<Right, Left>) constexpr bool
-    operator<(basic_iterator<Left> const &left, basic_iterator<Right> const &right) {
-        return 0 < (right - left);
-    }
-    template(typename Left, typename Right)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<Right, Left>) constexpr bool
-    operator<=(basic_iterator<Left> const &left, basic_iterator<Right> const &right) {
-        return 0 <= (right - left);
-    }
-    template(typename Left, typename Right)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<Right, Left>) constexpr bool
-    operator>(basic_iterator<Left> const &left, basic_iterator<Right> const &right) {
-        return (right - left) < 0;
-    }
-    template(typename Left, typename Right)(
-        /// \pre
-        requires ranges_detail::sized_sentinel_for_cursor<Right, Left>) constexpr bool
-    operator>=(basic_iterator<Left> const &left, basic_iterator<Right> const &right) {
-        return (right - left) <= 0;
-    }
-
-#if RANGES_BROKEN_CPO_LOOKUP
-    namespace _basic_iterator_ {
-        // Optionally support hooking iter_move when the cursor sports a
-        // move() member function.
-        template <typename Cur>
-        constexpr auto
-        iter_move(basic_iterator<Cur> const &it) noexcept(noexcept(range_access::move(std::declval<Cur const &>())))
-            -> CPP_broken_friend_ret(decltype(range_access::move(std::declval<Cur const &>())))(
-                /// \pre
-                requires ranges_detail::input_cursor<Cur>) {
-            return range_access::move(range_access::pos(it));
-        }
-    } // namespace _basic_iterator_
-#endif
-
-    /// Get a cursor from a basic_iterator
-    struct get_cursor_fn {
-        template <typename Cur> constexpr Cur &operator()(basic_iterator<Cur> &it) const noexcept {
-            return range_access::pos(it);
-        }
-        template <typename Cur> constexpr Cur const &operator()(basic_iterator<Cur> const &it) const noexcept {
-            return range_access::pos(it);
-        }
-        template <typename Cur>
-        constexpr Cur operator()(basic_iterator<Cur> &&it) const
-            noexcept(std::is_nothrow_move_constructible<Cur>::value) {
-            return range_access::pos(std::move(it));
-        }
-    };
-
-    /// \sa `get_cursor_fn`
-    RANGES_INLINE_VARIABLE(get_cursor_fn, get_cursor)
-    /// @}
-} // namespace futures::detail
-
-/// \cond
-namespace futures::detail::concepts {
-    // common_reference specializations for basic_proxy_reference
-    template <typename Cur, typename U, template <typename> class TQual, template <typename> class UQual>
-    struct basic_common_reference<::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, U, TQual, UQual>
-        : basic_common_reference<::futures::detail::ranges_detail::cursor_reference_t<Cur>, U, TQual, UQual> {};
-    template <typename T, typename Cur, template <typename> class TQual, template <typename> class UQual>
-    struct basic_common_reference<T, ::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, TQual, UQual>
-        : basic_common_reference<T, ::futures::detail::ranges_detail::cursor_reference_t<Cur>, TQual, UQual> {};
-    template <typename Cur1, typename Cur2, template <typename> class TQual, template <typename> class UQual>
-    struct basic_common_reference<::futures::detail::ranges_detail::basic_proxy_reference_<Cur1, true>,
-                                  ::futures::detail::ranges_detail::basic_proxy_reference_<Cur2, true>, TQual, UQual>
-        : basic_common_reference<::futures::detail::ranges_detail::cursor_reference_t<Cur1>, ::futures::detail::ranges_detail::cursor_reference_t<Cur2>,
-                                 TQual, UQual> {};
-
-    // common_type specializations for basic_proxy_reference
-    template <typename Cur, typename U>
-    struct common_type<::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, U>
-        : common_type<::futures::detail::range_access::cursor_value_t<Cur>, U> {};
-    template <typename T, typename Cur>
-    struct common_type<T, ::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>>
-        : common_type<T, ::futures::detail::range_access::cursor_value_t<Cur>> {};
-    template <typename Cur1, typename Cur2>
-    struct common_type<::futures::detail::ranges_detail::basic_proxy_reference_<Cur1, true>,
-                       ::futures::detail::ranges_detail::basic_proxy_reference_<Cur2, true>>
-        : common_type<::futures::detail::range_access::cursor_value_t<Cur1>, ::futures::detail::range_access::cursor_value_t<Cur2>> {};
-} // namespace futures::detail::concepts
-
-#if RANGES_CXX_VER > RANGES_CXX_STD_17
-RANGES_DIAGNOSTIC_PUSH
-RANGES_DIAGNOSTIC_IGNORE_MISMATCHED_TAGS
-RANGES_BEGIN_NAMESPACE_STD
-RANGES_BEGIN_NAMESPACE_VERSION
-template <typename, typename, template <typename> class, template <typename> class> struct basic_common_reference;
-
-// common_reference specializations for basic_proxy_reference
-template <typename Cur, typename U, template <typename> class TQual, template <typename> class UQual>
-struct basic_common_reference<::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, U, TQual, UQual>
-    : basic_common_reference<::futures::detail::ranges_detail::cursor_reference_t<Cur>, U, TQual, UQual> {};
-template <typename T, typename Cur, template <typename> class TQual, template <typename> class UQual>
-struct basic_common_reference<T, ::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, TQual, UQual>
-    : basic_common_reference<T, ::futures::detail::ranges_detail::cursor_reference_t<Cur>, TQual, UQual> {};
-template <typename Cur1, typename Cur2, template <typename> class TQual, template <typename> class UQual>
-struct basic_common_reference<::futures::detail::ranges_detail::basic_proxy_reference_<Cur1, true>,
-                              ::futures::detail::ranges_detail::basic_proxy_reference_<Cur2, true>, TQual, UQual>
-    : basic_common_reference<::futures::detail::ranges_detail::cursor_reference_t<Cur1>, ::futures::detail::ranges_detail::cursor_reference_t<Cur2>,
-                             TQual, UQual> {};
-
-template <typename...> struct common_type;
-
-// common_type specializations for basic_proxy_reference
-template <typename Cur, typename U>
-struct common_type<::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>, U>
-    : common_type<::futures::detail::range_access::cursor_value_t<Cur>, U> {};
-template <typename T, typename Cur>
-struct common_type<T, ::futures::detail::ranges_detail::basic_proxy_reference_<Cur, true>>
-    : common_type<T, ::futures::detail::range_access::cursor_value_t<Cur>> {};
-template <typename Cur1, typename Cur2>
-struct common_type<::futures::detail::ranges_detail::basic_proxy_reference_<Cur1, true>,
-                   ::futures::detail::ranges_detail::basic_proxy_reference_<Cur2, true>>
-    : common_type<::futures::detail::range_access::cursor_value_t<Cur1>, ::futures::detail::range_access::cursor_value_t<Cur2>> {};
-RANGES_END_NAMESPACE_VERSION
-RANGES_END_NAMESPACE_STD
-RANGES_DIAGNOSTIC_POP
-#endif // RANGES_CXX_VER > RANGES_CXX_STD_17
-
-namespace futures::detail {
-    /// \cond
-    namespace ranges_detail {
-        template <typename Cur, bool IsReadable> struct std_iterator_traits_ {
-            using difference_type = typename iterator_associated_types_base<Cur>::difference_type;
-            using value_type = void;
-            using reference = void;
-            using pointer = void;
-            using iterator_category = std::output_iterator_tag;
-            using iterator_concept = std::output_iterator_tag;
-        };
-
-        template <typename Cur> struct std_iterator_traits_<Cur, true> : iterator_associated_types_base<Cur> {};
-
-        template <typename Cur> using std_iterator_traits = std_iterator_traits_<Cur, (bool)readable_cursor<Cur>>;
-    } // namespace ranges_detail
-    /// \endcond
-} // namespace futures::detail
-
-namespace std {
-    template <typename Cur>
-    struct iterator_traits<::futures::detail::basic_iterator<Cur>> : ::futures::detail::ranges_detail::std_iterator_traits<Cur> {};
-} // namespace std
-/// \endcond
-
-RANGES_DIAGNOSTIC_POP
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-iterator
-    /// @{
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I> struct reverse_cursor {
-          private:
-            CPP_assert(bidirectional_iterator<I>);
-            friend range_access;
-            template <typename OtherI> friend struct reverse_cursor;
-            struct mixin : basic_mixin<reverse_cursor> {
-                mixin() = default;
-#ifndef _MSC_VER
-                using basic_mixin<reverse_cursor>::basic_mixin;
-#else
-                constexpr explicit mixin(reverse_cursor &&cur)
-                    : basic_mixin<reverse_cursor>(static_cast<reverse_cursor &&>(cur)) {}
-                constexpr explicit mixin(reverse_cursor const &cur) : basic_mixin<reverse_cursor>(cur) {}
-#endif
-                constexpr mixin(I it) : mixin{reverse_cursor{it}} {}
-                constexpr I base() const { return this->get().base(); }
-            };
-
-            I it_;
-
-            constexpr reverse_cursor(I it) : it_(std::move(it)) {}
-            constexpr iter_reference_t<I> read() const { return *arrow(); }
-            constexpr I arrow() const {
-                auto tmp = it_;
-                --tmp;
-                return tmp;
-            }
-            constexpr I base() const { return it_; }
-            template(typename J)(
-                /// \pre
-                requires sentinel_for<J, I>) constexpr bool equal(reverse_cursor<J> const &that) const {
-                return it_ == that.it_;
-            }
-            constexpr void next() { --it_; }
-            constexpr void prev() { ++it_; }
-            CPP_member constexpr auto advance(iter_difference_t<I> n) //
-                -> CPP_ret(void)(
-                    /// \pre
-                    requires random_access_iterator<I>) {
-                it_ -= n;
-            }
-            template(typename J)(
-                /// \pre
-                requires sized_sentinel_for<J, I>) constexpr iter_difference_t<I> distance_to(reverse_cursor<J> const
-                                                                                                  &that) //
-                const {
-                return it_ - that.base();
-            }
-            constexpr iter_rvalue_reference_t<I> move() const
-                noexcept(noexcept((void)I(I(it_)), (void)--const_cast<I &>(it_), iter_move(it_))) {
-                auto tmp = it_;
-                --tmp;
-                return iter_move(tmp);
-            }
-
-          public:
-            reverse_cursor() = default;
-            template(typename U)(
-                /// \pre
-                requires convertible_to<U, I>) constexpr reverse_cursor(reverse_cursor<U> const &u)
-                : it_(u.base()) {}
-        };
-    } // namespace ranges_detail
-    /// \endcond
-
-    struct make_reverse_iterator_fn {
-        template(typename I)(
-            /// \pre
-            requires bidirectional_iterator<I>) constexpr reverse_iterator<I>
-        operator()(I i) const {
-            return reverse_iterator<I>(i);
-        }
-    };
-
-    RANGES_INLINE_VARIABLE(make_reverse_iterator_fn, make_reverse_iterator)
-
-    namespace cpp20 {
-        using futures::detail::make_reverse_iterator;
-        using futures::detail::reverse_iterator;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif // FUTURES_RANGES_ITERATOR_REVERSE_ITERATOR_HPP
-
-// #include <futures/algorithm/detail/traits/range/iterator/traits.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-#if defined(__cpp_lib_string_view) && __cpp_lib_string_view > 0
-    template <class CharT, class Traits>
-    RANGES_INLINE_VAR constexpr bool enable_borrowed_range<std::basic_string_view<CharT, Traits>> = true;
-#endif
-
-#if defined(__cpp_lib_span) && __cpp_lib_span > 0
-    template <class T, std::size_t N> RANGES_INLINE_VAR constexpr bool enable_borrowed_range<std::span<T, N>> = true;
-#endif
-
-    namespace ranges_detail {
-        template <typename T> RANGES_INLINE_VAR constexpr bool _borrowed_range = enable_borrowed_range<uncvref_t<T>>;
-
-        template <typename T> RANGES_INLINE_VAR constexpr bool _borrowed_range<T &> = true;
-    } // namespace ranges_detail
-
-    /// \cond
-    namespace _begin_ {
-        // Poison pill for std::begin. (See the detailed discussion at
-        // https://github.com/ericniebler/stl2/issues/139)
-        template <typename T> void begin(T &&) = delete;
-
-#ifdef RANGES_WORKAROUND_MSVC_895622
-        void begin();
-#endif
-
-        template <typename T> void begin(std::initializer_list<T>) = delete;
-
-        template(typename I)(
-            /// \pre
-            requires input_or_output_iterator<I>) void is_iterator(I);
-
-        // clang-format off
-        template<typename T>
-        CPP_requires(has_member_begin_,
-            requires(T & t) //
-            (
-                _begin_::is_iterator(t.begin())
-            ));
-        template<typename T>
-        CPP_concept has_member_begin =
-            CPP_requires_ref(_begin_::has_member_begin_, T);
-
-        template<typename T>
-        CPP_requires(has_non_member_begin_,
-            requires(T & t) //
-            (
-                _begin_::is_iterator(begin(t))
-            ));
-        template<typename T>
-        CPP_concept has_non_member_begin =
-            CPP_requires_ref(_begin_::has_non_member_begin_, T);
-        // clang-format on
-
-        struct fn {
-          private:
-            template <bool> struct impl_ {
-                // has_member_begin == true
-                template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(r.begin())) {
-                    return r.begin();
-                }
-            };
-
-            template <typename R> using impl = impl_<has_member_begin<R>>;
-
-          public:
-            template <typename R, std::size_t N> void operator()(R(&&)[N]) const = delete;
-
-            template <typename R, std::size_t N> constexpr R *operator()(R (&array)[N]) const noexcept { return array; }
-
-            template(typename R)(
-                /// \pre
-                requires ranges_detail::_borrowed_range<R> AND(has_member_begin<R> || has_non_member_begin<R>)) constexpr auto
-            operator()(R &&r) const //
-                noexcept(noexcept(impl<R>::invoke(r))) {
-                return impl<R>::invoke(r);
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-        };
-
-        template <> struct fn::impl_<false> {
-            // has_member_begin == false
-            template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(begin(r))) { return begin(r); }
-        };
-
-        template <typename R> using _t = decltype(fn{}(std::declval<R>()));
-    } // namespace _begin_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return \c r, if \c r is an array. Otherwise, `r.begin()` if that expression is
-    ///   well-formed and returns an input_or_output_iterator. Otherwise, `begin(r)` if
-    ///   that expression returns an input_or_output_iterator.
-    RANGES_DEFINE_CPO(_begin_::fn, begin)
-
-    /// \cond
-    namespace _end_ {
-        // Poison pill for std::end. (See the detailed discussion at
-        // https://github.com/ericniebler/stl2/issues/139)
-        template <typename T> void end(T &&) = delete;
-
-#ifdef RANGES_WORKAROUND_MSVC_895622
-        void end();
-#endif
-
-        template <typename T> void end(std::initializer_list<T>) = delete;
-
-        template(typename I, typename S)(
-            /// \pre
-            requires sentinel_for<S, I>) void _is_sentinel(S, I);
-
-        // clang-format off
-        template<typename T>
-        CPP_requires(has_member_end_,
-            requires(T & t) //
-            (
-                _end_::_is_sentinel(t.end(), futures::detail::begin(t))
-            ));
-        template<typename T>
-        CPP_concept has_member_end =
-            CPP_requires_ref(_end_::has_member_end_, T);
-
-        template<typename T>
-        CPP_requires(has_non_member_end_,
-            requires(T & t) //
-            (
-                _end_::_is_sentinel(end(t), futures::detail::begin(t))
-            ));
-        template<typename T>
-        CPP_concept has_non_member_end =
-            CPP_requires_ref(_end_::has_non_member_end_, T);
-        // clang-format on
-
-        struct fn {
-          private:
-            template <bool> struct impl_ {
-                // has_member_end == true
-                template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(r.end())) {
-                    return r.end();
-                }
-            };
-
-            template <typename Int>
-            using iter_diff_t = futures::detail::meta::_t<futures::detail::meta::conditional_t<std::is_integral<Int>::value,
-                                                             std::make_signed<Int>, //
-                                                             futures::detail::meta::id<Int>>>;
-
-            template <typename R> using impl = impl_<has_member_end<R>>;
-
-          public:
-            template <typename R, std::size_t N> void operator()(R(&&)[N]) const = delete;
-
-            template <typename R, std::size_t N> constexpr R *operator()(R (&array)[N]) const noexcept {
-                return array + N;
-            }
-
-            template(typename R)(
-                /// \pre
-                requires ranges_detail::_borrowed_range<R> AND(has_member_end<R> || has_non_member_end<R>)) constexpr auto
-            operator()(R &&r) const                    //
-                noexcept(noexcept(impl<R>::invoke(r))) //
-            {
-                return impl<R>::invoke(r);
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template(typename Int)(
-                /// \pre
-                requires ranges_detail::integer_like_<Int>) auto
-            operator-(Int dist) const -> ranges_detail::from_end_<iter_diff_t<Int>> {
-                using SInt = iter_diff_t<Int>;
-                RANGES_EXPECT(0 <= dist);
-                RANGES_EXPECT(dist <= static_cast<Int>((std::numeric_limits<SInt>::max)()));
-                return ranges_detail::from_end_<SInt>{-static_cast<SInt>(dist)};
-            }
-        };
-
-        // has_member_end == false
-        template <> struct fn::impl_<false> {
-            template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(end(r))) { return end(r); }
-        };
-
-        template <typename R> using _t = decltype(fn{}(std::declval<R>()));
-    } // namespace _end_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return \c r+size(r), if \c r is an array. Otherwise, `r.end()` if that expression
-    /// is
-    ///   well-formed and returns an input_or_output_iterator. Otherwise, `end(r)` if that
-    ///   expression returns an input_or_output_iterator.
-    RANGES_DEFINE_CPO(_end_::fn, end)
-
-    /// \cond
-    namespace _cbegin_ {
-        struct fn {
-            template <typename R>
-            constexpr _begin_::_t<ranges_detail::as_const_t<R>> operator()(R &&r) const
-                noexcept(noexcept(futures::detail::begin(ranges_detail::as_const(r)))) {
-                return futures::detail::begin(ranges_detail::as_const(r));
-            }
-        };
-    } // namespace _cbegin_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return The result of calling `futures::detail::begin` with a const-qualified
-    ///    reference to r.
-    RANGES_INLINE_VARIABLE(_cbegin_::fn, cbegin)
-
-    /// \cond
-    namespace _cend_ {
-        struct fn {
-            template <typename R>
-            constexpr _end_::_t<ranges_detail::as_const_t<R>> operator()(R &&r) const
-                noexcept(noexcept(futures::detail::end(ranges_detail::as_const(r)))) {
-                return futures::detail::end(ranges_detail::as_const(r));
-            }
-        };
-    } // namespace _cend_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return The result of calling `futures::detail::end` with a const-qualified
-    ///    reference to r.
-    RANGES_INLINE_VARIABLE(_cend_::fn, cend)
-
-    /// \cond
-    namespace _rbegin_ {
-        template <typename R> void rbegin(R &&) = delete;
-        // Non-standard, to keep unqualified rbegin(r) from finding std::rbegin
-        // and returning a std::reverse_iterator.
-        template <typename T> void rbegin(std::initializer_list<T>) = delete;
-        template <typename T, std::size_t N> void rbegin(T (&)[N]) = delete;
-
-        // clang-format off
-        template<typename T>
-        CPP_requires(has_member_rbegin_,
-            requires(T & t) //
-            (
-                _begin_::is_iterator(t.rbegin())
-            ));
-        template<typename T>
-        CPP_concept has_member_rbegin =
-            CPP_requires_ref(_rbegin_::has_member_rbegin_, T);
-
-        template<typename T>
-        CPP_requires(has_non_member_rbegin_,
-            requires(T & t) //
-            (
-                _begin_::is_iterator(rbegin(t))
-            ));
-        template<typename T>
-        CPP_concept has_non_member_rbegin =
-            CPP_requires_ref(_rbegin_::has_non_member_rbegin_, T);
-
-        template<typename I>
-        void _same_type(I, I);
-
-        template<typename T>
-        CPP_requires(can_reverse_end_,
-            requires(T & t) //
-            (
-                // make_reverse_iterator is constrained with
-                // bidirectional_iterator.
-                futures::detail::make_reverse_iterator(futures::detail::end(t)),
-                _rbegin_::_same_type(futures::detail::begin(t), futures::detail::end(t))
-            ));
-        template<typename T>
-        CPP_concept can_reverse_end =
-            CPP_requires_ref(_rbegin_::can_reverse_end_, T);
-        // clang-format on
-
-        struct fn {
-          private:
-            // has_member_rbegin == true
-            template <int> struct impl_ {
-                template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(r.rbegin())) {
-                    return r.rbegin();
-                }
-            };
-
-            template <typename R> using impl = impl_<has_member_rbegin<R> ? 0 : has_non_member_rbegin<R> ? 1 : 2>;
-
-          public:
-            template(typename R)(
-                /// \pre
-                requires ranges_detail::_borrowed_range<R> AND(has_member_rbegin<R> || has_non_member_rbegin<R> ||
-                                                        can_reverse_end<R>)) //
-                constexpr auto
-                operator()(R &&r) const                //
-                noexcept(noexcept(impl<R>::invoke(r))) //
-            {
-                return impl<R>::invoke(r);
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const //
-                noexcept(noexcept(Fn{}(ref.get())))         //
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get()))) //
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-        };
-
-        // has_non_member_rbegin == true
-        template <> struct fn::impl_<1> {
-            template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(rbegin(r))) {
-                return rbegin(r);
-            }
-        };
-
-        // can_reverse_end
-        template <> struct fn::impl_<2> {
-            template <typename R>
-            static constexpr auto invoke(R &&r) noexcept(noexcept(futures::detail::make_reverse_iterator(futures::detail::end(r)))) {
-                return futures::detail::make_reverse_iterator(futures::detail::end(r));
-            }
-        };
-
-        template <typename R> using _t = decltype(fn{}(std::declval<R>()));
-    } // namespace _rbegin_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return `make_reverse_iterator(r + futures::detail::size(r))` if r is an array. Otherwise,
-    ///   `r.rbegin()` if that expression is well-formed and returns an
-    ///   input_or_output_iterator. Otherwise, `make_reverse_iterator(futures::detail::end(r))` if
-    ///   `futures::detail::begin(r)` and `futures::detail::end(r)` are both well-formed and have the same
-    ///   type that satisfies `bidirectional_iterator`.
-    RANGES_DEFINE_CPO(_rbegin_::fn, rbegin)
-
-    /// \cond
-    namespace _rend_ {
-        template <typename R> void rend(R &&) = delete;
-        // Non-standard, to keep unqualified rend(r) from finding std::rend
-        // and returning a std::reverse_iterator.
-        template <typename T> void rend(std::initializer_list<T>) = delete;
-        template <typename T, std::size_t N> void rend(T (&)[N]) = delete;
-
-        // clang-format off
-        template<typename T>
-        CPP_requires(has_member_rend_,
-            requires(T & t) //
-            (
-                _end_::_is_sentinel(t.rend(), futures::detail::rbegin(t))
-            ));
-        template<typename T>
-        CPP_concept has_member_rend =
-            CPP_requires_ref(_rend_::has_member_rend_, T);
-
-        template<typename T>
-        CPP_requires(has_non_member_rend_,
-            requires(T & t) //
-            (
-                _end_::_is_sentinel(rend(t), futures::detail::rbegin(t))
-            ));
-        template<typename T>
-        CPP_concept has_non_member_rend =
-            CPP_requires_ref(_rend_::has_non_member_rend_, T);
-
-        template<typename T>
-        CPP_requires(can_reverse_begin_,
-            requires(T & t) //
-            (
-                // make_reverse_iterator is constrained with
-                // bidirectional_iterator.
-                futures::detail::make_reverse_iterator(futures::detail::begin(t)),
-                _rbegin_::_same_type(futures::detail::begin(t), futures::detail::end(t))
-            ));
-        template<typename T>
-        CPP_concept can_reverse_begin =
-            CPP_requires_ref(_rend_::can_reverse_begin_, T);
-        // clang-format on
-
-        struct fn {
-          private:
-            // has_member_rbegin == true
-            template <int> struct impl_ {
-                template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(r.rend())) {
-                    return r.rend();
-                }
-            };
-
-            template <typename R> using impl = impl_<has_member_rend<R> ? 0 : has_non_member_rend<R> ? 1 : 2>;
-
-          public:
-            template(typename R)(
-                /// \pre
-                requires ranges_detail::_borrowed_range<R> AND(has_member_rend<R> ||     //
-                                                        has_non_member_rend<R> || //
-                                                        can_reverse_begin<R>))    //
-                constexpr auto
-                operator()(R &&r) const noexcept(noexcept(impl<R>::invoke(r))) //
-            {
-                return impl<R>::invoke(r);
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get()))) //
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get()))) //
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-        };
-
-        // has_non_member_rend == true
-        template <> struct fn::impl_<1> {
-            template <typename R> static constexpr auto invoke(R &&r) noexcept(noexcept(rend(r))) { return rend(r); }
-        };
-
-        // can_reverse_begin
-        template <> struct fn::impl_<2> {
-            template <typename R>
-            static constexpr auto invoke(R &&r) noexcept(noexcept(futures::detail::make_reverse_iterator(futures::detail::begin(r)))) {
-                return futures::detail::make_reverse_iterator(futures::detail::begin(r));
-            }
-        };
-
-        template <typename R> using _t = decltype(fn{}(std::declval<R>()));
-    } // namespace _rend_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return `make_reverse_iterator(r)` if `r` is an array. Otherwise,
-    ///   `r.rend()` if that expression is well-formed and returns a type that
-    ///   satisfies `sentinel_for<S, I>` where `I` is the type of `futures::detail::rbegin(r)`.
-    ///   Otherwise, `make_reverse_iterator(futures::detail::begin(r))` if `futures::detail::begin(r)`
-    ///   and `futures::detail::end(r)` are both well-formed and have the same type that
-    ///   satisfies `bidirectional_iterator`.
-    RANGES_DEFINE_CPO(_rend_::fn, rend)
-
-    /// \cond
-    namespace _crbegin_ {
-        struct fn {
-            template <typename R>
-            constexpr _rbegin_::_t<ranges_detail::as_const_t<R>> operator()(R &&r) const
-                noexcept(noexcept(futures::detail::rbegin(ranges_detail::as_const(r)))) {
-                return futures::detail::rbegin(ranges_detail::as_const(r));
-            }
-        };
-    } // namespace _crbegin_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return The result of calling `futures::detail::rbegin` with a const-qualified
-    ///    reference to r.
-    RANGES_INLINE_VARIABLE(_crbegin_::fn, crbegin)
-
-    /// \cond
-    namespace _crend_ {
-        struct fn {
-            template <typename R>
-            constexpr _rend_::_t<ranges_detail::as_const_t<R>> operator()(R &&r) const
-                noexcept(noexcept(futures::detail::rend(ranges_detail::as_const(r)))) {
-                return futures::detail::rend(ranges_detail::as_const(r));
-            }
-        };
-    } // namespace _crend_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return The result of calling `futures::detail::rend` with a const-qualified
-    ///    reference to r.
-    RANGES_INLINE_VARIABLE(_crend_::fn, crend)
-
-    template <typename Rng> using iterator_t = decltype(begin(std::declval<Rng &>()));
-
-    template <typename Rng> using sentinel_t = decltype(end(std::declval<Rng &>()));
-
-    namespace cpp20 {
-        using futures::detail::begin;
-        using futures::detail::cbegin;
-        using futures::detail::cend;
-        using futures::detail::crbegin;
-        using futures::detail::crend;
-        using futures::detail::end;
-        using futures::detail::rbegin;
-        using futures::detail::rend;
-
-        using futures::detail::iterator_t;
-        using futures::detail::sentinel_t;
-
-        using futures::detail::enable_borrowed_range;
-    } // namespace cpp20
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/range/primitives.h>
-#ifndef FUTURES_RANGES_RANGE_PRIMITIVES_HPP
-#define FUTURES_RANGES_RANGE_PRIMITIVES_HPP
-
-// #include <futures/algorithm/detail/traits/range/concepts/concepts.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
-
-// #include <futures/algorithm/detail/traits/range/range/access.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/addressof.h>
-
-// #include <futures/algorithm/detail/traits/range/utility/static_const.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-range
-    // Specialize this if the default is wrong.
-    template <typename T> RANGES_INLINE_VAR constexpr bool disable_sized_range = false;
-
-    /// \cond
-    namespace _size_ {
-        template <typename T> void size(T &&) = delete;
-
-#ifdef RANGES_WORKAROUND_MSVC_895622
-        void size();
-#endif
-
-        struct fn {
-          private:
-            template <typename R> using member_size_t = decltype(+(std::declval<R>()).size());
-            template <typename R> using non_member_size_t = decltype(+size(std::declval<R>()));
-
-            template <typename R, std::size_t N> static constexpr std::size_t impl_(R (&)[N], int) noexcept {
-                return N;
-            }
-
-            template <typename R, std::size_t N> static constexpr std::size_t impl_(R(&&)[N], int) noexcept {
-                return N;
-            }
-
-            // Prefer member if it returns integral.
-            template(typename R)(
-                /// \pre
-                requires integral<member_size_t<R>> AND(!disable_sized_range<uncvref_t<R>>)) //
-                static constexpr member_size_t<R> impl_(R &&r, int)                          //
-                noexcept(noexcept(((R &&) r).size())) {
-                return ((R &&) r).size();
-            }
-
-            // Use ADL if it returns integral.
-            template(typename R)(
-                /// \pre
-                requires integral<non_member_size_t<R>> AND(!disable_sized_range<uncvref_t<R>>)) //
-                static constexpr non_member_size_t<R> impl_(R &&r, long)                         //
-                noexcept(noexcept(size((R &&) r))) {
-                return size((R &&) r);
-            }
-
-            template(typename R)(
-                /// \pre
-                requires forward_iterator<_begin_::_t<R>> AND
-                    sized_sentinel_for<_end_::_t<R>, _begin_::_t<R>>) static constexpr auto impl_(R &&r, ...)
-                -> ranges_detail::iter_size_t<_begin_::_t<R>> {
-                using size_type = ranges_detail::iter_size_t<_begin_::_t<R>>;
-                return static_cast<size_type>(futures::detail::end((R &&) r) - futures::detail::begin((R &&) r));
-            }
-
-          public:
-            template <typename R>
-            constexpr auto operator()(R &&r) const noexcept(noexcept(fn::impl_((R &&) r, 0)))
-                -> decltype(fn::impl_((R &&) r, 0)) {
-                return fn::impl_((R &&) r, 0);
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a Range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a Range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-        };
-    } // namespace _size_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \return For a given expression `E` of type `T`, `futures::detail::size(E)` is equivalent
-    /// to:
-    ///   * `+extent_v<T>` if `T` is an array type.
-    ///   * Otherwise, `+E.size()` if it is a valid expression and its type `I` models
-    ///     `integral` and `disable_sized_range<std::remove_cvref_t<T>>` is false.
-    ///   * Otherwise, `+size(E)` if it is a valid expression and its type `I` models
-    ///     `integral` with overload resolution performed in a context that includes the
-    ///     declaration:
-    ///     \code
-    ///     template<class T> void size(T&&) = delete;
-    ///     \endcode
-    ///     and does not include a declaration of `futures::detail::size`, and
-    ///     `disable_sized_range<std::remove_cvref_t<T>>` is false.
-    ///   * Otherwise, `static_cast<U>(futures::detail::end(E) - futures::detail::begin(E))` where `U` is
-    ///     `std::make_unsigned_t<iter_difference_t<iterator_t<T>>>` if
-    ///     `iter_difference_t<iterator_t<T>>` satisfies `integral` and
-    ///     `iter_difference_t<iterator_t<T>>` otherwise; except that `E` is
-    ///     evaluated once, if it is a valid expression and the types `I` and `S` of
-    ///     `futures::detail::begin(E)` and `futures::detail::end(E)` model `sized_sentinel_for<S, I>` and
-    ///     `forward_iterator<I>`.
-    ///   * Otherwise, `futures::detail::size(E)` is ill-formed.
-    RANGES_DEFINE_CPO(_size_::fn, size)
-
-    // Customization point data
-    /// \cond
-    namespace _data_ {
-        struct fn {
-          private:
-            template <typename R> using member_data_t = ranges_detail::decay_t<decltype(std::declval<R>().data())>;
-
-            template(typename R)(
-                /// \pre
-                requires std::is_pointer<member_data_t<R &>>::value) //
-                static constexpr member_data_t<R &> impl_(R &r, ranges_detail::priority_tag<2>) noexcept(noexcept(r.data())) {
-                return r.data();
-            }
-            template(typename R)(
-                /// \pre
-                requires std::is_pointer<_begin_::_t<R>>::value) //
-                static constexpr _begin_::_t<R> impl_(R &&r, ranges_detail::priority_tag<1>) noexcept(
-                    noexcept(futures::detail::begin((R &&) r))) {
-                return futures::detail::begin((R &&) r);
-            }
-            template(typename R)(
-                /// \pre
-                requires contiguous_iterator<
-                    _begin_::_t<R>>) static constexpr auto impl_(R &&r,
-                                                                 ranges_detail::priority_tag<
-                                                                     0>) noexcept(noexcept(futures::detail::begin((R &&) r) ==
-                                                                                                   futures::detail::end((R &&) r)
-                                                                                               ? nullptr
-                                                                                               : ranges_detail::addressof(
-                                                                                                     *futures::detail::begin(
-                                                                                                         (R &&) r))))
-                -> decltype(ranges_detail::addressof(*futures::detail::begin((R &&) r))) {
-                return futures::detail::begin((R &&) r) == futures::detail::end((R &&) r) ? nullptr
-                                                                        : ranges_detail::addressof(*futures::detail::begin((R &&) r));
-            }
-
-          public:
-            template <typename charT, typename Traits, typename Alloc>
-            constexpr charT *operator()(std::basic_string<charT, Traits, Alloc> &s) const noexcept {
-                // string doesn't have non-const data before C++17
-                return const_cast<charT *>(ranges_detail::as_const(s).data());
-            }
-
-            template <typename R>
-            constexpr auto operator()(R &&r) const noexcept(noexcept(fn::impl_((R &&) r, ranges_detail::priority_tag<2>{})))
-                -> decltype(fn::impl_((R &&) r, ranges_detail::priority_tag<2>{})) {
-                return fn::impl_((R &&) r, ranges_detail::priority_tag<2>{});
-            }
-        };
-
-        template <typename R> using _t = decltype(fn{}(std::declval<R>()));
-    } // namespace _data_
-    /// \endcond
-
-    RANGES_INLINE_VARIABLE(_data_::fn, data)
-
-    /// \cond
-    namespace _cdata_ {
-        struct fn {
-            template <typename R>
-            constexpr _data_::_t<R const &> operator()(R const &r) const noexcept(noexcept(futures::detail::data(r))) {
-                return futures::detail::data(r);
-            }
-            template <typename R>
-            constexpr _data_::_t<R const> operator()(R const &&r) const
-                noexcept(noexcept(futures::detail::data((R const &&)r))) {
-                return futures::detail::data((R const &&)r);
-            }
-        };
-    } // namespace _cdata_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \param r
-    /// \return The result of calling `futures::detail::data` with a const-qualified
-    ///    (lvalue or rvalue) reference to `r`.
-    RANGES_INLINE_VARIABLE(_cdata_::fn, cdata)
-
-    /// \cond
-    namespace _empty_ {
-        struct fn {
-          private:
-            // Prefer member if it is valid.
-            template <typename R>
-            static constexpr auto impl_(R &&r, ranges_detail::priority_tag<2>) noexcept(noexcept(bool(((R &&) r).empty())))
-                -> decltype(bool(((R &&) r).empty())) {
-                return bool(((R &&) r).empty());
-            }
-
-            // Fall back to size == 0.
-            template <typename R>
-            static constexpr auto impl_(R &&r,
-                                        ranges_detail::priority_tag<1>) noexcept(noexcept(bool(futures::detail::size((R &&) r) == 0)))
-                -> decltype(bool(futures::detail::size((R &&) r) == 0)) {
-                return bool(futures::detail::size((R &&) r) == 0);
-            }
-
-            // Fall further back to begin == end.
-            template(typename R)(
-                /// \pre
-                requires forward_iterator<
-                    _begin_::_t<R>>) static constexpr auto impl_(R &&r,
-                                                                 ranges_detail::priority_tag<
-                                                                     0>) noexcept(noexcept(bool(futures::detail::begin((R &&)
-                                                                                                                  r) ==
-                                                                                                futures::detail::end((R &&) r))))
-                -> decltype(bool(futures::detail::begin((R &&) r) == futures::detail::end((R &&) r))) {
-                return bool(futures::detail::begin((R &&) r) == futures::detail::end((R &&) r));
-            }
-
-          public:
-            template <typename R>
-            constexpr auto operator()(R &&r) const noexcept(noexcept(fn::impl_((R &&) r, ranges_detail::priority_tag<2>{})))
-                -> decltype(fn::impl_((R &&) r, ranges_detail::priority_tag<2>{})) {
-                return fn::impl_((R &&) r, ranges_detail::priority_tag<2>{});
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a Range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(std::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-
-            template <typename T, typename Fn = fn>
-            RANGES_DEPRECATED("Using a reference_wrapper as a Range is deprecated. Use views::ref "
-                              "instead.")
-            constexpr auto
-            operator()(futures::detail::reference_wrapper<T> ref) const noexcept(noexcept(Fn{}(ref.get())))
-                -> decltype(Fn{}(ref.get())) {
-                return Fn{}(ref.get());
-            }
-        };
-    } // namespace _empty_
-    /// \endcond
-
-    /// \ingroup group-range
-    /// \return true if and only if range contains no elements.
-    RANGES_INLINE_VARIABLE(_empty_::fn, empty)
-
-    namespace cpp20 {
-        // Specialize this is namespace futures::detail::
-        using futures::detail::cdata;
-        using futures::detail::data;
-        using futures::detail::disable_sized_range;
-        using futures::detail::empty;
-        using futures::detail::size;
-    } // namespace cpp20
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-// #include <futures/algorithm/detail/traits/range/range/traits.h>
-#ifndef FUTURES_RANGES_RANGE_TRAITS_HPP
-#define FUTURES_RANGES_RANGE_TRAITS_HPP
-
-#include <array>
-// #include <iterator>
-
-// #include <type_traits>
-
-// #include <utility>
-
-
-// #include <futures/algorithm/detail/traits/range/meta/meta.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range_fwd.h>
-
-
-// #include <futures/algorithm/detail/traits/range/range/access.h>
-
-// #include <futures/algorithm/detail/traits/range/range/primitives.h>
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \cond
-    namespace ranges_detail {
-        template <typename I, typename S>
-        using common_iterator_impl_t =
-            enable_if_t<(bool)(input_or_output_iterator<I> &&sentinel_for<S, I>), common_iterator<I, S>>;
-    }
-    /// \endcond
-
-    /// \addtogroup group-range
-    /// @{
-    template <typename I, typename S>
-    using common_iterator_t = futures::detail::meta::conditional_t<std::is_same<I, S>::value, I, ranges_detail::common_iterator_impl_t<I, S>>;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename I, typename S>
-        using cpp17_iterator_t = futures::detail::meta::conditional_t<std::is_integral<iter_difference_t<I>>::value,
-                                                     common_iterator_t<I, S>, cpp17_iterator<common_iterator_t<I, S>>>;
-    }
-    /// \endcond
-
-    // Aliases (SFINAE-able)
-    template <typename Rng> using range_difference_t = iter_difference_t<iterator_t<Rng>>;
-
-    template <typename Rng> using range_value_t = iter_value_t<iterator_t<Rng>>;
-
-    template <typename Rng> using range_reference_t = iter_reference_t<iterator_t<Rng>>;
-
-    template <typename Rng> using range_rvalue_reference_t = iter_rvalue_reference_t<iterator_t<Rng>>;
-
-    template <typename Rng> using range_common_reference_t = iter_common_reference_t<iterator_t<Rng>>;
-
-    template <typename Rng> using range_size_t = decltype(futures::detail::size(std::declval<Rng &>()));
-
-    /// \cond
-    template <typename Rng>
-    using range_difference_type_t
-        RANGES_DEPRECATED("range_difference_type_t is deprecated. Use the range_difference_t instead.") =
-            iter_difference_t<iterator_t<Rng>>;
-
-    template <typename Rng>
-    using range_value_type_t RANGES_DEPRECATED("range_value_type_t is deprecated. Use the range_value_t instead.") =
-        iter_value_t<iterator_t<Rng>>;
-
-    template <typename Rng>
-    using range_category_t RANGES_DEPRECATED("range_category_t is deprecated. Use the range concepts instead.") =
-        futures::detail::meta::_t<ranges_detail::iterator_category<iterator_t<Rng>>>;
-
-    template <typename Rng>
-    using range_size_type_t RANGES_DEPRECATED("range_size_type_t is deprecated. Use range_size_t instead.") =
-        ranges_detail::iter_size_t<iterator_t<Rng>>;
-    /// \endcond
-
-    template <typename Rng> using range_common_iterator_t = common_iterator_t<iterator_t<Rng>, sentinel_t<Rng>>;
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename Rng> using range_cpp17_iterator_t = cpp17_iterator_t<iterator_t<Rng>, sentinel_t<Rng>>;
-
-        std::integral_constant<cardinality, finite> test_cardinality(void *);
-        template <cardinality Card> std::integral_constant<cardinality, Card> test_cardinality(basic_view<Card> *);
-        template <typename T, std::size_t N>
-        std::integral_constant<cardinality, static_cast<cardinality>(N)> test_cardinality(T (*)[N]);
-        template <typename T, std::size_t N>
-        std::integral_constant<cardinality, static_cast<cardinality>(N)> test_cardinality(std::array<T, N> *);
-    } // namespace ranges_detail
-    /// \endcond
-
-    // User customization point for specifying the cardinality of ranges:
-    template <typename Rng, typename Void /*= void*/>
-    struct range_cardinality
-        : futures::detail::meta::conditional_t<RANGES_IS_SAME(Rng, uncvref_t<Rng>),
-                              decltype(ranges_detail::test_cardinality(static_cast<uncvref_t<Rng> *>(nullptr))),
-                              range_cardinality<uncvref_t<Rng>>> {};
-
-    /// @}
-    namespace cpp20 {
-        using futures::detail::range_difference_t;
-        using futures::detail::range_reference_t;
-        using futures::detail::range_rvalue_reference_t;
-        using futures::detail::range_value_t;
-    } // namespace cpp20
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
-
-
-// #include <futures/algorithm/detail/traits/range/detail/prologue.h>
-#ifndef FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-#define FUTURES_RANGES_DETAIL_PROLOGUE_HPP
-// #include <futures/algorithm/detail/traits/range/detail/config.h>
-
-#endif
-
-#ifdef RANGES_PROLOGUE_INCLUDED
-#error "Prologue already included!"
-#endif
-#define RANGES_PROLOGUE_INCLUDED
-
-RANGES_DIAGNOSTIC_PUSH
-
-#ifdef RANGES_FEWER_WARNINGS
-RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
-RANGES_DIAGNOSTIC_IGNORE_INDENTATION
-RANGES_DIAGNOSTIC_IGNORE_CXX17_COMPAT
-#endif
-
-RANGES_DIAGNOSTIC_KEYWORD_MACRO
-
-#define template(...)                                                                                                  \
-    CPP_PP_IGNORE_CXX2A_COMPAT_BEGIN                                                                                   \
-    template <__VA_ARGS__ CPP_TEMPLATE_AUX_
-
-#define AND CPP_and
-
-
-namespace futures::detail {
-    /// \addtogroup group-range
-    /// @{
-
-    ///
-    /// Range concepts below
-    ///
-
-    // clang-format off
-    template<typename T>
-    CPP_requires(_range_,
-        requires(T & t) //
-        (
-            futures::detail::begin(t), // not necessarily equality-preserving
-            futures::detail::end(t)
-        ));
-    template<typename T>
-    CPP_concept range =
-        CPP_requires_ref(futures::detail::_range_, T);
-
-    template<typename T>
-    CPP_concept borrowed_range =
-        range<T> && ranges_detail::_borrowed_range<T>;
-
-    template <typename R>
-    RANGES_DEPRECATED("Please use futures::detail::borrowed_range instead.")
-    RANGES_INLINE_VAR constexpr bool safe_range = borrowed_range<R>;
-
-    template(typename T, typename V)(
-    concept (output_range_)(T, V),
-        output_iterator<iterator_t<T>, V>
-    );
-    template<typename T, typename V>
-    CPP_concept output_range =
-        range<T> && CPP_concept_ref(futures::detail::output_range_, T, V);
-
-    template(typename T)(
-    concept (input_range_)(T),
-        input_iterator<iterator_t<T>>
-    );
-    template<typename T>
-    CPP_concept input_range =
-        range<T> && CPP_concept_ref(futures::detail::input_range_, T);
-
-    template(typename T)(
-    concept (forward_range_)(T),
-        forward_iterator<iterator_t<T>>
-    );
-    template<typename T>
-    CPP_concept forward_range =
-        input_range<T> && CPP_concept_ref(futures::detail::forward_range_, T);
-
-    template(typename T)(
-    concept (bidirectional_range_)(T),
-        bidirectional_iterator<iterator_t<T>>
-    );
-    template<typename T>
-    CPP_concept bidirectional_range =
-        forward_range<T> && CPP_concept_ref(futures::detail::bidirectional_range_, T);
-
-    template(typename T)(
-    concept (random_access_range_)(T),
-        random_access_iterator<iterator_t<T>>
-    );
-
-    template<typename T>
-    CPP_concept random_access_range =
-        bidirectional_range<T> && CPP_concept_ref(futures::detail::random_access_range_, T);
-    // clang-format on
-
-    /// \cond
-    namespace ranges_detail {
-        template <typename Rng> using data_t = decltype(futures::detail::data(std::declval<Rng &>()));
-
-        template <typename Rng> using element_t = futures::detail::meta::_t<std::remove_pointer<data_t<Rng>>>;
-    } // namespace ranges_detail
-      /// \endcond
-
-    // clang-format off
-    template(typename T)(
-    concept (contiguous_range_)(T),
-        contiguous_iterator<iterator_t<T>> AND
-        same_as<ranges_detail::data_t<T>, std::add_pointer_t<iter_reference_t<iterator_t<T>>>>
-    );
-
-    template<typename T>
-    CPP_concept contiguous_range =
-        random_access_range<T> && CPP_concept_ref(futures::detail::contiguous_range_, T);
-
-    template(typename T)(
-    concept (common_range_)(T),
-        same_as<iterator_t<T>, sentinel_t<T>>
-    );
-
-    template<typename T>
-    CPP_concept common_range =
-        range<T> && CPP_concept_ref(futures::detail::common_range_, T);
-
-    /// \cond
-    template<typename T>
-    CPP_concept bounded_range =
-        common_range<T>;
-    /// \endcond
-
-    template<typename T>
-    CPP_requires(sized_range_,
-        requires(T & t) //
-        (
-            futures::detail::size(t)
-        ));
-    template(typename T)(
-    concept (sized_range_)(T),
-        ranges_detail::integer_like_<range_size_t<T>>);
-
-    template<typename T>
-    CPP_concept sized_range =
-        range<T> &&
-        !disable_sized_range<uncvref_t<T>> &&
-        CPP_requires_ref(futures::detail::sized_range_, T) &&
-        CPP_concept_ref(futures::detail::sized_range_, T);
-    // clang-format on
-
-    /// \cond
-    namespace ext {
-        template <typename T> struct enable_view : std::is_base_of<view_base, T> {};
-    } // namespace ext
-    /// \endcond
-
-    // Specialize this if the default is wrong.
-    template <typename T> RANGES_INLINE_VAR constexpr bool enable_view = ext::enable_view<T>::value;
-
-#if defined(__cpp_lib_string_view) && __cpp_lib_string_view > 0
-    template <typename Char, typename Traits>
-    RANGES_INLINE_VAR constexpr bool enable_view<std::basic_string_view<Char, Traits>> = true;
-#endif
-
-#if defined(__cpp_lib_span) && __cpp_lib_span > 0
-    template <typename T, std::size_t N> RANGES_INLINE_VAR constexpr bool enable_view<std::span<T, N>> = N + 1 < 2;
-#endif
-
-    ///
-    /// View concepts below
-    ///
-
-    // clang-format off
-    template<typename T>
-    CPP_concept view_ =
-        range<T> &&
-        semiregular<T> &&
-        enable_view<T>;
-
-    template<typename T>
-    CPP_concept viewable_range =
-        range<T> &&
-        (borrowed_range<T> || view_<uncvref_t<T>>);
-    // clang-format on
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // range_tag
-    struct range_tag {};
-
-    struct input_range_tag : range_tag {};
-    struct forward_range_tag : input_range_tag {};
-    struct bidirectional_range_tag : forward_range_tag {};
-    struct random_access_range_tag : bidirectional_range_tag {};
-    struct contiguous_range_tag : random_access_range_tag {};
-
-    template <typename Rng>
-    using range_tag_of =                          //
-        std::enable_if_t<                         //
-            range<Rng>,                           //
-            futures::detail::meta::conditional_t<                  //
-                contiguous_range<Rng>,            //
-                contiguous_range_tag,             //
-                futures::detail::meta::conditional_t<              //
-                    random_access_range<Rng>,     //
-                    random_access_range_tag,      //
-                    futures::detail::meta::conditional_t<          //
-                        bidirectional_range<Rng>, //
-                        bidirectional_range_tag,  //
-                        futures::detail::meta::conditional_t<      //
-                            forward_range<Rng>,   //
-                            forward_range_tag,    //
-                            futures::detail::meta::conditional_t<  //
-                                input_range<Rng>, //
-                                input_range_tag,  //
-                                range_tag>>>>>>;
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // common_range_tag_of
-    struct common_range_tag : range_tag {};
-
-    template <typename Rng>
-    using common_range_tag_of = //
-        std::enable_if_t<       //
-            range<Rng>,         //
-            futures::detail::meta::conditional_t<common_range<Rng>, common_range_tag, range_tag>>;
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // sized_range_concept
-    struct sized_range_tag : range_tag {};
-
-    template <typename Rng>
-    using sized_range_tag_of = //
-        std::enable_if_t<      //
-            range<Rng>,        //
-            futures::detail::meta::conditional_t<sized_range<Rng>, sized_range_tag, range_tag>>;
-
-    /// \cond
-    namespace view_detail_ {
-        // clang-format off
-        template<typename T>
-        CPP_concept view =
-            futures::detail::view_<T>;
-        // clang-format on
-    } // namespace view_detail_
-    /// \endcond
-
-    namespace cpp20 {
-        using futures::detail::bidirectional_range;
-        using futures::detail::borrowed_range;
-        using futures::detail::common_range;
-        using futures::detail::contiguous_range;
-        using futures::detail::enable_view;
-        using futures::detail::forward_range;
-        using futures::detail::input_range;
-        using futures::detail::output_range;
-        using futures::detail::random_access_range;
-        using futures::detail::range;
-        using futures::detail::sized_range;
-        using futures::detail::view_base;
-        using futures::detail::viewable_range;
-        using futures::detail::view_detail_::view;
-    } // namespace cpp20
-    /// @}
-} // namespace futures::detail
-
-// #include <futures/algorithm/detail/traits/range/detail/epilogue.h>
-#ifndef RANGES_PROLOGUE_INCLUDED
-#error "Including epilogue, but prologue not included!"
-#endif
-#undef RANGES_PROLOGUE_INCLUDED
-
-#undef template
-#undef AND
-
-RANGES_DIAGNOSTIC_POP
-
-
-#endif
 
 // #include <type_traits>
 
@@ -20068,7 +7647,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::
-            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+            enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
 #endif
         >
     void
@@ -20096,13 +7675,14 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::enable_if_t<
-            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
             int> = 0
 #endif
         >
     void
     wait_for_all(Range &&r) {
-        wait_for_all(std::begin(r), std::end(r));
+        using std::begin;
+        wait_for_all(begin(r), end(r));
     }
 
     /// \brief Wait for a sequence of futures to be ready
@@ -20145,9 +7725,13 @@ namespace futures {
 #ifndef FUTURES_WAIT_FOR_ANY_H
 #define FUTURES_WAIT_FOR_ANY_H
 
-// #include <futures/futures/traits/is_future.h>
+// #include <futures/algorithm/traits/iter_value.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/range_value.h>
+
+// #include <futures/futures/traits/is_future.h>
 
 // #include <futures/futures/detail/waiter_for_any.h>
 #ifndef FUTURES_WAITER_FOR_ANY_H
@@ -20157,7 +7741,7 @@ namespace futures {
 #ifndef FUTURES_LOCK_H
 #define FUTURES_LOCK_H
 
-// #include <futures/algorithm/detail/traits/range/iterator/concepts.h>
+// #include <futures/algorithm/traits/is_input_iterator.h>
 
 
 namespace futures::detail {
@@ -20192,7 +7776,7 @@ namespace futures::detail {
     /// if all the supplied Lockable objects are now locked
     template <
         typename Iterator,
-        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+        std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     Iterator
     try_lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
@@ -20251,7 +7835,7 @@ namespace futures::detail {
     /// \param last Iterator to one past the last mutex in the range
     template <
         typename Iterator,
-        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+        std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     void
     lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
@@ -20662,7 +8246,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::
-            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+            enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
 #endif
         >
     Iterator
@@ -20699,11 +8283,11 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::enable_if_t<
-            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
             int> = 0
 #endif
         >
-    detail::iterator_t<Range>
+    iterator_t<Range>
     wait_for_any(Range &&r) {
         return wait_for_any(std::begin(r), std::end(r));
     }
@@ -21040,6 +8624,10 @@ namespace futures {
 #ifndef FUTURES_CONTINUATION_UNWRAP_H
 #define FUTURES_CONTINUATION_UNWRAP_H
 
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/range_value.h>
+
 // #include <futures/futures/basic_future.h>
 
 // #include <futures/futures/traits/is_future.h>
@@ -21228,8 +8816,7 @@ namespace futures {
 #ifndef FUTURES_IS_TUPLE_H
 #define FUTURES_IS_TUPLE_H
 
-// #include <tuple>
-
+#include <tuple>
 // #include <type_traits>
 
 
@@ -21922,8 +9509,6 @@ namespace futures {
 
 #endif // FUTURES_TUPLE_ALGORITHM_H
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/futures/detail/small_vector.h>
 
 // #include <futures/futures/detail/traits/type_member_or_void.h>
@@ -21946,7 +9531,7 @@ namespace futures::detail {
     template <typename Sequence>
     struct range_or_tuple_element_type<
         Sequence,
-        std::enable_if_t<range<Sequence>>>
+        std::enable_if_t<is_range_v<Sequence>>>
     {
         using type = range_value_t<Sequence>;
     };
@@ -22003,13 +9588,13 @@ namespace futures::detail {
             = is_future_v<std::decay_t<
                   value_type>> && std::is_invocable_v<Function, PrefixArgs..., unwrap_future_t<value_type>>;
         constexpr bool is_tuple = is_tuple_v<value_type>;
-        constexpr bool is_range = range<value_type>;
+        constexpr bool is_range = is_range_v<value_type>;
 
         // 5 main unwrapping paths: (no unwrap, no input, single future,
         // when_all, when_any)
         constexpr bool direct_unwrap = value_unwrap || lvalue_unwrap
                                        || rvalue_unwrap || double_unwrap;
-        constexpr bool sequence_unwrap = is_tuple || range<value_type>;
+        constexpr bool sequence_unwrap = is_tuple || is_range_v<value_type>;
         constexpr bool when_any_unwrap = is_when_any_result_v<value_type>;
 
         constexpr auto fail = []() {
@@ -22099,7 +9684,7 @@ namespace futures::detail {
             } else if constexpr (sequence_unwrap && is_range) {
                 // when_all vector<future<T>> ->
                 // function(futures::small_vector<T>)
-                using range_value_t = detail::range_value_t<value_type>;
+                using range_value_t = range_value_t<value_type>;
                 constexpr bool is_range_of_futures = is_future_v<
                     std::decay_t<range_value_t>>;
                 using continuation_vector = detail::small_vector<
@@ -22164,7 +9749,7 @@ namespace futures::detail {
                 // when_any_result<tuple<future<T>, future<T>, ...>> ->
                 // continuation(future<T>)
                 constexpr bool when_any_same_type
-                    = range<
+                    = is_range_v<
                           when_any_sequence> || is_single_type_tuple_v<when_any_sequence>;
                 using when_any_element_type = range_or_tuple_element_type_t<
                     when_any_sequence>;
@@ -22546,8 +10131,7 @@ namespace futures::detail {
 
 // #include <future>
 
-// #include <version>
-
+#include <version>
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -22817,11 +10401,11 @@ namespace futures {
 
 #endif // FUTURES_TO_FUTURE_H
 
+// #include <futures/algorithm/traits/is_range.h>
+
 // #include <futures/adaptor/detail/traits/is_tuple.h>
 
 // #include <futures/adaptor/detail/tuple_algorithm.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/futures/detail/small_vector.h>
 
@@ -22851,7 +10435,7 @@ namespace futures {
     private:
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
-        static constexpr bool sequence_is_range = futures::detail::range<
+        static constexpr bool sequence_is_range = is_range_v<
             sequence_type>;
         static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
@@ -23157,7 +10741,7 @@ namespace futures {
         template <typename Sequence>
         struct is_when_all_range_future<
             when_all_future<Sequence>,
-            std::enable_if_t<futures::detail::range<Sequence>>> : std::true_type
+            std::enable_if_t<is_range_v<Sequence>>> : std::true_type
         {};
         template <class T>
         constexpr bool is_when_all_range_future_v = is_when_all_range_future<
@@ -23317,7 +10901,7 @@ namespace futures {
         class Range
 #ifndef FUTURES_DOXYGEN
         ,
-        std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
+        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
 #endif
         >
     when_all_future<
@@ -23462,6 +11046,8 @@ namespace futures {
 
 // #include <futures/adaptor/when_any_result.h>
 
+// #include <futures/algorithm/traits/is_range.h>
+
 // #include <futures/futures/async.h>
 
 // #include <futures/futures/traits/to_future.h>
@@ -23470,12 +11056,9 @@ namespace futures {
 
 // #include <futures/adaptor/detail/tuple_algorithm.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/futures/detail/small_vector.h>
 
-// #include <array>
-
+#include <array>
 #include <optional>
 // #include <condition_variable>
 
@@ -23525,8 +11108,7 @@ namespace futures {
     {
     private:
         using sequence_type = Sequence;
-        static constexpr bool sequence_is_range = futures::detail::range<
-            sequence_type>;
+        static constexpr bool sequence_is_range = is_range_v<sequence_type>;
         static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
 
@@ -24815,7 +12397,7 @@ namespace futures {
         template <typename Sequence>
         struct is_when_any_range_future<
             when_any_future<Sequence>,
-            std::enable_if_t<futures::detail::range<Sequence>>> : std::true_type
+            std::enable_if_t<is_range_v<Sequence>>> : std::true_type
         {};
         template <class T>
         constexpr bool is_when_any_range_future_v = is_when_any_range_future<
@@ -24960,7 +12542,7 @@ namespace futures {
         class Range
 #ifndef FUTURES_DOXYGEN
         ,
-        std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
+        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
 #endif
         >
     when_any_future<
@@ -25118,15 +12700,558 @@ namespace futures {
 
 // #include <futures/algorithm/traits/is_input_iterator.h>
 
+// #include <futures/algorithm/traits/is_input_range.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_RANGE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_INPUT_RANGE_H
+
+// #include <futures/algorithm/traits/is_input_iterator.h>
+
 // #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/iterator.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 input_range concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_input_range = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_input_range : std::false_type
+    {};
+
+    template <class T>
+    struct is_input_range<T, std::void_t<iterator_t<T>>>
+        : std::conjunction<
+              // clang-format off
+              is_range<T>,
+              is_input_iterator<iterator_t<T>>
+              // clang-format off
+            >
+    {};
+#endif
+    template <class T>
+    bool constexpr is_input_range_v = is_input_range<T>::value;
+
+    /** @}*/
+    /** @}*/
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_RANGE_H
+
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/is_sentinel_for.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
+#define FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
+
+// #include <futures/algorithm/traits/is_input_or_output_iterator.h>
+
+// #include <futures/algorithm/traits/is_semiregular.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
+#define FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
+
+// #include <futures/algorithm/traits/is_copyable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_H
+
+// #include <futures/algorithm/traits/is_movable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
+
+// #include <futures/algorithm/traits/is_move_constructible.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_MOVE_CONSTRUCTIBLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_MOVE_CONSTRUCTIBLE_H
+
+// #include <futures/algorithm/traits/is_constructible_from.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_CONSTRUCTIBLE_FROM_H
+#define FUTURES_ALGORITHM_TRAITS_IS_CONSTRUCTIBLE_FROM_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 constructible_from
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T, class... Args>
+    using is_constructible_from = __see_below__;
+#else
+    template <class T, class... Args>
+    struct is_constructible_from
+        : std::conjunction<
+              std::is_destructible<T>,
+              std::is_constructible<T, Args...>>
+    {};
+#endif
+    template <class T, class... Args>
+    bool constexpr is_constructible_from_v = is_constructible_from<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_CONSTRUCTIBLE_FROM_H
+
+// #include <futures/algorithm/traits/is_convertible_to.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_CONVERTIBLE_TO_H
+#define FUTURES_ALGORITHM_TRAITS_IS_CONVERTIBLE_TO_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 convertible_to
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class From, class To>
+    using is_convertible_to = __see_below__;
+#else
+    template <class From, class To, class = void>
+    struct is_convertible_to : std::false_type
+    {};
+
+    template <class From, class To>
+    struct is_convertible_to<
+        From, To,
+        std::void_t<
+            // clang-format off
+            std::enable_if_t<std::is_convertible_v<From, To>>,
+            decltype(static_cast<To>(std::declval<From>()))
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class From, class To>
+    bool constexpr is_convertible_to_v = is_convertible_to<From, To>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_CONVERTIBLE_TO_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 move_constructible
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_move_constructible = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_move_constructible : std::false_type
+    {};
+
+    template <class T>
+    struct is_move_constructible<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            is_constructible_from_v<T, T> &&
+            is_convertible_to_v<T, T>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_move_constructible_v = is_move_constructible<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_MOVE_CONSTRUCTIBLE_H
+
+// #include <futures/algorithm/traits/is_assignable_from.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
+#define FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
+
+// #include <futures/algorithm/traits/is_constructible_from.h>
+
+// #include <futures/algorithm/traits/is_convertible_to.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 assignable_from
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class LHS, class RHS>
+    using is_assignable_from = __see_below__;
+#else
+    template <class LHS, class RHS, class = void>
+    struct is_assignable_from : std::false_type
+    {};
+
+    template <class LHS, class RHS>
+    struct is_assignable_from<
+        LHS, RHS,
+        std::enable_if_t<
+            // clang-format off
+            std::is_lvalue_reference_v<LHS> &&
+            std::is_same_v<decltype(std::declval<LHS>() = std::declval<RHS&&>()), LHS>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class LHS, class RHS>
+    bool constexpr is_assignable_from_v = is_assignable_from<LHS, RHS>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
+
+// #include <futures/algorithm/traits/is_swappable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 swappable concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_swappable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_swappable : std::false_type
+    {};
+
+    template <class T>
+    struct is_swappable<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(swap(std::declval<T&>(), std::declval<T&>()))
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_swappable_v = is_swappable<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 movable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_movable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_movable : std::false_type
+    {};
+
+    template <class T>
+    struct is_movable<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            std::is_object_v<T> &&
+            is_move_constructible_v<T> &&
+            is_assignable_from_v<T&, T> &&
+            is_swappable_v<T>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_movable_v = is_movable<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
+
+// #include <futures/algorithm/traits/is_assignable_from.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 copyable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_copyable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_copyable : std::false_type
+    {};
+
+    template <class T>
+    struct is_copyable<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            std::is_copy_constructible_v<T> &&
+            is_movable_v<T> &&
+            is_assignable_from_v<T&, T&> &&
+            is_assignable_from_v<T&, const T&> &&
+            is_assignable_from_v<T&, const T>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_copyable_v = is_copyable<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_H
+
+// #include <futures/algorithm/traits/is_default_initializable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_H
+
+// #include <futures/algorithm/traits/is_constructible_from.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 default_initializable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_default_initializable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_default_initializable : std::false_type
+    {};
+
+    template <class T>
+    struct is_default_initializable<
+        T,
+        std::void_t<
+            // clang-format off
+            std::enable_if_t<is_constructible_from_v<T>>,
+            decltype(T{})
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_default_initializable_v = is_default_initializable<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 semiregular
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_semiregular = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_semiregular : std::false_type
+    {};
+
+    template <class T>
+    struct is_semiregular<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            is_copyable_v<T> &&
+            is_default_initializable_v<T>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_semiregular_v = is_semiregular<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 sentinel_for
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class S, class I>
+    using is_sentinel_for = __see_below__;
+#else
+    template <class S, class I, class = void>
+    struct is_sentinel_for : std::false_type
+    {};
+
+    template <class S, class I>
+    struct is_sentinel_for<
+        S,
+        I,
+        std::enable_if_t<
+            // clang-format off
+            is_semiregular_v<S> &&
+            is_input_or_output_iterator_v<I>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class S, class I>
+    bool constexpr is_sentinel_for_v = is_sentinel_for<S, I>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
+
+// #include <futures/executor/default_executor.h>
 
 // #include <futures/adaptor/detail/traits/has_get.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
+#include <algorithm>
 // #include <thread>
 
-#include <algorithm>
 
 /// \file Default partitioners
 /// A partitioner is a light callable object that takes a pair of iterators and
@@ -25187,15 +13312,12 @@ namespace futures {
     class thread_partitioner
     {
         std::size_t min_grain_size_;
-        std::size_t num_threads_;
+        std::size_t num_threads_{hardware_concurrency()};
         std::thread::id last_thread_id_{};
 
     public:
         explicit thread_partitioner(std::size_t min_grain_size)
-            : min_grain_size_(min_grain_size),
-              num_threads_(std::max(
-                  std::thread::hardware_concurrency(),
-                  static_cast<unsigned int>(1))) {}
+            : min_grain_size_(min_grain_size) {}
 
         template <typename I, typename S>
         auto
@@ -25254,7 +13376,7 @@ namespace futures {
         class I,
         class S,
         std::enable_if_t<
-            is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
+            is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
             int> = 0>
     default_partitioner
     make_default_partitioner(I first, S last) {
@@ -25267,7 +13389,7 @@ namespace futures {
     /// The default partitioner type and parameters might change
     template <
         class R,
-        std::enable_if_t<futures::detail::input_range<R>, int> = 0>
+        std::enable_if_t<is_input_range_v<R>, int> = 0>
     default_partitioner
     make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
@@ -25294,12 +13416,13 @@ namespace futures {
     template <class T, class R, typename = void>
     struct is_range_partitioner : std::false_type
     {};
+
     template <class T, class R>
     struct is_range_partitioner<T, R, std::enable_if_t<is_range_v<R>>>
         : is_partitioner<
               T,
-              futures::detail::range_common_iterator_t<R>,
-              futures::detail::range_common_iterator_t<R>>
+              iterator_t<R>,
+              iterator_t<R>>
     {};
 
     template <class T, class R>
@@ -25310,6 +13433,743 @@ namespace futures {
 } // namespace futures
 
 #endif // FUTURES_PARTITIONER_H
+// #include <futures/algorithm/traits/is_forward_iterator.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_H
+#define FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_H
+
+// #include <futures/algorithm/traits/is_input_iterator.h>
+
+// #include <futures/algorithm/traits/is_sentinel_for.h>
+
+// #include <futures/algorithm/traits/iter_concept.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
+#define FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
+
+// #include <futures/algorithm/traits/has_iterator_traits_iterator_concept.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CONCEPT_H
+#define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CONCEPT_H
+
+// #include <type_traits>
+
+// #include <iterator>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20
+     * "has-iterator-traits-iterator-concept" concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using has_iterator_traits_iterator_concept = __see_below__;
+#else
+    template <class T, class = void>
+    struct has_iterator_traits_iterator_concept : std::false_type
+    {};
+
+    template <class T>
+    struct has_iterator_traits_iterator_concept<
+        T,
+        std::void_t<typename std::iterator_traits<T>::iterator_concept>>
+        : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr has_iterator_traits_iterator_concept_v
+        = has_iterator_traits_iterator_concept<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CONCEPT_H
+
+// #include <futures/algorithm/traits/has_iterator_traits_iterator_category.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CATEGORY_H
+#define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CATEGORY_H
+
+// #include <type_traits>
+
+// #include <iterator>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20
+     * "has-iterator-traits-iterator-category" concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using has_iterator_traits_iterator_category = __see_below__;
+#else
+    template <class T, class = void>
+    struct has_iterator_traits_iterator_category : std::false_type
+    {};
+
+    template <class T>
+    struct has_iterator_traits_iterator_category<
+        T,
+        std::void_t<typename std::iterator_traits<T>::iterator_category>>
+        : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr has_iterator_traits_iterator_category_v
+        = has_iterator_traits_iterator_category<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CATEGORY_H
+
+// #include <futures/algorithm/traits/remove_cvref.h>
+
+// #include <iterator>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_concept
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using iter_concept = __see_below__;
+#else
+    template <class T, class = void>
+    struct iter_concept
+    {};
+
+    template <class T>
+    struct iter_concept<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            has_iterator_traits_iterator_concept_v<remove_cvref_t<T>>
+            // clang-format on
+        >>
+    {
+        using type = typename std::iterator_traits<
+            remove_cvref_t<T>>::iterator_concept;
+    };
+
+    template <class T>
+    struct iter_concept<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
+            has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
+            // clang-format on
+        >>
+    {
+        using type = typename std::iterator_traits<
+            remove_cvref_t<T>>::iterator_category;
+    };
+
+    template <class T>
+    struct iter_concept<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
+            !has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
+            // clang-format on
+        >>
+    {
+        using type = std::random_access_iterator_tag;
+    };
+#endif
+    template <class T>
+    using iter_concept_t = typename iter_concept<T>::type;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
+
+// #include <futures/algorithm/traits/is_derived_from.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_DERIVED_FROM_H
+#define FUTURES_ALGORITHM_TRAITS_IS_DERIVED_FROM_H
+
+// #include <futures/algorithm/traits/iter_reference.h>
+
+// #include <futures/algorithm/traits/iter_rvalue_reference.h>
+
+// #include <futures/algorithm/traits/iter_value.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 derived_from concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_derived_from = __see_below__;
+#else
+    template <class Derived, class Base>
+    struct is_derived_from
+        : std::conjunction<
+              std::is_base_of<Base, Derived>,
+              std::is_convertible<const volatile Derived*, const volatile Base*>>
+    {};
+#endif
+    template <class Derived, class Base>
+    bool constexpr is_derived_from_v = is_derived_from<Derived, Base>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_DERIVED_FROM_H
+
+// #include <futures/algorithm/traits/is_incrementable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INCREMENTABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_INCREMENTABLE_H
+
+// #include <futures/algorithm/traits/is_regular.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_REGULAR_H
+#define FUTURES_ALGORITHM_TRAITS_IS_REGULAR_H
+
+// #include <futures/algorithm/traits/is_equality_comparable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 equality_comparable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_equality_comparable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_equality_comparable : std::false_type
+    {};
+
+    template <class T>
+    struct is_equality_comparable<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<const std::remove_reference_t<T>&>() == std::declval<const std::remove_reference_t<T>&>()),
+            decltype(std::declval<const std::remove_reference_t<T>&>() != std::declval<const std::remove_reference_t<T>&>())
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_equality_comparable_v = is_equality_comparable<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_H
+
+// #include <futures/algorithm/traits/is_semiregular.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 regular
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_regular = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_regular : std::false_type
+    {};
+
+    template <class T>
+    struct is_regular<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            is_semiregular_v<T> &&
+            is_equality_comparable_v<T>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr is_regular_v = is_regular<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_REGULAR_H
+
+// #include <futures/algorithm/traits/is_weakly_incrementable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
+
+// #include <futures/algorithm/traits/is_movable.h>
+
+// #include <futures/algorithm/traits/iter_difference.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
+#define FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
+
+// #include <futures/algorithm/traits/has_iterator_traits_difference_type.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_DIFFERENCE_TYPE_H
+#define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_DIFFERENCE_TYPE_H
+
+// #include <type_traits>
+
+// #include <iterator>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20
+     * "has-iterator-traits-difference-type" concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using has_iterator_traits_difference_type = __see_below__;
+#else
+    template <class T, class = void>
+    struct has_iterator_traits_difference_type : std::false_type
+    {};
+
+    template <class T>
+    struct has_iterator_traits_difference_type<
+        T,
+        std::void_t<typename std::iterator_traits<T>::difference_type>>
+        : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr has_iterator_traits_difference_type_v
+        = has_iterator_traits_difference_type<T>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_DIFFERENCE_TYPE_H
+
+// #include <futures/algorithm/traits/remove_cvref.h>
+
+// #include <futures/algorithm/traits/has_difference_type.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_DIFFERENCE_TYPE_H
+#define FUTURES_ALGORITHM_TRAITS_HAS_DIFFERENCE_TYPE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+    /** \brief A C++17 type trait equivalent to the C++20 has-member-difference-type
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using has_difference_type = __see_below__;
+#else
+    template <class T, class = void>
+    struct has_difference_type : std::false_type
+    {};
+
+    template <class T>
+    struct has_difference_type<T, std::void_t<typename T::value_type>>
+        : std::true_type
+    {};
+#endif
+    template <class T>
+    bool constexpr has_difference_type_v = has_difference_type<T>::value;
+    /** @}*/
+    /** @}*/
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_DIFFERENCE_TYPE_H
+
+// #include <futures/algorithm/traits/is_subtractable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 subtractable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_subtractable = __see_below__;
+#else
+    template <class T, class = void>
+    struct is_subtractable : std::false_type
+    {};
+
+    template <class T>
+    struct is_subtractable<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<const std::remove_reference_t<T>&>() - std::declval<const std::remove_reference_t<T>&>())
+            // clang-format on
+            >>
+        : std::is_integral<
+              decltype(std::declval<const std::remove_reference_t<T>&>() - std::declval<const std::remove_reference_t<T>&>())>
+    {};
+#endif
+    template <class T>
+    bool constexpr is_subtractable_v = is_subtractable<T>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_H
+
+// #include <iterator>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_difference
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using iter_difference = __see_below__;
+#else
+    template <class T, class = void>
+    struct iter_difference
+    {};
+
+    template <class T>
+    struct iter_difference<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            has_iterator_traits_difference_type_v<remove_cvref_t<T>>
+            // clang-format on
+            >>
+    {
+        using type = typename std::iterator_traits<
+            remove_cvref_t<T>>::difference_type;
+    };
+
+    template <class T>
+    struct iter_difference<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
+            std::is_pointer_v<T>
+            // clang-format on
+            >>
+    {
+        using type = std::ptrdiff_t;
+    };
+
+    template <class T>
+    struct iter_difference<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
+            !std::is_pointer_v<T> &&
+            std::is_const_v<T>
+            // clang-format on
+            >>
+    {
+        using type = typename iter_difference<std::remove_const_t<T>>::type;
+    };
+
+    template <class T>
+    struct iter_difference<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
+            !std::is_pointer_v<T> &&
+            !std::is_const_v<T> &&
+            has_iterator_traits_difference_type_v<remove_cvref_t<T>>
+            // clang-format on
+            >>
+    {
+        using type = typename T::difference_type;
+    };
+
+    template <class T>
+    struct iter_difference<
+        T,
+        std::enable_if_t<
+            // clang-format off
+            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
+            !std::is_pointer_v<T> &&
+            !std::is_const_v<T> &&
+            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
+            is_subtractable_v<remove_cvref_t<T>>
+            // clang-format on
+            >>
+    {
+        using type = std::make_signed_t<decltype(std::declval<T>() - std::declval<T>())>;
+    };
+#endif
+    template <class T>
+    using iter_difference_t = typename iter_difference<T>::type;
+
+    /** @}*/
+    /** @}*/
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 weakly_incrementable concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class I>
+    using is_weakly_incrementable = __see_below__;
+#else
+    template <class I, class = void>
+    struct is_weakly_incrementable : std::false_type
+    {};
+
+    template <class I>
+    struct is_weakly_incrementable<
+        I,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<I>()++),
+            decltype(++std::declval<I>()),
+            iter_difference_t<I>
+            // clang-format on
+            >>
+        : std::conjunction<
+              // clang-format off
+              is_movable<I>,
+              std::is_same<decltype(++std::declval<I>()), I&>
+              // clang-format on
+              >
+    {};
+#endif
+    template <class I>
+    bool constexpr is_weakly_incrementable_v = is_weakly_incrementable<I>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 incrementable concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class I>
+    using is_incrementable = __see_below__;
+#else
+    template <class I, class = void>
+    struct is_incrementable : std::false_type
+    {};
+
+    template <class I>
+    struct is_incrementable<
+        I,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<I>()++)
+            // clang-format on
+            >>
+        : std::conjunction<
+              // clang-format off
+              is_regular<I>,
+              is_weakly_incrementable<I>,
+              std::is_same<decltype(std::declval<I>()++), I>
+              // clang-format on
+              >
+    {};
+#endif
+    template <class I>
+    bool constexpr is_incrementable_v = is_incrementable<I>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INCREMENTABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 forward_iterator
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class I>
+    using is_forward_iterator = __see_below__;
+#else
+    template <class I, class = void>
+    struct is_forward_iterator : std::false_type
+    {};
+
+    template <class I>
+    struct is_forward_iterator<
+        I,
+        std::enable_if_t<
+            // clang-format off
+            is_input_iterator_v<I> &&
+            is_derived_from_v<iter_concept_t<I>, std::forward_iterator_tag> &&
+            is_incrementable_v<I> &&
+            is_sentinel_for_v<I, I>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class I>
+    bool constexpr is_forward_iterator_v = is_forward_iterator<I>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_H
+
+// #include <futures/algorithm/traits/is_range.h>
+
+// #include <futures/algorithm/traits/is_sentinel_for.h>
+
 // #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #ifndef FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
 #define FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
@@ -25343,6 +14203,12 @@ namespace futures {
 ///
 
 #include <execution>
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/executor/default_executor.h>
+
+// #include <futures/executor/inline_executor.h>
+
 
 #ifdef __has_include
 #    if __has_include(<version>)
@@ -25350,15 +14216,6 @@ namespace futures {
 
 #    endif
 #endif
-
-// #include <futures/algorithm/partitioner/partitioner.h>
-
-// #include <futures/executor/default_executor.h>
-
-// #include <futures/executor/inline_executor.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -25426,7 +14283,7 @@ namespace futures {
         ,
         std::enable_if_t<
             !is_executor_v<
-                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
+                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
             int> = 0
 #endif
         >
@@ -25445,11 +14302,66 @@ namespace futures {
 
 #endif // FUTURES_ALGORITHM_POLICIES_H
 
+// #include <futures/algorithm/traits/is_indirectly_unary_invocable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_H
+
+// #include <futures/algorithm/traits/is_indirectly_readable.h>
+
+// #include <futures/algorithm/traits/is_convertible_to.h>
+
+// #include <futures/algorithm/traits/iter_value.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 indirectly_unary_invocable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class F, class I>
+    using is_indirectly_unary_invocable = __see_below__;
+#else
+    template <class F, class I, class = void>
+    struct is_indirectly_unary_invocable : std::false_type
+    {};
+
+    template <class F, class I>
+    struct is_indirectly_unary_invocable<
+        F, I,
+        std::enable_if_t<
+            // clang-format off
+            is_indirectly_readable_v<I> &&
+            std::is_copy_constructible_v<F> &&
+            std::is_invocable_v<F&, iter_value_t<I>&>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class F, class I>
+    bool constexpr is_indirectly_unary_invocable_v = is_indirectly_unary_invocable<F, I>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_H
+
+// #include <futures/algorithm/traits/is_input_range.h>
+
 // #include <futures/executor/default_executor.h>
 
 // #include <futures/executor/inline_executor.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <execution>
 
@@ -25479,13 +14391,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
                 int> = 0>
 #endif
         decltype(auto)
         operator()(const E &ex, P p, I first, S last, Fun f) const {
-            return Derived().run(ex, std::forward<P>(p), first, last, f);
+            return Derived().run(ex, p, first, last, f);
         }
 
         /// \overload execution policy instead of executor
@@ -25499,19 +14418,23 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                !is_executor_v<E> &&
+                is_execution_policy_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &, P p, I first, S last, Fun f) const {
-            return Derived().operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                f);
+            return Derived()
+                .run(make_policy_executor<E, I, S>(), p, first, last, f);
         }
 
         /// \overload Ranges
@@ -25523,20 +14446,19 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, P p, R &&r, Fun f) const {
-            return Derived().operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            return operator()(ex, p, std::begin(r), std::end(r), std::move(f));
         }
 
         /// \overload Iterators / default parallel executor
@@ -25548,21 +14470,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_partitioner_v<P, I,S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format off
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(P p, I first, S last, Fun f) const {
-            return Derived().operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                std::move(f));
+            return Derived().
+            run(make_default_executor(), p, first, last, std::move(f));
         }
 
         /// \overload Ranges / default parallel executor
@@ -25573,9 +14494,12 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_range_partitioner_v<P,R> &&
+                is_input_range_v<R> &&
+                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
@@ -25583,7 +14507,7 @@ namespace futures {
         operator()(P p, R &&r, Fun f) const {
             return Derived().operator()(
                 make_default_executor(),
-                std::forward<P>(p),
+                p,
                 std::begin(r),
                 std::end(r),
                 std::move(f));
@@ -25598,8 +14522,13 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
@@ -25621,8 +14550,12 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_range_v<R> &&
+                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
@@ -25644,8 +14577,12 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
@@ -25666,8 +14603,11 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                futures::detail::input_range<
-                    R> && futures::detail::indirectly_unary_invocable<Fun, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_input_range_v<R> &&
+                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
@@ -25689,8 +14629,6 @@ namespace futures {
 #endif // FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
 
 // #include <futures/futures.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/algorithm/detail/try_async.h>
 #ifndef FUTURES_TRY_ASYNC_H
@@ -25785,6 +14723,10 @@ namespace futures {
      *  @{
      */
 
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
     /// \brief Functor representing the overloads for the @ref all_of function
     class all_of_functor : public unary_invoke_algorithm_functor<all_of_functor>
     {
@@ -25811,26 +14753,33 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
                 int> = 0
 #endif
             >
         bool
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+            if (bool always_sequential
+                = std::is_same_v<E, inline_executor> || is_forward_iterator_v<I>;
+                always_sequential || middle == last)
             {
                 return std::all_of(first, last, f);
             }
 
             // Run all_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run all_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -25854,7 +14803,8 @@ namespace futures {
     /// \brief Checks if a predicate is true for all the elements in a range
     inline constexpr all_of_functor all_of;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_ALL_OF_H
@@ -25865,11 +14815,11 @@ namespace futures {
 
 // #include <futures/algorithm/partitioner/partitioner.h>
 
+// #include <futures/algorithm/traits/is_forward_iterator.h>
+
 // #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 
 // #include <futures/futures.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/algorithm/detail/try_async.h>
 
@@ -25882,10 +14832,12 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
 
     /// \brief Functor representing the overloads for the @ref any_of function
-    class any_of_functor
-        : public unary_invoke_algorithm_functor<any_of_functor>
+    class any_of_functor : public unary_invoke_algorithm_functor<any_of_functor>
     {
         friend unary_invoke_algorithm_functor<any_of_functor>;
 
@@ -25910,26 +14862,32 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
                 int> = 0
 #endif
             >
         bool
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+            if (bool is_always_sequential
+                = std::is_same_v<E, inline_executor> || is_forward_iterator_v<I>;
+                is_always_sequential || middle == last)
             {
                 return std::any_of(first, last, f);
             }
 
             // Run any_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run any_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -25953,7 +14911,8 @@ namespace futures {
     /// \brief Checks if a predicate is true for any of the elements in a range
     inline constexpr any_of_functor any_of;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_ANY_OF_H
@@ -25962,7 +14921,206 @@ namespace futures {
 #ifndef FUTURES_COUNT_H
 #define FUTURES_COUNT_H
 
+// #include <futures/algorithm/comparisons/equal_to.h>
+#ifndef FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
+#define FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
+
+// #include <futures/algorithm/traits/is_equality_comparable_with.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
+#define FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
+
+// #include <futures/algorithm/traits/is_equality_comparable.h>
+
+// #include <futures/algorithm/traits/is_weakly_equality_comparable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_EQUALITY_COMPARABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_EQUALITY_COMPARABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 weakly_equality_comparable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T, class U>
+    using is_weakly_equality_comparable = __see_below__;
+#else
+    template <class T, class U, class = void>
+    struct is_weakly_equality_comparable : std::false_type
+    {};
+
+    template <class T, class U>
+    struct is_weakly_equality_comparable<
+        T,
+        U,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<const std::remove_reference_t<T>&>() == std::declval<const std::remove_reference_t<U>&>()),
+            decltype(std::declval<const std::remove_reference_t<T>&>() != std::declval<const std::remove_reference_t<U>&>()),
+            decltype(std::declval<const std::remove_reference_t<U>&>() == std::declval<const std::remove_reference_t<T>&>()),
+            decltype(std::declval<const std::remove_reference_t<U>&>() != std::declval<const std::remove_reference_t<T>&>())
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T, class U>
+    bool constexpr is_weakly_equality_comparable_v
+        = is_weakly_equality_comparable<T, U>::value;
+
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_EQUALITY_COMPARABLE_H
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 equality_comparable_with
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T, class U>
+    using is_equality_comparable_with = __see_below__;
+#else
+    template <class T, class U, class = void>
+    struct is_equality_comparable_with : std::false_type
+    {};
+
+    template <class T, class U>
+    struct is_equality_comparable_with<
+        T,
+        U,
+        std::enable_if_t<
+            // clang-format off
+            is_equality_comparable_v<T> &&
+            is_equality_comparable_v<U> &&
+            is_weakly_equality_comparable_v<T,U>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class T, class U>
+    bool constexpr is_equality_comparable_with_v
+        = is_equality_comparable_with<T, U>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
+
+// #include <utility>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** A C++17 functor equivalent to the C++20 std::ranges::equal_to
+     */
+    struct equal_to
+    {
+        template <
+            typename T,
+            typename U
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<is_equality_comparable_with_v<T, U>, int> = 0
+#endif
+            >
+        constexpr bool
+        operator()(T &&t, U &&u) const {
+            return std::forward<T>(t) == std::forward<U>(u);
+        }
+        using is_transparent = void;
+    };
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
+
 // #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/is_forward_iterator.h>
+
+// #include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
+
+// #include <futures/algorithm/traits/is_indirectly_readable.h>
+
+// #include <futures/algorithm/traits/is_convertible_to.h>
+
+// #include <futures/algorithm/traits/iter_value.h>
+
+// #include <type_traits>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 indirectly_binary_invocable
+     * concept
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class F, class I1, class I2>
+    using is_indirectly_binary_invocable = __see_below__;
+#else
+    template <class F, class I1, class I2, class = void>
+    struct is_indirectly_binary_invocable : std::false_type
+    {};
+
+    template <class F, class I1, class I2>
+    struct is_indirectly_binary_invocable<
+        F, I1, I2,
+        std::enable_if_t<
+            // clang-format off
+            is_indirectly_readable_v<I1> &&
+            is_indirectly_readable_v<I2> &&
+            std::is_copy_constructible_v<F> &&
+            std::is_invocable_v<F&, iter_value_t<I1>&, iter_value_t<I2>&>
+            // clang-format on
+            >> : std::true_type
+    {};
+#endif
+    template <class F, class I1, class I2>
+    bool constexpr is_indirectly_binary_invocable_v = is_indirectly_binary_invocable<F, I1, I2>::value;
+    /** @}*/
+    /** @}*/
+
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
+
+// #include <futures/algorithm/traits/iter_difference.h>
 
 // #include <futures/algorithm/traits/value_cmp_algorithm.h>
 #ifndef FUTURES_ALGORITHM_VALUE_CMP_ALGORITHM_H
@@ -25979,15 +15137,17 @@ namespace futures {
 /// \see https://en.cppreference.com/w/cpp/ranges/view
 ///
 
+// #include <futures/algorithm/comparisons/equal_to.h>
+
 // #include <futures/algorithm/partitioner/partitioner.h>
 
 // #include <futures/algorithm/policies.h>
 
+// #include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
+
 // #include <futures/executor/default_executor.h>
 
 // #include <futures/executor/inline_executor.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <execution>
 
@@ -26017,14 +15177,19 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, P p, I first, S last, T f) const {
-            return Derived().run(ex, std::forward<P>(p), first, last, f);
+            return Derived().run(ex, p, first, last, f);
         }
 
         /// \overload execution policy instead of executor
@@ -26038,19 +15203,21 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                !is_executor_v<E> &&
+                is_execution_policy_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &, P p, I first, S last, T f) const {
-            return Derived().operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                f);
+            return Derived()
+                .run(make_policy_executor<E, I, S>(), p, first, last, f);
         }
 
         /// \overload Ranges
@@ -26062,20 +15229,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, P p, R &&r, T f) const {
-            return Derived().operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            return Derived()
+                .run(ex, p, std::begin(r), std::end(r), std::move(f));
         }
 
         /// \overload Iterators / default parallel executor
@@ -26087,21 +15254,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(P p, I first, S last, T f) const {
-            return Derived().operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                std::move(f));
+            return Derived()
+                .run(make_default_executor(), p, first, last, std::move(f));
         }
 
         /// \overload Ranges / default parallel executor
@@ -26112,17 +15278,20 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(P p, R &&r, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
-                std::forward<P>(p),
+                p,
                 std::begin(r),
                 std::end(r),
                 std::move(f));
@@ -26137,14 +15306,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, I first, S last, T f) const {
-            return Derived().operator()(
+            return operator()(
                 ex,
                 make_default_partitioner(first, last),
                 first,
@@ -26160,14 +15333,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(const E &ex, R &&r, T f) const {
-            return Derived().operator()(
+            return operator()(
                 ex,
                 make_default_partitioner(std::forward<R>(r)),
                 std::begin(r),
@@ -26183,14 +15360,18 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
+                // clang-format off
                 is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
+                    I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(I first, S last, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
                 make_default_partitioner(first, last),
                 first,
@@ -26205,14 +15386,17 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<T>,
+                // clang-format off
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
+                std::is_copy_constructible_v<T>,
+                // clang-format on
                 int> = 0
 #endif
             >
         decltype(auto)
         operator()(R &&r, T f) const {
-            return Derived().operator()(
+            return Derived().run(
                 make_default_executor(),
                 make_default_partitioner(r),
                 std::begin(r),
@@ -26228,8 +15412,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
@@ -26241,6 +15423,11 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
 
     /// \brief Functor representing the overloads for the @ref count function
     class count_functor : public value_cmp_algorithm_functor<count_functor>
@@ -26264,29 +15451,39 @@ namespace futures {
             class P,
             class I,
             class S,
-            class T,
+            class T
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                int> = 0>
-        futures::detail::iter_difference_t<I>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        iter_difference_t<I>
         run(const E &ex, P p, I first, S last, T v) const {
             auto middle = p(first, last);
             if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                || std::
+                    is_same_v<E, inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::count(first, last, v);
             }
 
             // Run count on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, v);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, v, this]() {
+                      return operator()(ex, p, middle, last, v);
+                  });
 
             // Run count on lhs: [first, middle]
-            bool lhs = operator()(ex, p, first, middle, v);
+            auto lhs = operator()(ex, p, first, middle, v);
 
             // Wait for rhs
             if (is_ready(rhs_started)) {
@@ -26303,7 +15500,8 @@ namespace futures {
     /// \brief Returns the number of elements matching an element
     inline constexpr count_functor count;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_COUNT_H
@@ -26318,8 +15516,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
@@ -26332,11 +15528,14 @@ namespace futures {
      *  @{
      */
 
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
     /// \brief Functor representing the overloads for the @ref count_if function
     class count_if_functor
         : public unary_invoke_algorithm_functor<count_if_functor>
     {
-
         friend unary_invoke_algorithm_functor<count_if_functor>;
 
         /// \brief Complete overload of the count_if algorithm
@@ -26356,29 +15555,40 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_difference_t<I>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        iter_difference_t<I>
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+            if (bool always_sequential
+                = std::is_same_v<E, inline_executor> || is_forward_iterator_v<I>;
+                always_sequential || middle == last)
             {
                 return std::count_if(first, last, f);
             }
 
             // Run count_if on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run count_if on lhs: [first, middle]
-            bool lhs = operator()(ex, p, first, middle, f);
+            auto lhs = operator()(ex, p, first, middle, f);
 
             // Wait for rhs
             if (is_ready(rhs_started)) {
@@ -26395,7 +15605,8 @@ namespace futures {
     /// \brief Returns the number of elements satisfying specific criteria
     inline constexpr count_if_functor count_if;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_COUNT_IF_H
@@ -26404,13 +15615,15 @@ namespace futures {
 #ifndef FUTURES_FIND_H
 #define FUTURES_FIND_H
 
+// #include <futures/algorithm/comparisons/equal_to.h>
+
 // #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
 
 // #include <futures/algorithm/traits/value_cmp_algorithm.h>
 
 // #include <futures/futures.h>
-
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 // #include <futures/algorithm/detail/try_async.h>
 
@@ -26424,11 +15637,13 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref find function
-    class find_functor
-        : public value_cmp_algorithm_functor<find_functor>
-    {
+    /** \addtogroup functions Functions
+     *  @{
+     */
 
+    /// \brief Functor representing the overloads for the @ref find function
+    class find_functor : public value_cmp_algorithm_functor<find_functor>
+    {
         friend value_cmp_algorithm_functor<find_functor>;
 
         /// \brief Complete overload of the find algorithm
@@ -26448,26 +15663,37 @@ namespace futures {
             class P,
             class I,
             class S,
-            class T,
+            class T
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<futures::detail::equal_to, T *, I>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<equal_to, T *, I>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         I
         run(const E &ex, P p, I first, S last, const T &v) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::find(first, last, v);
             }
 
             // Run find on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, v);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, v, this]() {
+                      return operator()(ex, p, middle, last, v);
+                  });
 
             // Run find on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, v);
@@ -26496,7 +15722,8 @@ namespace futures {
     /// \brief Finds the first element equal to another element
     inline constexpr find_functor find;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FIND_H
@@ -26511,8 +15738,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
@@ -26522,6 +15747,10 @@ namespace futures {
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup functions Functions
      *  @{
      */
 
@@ -26548,26 +15777,38 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         I
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::find_if(first, last, f);
             }
 
             // Run find_if on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run find_if on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, f);
@@ -26596,7 +15837,8 @@ namespace futures {
     /// \brief Finds the first element satisfying specific criteria
     inline constexpr find_if_functor find_if;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FIND_IF_H
@@ -26611,8 +15853,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
@@ -26624,6 +15864,10 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
 
     /// \brief Functor representing the overloads for the @ref find_if_not
     /// function
@@ -26649,26 +15893,38 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         I
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::find_if_not(first, last, f);
             }
 
             // Run find_if_not on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run find_if_not on lhs: [first, middle]
             I lhs = operator()(ex, p, first, middle, f);
@@ -26697,7 +15953,8 @@ namespace futures {
     /// \brief Finds the first element not satisfying specific criteria
     inline constexpr find_if_not_functor find_if_not;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FIND_IF_NOT_H
@@ -26712,8 +15969,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <futures/futures/detail/empty_base.h>
@@ -26725,6 +15980,9 @@ namespace futures {
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+    /** \addtogroup functions Functions
      *  @{
      */
 
@@ -26781,7 +16039,7 @@ namespace futures {
                 constexpr bool cannot_parallelize
                     = std::is_same_v<
                           Executor,
-                          inline_executor> || futures::detail::forward_iterator<I>;
+                          inline_executor> || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     std::for_each(first, last, f);
                 } else {
@@ -26868,7 +16126,7 @@ namespace futures {
             ,
             std::enable_if_t<
                 is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
+                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && is_sentinel_for_v<S, I> && is_indirectly_unary_invocable_v<Fun, I> && std::is_copy_constructible_v<Fun>,
                 int> = 0
 #endif
             >
@@ -26891,7 +16149,8 @@ namespace futures {
     /// \brief Applies a function to a range of elements
     inline constexpr for_each_functor for_each;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_FOR_EACH_H
@@ -26906,8 +16165,6 @@ namespace futures {
 
 // #include <futures/futures.h>
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
-
 // #include <futures/algorithm/detail/try_async.h>
 
 // #include <execution>
@@ -26919,6 +16176,10 @@ namespace futures {
     /** \addtogroup algorithms Algorithms
      *  @{
      */
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
 
     /// \brief Functor representing the overloads for the @ref none_of function
     class none_of_functor
@@ -26943,26 +16204,38 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_unary_invocable<Fun, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
         bool
         run(const E &ex, P p, I first, S last, Fun f) const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::none_of(first, last, f);
             }
 
             // Run none_of on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, f);
-            });
+            auto [rhs, rhs_started, rhs_cancel]
+                = try_async(ex, [ex, p, middle, last, f, this]() {
+                      return operator()(ex, p, middle, last, f);
+                  });
 
             // Run none_of on lhs: [first, middle]
             bool lhs = operator()(ex, p, first, middle, f);
@@ -26986,7 +16259,8 @@ namespace futures {
     /// \brief Checks if a predicate is true for none of the elements in a range
     inline constexpr none_of_functor none_of;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_NONE_OF_H
@@ -26997,9 +16271,21 @@ namespace futures {
 
 // #include <futures/algorithm/partitioner/partitioner.h>
 
-// #include <futures/futures.h>
+// #include <futures/algorithm/traits/binary_invoke_algorithm.h>
+#ifndef FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
+#define FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
 
-// #include <futures/algorithm/detail/traits/range/range/concepts.h>
+// #include <futures/algorithm/partitioner/partitioner.h>
+
+// #include <futures/algorithm/policies.h>
+
+// #include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
+
+// #include <futures/algorithm/traits/is_input_range.h>
+
+// #include <futures/algorithm/traits/range_value.h>
+
+// #include <futures/futures.h>
 
 // #include <futures/algorithm/detail/try_async.h>
 
@@ -27014,11 +16300,579 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref reduce function
-    class reduce_functor
+    /** \addtogroup algorithm-traits Algorithm Traits
+     *  @{
+     */
+
+    /// \brief Binary algorithm overloads
+    ///
+    /// CRTP class with the overloads for classes that aggregate
+    /// elements in a sequence with an binary function. This includes
+    /// algorithms such as reduce and accumulate.
+    template <class Derived>
+    class binary_invoke_algorithm_functor
     {
     public:
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+            const {
+            return Derived().run(ex, p, first, last, i, f);
+        }
+
+        /// \overload default init value
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>())
+            const {
+            if (first != last) {
+                return Derived().run(ex, p, std::next(first), last, *first, f);
+            } else {
+                return iter_value_t<I>{};
+            }
+        }
+
+        /// \overload execution policy instead of executor
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                !is_executor_v<E> &&
+                is_execution_policy_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>())
+            const {
+            return Derived().
+            operator()(make_policy_executor<E, I, S>(), p, first, last, i, f);
+        }
+
+        /// \overload execution policy instead of executor / default init value
+        template <
+            class E,
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                !is_executor_v<E> &&
+                is_execution_policy_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &, P p, I first, S last, Fun f = std::plus<>())
+            const {
+            return
+            operator()(make_policy_executor<E, I, S>(), p, first, last, f);
+        }
+
+        /// \overload Ranges
+        template <
+            class E,
+            class P,
+            class R,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_range_partitioner_v<P,R> &&
+                is_input_range_v<R> &&
+                std::is_same_v<range_value_t<R>, T> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
+            return Derived().
+            operator()(ex, p, std::begin(r), std::end(r), i, std::move(f));
+        }
+
+        /// \overload Ranges / default init value
+        template <
+            class E,
+            class P,
+            class R,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_range_partitioner_v<P,R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
+            return operator()(ex, p, std::begin(r), std::end(r), std::move(f));
+        }
+
+        /// \overload Iterators / default parallel executor
+        template <
+            class P,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format on
+                is_partitioner_v<
+                    P,
+                    I,
+                    S> && is_input_iterator_v<I> && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T> && is_indirectly_binary_invocable_v<Fun, I, I> && std::is_copy_constructible_v<Fun>
+                // clang-format off
+                , int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
+            return
+            Derived().run(make_default_executor(), p, first, last, i, std::move(f));
+        }
+
+        /// \overload Iterators / default parallel executor / default init value
+        template <
+            class P,
+            class I,
+            class S,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_partitioner_v<P,I,S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(P p, I first, S last, Fun f = std::plus<>()) const {
+            return
+            operator()(make_default_executor(), p, first, last, std::move(f));
+        }
+
+        /// \overload Ranges / default parallel executor
+        template <
+            class P,
+            class R,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_range_partitioner_v<P,R> &&
+                is_input_range_v<R> &&
+                std::is_same_v<range_value_t<R>, T> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
+            return Derived().run(
+                make_default_executor(),
+                p,
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
+        }
+
+        /// \overload Ranges / default parallel executor / default init value
+        template <
+            class P,
+            class R,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_range_partitioner_v<P, R> &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(P p, R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                p,
+                std::begin(r),
+                std::end(r),
+                std::move(f));
+        }
+
+        /// \overload Iterators / default partitioner
+        template <
+            class E,
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>())
+            const {
+            return operator()(
+                ex,
+                make_default_partitioner(first, last),
+                first,
+                last,
+                i,
+                std::move(f));
+        }
+
+        /// \overload Iterators / default partitioner / default init value
+        template <
+            class E,
+            class I,
+            class S,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(first, last),
+                first,
+                last,
+                std::move(f));
+        }
+
+        /// \overload Ranges / default partitioner
+        template <
+            class E,
+            class R,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_range_v<R> &&
+                std::is_same_v<range_value_t<R>, T> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(std::forward<R>(r)),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
+        }
+
+        /// \overload Ranges / default partitioner / default init value
+        template <
+            class E,
+            class R,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                (is_executor_v<E> || is_execution_policy_v<E>) &&
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                ex,
+                make_default_partitioner(std::forward<R>(r)),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
+        }
+
+        /// \overload Iterators / default executor / default partitioner
+        template <
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(I first, S last, T i, Fun f = std::plus<>()) const {
+            return Derived().run(
+                make_default_executor(),
+                make_default_partitioner(first, last),
+                first,
+                last,
+                i,
+                std::move(f));
+        }
+
+        /// \overload Iterators / default executor / default partitioner /
+        /// default init value
+        template <
+            class I,
+            class S,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(I first, S last, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(first, last),
+                first,
+                last,
+                std::move(f));
+        }
+
+        /// \overload Ranges / default executor / default partitioner
+        template <
+            class R,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_range_v<R> &&
+                std::is_same_v<range_value_t<R>, T> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(R &&r, T i, Fun f = std::plus<>()) const {
+            return Derived().run(
+                make_default_executor(),
+                make_default_partitioner(r),
+                std::begin(r),
+                std::end(r),
+                i,
+                std::move(f));
+        }
+
+        /// \overload Ranges / default executor / default partitioner / default
+        /// init value
+        template <
+            class R,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_range_v<R> &&
+                is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        decltype(auto)
+        operator()(R &&r, Fun f = std::plus<>()) const {
+            return operator()(
+                make_default_executor(),
+                make_default_partitioner(r),
+                std::begin(r),
+                std::end(r),
+                std::move(f));
+        }
+    };
+
+    /** @}*/
+    /** @}*/
+} // namespace futures
+
+#endif // FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
+
+// #include <futures/futures.h>
+
+// #include <futures/algorithm/detail/try_async.h>
+
+// #include <execution>
+
+// #include <numeric>
+
+// #include <variant>
+
+
+namespace futures {
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+    /** \addtogroup functions Functions
+     *  @{
+     */
+
+
+    /// \brief Functor representing the overloads for the @ref reduce function
+    class reduce_functor
+        : public binary_invoke_algorithm_functor<reduce_functor>
+    {
+        friend binary_invoke_algorithm_functor<reduce_functor>;
+
         /// \brief Complete overload of the reduce algorithm
+        ///
         /// The reduce algorithm is equivalent to a version std::accumulate
         /// where the binary operation is applied out of order. \tparam E
         /// Executor type \tparam P Partitioner type \tparam I Iterator type
@@ -27036,19 +16890,30 @@ namespace futures {
             class I,
             class S,
             class T,
-            class Fun = std::plus<>,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
+                int> = 0
+#endif
+            >
         T
-        operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+        run(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             auto middle = p(first, last);
             if (middle == last
                 || std::is_same_v<
                     E,
-                    inline_executor> || futures::detail::forward_iterator<I>)
+                    inline_executor> || is_forward_iterator_v<I>)
             {
                 return std::reduce(first, last, i, f);
             }
@@ -27072,381 +16937,14 @@ namespace futures {
                 return f(lhs, i_rhs);
             }
         }
-
-        /// \overload default init value
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>())
-            const {
-            if (first != last) {
-                return operator()(
-                    ex,
-                    std::forward<P>(p),
-                    std::next(first),
-                    last,
-                    *first,
-                    f);
-            } else {
-                return futures::detail::iter_value_t<I>{};
-            }
-        }
-
-        /// \overload execution policy instead of executor
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>())
-            const {
-            return operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                i,
-                f);
-        }
-
-        /// \overload execution policy instead of executor / default init value
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                !is_executor_v<
-                    E> && is_execution_policy_v<E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &, P p, I first, S last, Fun f = std::plus<>())
-            const {
-            return operator()(
-                make_policy_executor<E, I, S>(),
-                std::forward<P>(p),
-                first,
-                last,
-                f);
-        }
-
-        /// \overload Ranges
-        template <
-            class E,
-            class P,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default init value
-        template <
-            class E,
-            class P,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default parallel executor
-        template <
-            class P,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default parallel executor / default init value
-        template <
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(P p, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default parallel executor
-        template <
-            class P,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default parallel executor / default init value
-        template <
-            class P,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_range_partitioner_v<
-                    P,
-                    R> && futures::detail::input_range<R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(P p, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                std::forward<P>(p),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default partitioner
-        template <
-            class E,
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>())
-            const {
-            return operator()(
-                ex,
-                make_default_partitioner(first, last),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default partitioner / default init value
-        template <
-            class E,
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default partitioner
-        template <
-            class E,
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(std::forward<R>(r)),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default partitioner / default init value
-        template <
-            class E,
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                (is_executor_v<E> || is_execution_policy_v<E>) &&futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                ex,
-                make_default_partitioner(std::forward<R>(r)),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
-
-        /// \overload Iterators / default executor / default partitioner
-        template <
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && std::is_same_v<futures::detail::iter_value_t<I>, T> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(I first, S last, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(first, last),
-                first,
-                last,
-                i,
-                std::move(f));
-        }
-
-        /// \overload Iterators / default executor / default partitioner /
-        /// default init value
-        template <
-            class I,
-            class S,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                is_input_iterator_v<
-                    I> && futures::detail::sentinel_for<S, I> && futures::detail::indirectly_binary_invocable_<Fun, I, I> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::iter_value_t<I>
-        operator()(I first, S last, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default executor / default partitioner
-        template <
-            class R,
-            class T,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                futures::detail::input_range<
-                    R> && std::is_same_v<futures::detail::range_value_t<R>, T> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        T
-        operator()(R &&r, T i, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(r),
-                std::begin(r),
-                std::end(r),
-                i,
-                std::move(f));
-        }
-
-        /// \overload Ranges / default executor / default partitioner / default
-        /// init value
-        template <
-            class R,
-            class Fun = std::plus<>,
-            std::enable_if_t<
-                futures::detail::input_range<
-                    R> && futures::detail::indirectly_binary_invocable_<Fun, futures::detail::iterator_t<R>, futures::detail::iterator_t<R>> && std::is_copy_constructible_v<Fun>,
-                int> = 0>
-        futures::detail::range_value_t<R>
-        operator()(R &&r, Fun f = std::plus<>()) const {
-            return operator()(
-                make_default_executor(),
-                make_default_partitioner(r),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
-        }
     };
 
     /// \brief Sums up (or accumulate with a custom function) a range of
     /// elements, except out of order
     inline constexpr reduce_functor reduce;
 
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/
+    /** @}*/
 } // namespace futures
 
 #endif // FUTURES_REDUCE_H

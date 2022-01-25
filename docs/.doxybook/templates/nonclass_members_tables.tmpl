@@ -38,7 +38,7 @@
 | Classes        |     |
 | -------------- |-----|
 {% for child in publicClasses -%}
-| **[{{ stripNamespace(child.name) }}]({{child.url}})** | {% if existsIn(child, "brief") %}{{child.brief}}{% else %}{{child.name}} {{child.kind}}{% endif %}<br> <sup><span style="color:green">({{child.kind}})</span></sup> |
+| **[{{ stripNamespace(child.name) }}]({{child.url}})** | {% if existsIn(child, "brief") %}{{child.brief}}{% else %}{{child.name}}{% endif %}<br> <sup><span style="color:green">({{child.kind}})</span></sup> |
 {% endfor %}
 {% endif -%}
 {%- if exists("publicTypes") %}
@@ -46,7 +46,7 @@
 | Types          |           |
 | -------------- |-----------|
 {% for child in publicTypes -%}
-| **[{{ stripNamespace(child.name) }}]({{child.url}})** | {% if existsIn(child, "brief") %}{{child.brief}}{% else %}{{child.name}} {{child.kind}}{% endif %}<br> <sup><span style="color:green">({{child.kind}})</span></sup> |
+| **[{{ stripNamespace(child.name) }}]({{child.url}})** | {% if existsIn(child, "brief") %}{{child.brief}}{% else if existsIn(child, "type") %}{% if child.type == "__see_below__" %}`/* see below */`{% else %}`{{child.type}}`{% endif %}{% else %}`{{child.name}}`{% endif %}<br> <sup><span style="color:green">({{child.kind}})</span></sup> |
 {% endfor %}
 {% endif -%}
 {%- if exists("publicSlots") %} 
@@ -119,10 +119,10 @@ template <{% for param in child.templateParams -%}
 | Attributes               |            |
 | -------------- | -------------- |
 {% for child in publicAttributes -%}
-| {% if existsIn(child, "type") %}{{child.type}} {% endif -%}
-| **[{{child.name}}]({{child.url}})** {% if existsIn(child, "brief") %}<br>{{child.brief}}{% endif %} |
+| **[{{ stripNamespace(child.name) }}]({{child.url}})** | {% if existsIn(child, "brief") %}{{child.brief}}{% else if existsIn(child, "type") %}{% if child.type == "__see_below__" %}`/* see below */`{% else %}`{{child.type}}`{% endif %}{% else %}`{{child.name}}`{% endif %}<br> <sup><span style="color:green">({{child.kind}})</span></sup> |
 {% endfor %}
 {% endif -%}
+
 {%- if exists("defines") %}
 
 | Defines               |            |

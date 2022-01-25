@@ -8,8 +8,10 @@
 #ifndef FUTURES_WAIT_FOR_ANY_H
 #define FUTURES_WAIT_FOR_ANY_H
 
+#include <futures/algorithm/traits/iter_value.h>
+#include <futures/algorithm/traits/is_range.h>
+#include <futures/algorithm/traits/range_value.h>
 #include <futures/futures/traits/is_future.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/futures/detail/waiter_for_any.h>
 #include <type_traits>
 
@@ -44,7 +46,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::
-            enable_if_t<is_future_v<detail::iter_value_t<Iterator>>, int> = 0
+            enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
 #endif
         >
     Iterator
@@ -81,11 +83,11 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         typename std::enable_if_t<
-            detail::range<Range> && is_future_v<detail::range_value_t<Range>>,
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
             int> = 0
 #endif
         >
-    detail::iterator_t<Range>
+    iterator_t<Range>
     wait_for_any(Range &&r) {
         return wait_for_any(std::begin(r), std::end(r));
     }

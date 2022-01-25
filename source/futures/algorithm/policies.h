@@ -20,17 +20,15 @@
 ///
 
 #include <execution>
+#include <futures/algorithm/partitioner/partitioner.h>
+#include <futures/executor/default_executor.h>
+#include <futures/executor/inline_executor.h>
 
 #ifdef __has_include
 #    if __has_include(<version>)
 #        include <version>
 #    endif
 #endif
-
-#include <futures/algorithm/partitioner/partitioner.h>
-#include <futures/executor/default_executor.h>
-#include <futures/executor/inline_executor.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 
 namespace futures {
     /** \addtogroup algorithms Algorithms
@@ -98,7 +96,7 @@ namespace futures {
         ,
         std::enable_if_t<
             !is_executor_v<
-                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && futures::detail::sentinel_for<S, I>,
+                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
             int> = 0
 #endif
         >

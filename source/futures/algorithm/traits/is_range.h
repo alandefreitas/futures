@@ -5,13 +5,22 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
-#define FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGE_H
+#define FUTURES_ALGORITHM_TRAITS_IS_RANGE_H
 
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 range concept
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 range concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -25,13 +34,19 @@ namespace futures {
     struct is_range<
         T,
         std::void_t<
+            // clang-format off
             decltype(*begin(std::declval<T>())),
-            decltype(*end(std::declval<T>()))>> : std::true_type
+            decltype(*end(std::declval<T>()))
+            // clang-format on
+            >> : std::true_type
     {};
 #endif
     template <class T>
     bool constexpr is_range_v = is_range<T>::value;
 
+    /** @}*/
+    /** @}*/
+
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_RANGES_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_RANGE_H

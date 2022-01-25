@@ -8,6 +8,8 @@
 #ifndef FUTURES_CONTINUATION_UNWRAP_H
 #define FUTURES_CONTINUATION_UNWRAP_H
 
+#include <futures/algorithm/traits/is_range.h>
+#include <futures/algorithm/traits/range_value.h>
 #include <futures/futures/basic_future.h>
 #include <futures/futures/traits/is_future.h>
 #include <futures/futures/traits/unwrap_future.h>
@@ -22,7 +24,6 @@
 #include <futures/adaptor/detail/traits/tuple_type_transform.h>
 #include <futures/adaptor/detail/traits/type_member_or.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/futures/detail/small_vector.h>
 #include <futures/futures/detail/traits/type_member_or_void.h>
 
@@ -43,7 +44,7 @@ namespace futures::detail {
     template <typename Sequence>
     struct range_or_tuple_element_type<
         Sequence,
-        std::enable_if_t<range<Sequence>>>
+        std::enable_if_t<is_range_v<Sequence>>>
     {
         using type = range_value_t<Sequence>;
     };
@@ -100,13 +101,13 @@ namespace futures::detail {
             = is_future_v<std::decay_t<
                   value_type>> && std::is_invocable_v<Function, PrefixArgs..., unwrap_future_t<value_type>>;
         constexpr bool is_tuple = is_tuple_v<value_type>;
-        constexpr bool is_range = range<value_type>;
+        constexpr bool is_range = is_range_v<value_type>;
 
         // 5 main unwrapping paths: (no unwrap, no input, single future,
         // when_all, when_any)
         constexpr bool direct_unwrap = value_unwrap || lvalue_unwrap
                                        || rvalue_unwrap || double_unwrap;
-        constexpr bool sequence_unwrap = is_tuple || range<value_type>;
+        constexpr bool sequence_unwrap = is_tuple || is_range_v<value_type>;
         constexpr bool when_any_unwrap = is_when_any_result_v<value_type>;
 
         constexpr auto fail = []() {
@@ -196,7 +197,7 @@ namespace futures::detail {
             } else if constexpr (sequence_unwrap && is_range) {
                 // when_all vector<future<T>> ->
                 // function(futures::small_vector<T>)
-                using range_value_t = detail::range_value_t<value_type>;
+                using range_value_t = range_value_t<value_type>;
                 constexpr bool is_range_of_futures = is_future_v<
                     std::decay_t<range_value_t>>;
                 using continuation_vector = detail::small_vector<
@@ -261,7 +262,7 @@ namespace futures::detail {
                 // when_any_result<tuple<future<T>, future<T>, ...>> ->
                 // continuation(future<T>)
                 constexpr bool when_any_same_type
-                    = range<
+                    = is_range_v<
                           when_any_sequence> || is_single_type_tuple_v<when_any_sequence>;
                 using when_any_element_type = range_or_tuple_element_type_t<
                     when_any_sequence>;

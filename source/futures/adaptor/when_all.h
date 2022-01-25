@@ -37,9 +37,9 @@
 /// and are invalidated, as usual. The `when_all_future` cannot be shared.
 
 #include <futures/futures/traits/to_future.h>
+#include <futures/algorithm/traits/is_range.h>
 #include <futures/adaptor/detail/traits/is_tuple.h>
 #include <futures/adaptor/detail/tuple_algorithm.h>
-#include <futures/algorithm/detail/traits/range/range/concepts.h>
 #include <futures/futures/detail/small_vector.h>
 
 namespace futures {
@@ -67,7 +67,7 @@ namespace futures {
     private:
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
-        static constexpr bool sequence_is_range = futures::detail::range<
+        static constexpr bool sequence_is_range = is_range_v<
             sequence_type>;
         static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
@@ -373,7 +373,7 @@ namespace futures {
         template <typename Sequence>
         struct is_when_all_range_future<
             when_all_future<Sequence>,
-            std::enable_if_t<futures::detail::range<Sequence>>> : std::true_type
+            std::enable_if_t<is_range_v<Sequence>>> : std::true_type
         {};
         template <class T>
         constexpr bool is_when_all_range_future_v = is_when_all_range_future<
@@ -533,7 +533,7 @@ namespace futures {
         class Range
 #ifndef FUTURES_DOXYGEN
         ,
-        std::enable_if_t<futures::detail::range<std::decay_t<Range>>, int> = 0
+        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
 #endif
         >
     when_all_future<

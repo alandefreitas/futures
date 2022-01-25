@@ -16,7 +16,16 @@
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20 iter_value
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20 iter_value
      * concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -89,6 +98,9 @@ namespace futures {
 #endif
     template <class T>
     using iter_value_t = typename iter_value<T>::type;
+
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 

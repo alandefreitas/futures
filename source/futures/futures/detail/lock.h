@@ -8,7 +8,7 @@
 #ifndef FUTURES_LOCK_H
 #define FUTURES_LOCK_H
 
-#include <futures/algorithm/detail/traits/range/iterator/concepts.h>
+#include <futures/algorithm/traits/is_input_iterator.h>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -42,7 +42,7 @@ namespace futures::detail {
     /// if all the supplied Lockable objects are now locked
     template <
         typename Iterator,
-        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+        std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     Iterator
     try_lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
@@ -101,7 +101,7 @@ namespace futures::detail {
     /// \param last Iterator to one past the last mutex in the range
     template <
         typename Iterator,
-        std::enable_if_t<detail::input_iterator<Iterator>, int> = 0>
+        std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     void
     lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;

@@ -12,7 +12,16 @@
 #include <iterator>
 
 namespace futures {
-    /** A C++17 type trait equivalent to the C++20
+    /** \addtogroup algorithms Algorithms
+     *  @{
+     */
+
+    /** \addtogroup traits Traits
+     *  @{
+     */
+
+
+    /** \brief A C++17 type trait equivalent to the C++20
      * "has-iterator-traits-value-type" concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -33,6 +42,8 @@ namespace futures {
     template <class T>
     bool constexpr has_iterator_traits_value_type_v
         = has_iterator_traits_value_type<T>::value;
+    /** @}*/
+    /** @}*/
 
 } // namespace futures
 
