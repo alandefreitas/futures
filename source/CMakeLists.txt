@@ -15,7 +15,7 @@ target_compile_features(futures INTERFACE cxx_std_17)
 # Include directories (development and installation)
 target_include_directories(futures
         INTERFACE $<BUILD_INTERFACE:${FUTURES_ROOT_DIR}/source>
-               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         )
 
 # Compiler options
@@ -36,13 +36,13 @@ maybe_target_pedantic_warnings(futures)
 #######################################################
 if (Boost_FOUND)
     target_link_libraries(futures INTERFACE Boost::boost)
-endif()
+endif ()
 if (small_FOUND OR Small_FOUND)
     target_link_libraries(futures INTERFACE small::small)
-endif()
+endif ()
 if (asio_FOUND OR Asio_FOUND)
     target_link_libraries(futures INTERFACE asio::asio)
-endif()
+endif ()
 target_link_libraries(futures INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 
 ###############################################################
@@ -50,47 +50,49 @@ target_link_libraries(futures INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 ###############################################################
 if (FUTURES_PREFER_BOOST_DEPENDENCIES)
     target_compile_definitions(futures INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
-endif()
+endif ()
 if (FUTURES_PREFER_STANDALONE_DEPENDENCIES)
     target_compile_definitions(futures INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
-endif()
+endif ()
 
 ###########################################################
 ### Single-header library                               ###
 ###########################################################
 # Generate a single-header version of futures
-set(SINGLE_HEADER_PATH "${FUTURES_ROOT_DIR}/source/single-header/futures.h")
-add_custom_command(
-        OUTPUT ${SINGLE_HEADER_PATH}
-        COMMAND amalgamator
-        --include_paths
-        "${FUTURES_ROOT_DIR}/source"
-        --entry_points
-        "futures/futures.h"
-        "futures/algorithm.h"
-        --double_include
-        --output
-        "${FUTURES_ROOT_DIR}/source/single-header/futures/futures.h"
-        --remove_leading_comments
-        --show_progress
-        DEPENDS amalgamator ${FUTURES_HEADERS}
-        COMMENT "Creating single-header library"
-        VERBATIM
-)
-add_custom_target(build_single_include DEPENDS ${SINGLE_HEADER_PATH})
-add_library(single-header-futures INTERFACE)
-add_dependencies(single-header-futures build_single_include)
-add_library(futures::single-header-futures ALIAS single-header-futures)
+if (FUTURES_BUILD_SINGLE_HEADER)
+    set(SINGLE_HEADER_PATH "${CMAKE_CURRENT_BINARY_DIR}/single-header/futures/futures.h")
+    add_custom_command(
+            OUTPUT ${SINGLE_HEADER_PATH}
+            COMMAND amalgamator
+            --include_paths
+            "${FUTURES_ROOT_DIR}/source"
+            --entry_points
+            "futures/futures.h"
+            "futures/algorithm.h"
+            --double_include
+            --output
+            "${SINGLE_HEADER_PATH}"
+            --remove_leading_comments
+            --show_progress
+            DEPENDS amalgamator ${FUTURES_HEADERS}
+            COMMENT "Creating single-header library"
+            VERBATIM
+    )
+    add_custom_target(build_single_include DEPENDS ${SINGLE_HEADER_PATH})
+    add_library(single-header-futures INTERFACE)
+    add_dependencies(single-header-futures build_single_include)
+    add_library(futures::single-header-futures ALIAS single-header-futures)
 
-target_include_directories(single-header-futures
-        INTERFACE $<BUILD_INTERFACE:${FUTURES_ROOT_DIR}/source/single-header>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/single-header>
-        )
+    target_include_directories(single-header-futures
+            INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/single-header>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/futures/single-header>
+            )
 
-foreach(FUTURES_PROPERTY INTERFACE_COMPILE_FEATURES INTERFACE_COMPILE_OPTIONS INTERFACE_LINK_LIBRARIES)
-    get_target_property(PROPERTY_VALUE futures ${FUTURES_PROPERTY})
-    set_target_properties(single-header-futures PROPERTIES ${FUTURES_PROPERTY} "${PROPERTY_VALUE}")
-endforeach()
+    foreach (FUTURES_PROPERTY INTERFACE_COMPILE_FEATURES INTERFACE_COMPILE_OPTIONS INTERFACE_LINK_LIBRARIES)
+        get_target_property(PROPERTY_VALUE futures ${FUTURES_PROPERTY})
+        set_target_properties(single-header-futures PROPERTIES ${FUTURES_PROPERTY} "${PROPERTY_VALUE}")
+    endforeach ()
+endif ()
 
 ###########################################################
 ### Target with separate compilation (not header-only)  ###
@@ -104,13 +106,17 @@ target_compile_definitions(futures-compiled PUBLIC FUTURES_SEPARATE_COMPILATION)
 add_library(futures::futures-compiled ALIAS futures-compiled)
 
 
-
 #######################################################
 ### Installer                                       ###
 #######################################################
 if (FUTURES_BUILD_INSTALLER)
     # Install targets
-    install(TARGETS futures
+    if (FUTURES_BUILD_SINGLE_HEADER)
+        set(INSTALL_TARGET_LIST futures futures-compiled single-header-futures)
+    else()
+        set(INSTALL_TARGET_LIST futures futures-compiled)
+    endif()
+    install(TARGETS ${INSTALL_TARGET_LIST}
             EXPORT futures-targets
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -121,6 +127,12 @@ if (FUTURES_BUILD_INSTALLER)
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
             FILES_MATCHING PATTERN "*.h"
             )
+
+    if (FUTURES_BUILD_SINGLE_HEADER)
+        install(FILES ${SINGLE_HEADER_PATH}
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/futures/single-header/futures
+            )
+    endif()
 
     # Install cmake script
     install(EXPORT futures-targets

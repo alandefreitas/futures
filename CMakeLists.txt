@@ -34,6 +34,7 @@ set_optimization_flags() # detect and set default optimization flags
 set_compiler_booleans() # detect compiler
 
 # What to build
+option(FUTURES_BUILD_SINGLE_HEADER "Build single-header library" ON)
 option(FUTURES_BUILD_INSTALLER "Build installer target" ${MASTER_PROJECT})
 option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 

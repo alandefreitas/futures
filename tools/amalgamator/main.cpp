@@ -319,8 +319,13 @@ main(int argc, char **argv) {
     if (c.show_progress) {
         std::cout << "- 100% - Saving " << c.output << "\n";
     }
-    std::ofstream fout(c.output);
-    fout << content;
+    fs::create_directories(c.output.parent_path());
+    if (std::ofstream fout(c.output); fout.good()) {
+        fout << content;
+    } else {
+        std::cerr << "- Error opening " << c.output << "\n";
+        return 1;
+    }
 
     return 0;
 }

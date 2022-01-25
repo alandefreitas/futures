@@ -9,7 +9,7 @@
         You can copy into your project:
 
         - the contents from the `source/futures` directory; 
-        - **or** the single-header file from `source/single-header`.
+        - **or** the single-header file from our [release page](https://github.com/alandefreitas/futures/releases).
 
         Make sure the headers for the dependencies are also available:
         
