@@ -1,8 +1,8 @@
+#include <futures/futures.h>
 #include <array>
 #include <catch2/catch.hpp>
-#include <futures/futures.h>
 #if __has_include(<futures/algorithm.h>)
-#include <futures/algorithm.h>
+#    include <futures/algorithm.h>
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
@@ -12,9 +12,15 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
     std::vector<int> v(5000);
     std::iota(v.begin(), v.end(), 1);
-    constexpr int v_sum = 12502500;
-    static int v_prod = std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-    auto p = [](std::vector<int>::iterator first, std::vector<int>::iterator last) {
+    const static int v_sum = std::
+        accumulate(v.begin(), v.end(), 0, std::plus<>());
+    auto custom_plus = [](int a, int b) {
+        return a + b;
+    };
+    const static int v_custom = std::
+        accumulate(v.begin(), v.end(), 0, custom_plus);
+    auto p =
+        [](std::vector<int>::iterator first, std::vector<int>::iterator last) {
         return std::next(first, (last - first) / 2);
     };
 
@@ -22,7 +28,7 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
         std::mutex m;
         int count_ = 0;
         auto fun = [&](int v) {
-            std::lock_guard lk{m};
+            std::lock_guard lk{ m };
             count_ += v;
         };
 
@@ -88,104 +94,170 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
     }
 
     SECTION("all_of") {
-        auto fun = [&](int v) { return v < 5500; };
+        auto fun = [&](int v) {
+            return v < 5500;
+        };
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(all_of(v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(all_of(v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(all_of(v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(all_of(v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(all_of(ex, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(all_of(ex, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(all_of(ex, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(all_of(ex, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(all_of(seq, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(all_of(seq, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(all_of(seq, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(all_of(seq, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(all_of(p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(all_of(p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(all_of(p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(all_of(p, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(all_of(ex, p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(all_of(ex, p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(all_of(ex, p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(all_of(ex, p, v.begin(), v.end(), fun));
+            }
         }
     }
 
     SECTION("any_of") {
-        auto fun = [&](int v) { return v == 2700; };
+        auto fun = [&](int v) {
+            return v == 2700;
+        };
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(any_of(v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(any_of(v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(any_of(v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(any_of(v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(any_of(ex, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(any_of(ex, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(any_of(ex, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(any_of(ex, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(any_of(seq, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(any_of(seq, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(any_of(seq, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(any_of(seq, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(any_of(p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(any_of(p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(any_of(p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(any_of(p, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(any_of(ex, p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(any_of(ex, p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(any_of(ex, p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(any_of(ex, p, v.begin(), v.end(), fun));
+            }
         }
     }
 
     SECTION("none_of") {
-        auto fun = [&](int v) { return v > 5500; };
+        auto fun = [&](int v) {
+            return v > 5500;
+        };
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(none_of(v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(none_of(v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(none_of(v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(none_of(v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(none_of(ex, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(none_of(ex, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(none_of(ex, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(none_of(ex, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(none_of(seq, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(none_of(seq, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(none_of(seq, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(none_of(seq, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(none_of(p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(none_of(p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(none_of(p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(none_of(p, v.begin(), v.end(), fun));
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(none_of(ex, p, v, fun)); }
+            SECTION("Ranges") {
+                REQUIRE(none_of(ex, p, v, fun));
+            }
 
-            SECTION("Iterators") { REQUIRE(none_of(ex, p, v.begin(), v.end(), fun)); }
+            SECTION("Iterators") {
+                REQUIRE(none_of(ex, p, v.begin(), v.end(), fun));
+            }
         }
     }
 
@@ -193,101 +265,179 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
         int t = 2700;
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(find(v, t) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find(v, t) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find(v.begin(), v.end(), t) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find(v.begin(), v.end(), t) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(find(ex, v, t) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find(ex, v, t) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find(ex, v.begin(), v.end(), t) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find(ex, v.begin(), v.end(), t) == v.begin() + 2699);
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(find(seq, v, t) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find(seq, v, t) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find(seq, v.begin(), v.end(), t) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find(seq, v.begin(), v.end(), t) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(find(p, v, t) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find(p, v, t) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find(p, v.begin(), v.end(), t) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find(p, v.begin(), v.end(), t) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(find(ex, p, v, t) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find(ex, p, v, t) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find(ex, p, v.begin(), v.end(), t) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find(ex, p, v.begin(), v.end(), t) == v.begin() + 2699);
+            }
         }
     }
 
     SECTION("find_if") {
-        auto fun = [&](int v) { return v >= 2700; };
+        auto fun = [&](int v) {
+            return v >= 2700;
+        };
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(find_if(v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if(v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if(v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(find_if(v.begin(), v.end(), fun) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(find_if(ex, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if(ex, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if(ex, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if(ex, v.begin(), v.end(), fun) == v.begin() + 2699);
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(find_if(seq, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if(seq, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if(seq, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if(seq, v.begin(), v.end(), fun) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(find_if(p, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if(p, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if(p, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if(p, v.begin(), v.end(), fun) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(find_if(ex, p, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if(ex, p, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if(ex, p, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if(ex, p, v.begin(), v.end(), fun)
+                    == v.begin() + 2699);
+            }
         }
     }
 
     SECTION("find_if_not") {
-        auto fun = [&](int v) { return v < 2700; };
+        auto fun = [&](int v) {
+            return v < 2700;
+        };
 
         SECTION("Basic") {
-            SECTION("Ranges") { REQUIRE(find_if_not(v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if_not(v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if_not(v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if_not(v.begin(), v.end(), fun) == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor") {
-            SECTION("Ranges") { REQUIRE(find_if_not(ex, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if_not(ex, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if_not(ex, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if_not(ex, v.begin(), v.end(), fun)
+                    == v.begin() + 2699);
+            }
         }
 
         SECTION("Policy") {
-            SECTION("Ranges") { REQUIRE(find_if_not(seq, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if_not(seq, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if_not(seq, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if_not(seq, v.begin(), v.end(), fun)
+                    == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom partitioner") {
-            SECTION("Ranges") { REQUIRE(find_if_not(p, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if_not(p, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if_not(p, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if_not(p, v.begin(), v.end(), fun)
+                    == v.begin() + 2699);
+            }
         }
 
         SECTION("Custom executor and partitioner") {
-            SECTION("Ranges") { REQUIRE(find_if_not(ex, p, v, fun) == v.begin() + 2699); }
+            SECTION("Ranges") {
+                REQUIRE(find_if_not(ex, p, v, fun) == v.begin() + 2699);
+            }
 
-            SECTION("Iterators") { REQUIRE(find_if_not(ex, p, v.begin(), v.end(), fun) == v.begin() + 2699); }
+            SECTION("Iterators") {
+                REQUIRE(
+                    find_if_not(ex, p, v.begin(), v.end(), fun)
+                    == v.begin() + 2699);
+            }
         }
     }
 
@@ -356,7 +506,9 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
     }
 
     SECTION("count_if") {
-        auto fun = [&](int v) { return v & 1; };
+        auto fun = [&](int v) {
+            return v & 1;
+        };
 
         SECTION("Basic") {
             SECTION("Ranges") {
@@ -436,13 +588,13 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(v, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(v.begin(), v.end(), std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v.begin(), v.end(), custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -462,13 +614,13 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(v, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(v.begin(), v.end(), std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v.begin(), v.end(), custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -488,13 +640,14 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(seq, v, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(seq, v, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(seq, v.begin(), v.end(), std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_
+                            = reduce(seq, v.begin(), v.end(), custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -514,13 +667,13 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(p, v, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(p, v, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(p, v.begin(), v.end(), std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(p, v.begin(), v.end(), custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -540,13 +693,14 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(ex, p, v, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(ex, p, v, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(ex, p, v.begin(), v.end(), std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_
+                            = reduce(ex, p, v.begin(), v.end(), custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -568,13 +722,13 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(v, 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v, 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(v.begin(), v.end(), 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v.begin(), v.end(), 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -594,13 +748,13 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(v, 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v, 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(v.begin(), v.end(), 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(v.begin(), v.end(), 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -620,13 +774,14 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(seq, v, 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(seq, v, 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(seq, v.begin(), v.end(), 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_
+                            = reduce(seq, v.begin(), v.end(), 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -646,13 +801,14 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(p, v, 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(p, v, 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(p, v.begin(), v.end(), 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_
+                            = reduce(p, v.begin(), v.end(), 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
@@ -672,17 +828,17 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
 
                 SECTION("Custom function") {
                     SECTION("Ranges") {
-                        int count_ = reduce(ex, p, v, 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_ = reduce(ex, p, v, 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
 
                     SECTION("Iterators") {
-                        int count_ = reduce(ex, p, v.begin(), v.end(), 1, std::multiplies<>());
-                        REQUIRE(count_ == v_prod);
+                        int count_
+                            = reduce(ex, p, v.begin(), v.end(), 0, custom_plus);
+                        REQUIRE(count_ == v_custom);
                     }
                 }
             }
         }
     }
-
 }
