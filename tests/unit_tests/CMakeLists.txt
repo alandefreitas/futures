@@ -98,6 +98,7 @@ endmacro()
 
 # Main tests
 add_futures_test(asio_executors)
+add_futures_test(queue)
 add_futures_test(shared_state)
 add_futures_test(futures_types)
 add_futures_test(make_ready)

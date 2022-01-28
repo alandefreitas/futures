@@ -11,7 +11,7 @@
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/try_async.h>
+#include <futures/executor/detail/lock_free_queue.hpp>
 #include <futures/futures/detail/empty_base.h>
 #include <execution>
 #include <variant>
@@ -49,25 +49,11 @@ namespace futures {
         /// compared to the cost of the whole procedure.
         ///
         template <class Executor>
-        class sorter : public detail::maybe_empty<Executor>
+        class sort_graph : public detail::maybe_empty<Executor>
         {
         public:
-            explicit sorter(const Executor &ex)
+            explicit sort_graph(const Executor &ex)
                 : detail::maybe_empty<Executor>(ex) {}
-
-            /// \brief Get executor from the base class as a function for
-            /// convenience
-            const Executor &
-            ex() const {
-                return detail::maybe_empty<Executor>::get();
-            }
-
-            /// \brief Get executor from the base class as a function for
-            /// convenience
-            Executor &
-            ex() {
-                return detail::maybe_empty<Executor>::get();
-            }
 
             template <class P, class I, class S, class Fun>
             void
@@ -81,22 +67,22 @@ namespace futures {
                 if (too_small || cannot_parallelize) {
                     std::for_each(first, last, f);
                 } else {
-                    // Run for_each on rhs: [middle, last]
-                    cfuture<void> rhs_task = futures::
-                        async(ex(), [this, p, middle, last, f] {
-                            launch_sort_tasks(p, middle, last, f);
+                    // Create task that launches tasks for rhs: [middle, last]
+                    auto rhs_task = futures::async(
+                        detail::maybe_empty<Executor>::get(),
+                        [this, p, middle, last, f] {
+                        launch_sort_tasks(p, middle, last, f);
                         });
 
-                    // Run for_each on lhs: [first, middle]
+                    // Launch tasks for lhs: [first, middle]
                     launch_sort_tasks(p, first, middle, f);
 
                     // When lhs is ready, we check on rhs
                     if (!is_ready(rhs_task)) {
                         // Put rhs_task on the list of tasks we need to await
-                        // later This ensures we only deal with the task queue
-                        // if we really need to
-                        std::unique_lock write_lock(tasks_mutex_);
-                        tasks_.emplace_back(std::move(rhs_task));
+                        // later. This ensures we only deal with the task queue
+                        // if we really need to.
+                        tasks_.push(std::move(rhs_task));
                     }
                 }
             }
@@ -111,22 +97,11 @@ namespace futures {
             /// compared to other applications.
             ///
             /// \return `true` if we had to wait for any tasks
-            bool
+            void
             wait_for_sort_tasks() {
-                tasks_mutex_.lock_shared();
-                bool waited_any = false;
                 while (!tasks_.empty()) {
-                    tasks_mutex_.unlock_shared();
-                    tasks_mutex_.lock();
-                    detail::small_vector<futures::cfuture<void>> stolen_tasks(
-                        std::make_move_iterator(tasks_.begin()),
-                        std::make_move_iterator(tasks_.end()));
-                    tasks_.clear();
-                    tasks_mutex_.unlock();
-                    when_all(stolen_tasks).wait();
-                    waited_any = true;
+                    tasks_.pop().wait();
                 }
-                return waited_any;
             }
 
             template <class P, class I, class S, class Fun>
@@ -137,8 +112,7 @@ namespace futures {
             }
 
         private:
-            detail::small_vector<futures::cfuture<void>> tasks_;
-            std::shared_mutex tasks_mutex_;
+            detail::lock_free_queue<futures::cfuture<void>> tasks_;
         };
 
         /// \brief Complete overload of the for_each algorithm
@@ -154,7 +128,6 @@ namespace futures {
         /// \param f Function
         /// \brief function template \c for_each
         template <
-            class FullAsync = std::false_type,
             class E,
             class P,
             class I,
@@ -168,19 +141,9 @@ namespace futures {
                 int> = 0
 #endif
             >
-        auto
+        void
         run(const E &ex, P p, I first, S last, Fun f) const {
-            if constexpr (FullAsync::value) {
-                // If full async, launching the tasks and solving small tasks
-                // also happen asynchronously
-                return async(ex, [ex, p, first, last, f]() {
-                    sorter<E>(ex).sort(p, first, last, f);
-                });
-            } else {
-                // Else, we try to solve small tasks and launching other tasks
-                // if it's worth splitting the problem
-                sorter<E>(ex).sort(p, first, last, f);
-            }
+            sort_graph<E>(ex).sort(p, first, last, f);
         }
     };
 

@@ -11,7 +11,6 @@
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/binary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <numeric>
 #include <variant>
@@ -30,6 +29,62 @@ namespace futures {
         : public binary_invoke_algorithm_functor<reduce_functor>
     {
         friend binary_invoke_algorithm_functor<reduce_functor>;
+
+        template <class Executor, class T>
+        class reduce_graph : public detail::maybe_empty<Executor>
+        {
+        public:
+            explicit reduce_graph(const Executor &ex)
+                : detail::maybe_empty<Executor>(ex) {}
+
+            template <class P, class I, class S, class Fun>
+            T
+            launch_reduce_tasks(P p, I first, S last, T i, Fun f) {
+                auto middle = p(first, last);
+                const iter_difference_t<I> too_small = middle == last;
+                constexpr iter_difference_t<I> cannot_parallelize
+                    = std::is_same_v<
+                          Executor,
+                          inline_executor> || is_forward_iterator_v<I>;
+                if (too_small || cannot_parallelize) {
+                    return std::reduce(first, last, i, f);
+                } else {
+                    // Create task that launches tasks for rhs: [middle, last]
+                    cfuture<T> rhs_task = futures::async(
+                        detail::maybe_empty<Executor>::get(),
+                        [this, p, middle, last, i, f] {
+                        return launch_reduce_tasks(p, middle, last, i, f);
+                        });
+
+                    // Launch tasks for lhs: [first, middle]
+                    T lhs_result = launch_reduce_tasks(p, first, middle, i, f);
+
+                    // When lhs is ready, we check on rhs
+                    if (!is_ready(rhs_task)) {
+                        // Put rhs_task on the list of tasks we need to await
+                        // later. This ensures we only deal with the task queue
+                        // if we really need to.
+                        tasks_.push(std::move(rhs_task));
+                        return lhs_result;
+                    } else {
+                        return lhs_result + rhs_task.get();
+                    }
+                }
+            }
+
+            template <class P, class I, class S, class Fun>
+            T
+            reduce(P p, I first, S last, T i, Fun f) {
+                i = launch_reduce_tasks(p, first, last, i, f);
+                while (!tasks_.empty()) {
+                    i = f(i, tasks_.pop().get());
+                }
+                return i;
+            }
+
+        private:
+            detail::lock_free_queue<cfuture<T>> tasks_{};
+        };
 
         /// \brief Complete overload of the reduce algorithm
         ///
@@ -69,33 +124,7 @@ namespace futures {
         T
         run(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
-            auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || is_forward_iterator_v<I>)
-            {
-                return std::reduce(first, last, i, f);
-            }
-
-            // Run reduce on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel] = try_async(ex, [=]() {
-                return operator()(ex, p, middle, last, i, f);
-            });
-
-            // Run reduce on lhs: [first, middle]
-            T lhs = operator()(ex, p, first, middle, i, f);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                return f(lhs, rhs.get());
-            } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                T i_rhs =
-                operator()(make_inline_executor(), p, middle, last, i, f);
-                return f(lhs, i_rhs);
-            }
+            return reduce_graph<E, T>(ex).reduce(p, first, last, i, f);
         }
     };
 

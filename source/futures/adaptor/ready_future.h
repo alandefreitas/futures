@@ -94,9 +94,9 @@ namespace futures {
     ///
     /// \return A cfuture associated with the shared state that is created.
     template <typename T>
-    cfuture<typename std::decay<T>>
+    cfuture<typename std::decay_t<T>>
     make_ready_cfuture(T &&value) {
-        return make_ready_future<T, cfuture<typename std::decay<T>>>(
+        return make_ready_future<T, cfuture<typename std::decay_t<T>>>(
             std::forward<T>(value));
     }
 

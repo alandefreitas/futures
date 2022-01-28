@@ -11,7 +11,6 @@
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
 
@@ -24,11 +23,78 @@ namespace futures {
      *  @{
      */
 
+    class count_functor;
+
     /// \brief Functor representing the overloads for the @ref count_if function
     class count_if_functor
         : public unary_invoke_algorithm_functor<count_if_functor>
     {
         friend unary_invoke_algorithm_functor<count_if_functor>;
+        friend count_functor;
+
+        template <class Executor, class I>
+        class count_if_graph : public detail::maybe_empty<Executor>
+        {
+        public:
+            explicit count_if_graph(const Executor &ex)
+                : detail::maybe_empty<Executor>(ex) {}
+
+            template <class P, class S, class Fun>
+            iter_difference_t<I>
+            launch_count_if_tasks(P p, I first, S last, Fun f) {
+                auto middle = p(first, last);
+                const iter_difference_t<I> too_small = middle == last;
+                constexpr iter_difference_t<I> cannot_parallelize
+                    = std::is_same_v<
+                          Executor,
+                          inline_executor> || is_forward_iterator_v<I>;
+                if (too_small || cannot_parallelize) {
+                    return std::count_if(first, last, f);
+                } else {
+                    // Create task that launches tasks for rhs: [middle, last]
+                    cfuture<iter_difference_t<I>> rhs_task = futures::async(
+                        detail::maybe_empty<Executor>::get(),
+                        [this, p, middle, last, f] {
+                        return launch_count_if_tasks(p, middle, last, f);
+                        });
+
+                    // Launch tasks for lhs: [first, middle]
+                    iter_difference_t<I>
+                        lhs_result = launch_count_if_tasks(p, first, middle, f);
+
+                    // When lhs is ready, we check on rhs
+                    if (!is_ready(rhs_task)) {
+                        // Put rhs_task on the list of tasks we need to await
+                        // later. This ensures we only deal with the task queue
+                        // if we really need to.
+                        tasks_.push(std::move(rhs_task));
+                        return lhs_result;
+                    } else {
+                        return lhs_result + rhs_task.get();
+                    }
+                }
+            }
+
+            iter_difference_t<I>
+            wait_for_count_if_tasks() {
+                iter_difference_t<I> sum = 0;
+                while (!tasks_.empty()) {
+                    sum += tasks_.pop().get();
+                }
+                return sum;
+            }
+
+            template <class P, class S, class Fun>
+            iter_difference_t<I>
+            count_if(P p, I first, S last, Fun f) {
+                iter_difference_t<I>
+                    partial = launch_count_if_tasks(p, first, last, f);
+                return partial + wait_for_count_if_tasks();
+            }
+
+        private:
+            detail::lock_free_queue<cfuture<iter_difference_t<I>>> tasks_{};
+        };
 
         /// \brief Complete overload of the count_if algorithm
         /// \tparam E Executor type
@@ -65,32 +131,7 @@ namespace futures {
             >
         iter_difference_t<I>
         run(const E &ex, P p, I first, S last, Fun f) const {
-            auto middle = p(first, last);
-            if (bool always_sequential
-                = std::is_same_v<E, inline_executor> || is_forward_iterator_v<I>;
-                always_sequential || middle == last)
-            {
-                return std::count_if(first, last, f);
-            }
-
-            // Run count_if on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel]
-                = try_async(ex, [ex, p, middle, last, f, this]() {
-                      return operator()(ex, p, middle, last, f);
-                  });
-
-            // Run count_if on lhs: [first, middle]
-            auto lhs = operator()(ex, p, first, middle, f);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                return lhs + rhs.get();
-            } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                return lhs
-                       + operator()(make_inline_executor(), p, middle, last, f);
-            }
+            return count_if_graph<E, I>(ex).count_if(p, first, last, f);
         }
     };
 

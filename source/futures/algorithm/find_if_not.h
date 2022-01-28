@@ -8,10 +8,10 @@
 #ifndef FUTURES_FIND_IF_NOT_H
 #define FUTURES_FIND_IF_NOT_H
 
+#include <futures/algorithm/find_if.h>
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/unary_invoke_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
 
@@ -65,43 +65,11 @@ namespace futures {
 #endif
             >
         I
-        run(const E &ex, P p, I first, S last, Fun f) const {
-            auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || is_forward_iterator_v<I>)
-            {
-                return std::find_if_not(first, last, f);
-            }
-
-            // Run find_if_not on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel]
-                = try_async(ex, [ex, p, middle, last, f, this]() {
-                      return operator()(ex, p, middle, last, f);
-                  });
-
-            // Run find_if_not on lhs: [first, middle]
-            I lhs = operator()(ex, p, first, middle, f);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                rhs.wait();
-                if (lhs != middle) {
-                    return lhs;
-                } else {
-                    return rhs.get();
-                }
-            } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                if (lhs != middle) {
-                    return lhs;
-                } else {
-                    return
-                    operator()(make_inline_executor(), p, middle, last, f);
-                }
-            }
+        run(const E& ex, P p, I first, S last, Fun f) const {
+            return find_if_functor::find_if_graph<E, I>(ex)
+                .find_if(p, first, last, [f](const auto& el) {
+                    return !f(el);
+                });
         }
     };
 

@@ -9,11 +9,11 @@
 #define FUTURES_FIND_H
 
 #include <futures/algorithm/comparisons/equal_to.h>
+#include <futures/algorithm/find_if.h>
 #include <futures/algorithm/partitioner/partitioner.h>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.h>
 #include <futures/algorithm/traits/value_cmp_algorithm.h>
 #include <futures/futures.h>
-#include <futures/algorithm/detail/try_async.h>
 #include <execution>
 #include <variant>
 
@@ -65,42 +65,10 @@ namespace futures {
             >
         I
         run(const E &ex, P p, I first, S last, const T &v) const {
-            auto middle = p(first, last);
-            if (middle == last
-                || std::is_same_v<
-                    E,
-                    inline_executor> || is_forward_iterator_v<I>)
-            {
-                return std::find(first, last, v);
-            }
-
-            // Run find on rhs: [middle, last]
-            auto [rhs, rhs_started, rhs_cancel]
-                = try_async(ex, [ex, p, middle, last, v, this]() {
-                      return operator()(ex, p, middle, last, v);
-                  });
-
-            // Run find on lhs: [first, middle]
-            I lhs = operator()(ex, p, first, middle, v);
-
-            // Wait for rhs
-            if (is_ready(rhs_started)) {
-                rhs.wait();
-                if (lhs != middle) {
-                    return lhs;
-                } else {
-                    return rhs.get();
-                }
-            } else {
-                rhs_cancel.request_stop();
-                rhs.detach();
-                if (lhs != middle) {
-                    return lhs;
-                } else {
-                    return
-                    operator()(make_inline_executor(), p, middle, last, v);
-                }
-            }
+            return find_if_functor::find_if_graph<E, I>(ex)
+                .find_if(p, first, last, [&](const auto &el) {
+                    return el == v;
+                });
         }
     };
 

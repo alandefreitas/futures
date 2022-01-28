@@ -456,12 +456,27 @@ Coming from other programming languages or even from the historical C++ construc
 
 Given the pros and cons of each model described in our [review](#previous-work), this library models future types as a simple [is_future] concept, which supports all the features we have discussed, such as continuations and deferred work:  
 
-- Reusable algorithms **work for** [**all future types**](#standard-futures), including any new and existing future types, such as [std::future], `boost::future`, `boost::fiber::future`.
-- Provides an alternative to [std::async] **based on [ASIO] [executors](#executors)**, which is the model most people have been effectively using so far, while still adaptable to other executor or scheduler concepts, including senders and receivers.
-- Implements a **vast number of concrete future types**, including continuable, cancellable, lazy/eager, unique/shared futures. 
-- Future types support [lazy **continuations**](#lazy-continuations) without polling, although the future adaptors still work for all future types by polling.
-- Future types might have [**deferred** work](#deferred-futures) or maybe eager, avoiding the synchronization costs of attaching continuations.
-- Implements a large set of [**composition** operations](#senders-and-receivers) with a **syntax closer to the existing future types** users are used to
-- Includes a large set of the **STL algorithms in terms of futures and executors**, with easy integration and no need for external libraries, like [common](https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4) with C++ execution policies.
+- Futures and Promises
+    - This library maintains the common model most programmers are familiar with  
+- Future concept
+    - By modeling futures as a concept, futures can be optionally instantiated with any combination of custom extensions such as continuations, stop tokens, and deferred work
+    - Reusable algorithms **work for** [**all future types**](#standard-futures), including any new and existing future types, such as [std::future], `boost::future`, `boost::fiber::future`.
+- Executors
+    - Custom executors can be defined and the traits are compatible with existing ASIO executors.
+    - Provides an alternative to [std::async] **based on [executors](#executors)** while still adaptable to other executor or scheduler concepts, including senders and receivers.
+- Extensions
+    - [basic_future] implements a **vast number of concrete future types**, including continuable, cancellable, lazy/eager, unique/shared futures.
+    - Future types support [lazy **continuations**](#lazy-continuations) without polling
+    - The future adaptors still work for existing future types, such as [std::future] by polling.
+    - Integrations with ASIO are provided, such as completion tokens and async IO operations.
+- Data races
+    - Both eager and lazy futures are lock-free.
+    - Future types might have [**deferred** work](#deferred-futures) or be eager, avoiding the synchronization costs of attaching continuations.
+    - Eager futures use lock-free operations and data structures.
+- Adaptors
+    - Implements a large set of [**composition** operations](#senders-and-receivers) with a **syntax closer to the existing future types** users are used to, such as [when_all] and [when_any]
+- Algorithms
+    - Includes a large set of the **STL algorithms in terms of futures and executors**
+    - Easy access to async algorithms based on executors with no need for external libraries, as [common](https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4) with C++ execution policies, such as [TTB].
 
 --8<-- "docs/references.md"
