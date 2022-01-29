@@ -2,7 +2,7 @@
 ### Futures                                         ###
 #######################################################
 # Project information
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.16)
 project(futures VERSION 0.1.2)
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
@@ -95,15 +95,6 @@ if (MASTER_PROJECT)
         add_compile_definitions(NOMINMAX)
         # endif ()
     endif ()
-endif ()
-
-#######################################################
-### Dependencies                                    ###
-#######################################################
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/find_cpp_modules.cmake)
-    include(find_cpp_modules.cmake)
-else ()
-    message(FATAL_ERROR "find_cpp_modules.cmake file not found.")
 endif ()
 
 #######################################################

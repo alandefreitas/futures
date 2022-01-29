@@ -1,14 +1,38 @@
 #######################################################
-### Unit Tests                                      ###
+### Dependencies                                    ###
 #######################################################
-# Include catch helper CMake scripts
-include(${Catch2_DIR}/Catch.cmake)
+find_package(Catch2 2.13.6 CONFIG)
+if (Catch2_FOUND)
+    include(${Catch2_DIR}/Catch.cmake)
+else ()
+    FetchContent_Declare(Catch2 URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.6.zip)
+    FetchContent_GetProperties(Catch2)
+    if (NOT Catch2_POPULATED)
+        FetchContent_Populate(Catch2)
+        set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+        set(CATCH_USE_VALGRIND OFF) # "Perform SelfTests with Valgrind"
+        set(CATCH_BUILD_TESTING OFF) # "Build SelfTest project"
+        set(CATCH_BUILD_EXAMPLES OFF) # "Build documentation examples"
+        set(CATCH_BUILD_EXTRA_TESTS OFF) # "Build extra tests"
+        set(CATCH_BUILD_STATIC_LIBRARY OFF) # "Builds static library from the main implementation. EXPERIMENTAL"
+        set(CATCH_ENABLE_COVERAGE OFF) # "Generate coverage for codecov.io"
+        set(CATCH_ENABLE_WERROR OFF) # "Enable all warnings as errors"
+        set(CATCH_INSTALL_DOCS OFF) # "Install documentation alongside library"
+        set(CATCH_INSTALL_HELPERS ON) # "Install contrib alongside library"
+        add_subdirectory(${catch2_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/catch2)
+        include(${catch2_SOURCE_DIR}/contrib/Catch.cmake)
+    endif ()
+endif ()
 
 # Create a common catch main for all tests
 add_library(catch_main detail/catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_compile_features(catch_main PUBLIC cxx_std_17)
 
+
+#######################################################
+### Unit Tests                                      ###
+#######################################################
 include(ProcessorCount)
 ProcessorCount(N_PROCESSORS)
 
