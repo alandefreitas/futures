@@ -1,6 +1,6 @@
 #include <array>
 #include <catch2/catch.hpp>
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 
 template <typename T, typename T2> void set_value_or_void(futures::promise<T> &p, T2 test_value) {
     constexpr bool is_void_promise = std::is_same_v<T, void>;

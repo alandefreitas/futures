@@ -1,7 +1,7 @@
 #include <array>
 #include <string>
 #include <catch2/catch.hpp>
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 #if __has_include(<futures/executor/detail/lock_free_queue.hpp>)
 #    include <futures/executor/detail/lock_free_queue.hpp>
 #endif

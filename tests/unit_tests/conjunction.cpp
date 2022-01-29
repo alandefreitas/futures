@@ -1,4 +1,4 @@
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 #include <array>
 #include <string>
 #include <catch2/catch.hpp>

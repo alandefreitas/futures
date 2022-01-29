@@ -6,13 +6,13 @@ GENERATE_LATEX = NO
 GENERATE_XML = YES
 XML_OUTPUT = xml
 
-INPUT = ./../source/futures
-STRIP_FROM_PATH = ./../source
+INPUT = ./../include/futures
+STRIP_FROM_PATH = ./../include
 RECURSIVE = YES
-EXCLUDE = ./../source/futures/adaptor/detail \
-          ./../source/futures/algorithm/detail \
-          ./../source/futures/futures/detail
-FILE_PATTERNS = *.h
+EXCLUDE = ./../include/futures/adaptor/detail \
+          ./../include/futures/algorithm/detail \
+          ./../include/futures/futures/detail
+FILE_PATTERNS = *.hpp
 EXCLUDE_SYMBOLS = "std" "asio" "detail" "futures::detail" "detail::*" "futures::detail::*" "A" "Enable" "Proxy"
 EXAMPLE_PATH = ./../examples
 EXAMPLE_PATTERNS = *.cpp

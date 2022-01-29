@@ -3,7 +3,7 @@
 
 #include <catch2/catch.hpp>
 
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
     using namespace futures;

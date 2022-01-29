@@ -1,5 +1,5 @@
-#include <futures/algorithm.h>
-#include <futures/futures.h>
+#include <futures/algorithm.hpp>
+#include <futures/futures.hpp>
 #include <iostream>
 
 int main() {

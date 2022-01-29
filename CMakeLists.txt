@@ -105,7 +105,8 @@ add_subdirectory(tools)
 #######################################################
 ### Libraries                                       ###
 #######################################################
-add_subdirectory(source)
+add_subdirectory(include)
+add_subdirectory(src)
 
 #######################################################
 ### Tests                                           ###

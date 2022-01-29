@@ -1,8 +1,8 @@
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 #include <array>
 #include <catch2/catch.hpp>
-#if __has_include(<futures/algorithm.h>)
-#    include <futures/algorithm.h>
+#if __has_include(<futures/algorithm.hpp>)
+#    include <futures/algorithm.hpp>
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {

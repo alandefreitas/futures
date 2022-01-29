@@ -2,7 +2,7 @@
 #include <string>
 
 #include <catch2/catch.hpp>
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Async overloads") {
     using namespace futures;

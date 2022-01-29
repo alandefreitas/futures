@@ -13,7 +13,7 @@
 #include <utility>
 #include <charconv>
 
-#include <futures/futures.h>
+#include <futures/futures.hpp>
 
 #ifdef FUTURES_USE_ASIO
 
