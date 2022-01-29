@@ -120,7 +120,9 @@ macro(add_futures_test TEST_NAME)
     endif ()
 endmacro()
 
-# Main tests
+######################################################
+# Separate CMake tests                               #
+######################################################
 add_futures_test(asio_executors)
 add_futures_test(queue)
 add_futures_test(shared_state)
@@ -135,3 +137,12 @@ add_futures_test(continuation_stop)
 add_futures_test(exceptions)
 add_futures_test(shared_futures)
 add_futures_test(futures-algorithm)
+
+#####################################################
+# All tests as a single target                      #
+#####################################################
+file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
+add_executable(ut_futures_all detail/catch_main.cpp ${FUTURES_TESTS_SOURCE})
+target_link_libraries(ut_futures_all PUBLIC futures::futures-compiled Catch2::Catch2)
+target_compile_features(ut_futures_all PUBLIC cxx_std_17)
+target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")

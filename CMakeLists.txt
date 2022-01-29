@@ -28,13 +28,13 @@ include(cmake/functions.cmake)
 ### Options                                         ###
 #######################################################
 # Set variables with project properties
-set_master_project_booleans() # detect if master project / dev mode
-set_debug_booleans() # detect if debug
-set_optimization_flags() # detect and set default optimization flags
-set_compiler_booleans() # detect compiler
+set_master_project_booleans()
+set_debug_booleans()
+set_optimization_flags()
+set_compiler_booleans()
 
 # What to build
-option(FUTURES_BUILD_SINGLE_HEADER "Build single-header library" ON)
+option(FUTURES_BUILD_SINGLE_HEADER "Build single-header library" ${MASTER_PROJECT})
 option(FUTURES_BUILD_INSTALLER "Build installer target" ${MASTER_PROJECT})
 option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 
