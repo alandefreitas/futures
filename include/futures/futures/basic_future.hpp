@@ -760,36 +760,12 @@ namespace futures {
     template <typename... Args>
     struct is_future<basic_future<Args...>> : std::true_type
     {};
-    template <typename... Args>
-    struct is_future<basic_future<Args...> &> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_future<basic_future<Args...> &&> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_future<const basic_future<Args...>> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_future<const basic_future<Args...> &> : std::true_type
-    {};
     /// @}
 
     /// \name Define basic_future as a kind of future
     /// @{
     template <typename... Args>
     struct has_ready_notifier<basic_future<Args...>> : std::true_type
-    {};
-    template <typename... Args>
-    struct has_ready_notifier<basic_future<Args...> &> : std::true_type
-    {};
-    template <typename... Args>
-    struct has_ready_notifier<basic_future<Args...> &&> : std::true_type
-    {};
-    template <typename... Args>
-    struct has_ready_notifier<const basic_future<Args...>> : std::true_type
-    {};
-    template <typename... Args>
-    struct has_ready_notifier<const basic_future<Args...> &> : std::true_type
     {};
     /// @}
 
@@ -798,36 +774,12 @@ namespace futures {
     template <class T, class SH, class L, class ST>
     struct is_shared_future<basic_future<T, SH, L, ST>> : SH
     {};
-    template <class T, class SH, class L, class ST>
-    struct is_shared_future<basic_future<T, SH, L, ST> &> : SH
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_shared_future<basic_future<T, SH, L, ST> &&> : SH
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_shared_future<const basic_future<T, SH, L, ST>> : SH
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_shared_future<const basic_future<T, SH, L, ST> &> : SH
-    {};
     /// @}
 
     /// \name Define basic_futures as supporting lazy continuations
     /// @{
     template <class T, class SH, class L, class ST>
     struct is_lazy_continuable<basic_future<T, SH, L, ST>> : L
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_lazy_continuable<basic_future<T, SH, L, ST> &> : L
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_lazy_continuable<basic_future<T, SH, L, ST> &&> : L
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_lazy_continuable<const basic_future<T, SH, L, ST>> : L
-    {};
-    template <class T, class SH, class L, class ST>
-    struct is_lazy_continuable<const basic_future<T, SH, L, ST> &> : L
     {};
     /// @}
 
@@ -836,18 +788,6 @@ namespace futures {
     template <class T, class S, class L, class Stoppable>
     struct has_stop_token<basic_future<T, S, L, Stoppable>> : Stoppable
     {};
-    template <class T, class S, class L, class Stoppable>
-    struct has_stop_token<basic_future<T, S, L, Stoppable> &> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct has_stop_token<basic_future<T, S, L, Stoppable> &&> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct has_stop_token<const basic_future<T, S, L, Stoppable>> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct has_stop_token<const basic_future<T, S, L, Stoppable> &> : Stoppable
-    {};
     /// @}
 
     /// \name Define basic_futures as being stoppable (not the same as having a
@@ -855,18 +795,6 @@ namespace futures {
     /// @{
     template <class T, class S, class L, class Stoppable>
     struct is_stoppable<basic_future<T, S, L, Stoppable>> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct is_stoppable<basic_future<T, S, L, Stoppable> &> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct is_stoppable<basic_future<T, S, L, Stoppable> &&> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct is_stoppable<const basic_future<T, S, L, Stoppable>> : Stoppable
-    {};
-    template <class T, class S, class L, class Stoppable>
-    struct is_stoppable<const basic_future<T, S, L, Stoppable> &> : Stoppable
     {};
 /** @} */
 #endif

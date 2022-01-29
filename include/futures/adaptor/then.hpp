@@ -58,8 +58,13 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
-            is_executor_v<std::decay_t<
-                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            // clang-format off
+            is_executor_v<std::decay_t<Executor>> &&
+            !is_executor_v<std::decay_t<Function>> &&
+            !is_executor_v<std::decay_t<Future>> &&
+            is_future_v<std::decay_t<Future>> &&
+            detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            // clang-format on
             int> = 0
 #endif
         >
@@ -107,8 +112,12 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
-            !is_executor_v<std::decay_t<
-                Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            // clang-format off
+            !is_executor_v<std::decay_t<Function>> &&
+            !is_executor_v<std::decay_t<Future>> &&
+            is_future_v<std::decay_t<Future>> &&
+            detail::is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+            // clang-format on
             int> = 0
 #endif
         >

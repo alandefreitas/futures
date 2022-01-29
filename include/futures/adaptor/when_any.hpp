@@ -179,7 +179,8 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -223,7 +224,8 @@ namespace futures {
         wait() const {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::true_type;
@@ -239,7 +241,8 @@ namespace futures {
         wait() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::false_type;
@@ -568,7 +571,8 @@ namespace futures {
             = std::chrono::seconds(0)) const {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             // Wait for on each thread, increasingly accounting for the time we
             // waited from the total
@@ -1227,31 +1231,6 @@ namespace futures {
     template <typename T>
     struct is_future<when_any_future<T>> : std::true_type
     {};
-
-    /// Specialization explicitly setting when_any_future<T> & as a type of
-    /// future
-    template <typename T>
-    struct is_future<when_any_future<T> &> : std::true_type
-    {};
-
-    /// Specialization explicitly setting when_any_future<T> && as a type of
-    /// future
-    template <typename T>
-    struct is_future<when_any_future<T> &&> : std::true_type
-    {};
-
-    /// Specialization explicitly setting const when_any_future<T> as a type of
-    /// future
-    template <typename T>
-    struct is_future<const when_any_future<T>> : std::true_type
-    {};
-
-    /// Specialization explicitly setting const when_any_future<T> & as a type
-    /// of future
-    template <typename T>
-    struct is_future<const when_any_future<T> &> : std::true_type
-    {};
-    /// @}
 #endif
 
     namespace detail {
@@ -1265,20 +1244,6 @@ namespace futures {
         template <typename Sequence>
         struct is_when_any_future<when_any_future<Sequence>> : std::true_type
         {};
-        template <typename Sequence>
-        struct is_when_any_future<const when_any_future<Sequence>>
-            : std::true_type
-        {};
-        template <typename Sequence>
-        struct is_when_any_future<when_any_future<Sequence> &> : std::true_type
-        {};
-        template <typename Sequence>
-        struct is_when_any_future<when_any_future<Sequence> &&> : std::true_type
-        {};
-        template <typename Sequence>
-        struct is_when_any_future<const when_any_future<Sequence> &>
-            : std::true_type
-        {};
 
         /// \brief Check if type is a when_any_future as constant bool
         template <class T>
@@ -1288,7 +1253,8 @@ namespace futures {
         /// or operator|| for futures)
         template <class T>
         using is_valid_when_any_argument = std::
-            disjunction<is_future<T>, std::is_invocable<T>>;
+            disjunction<is_future<std::decay_t<T>>, std::is_invocable<T>>;
+
         template <class T>
         constexpr bool is_valid_when_any_argument_v
             = is_valid_when_any_argument<T>::value;
@@ -1450,8 +1416,10 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
+            // clang-format off
             detail::is_valid_when_any_argument_v<
                 typename std::iterator_traits<InputIt>::value_type>,
+            // clang-format on
             int> = 0
 #endif
         >
@@ -1526,7 +1494,9 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
+            // clang-format off
             detail::are_valid_when_any_arguments_v<Futures...>,
+            // clang-format on
             int> = 0
 #endif
         >
@@ -1540,9 +1510,9 @@ namespace futures {
         // - shared futures need to be copied
         // - lambdas need to be posted
         [[maybe_unused]] constexpr auto move_share_or_post = [](auto &&f) {
-            if constexpr (is_shared_future_v<decltype(f)>) {
+            if constexpr (is_shared_future_v<std::decay_t<decltype(f)>>) {
                 return std::forward<decltype(f)>(f);
-            } else if constexpr (is_future_v<decltype(f)>) {
+            } else if constexpr (is_future_v<std::decay_t<decltype(f)>>) {
                 return std::move(std::forward<decltype(f)>(f));
             } else /* if constexpr (std::is_invocable_v<decltype(f)>) */ {
                 return ::futures::async(std::forward<decltype(f)>(f));

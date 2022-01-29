@@ -452,7 +452,7 @@ namespace futures::detail {
     template <typename Function, typename Future>
     struct result_of_then
     {
-        using type = typename unwrap_traits<Function, Future>::
+        using type = typename unwrap_traits<Function, std::decay_t<Future>>::
             result_future_type;
     };
 
@@ -476,7 +476,7 @@ namespace futures::detail {
         template <typename Function, class Future>
         static stop_source
         make_continuation_stop_source(const Future &before, const Function &) {
-            using traits = unwrap_traits<Function, Future>;
+            using traits = unwrap_traits<Function, std::decay_t<Future>>;
             if constexpr (traits::after_has_stop_token) {
                 if constexpr (
                     traits::inherit_stop_token
@@ -499,7 +499,7 @@ namespace futures::detail {
         static continuations_source
         copy_continuations_source(const Future &before) {
             constexpr bool before_is_lazy_continuable = is_lazy_continuable_v<
-                Future>;
+                std::decay_t<Future>>;
             if constexpr (before_is_lazy_continuable) {
                 return before.get_continuations_source();
             } else {
@@ -534,15 +534,20 @@ namespace futures::detail {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<std::decay_t<
-                    Executor>> && !is_executor_v<std::decay_t<Function>> && !is_executor_v<std::decay_t<Future>> && is_future_v<std::decay_t<Future>> && is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+                // clang-format off
+                is_executor_v<std::decay_t<Executor>> &&
+                !is_executor_v<std::decay_t<Function>> &&
+                !is_executor_v<std::decay_t<Future>> &&
+                is_future_v<std::decay_t<Future>> &&
+                is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+                // clang-format on
                 int> = 0
 #endif
             >
         result_of_then_t<Function, Future>
         operator()(const Executor &ex, Future &&before, Function &&after)
             const {
-            using traits = unwrap_traits<Function, Future>;
+            using traits = unwrap_traits<Function, std::decay_t<Future>>;
 
             // Shared sources
             stop_source ss = make_continuation_stop_source(before, after);

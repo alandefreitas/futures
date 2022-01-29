@@ -27,7 +27,7 @@ namespace futures::detail {
     template <class Future>
     constexpr decltype(auto)
     move_or_copy(Future &&before) {
-        if constexpr (is_shared_future_v<Future>) {
+        if constexpr (is_shared_future_v<std::decay_t<Future>>) {
             return std::forward<Future>(before);
         } else {
             return std::move(std::forward<Future>(before));

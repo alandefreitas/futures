@@ -18,7 +18,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation Stop - Shared stop source") {
         },
         10);
 
-    jcfuture<int> f2 = then(f1, [&](int count) { return count * 2; });
+    jcfuture<int> f2 = then(f1, [](int count) { return count * 2; });
     std::this_thread::sleep_for(100ms);
     REQUIRE_FALSE(is_ready(f2));
     f2.request_stop(); // <- inherited from f1
