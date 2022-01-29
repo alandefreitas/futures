@@ -57,14 +57,14 @@ namespace futures {
     };
 
     /// \brief Get the inline execution context
-    asio::execution_context &
+    inline asio::execution_context &
     inline_execution_context() {
         static asio::execution_context context;
         return context;
     }
 
     /// \brief Make an inline executor object
-    inline_executor
+    inline inline_executor
     make_inline_executor() {
         asio::execution_context &ctx = inline_execution_context();
         return inline_executor{ &ctx };

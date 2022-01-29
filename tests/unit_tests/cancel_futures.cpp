@@ -62,6 +62,12 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
             REQUIRE(t >= 2.2);
         }
 
+        SECTION("Stop from continuation source") {
+            ss.request_stop();
+            double t = f2.get();
+            REQUIRE(t >= 2.2);
+        }
+
         SECTION("Stop from original source") {
             // the stop state is not invalided in the original future
             f.request_stop();

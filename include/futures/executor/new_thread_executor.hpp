@@ -57,10 +57,6 @@ namespace futures {
         asio::execution_context &ctx = inline_execution_context();
         return new_thread_executor{ &ctx };
     }
-
-    /// \brief Make an new thread executor object
-    inline_later_executor
-    make_inline_later_executor();
     /** @} */ // \addtogroup executors Executors
 } // namespace futures
 
