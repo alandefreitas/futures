@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (const link of external_links.concat(repo_link)) {
         link.target = "_blank"
     }
+
     // Put <code> around cpp reference links regardless of macros
     let cpp_reference_links = Array.from(document.querySelectorAll('.md-typeset a[href*="cppreference"]'));
     let open_std_links = Array.from(document.querySelectorAll('.md-typeset a[href*="open-std"]'));
@@ -19,5 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
             continue;
         }
         link.innerHTML = "<code>" + link.innerHTML + "</code>"
+    }
+
+    // Fix bug in doxybook reference anchors
+    let brokenAnchors = ['#function-', '#variable-']
+    for (const anchor of brokenAnchors) {
+        for (const link of futures_reference_link) {
+            anchorPos = link.href.lastIndexOf(anchor);
+            if (anchorPos !== -1) {
+                let splitPos = anchorPos + anchor.length;
+                let linkLhs = link.href.substr(0, splitPos);
+                let linkRhs = link.href.substr(splitPos);
+                link.href = linkLhs + linkRhs.replaceAll('-', '_');
+                console.log(link.href)
+            }
+        }
     }
 })
