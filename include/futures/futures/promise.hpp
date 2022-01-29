@@ -104,10 +104,10 @@ namespace futures {
         Future
         get_future() {
             if (obtained_) {
-                throw future_already_retrieved{};
+                detail::throw_exception<future_already_retrieved>();
             }
             if (!shared_state_) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             obtained_ = true;
             return Future{ shared_state_ };
@@ -119,7 +119,7 @@ namespace futures {
         void
         set_exception(std::exception_ptr p) {
             if (!shared_state_) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             shared_state_->set_exception(p);
         }
@@ -177,7 +177,7 @@ namespace futures {
         void
         set_value(R const &value) {
             if (!promise_base<R>::get_shared_state()) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             promise_base<R>::get_shared_state()->set_value(value);
         }
@@ -187,7 +187,7 @@ namespace futures {
         void
         set_value(R &&value) {
             if (!promise_base<R>::get_shared_state()) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             promise_base<R>::get_shared_state()->set_value(std::move(value));
         }
@@ -211,7 +211,7 @@ namespace futures {
         void
         set_value(R &value) {
             if (!promise_base<R &>::get_shared_state()) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             promise_base<R &>::get_shared_state()->set_value(value);
         }
@@ -235,7 +235,7 @@ namespace futures {
         void
         set_value() { // NOLINT(readability-make-member-function-const)
             if (!promise_base<void>::get_shared_state()) {
-                throw promise_uninitialized{};
+                detail::throw_exception<promise_uninitialized>();
             }
             promise_base<void>::get_shared_state()->set_value();
         }

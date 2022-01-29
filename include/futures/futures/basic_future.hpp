@@ -248,7 +248,7 @@ namespace futures {
                 const Executor &ex,
                 continuations_state::continuation_type &&fn) {
                 if (!static_cast<Derived *>(this)->valid()) {
-                    throw std::future_error(std::future_errc::no_state);
+                    detail::throw_exception<std::future_error>(std::future_errc::no_state);
                 }
                 if (!static_cast<Derived *>(this)->is_ready()
                     && continuations_source_.run_possible())
@@ -589,7 +589,7 @@ namespace futures {
         /// The behaviour depends on shared_based.
         decltype(auto) get() {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             if constexpr (is_shared_v) {
                 return state_->get();
@@ -614,7 +614,7 @@ namespace futures {
         /// \return A shared variant of this future
         basic_future_shared_version_t share() {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             basic_future_shared_version_t res{
                 is_shared_v ? state_ : std::move(state_)
@@ -635,7 +635,7 @@ namespace futures {
         /// threw an exception
         std::exception_ptr get_exception_ptr() {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             return state_->get_exception_ptr();
         }
@@ -648,7 +648,7 @@ namespace futures {
         /// \brief Blocks until the result becomes available.
         void wait() const {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             state_->wait();
         }
@@ -658,7 +658,7 @@ namespace futures {
         [[nodiscard]] std::future_status wait_for(
             const std::chrono::duration<Rep, Period> &timeout_duration) const {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             return state_->wait_for(timeout_duration);
         }
@@ -669,7 +669,7 @@ namespace futures {
             const std::chrono::time_point<Clock, Duration> &timeout_time)
             const {
             if (!valid()) {
-                throw future_uninitialized{};
+                detail::throw_exception<future_uninitialized>();
             }
             return state_->wait_until(timeout_time);
         }
@@ -677,7 +677,7 @@ namespace futures {
         /// \brief Checks if the shared state is ready
         [[nodiscard]] bool is_ready() const {
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             return state_->is_ready();
         }

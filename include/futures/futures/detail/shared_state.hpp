@@ -114,7 +114,7 @@ namespace futures {
             void
             set_exception(std::exception_ptr except) {
                 if (status_.load(std::memory_order_acquire) == status::ready) {
-                    throw promise_already_satisfied();
+                    detail::throw_exception<promise_already_satisfied>();
                 }
                 // ready_ already protects except_ because only one thread
                 // should call this function
@@ -128,7 +128,7 @@ namespace futures {
             std::exception_ptr
             get_exception_ptr() const {
                 if (status_.load(std::memory_order_acquire) != status::ready) {
-                    throw promise_uninitialized();
+                    detail::throw_exception<promise_uninitialized>();
                 }
                 return except_;
             }
@@ -555,7 +555,7 @@ namespace futures {
         set_value(R const &value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             if (is_ready()) {
-                throw promise_already_satisfied{};
+                detail::throw_exception<promise_already_satisfied>();
             }
             ::new (static_cast<void *>(std::addressof(storage_))) R(value);
             detail::relocker relk(lk);
@@ -571,7 +571,7 @@ namespace futures {
         set_value(R &&value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             if (is_ready()) {
-                throw promise_already_satisfied{};
+                detail::throw_exception<promise_already_satisfied>();
             }
             ::new (static_cast<void *>(std::addressof(storage_)))
                 R(std::move(value));
@@ -661,7 +661,7 @@ namespace futures {
         set_value(R &value, std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             if (is_ready()) {
-                throw promise_already_satisfied();
+                detail::throw_exception<promise_already_satisfied>();
             }
             value_ = std::addressof(value);
             detail::relocker relk(lk);
@@ -746,7 +746,7 @@ namespace futures {
         set_value(std::unique_lock<std::mutex> &lk) {
             assert(lk.owns_lock());
             if (is_ready()) {
-                throw promise_already_satisfied();
+                detail::throw_exception<promise_already_satisfied>();
             }
             detail::relocker relk(lk);
             set_ready();

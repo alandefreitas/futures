@@ -179,7 +179,7 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -223,7 +223,7 @@ namespace futures {
         wait() const {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::true_type;
@@ -239,7 +239,7 @@ namespace futures {
         wait() {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             // Reuse the logic from wait_for here
             using const_version = std::false_type;
@@ -568,7 +568,7 @@ namespace futures {
             = std::chrono::seconds(0)) const {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             // Wait for on each thread, increasingly accounting for the time we
             // waited from the total

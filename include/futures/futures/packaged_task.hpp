@@ -173,10 +173,10 @@ namespace futures {
         Future
         get_future() {
             if (future_retrieved_) {
-                throw future_already_retrieved{};
+                detail::throw_exception<future_already_retrieved>();
             }
             if (!valid()) {
-                throw packaged_task_uninitialized{};
+                detail::throw_exception<packaged_task_uninitialized>();
             }
             future_retrieved_ = true;
             return Future{ std::static_pointer_cast<shared_state<R>>(task_) };
@@ -193,7 +193,7 @@ namespace futures {
         void
         operator()(Args... args) {
             if (!valid()) {
-                throw packaged_task_uninitialized{};
+                detail::throw_exception<packaged_task_uninitialized>();
             }
             task_->run(std::forward<Args>(args)...);
         }
@@ -207,7 +207,7 @@ namespace futures {
         void
         reset() {
             if (!valid()) {
-                throw packaged_task_uninitialized{};
+                detail::throw_exception<packaged_task_uninitialized>();
             }
             task_ = task_->reset();
             future_retrieved_ = false;

@@ -127,7 +127,7 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -155,7 +155,7 @@ namespace futures {
         wait() const {
             // Check if the sequence is valid
             if (!valid()) {
-                throw std::future_error(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(std::future_errc::no_state);
             }
             if constexpr (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
@@ -189,7 +189,7 @@ namespace futures {
 
                 // Check if the sequence is valid
                 if (!valid()) {
-                    throw std::future_error(std::future_errc::no_state);
+                    detail::throw_exception<std::future_error>(std::future_errc::no_state);
                 }
                 using duration_type = std::chrono::duration<Rep, Period>;
                 using namespace std::chrono;

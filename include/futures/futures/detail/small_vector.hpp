@@ -1234,7 +1234,7 @@ namespace futures::detail {
             std::enable_if_t<!std::is_trivially_copyable_v<T2>, int> = 0>
         void
         copy_inline_trivial(small_vector const &) {
-            throw std::logic_error(
+            detail::throw_exception<std::logic_error>(
                 "Attempting to trivially copy not trivially copyable type");
         }
 
