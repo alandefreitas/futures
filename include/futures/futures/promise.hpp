@@ -55,7 +55,8 @@ namespace futures {
         /// as the future shared state.
         template <typename Allocator>
         promise_base(std::allocator_arg_t, Allocator alloc)
-            : shared_state_(std::allocate_shared<shared_state<R>>(alloc)) {}
+            : shared_state_(
+                std::allocate_shared<detail::shared_state<R>>(alloc)) {}
 
         /// \brief No copy constructor
         promise_base(promise_base const &) = delete;
@@ -146,23 +147,27 @@ namespace futures {
         }
 
         /// \brief Intrusive pointer to the future corresponding to this promise
-        constexpr std::shared_ptr<shared_state<R>> &
+        constexpr std::shared_ptr<detail::shared_state<R>> &
         get_shared_state() {
             return shared_state_;
         };
 
     private:
-        /// \brief True if the future has already obtained the shared state
+        /// \brief True if the future has already obtained the promise
         bool obtained_{ false };
 
-        /// \brief Intrusive pointer to the future corresponding to this promise
-        std::shared_ptr<shared_state<R>> shared_state_{};
+        /// \brief Pointer to the shared state for this promise
+        std::shared_ptr<detail::shared_state<R>> shared_state_{};
     };
 
     /// \brief A shared state that will later be acquired by a future type
     ///
-    /// The difference between the promise specializations is only in how they
-    /// handle their set_value functions.
+    /// The shared state is accessed by a future and a promise. The promise
+    /// can write to the shared state while the future can read from it.
+    ///
+    /// The shared state is an implementation detail that takes advantages
+    /// of the properties of futures and promises to avoid locking and
+    /// wasteful memory allocations.
     ///
     /// \tparam R The shared state type
     template <typename R>
@@ -172,78 +177,25 @@ namespace futures {
         /// \brief Create the promise for type R
         using promise_base<R>::promise_base;
 
-        /// \brief Copy and set the promise value so it can be obtained by the
-        /// future \param value lvalue reference to the shared state value
+        /// \brief Set the promise value
+        ///
+        /// After this value is set, it can be obtained by the future object
+        ///
+        /// \param args arguments to set the promise
+        template <class... Args>
         void
-        set_value(R const &value) {
+        set_value(Args &&...args) {
             if (!promise_base<R>::get_shared_state()) {
                 detail::throw_exception<promise_uninitialized>();
             }
-            promise_base<R>::get_shared_state()->set_value(value);
-        }
-
-        /// \brief Move and set the promise value so it can be obtained by the
-        /// future \param value rvalue reference to the shared state value
-        void
-        set_value(R &&value) {
-            if (!promise_base<R>::get_shared_state()) {
-                detail::throw_exception<promise_uninitialized>();
-            }
-            promise_base<R>::get_shared_state()->set_value(std::move(value));
+            promise_base<R>::get_shared_state()->set_value(
+                std::forward<Args>(args)...);
         }
 
         /// \brief Swap the value of two promises
         void
         swap(promise &other) noexcept {
             promise_base<R>::swap(other);
-        }
-    };
-
-    /// \brief A shared state that will later be acquired by a future type
-    template <typename R>
-    class promise<R &> : public promise_base<R &>
-    {
-    public:
-        /// \brief Create the promise for type R&
-        using promise_base<R &>::promise_base;
-
-        /// \brief Set the promise value so it can be obtained by the future
-        void
-        set_value(R &value) {
-            if (!promise_base<R &>::get_shared_state()) {
-                detail::throw_exception<promise_uninitialized>();
-            }
-            promise_base<R &>::get_shared_state()->set_value(value);
-        }
-
-        /// \brief Swap the value of two promises
-        void
-        swap(promise &other) noexcept {
-            promise_base<R &>::swap(other);
-        }
-    };
-
-    /// \brief A shared state that will later be acquired by a future type
-    template <>
-    class promise<void> : public promise_base<void>
-    {
-    public:
-        /// \brief Create the promise for type void
-        using promise_base<void>::promise_base;
-
-        /// \brief Set the promise value, so it can be obtained by the future
-        void
-        set_value() { // NOLINT(readability-make-member-function-const)
-            if (!promise_base<void>::get_shared_state()) {
-                detail::throw_exception<promise_uninitialized>();
-            }
-            promise_base<void>::get_shared_state()->set_value();
-        }
-
-        /// \brief Swap the value of two promises
-        void
-        swap(promise &other) noexcept {
-            promise_base<void>::swap(other);
         }
     };
 

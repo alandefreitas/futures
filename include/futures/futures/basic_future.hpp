@@ -177,7 +177,7 @@ namespace futures {
         ///
         /// \param s Future shared state
         explicit basic_future(
-            const std::shared_ptr<shared_state<T>> &s) noexcept
+            const std::shared_ptr<detail::shared_state<T>> &s) noexcept
             : lazy_continuations_base(), // No continuations at constructions,
                                          // but callbacks should be set
               stop_token_base(), // Stop token false, but stop token parameter
@@ -415,7 +415,7 @@ namespace futures {
             if constexpr (is_shared_v) {
                 return state_->get();
             } else {
-                std::shared_ptr<shared_state<T>> tmp;
+                std::shared_ptr<detail::shared_state<T>> tmp;
                 tmp.swap(state_);
                 if constexpr (std::is_reference_v<T> || std::is_void_v<T>) {
                     return tmp->get();
@@ -544,7 +544,7 @@ namespace futures {
             if (!state_) {
                 detail::throw_exception<future_uninitialized>();
             }
-            return state_->mutex();
+            return state_->waiters_mutex();
         }
 
     private:
@@ -586,7 +586,7 @@ namespace futures {
         bool join_{ true };
 
         /// \brief Pointer to shared state
-        std::shared_ptr<shared_state<T>> state_{};
+        std::shared_ptr<detail::shared_state<T>> state_{};
         /// @}
     };
 

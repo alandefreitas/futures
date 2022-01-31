@@ -179,7 +179,7 @@ namespace futures {
                 detail::throw_exception<packaged_task_uninitialized>();
             }
             future_retrieved_ = true;
-            return Future{ std::static_pointer_cast<shared_state<R>>(task_) };
+            return Future{ std::static_pointer_cast<detail::shared_state<R>>(task_) };
         }
 
         /// \brief Executes the function and set the shared state

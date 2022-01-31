@@ -56,7 +56,7 @@ namespace futures {
         using decay_type = typename std::decay_t<T>;
         promise<decay_type> p;
         Future result = p.template get_future<Future>();
-        p.set_value(value);
+        p.set_value(std::forward<T>(value));
         return result;
     }
 

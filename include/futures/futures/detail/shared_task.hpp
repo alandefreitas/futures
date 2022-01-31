@@ -8,6 +8,7 @@
 #ifndef FUTURES_SHARED_TASK_H
 #define FUTURES_SHARED_TASK_H
 
+#include <futures/executor/detail/allocator_rebind.hpp>
 #include <futures/futures/detail/empty_base.hpp>
 #include <futures/futures/detail/shared_state.hpp>
 #include <futures/futures/detail/to_address.hpp>
@@ -49,15 +50,14 @@ namespace futures::detail {
         reset() = 0;
     };
 
-    /// \brief A shared task object, that also stores the function to create the
-    /// shared state
+    /// \brief A shared state that contains a task
     ///
     /// A shared_task extends the shared state with a task. A task is an
     /// extension of and analogous with shared states. The main difference is
     /// that tasks also define a function that specify how to create the state,
     /// with the `run` function.
     ///
-    /// In practice, a shared_task are to a packaged_task what a shared state is
+    /// In practice, a shared_task is to a packaged_task what a shared_state is
     /// to a promise.
     ///
     /// \tparam R Type returned by the task callable
@@ -67,15 +67,14 @@ namespace futures::detail {
         : public shared_task_base<R, Args...>
 #ifndef FUTURES_DOXYGEN
         , public maybe_empty<Fn>
-        , public maybe_empty<
-              /* allocator_type */ typename std::allocator_traits<Allocator>::
-                  template rebind_alloc<shared_task<Fn, Allocator, R, Args...>>>
+        , public maybe_empty<allocator_rebind_t<
+              Allocator,
+              shared_task<Fn, Allocator, R, Args...>>>
 #endif
     {
     public:
         /// \brief Allocator used to allocate this task object type
-        using allocator_type = typename std::allocator_traits<
-            Allocator>::template rebind_alloc<shared_task>;
+        using allocator_type = allocator_rebind_t<Allocator, shared_task>;
 
         /// \brief Construct a task object for the specified allocator and
         /// function, copying the function
@@ -105,15 +104,13 @@ namespace futures::detail {
         void
         run(Args &&...args) final {
             try {
-                if constexpr (std::is_same_v<R, void>) {
-                    std::apply(
-                        fn(),
-                        std::make_tuple(std::forward<Args>(args)...));
+                if constexpr (std::is_void_v<R>) {
+                    std::apply(maybe_empty<Fn>::get(), std::make_tuple(args...));
                     this->set_value();
                 } else {
                     this->set_value(std::apply(
-                        fn(),
-                        std::make_tuple(std::forward<Args>(args)...)));
+                        maybe_empty<Fn>::get(),
+                        std::make_tuple(args...)));
                 }
             }
             catch (...) {
@@ -126,36 +123,10 @@ namespace futures::detail {
         /// This constructs a task object of same type from scratch.
         typename std::shared_ptr<shared_task_base<R, Args...>>
         reset() final {
-            return std::allocate_shared<
-                shared_task>(alloc(), alloc(), std::move(fn()));
-        }
-
-    private:
-        /// @name Maybe-empty internal members
-        /// @{
-
-        /// \brief Internal function object representing the task function
-        const Fn &
-        fn() const {
-            return maybe_empty<Fn>::get();
-        }
-
-        /// \brief Internal function object representing the task function
-        Fn &
-        fn() {
-            return maybe_empty<Fn>::get();
-        }
-
-        /// \brief Internal function object representing the task function
-        const allocator_type &
-        alloc() const {
-            return maybe_empty<allocator_type>::get();
-        }
-
-        /// \brief Internal function object representing the task function
-        allocator_type &
-        alloc() {
-            return maybe_empty<allocator_type>::get();
+            return std::allocate_shared<shared_task>(
+                maybe_empty<allocator_type>::get(),
+                maybe_empty<allocator_type>::get(),
+                std::move(maybe_empty<Fn>::get()));
         }
 
         /// @}
