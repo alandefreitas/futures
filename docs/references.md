@@ -41,13 +41,18 @@
 <!-- Futures -->
 [await]: /futures/reference/Namespaces/namespacefutures/#function-await
 [async]: /futures/reference/Namespaces/namespacefutures/#function-async
+[schedule]: /futures/reference/Namespaces/namespacefutures/#function-schedule
 [launch]: /futures/reference/Namespaces/namespacefutures/#enum-launch
 [executor]: /futures/reference/Namespaces/namespacefutures/#using-is_executor
 [futures::async]: /futures/reference/Namespaces/namespacefutures/#function-async
 [is_future]: /futures/reference/Classes/structfutures_1_1is__future/
 [basic_future]: /futures/reference/Classes/structfutures_1_1is__future/
+[future_options]: /futures/reference/Classes/structfutures_1_1future__options/
 [jfuture]: /futures/reference/Namespaces/namespacefutures/#using-jfuture
 [shared_jfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_jfuture
+[future]: /futures/reference/Namespaces/namespacefutures/#using-future
+[vfuture]: /futures/reference/Namespaces/namespacefutures/#using-vfuture
+[shared_future]: /futures/reference/Namespaces/namespacefutures/#using-shared_future
 [cfuture]: /futures/reference/Namespaces/namespacefutures/#using-cfuture
 [shared_cfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_cfuture
 [jcfuture]: /futures/reference/Namespaces/namespacefutures/#using-jcfuture

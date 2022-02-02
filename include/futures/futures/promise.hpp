@@ -34,7 +34,10 @@ namespace futures {
     /// The specific promise specialization will only differ by their set_value
     /// functions.
     ///
-    template <typename R>
+    template <
+        class R,
+        class Options
+        = future_options<executor_opt<default_executor_type>, continuable_opt>>
     class promise_base
     {
     public:
@@ -54,9 +57,8 @@ namespace futures {
         /// allocator. This object is stored in the internal intrusive pointer
         /// as the future shared state.
         template <typename Allocator>
-        promise_base(std::allocator_arg_t, Allocator alloc)
-            : shared_state_(
-                std::allocate_shared<detail::shared_state<R>>(alloc)) {}
+        promise_base(std::allocator_arg_t, const Allocator &alloc)
+            : shared_state_(make_shared_state(alloc)) {}
 
         /// \brief No copy constructor
         promise_base(promise_base const &) = delete;
@@ -101,8 +103,7 @@ namespace futures {
         ///
         /// This function expects future type constructors to accept pointers to
         /// shared states.
-        template <class Future = futures::cfuture<R>>
-        Future
+        basic_future<R, Options>
         get_future() {
             if (obtained_) {
                 detail::throw_exception<future_already_retrieved>();
@@ -111,7 +112,7 @@ namespace futures {
                 detail::throw_exception<promise_uninitialized>();
             }
             obtained_ = true;
-            return Future{ shared_state_ };
+            return basic_future<R, Options>{ shared_state_ };
         }
 
         /// \brief Set the promise result as an exception
@@ -147,17 +148,29 @@ namespace futures {
         }
 
         /// \brief Intrusive pointer to the future corresponding to this promise
-        constexpr std::shared_ptr<detail::shared_state<R>> &
+        constexpr std::shared_ptr<detail::shared_state<R, Options>> &
         get_shared_state() {
             return shared_state_;
         };
 
     private:
+        template <class Allocator>
+        std::shared_ptr<detail::shared_state<R, Options>>
+        make_shared_state(const Allocator &alloc) {
+            if constexpr (Options::has_executor) {
+                return std::allocate_shared<detail::shared_state<R, Options>>(
+                    alloc,
+                    make_default_executor());
+            } else {
+                return std::allocate_shared<detail::shared_state<R, Options>>(alloc);
+            }
+        }
+
         /// \brief True if the future has already obtained the promise
         bool obtained_{ false };
 
         /// \brief Pointer to the shared state for this promise
-        std::shared_ptr<detail::shared_state<R>> shared_state_{};
+        std::shared_ptr<detail::shared_state<R, Options>> shared_state_{};
     };
 
     /// \brief A shared state that will later be acquired by a future type
@@ -170,12 +183,15 @@ namespace futures {
     /// wasteful memory allocations.
     ///
     /// \tparam R The shared state type
-    template <typename R>
-    class promise : public promise_base<R>
+    template <
+        class R,
+        class Options
+        = future_options<executor_opt<default_executor_type>, continuable_opt>>
+    class promise : public promise_base<R, Options>
     {
     public:
         /// \brief Create the promise for type R
-        using promise_base<R>::promise_base;
+        using promise_base<R, Options>::promise_base;
 
         /// \brief Set the promise value
         ///
@@ -185,17 +201,17 @@ namespace futures {
         template <class... Args>
         void
         set_value(Args &&...args) {
-            if (!promise_base<R>::get_shared_state()) {
+            if (!promise_base<R, Options>::get_shared_state()) {
                 detail::throw_exception<promise_uninitialized>();
             }
-            promise_base<R>::get_shared_state()->set_value(
+            promise_base<R, Options>::get_shared_state()->set_value(
                 std::forward<Args>(args)...);
         }
 
         /// \brief Swap the value of two promises
         void
         swap(promise &other) noexcept {
-            promise_base<R>::swap(other);
+            promise_base<R, Options>::swap(other);
         }
     };
 

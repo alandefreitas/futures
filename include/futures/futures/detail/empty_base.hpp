@@ -102,6 +102,10 @@ namespace futures::detail {
         }
     };
 
+    template <bool B, class T, unsigned BaseIndex = 0>
+    using conditional_base
+        = maybe_empty<std::conditional_t<B, T, empty_value_type>, BaseIndex>;
+
     /** @} */
 } // namespace futures::detail
 

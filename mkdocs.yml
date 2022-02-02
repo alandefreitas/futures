@@ -46,6 +46,7 @@ edit_uri: ""
 
 plugins:
   - search
+  - mermaid2
 
 extra:
   analytics:

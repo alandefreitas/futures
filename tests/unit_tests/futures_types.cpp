@@ -1,9 +1,7 @@
+#include <futures/futures.hpp>
 #include <array>
 #include <string>
-
 #include <catch2/catch.hpp>
-
-#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Futures types") {
     using namespace futures;
@@ -11,10 +9,15 @@ TEST_CASE(TEST_CASE_PREFIX "Futures types") {
     constexpr int32_t thread_pool_replicates = 100;
     SECTION("Continuable") {
         for (int32_t i = 0; i < thread_pool_replicates; ++i) {
-            auto fn = [] { return 2; };
+            auto fn = [] {
+                return 2;
+            };
             using Function = decltype(fn);
-            STATIC_REQUIRE(!std::is_invocable_v<std::decay_t<Function>, stop_token>);
-            cfuture<int32_t> r = async([] { return 2; });
+            STATIC_REQUIRE(
+                !std::is_invocable_v<std::decay_t<Function>, stop_token>);
+            STATIC_REQUIRE(
+                std::is_same_v<detail::launch_result_t<decltype(fn)>, int>);
+            auto r = async(fn);
             REQUIRE(r.valid());
             REQUIRE(r.get() == 2);
             REQUIRE_FALSE(r.valid());
@@ -22,8 +25,30 @@ TEST_CASE(TEST_CASE_PREFIX "Futures types") {
     }
 
     SECTION("Shared") {
+        using future_options_t = future_options<continuable_opt>;
+        using shared_state_options = detail::
+            remove_future_option_t<shared_opt, future_options_t>;
+        STATIC_REQUIRE(
+            std::is_same_v<
+                shared_state_options,
+                future_options<continuable_opt>>);
+
+        using shared_future_options_t
+            = future_options<continuable_opt, shared_opt>;
+        using shared_shared_state_options = detail::
+            remove_future_option_t<shared_opt, shared_future_options_t>;
+        STATIC_REQUIRE(
+            std::is_same_v<
+                shared_shared_state_options,
+                future_options<continuable_opt>>);
+
+        auto fn = [] {
+            return 2;
+        };
+        STATIC_REQUIRE(
+            std::is_same_v<detail::launch_result_t<decltype(fn)>, int>);
         for (int32_t i = 0; i < thread_pool_replicates; ++i) {
-            cfuture<int32_t> r = async([] { return 2; });
+            cfuture<int32_t> r = async(fn);
             REQUIRE(r.valid());
             shared_cfuture<int32_t> r2 = r.share();
             REQUIRE_FALSE(r.valid());
@@ -33,19 +58,10 @@ TEST_CASE(TEST_CASE_PREFIX "Futures types") {
         }
     }
 
-    SECTION("Dispatch immediately") {
-        for (int32_t i = 0; i < thread_pool_replicates; ++i) {
-            cfuture<int32_t> r = async(launch::executor_now, [] { return 2; });
-            REQUIRE(r.valid());
-            REQUIRE(r.get() == 2);
-            REQUIRE_FALSE(r.valid());
-        }
-    }
-
     SECTION("Promise / event future") {
         for (int32_t i = 0; i < thread_pool_replicates; ++i) {
             promise<int32_t> p;
-            future<int32_t> r = p.template get_future<future<int32_t>>();
+            cfuture<int32_t> r = p.get_future();
             REQUIRE_FALSE(is_ready(r));
             p.set_value(2);
             REQUIRE(is_ready(r));

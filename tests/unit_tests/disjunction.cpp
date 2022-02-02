@@ -185,31 +185,16 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             using Function = decltype(continuation);
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             // when_any_result -> int
-            using value_type = unwrap_future_t<Future>;
+            using value_type = future_value_t<Future>;
             using when_any_sequence = typename value_type::sequence_type;
-            using when_any_element_type = detail::range_or_tuple_element_type_t<
+            using when_any_element_type = detail::range_or_tuple_value_t<
                 when_any_sequence>;
             STATIC_REQUIRE(
                 detail::is_tuple_invocable_v<
                     Function,
                     detail::tuple_type_concat_t<
                         std::tuple<>,
-                        std::tuple<unwrap_future_t<when_any_element_type>>>>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    detail::unwrap_traits<Function, Future>::
-                        unwrap_result_no_token_type,
-                    int>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    detail::unwrap_traits<Function, Future>::
-                        unwrap_result_with_token_type,
-                    detail::unwrapping_failure_t>);
-            STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::
-                               is_valid_without_stop_token);
-            STATIC_REQUIRE(!detail::unwrap_traits<Function, Future>::
-                               is_valid_with_stop_token);
-            STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::is_valid);
+                        std::tuple<future_value_t<when_any_element_type>>>>);
             STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
             auto f4 = then(f, continuation);
             int r = f4.get();
@@ -451,7 +436,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             return 4;
         };
         STATIC_REQUIRE(
-            std::is_same_v<unwrap_future_t<Future>, when_any_result<Tuple>>);
+            std::is_same_v<future_value_t<Future>, when_any_result<Tuple>>);
         SECTION("Sync unwrap") {
             detail::unwrap_and_continue(f, [](int a) { return a * 5; });
         }

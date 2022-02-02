@@ -27,8 +27,8 @@ namespace futures::detail {
     ///
     /// \tparam R Type returned by the task callable
     /// \tparam Args Argument types to run the task callable
-    template <typename R, typename... Args>
-    class shared_task_base : public shared_state<R>
+    template <class R, class Options, class... Args>
+    class shared_task_base : public shared_state<R, Options>
     {
     public:
         /// \brief Virtual task destructor
@@ -62,16 +62,29 @@ namespace futures::detail {
     ///
     /// \tparam R Type returned by the task callable
     /// \tparam Args Argument types to run the task callable
-    template <typename Fn, typename Allocator, typename R, typename... Args>
+    template <
+        typename Fn,
+        typename Allocator,
+        class Options,
+        typename R,
+        typename... Args>
     class shared_task
-        : public shared_task_base<R, Args...>
+        : public shared_task_base<R, Options, Args...>
 #ifndef FUTURES_DOXYGEN
         , public maybe_empty<Fn>
         , public maybe_empty<allocator_rebind_t<
               Allocator,
-              shared_task<Fn, Allocator, R, Args...>>>
+              shared_task<Fn, Allocator, Options, R, Args...>>>
 #endif
     {
+    private:
+        using stop_source_base = detail::maybe_empty<
+            std::conditional_t<
+                Options::is_stoppable,
+                stop_source,
+                detail::empty_value_type>,
+            0>;
+
     public:
         /// \brief Allocator used to allocate this task object type
         using allocator_type = allocator_rebind_t<Allocator, shared_task>;
@@ -79,13 +92,14 @@ namespace futures::detail {
         /// \brief Construct a task object for the specified allocator and
         /// function, copying the function
         shared_task(const allocator_type &alloc, const Fn &fn)
-            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{ fn },
+            : shared_task_base<R, Options, Args...>{}, maybe_empty<Fn>{ fn },
               maybe_empty<allocator_type>{ alloc } {}
 
         /// \brief Construct a task object for the specified allocator and
         /// function, moving the function
         shared_task(const allocator_type &alloc, Fn &&fn)
-            : shared_task_base<R, Args...>{}, maybe_empty<Fn>{ std::move(fn) },
+            : shared_task_base<R, Options, Args...>{},
+              maybe_empty<Fn>{ std::move(fn) },
               maybe_empty<allocator_type>{ alloc } {}
 
         /// \brief No copy constructor
@@ -99,10 +113,39 @@ namespace futures::detail {
         /// \brief Virtual shared task destructor
         virtual ~shared_task() = default;
 
-        /// \brief Run the task function with the given arguments and use the
-        /// result to set the shared state value \param args Arguments
+        /// \brief Run the task function with the given arguments and use
+        /// the result to set the shared state value \param args Arguments
         void
         run(Args &&...args) final {
+            if constexpr (!Options::is_stoppable) {
+                apply(std::forward<Args>(args)...);
+            } else {
+                apply(
+                    stop_source_base::get().get_token(),
+                    std::forward<Args>(args)...);
+            }
+        }
+
+        /// \brief Reallocate and reconstruct a task object
+        ///
+        /// This constructs a task object of same type from scratch.
+        typename std::shared_ptr<shared_task_base<R, Options, Args...>>
+        reset() final {
+            return std::allocate_shared<shared_task>(
+                maybe_empty<allocator_type>::get(),
+                maybe_empty<allocator_type>::get(),
+                std::move(maybe_empty<Fn>::get()));
+        }
+
+        typename stop_source_base::value_type
+        get_stop_source() {
+            return stop_source_base::get();
+        }
+        /// @}
+    private:
+        template <class... UArgs>
+        void
+        apply(UArgs &&...args) {
             try {
                 if constexpr (std::is_void_v<R>) {
                     std::apply(maybe_empty<Fn>::get(), std::make_tuple(args...));
@@ -117,19 +160,6 @@ namespace futures::detail {
                 this->set_exception(std::current_exception());
             }
         }
-
-        /// \brief Reallocate and reconstruct a task object
-        ///
-        /// This constructs a task object of same type from scratch.
-        typename std::shared_ptr<shared_task_base<R, Args...>>
-        reset() final {
-            return std::allocate_shared<shared_task>(
-                maybe_empty<allocator_type>::get(),
-                maybe_empty<allocator_type>::get(),
-                std::move(maybe_empty<Fn>::get()));
-        }
-
-        /// @}
     };
 
     /** @} */ // \addtogroup futures Futures

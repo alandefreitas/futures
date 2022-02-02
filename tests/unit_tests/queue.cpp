@@ -43,10 +43,10 @@ TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {
 
     SECTION("Future") {
         SECTION("Queue") {
-            lock_free_queue<cfuture<int>> q;
-            q.push(make_ready_cfuture(1));
-            q.push(make_ready_cfuture(2));
-            q.push(make_ready_cfuture(3));
+            lock_free_queue<basic_future<int, future_options<>>> q;
+            q.push(make_ready_future(1));
+            q.push(make_ready_future(2));
+            q.push(make_ready_future(3));
             REQUIRE(q.pop().get() == 1);
             REQUIRE_FALSE(q.empty());
             REQUIRE(q.pop().get() == 2);

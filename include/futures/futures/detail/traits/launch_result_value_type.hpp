@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ASYNC_RESULT_VALUE_TYPE_H
-#define FUTURES_ASYNC_RESULT_VALUE_TYPE_H
+#ifndef FUTURES_launch_result_value_type_H
+#define FUTURES_launch_result_value_type_H
 
 #include <futures/futures/stop_token.hpp>
 #include <futures/futures/detail/traits/type_member_or_void.hpp>
@@ -23,7 +23,7 @@ namespace futures::detail {
     /// different as the stop_token is provided by the async function and is
     /// thus not a part of Args, so both paths need to be considered.
     template <typename Function, typename... Args>
-    using async_result_value_type = std::conditional<
+    using launch_result_value_type = std::conditional<
         std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
         type_member_or_void_t<
             std::invoke_result<std::decay_t<Function>, stop_token, Args...>>,
@@ -31,11 +31,11 @@ namespace futures::detail {
             std::invoke_result<std::decay_t<Function>, Args...>>>;
 
     template <typename Function, typename... Args>
-    using async_result_value_type_t =
-        typename async_result_value_type<Function, Args...>::type;
+    using launch_result_value_type_t =
+        typename launch_result_value_type<Function, Args...>::type;
 
     /** @} */
 } // namespace futures::detail
 
 
-#endif // FUTURES_ASYNC_RESULT_VALUE_TYPE_H
+#endif // FUTURES_launch_result_value_type_H

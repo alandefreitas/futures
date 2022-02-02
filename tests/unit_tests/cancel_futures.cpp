@@ -1,9 +1,7 @@
+#include <futures/futures.hpp>
 #include <array>
 #include <string>
-
 #include <catch2/catch.hpp>
-
-#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
     using namespace futures;
@@ -24,7 +22,8 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
             do {
                 std::this_thread::sleep_for(x);
                 ++i;
-            } while (!s.stop_requested());
+            }
+            while (!s.stop_requested());
             return i;
         };
         jcfuture<int32_t> f = async(fn, std::chrono::milliseconds(20));
@@ -38,41 +37,32 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
     SECTION("Continue from jfuture<int>") {
         jcfuture<int32_t> f = async(
             [](stop_token s, std::chrono::milliseconds x) {
-                int32_t i = 2;
-                do {
-                    std::this_thread::sleep_for(x);
-                    ++i;
-                } while (!s.stop_requested());
-                return i;
+            int32_t i = 2;
+            do {
+                std::this_thread::sleep_for(x);
+                ++i;
+            }
+            while (!s.stop_requested());
+            return i;
             },
             std::chrono::milliseconds(20));
+
         stop_source ss = f.get_stop_source();
         stop_token st = f.get_stop_token();
         stop_token sst = ss.get_token();
         REQUIRE(st == sst);
-        auto cont = [](int32_t count) { return static_cast<double>(count) * 1.2; };
-        jcfuture<double> f2 = then(f, cont);
-        REQUIRE_FALSE(f.valid());
+
+        auto cont = [](int32_t count) {
+            return static_cast<double>(count) * 1.2;
+        };
+        auto f2 = then(f, cont);
+
         REQUIRE(!is_ready(f2));
+
         std::this_thread::sleep_for(std::chrono::milliseconds(60));
+        ss.request_stop();
 
-        SECTION("Stop from source copy") {
-            ss.request_stop();
-            double t = f2.get();
-            REQUIRE(t >= 2.2);
-        }
-
-        SECTION("Stop from continuation source") {
-            ss.request_stop();
-            double t = f2.get();
-            REQUIRE(t >= 2.2);
-        }
-
-        SECTION("Stop from original source") {
-            // the stop state is not invalided in the original future
-            f.request_stop();
-            double t = f2.get();
-            REQUIRE(t >= 2.2);
-        }
+        double t = f2.get();
+        REQUIRE(t >= 2.2);
     }
 }

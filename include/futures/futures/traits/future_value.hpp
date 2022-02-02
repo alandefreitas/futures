@@ -26,7 +26,7 @@ namespace futures {
     ///
     /// \note Not to be confused with continuation unwrapping
     template <typename T, class Enable = void>
-    struct unwrap_future
+    struct future_value
     {
         using type = void;
     };
@@ -38,7 +38,7 @@ namespace futures {
     ///
     /// \note Not to be confused with continuation unwrapping
     template <typename Future>
-    struct unwrap_future<
+    struct future_value<
         Future,
         std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>>
     {
@@ -50,7 +50,7 @@ namespace futures {
     ///
     /// \note Not to be confused with continuation unwrapping
     template <class T>
-    using unwrap_future_t = typename unwrap_future<T>::type;
+    using future_value_t = typename future_value<T>::type;
 
     /** @} */ // \addtogroup future-traits Future Traits
     /** @} */ // \addtogroup futures Futures

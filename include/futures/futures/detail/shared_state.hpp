@@ -9,9 +9,11 @@
 #define FUTURES_SHARED_STATE_H
 
 #include <futures/futures/future_error.hpp>
+#include <futures/futures/future_options.hpp>
 #include <futures/futures/detail/relocker.hpp>
 #include <futures/futures/detail/shared_state_storage.hpp>
 #include <futures/futures/detail/small_vector.hpp>
+#include <futures/futures/detail/traits/is_in_args.hpp>
 #include <atomic>
 #include <future>
 #include <condition_variable>
@@ -29,13 +31,15 @@ namespace futures::detail {
     /// All objects such as futures and promises have shared states and
     /// inherit from this class to synchronize their access to their common
     /// shared state.
+    template <bool is_deferred>
     class shared_state_base
     {
-    public:
+    private:
         /// \brief A list of waiters: condition variables to notify any
         /// object waiting for this shared state to be ready
         using waiter_list = detail::small_vector<std::condition_variable_any *>;
 
+    public:
         /// \brief A handle to notify an external context about this state
         /// being ready
         using notify_when_ready_handle = waiter_list::iterator;
@@ -70,14 +74,26 @@ namespace futures::detail {
         /// classes that might need to use another mutex for this operation
         void
         set_ready() noexcept {
-            status prev
-                = status_.exchange(status::ready, std::memory_order_release);
-            if (prev == status::waiting) {
-                std::atomic_thread_fence(std::memory_order_acquire);
-                auto lk = create_wait_lock();
-                waiter_.notify_all();
-                for (auto &&external_waiter: external_waiters_) {
-                    external_waiter->notify_all();
+            if constexpr (!is_deferred) {
+                status prev = status_.exchange(
+                    status::ready,
+                    std::memory_order_release);
+                if (prev == status::waiting) {
+                    std::atomic_thread_fence(std::memory_order_acquire);
+                    auto lk = create_wait_lock();
+                    waiter_.notify_all();
+                    for (auto &&external_waiter: external_waiters_) {
+                        external_waiter->notify_all();
+                    }
+                }
+            } else {
+                status prev = std::exchange(status_, status::ready);
+                if (prev == status::waiting) {
+                    auto lk = create_wait_lock();
+                    waiter_.notify_all();
+                    for (auto &&external_waiter: external_waiters_) {
+                        external_waiter->notify_all();
+                    }
                 }
             }
         }
@@ -87,7 +103,11 @@ namespace futures::detail {
         /// This overload uses the default global mutex for synchronization
         bool
         is_ready() const {
-            return status_.load(std::memory_order_acquire) == status::ready;
+            if constexpr (!is_deferred) {
+                return status_.load(std::memory_order_acquire) == status::ready;
+            } else {
+                return status_ == status::ready;
+            }
         }
 
         /// \brief Check if state is ready without locking
@@ -110,7 +130,7 @@ namespace futures::detail {
         ///
         void
         set_exception(std::exception_ptr except) {
-            if (status_.load(std::memory_order_acquire) == status::ready) {
+            if (is_ready()) {
                 detail::throw_exception<promise_already_satisfied>();
             }
             // ready_ already protects except_ because only one thread
@@ -124,7 +144,7 @@ namespace futures::detail {
         /// This overload uses the default global mutex for synchronization
         std::exception_ptr
         get_exception_ptr() const {
-            if (status_.load(std::memory_order_acquire) != status::ready) {
+            if (!is_ready()) {
                 detail::throw_exception<promise_uninitialized>();
             }
             return except_;
@@ -144,7 +164,7 @@ namespace futures::detail {
         /// classes that might need to use another mutex for this operation
         void
         signal_promise_destroyed() {
-            if (status_.load(std::memory_order_acquire) != status::ready) {
+            if (!is_ready()) {
                 set_exception(std::make_exception_ptr(broken_promise()));
             }
         }
@@ -164,18 +184,33 @@ namespace futures::detail {
         /// waiting lock if the shared state is not ready yet.
         ///
         void
-        wait() const {
-            status prev = status::initial;
-            status_.compare_exchange_strong(prev, status::waiting);
+        wait() {
+            status prev = [this]() {
+                if constexpr (!is_deferred) {
+                    status v = status::initial;
+                    status_.compare_exchange_strong(v, status::waiting);
+                    return v;
+                } else {
+                    status v = status_;
+                    if (status_ == status::initial) {
+                        status_ = status::waiting;
+                    }
+                    return v;
+                }
+            }();
             if (prev != status::ready) {
-                if (wait_callback_ && prev == status::initial) {
-                    wait_callback_();
+                run_wait_callback();
+                if (prev == status::initial) {
+                    this->post_deferred();
                 }
                 auto lk = create_wait_lock();
                 waiter_.wait(lk, [this]() {
-                    return (
-                        status_.load(std::memory_order_acquire)
-                        == status::ready);
+                    if constexpr (!is_deferred) {
+                        return status_.load(std::memory_order_acquire)
+                               == status::ready;
+                    } else {
+                        return status_ == status::ready;
+                    }
                 });
             }
         }
@@ -193,18 +228,33 @@ namespace futures::detail {
         /// \return The state of the shared value
         template <typename Rep, typename Period>
         std::future_status
-        wait_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration) const {
-            status prev = status::initial;
-            status_.compare_exchange_strong(prev, status::waiting);
+        wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
+            status prev = [this]() {
+                if constexpr (!is_deferred) {
+                    status v = status::initial;
+                    status_.compare_exchange_strong(v, status::waiting);
+                    return v;
+                } else {
+                    status v = status_;
+                    if (status_ == status::initial) {
+                        status_ = status::waiting;
+                    }
+                    return v;
+                }
+            }();
             if (prev != status::ready) {
-                if (wait_callback_ && prev == status::initial) {
-                    wait_callback_();
+                run_wait_callback();
+                if (prev == status::initial) {
+                    this->post_deferred();
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_for(lk, timeout_duration, [this]() {
-                        return status_.load(std::memory_order_acquire)
-                               == status::ready;
+                        if constexpr (!is_deferred) {
+                            return status_.load(std::memory_order_acquire)
+                                   == status::ready;
+                        } else {
+                            return status_ == status::ready;
+                        }
                     }))
                 {
                     return std::future_status::ready;
@@ -229,18 +279,34 @@ namespace futures::detail {
         /// \return The state of the shared value
         template <typename Clock, typename Duration>
         std::future_status
-        wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
-            const {
-            status prev = status::initial;
-            status_.compare_exchange_strong(prev, status::waiting);
+        wait_until(
+            std::chrono::time_point<Clock, Duration> const &timeout_time) {
+            status prev = [this]() {
+                if constexpr (!is_deferred) {
+                    status v = status::initial;
+                    status_.compare_exchange_strong(v, status::waiting);
+                    return v;
+                } else {
+                    status v = status_;
+                    if (status_ == status::initial) {
+                        status_ = status::waiting;
+                    }
+                    return v;
+                }
+            }();
             if (prev != status::ready) {
-                if (wait_callback_ && prev == status::initial) {
-                    wait_callback_();
+                run_wait_callback();
+                if (prev == status::initial) {
+                    this->post_deferred();
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_until(lk, timeout_time, [this]() {
-                        return status_.load(std::memory_order_acquire)
-                               == status::ready;
+                        if constexpr (!is_deferred) {
+                            return status_.load(std::memory_order_acquire)
+                                   == status::ready;
+                        } else {
+                            return status_ == status::ready;
+                        }
                     }))
                 {
                     return std::future_status::ready;
@@ -259,12 +325,23 @@ namespace futures::detail {
         /// \return Handle which can be used to unnotify when ready
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
-            status expected = status::initial;
-            status_.compare_exchange_strong(expected, status::waiting);
-            if (wait_callback_ && expected == status::initial) {
-                wait_callback_();
+            status prev = [this]() {
+                if constexpr (!is_deferred) {
+                    status v = status::initial;
+                    status_.compare_exchange_strong(v, status::waiting);
+                    return v;
+                } else {
+                    status v = status_;
+                    if (status_ == status::initial) {
+                        status_ = status::waiting;
+                    }
+                    return v;
+                }
+            }();
+            if (prev == status::initial) {
+                this->post_deferred();
             }
-            auto lk = create_wait_lock();
+            run_wait_callback();
             return external_waiters_.insert(external_waiters_.end(), &cv);
         }
 
@@ -277,6 +354,16 @@ namespace futures::detail {
             auto lk = create_wait_lock();
             external_waiters_.erase(it);
         }
+
+        template <typename F>
+        void
+        set_wait_callback(F f) {
+            auto lk = create_wait_lock();
+            wait_callback_ = f;
+        }
+
+        virtual void
+        post_deferred(){};
 
         /// \brief Get a reference to the mutex in the shared state
         std::mutex &
@@ -294,18 +381,43 @@ namespace futures::detail {
         }
 
     private:
+        /// \brief Call the internal wait callback function
+        void
+        run_wait_callback() const {
+            if (wait_callback_) {
+                status prev = [this]() {
+                    if constexpr (!is_deferred) {
+                        return status_.load(std::memory_order_acquire);
+                    } else {
+                        return status_;
+                    }
+                }();
+                if (prev != status::ready) {
+                    auto lk = create_wait_lock();
+                    std::function<void()> local_callback(
+                        std::move(wait_callback_));
+                    relocker relock(lk);
+                    local_callback();
+                }
+            }
+        }
+
         /// \brief The current status of this shared state
         enum status : uint8_t
         {
+            /// Nothing happened yet
             initial,
+            /// Someone is waiting for the result
             waiting,
+            /// The state has been set and we notified everyone
             ready,
         };
 
         /// \brief Indicates if the shared state is already set
         ///
         /// There are three states possible: nothing, waiting, ready
-        mutable std::atomic<status> status_{ status::initial };
+        mutable std::conditional_t<is_deferred, status, std::atomic<status>>
+            status_{ status::initial };
 
         /// \brief Pointer to an exception, when the shared_state fails
         ///
@@ -313,6 +425,10 @@ namespace futures::detail {
         /// the status variable is guarding it.
         ///
         std::exception_ptr except_{ nullptr };
+
+        /// \brief Callback function we should call before waiting for the
+        /// shared state
+        std::function<void()> wait_callback_;
 
         /// \brief Condition variable to notify any object waiting for this
         /// shared state to be ready
@@ -333,14 +449,6 @@ namespace futures::detail {
         /// While the internal waiter is intended for
         ///
         waiter_list external_waiters_;
-
-        /// \brief Callback function we should call when waiting for the
-        /// shared state
-        ///
-        /// This callback function is meant to be called before we wait for
-        /// the result of a future. Although it can be used for alternative
-        /// purposes, it is meant to allow lazy futures.
-        std::function<void()> wait_callback_;
 
         /// \brief Mutex for threads that want to wait on the result
         ///
@@ -381,11 +489,47 @@ namespace futures::detail {
     /// takes no memory if the state is an empty type, such as `void` or
     /// std::allocator.
     ///
-    template <typename R>
+    template <class R, class Options>
     class shared_state
-        : public detail::shared_state_base
+        : public shared_state_base<Options::is_deferred>
+        , public std::enable_shared_from_this<shared_state<R, Options>>
         , private shared_state_storage<R>
+        , private conditional_base<
+              Options::has_executor,
+              typename Options::executor_t,
+              0>
+        , private conditional_base<
+              Options::is_continuable,
+              continuations_source,
+              1>
+        , private conditional_base<Options::is_stoppable, stop_source, 2>
     {
+    protected:
+        /// \brief Executor storage
+        using executor_base = conditional_base<
+            Options::has_executor,
+            typename Options::executor_t,
+            0>;
+
+        using executor_type = typename executor_base::value_type;
+
+        /// \brief Continuations storage
+        using continuations_base
+            = conditional_base<Options::is_continuable, continuations_source, 1>;
+
+        using continuations_type = typename continuations_base::value_type;
+
+        /// \brief Stop source storage
+        using stop_source_base
+            = conditional_base<Options::is_stoppable, stop_source, 2>;
+
+        using stop_source_type = typename stop_source_base::value_type;
+
+        using stop_token_type = std::conditional_t<
+            Options::is_stoppable,
+            stop_token,
+            detail::empty_value_type>;
+
     public:
         /// \brief Destructor
         ///
@@ -393,7 +537,7 @@ namespace futures::detail {
         /// ready with a value.
         ///
         ~shared_state() override {
-            if (succeeded()) {
+            if (this->succeeded()) {
                 shared_state_storage<R>::destroy();
             }
         }
@@ -404,6 +548,13 @@ namespace futures::detail {
         ///
         shared_state() = default;
 
+        /// \brief Constructor for state with reference to executor
+        ///
+        /// The executor allows us to emplace continuations on the
+        /// same executor by default.
+        ///
+        explicit shared_state(const executor_type &ex) : executor_base(ex) {}
+
         /// \brief Deleted copy constructor
         ///
         /// The copy constructor does not make sense for shared states as
@@ -411,6 +562,20 @@ namespace futures::detail {
         /// promises and futures.
         ///
         shared_state(shared_state const &) = delete;
+
+        /// \brief Move constructor
+        ///
+        shared_state(shared_state &&) noexcept = default;
+
+        /// \brief Move constructor from shared state with different options
+        ///
+        /// \param other Other shared state
+        template <class OtherOptions>
+        shared_state(shared_state<R, OtherOptions> &&other) noexcept
+            : shared_state_base<Options::is_deferred>(std::move(other)),
+              shared_state_storage<R>(std::move(other)),
+              continuations_base(std::move(other)),
+              stop_source_base(std::move(other)) {}
 
         /// \brief Deleted copy assignment operator
         ///
@@ -420,6 +585,15 @@ namespace futures::detail {
         shared_state &
         operator=(shared_state const &)
             = delete;
+
+        /// \brief Move assignment operator
+        ///
+        /// These functions do not make sense for shared states as they are
+        /// meant to be shared.
+        ///
+        shared_state &
+        operator=(shared_state &&)
+            = default;
 
         /// \brief Set the value of the shared state to a copy of value
         ///
@@ -436,11 +610,70 @@ namespace futures::detail {
         template <class... Args>
         void
         set_value(Args &&...args) {
-            if (is_ready()) {
+            if (this->is_ready()) {
                 detail::throw_exception<promise_already_satisfied>();
             }
             shared_state_storage<R>::set_value(std::forward<Args>(args)...);
-            set_ready();
+            this->set_ready();
+        }
+
+        /// \brief Set value with a callable and an argument list
+        template <typename Fn, typename... Args>
+        void
+        apply(Fn &&fn, Args &&...args) {
+            // Use shared_from_this to ensure the state lives after the
+            // the function is executed. Some futures might wait()
+            // until the shared state value is set but attempt to
+            // destroy the state before the continuations and related
+            // tasks are executed.
+            auto state = this->shared_from_this();
+            try {
+                if constexpr (!Options::is_stoppable) {
+                    if constexpr (std::is_void_v<R>) {
+                        std::invoke(
+                            std::forward<Fn>(fn),
+                            std::forward<Args>(args)...);
+                        state->set_value();
+                    } else {
+                        state->set_value(std::invoke(
+                            std::forward<Fn>(fn),
+                            std::forward<Args>(args)...));
+                    }
+                } else {
+                    if constexpr (std::is_void_v<R>) {
+                        std::invoke(
+                            std::forward<Fn>(fn),
+                            this->get_stop_token(),
+                            std::forward<Args>(args)...);
+                        state->set_value();
+                    } else {
+                        state->set_value(std::invoke(
+                            std::forward<Fn>(fn),
+                            this->get_stop_token(),
+                            std::forward<Args>(args)...));
+                    }
+                }
+            }
+            catch (...) {
+                state->set_exception(std::current_exception());
+            }
+            if constexpr (Options::is_continuable) {
+                // The state might have been destroyed by the executor
+                // by now. Use another shared reference to the
+                // continuations.
+                state->get_continuations_source().request_run();
+            }
+        }
+
+        /// \brief Set value with a callable and a tuple or arguments
+        template <typename Fn, typename Tuple>
+        void
+        apply_tuple(Fn &&fn, Tuple &&targs) {
+            return apply_tuple_impl(
+                std::forward<Fn>(fn),
+                std::forward<Tuple>(targs),
+                std::make_index_sequence<
+                    std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
         }
 
         /// \brief Get the value of the shared state
@@ -454,11 +687,180 @@ namespace futures::detail {
         /// \return Reference to the state as a reference to R
         std::add_lvalue_reference_t<R>
         get() {
-            wait();
-            if (failed()) {
-                throw_internal_exception();
+            this->wait();
+            if (this->failed()) {
+                this->throw_internal_exception();
             }
             return shared_state_storage<R>::get();
+        }
+
+        const executor_type &
+        get_executor() const noexcept {
+            static_assert(Options::has_executor);
+            return executor_base::get();
+        }
+
+        stop_token
+        get_stop_token() const noexcept {
+            static_assert(Options::is_stoppable);
+            return stop_source_base::get().get_token();
+        }
+
+        stop_source &
+        get_stop_source() const noexcept {
+            static_assert(Options::is_stoppable);
+            return stop_source_base::get();
+        }
+
+        stop_source &
+        get_stop_source() noexcept {
+            static_assert(Options::is_stoppable);
+            return stop_source_base::get();
+        }
+
+        continuations_source &
+        get_continuations_source() const noexcept {
+            static_assert(Options::is_continuable);
+            return continuations_base::get();
+        }
+
+        continuations_source &
+        get_continuations_source() noexcept {
+            static_assert(Options::is_continuable);
+            return continuations_base::get();
+        }
+
+    private:
+        template <typename Fn, typename Tuple, std::size_t... I>
+        void
+        apply_tuple_impl(Fn &&fn, Tuple &&targs, std::index_sequence<I...>) {
+            return apply(
+                std::forward<Fn>(fn),
+                std::get<I>(std::forward<Tuple>(targs))...);
+        }
+    };
+
+    /// \brief An extension of shared state with storage for a deferred task
+    ///
+    /// This class provides the same functionality as shared state and
+    /// extra storage for a deferred task.
+    ///
+    /// Because futures keep references to a shared state, what this
+    /// effectively achieves is type erasing the task type. Otherwise,
+    /// we would need embed the task types in the futures.
+    ///
+    /// For instance, this would make it impossible to have vectors of
+    /// futures without wrapping tasks into a more limited std::function
+    /// before for erasing the task type.
+    ///
+    template <class R, class Options, class Fn, class... Args>
+    class deferred_shared_state
+        : public shared_state<R, Options>
+        , private maybe_empty<Fn, 3>
+        , private maybe_empty<std::tuple<std::decay_t<Args>...>, 4>
+    {
+    private:
+        /// \brief Deferred function storage
+        using deferred_base = maybe_empty<Fn, 3>;
+        using deferred_type = typename deferred_base::value_type;
+
+        /// \brief Deferred Args storage
+        using deferred_args_base
+            = maybe_empty<std::tuple<std::decay_t<Args>...>, 4>;
+        using deferred_args_type = typename deferred_args_base::value_type;
+
+    public:
+        /// \brief Destructor
+        ///
+        /// We might need to destroy the shared object R if the state is
+        /// ready with a value.
+        ///
+        ~deferred_shared_state() override = default;
+
+        /// \brief Constructor
+        ///
+        /// This function will construct the state with storage for R.
+        ///
+        deferred_shared_state() = default;
+
+        /// \brief Constructor for deferred state
+        ///
+        /// The function accepts other function and args types so
+        /// (i) we can forward the variables, and (ii) allow compatible
+        /// types to be used here. Most of the time, these will be the
+        /// same types as Fn and Args.
+        template <class OtherFn, class... OtherArgs>
+        explicit deferred_shared_state(
+            const typename shared_state<R, Options>::executor_type &ex,
+            OtherFn &&f,
+            OtherArgs &&...args)
+            : shared_state<R, Options>(ex),
+              deferred_base(std::forward<OtherFn>(f)),
+              deferred_args_base(std::forward<OtherArgs>(args)...) {}
+
+        /// \brief Deleted copy constructor
+        ///
+        /// The copy constructor does not make sense for shared states as
+        /// they are meant to be shared in all of our use cases with
+        /// promises and futures.
+        ///
+        deferred_shared_state(deferred_shared_state const &) = delete;
+
+        /// \brief Move constructor
+        ///
+        deferred_shared_state(deferred_shared_state &&) noexcept = default;
+
+        /// \brief Move constructor from shared state with different options
+        ///
+        /// \param other Other shared state
+        template <class OtherOptions>
+        deferred_shared_state(
+            deferred_shared_state<R, OtherOptions, Fn, Args...> &&other) noexcept
+            : shared_state<R, Options>(std::move(other)),
+              deferred_base(std::move(other)),
+              deferred_args_base(std::move(other)) {}
+
+        /// \brief Deleted copy assignment operator
+        ///
+        /// These functions do not make sense for shared states as they are
+        /// meant to be shared.
+        ///
+        deferred_shared_state &
+        operator=(deferred_shared_state const &)
+            = delete;
+
+        /// \brief Move assignment operator
+        ///
+        /// These functions do not make sense for shared states as they are
+        /// meant to be shared.
+        ///
+        deferred_shared_state &
+        operator=(deferred_shared_state &&)
+            = default;
+
+        void
+        post_deferred() override {
+            // if this is a continuation, wait for tasks that come before
+            if constexpr (Options::is_deferred) {
+                if constexpr (Options::has_executor) {
+                    asio::post(
+                        shared_state<R, Options>::get_executor(),
+                        [this]() {
+                        // use shared_from_this to ensure the state lives while
+                        // the deferred function is executed. Some futures might
+                        // wait() until the shared state value is set but
+                        // destroy the state before the continuations and
+                        // related tasks are executed.
+                        this->apply_tuple(
+                            std::move(this->deferred_base::get()),
+                            std::move(this->deferred_args_base::get()));
+                        });
+                } else {
+                    apply_tuple(
+                        std::move(deferred_base::get()),
+                        std::move(deferred_args_base::get()));
+                }
+            }
         }
     };
 

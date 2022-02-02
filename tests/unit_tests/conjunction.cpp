@@ -60,8 +60,6 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 detail::is_valid_continuation_v<
                     decltype(continuation),
                     decltype(f)>);
-            using traits = detail::
-                unwrap_traits<decltype(continuation), decltype(f)>;
             STATIC_REQUIRE(
                 std::is_same_v<
                     int,
@@ -71,28 +69,6 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                             cfuture<int>,
                             cfuture<double>,
                             cfuture<std::string>>>>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    int,
-                    typename traits::unwrap_result_no_token_type>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    detail::unwrapping_failure_t,
-                    typename traits::unwrap_result_with_token_type>);
-            STATIC_REQUIRE_FALSE(traits::is_valid_with_stop_token);
-            STATIC_REQUIRE(
-                std::is_same_v<int, typename traits::result_value_type>);
-            STATIC_REQUIRE(
-                std::is_same_v<int, typename traits::result_value_type>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    cfuture<int>,
-                    typename traits::result_future_type>);
-            STATIC_REQUIRE(
-                std::is_same_v<
-                    cfuture<int>,
-                    detail::
-                        result_of_then_t<decltype(continuation), decltype(f)>>);
             STATIC_REQUIRE(
                 std::is_same_v<
                     cfuture<int>,
@@ -191,7 +167,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 STATIC_REQUIRE(!is_executor_v<Function>);
                 STATIC_REQUIRE(!is_executor_v<Future>);
                 STATIC_REQUIRE(is_future_v<Future>);
-                using value_type = unwrap_future_t<Future>;
+                using value_type = future_value_t<Future>;
                 using lvalue_type = std::add_lvalue_reference_t<value_type>;
                 using rvalue_type = std::add_rvalue_reference_t<value_type>;
                 STATIC_REQUIRE(
@@ -209,18 +185,6 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                         std::add_rvalue_reference_t<
                             detail::small_vector<cfuture<int>>>>);
                 STATIC_REQUIRE(std::is_invocable_v<Function, lvalue_type>);
-                STATIC_REQUIRE(
-                    std::is_same_v<
-                        detail::unwrap_traits<Function, Future>::
-                            unwrap_result_no_token_type,
-                        int>);
-                STATIC_REQUIRE(detail::unwrap_traits<Function, Future>::
-                                   is_valid_without_stop_token);
-                STATIC_REQUIRE_FALSE(
-                    detail::unwrap_traits<Function, Future>::
-                        is_valid_with_stop_token);
-                STATIC_REQUIRE(
-                    detail::unwrap_traits<Function, Future>::is_valid);
                 STATIC_REQUIRE(
                     detail::is_valid_continuation_v<Function, Future>);
                 STATIC_REQUIRE(

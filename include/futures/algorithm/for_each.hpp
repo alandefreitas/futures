@@ -112,7 +112,7 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<futures::cfuture<void>> tasks_;
+            detail::lock_free_queue<basic_future<void, future_options<executor_opt<Executor>, continuable_opt>>> tasks_;
         };
 
         /// \brief Complete overload of the for_each algorithm

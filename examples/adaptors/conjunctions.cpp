@@ -2,7 +2,8 @@
 #include <futures/futures.hpp>
 #include <iostream>
 
-int main() {
+int
+main() {
     using namespace futures;
 
     // Tuple conjunction
@@ -19,14 +20,14 @@ int main() {
 
     // r1, r2, r3 are also futures
     auto [r11, r21, r31] = fc1.get();
-    std::cout << r11.get() << std::endl;
-    std::cout << r21.get() << std::endl;
-    std::cout << r31.get() << std::endl;
+    std::cout << r11.get() << '\n';
+    std::cout << r21.get() << '\n';
+    std::cout << r31.get() << '\n';
 
     auto [r12, r22, r32] = fc2.get();
-    std::cout << r12.get() << std::endl;
-    std::cout << r22.get() << std::endl;
-    std::cout << r32.get() << std::endl;
+    std::cout << r12.get() << '\n';
+    std::cout << r22.get() << '\n';
+    std::cout << r32.get() << '\n';
 
     return 0;
 }

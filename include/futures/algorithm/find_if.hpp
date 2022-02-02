@@ -69,7 +69,9 @@ namespace futures {
                     // Create task that launches tasks for rhs: [middle, last]
                     std::bitset<64> rhs_branch = branch;
                     rhs_branch[64 - level - 1] = true;
-                    cfuture<std::pair<I, std::bitset<64>>>
+                    basic_future<
+                        std::pair<I, std::bitset<64>>,
+                        future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
                             detail::maybe_empty<Executor>::get(),
                             [this,
@@ -150,7 +152,9 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<cfuture<std::pair<I, std::bitset<64>>>>
+            detail::lock_free_queue<basic_future<
+                std::pair<I, std::bitset<64>>,
+                future_options<executor_opt<Executor>, continuable_opt>>>
                 tasks_{};
         };
 

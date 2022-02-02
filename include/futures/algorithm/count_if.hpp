@@ -52,11 +52,14 @@ namespace futures {
                     return std::count_if(first, last, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
-                    cfuture<iter_difference_t<I>> rhs_task = futures::async(
-                        detail::maybe_empty<Executor>::get(),
-                        [this, p, middle, last, f] {
+                    basic_future<
+                        iter_difference_t<I>,
+                        future_options<executor_opt<Executor>, continuable_opt>>
+                        rhs_task = futures::async(
+                            detail::maybe_empty<Executor>::get(),
+                            [this, p, middle, last, f] {
                         return launch_count_if_tasks(p, middle, last, f);
-                        });
+                            });
 
                     // Launch tasks for lhs: [first, middle]
                     iter_difference_t<I>
@@ -93,7 +96,10 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<cfuture<iter_difference_t<I>>> tasks_{};
+            detail::lock_free_queue<basic_future<
+                iter_difference_t<I>,
+                future_options<executor_opt<Executor>, continuable_opt>>>
+                tasks_{};
         };
 
         /// \brief Complete overload of the count_if algorithm

@@ -8,155 +8,192 @@
 #ifndef FUTURES_LAUNCH_H
 #define FUTURES_LAUNCH_H
 
+#include <futures/executor/inline_executor.hpp>
+#include <futures/futures/await.hpp>
+#include <futures/futures/detail/empty_base.hpp>
+#include <futures/futures/detail/future_launcher.hpp>
+#include <futures/futures/detail/traits/launch_result.hpp>
+
 namespace futures {
     /** \addtogroup futures Futures
      *  @{
      */
     /** \addtogroup launch Launch
+     *  @{
+     */
+    /** \addtogroup launch-algorithms Launch Algorithms
      *
-     * \brief Functions and policies for launching asynchronous tasks
+     * \brief Function to launch and schedule future tasks
      *
-     * This module defines functions for conveniently launching asynchronous
-     * tasks and policies to determine how executors should handle these tasks.
+     * This module contains functions we can use to launch and schedule tasks.
+     * Tasks can be scheduled lazily instead of eagerly to avoid a race between
+     * the task and its dependencies.
+     *
+     * When tasks are scheduled eagerly, the function @ref async provides an
+     * alternatives to launch tasks on specific executors instead of creating a
+     * new thread for each asynchronous task.
      *
      *  @{
      */
-    /** \addtogroup launch-policies Launch Policies
-     *
-     * \brief Launch policies for asynchronous tasks
-     *
-     * Launch policies determine how executors should launch and handle a task.
-     *
-     *  @{
-     */
 
-    /// \brief Specifies the launch policy for a task executed by the @ref
-    /// futures::async function
+    /// \brief Launch an asynchronous task with the specified executor
     ///
-    /// std::async creates a new thread for each asynchronous operation, which
-    /// usually entails in only two execution policies: new thread or inline.
-    /// Because futures::async use executors, there are many more policies and
-    /// ways to use these executors beyond yes/no.
+    /// This version of the async function will always use the specified
+    /// executor instead of creating a new thread.
     ///
-    /// Most of the time, we want the executor/post policy for executors. So as
-    /// the @ref async function also accepts executors directly, this option can
-    /// often be ignored, and is here mostly here for compatibility with the
-    /// std::async.
+    /// If no executor is provided, then the function is run in a default
+    /// executor created from the default thread pool. The default executor
+    /// also ensures the function will not launch one thread per task.
     ///
-    /// When only the policy is provided, async will try to generate the proper
-    /// executor for that policy. When the executor and the policy is provided,
-    /// we might only have some conflict for the deferred policy, which does not
-    /// use an executor in std::launch. In the context of executors, the
-    /// deferred policy means the function is only posted to the executor when
-    /// its result is requested.
-    enum class launch
-    {
-        /// no policy
-        none = 0b0000'0000,
-        /// execute on a new thread regardless of executors (same as
-        /// std::async::async)
-        new_thread = 0b0000'0001,
-        /// execute on a new thread regardless of executors (same as
-        /// std::async::async)
-        async = 0b0000'0001,
-        /// execute on the calling thread when result is requested (same as
-        /// std::async::deferred)
-        deferred = 0b0000'0010,
-        /// execute on the calling thread when result is requested (same as
-        /// std::async::deferred)
-        lazy = 0b0000'0010,
-        /// inherit from context
-        inherit = 0b0000'0100,
-        /// execute on the calling thread now (uses inline executor)
-        inline_now = 0b0000'1000,
-        /// execute on the calling thread now (uses inline executor)
-        sync = 0b0000'1000,
-        /// enqueue task in the executor
-        post = 0b0001'0000,
-        /// run immediately if inside the executor
-        executor = 0b0001'0000,
-        /// run immediately if inside the executor
-        dispatch = 0b0010'0000,
-        /// run immediately if inside the executor
-        executor_now = 0b0010'0000,
-        /// enqueue task for later in the executor
-        executor_later = 0b0100'0000,
-        /// enqueue task for later in the executor
-        defer = 0b0100'0000,
-        /// both async and deferred are OK
-        any = async | deferred
-    };
-
-    /// \brief operator & for launch policies
+    /// The task might accept a stop token as its first parameter, in which
+    /// case the function returns a continuable and stoppable future type.
+    /// Otherwise, this function returns a continuable future type.
     ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy both policies
-    constexpr launch
-    operator&(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) & static_cast<int>(y));
+    /// \par Example
+    /// \code
+    /// auto f = async(ex, []() { return 2; });
+    /// std::cout << f.get() << std::endl; // 2
+    /// \endcode
+    ///
+    /// \see
+    ///      \ref basic_future
+    ///
+    /// \tparam Executor Executor from an execution context
+    /// \tparam Function A callable object
+    /// \tparam Args Arguments for the Function
+    ///
+    /// \param ex Executor
+    /// \param f Function to execute
+    /// \param args Function arguments
+    ///
+    /// \return A future object with the function results
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<
+            // clang-format off
+            is_executor_v<Executor> &&
+            (std::is_invocable_v<Function, Args...> ||
+             std::is_invocable_v<Function, stop_token, Args...>),
+            // clang-format on
+            int> = 0
+#endif
+        >
+    decltype(auto)
+    async(const Executor &ex, Function &&f, Args &&...args) {
+        return detail::schedule_future<true>(
+            ex,
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief operator | for launch policies
+    /// \brief Schedule an asynchronous task with the specified executor
     ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy any of the policies
-    constexpr launch
-    operator|(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) | static_cast<int>(y));
+    /// This function schedules a deferred future. The task is only
+    /// scheduled in the executor when we wait for the value of the future.
+    ///
+    /// \see
+    ///      \ref basic_future
+    ///
+    /// \tparam Executor Executor from an execution context
+    /// \tparam Function A callable object
+    /// \tparam Args Arguments for the Function
+    ///
+    /// \param ex Executor
+    /// \param f Function to execute
+    /// \param args Function arguments
+    ///
+    /// \return A future object with the function results
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<
+            // clang-format off
+            is_executor_v<Executor> &&
+            (std::is_invocable_v<Function, Args...> ||
+             std::is_invocable_v<Function, stop_token, Args...>),
+            // clang-format on
+            int> = 0
+#endif
+        >
+    decltype(auto)
+    schedule(const Executor &ex, Function &&f, Args &&...args) {
+        return detail::schedule_future<false>(
+            ex,
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief operator ^ for launch policies
+    /// \brief Launch an async function with the default executor
     ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A launch policy that attempts to satisfy any policy set in only
-    /// one of them
-    constexpr launch
-    operator^(launch x, launch y) {
-        return static_cast<launch>(static_cast<int>(x) ^ static_cast<int>(y));
+    /// \tparam Executor Executor from an execution context
+    /// \tparam Function A callable object
+    /// \tparam Args Arguments for the Function
+    ///
+    /// \param f Function to execute
+    /// \param args Function arguments
+    ///
+    /// \return A future object with the function results
+    template <
+        typename Function,
+        typename... Args
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<
+            // clang-format off
+            !is_executor_v<Function> &&
+            (std::is_invocable_v<Function, Args...> ||
+             std::is_invocable_v<Function, stop_token, Args...>),
+            // clang-format on
+            int> = 0
+#endif
+        >
+    decltype(auto)
+    async(Function &&f, Args &&...args) {
+        return detail::schedule_future<true>(
+            ::futures::make_default_executor(),
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief operator ~ for launch policies
+    /// \brief Schedule an async function with the default executor
     ///
-    /// \param x left-hand side operand
-    /// \return A launch policy that attempts to satisfy the opposite of the
-    /// policies set
-    constexpr launch
-    operator~(launch x) {
-        return static_cast<launch>(~static_cast<int>(x));
+    /// \tparam Executor Executor from an execution context
+    /// \tparam Function A callable object
+    /// \tparam Args Arguments for the Function
+    ///
+    /// \param f Function to execute
+    /// \param args Function arguments
+    ///
+    /// \return A future object with the function results
+    template <
+        typename Function,
+        typename... Args
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<
+            // clang-format off
+            !is_executor_v<Function> &&
+            (std::is_invocable_v<Function, Args...> ||
+             std::is_invocable_v<Function, stop_token, Args...>),
+            // clang-format on
+            int> = 0
+#endif
+        >
+    decltype(auto)
+    schedule(Function &&f, Args &&...args) {
+        return detail::schedule_future<false>(
+            ::futures::make_default_executor(),
+            std::forward<Function>(f),
+            std::forward<Args>(args)...);
     }
 
-    /// \brief operator &= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &
-    operator&=(launch &x, launch y) {
-        return x = x & y;
-    }
-
-    /// \brief operator |= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &
-    operator|=(launch &x, launch y) {
-        return x = x | y;
-    }
-
-    /// \brief operator ^= for launch policies
-    ///
-    /// \param x left-hand side operand
-    /// \param y right-hand side operand
-    /// \return A reference to `x`
-    constexpr launch &
-    operator^=(launch &x, launch y) {
-        return x = x ^ y;
-    }
     /** @} */
     /** @} */
     /** @} */

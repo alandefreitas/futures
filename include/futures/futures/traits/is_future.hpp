@@ -71,13 +71,13 @@ namespace futures {
     /// \brief Customization point to define future as supporting lazy
     /// continuations
     template <typename>
-    struct is_lazy_continuable : std::false_type
+    struct is_continuable : std::false_type
     {};
 
     /// \brief Customization point to define future as supporting lazy
     /// continuations
     template <class T>
-    constexpr bool is_lazy_continuable_v = is_lazy_continuable<T>::value;
+    constexpr bool is_continuable_v = is_continuable<T>::value;
 
     /// \brief Customization point to define future as stoppable
     template <typename>
@@ -96,6 +96,15 @@ namespace futures {
     /// \brief Customization point to define future having a common stop token
     template <class T>
     constexpr bool has_stop_token_v = has_stop_token<T>::value;
+
+    /// \brief Customization point to define future as deferred
+    template <typename>
+    struct is_deferred : std::false_type
+    {};
+
+    /// \brief Customization point to define future as deferred
+    template <class T>
+    constexpr bool is_deferred_v = is_deferred<T>::value;
 
     /** @} */ // \addtogroup future-traits Future Traits
     /** @} */ // \addtogroup futures Futures

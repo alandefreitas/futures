@@ -109,8 +109,8 @@ namespace futures::detail {
 
     private:
         /// \brief Type of handle in the future object used to notify completion
-        using notify_when_ready_handle = typename detail::shared_state_base::
-            notify_when_ready_handle;
+        using notify_when_ready_handle = detail::shared_state_base<
+            false>::notify_when_ready_handle;
 
         /// \brief Helper class to store information about each of the futures
         /// we are waiting for
@@ -149,7 +149,7 @@ namespace futures::detail {
                 Future &a_future,
                 const notify_when_ready_handle &handle_,
                 std::size_t index_)
-                : future_mutex_(&a_future.mutex()),
+                : future_mutex_(&a_future.waiters_mutex()),
                   disable_notification_callback(
                       [future_ = &a_future](notify_when_ready_handle h)
                           -> void { future_->unnotify_when_ready(h); }),

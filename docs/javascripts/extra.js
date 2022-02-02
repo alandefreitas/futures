@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let linkLhs = link.href.substr(0, splitPos);
                 let linkRhs = link.href.substr(splitPos);
                 link.href = linkLhs + linkRhs.replaceAll('-', '_');
-                console.log(link.href)
             }
         }
     }

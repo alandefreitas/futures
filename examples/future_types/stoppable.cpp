@@ -15,12 +15,12 @@ main() {
 
     // It won't be ready until we ask it to stop
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    std::cout << is_ready(f) << std::endl;
+    std::cout << is_ready(f) << '\n';
 
     // Request stop
     f.request_stop();
     f.wait();
-    std::cout << is_ready(f) << std::endl;
+    std::cout << is_ready(f) << '\n';
 
     return 0;
 }

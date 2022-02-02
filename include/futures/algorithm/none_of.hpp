@@ -49,11 +49,14 @@ namespace futures {
                     return std::none_of(first, last, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
-                    cfuture<bool> rhs_task = futures::async(
-                        detail::maybe_empty<Executor>::get(),
-                        [this, p, middle, last, f] {
+                    basic_future<
+                        bool,
+                        future_options<executor_opt<Executor>, continuable_opt>>
+                        rhs_task = futures::async(
+                            detail::maybe_empty<Executor>::get(),
+                            [this, p, middle, last, f] {
                         return launch_none_of_tasks(p, middle, last, f);
-                        });
+                            });
 
                     // Launch tasks for lhs: [first, middle]
                     bool lhs_result = launch_none_of_tasks(p, first, middle, f);
@@ -97,7 +100,10 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<cfuture<bool>> tasks_{};
+            detail::lock_free_queue<basic_future<
+                bool,
+                future_options<executor_opt<Executor>, continuable_opt>>>
+                tasks_{};
         };
 
         /// \brief Complete overload of the none_of algorithm

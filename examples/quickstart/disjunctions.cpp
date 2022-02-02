@@ -2,7 +2,8 @@
 #include <futures/futures.hpp>
 #include <iostream>
 
-int main() {
+int
+main() {
     using namespace futures;
 
     auto f1 = futures::async([]() -> int { return 10; });

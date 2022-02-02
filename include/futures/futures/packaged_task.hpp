@@ -9,6 +9,8 @@
 #define FUTURES_PACKAGED_TASK_H
 
 #include <futures/futures/basic_future.hpp>
+#include <futures/futures/future_options.hpp>
+#include <futures/futures/detail/empty_base.hpp>
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {
@@ -21,26 +23,29 @@ namespace futures {
 
 #ifndef FUTURES_DOXYGEN
     /// \brief Undefined packaged task class
-    template <typename Signature>
+    template <
+        typename Signature,
+        class Options = future_options<continuable_opt>>
     class packaged_task;
 #endif
 
     /// \brief A packaged task that sets a shared state when done
     ///
     /// A packaged task holds a task to be executed and a shared state for its
-    /// result.
-    ///
-    /// It's very similar to a promise where the shared state is replaced by a
-    /// shared task.
+    /// result. It's very similar to a promise where the shared state is
+    /// extended with a task to generate the state.
     ///
     /// \tparam R Return type
     /// \tparam Args Task arguments
 #ifndef FUTURES_DOXYGEN
-    template <typename R, typename... Args>
+    template <
+        typename R,
+        typename... Args,
+        class Options>
 #else
-    template <typename Signature>
+    template <typename Signature, Options>
 #endif
-    class packaged_task<R(Args...)>
+    class packaged_task<R(Args...), Options>
     {
     public:
         /// \brief Constructs a std::packaged_task object with no task and no
@@ -100,11 +105,12 @@ namespace futures {
             std::allocator_arg_t,
             const Allocator &alloc,
             Fn &&fn) {
-            task_ = std::allocate_shared<
-                detail::shared_task<std::decay_t<Fn>, Allocator, R, Args...>>(
-                alloc,
-                alloc,
-                std::forward<Fn>(fn));
+            using shared_task_t = detail::
+                shared_task<std::decay_t<Fn>, Allocator, Options, R, Args...>;
+            auto typed_task_ = std::allocate_shared<
+                shared_task_t>(alloc, alloc, std::forward<Fn>(fn));
+            task_ = std::dynamic_pointer_cast<
+                detail::shared_task_base<R, Options, Args...>>(typed_task_);
         }
 
         /// \brief The copy constructor is deleted, std::packaged_task is
@@ -169,7 +175,7 @@ namespace futures {
         /// this promise Because this library handles more than a single future
         /// type, the future type we want is a template parameter. This function
         /// expects future type constructors to accept pointers to shared states.
-        template <class Future = cfuture<R>>
+        template <class Future = basic_future<R, Options>>
         Future
         get_future() {
             if (future_retrieved_) {
@@ -178,8 +184,12 @@ namespace futures {
             if (!valid()) {
                 detail::throw_exception<packaged_task_uninitialized>();
             }
+            Future f{
+                std::static_pointer_cast<detail::shared_state<R, Options>>(
+                    task_)
+            };
             future_retrieved_ = true;
-            return Future{ std::static_pointer_cast<detail::shared_state<R>>(task_) };
+            return f;
         }
 
         /// \brief Executes the function and set the shared state
@@ -196,6 +206,9 @@ namespace futures {
                 detail::throw_exception<packaged_task_uninitialized>();
             }
             task_->run(std::forward<Args>(args)...);
+            if constexpr (Options::is_continuable) {
+                task_->get_continuations_source().request_run();
+            }
         }
 
         /// \brief Resets the shared state abandoning any stored results of
@@ -213,12 +226,19 @@ namespace futures {
             future_retrieved_ = false;
         }
 
+        /// \brief Set the task we should execute before waiting
+        template <typename F>
+        void
+        set_wait_callback(F &&f) {
+            task_->set_wait_callback(std::forward<F>(f));
+        }
+
     private:
         /// \brief True if the corresponding future has already been retrieved
         bool future_retrieved_{ false };
 
         /// \brief The function this task should execute
-        std::shared_ptr<detail::shared_task_base<R, Args...>> task_{};
+        std::shared_ptr<detail::shared_task_base<R, Options, Args...>> task_{};
     };
 
     /// \brief Specializes the std::swap algorithm

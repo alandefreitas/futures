@@ -50,11 +50,14 @@ namespace futures {
                     return std::reduce(first, last, i, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
-                    cfuture<T> rhs_task = futures::async(
-                        detail::maybe_empty<Executor>::get(),
-                        [this, p, middle, last, i, f] {
+                    basic_future<
+                        T,
+                        future_options<executor_opt<Executor>, continuable_opt>>
+                        rhs_task = futures::async(
+                            detail::maybe_empty<Executor>::get(),
+                            [this, p, middle, last, i, f] {
                         return launch_reduce_tasks(p, middle, last, i, f);
-                        });
+                            });
 
                     // Launch tasks for lhs: [first, middle]
                     T lhs_result = launch_reduce_tasks(p, first, middle, i, f);
@@ -83,7 +86,10 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<cfuture<T>> tasks_{};
+            detail::lock_free_queue<basic_future<
+                T,
+                future_options<executor_opt<Executor>, continuable_opt>>>
+                tasks_{};
         };
 
         /// \brief Complete overload of the reduce algorithm

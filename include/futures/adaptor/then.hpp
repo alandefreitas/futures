@@ -8,7 +8,7 @@
 #ifndef FUTURES_THEN_H
 #define FUTURES_THEN_H
 
-#include <futures/adaptor/detail/continuation_unwrap.hpp>
+#include <futures/adaptor/detail/internal_then_functor.hpp>
 #include <future>
 #include <version>
 
@@ -143,7 +143,7 @@ namespace futures {
             int> = 0
 #endif
         >
-    auto
+    decltype(auto)
     operator>>(Future &&before, Function &&after) {
         return then(std::forward<Future>(before), std::forward<Function>(after));
     }
@@ -164,7 +164,7 @@ namespace futures {
             int> = 0
 #endif
         >
-    auto
+    decltype(auto)
     operator>>(
         Future &&before,
         std::pair<const Executor &, Function &> &&after) {
@@ -195,7 +195,7 @@ namespace futures {
             int> = 0
 #endif
         >
-    auto
+    decltype(auto)
     operator%(const Executor &ex, Function &&after) {
         return std::make_pair(std::cref(ex), std::ref(after));
     }

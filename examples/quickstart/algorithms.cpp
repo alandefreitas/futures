@@ -2,17 +2,19 @@
 #include <futures/futures.hpp>
 #include <iostream>
 
-int main() {
+int
+main() {
     using namespace futures;
 
     std::vector<int> v(50000);
     std::iota(v.begin(), v.end(), 1);
-    std::cout << "Sum: " << futures::reduce(v, 0) << std::endl;
+    std::cout << "Sum: " << futures::reduce(v, 0) << '\n';
 
     asio::thread_pool custom_pool(4);
     asio::thread_pool::executor_type ex = custom_pool.executor();
-    futures::for_each(ex, v.begin(), v.begin() + 10,
-                      [](int x) { std::cout << x << std::endl; });
+    futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
+        std::cout << x << '\n';
+    });
 
     return 0;
 }

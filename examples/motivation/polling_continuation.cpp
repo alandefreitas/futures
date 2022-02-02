@@ -2,14 +2,15 @@
 #include <futures/futures.hpp>
 #include <iostream>
 
-int main() {
+int
+main() {
     using namespace futures;
 
     // Waiting
     {
         std::future A = std::async([]() { return 2; });
         int A_result = A.get();
-        std::cout << A_result << std::endl;
+        std::cout << A_result << '\n';
     }
 
     // Polling
@@ -17,7 +18,7 @@ int main() {
         std::future A = std::async([]() { return 2; });
         std::future B = std::async([&]() {
             int A_result = A.get();
-            std::cout << A_result << std::endl;
+            std::cout << A_result << '\n';
         });
         B.wait();
     }
@@ -26,7 +27,7 @@ int main() {
     {
         auto A = futures::async([]() { return 2; });
         auto B = futures::then(A, [](int A_result) {
-            std::cout << A_result << std::endl;
+            std::cout << A_result << '\n';
         });
         B.wait();
     }

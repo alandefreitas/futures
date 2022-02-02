@@ -14,7 +14,7 @@
 
 #include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/futures/async.hpp>
+#include <futures/futures/launch.hpp>
 #include <futures/futures/traits/to_future.hpp>
 #include <futures/adaptor/detail/traits/is_tuple.hpp>
 #include <futures/adaptor/detail/tuple_algorithm.hpp>
@@ -360,7 +360,7 @@ namespace futures {
             const auto eq_comp = [](auto &&f) {
                 if constexpr (
                     CheckLazyContinuables::value
-                    || (!is_lazy_continuable_v<std::decay_t<decltype(f)>>) )
+                    || (!is_continuable_v<std::decay_t<decltype(f)>>) )
                 {
                     return ::futures::is_ready(std::forward<decltype(f)>(f));
                 } else {
@@ -510,14 +510,14 @@ namespace futures {
                 return std::tuple_size_v<sequence_type>;
                 size_t count = 0;
                 tuple_for_each(v, [&count](auto &&el) {
-                    if constexpr (is_lazy_continuable_v<
-                                      std::decay_t<decltype(el)>>) {
+                    if constexpr (is_continuable_v<std::decay_t<decltype(el)>>)
+                    {
                         ++count;
                     }
                 });
                 return count;
             } else {
-                if (is_lazy_continuable_v<
+                if (is_continuable_v<
                         std::decay_t<typename sequence_type::value_type>>) {
                     return v.size();
                 } else {
@@ -606,8 +606,7 @@ namespace futures {
             auto equal_fn = [&](auto &&f) {
                 // a) Don't wait on the ones with lazy continuations
                 // We are going to wait on all of them at once later
-                if constexpr (is_lazy_continuable_v<std::decay_t<decltype(f)>>)
-                {
+                if constexpr (is_continuable_v<std::decay_t<decltype(f)>>) {
                     return false;
                 }
                 // b) update parameters of our heuristic _before_ checking the
@@ -963,8 +962,8 @@ namespace futures {
 
                 // Create promise the notifier needs to fulfill
                 // All we need to know is whether it's over
-                promise<void> p;
-                auto std_future = p.get_future<futures::future<void>>();
+                promise<void, future_options<executor_opt<default_executor_type>>> p;
+                auto std_future = p.get_future();
                 auto notifier_task =
                     [p = std::move(p),
                      &future,
@@ -1061,8 +1060,8 @@ namespace futures {
                 // Post the task appropriately
                 using future_type = std::decay_t<decltype(future)>;
                 // MSVC hack
-                constexpr bool internal_lazy_continuable
-                    = is_lazy_continuable_v<future_type>;
+                constexpr bool internal_lazy_continuable = is_continuable_v<
+                    future_type>;
                 constexpr bool internal_setting_lazy = SettingLazyContinuables::
                     value;
                 constexpr bool internal_setting_thread
@@ -1089,13 +1088,13 @@ namespace futures {
             // Launch the notification task for each future
             if constexpr (sequence_is_range) {
                 if constexpr (
-                    is_lazy_continuable_v<
+                    is_continuable_v<
                         typename sequence_type::
                             value_type> && setting_notifiers_as_new_threads)
                 {
                     return;
                 } else if constexpr (
-                    !is_lazy_continuable_v<
+                    !is_continuable_v<
                         typename sequence_type::
                             value_type> && setting_notifiers_as_continuations)
                 {
@@ -1121,27 +1120,28 @@ namespace futures {
                     notifiers,
                     [&](auto &this_future, notifier &n) {
                     using future_type = std::decay_t<decltype(this_future)>;
-                    constexpr bool current_is_lazy_continuable_v
-                        = is_lazy_continuable_v<future_type>;
+                    constexpr bool current_is_continuable_v = is_continuable_v<
+                        future_type>;
                     constexpr bool internal_setting_thread
                         = !SettingLazyContinuables::value;
                     constexpr bool internal_setting_lazy
                         = SettingLazyContinuables::value;
                     if constexpr (
-                        current_is_lazy_continuable_v
-                        && internal_setting_thread) {
+                        current_is_continuable_v && internal_setting_thread) {
                         return;
                     } else if constexpr (
-                        (!current_is_lazy_continuable_v)
-                        && internal_setting_lazy) {
+                        (!current_is_continuable_v) && internal_setting_lazy) {
                         return;
                     } else {
                         n.cancel_token.store(false);
                         n.start_token.store(false);
-                        future<void> tmp = launch_notifier_task(
-                            this_future,
-                            n.cancel_token,
-                            n.start_token);
+                        basic_future<
+                            void,
+                            future_options<executor_opt<default_executor_type>>>
+                            tmp = launch_notifier_task(
+                                this_future,
+                                n.cancel_token,
+                                n.start_token);
                         n.task = std::move(tmp);
                     }
                     });
@@ -1171,7 +1171,10 @@ namespace futures {
         struct notifier
         {
             /// A simple task that notifies us whenever the task is ready
-            future<void> task{ make_ready_future() };
+            basic_future<
+                void,
+                future_options<executor_opt<default_executor_type>>>
+                task;
 
             /// Cancel the notification task
             std::atomic_bool cancel_token{ false };
