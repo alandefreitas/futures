@@ -8,14 +8,14 @@
 #ifndef FUTURES_FUTURES_BASIC_FUTURE_HPP
 #define FUTURES_FUTURES_BASIC_FUTURE_HPP
 
+#include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/futures/future_options.hpp>
 #include <futures/futures/stop_token.hpp>
 #include <futures/futures/traits/is_future.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_state.hpp>
-#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 #include <futures/futures/detail/traits/is_executor_then_function.hpp>
 #include <futures/futures/detail/traits/is_type_template_in_args.hpp>
@@ -79,9 +79,22 @@ namespace futures {
     /// contains a stop token
     ///
     template <class T, class Options = future_options<>>
-    class basic_future : private Options
+    class basic_future
+        : private detail::conditional_base<!Options::is_always_detached, bool>
     {
     private:
+        using join_base = detail::
+            conditional_base<!Options::is_always_detached, bool>;
+
+        typename join_base::value_type
+        initial_join_value() {
+            if constexpr (!Options::is_always_detached) {
+                return true;
+            } else {
+                return detail::empty_value;
+            }
+        }
+
         // futures and shared futures use the same state type
         using shared_state_options = detail::
             remove_future_option_t<shared_opt, Options>;
@@ -121,7 +134,7 @@ namespace futures {
         /// \param s Future shared state
         explicit basic_future(
             const std::shared_ptr<shared_state_type> &s) noexcept
-            : state_{ std::move(s) } {}
+            : join_base(initial_join_value()), state_{ std::move(s) } {}
 
     public:
         /// \name Public types
@@ -140,7 +153,8 @@ namespace futures {
         /// state.
         ///
         /// Null shared state. Properties inherited from base classes.
-        basic_future() noexcept = default;
+        basic_future() noexcept
+            : join_base(initial_join_value()), state_{ nullptr } {};
 
         /// \brief Copy constructor for shared futures only.
         ///
@@ -152,7 +166,7 @@ namespace futures {
         /// \param other Another future used as source to initialize the shared
         /// state
         basic_future(const basic_future &other)
-            : join_{ other.join_ }, state_{ other.state_ } {
+            : join_base{ other.join_base::get() }, state_{ other.state_ } {
             static_assert(
                 Options::is_shared,
                 "Copy constructor is only available for shared futures");
@@ -162,7 +176,8 @@ namespace futures {
         ///
         /// Inherited from base classes.
         basic_future(basic_future &&other) noexcept
-            : join_{ other.join_ }, state_{ std::move(other.state_) } {
+            : join_base{ std::move(other.join_base::get()) },
+              state_{ std::move(other.state_) } {
             other.state_.reset();
         }
 
@@ -204,7 +219,14 @@ namespace futures {
             }
             wait_if_last(); // If this is the last shared future waiting for
                             // previous result, we wait
-            join_ = other.join_;
+            if constexpr (std::is_same_v<
+                              join_base,
+                              typename basic_future<U, O>::join_base>) {
+                join_base::get() = other.join_base::get();
+            } else if constexpr (
+                std::is_same_v<typename join_base::value_type, bool>) {
+                join_base::get() = false;
+            }
             state_ = other.state_; // Make it point to the same shared state
             other.detach();        // Detach other to ensure it won't block at
                                    // destruction
@@ -222,7 +244,14 @@ namespace futures {
             }
             wait_if_last(); // If this is the last shared future waiting for
                             // previous result, we wait
-            join_ = other.join_;
+            if constexpr (std::is_same_v<
+                              join_base,
+                              typename basic_future<U, O>::join_base>) {
+                join_base::get() = other.join_base::get();
+            } else if constexpr (
+                std::is_same_v<typename join_base::value_type, bool>) {
+                join_base::get() = false;
+            }
             state_ = other.state_; // Make it point to the same shared state
             other.state_.reset();
             other.detach(); // Detach other to ensure it won't block at
@@ -265,7 +294,7 @@ namespace futures {
                     return state_->get_continuations_source()
                         .emplace_continuation(ex, std::forward<Fn>(fn));
                 } else {
-                    auto fn_shared_ptr = std::make_shared<Fn>(std::move(fn));
+                    auto fn_shared_ptr = std::make_shared<Fn>(std::forward<Fn>(fn));
                     auto copyable_handle = [fn_shared_ptr]() {
                         (*fn_shared_ptr)();
                     };
@@ -397,7 +426,9 @@ namespace futures {
             shared_future_t res{
                 Options::is_shared ? state_ : std::move(state_)
             };
-            res.join_ = std::exchange(join_, Options::is_shared && join_);
+            res.join_base::get() = std::exchange(
+                join_base::get(),
+                Options::is_shared && join_base::get());
             return res;
         }
 
@@ -465,7 +496,7 @@ namespace futures {
         /// For safety, all futures join at destruction
         void
         detach() {
-            join_ = false;
+            join_base::get() = false;
         }
 
         /// \brief Notify this condition variable when the future is ready
@@ -502,7 +533,7 @@ namespace futures {
 
         void
         wait_if_last() const {
-            if (join_ && valid() && (!is_ready())) {
+            if (join_base::get() && valid() && (!is_ready())) {
                 if constexpr (!Options::is_shared) {
                     wait();
                 } else /* constexpr */ {
@@ -517,8 +548,6 @@ namespace futures {
 
         /// \name Members
         /// @{
-        bool join_{ true };
-
         /// \brief Pointer to shared state
         std::shared_ptr<shared_state_type> state_{};
         /// @}
