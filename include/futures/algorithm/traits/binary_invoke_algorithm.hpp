@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
-#define FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
+#ifndef FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
+#define FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/policies.hpp>
@@ -566,4 +566,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_H
+#endif // FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP

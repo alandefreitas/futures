@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_WHEN_ANY_RESULT_H
-#define FUTURES_WHEN_ANY_RESULT_H
+#ifndef FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP
+#define FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -32,4 +32,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_WHEN_ANY_RESULT_H
+#endif // FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP

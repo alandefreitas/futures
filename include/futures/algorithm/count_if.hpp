@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_COUNT_IF_H
-#define FUTURES_COUNT_IF_H
+#ifndef FUTURES_ALGORITHM_COUNT_IF_HPP
+#define FUTURES_ALGORITHM_COUNT_IF_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
@@ -148,4 +148,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_COUNT_IF_H
+#endif // FUTURES_ALGORITHM_COUNT_IF_HPP

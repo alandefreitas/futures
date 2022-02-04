@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
-#define FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
+#define FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
 
 #include <futures/algorithm/traits/has_iterator_traits_difference_type.hpp>
 #include <futures/algorithm/traits/remove_cvref.hpp>
@@ -114,4 +114,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_H
+#endif // FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP

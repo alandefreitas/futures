@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_WAIT_FOR_ALL_H
-#define FUTURES_WAIT_FOR_ALL_H
+#ifndef FUTURES_FUTURES_WAIT_FOR_ALL_HPP
+#define FUTURES_FUTURES_WAIT_FOR_ALL_HPP
 
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
@@ -113,4 +113,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_WAIT_FOR_ALL_H
+#endif // FUTURES_FUTURES_WAIT_FOR_ALL_HPP

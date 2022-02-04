@@ -5,13 +5,13 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_SHARED_TASK_H
-#define FUTURES_SHARED_TASK_H
+#ifndef FUTURES_FUTURES_DETAIL_SHARED_TASK_HPP
+#define FUTURES_FUTURES_DETAIL_SHARED_TASK_HPP
 
-#include <futures/executor/detail/allocator_rebind.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/allocator/allocator_rebind.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_state.hpp>
-#include <futures/futures/detail/to_address.hpp>
+#include <futures/detail/utility/to_address.hpp>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -165,4 +165,4 @@ namespace futures::detail {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures::detail
 
-#endif // FUTURES_SHARED_TASK_H
+#endif // FUTURES_FUTURES_DETAIL_SHARED_TASK_HPP

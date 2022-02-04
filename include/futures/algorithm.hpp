@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_H
-#define FUTURES_ALGORITHM_H
+#ifndef FUTURES_ALGORITHM_HPP
+#define FUTURES_ALGORITHM_HPP
 
 #include <futures/algorithm/all_of.hpp>
 #include <futures/algorithm/any_of.hpp>
@@ -19,4 +19,4 @@
 #include <futures/algorithm/none_of.hpp>
 #include <futures/algorithm/reduce.hpp>
 
-#endif // FUTURES_ALGORITHM_H
+#endif // FUTURES_ALGORITHM_HPP

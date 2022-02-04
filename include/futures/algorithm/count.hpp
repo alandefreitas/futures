@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_COUNT_H
-#define FUTURES_COUNT_H
+#ifndef FUTURES_ALGORITHM_COUNT_HPP
+#define FUTURES_ALGORITHM_COUNT_HPP
 
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/count_if.hpp>
@@ -82,4 +82,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_COUNT_H
+#endif // FUTURES_ALGORITHM_COUNT_HPP

@@ -19,6 +19,11 @@ end
 2. When the task is completed, it fulfills its promise by setting the shared state with its result. 
 3. The future is considered ready and the main thread can obtain its value.
 
+Note that the shared state is a private implementation detail with which the user does not interact.
+This ensures all write operations will happen through the promise and all read operations
+will happen through the future. It also enables optimizations based on assumptions about
+how specific future and promise types can access the shared state.
+
 ## Eager tasks
 
 Like [std::async], [futures::async] is used to launch new tasks.  

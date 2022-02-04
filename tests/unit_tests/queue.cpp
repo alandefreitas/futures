@@ -2,8 +2,8 @@
 #include <string>
 #include <catch2/catch.hpp>
 #include <futures/futures.hpp>
-#if __has_include(<futures/executor/detail/lock_free_queue.hpp>)
-#    include <futures/executor/detail/lock_free_queue.hpp>
+#if __has_include(<futures/detail/container/lock_free_queue.hpp>)
+#    include <futures/detail/container/lock_free_queue.hpp>
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {

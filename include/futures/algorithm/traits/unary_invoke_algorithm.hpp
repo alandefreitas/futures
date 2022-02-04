@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
-#define FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
+#ifndef FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP
+#define FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP
 
 /// \file Identify traits for algorithms, like we do for other types
 ///
@@ -287,4 +287,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_H
+#endif // FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP

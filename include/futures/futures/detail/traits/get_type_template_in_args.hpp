@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_TRAITS_GET_TYPE_TEMPLATE_IN_ARGS_HPP
 
 #include <futures/futures/detail/traits/has_same_type_member.hpp>
-#include <futures/futures/detail/traits/type_member_or_void.hpp>
+#include <futures/detail/traits/type_member_or_void.hpp>
 #include <type_traits>
 
 namespace futures::detail {

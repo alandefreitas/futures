@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
-#define FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
+#ifndef FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
+#define FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
 
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <utility>
@@ -34,4 +34,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_H
+#endif // FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP

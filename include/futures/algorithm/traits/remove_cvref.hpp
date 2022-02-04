@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
-#define FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
+#ifndef FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
+#define FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
 
 #include <type_traits>
 
@@ -40,4 +40,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_H
+#endif // FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP

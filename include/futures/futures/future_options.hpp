@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURE_OPTIONS_HPP
-#define FUTURES_FUTURE_OPTIONS_HPP
+#ifndef FUTURES_FUTURES_FUTURE_OPTIONS_HPP
+#define FUTURES_FUTURES_FUTURE_OPTIONS_HPP
 
 #include <futures/futures/detail/traits/get_type_template_in_args.hpp>
 #include <futures/futures/detail/traits/is_in_args.hpp>
@@ -74,4 +74,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_FUTURE_OPTIONS_HPP
+#endif // FUTURES_FUTURES_FUTURE_OPTIONS_HPP

@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_TO_FUTURE_H
-#define FUTURES_TO_FUTURE_H
+#ifndef FUTURES_FUTURES_TRAITS_TO_FUTURE_HPP
+#define FUTURES_FUTURES_TRAITS_TO_FUTURE_HPP
 
 namespace futures {
     /// \brief Trait to convert input type to its proper future type
@@ -54,4 +54,4 @@ namespace futures {
     using to_future_t = typename to_future<T>::type;
 } // namespace futures
 
-#endif // FUTURES_TO_FUTURE_H
+#endif // FUTURES_FUTURES_TRAITS_TO_FUTURE_HPP

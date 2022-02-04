@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_UNWRAP_AND_CONTINUE_HPP
-#define FUTURES_UNWRAP_AND_CONTINUE_HPP
+#ifndef FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
+#define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 
-#include <futures/adaptor/detail/traits/range_or_tuple_value.hpp>
+#include <futures/detail/traits/range_or_tuple_value.hpp>
 
 namespace futures::detail {
     struct unwrapping_failure_t
@@ -80,7 +80,7 @@ namespace futures::detail {
             if constexpr (no_unwrap) {
                 return continuation(
                     std::forward<PrefixArgs>(prefix_args)...,
-                    detail::move_or_copy(before_future));
+                    detail::move_if_not_shared(before_future));
             } else if constexpr (no_input) {
                 before_future.get();
                 return continuation(std::forward<PrefixArgs>(prefix_args)...);
@@ -448,4 +448,4 @@ namespace futures::detail {
 
 } // namespace futures::detail
 
-#endif // FUTURES_UNWRAP_AND_CONTINUE_HPP
+#endif // FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP

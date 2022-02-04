@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
-#define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_HPP
 
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
@@ -58,4 +58,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_HPP

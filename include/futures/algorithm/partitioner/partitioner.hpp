@@ -1,12 +1,12 @@
-#ifndef FUTURES_PARTITIONER_H
-#define FUTURES_PARTITIONER_H
+#ifndef FUTURES_ALGORITHM_PARTITIONER_PARTITIONER_HPP
+#define FUTURES_ALGORITHM_PARTITIONER_PARTITIONER_HPP
 
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/executor/default_executor.hpp>
-#include <futures/adaptor/detail/traits/has_get.hpp>
+#include <futures/detail/traits/has_get.hpp>
 #include <algorithm>
 #include <thread>
 
@@ -189,4 +189,4 @@ namespace futures {
     /** @}*/ // \addtogroup algorithms Algorithms
 } // namespace futures
 
-#endif // FUTURES_PARTITIONER_H
+#endif // FUTURES_ALGORITHM_PARTITIONER_PARTITIONER_HPP

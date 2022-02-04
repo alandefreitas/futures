@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
-#define FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_HPP
 
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
@@ -51,4 +51,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_HPP

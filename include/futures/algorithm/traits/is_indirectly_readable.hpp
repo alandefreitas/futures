@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
-#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_HPP
 
 #include <futures/algorithm/traits/iter_reference.hpp>
 #include <futures/algorithm/traits/iter_rvalue_reference.hpp>
@@ -51,4 +51,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_HPP

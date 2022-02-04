@@ -5,11 +5,11 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_launch_result_value_type_H
-#define FUTURES_launch_result_value_type_H
+#ifndef FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_VALUE_TYPE_HPP
+#define FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_VALUE_TYPE_HPP
 
 #include <futures/futures/stop_token.hpp>
-#include <futures/futures/detail/traits/type_member_or_void.hpp>
+#include <futures/detail/traits/type_member_or_void.hpp>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -38,4 +38,4 @@ namespace futures::detail {
 } // namespace futures::detail
 
 
-#endif // FUTURES_launch_result_value_type_H
+#endif // FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_VALUE_TYPE_HPP

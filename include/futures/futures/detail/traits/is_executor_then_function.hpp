@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
-#define FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
+#ifndef FUTURES_FUTURES_DETAIL_TRAITS_IS_EXECUTOR_THEN_FUNCTION_HPP
+#define FUTURES_FUTURES_DETAIL_TRAITS_IS_EXECUTOR_THEN_FUNCTION_HPP
 
-#include <futures/config/asio_include.hpp>
+#include <futures/detail/config/asio_include.hpp>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -77,4 +77,4 @@ namespace futures::detail {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures::detail
 
-#endif // FUTURES_IS_EXECUTOR_THEN_FUNCTION_H
+#endif // FUTURES_FUTURES_DETAIL_TRAITS_IS_EXECUTOR_THEN_FUNCTION_HPP

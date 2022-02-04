@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURES_H
-#define FUTURES_FUTURES_H
+#ifndef FUTURES_FUTURES_HPP
+#define FUTURES_FUTURES_HPP
 
 /// \file
 /// Future types and functions to work with futures
@@ -77,4 +77,4 @@
 #include <futures/adaptor/when_all.hpp>
 #include <futures/adaptor/when_any.hpp>
 
-#endif // FUTURES_FUTURES_H
+#endif // FUTURES_FUTURES_HPP

@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ANY_OF_H
-#define FUTURES_ANY_OF_H
+#ifndef FUTURES_ALGORITHM_ANY_OF_HPP
+#define FUTURES_ALGORITHM_ANY_OF_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
@@ -150,4 +150,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_ANY_OF_H
+#endif // FUTURES_ALGORITHM_ANY_OF_HPP

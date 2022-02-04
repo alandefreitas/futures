@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_IS_FUTURE_H
-#define FUTURES_IS_FUTURE_H
+#ifndef FUTURES_FUTURES_TRAITS_IS_FUTURE_HPP
+#define FUTURES_FUTURES_TRAITS_IS_FUTURE_HPP
 
 #include <future>
 #include <type_traits>
@@ -110,4 +110,4 @@ namespace futures {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
-#endif // FUTURES_IS_FUTURE_H
+#endif // FUTURES_FUTURES_TRAITS_IS_FUTURE_HPP

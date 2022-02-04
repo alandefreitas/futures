@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
-#define FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP
 
 #include <futures/algorithm/traits/is_move_constructible.hpp>
 #include <futures/algorithm/traits/is_assignable_from.hpp>
@@ -55,4 +55,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP

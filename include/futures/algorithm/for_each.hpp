@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FOR_EACH_H
-#define FUTURES_FOR_EACH_H
+#ifndef FUTURES_ALGORITHM_FOR_EACH_HPP
+#define FUTURES_ALGORITHM_FOR_EACH_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/futures.hpp>
-#include <futures/executor/detail/lock_free_queue.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/container/lock_free_queue.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <execution>
 #include <variant>
 
@@ -154,4 +154,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_FOR_EACH_H
+#endif // FUTURES_ALGORITHM_FOR_EACH_HPP

@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_CONTINUATIONS_SOURCE_H
-#define FUTURES_CONTINUATIONS_SOURCE_H
+#ifndef FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
+#define FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
-#include <futures/futures/detail/small_vector.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <memory>
 #include <shared_mutex>
 
@@ -369,4 +369,4 @@ namespace futures::detail {
     /** @} */
 } // namespace futures::detail
 
-#endif // FUTURES_CONTINUATIONS_SOURCE_H
+#endif // FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP

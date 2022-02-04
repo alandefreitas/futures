@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FIND_H
-#define FUTURES_FIND_H
+#ifndef FUTURES_ALGORITHM_FIND_HPP
+#define FUTURES_ALGORITHM_FIND_HPP
 
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/find_if.hpp>
@@ -79,4 +79,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_FIND_H
+#endif // FUTURES_ALGORITHM_FIND_HPP

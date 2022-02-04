@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_STOP_TOKEN_H
-#define FUTURES_STOP_TOKEN_H
+#ifndef FUTURES_FUTURES_STOP_TOKEN_HPP
+#define FUTURES_FUTURES_STOP_TOKEN_HPP
 
 /// \file
 ///
@@ -449,4 +449,4 @@ namespace futures {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
-#endif // FUTURES_STOP_TOKEN_H
+#endif // FUTURES_FUTURES_STOP_TOKEN_HPP

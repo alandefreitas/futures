@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURE_ERROR_H
-#define FUTURES_FUTURE_ERROR_H
+#ifndef FUTURES_FUTURES_FUTURE_ERROR_HPP
+#define FUTURES_FUTURES_FUTURE_ERROR_HPP
 
 #include <system_error>
 
@@ -219,4 +219,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_FUTURE_ERROR_H
+#endif // FUTURES_FUTURES_FUTURE_ERROR_HPP

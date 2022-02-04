@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_WHEN_ANY_H
-#define FUTURES_WHEN_ANY_H
+#ifndef FUTURES_ADAPTOR_WHEN_ANY_HPP
+#define FUTURES_ADAPTOR_WHEN_ANY_HPP
 
 /// \file Implement the when_any functionality for futures and executors
 /// The same rationale as when_all applies here
@@ -16,9 +16,9 @@
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/futures/launch.hpp>
 #include <futures/futures/traits/to_future.hpp>
-#include <futures/adaptor/detail/traits/is_tuple.hpp>
-#include <futures/adaptor/detail/tuple_algorithm.hpp>
-#include <futures/futures/detail/small_vector.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
+#include <futures/detail/algorithm/tuple_algorithm.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <array>
 #include <optional>
 #include <condition_variable>
@@ -1615,4 +1615,4 @@ namespace futures {
 
     /** @} */
 } // namespace futures
-#endif // FUTURES_WHEN_ANY_H
+#endif // FUTURES_ADAPTOR_WHEN_ANY_HPP

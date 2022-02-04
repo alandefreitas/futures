@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
-#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_HPP
 
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
@@ -54,4 +54,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_HPP

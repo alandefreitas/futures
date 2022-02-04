@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
-#define FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_HPP
+#define FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_HPP
 
 #include <type_traits>
 
@@ -42,4 +42,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_H
+#endif // FUTURES_ALGORITHM_TRAITS_HAS_VALUE_TYPE_HPP

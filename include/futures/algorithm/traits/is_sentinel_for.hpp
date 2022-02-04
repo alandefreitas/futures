@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
-#define FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP
 
 #include <futures/algorithm/traits/is_input_or_output_iterator.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
@@ -53,4 +53,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP

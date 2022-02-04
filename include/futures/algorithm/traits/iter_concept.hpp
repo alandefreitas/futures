@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
-#define FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_HPP
+#define FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_HPP
 
 #include <futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp>
 #include <futures/algorithm/traits/has_iterator_traits_iterator_category.hpp>
@@ -83,4 +83,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_H
+#endif // FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_HPP

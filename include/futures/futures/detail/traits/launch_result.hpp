@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_launch_result_H
-#define FUTURES_launch_result_H
+#ifndef FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_HPP
+#define FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_HPP
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/detail/traits/launch_result_value_type.hpp>
@@ -65,4 +65,4 @@ namespace futures::detail {
     /** @} */
 } // namespace futures::detail
 
-#endif // FUTURES_launch_result_H
+#endif // FUTURES_FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_HPP

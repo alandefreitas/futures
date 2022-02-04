@@ -5,17 +5,17 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_BASIC_FUTURE_H
-#define FUTURES_BASIC_FUTURE_H
+#ifndef FUTURES_FUTURES_BASIC_FUTURE_HPP
+#define FUTURES_FUTURES_BASIC_FUTURE_HPP
 
 #include <futures/executor/default_executor.hpp>
 #include <futures/futures/future_options.hpp>
 #include <futures/futures/stop_token.hpp>
 #include <futures/futures/traits/is_future.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_state.hpp>
-#include <futures/futures/detail/throw_exception.hpp>
+#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 #include <futures/futures/detail/traits/is_executor_then_function.hpp>
 #include <futures/futures/detail/traits/is_type_template_in_args.hpp>
@@ -675,4 +675,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_BASIC_FUTURE_H
+#endif // FUTURES_FUTURES_BASIC_FUTURE_HPP

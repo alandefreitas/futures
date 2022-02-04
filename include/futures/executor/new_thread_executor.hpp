@@ -8,7 +8,7 @@
 #ifndef FUTURES_NEW_THREAD_EXECUTOR_H
 #define FUTURES_NEW_THREAD_EXECUTOR_H
 
-#include <futures/config/asio_include.hpp>
+#include <futures/detail/config/asio_include.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
 

@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_POLICIES_H
-#define FUTURES_ALGORITHM_POLICIES_H
+#ifndef FUTURES_ALGORITHM_POLICIES_HPP
+#define FUTURES_ALGORITHM_POLICIES_HPP
 
 /// \file Identify traits for algorithms, like we do for other types
 ///
@@ -113,4 +113,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_POLICIES_H
+#endif // FUTURES_ALGORITHM_POLICIES_HPP

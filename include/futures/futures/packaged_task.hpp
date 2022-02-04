@@ -5,12 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_PACKAGED_TASK_H
-#define FUTURES_PACKAGED_TASK_H
+#ifndef FUTURES_FUTURES_PACKAGED_TASK_HPP
+#define FUTURES_FUTURES_PACKAGED_TASK_HPP
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/future_options.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {
@@ -252,4 +252,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_PACKAGED_TASK_H
+#endif // FUTURES_FUTURES_PACKAGED_TASK_HPP

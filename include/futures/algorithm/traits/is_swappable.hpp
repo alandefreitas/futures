@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
-#define FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_HPP
 
 #include <type_traits>
 
@@ -48,4 +48,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_HPP

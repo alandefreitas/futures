@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
-#define FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_HPP
+#define FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_HPP
 
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
@@ -49,4 +49,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_H
+#endif // FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_HPP

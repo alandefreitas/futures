@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FIND_IF_NOT_H
-#define FUTURES_FIND_IF_NOT_H
+#ifndef FUTURES_ALGORITHM_FIND_IF_NOT_HPP
+#define FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -80,4 +80,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_FIND_IF_NOT_H
+#endif // FUTURES_ALGORITHM_FIND_IF_NOT_HPP

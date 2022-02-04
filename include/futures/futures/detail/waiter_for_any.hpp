@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_WAITER_FOR_ANY_H
-#define FUTURES_WAITER_FOR_ANY_H
+#ifndef FUTURES_FUTURES_DETAIL_WAITER_FOR_ANY_HPP
+#define FUTURES_FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 
-#include <futures/futures/detail/lock.hpp>
+#include <futures/detail/thread/lock.hpp>
 #include <futures/futures/detail/shared_state.hpp>
 #include <utility>
 
@@ -252,4 +252,4 @@ namespace futures::detail {
     /** @} */
 } // namespace futures::detail
 
-#endif // FUTURES_WAITER_FOR_ANY_H
+#endif // FUTURES_FUTURES_DETAIL_WAITER_FOR_ANY_HPP

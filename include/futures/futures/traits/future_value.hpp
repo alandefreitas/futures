@@ -5,11 +5,11 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_UNWRAP_FUTURE_H
-#define FUTURES_UNWRAP_FUTURE_H
+#ifndef FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
+#define FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
 
 #include <futures/futures/traits/is_future.hpp>
-#include <futures/adaptor/detail/traits/has_get.hpp>
+#include <futures/detail/traits/has_get.hpp>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -56,4 +56,4 @@ namespace futures {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures
 
-#endif // FUTURES_UNWRAP_FUTURE_H
+#endif // FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP

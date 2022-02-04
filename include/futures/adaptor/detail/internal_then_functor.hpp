@@ -5,28 +5,28 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_CONTINUATION_UNWRAP_H
-#define FUTURES_CONTINUATION_UNWRAP_H
+#ifndef FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
+#define FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
 
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/traits/future_value.hpp>
 #include <futures/futures/traits/is_future.hpp>
-#include <futures/adaptor/detail/move_or_copy.hpp>
-#include <futures/adaptor/detail/traits/is_callable.hpp>
-#include <futures/adaptor/detail/traits/is_single_type_tuple.hpp>
-#include <futures/adaptor/detail/traits/is_tuple.hpp>
-#include <futures/adaptor/detail/traits/is_tuple_invocable.hpp>
-#include <futures/adaptor/detail/traits/is_when_any_result.hpp>
-#include <futures/adaptor/detail/traits/tuple_type_all_of.hpp>
-#include <futures/adaptor/detail/traits/tuple_type_concat.hpp>
-#include <futures/adaptor/detail/traits/tuple_type_transform.hpp>
-#include <futures/adaptor/detail/traits/type_member_or.hpp>
-#include <futures/adaptor/detail/tuple_algorithm.hpp>
+#include <futures/futures/detail/move_if_not_shared.hpp>
+#include <futures/detail/traits/is_callable.hpp>
+#include <futures/detail/traits/is_single_type_tuple.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
+#include <futures/detail/traits/is_tuple_invocable.hpp>
+#include <futures/detail/traits/is_when_any_result.hpp>
+#include <futures/detail/traits/tuple_type_all_of.hpp>
+#include <futures/detail/traits/tuple_type_concat.hpp>
+#include <futures/detail/traits/tuple_type_transform.hpp>
+#include <futures/detail/traits/type_member_or.hpp>
+#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
-#include <futures/futures/detail/small_vector.hpp>
-#include <futures/futures/detail/traits/type_member_or_void.hpp>
+#include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/traits/type_member_or_void.hpp>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -191,4 +191,4 @@ namespace futures::detail {
     /** @} */
 } // namespace futures::detail
 
-#endif // FUTURES_CONTINUATION_UNWRAP_H
+#endif // FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP

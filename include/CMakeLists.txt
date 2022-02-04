@@ -95,6 +95,7 @@ if (FUTURES_BUILD_SINGLE_HEADER)
             "${SINGLE_HEADER_PATH}"
             --remove_leading_comments
             --show_progress
+            --fix_include_guards
             DEPENDS amalgamator ${FUTURES_HEADERS}
             COMMENT "Creating single-header library"
             VERBATIM

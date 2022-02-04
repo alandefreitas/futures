@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_THEN_H
-#define FUTURES_THEN_H
+#ifndef FUTURES_ADAPTOR_THEN_HPP
+#define FUTURES_ADAPTOR_THEN_HPP
 
 #include <futures/adaptor/detail/internal_then_functor.hpp>
 #include <future>
@@ -203,4 +203,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_THEN_H
+#endif // FUTURES_ADAPTOR_THEN_HPP

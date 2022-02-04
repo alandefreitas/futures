@@ -5,12 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_LAUNCH_H
-#define FUTURES_LAUNCH_H
+#ifndef FUTURES_FUTURES_LAUNCH_HPP
+#define FUTURES_FUTURES_LAUNCH_HPP
 
 #include <futures/executor/inline_executor.hpp>
 #include <futures/futures/await.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/future_launcher.hpp>
 #include <futures/futures/detail/traits/launch_result.hpp>
 
@@ -199,4 +199,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_LAUNCH_H
+#endif // FUTURES_FUTURES_LAUNCH_HPP

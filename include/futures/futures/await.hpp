@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_AWAIT_H
-#define FUTURES_AWAIT_H
+#ifndef FUTURES_FUTURES_AWAIT_HPP
+#define FUTURES_FUTURES_AWAIT_HPP
 
 #include <futures/futures/traits/is_future.hpp>
 #include <type_traits>
@@ -53,4 +53,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_AWAIT_H
+#endif // FUTURES_FUTURES_AWAIT_HPP

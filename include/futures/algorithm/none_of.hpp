@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_NONE_OF_H
-#define FUTURES_NONE_OF_H
+#ifndef FUTURES_ALGORITHM_NONE_OF_HPP
+#define FUTURES_ALGORITHM_NONE_OF_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
@@ -152,4 +152,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_NONE_OF_H
+#endif // FUTURES_ALGORITHM_NONE_OF_HPP

@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURES_DETAIL_FUTURE_SCHEDULER_HPP
-#define FUTURES_FUTURES_DETAIL_FUTURE_SCHEDULER_HPP
+#ifndef FUTURES_FUTURES_DETAIL_FUTURE_LAUNCHER_HPP
+#define FUTURES_FUTURES_DETAIL_FUTURE_LAUNCHER_HPP
 
 #include <futures/futures/stop_token.hpp>
 #include <futures/futures/traits/future_value.hpp>
@@ -116,4 +116,4 @@ namespace futures::detail {
 
 } // namespace futures::detail
 
-#endif // FUTURES_FUTURES_DETAIL_FUTURE_SCHEDULER_HPP
+#endif // FUTURES_FUTURES_DETAIL_FUTURE_LAUNCHER_HPP

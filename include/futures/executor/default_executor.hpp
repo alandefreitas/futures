@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_DEFAULT_EXECUTOR_H
-#define FUTURES_DEFAULT_EXECUTOR_H
+#ifndef FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
+#define FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 
-#include <futures/config/asio_include.hpp>
+#include <futures/detail/config/asio_include.hpp>
 #include <futures/executor/is_executor.hpp>
 
 namespace futures {
@@ -123,4 +123,4 @@ namespace futures {
     /** @} */ // \addtogroup executors Executors
 } // namespace futures
 
-#endif // FUTURES_DEFAULT_EXECUTOR_H
+#endif // FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP

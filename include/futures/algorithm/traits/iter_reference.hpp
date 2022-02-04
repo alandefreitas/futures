@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
-#define FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
+#ifndef FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_HPP
+#define FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_HPP
 
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <iterator>
@@ -48,4 +48,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_H
+#endif // FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_HPP

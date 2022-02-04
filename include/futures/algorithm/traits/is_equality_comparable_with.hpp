@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
-#define FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_weakly_equality_comparable.hpp>
@@ -54,4 +54,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP

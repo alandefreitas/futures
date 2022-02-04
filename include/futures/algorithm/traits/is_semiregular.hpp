@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
-#define FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_HPP
 
 #include <futures/algorithm/traits/is_copyable.hpp>
 #include <futures/algorithm/traits/is_default_initializable.hpp>
@@ -52,4 +52,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_HPP

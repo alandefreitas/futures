@@ -5,10 +5,10 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_SHARED_STATE_STORAGE_HPP
-#define FUTURES_SHARED_STATE_STORAGE_HPP
+#ifndef FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP
+#define FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP
 
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <type_traits>
 
 namespace futures::detail {
@@ -123,4 +123,4 @@ namespace futures::detail {
 
 } // namespace futures::detail
 
-#endif // FUTURES_SHARED_STATE_STORAGE_HPP
+#endif // FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP

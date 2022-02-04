@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_IS_IN_ARGS_HPP
-#define FUTURES_IS_IN_ARGS_HPP
+#ifndef FUTURES_FUTURES_DETAIL_TRAITS_IS_IN_ARGS_HPP
+#define FUTURES_FUTURES_DETAIL_TRAITS_IS_IN_ARGS_HPP
 
 #include <type_traits>
 
@@ -31,4 +31,4 @@ namespace futures::detail {
     inline constexpr bool is_in_args_v = is_in_args<T, Args...>::value;
 } // namespace futures::detail
 
-#endif // FUTURES_IS_IN_ARGS_HPP
+#endif // FUTURES_FUTURES_DETAIL_TRAITS_IS_IN_ARGS_HPP

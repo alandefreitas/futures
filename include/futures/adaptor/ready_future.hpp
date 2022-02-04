@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_READY_FUTURE_H
-#define FUTURES_READY_FUTURE_H
+#ifndef FUTURES_ADAPTOR_READY_FUTURE_HPP
+#define FUTURES_ADAPTOR_READY_FUTURE_HPP
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/promise.hpp>
 #include <futures/futures/traits/future_return.hpp>
 #include <futures/futures/traits/is_future.hpp>
-#include <futures/futures/detail/traits/has_is_ready.hpp>
+#include <futures/detail/traits/has_is_ready.hpp>
 #include <future>
 
 namespace futures {
@@ -118,4 +118,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_READY_FUTURE_H
+#endif // FUTURES_ADAPTOR_READY_FUTURE_HPP

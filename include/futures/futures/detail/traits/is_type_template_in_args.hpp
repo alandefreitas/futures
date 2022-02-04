@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_DETAIL_TRAITS_IS_TYPE_TEMPLATE_IN_ARGS_HPP
 #define FUTURES_FUTURES_DETAIL_TRAITS_IS_TYPE_TEMPLATE_IN_ARGS_HPP
 
-#include <futures/futures/detail/traits/type_member_or_void.hpp>
+#include <futures/detail/traits/type_member_or_void.hpp>
 #include <type_traits>
 
 namespace futures::detail {

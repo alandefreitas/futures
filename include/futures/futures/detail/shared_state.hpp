@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_SHARED_STATE_H
-#define FUTURES_SHARED_STATE_H
+#ifndef FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP
+#define FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP
 
 #include <futures/futures/future_error.hpp>
 #include <futures/futures/future_options.hpp>
-#include <futures/futures/detail/relocker.hpp>
+#include <futures/detail/thread/relocker.hpp>
 #include <futures/futures/detail/shared_state_storage.hpp>
-#include <futures/futures/detail/small_vector.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <futures/futures/detail/traits/is_in_args.hpp>
 #include <atomic>
 #include <future>
@@ -867,4 +867,4 @@ namespace futures::detail {
     /** @} */ // \addtogroup futures Futures
 } // namespace futures::detail
 
-#endif // FUTURES_SHARED_STATE_H
+#endif // FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP

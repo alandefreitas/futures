@@ -6,13 +6,13 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_PROMISE_H
-#define FUTURES_PROMISE_H
+#ifndef FUTURES_FUTURES_PROMISE_HPP
+#define FUTURES_FUTURES_PROMISE_HPP
 
 #include <futures/futures/basic_future.hpp>
-#include <futures/futures/detail/empty_base.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_state.hpp>
-#include <futures/futures/detail/to_address.hpp>
+#include <futures/detail/utility/to_address.hpp>
 #include <memory>
 
 namespace futures {
@@ -226,4 +226,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_PROMISE_H
+#endif // FUTURES_FUTURES_PROMISE_HPP

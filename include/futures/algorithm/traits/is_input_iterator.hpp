@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
-#define FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_HPP
 
 #include <futures/algorithm/traits/has_iterator_traits_value_type.hpp>
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
@@ -43,4 +43,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_HPP

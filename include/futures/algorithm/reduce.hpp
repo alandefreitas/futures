@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_REDUCE_H
-#define FUTURES_REDUCE_H
+#ifndef FUTURES_ALGORITHM_REDUCE_HPP
+#define FUTURES_ALGORITHM_REDUCE_HPP
 
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
@@ -142,4 +142,4 @@ namespace futures {
     /** @}*/
 } // namespace futures
 
-#endif // FUTURES_REDUCE_H
+#endif // FUTURES_ALGORITHM_REDUCE_HPP
