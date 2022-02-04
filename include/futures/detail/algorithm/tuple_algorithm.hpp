@@ -9,6 +9,8 @@
 #define FUTURES_DETAIL_ALGORITHM_TUPLE_ALGORITHM_HPP
 
 #include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/traits/is_callable.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
 #include <tuple>
 
 namespace futures {

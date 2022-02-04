@@ -9,6 +9,7 @@
 #define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 
 #include <futures/detail/traits/range_or_tuple_value.hpp>
+#include <futures/futures/detail/move_if_not_shared.hpp>
 
 namespace futures::detail {
     struct unwrapping_failure_t
@@ -412,8 +413,8 @@ namespace futures::detail {
         // without token
         using deferred_future_options = std::conditional_t
                                         < after_has_stop_token,
-              future_options<continuable_opt, stoppable_opt, deferred_opt>,
-              future_options<continuable_opt, deferred_opt>>;
+              future_options<continuable_opt, stoppable_opt, always_deferred_opt>,
+              future_options<continuable_opt, always_deferred_opt>>;
 
         // The result type of unwrap and continue for the valid version, with or
         // without token

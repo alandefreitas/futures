@@ -54,14 +54,27 @@ application.
 
 When both eager and lazy futures are applicable, a few criteria might be considered. 
 
-- If not all tasks are available at the same time, eager futures have the obvious benefit of allowing us
-  to already start with the tasks we know about before assembling the complete execution graph. 
-- On the other hand, lazy futures permit a few optimizations for functions operating on the shared state, 
-  since we can assume there is nothing else we need to synchronize when a task is launched. This means we
-  don't have to handle a potential race with the task and its own continuations.
-- The library implements the synchronization of eager futures using atomic operations to reduce this synchronization
-  cost. 
-- For applications with reasonably long tasks, the difference between the two is likely to be negligible.  
+- Eager futures ✅: have the obvious benefit of allowing us to already start with the tasks we know about 
+  before assembling the complete execution graph. This is especially useful when not all tasks are available at the same time. 
+- Deferred futures ✅: On the other hand, lazy futures permit a few optimizations for functions operating on the shared state, 
+  since we can assume there is nothing else we need to synchronize when a task is launched. This means:
+    1. We can make extra assumptions about the condition of the shared state before waiting, and
+    2. We don't have to handle a potential race with the task and its own continuations
+- Eager futures ✅: The library implements the synchronization of eager futures using atomic operations to reduce 
+  this synchronization cost. 
+- Both futures ✅: For applications with reasonably long tasks, the difference between the two is likely to be negligible.  
+
+!!! hint "Deferred Future Continuations"
+
+    The library assumes continuations to deferred futures are always attached *before*
+    the future starts executing. 
+
+    This strategy uses deferred futures as an oportunity for an extra optimization where 
+    we don't have to synchronize the access to continuations by the thread attaching the
+    continuation and the main task. 
+
+    If the deferred future is already executing in one thread, this means it is *not thread safe*
+    to attempt to attach a continuation in a second thread.      
 
 ## Executors
 

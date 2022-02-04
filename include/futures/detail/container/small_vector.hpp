@@ -803,7 +803,7 @@ namespace futures::detail {
             } else {
                 if constexpr (!should_use_heap) {
                     throw_exception<std::length_error>(
-                        "emplace_back: max_size exceeded in "
+                        "push: max_size exceeded in "
                         "small_small_vector");
                 } else {
                     // Handle external small_vectors

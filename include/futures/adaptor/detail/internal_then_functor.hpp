@@ -10,10 +10,8 @@
 
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
-#include <futures/futures/basic_future.hpp>
-#include <futures/futures/traits/future_value.hpp>
-#include <futures/futures/traits/is_future.hpp>
-#include <futures/futures/detail/move_if_not_shared.hpp>
+#include <futures/detail/algorithm/tuple_algorithm.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_callable.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
@@ -23,10 +21,12 @@
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
 #include <futures/detail/traits/type_member_or.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue.hpp>
-#include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/type_member_or_void.hpp>
+#include <futures/futures/basic_future.hpp>
+#include <futures/futures/traits/future_value.hpp>
+#include <futures/futures/traits/is_future.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue.hpp>
+#include <futures/futures/detail/move_if_not_shared.hpp>
 
 namespace futures::detail {
     /** \addtogroup futures Futures
@@ -75,7 +75,7 @@ namespace futures::detail {
             class Function>
         std::shared_ptr<shared_state<value_type, future_options>>
         make_initial_shared_state(const Executor &ex, Function &&f) const {
-            if constexpr (!future_options::is_deferred) {
+            if constexpr (!future_options::is_always_deferred) {
                 using shared_state_t = shared_state<value_type, future_options>;
                 (void) f;
                 return std::make_shared<shared_state_t>(ex);
@@ -132,17 +132,18 @@ namespace futures::detail {
                 future_options_base>;
             using future_options = conditional_append_future_option_t<
                 is_deferred_v<Future>,
-                deferred_opt,
+                always_deferred_opt,
                 future_options_stop>;
             using value_type = typename traits::value_type;
             using future_type = basic_future<value_type, future_options>;
 
             // Create task for continuation future
             continuations_source cs_backup = copy_continuations_source(before);
-            unwrap_and_continue_task<Future, Function> task{
-                std::forward<Future>(before),
-                std::forward<Function>(after)
-            };
+            unwrap_and_continue_task<
+                std::decay_t<Future>,
+                std::decay_t<Function>>
+                task{ move_if_not_shared(std::forward<Future>(before)),
+                      std::forward<Function>(after) };
 
             // Create shared state for next task
             auto state = make_initial_shared_state<value_type, future_options>(
@@ -172,7 +173,7 @@ namespace futures::detail {
                 auto copyable_handle = [fn_shared_ptr]() {
                     (*fn_shared_ptr)();
                 };
-                cs_backup.emplace_continuation(ex, copyable_handle);
+                cs_backup.push(ex, copyable_handle);
             } else {
                 // before not continuable / futures are eager
                 // - start polling now

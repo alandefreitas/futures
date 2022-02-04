@@ -31,7 +31,7 @@ namespace futures::detail {
     /// All objects such as futures and promises have shared states and
     /// inherit from this class to synchronize their access to their common
     /// shared state.
-    template <bool is_deferred>
+    template <bool is_always_deferred>
     class shared_state_base
     {
     private:
@@ -74,7 +74,7 @@ namespace futures::detail {
         /// classes that might need to use another mutex for this operation
         void
         set_ready() noexcept {
-            if constexpr (!is_deferred) {
+            if constexpr (!is_always_deferred) {
                 status prev = status_.exchange(
                     status::ready,
                     std::memory_order_release);
@@ -103,7 +103,7 @@ namespace futures::detail {
         /// This overload uses the default global mutex for synchronization
         bool
         is_ready() const {
-            if constexpr (!is_deferred) {
+            if constexpr (!is_always_deferred) {
                 return status_.load(std::memory_order_acquire) == status::ready;
             } else {
                 return status_ == status::ready;
@@ -186,7 +186,7 @@ namespace futures::detail {
         void
         wait() {
             status prev = [this]() {
-                if constexpr (!is_deferred) {
+                if constexpr (!is_always_deferred) {
                     status v = status::initial;
                     status_.compare_exchange_strong(v, status::waiting);
                     return v;
@@ -205,7 +205,7 @@ namespace futures::detail {
                 }
                 auto lk = create_wait_lock();
                 waiter_.wait(lk, [this]() {
-                    if constexpr (!is_deferred) {
+                    if constexpr (!is_always_deferred) {
                         return status_.load(std::memory_order_acquire)
                                == status::ready;
                     } else {
@@ -230,7 +230,7 @@ namespace futures::detail {
         std::future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             status prev = [this]() {
-                if constexpr (!is_deferred) {
+                if constexpr (!is_always_deferred) {
                     status v = status::initial;
                     status_.compare_exchange_strong(v, status::waiting);
                     return v;
@@ -249,7 +249,7 @@ namespace futures::detail {
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_for(lk, timeout_duration, [this]() {
-                        if constexpr (!is_deferred) {
+                        if constexpr (!is_always_deferred) {
                             return status_.load(std::memory_order_acquire)
                                    == status::ready;
                         } else {
@@ -282,7 +282,7 @@ namespace futures::detail {
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) {
             status prev = [this]() {
-                if constexpr (!is_deferred) {
+                if constexpr (!is_always_deferred) {
                     status v = status::initial;
                     status_.compare_exchange_strong(v, status::waiting);
                     return v;
@@ -301,7 +301,7 @@ namespace futures::detail {
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_until(lk, timeout_time, [this]() {
-                        if constexpr (!is_deferred) {
+                        if constexpr (!is_always_deferred) {
                             return status_.load(std::memory_order_acquire)
                                    == status::ready;
                         } else {
@@ -326,7 +326,7 @@ namespace futures::detail {
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             status prev = [this]() {
-                if constexpr (!is_deferred) {
+                if constexpr (!is_always_deferred) {
                     status v = status::initial;
                     status_.compare_exchange_strong(v, status::waiting);
                     return v;
@@ -386,7 +386,7 @@ namespace futures::detail {
         run_wait_callback() const {
             if (wait_callback_) {
                 status prev = [this]() {
-                    if constexpr (!is_deferred) {
+                    if constexpr (!is_always_deferred) {
                         return status_.load(std::memory_order_acquire);
                     } else {
                         return status_;
@@ -416,7 +416,7 @@ namespace futures::detail {
         /// \brief Indicates if the shared state is already set
         ///
         /// There are three states possible: nothing, waiting, ready
-        mutable std::conditional_t<is_deferred, status, std::atomic<status>>
+        mutable std::conditional_t<is_always_deferred, status, std::atomic<status>>
             status_{ status::initial };
 
         /// \brief Pointer to an exception, when the shared_state fails
@@ -491,7 +491,7 @@ namespace futures::detail {
     ///
     template <class R, class Options>
     class shared_state
-        : public shared_state_base<Options::is_deferred>
+        : public shared_state_base<Options::is_always_deferred>
         , public std::enable_shared_from_this<shared_state<R, Options>>
         , private shared_state_storage<R>
         , private conditional_base<
@@ -572,7 +572,7 @@ namespace futures::detail {
         /// \param other Other shared state
         template <class OtherOptions>
         shared_state(shared_state<R, OtherOptions> &&other) noexcept
-            : shared_state_base<Options::is_deferred>(std::move(other)),
+            : shared_state_base<Options::is_always_deferred>(std::move(other)),
               shared_state_storage<R>(std::move(other)),
               continuations_base(std::move(other)),
               stop_source_base(std::move(other)) {}
@@ -841,7 +841,7 @@ namespace futures::detail {
         void
         post_deferred() override {
             // if this is a continuation, wait for tasks that come before
-            if constexpr (Options::is_deferred) {
+            if constexpr (Options::is_always_deferred) {
                 if constexpr (Options::has_executor) {
                     asio::post(
                         shared_state<R, Options>::get_executor(),

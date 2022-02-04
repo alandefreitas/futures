@@ -41,7 +41,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
 
         SECTION("Continuation to void") {
             int i = 0;
-            cfuture<void> before = async([&] { ++i; });
+            cfuture<void> before = async([&i] { ++i; });
             cfuture<int> after = then(before, []() { return 2; });
             REQUIRE(after.get() == 2);
             REQUIRE(i == 1);
@@ -126,8 +126,8 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
                 asio::thread_pool pool(1);
                 asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
-                cfuture<void> before = async([&] { ++i; });
-                cfuture<void> after = then(before, ex, [&]() { ++i; });
+                cfuture<void> before = async([&i] { ++i; });
+                cfuture<void> after = then(before, ex, [&i]() { ++i; });
                 REQUIRE_NOTHROW(after.get());
                 REQUIRE(i == 2);
                 REQUIRE_FALSE(before.valid());

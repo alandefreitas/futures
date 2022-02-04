@@ -100,7 +100,7 @@ namespace futures {
             remove_future_option_t<shared_opt, Options>;
         using shared_state_type = detail::shared_state<T, shared_state_options>;
         using shared_state_base = detail::shared_state_base<
-            Options::is_deferred>;
+            Options::is_always_deferred>;
 
         using notify_when_ready_handle = typename shared_state_base::
             notify_when_ready_handle;
@@ -292,14 +292,14 @@ namespace futures {
                 && state_->get_continuations_source().run_possible()) {
                 if constexpr (std::is_copy_constructible_v<Fn>) {
                     return state_->get_continuations_source()
-                        .emplace_continuation(ex, std::forward<Fn>(fn));
+                        .push(ex, std::forward<Fn>(fn));
                 } else {
                     auto fn_shared_ptr = std::make_shared<Fn>(std::forward<Fn>(fn));
                     auto copyable_handle = [fn_shared_ptr]() {
                         (*fn_shared_ptr)();
                     };
                     return state_->get_continuations_source()
-                        .emplace_continuation(ex, copyable_handle);
+                        .push(ex, copyable_handle);
                 }
             } else {
                 asio::post(ex, asio::use_future(std::forward<Fn>(fn)));
@@ -603,7 +603,7 @@ namespace futures {
     /// @{
     template <class T, class... Args>
     struct is_deferred<basic_future<T, future_options<Args...>>>
-        : detail::is_in_args<deferred_opt, Args...>
+        : detail::is_in_args<always_deferred_opt, Args...>
     {};
     /// @}
 #endif

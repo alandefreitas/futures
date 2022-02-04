@@ -79,8 +79,7 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
         }
     };
     using deferred_options = future_options<
-        continuable_opt,
-        deferred_opt>;
+        continuable_opt, always_deferred_opt>;
     STATIC_REQUIRE(
         std::is_same_v<
             deferred_options,

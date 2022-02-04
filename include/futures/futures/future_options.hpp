@@ -31,7 +31,7 @@ namespace futures {
     struct always_detached_opt
     {};
 
-    struct deferred_opt
+    struct always_deferred_opt
     {};
 
     template <class Fn>
@@ -63,8 +63,8 @@ namespace futures {
         static constexpr bool is_always_detached = detail::
             is_in_args_v<always_detached_opt, Args...>;
 
-        static constexpr bool is_deferred = detail::
-            is_in_args_v<deferred_opt, Args...>;
+        static constexpr bool is_always_deferred = detail::
+            is_in_args_v<always_deferred_opt, Args...>;
 
         static constexpr bool is_shared = detail::
             is_in_args_v<shared_opt, Args...>;

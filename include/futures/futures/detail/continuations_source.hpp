@@ -9,6 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/container/lock_free_queue.hpp>
 #include <memory>
 #include <shared_mutex>
 
@@ -49,15 +50,10 @@ namespace futures::detail {
         /// callables that might become a continuation here.
         using continuation_type = std::function<void()>;
 
-        /// \brief Continuation ptr
-        /// The callbacks are stored pointers because their addresses cannot
-        /// lose stability when the future is moved or shared
-        using continuation_ptr = std::unique_ptr<continuation_type>;
-
         /// \brief The continuation vector
         /// We use a small vector because of the common case when there few
         /// continuations per task
-        using continuation_vector = detail::small_vector<continuation_ptr>;
+        using continuation_vector = detail::lock_free_queue<continuation_type>;
 
         /// @}
 
@@ -82,54 +78,14 @@ namespace futures::detail {
 
         /// @}
 
-        /// \name Non-modifying
-        /// @{
-
-        /// \brief Get number of continuations
-        [[nodiscard]] size_t
-        size() const {
-            std::shared_lock lock(continuations_mutex_);
-            return continuations_.size();
-        }
-
-        /// \brief Get the i-th continuation
-        /// The return reference is safe (in context) because the continuation
-        /// vector has stability
-        continuation_type &
-        operator[](size_t index) const {
-            std::shared_lock lock(continuations_mutex_);
-            return continuations_.at(index).operator*();
-        }
-        /// @}
-
         /// \name Modifying
         /// @{
-
-        /// \brief Emplace a new continuation
-        /// Use executor ex if more continuations are not possible
-        template <class Executor>
-        bool
-        emplace_back(const Executor &ex, continuation_type &&fn) {
-            std::unique_lock lock(continuations_mutex_);
-            if (is_run_possible()) {
-                continuations_.emplace_back(
-                    std::make_unique<continuation_type>(std::move(fn)));
-                return true;
-            } else {
-                // When the shared state currently associated with *this is
-                // ready, the continuation is called on an unspecified thread of
-                // execution
-                asio::post(ex, asio::use_future(std::move(fn)));
-                return false;
-            }
-        }
 
         /// \brief Check if some source asked already asked for the
         /// continuations to run
         bool
         is_run_requested() const {
-            std::shared_lock lock(run_requested_mutex_);
-            return run_requested_;
+            return run_requested_.load(std::memory_order_acquire);
         }
 
         /// \brief Check if some source asked already asked for the
@@ -139,24 +95,45 @@ namespace futures::detail {
             return !is_run_requested();
         }
 
+        /// \brief Emplace a new continuation
+        /// Use executor ex if more continuations are not possible
+        template <class Executor, class Fn>
+        bool
+        push(const Executor &ex, Fn &&fn) {
+            if (!is_run_requested()) {
+                // Although this is a write operation, this is a shared lock
+                // because many threads can emplace continuations at the same
+                // time in the atomic queue.
+                std::shared_lock lock(continuations_mutex_);
+                continuations_.push(std::forward<Fn>(fn));
+                return true;
+            } else {
+                // When the shared state currently associated with *this is
+                // ready, the continuation is called on an unspecified thread of
+                // execution
+                asio::post(ex, asio::use_future(std::forward<Fn>(fn)));
+                return false;
+            }
+        }
+
         /// \brief Run all continuations
         bool
         request_run() {
-            {
-                // Check or update in a single lock
-                std::unique_lock lock(run_requested_mutex_);
-                if (run_requested_) {
-                    return false;
-                } else {
-                    run_requested_ = true;
+            bool prev_request = false;
+            if (run_requested_.compare_exchange_strong(prev_request, true)){
+                // Do not lock yet, pop and execute what we can
+                while (!continuations_.empty()) {
+                    continuations_.pop()();
+                }
+                // Maybe some other thread was pushing a task while we were
+                // popping. Lock the continuations now to make sure we wait
+                // for that to happen and pop whatever is left.
+                std::unique_lock lock(continuations_mutex_);
+                while (!continuations_.empty()) {
+                    continuations_.pop()();
                 }
             }
-            std::unique_lock lock(continuations_mutex_);
-            for (auto &continuation: continuations_) {
-                (*continuation)();
-            }
-            continuations_.clear();
-            return true;
+            return !prev_request;
         }
         /// @}
 
@@ -164,9 +141,17 @@ namespace futures::detail {
         /// \brief The actual pointers to the continuation functions
         /// This is encapsulated so we can't break anything
         continuation_vector continuations_;
-        bool run_requested_{ false };
+
+        /// \brief A mutex for the continuations.
+        ///
+        /// Although the continuations are in an atomic queue and multiple
+        /// threads can push continuations at the same time, we cannot
+        /// allow more continuations to be emplaced once we start
+        /// dequeueing them.
         mutable std::shared_mutex continuations_mutex_;
-        mutable std::shared_mutex run_requested_mutex_;
+
+        /// \brief Run has already been requested
+        std::atomic<bool> run_requested_{ false };
     };
 
     /// Unit type intended for use as a placeholder in continuations_source
@@ -295,7 +280,7 @@ namespace futures::detail {
         /// The return reference is safe because the continuation vector has
         /// stability
         bool
-        request_run() const {
+        request_run() {
             if (state_ != nullptr) {
                 return state_->request_run();
             }
@@ -305,13 +290,11 @@ namespace futures::detail {
         /// \brief Run all continuations
         /// The return reference is safe because the continuation vector has
         /// stability
-        template <class Executor>
+        template <class Executor, class Fn>
         bool
-        emplace_continuation(
-            const Executor &ex,
-            continuations_state::continuation_type &&fn) {
+        push(const Executor &ex, Fn &&fn) {
             if (state_ != nullptr) {
-                return state_->emplace_back(ex, std::move(fn));
+                return state_->push(ex, std::forward<Fn>(fn));
             }
             return false;
         }
@@ -323,6 +306,7 @@ namespace futures::detail {
         }
 
         /// \brief Get a token to this object
+        ///
         /// Returns a continuations_token object associated with the
         /// continuations_source's continuations-state, if the
         /// continuations_source has continuations-state; otherwise returns a

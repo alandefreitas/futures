@@ -32,7 +32,7 @@ namespace futures::detail {
             const Executor& ex,
             Function&& f,
             Args&&... args) const {
-            if constexpr (!future_options::is_deferred) {
+            if constexpr (!future_options::is_always_deferred) {
                 using shared_state_t = shared_state<value_type, future_options>;
                 (void) f;
                 return std::make_shared<shared_state_t>(ex);
@@ -85,7 +85,7 @@ namespace futures::detail {
                 future_options_a>;
             using future_options = conditional_append_future_option_t<
                 !is_eager,
-                deferred_opt,
+                always_deferred_opt,
                 future_options_b>;
 
             // Create shared state
