@@ -1,6 +1,6 @@
 {# RENDER HEADERS #}
 {% if exists("location") and not exists("hide_location")-%}
-<sup>Defined in header [`<{{ location.file }}>`](https://github.com/alandefreitas/futures/blob/master/source/{{ location.file }})</sup>
+<sup>Defined in header [`<{{ location.file }}>`](https://github.com/alandefreitas/futures/blob/master/include/{{ location.file }})</sup>
 {% endif -%}
 
 {% if kind in ["function", "slot", "signal", "event"] -%}

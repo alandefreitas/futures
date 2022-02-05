@@ -1,6 +1,6 @@
 # Launching tasks
 
-## Future and Promises
+## Futures tasks
 
 The easiest way to create futures is by launching tasks.  
 

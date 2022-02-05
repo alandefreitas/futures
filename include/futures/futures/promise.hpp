@@ -37,7 +37,7 @@ namespace futures {
     template <
         class R,
         class Options
-        = future_options<executor_opt<default_executor_type>, continuable_opt>>
+        = future_options<continuable_opt>>
     class promise_base
     {
     public:

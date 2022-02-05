@@ -1,6 +1,6 @@
 # Continuations
 
-Futures can have continuations, which allows us to create tasks chains. The function [then] is used to create a continuation to a future, which is itself another future.
+Continuations are the main primitive to assemble asynchronous task graphs. An instance of [basic_future] can have continuations, which allows us to create tasks chains. The function [then] is used to create a continuation to a future, which is itself another future value.
 
 ```cpp
 --8<-- "examples/adaptors/continuations.cpp"

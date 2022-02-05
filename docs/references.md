@@ -46,7 +46,9 @@
 [executor]: /futures/reference/Namespaces/namespacefutures/#using-is_executor
 [futures::async]: /futures/reference/Namespaces/namespacefutures/#function-async
 [is_future]: /futures/reference/Classes/structfutures_1_1is__future/
-[basic_future]: /futures/reference/Classes/structfutures_1_1is__future/
+[basic_future]: /futures/reference/Classes/classfutures_1_1basic__future/
+[promise]: /futures/reference/Classes/classfutures_1_1promise/
+[packaged_task]: /futures/reference/Classes/classfutures_1_1packaged__task/
 [future_options]: /futures/reference/Classes/structfutures_1_1future__options/
 [jfuture]: /futures/reference/Namespaces/namespacefutures/#using-jfuture
 [shared_jfuture]: /futures/reference/Namespaces/namespacefutures/#using-shared_jfuture

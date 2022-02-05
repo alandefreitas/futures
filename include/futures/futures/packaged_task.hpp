@@ -8,9 +8,9 @@
 #ifndef FUTURES_FUTURES_PACKAGED_TASK_HPP
 #define FUTURES_FUTURES_PACKAGED_TASK_HPP
 
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/future_options.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {
@@ -25,7 +25,8 @@ namespace futures {
     /// \brief Undefined packaged task class
     template <
         typename Signature,
-        class Options = future_options<continuable_opt>>
+        class Options
+        = future_options<continuable_opt>>
     class packaged_task;
 #endif
 
@@ -38,10 +39,7 @@ namespace futures {
     /// \tparam R Return type
     /// \tparam Args Task arguments
 #ifndef FUTURES_DOXYGEN
-    template <
-        typename R,
-        typename... Args,
-        class Options>
+    template <typename R, typename... Args, class Options>
 #else
     template <typename Signature, Options>
 #endif
@@ -200,12 +198,13 @@ namespace futures {
         /// unblocked.
         ///
         /// \param args the parameters to pass on invocation of the stored task
+        template <class... OtherArgs>
         void
-        operator()(Args... args) {
+        operator()(OtherArgs... args) {
             if (!valid()) {
                 detail::throw_exception<packaged_task_uninitialized>();
             }
-            task_->run(std::forward<Args>(args)...);
+            task_->run(std::forward<OtherArgs>(args)...);
             if constexpr (Options::is_continuable) {
                 task_->get_continuations_source().request_run();
             }
