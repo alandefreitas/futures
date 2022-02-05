@@ -99,12 +99,12 @@ namespace futures {
 
     /// \brief Customization point to define future as deferred
     template <typename>
-    struct is_deferred : std::false_type
+    struct is_always_deferred : std::false_type
     {};
 
     /// \brief Customization point to define future as deferred
     template <class T>
-    constexpr bool is_deferred_v = is_deferred<T>::value;
+    constexpr bool is_deferred_v = is_always_deferred<T>::value;
 
     /** @} */ // \addtogroup future-traits Future Traits
     /** @} */ // \addtogroup futures Futures

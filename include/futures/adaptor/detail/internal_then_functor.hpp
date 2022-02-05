@@ -91,12 +91,12 @@ namespace futures::detail {
 
         /// \brief Maybe copy the previous continuations source
         template <class Future>
-        static continuations_source
+        static continuations_source<is_deferred_v<Future>>
         copy_continuations_source(const Future &before) {
             if constexpr (is_continuable_v<std::decay_t<Future>>) {
                 return before.state_->get_continuations_source();
             } else {
-                return continuations_source(nocontinuationsstate);
+                return continuations_source<is_deferred_v<Future>>(nocontinuationsstate);
             }
         }
 

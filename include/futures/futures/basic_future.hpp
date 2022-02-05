@@ -602,7 +602,7 @@ namespace futures {
     /// \name Define deferred basic_futures as being deferred
     /// @{
     template <class T, class... Args>
-    struct is_deferred<basic_future<T, future_options<Args...>>>
+    struct is_always_deferred<basic_future<T, future_options<Args...>>>
         : detail::is_in_args<always_deferred_opt, Args...>
     {};
     /// @}

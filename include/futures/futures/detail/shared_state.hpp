@@ -8,11 +8,11 @@
 #ifndef FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP
 #define FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP
 
+#include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/thread/relocker.hpp>
 #include <futures/futures/future_error.hpp>
 #include <futures/futures/future_options.hpp>
-#include <futures/detail/thread/relocker.hpp>
 #include <futures/futures/detail/shared_state_storage.hpp>
-#include <futures/detail/container/small_vector.hpp>
 #include <futures/futures/detail/traits/is_in_args.hpp>
 #include <atomic>
 #include <future>
@@ -416,8 +416,9 @@ namespace futures::detail {
         /// \brief Indicates if the shared state is already set
         ///
         /// There are three states possible: nothing, waiting, ready
-        mutable std::conditional_t<is_always_deferred, status, std::atomic<status>>
-            status_{ status::initial };
+        mutable std::
+            conditional_t<is_always_deferred, status, std::atomic<status>>
+                status_{ status::initial };
 
         /// \brief Pointer to an exception, when the shared_state fails
         ///
@@ -500,7 +501,7 @@ namespace futures::detail {
               0>
         , private conditional_base<
               Options::is_continuable,
-              continuations_source,
+              continuations_source<Options::is_always_deferred>,
               1>
         , private conditional_base<Options::is_stoppable, stop_source, 2>
     {
@@ -514,8 +515,10 @@ namespace futures::detail {
         using executor_type = typename executor_base::value_type;
 
         /// \brief Continuations storage
-        using continuations_base
-            = conditional_base<Options::is_continuable, continuations_source, 1>;
+        using continuations_base = conditional_base<
+            Options::is_continuable,
+            continuations_source<Options::is_always_deferred>,
+            1>;
 
         using continuations_type = typename continuations_base::value_type;
 
@@ -718,13 +721,13 @@ namespace futures::detail {
             return stop_source_base::get();
         }
 
-        continuations_source &
+        typename continuations_base::value_type &
         get_continuations_source() const noexcept {
             static_assert(Options::is_continuable);
             return continuations_base::get();
         }
 
-        continuations_source &
+        typename continuations_base::value_type &
         get_continuations_source() noexcept {
             static_assert(Options::is_continuable);
             return continuations_base::get();

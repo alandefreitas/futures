@@ -8,8 +8,8 @@
 #ifndef FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 #define FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
-#include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/container/lock_free_queue.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <memory>
 #include <shared_mutex>
 
@@ -37,6 +37,7 @@ namespace futures::detail {
     /// state. Especially when the future is shared, many threads might be
     /// trying to attach new continuations to this future type, and the main
     /// future callback needs to wait for it.
+    template <bool is_always_deferred>
     class continuations_state
     {
     public:
@@ -53,7 +54,10 @@ namespace futures::detail {
         /// \brief The continuation vector
         /// We use a small vector because of the common case when there few
         /// continuations per task
-        using continuation_vector = detail::lock_free_queue<continuation_type>;
+        using continuation_vector = std::conditional_t<
+            !is_always_deferred,
+            detail::lock_free_queue<continuation_type>,
+            detail::small_vector<continuation_type>>;
 
         /// @}
 
@@ -85,7 +89,11 @@ namespace futures::detail {
         /// continuations to run
         bool
         is_run_requested() const {
-            return run_requested_.load(std::memory_order_acquire);
+            if constexpr (!is_always_deferred) {
+                return run_requested_.load(std::memory_order_acquire);
+            } else {
+                return run_requested_;
+            }
         }
 
         /// \brief Check if some source asked already asked for the
@@ -104,8 +112,12 @@ namespace futures::detail {
                 // Although this is a write operation, this is a shared lock
                 // because many threads can emplace continuations at the same
                 // time in the atomic queue.
-                std::shared_lock lock(continuations_mutex_);
-                continuations_.push(std::forward<Fn>(fn));
+                if constexpr (!is_always_deferred) {
+                    std::shared_lock lock(continuations_mutex_);
+                    continuations_.push(std::forward<Fn>(fn));
+                } else {
+                    continuations_.emplace_back(std::forward<Fn>(fn));
+                }
                 return true;
             } else {
                 // When the shared state currently associated with *this is
@@ -119,21 +131,35 @@ namespace futures::detail {
         /// \brief Run all continuations
         bool
         request_run() {
-            bool prev_request = false;
-            if (run_requested_.compare_exchange_strong(prev_request, true)){
-                // Do not lock yet, pop and execute what we can
-                while (!continuations_.empty()) {
-                    continuations_.pop()();
+            if constexpr (!is_always_deferred) {
+                bool prev_request = false;
+                if (run_requested_.compare_exchange_strong(prev_request, true))
+                {
+                    // Do not lock yet, pop and execute what we can
+                    while (!continuations_.empty()) {
+                        continuations_.pop()();
+                    }
+                    // Maybe some other thread was pushing a task while we were
+                    // popping. Lock the continuations now to make sure we wait
+                    // for that to happen and pop whatever is left.
+                    std::unique_lock lock(continuations_mutex_);
+                    while (!continuations_.empty()) {
+                        continuations_.pop()();
+                    }
+                    return true;
                 }
-                // Maybe some other thread was pushing a task while we were
-                // popping. Lock the continuations now to make sure we wait
-                // for that to happen and pop whatever is left.
-                std::unique_lock lock(continuations_mutex_);
-                while (!continuations_.empty()) {
-                    continuations_.pop()();
+                return false;
+            } else {
+                if (!run_requested_) {
+                    run_requested_ = true;
+                    for (auto& c: continuations_) {
+                        c();
+                    }
+                    continuations_.clear();
+                    return true;
                 }
+                return false;
             }
-            return !prev_request;
         }
         /// @}
 
@@ -151,7 +177,8 @@ namespace futures::detail {
         mutable std::shared_mutex continuations_mutex_;
 
         /// \brief Run has already been requested
-        std::atomic<bool> run_requested_{ false };
+        std::conditional_t<!is_always_deferred, std::atomic<bool>, bool>
+            run_requested_{ false };
     };
 
     /// Unit type intended for use as a placeholder in continuations_source
@@ -167,6 +194,7 @@ namespace futures::detail {
     inline constexpr nocontinuationsstate_t nocontinuationsstate{};
 
     /// \brief Token the future object uses to emplace continuations
+    template <bool is_always_deferred>
     class continuations_token
     {
     public:
@@ -231,25 +259,29 @@ namespace futures::detail {
         }
 
     private:
+        template <bool is_always_deferred_source>
         friend class continuations_source;
 
         /// \brief Create token from state
         explicit continuations_token(
-            std::shared_ptr<continuations_state> state) noexcept
+            std::shared_ptr<continuations_state<is_always_deferred>>
+                state) noexcept
             : state_(std::move(state)) {}
 
         /// \brief The state
-        std::shared_ptr<continuations_state> state_;
+        std::shared_ptr<continuations_state<is_always_deferred>> state_;
     };
 
     /// \brief The continuations_source class provides the means to issue a
     /// request to run the future continuations
+    template <bool is_always_deferred>
     class continuations_source
     {
     public:
         /// \brief Constructs a continuations_source with new continuations-state
         continuations_source()
-            : state_(std::make_shared<continuations_state>()){};
+            : state_(
+                std::make_shared<continuations_state<is_always_deferred>>()){};
 
         /// \brief Constructs an empty continuations_source with no associated
         /// continuations-state.
@@ -311,7 +343,7 @@ namespace futures::detail {
         /// continuations_source's continuations-state, if the
         /// continuations_source has continuations-state; otherwise returns a
         /// default-constructed (empty) continuations_token.
-        [[nodiscard]] continuations_token
+        [[nodiscard]] continuations_token<is_always_deferred>
         get_token() const noexcept {
             return continuations_token(state_);
         }
@@ -347,7 +379,7 @@ namespace futures::detail {
         }
 
     private:
-        std::shared_ptr<continuations_state> state_;
+        std::shared_ptr<continuations_state<is_always_deferred>> state_;
     };
 
     /** @} */
