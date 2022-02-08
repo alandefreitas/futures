@@ -152,7 +152,7 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<basic_future<
+            detail::atomic_queue<basic_future<
                 std::pair<I, std::bitset<64>>,
                 future_options<executor_opt<Executor>, continuable_opt>>>
                 tasks_{};

@@ -107,6 +107,46 @@ namespace futures::detail {
             return ready_idx;
         }
 
+        /// \brief Wait for one of the futures to notify it got ready
+        template <class Rep, class Period>
+        std::size_t
+        wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) {
+            registered_waiter_range_lock lk(waiters_);
+            std::size_t ready_idx;
+            if (cv.wait_for(lk, timeout_duration, [this, &ready_idx]() {
+                for (auto const &waiter: waiters_) {
+                    if (waiter.is_ready()) {
+                        ready_idx = waiter.index;
+                        return true;
+                    }
+                }
+                return false;
+            })) {
+                return ready_idx;
+            }
+            return std::size_t(-1);
+        }
+
+        /// \brief Wait for one of the futures to notify it got ready
+        template <class Clock, class Duration>
+        std::size_t
+        wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time) {
+            registered_waiter_range_lock lk(waiters_);
+            std::size_t ready_idx;
+            if (cv.wait_until(lk, timeout_time, [this, &ready_idx]() {
+                for (auto const &waiter: waiters_) {
+                    if (waiter.is_ready()) {
+                        ready_idx = waiter.index;
+                        return true;
+                    }
+                }
+                return false;
+            })) {
+                return ready_idx;
+            }
+            return std::size_t(-1);
+        }
+
     private:
         /// \brief Type of handle in the future object used to notify completion
         using notify_when_ready_handle = detail::shared_state_base<

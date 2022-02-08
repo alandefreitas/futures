@@ -1,4 +1,4 @@
-#include <futures/algorithm.hpp>
+#define FUTURES_DEFAULT_THREAD_POOL_SIZE 1
 #include <futures/futures.hpp>
 #include <iostream>
 

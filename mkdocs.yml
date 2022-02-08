@@ -9,11 +9,12 @@ nav:
   - Quickstart: quickstart.md
   - Motivation: motivation.md
   - Futures:
-    - Concepts: future_concept.md
+    - Future Types: future_types.md
     - Launching Tasks: launching.md
     - Promises and Tasks: promises.md
+    - Continuable Futures: continuable_futures.md
     - Stoppable Futures: stoppable_futures.md
-    - Shared futures: shared_futures.md
+    - Shared Futures: shared_futures.md
     - Waiting: waiting.md
   - Future Adaptors:
     - Continuations: continuations.md

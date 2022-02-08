@@ -31,9 +31,10 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             STATIC_REQUIRE(is_valid_without_stop_token);
 
             STATIC_REQUIRE(
-                detail::is_valid_continuation_v<
+                detail::continuation_traits<
+                    default_executor_type,
                     std::decay_t<decltype(after_fn)>,
-                    std::decay_t<cfuture<int>>>);
+                    std::decay_t<cfuture<int>>>::is_valid);
             cfuture<int> after = then(before, after_fn);
             REQUIRE(after.get() == 4);
             REQUIRE_FALSE(before.valid());

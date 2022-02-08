@@ -5,6 +5,7 @@
 
 TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
     using namespace futures;
+
     SECTION("Empty disjunction") {
         auto f = when_any();
         REQUIRE(f.valid());
@@ -86,10 +87,12 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
                 }
                 return 0;
             };
-            using Future = decltype(f);
-            using Function = decltype(continuation);
-            STATIC_REQUIRE(detail::is_when_any_future_v<Future>);
-            STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
+            STATIC_REQUIRE(detail::is_when_any_future_v<decltype(f)>);
+            STATIC_REQUIRE(
+                detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -168,9 +171,10 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::is_valid_continuation_v<
-                    decltype(continuation),
-                    decltype(f)>);
+                detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));
@@ -195,7 +199,11 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
                     detail::tuple_type_concat_t<
                         std::tuple<>,
                         std::tuple<future_value_t<when_any_element_type>>>>);
-            STATIC_REQUIRE(detail::is_valid_continuation_v<Function, Future>);
+            STATIC_REQUIRE(
+                detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));
@@ -267,9 +275,10 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::is_valid_continuation_v<
-                    decltype(continuation),
-                    decltype(f)>);
+                detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE_FALSE(r == 0);
@@ -314,9 +323,10 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::is_valid_continuation_v<
-                    decltype(continuation),
-                    decltype(f)>);
+                detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid);
             auto f4 = then(f, continuation);
             int r = f4.get();
             REQUIRE((r == 6 || r == 9 || r == 12));

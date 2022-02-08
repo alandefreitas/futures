@@ -19,8 +19,33 @@ end
 2. When the task is completed, it fulfills its promise by setting the shared state with its result. 
 3. The future is considered ready and the main thread can obtain its value.
 
+This is how these three steps might happen:
+
+<div class="mermaid">
+sequenceDiagram
+    rect rgb(191, 200, 255)
+    Main->>Task: Launch
+    Task->>State: Create
+    activate Task
+    State->>Future: Create
+    Task->>Task: Executor runs task
+    Future->>Main: Store
+    end
+    Main->>Main: Do work before waiting
+    rect rgb(191, 223, 200)
+    Main->>Future: Wait
+    Future->>State: Wait
+    Task->>State: Write
+    deactivate Task
+    Future->>State: Read
+    end
+    rect rgb(150, 223, 255)
+    Future->>Main: Return
+    end
+</div>
+
 Note that the shared state is a private implementation detail with which the user does not interact.
-This ensures all write operations will happen through the promise and all read operations
+This ensures all write operations will happen through the promised task and all read operations
 will happen through the future. It also enables optimizations based on assumptions about
 how specific future and promise types can access the shared state.
 
@@ -35,10 +60,21 @@ Like [std::async], [futures::async] is used to launch new tasks.
 However, [futures::async] implements a few improvements and extensions to [std::async]:
 
 - Its launch policy is replaced with a concrete [executor].
-- If the [executor] is not defined, a default executor (a thread pool) is used for the tasks, instead of always  
-  launching a new thread for the task
-- It returns a continuable [cfuture] instead of a [std::future]
+- If the [executor] is not defined, a default executor (a thread pool) is used for the tasks, instead of always launching a new thread for the task
+- It returns a continuable [cfuture] by default instead of a [std::future]
 - If the first task parameter is a [stop_source], it returns a [jcfuture]
+
+Note that eager tasks are allowed to start as soon as they are launched:
+
+<div class="mermaid">
+sequenceDiagram
+    Main->>+Task: Launch
+    Task->>Task: Do work
+    Main->>Main: Do work
+    Main->>Task: Wait
+    Task->>-Main: Return
+</div>
+
 
 ## Lazy tasks
 
@@ -49,7 +85,19 @@ The function [schedule] can be used to create lazy tasks.
 ```
 
 The difference between [async] and [schedule] is the latter only posts the task to the executor when we call wait
-on the corresponding future. Most of the time, the choice between eager and lazy futures is determined by the 
+on the corresponding future. 
+
+Note that lazy tasks are allowed to start only after we announce we are waiting for its results:
+
+<div class="mermaid">
+sequenceDiagram
+    Main->>Task: Schedule
+    Main->>+Task: Wait
+    Task->>Task: Do work
+    Task->>-Main: Return
+</div>
+
+Most of the time, the choice between eager and lazy futures is determined by the 
 application.
 
 When both eager and lazy futures are applicable, a few criteria might be considered. 

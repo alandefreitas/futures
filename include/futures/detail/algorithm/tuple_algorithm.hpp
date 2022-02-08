@@ -27,12 +27,30 @@ namespace futures {
             std::index_sequence<Is...>) {
             (fn(std::get<Is>(t)), ...);
         }
+
+        template <class Function, class... Args, std::size_t... Is>
+        static void
+        for_each_impl(
+            std::tuple<Args...> &t,
+            Function &&fn,
+            std::index_sequence<Is...>) {
+            (fn(std::get<Is>(t)), ...);
+        }
     } // namespace detail
 
     /// \brief tuple_for_each for tuples
     template <class Function, class... Args>
     static void
     tuple_for_each(const std::tuple<Args...> &t, Function &&fn) {
+        detail::for_each_impl(
+            t,
+            std::forward<Function>(fn),
+            std::index_sequence_for<Args...>{});
+    }
+
+    template <class Function, class... Args>
+    static void
+    tuple_for_each(std::tuple<Args...> &t, Function &&fn) {
         detail::for_each_impl(
             t,
             std::forward<Function>(fn),

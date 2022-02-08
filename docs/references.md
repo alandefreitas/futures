@@ -64,8 +64,12 @@
 [when_any_future]: /futures/reference/Classes/classfutures_1_1when__any__future/
 [when_all]: /futures/reference/Namespaces/namespacefutures/#function-when_all
 [wait_for_all]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_all
+[wait_for_all_for]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_all_for
+[wait_for_all_until]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_all_until
 [when_any]: /futures/reference/Namespaces/namespacefutures/#function-when_any
 [wait_for_any]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_any
+[wait_for_any_for]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_any_for
+[wait_for_any_until]: /futures/reference/Namespaces/namespacefutures/#function-wait_for_any_until
 [stop_source]: /futures/reference/Classes/classfutures_1_1stop__source/
 [stop_token]: /futures/reference/Classes/classfutures_1_1stop__token/
 [is_ready]: /futures/reference/Namespaces/namespacefutures/#function-is_ready

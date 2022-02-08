@@ -4,7 +4,7 @@ This library includes a number of helper functions to wait for the result of fut
 
 # Await
 
-Usually use the functions `get()` or `wait()` to wait for the result of future types. This is especially important for deferred futures, which might not start executing until we start waiting for their results.
+We usually use the functions `get()` or `wait()` to wait for the result of future types. This is especially important for deferred futures, which might not start executing until we start waiting for their results.
 
 The free-function [await] can also be used to wait for results. This syntactic sugar makes waiting more similar to other common programming languages.
 
@@ -13,6 +13,8 @@ The free-function [await] can also be used to wait for results. This syntactic s
 The [await] can also be used for conjunctions. In this case, the function returns a tuple, which might be convenient with structured binding declarations.
 
 We can also wait for a future conjunction with [wait_for_all]. This function waits for all results in a range or tuple of futures without owning them. This is convenient when we need to synchronously wait for a set of futures.
+
+The overloads of [wait_for_all_for] and [wait_for_all_until] are variants that might be used when we wish to specify a time limit.
 
 !!! warning "[wait_for_all] != [when_all]"
 
@@ -23,6 +25,8 @@ We can also wait for a future conjunction with [wait_for_all]. This function wai
 # Waiting for disjunctions
 
 We can also wait for a future disjunction with [wait_for_any]. This function waits for any result in a range or tuple of futures without owning them. 
+
+The overloads of [wait_for_any_for] and [wait_for_any_until] are variants that might be used when we wish to specify a time limit.
 
 !!! warning "[wait_for_any] != [when_any]"
 

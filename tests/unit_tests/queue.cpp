@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 #include <futures/futures.hpp>
 #if __has_include(<futures/detail/container/lock_free_queue.hpp>)
-#    include <futures/detail/container/lock_free_queue.hpp>
+#    include <futures/detail/container/atomic_queue.hpp>
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {
@@ -12,7 +12,7 @@ TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {
 
     SECTION("Trivial") {
         SECTION("Queue") {
-            lock_free_queue<int> q;
+            atomic_queue<int> q;
             q.push(1);
             q.push(2);
             q.push(3);
@@ -27,7 +27,7 @@ TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {
 
     SECTION("Pointer") {
         SECTION("Queue") {
-            lock_free_queue<int*> q;
+            atomic_queue<int*> q;
             std::array<int, 3> a{};
             q.push(&a[0]);
             q.push(&a[1]);
@@ -43,7 +43,7 @@ TEST_CASE(TEST_CASE_PREFIX "Mt-Queue") {
 
     SECTION("Future") {
         SECTION("Queue") {
-            lock_free_queue<basic_future<int, future_options<>>> q;
+            atomic_queue<basic_future<int, future_options<>>> q;
             q.push(make_ready_future(1));
             q.push(make_ready_future(2));
             q.push(make_ready_future(3));

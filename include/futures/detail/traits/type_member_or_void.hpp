@@ -22,11 +22,13 @@ namespace futures::detail {
     {
         using type = void;
     };
+
     template <class T>
     struct type_member_or_void<T, std::void_t<typename T::type>>
     {
         using type = typename T::type;
     };
+
     template <class T>
     using type_member_or_void_t = typename type_member_or_void<T>::type;
 

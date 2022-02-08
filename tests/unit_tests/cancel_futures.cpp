@@ -55,14 +55,29 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
         auto cont = [](int32_t count) {
             return static_cast<double>(count) * 1.2;
         };
-        auto f2 = then(f, cont);
 
-        REQUIRE(!is_ready(f2));
+        SECTION("Standalone then") {
+            auto f2 = then(f, cont);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(60));
-        ss.request_stop();
+            REQUIRE(!is_ready(f2));
 
-        double t = f2.get();
-        REQUIRE(t >= 2.2);
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
+            ss.request_stop();
+
+            double t = f2.get();
+            REQUIRE(t >= 2.2);
+        }
+
+        SECTION("Member then") {
+            cfuture<double> f2 = f.then(cont);
+
+            REQUIRE(!is_ready(f2));
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
+            ss.request_stop();
+
+            double t = f2.get();
+            REQUIRE(t >= 2.2);
+        }
     }
 }

@@ -14,6 +14,8 @@
 #include <futures/futures/future_options.hpp>
 #include <futures/futures/stop_token.hpp>
 #include <futures/futures/traits/is_future.hpp>
+#include <futures/adaptor/detail/make_continuation_shared_state.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
 #include <futures/futures/detail/shared_state.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
@@ -282,29 +284,52 @@ namespace futures {
             std::enable_if_t<U && U == Options::is_continuable, int> = 0
 #endif
             >
-        bool
+        decltype(auto)
         then(const Executor &ex, Fn &&fn) {
             if (!valid()) {
                 detail::throw_exception<std::future_error>(
                     std::future_errc::no_state);
             }
-            if (!is_ready()
-                && state_->get_continuations_source().run_possible()) {
-                if constexpr (std::is_copy_constructible_v<Fn>) {
-                    return state_->get_continuations_source()
-                        .push(ex, std::forward<Fn>(fn));
-                } else {
-                    auto fn_shared_ptr = std::make_shared<Fn>(std::forward<Fn>(fn));
-                    auto copyable_handle = [fn_shared_ptr]() {
-                        (*fn_shared_ptr)();
-                    };
-                    return state_->get_continuations_source()
-                        .push(ex, copyable_handle);
-                }
-            } else {
-                asio::post(ex, asio::use_future(std::forward<Fn>(fn)));
-                return false;
-            }
+
+            // Determine next future options
+            using traits = detail::
+                continuation_traits<Executor, Fn, basic_future>;
+            using next_value_type = typename traits::next_value_type;
+            using next_future_options = typename traits::next_future_options;
+            using next_future_type
+                = basic_future<next_value_type, next_future_options>;
+
+            // Create task for continuation future
+            detail::continuations_source continuations_handle
+                = state_->get_continuations_source();
+            detail::unwrap_and_continue_task<
+                std::decay_t<basic_future>,
+                std::decay_t<Fn>>
+                task{ move_if_not_shared(*this), std::forward<Fn>(fn) };
+
+            // Create shared state for next future
+            auto state = detail::make_continuation_shared_state<
+                next_value_type,
+                next_future_options>(ex, std::move(task));
+            next_future_type fut(state);
+
+            // Task that sets the next state by applying the continuation
+            auto apply_fn =
+                [state = std::move(state), task = std::move(task)]() mutable {
+                state->apply(std::move(task));
+            };
+
+            // make task copyable because `before` is not copyable
+            auto fn_shared_ptr = std::make_shared<decltype(apply_fn)>(
+                std::move(apply_fn));
+            auto copyable_handle = [fn_shared_ptr]() {
+                (*fn_shared_ptr)();
+            };
+
+            // push task to this continuation list
+            continuations_handle.push(ex, copyable_handle);
+
+            return fut;
         }
 
         /// \brief Emplace a function to the shared vector of continuations
@@ -328,11 +353,30 @@ namespace futures {
 #endif
 
             >
-        bool
+        decltype(auto)
         then(Fn &&fn) {
-            return then(
-                make_default_executor(),
-                asio::use_future(std::forward<Fn>(fn)));
+            if constexpr (Options::has_executor) {
+                return then(get_executor(), std::forward<Fn>(fn));
+            } else {
+                return then(make_default_executor(), std::forward<Fn>(fn));
+            }
+        }
+
+        /// \brief Get this future's continuations source
+        ///
+        /// \note This function only participates in overload resolution if the
+        /// future supports continuations
+        ///
+        /// \return The continuations source
+        template <
+#ifndef FUTURES_DOXYGEN
+            bool U = Options::is_continuable,
+            std::enable_if_t<U && U == Options::is_continuable, int> = 0
+#endif
+            >
+        [[nodiscard]] decltype(auto)
+        get_continuations_source() const noexcept {
+            return state_->get_continuations_source();
         }
 
         /// \brief Request the future to stop whatever task it's running
@@ -461,7 +505,7 @@ namespace futures {
 
         /// \brief Waits for the result to become available.
         template <class Rep, class Period>
-        [[nodiscard]] std::future_status
+        std::future_status
         wait_for(
             const std::chrono::duration<Rep, Period> &timeout_duration) const {
             if (!valid()) {
@@ -516,6 +560,24 @@ namespace futures {
                 detail::throw_exception<future_uninitialized>();
             }
             return state_->unnotify_when_ready(h);
+        }
+
+        /// \brief Get the current executor for this task
+        ///
+        /// \note This function only participates in overload resolution
+        /// if future_options has an associated executor
+        ///
+        /// \return The executor associated with this future instance
+        template <
+#ifndef FUTURES_DOXYGEN
+            bool U = Options::has_executor,
+            std::enable_if_t<U && U == Options::has_executor, int> = 0
+#endif
+            >
+        const typename Options::executor_t &
+        get_executor() const {
+            static_assert(Options::has_executor);
+            return state_->get_executor();
         }
 
     private:

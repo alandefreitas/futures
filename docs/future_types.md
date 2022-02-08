@@ -1,5 +1,4 @@
-
-# Futures Concepts
+# Futures types
 
 This library implements a number of future types as a *concept* rather than a single concrete object. Algorithms work with any given class that has the requirements of the future concept, as defined by the trait [is_future]. The [std::future] class also has the requirements of this concept, so it can interoperate with any of the new algorithms and future types.
 

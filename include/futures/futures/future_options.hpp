@@ -18,7 +18,7 @@ namespace futures {
     /** \addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-types Future types
+    /** \addtogroup future-options Future options
      *  @{
      */
 
@@ -43,6 +43,7 @@ namespace futures {
     struct shared_opt
     {};
 
+    /// \brief Class used to define future extension at compile-time
     template <class... Args>
     struct future_options
     {

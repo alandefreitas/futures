@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_DETAIL_CONTAINER_LOCK_FREE_QUEUE_HPP
-#define FUTURES_DETAIL_CONTAINER_LOCK_FREE_QUEUE_HPP
+#ifndef FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
+#define FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 
 #include <futures/detail/allocator/allocator_construct.hpp>
 #include <futures/detail/allocator/allocator_destroy.hpp>
@@ -40,7 +40,7 @@ namespace futures::detail {
     /// \tparam T Data type
     /// \tparam Allocator Node allocator
     template <class T, class Allocator = std::allocator<T>>
-    class lock_free_queue
+    class atomic_queue
         : private maybe_empty<
               allocator_rebind_t<Allocator, lock_free_queue_node<T>>>
         , private maybe_empty<allocator_rebind_t<Allocator, T>>
@@ -61,7 +61,7 @@ namespace futures::detail {
     public:
         using allocator_type = allocator_rebind_t<Allocator, T>;
 
-        ~lock_free_queue() {
+        ~atomic_queue() {
             node* old_head = head_.load(std::memory_order_relaxed);
             while (old_head) {
                 head_.store(old_head->next, std::memory_order_relaxed);
@@ -71,7 +71,7 @@ namespace futures::detail {
             }
         }
 
-        explicit lock_free_queue(const Allocator& alloc = std::allocator<T>{})
+        explicit atomic_queue(const Allocator& alloc = std::allocator<T>{})
             : maybe_empty<allocator_rebind_t<Allocator, node>>(alloc),
               maybe_empty<allocator_rebind_t<Allocator, T>>(alloc) {
             node* dummy_node_ptr = get_node_allocator().allocate(1);
@@ -80,10 +80,10 @@ namespace futures::detail {
             tail_.store(dummy_node_ptr);
         }
 
-        lock_free_queue(const lock_free_queue&) = delete;
+        atomic_queue(const atomic_queue&) = delete;
 
-        lock_free_queue&
-        operator=(const lock_free_queue&)
+        atomic_queue&
+        operator=(const atomic_queue&)
             = delete;
 
         [[nodiscard]] bool
@@ -188,4 +188,4 @@ namespace futures::detail {
     };
 } // namespace futures::detail
 
-#endif // FUTURES_DETAIL_CONTAINER_LOCK_FREE_QUEUE_HPP
+#endif // FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP

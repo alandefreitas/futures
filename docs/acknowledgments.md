@@ -1,10 +1,11 @@
 ---
-layout: default
-title: References
-nav_order: 7
-has_children: false
-has_toc: false
+layout: default title: References nav_order: 7 has_children: false has_toc: false
 ---
+
+# Acknowledgments
+
+We thank [The C++ Alliance](https://acknowledgementsample.com/2015/03/23/acknowledgement-sample-for-a-research-paper/)
+and all reviewers for supporting this library.
 
 # Contributors
 

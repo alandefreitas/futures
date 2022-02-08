@@ -18,7 +18,7 @@ Our motivation is organized as follows:
 - [An overview](#previous-work) of all related work presented since then 
 - [A brief description](#the-futures-library) of how this library relates this previous work 
 
-Alternatively, you can move straight to [our guides](future_concept.md) and see how the library works in practice. Be welcome. 
+Alternatively, you can move straight to [our guides](future_types.md) and see how the library works in practice. Be welcome. 
 
 ## Standard Futures
 

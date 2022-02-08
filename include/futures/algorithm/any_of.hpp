@@ -99,7 +99,7 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<basic_future<
+            detail::atomic_queue<basic_future<
                 bool,
                 future_options<executor_opt<Executor>, continuable_opt>>>
                 tasks_{};

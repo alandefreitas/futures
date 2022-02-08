@@ -204,14 +204,7 @@ namespace futures::detail {
                     this->post_deferred();
                 }
                 auto lk = create_wait_lock();
-                waiter_.wait(lk, [this]() {
-                    if constexpr (!is_always_deferred) {
-                        return status_.load(std::memory_order_acquire)
-                               == status::ready;
-                    } else {
-                        return status_ == status::ready;
-                    }
-                });
+                waiter_.wait(lk, [this]() { return is_ready(); });
             }
         }
 
@@ -249,14 +242,8 @@ namespace futures::detail {
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_for(lk, timeout_duration, [this]() {
-                        if constexpr (!is_always_deferred) {
-                            return status_.load(std::memory_order_acquire)
-                                   == status::ready;
-                        } else {
-                            return status_ == status::ready;
-                        }
-                    }))
-                {
+                        return is_ready();
+                    })) {
                     return std::future_status::ready;
                 } else {
                     return std::future_status::timeout;
@@ -301,14 +288,8 @@ namespace futures::detail {
                 }
                 auto lk = create_wait_lock();
                 if (waiter_.wait_until(lk, timeout_time, [this]() {
-                        if constexpr (!is_always_deferred) {
-                            return status_.load(std::memory_order_acquire)
-                                   == status::ready;
-                        } else {
-                            return status_ == status::ready;
-                        }
-                    }))
-                {
+                        return is_ready();
+                    })) {
                     return std::future_status::ready;
                 } else {
                     return std::future_status::timeout;

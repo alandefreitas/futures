@@ -25,6 +25,7 @@
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/traits/future_value.hpp>
 #include <futures/futures/traits/is_future.hpp>
+#include <futures/adaptor/detail/make_continuation_shared_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/futures/detail/move_if_not_shared.hpp>
 
@@ -33,62 +34,9 @@ namespace futures::detail {
      *  @{
      */
 
-    /// \brief A trait to validate whether a Function can be a continuation to a
-    /// future
-    template <class Function, class Future>
-    using is_valid_continuation = std::bool_constant<
-        continuation_traits_helper<Function, Future>::is_valid>;
-
-    template <class Function, class Future>
-    constexpr bool is_valid_continuation_v
-        = is_valid_continuation<Function, Future>::value;
-
     // Wrap implementation in empty struct to facilitate friends
     struct internal_then_functor
     {
-        template <class Future, class Function>
-        struct unwrap_and_continue_task
-        {
-            Future before_;
-            Function after_;
-
-            decltype(auto)
-            operator()() {
-                return unwrap_and_continue(
-                    std::move(before_),
-                    std::move(after_));
-            }
-
-            decltype(auto)
-            operator()(stop_token st) {
-                return unwrap_and_continue(
-                    std::move(before_),
-                    std::move(after_),
-                    st);
-            }
-        };
-
-        template <
-            class value_type,
-            class future_options,
-            class Executor,
-            class Function>
-        std::shared_ptr<shared_state<value_type, future_options>>
-        make_initial_shared_state(const Executor &ex, Function &&f) const {
-            if constexpr (!future_options::is_always_deferred) {
-                using shared_state_t = shared_state<value_type, future_options>;
-                (void) f;
-                return std::make_shared<shared_state_t>(ex);
-            } else {
-                using shared_state_t = deferred_shared_state<
-                    value_type,
-                    future_options,
-                    Function>;
-                return std::make_shared<
-                    shared_state_t>(ex, std::forward<Function>(f));
-            }
-        }
-
         /// \brief Maybe copy the previous continuations source
         template <class Future>
         static continuations_source<is_deferred_v<Future>>
@@ -96,7 +44,8 @@ namespace futures::detail {
             if constexpr (is_continuable_v<std::decay_t<Future>>) {
                 return before.state_->get_continuations_source();
             } else {
-                return continuations_source<is_deferred_v<Future>>(nocontinuationsstate);
+                return continuations_source<is_deferred_v<Future>>(
+                    nocontinuationsstate);
             }
         }
 
@@ -113,7 +62,7 @@ namespace futures::detail {
                 !is_executor_v<std::decay_t<Function>> &&
                 !is_executor_v<std::decay_t<Future>> &&
                 is_future_v<std::decay_t<Future>> &&
-                is_valid_continuation_v<std::decay_t<Function>, std::decay_t<Future>>,
+                continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
                 // clang-format on
                 int> = 0
 #endif
@@ -121,69 +70,61 @@ namespace futures::detail {
         decltype(auto)
         operator()(const Executor &ex, Future &&before, Function &&after)
             const {
-            // Determiner next future options
-            using traits = continuation_traits<Function, std::decay_t<Future>>;
+            // Determine next future options
+            using traits
+                = continuation_traits<Executor, Function, std::decay_t<Future>>;
+            using next_value_type = typename traits::next_value_type;
+            using next_future_options = typename traits::next_future_options;
+            using next_future_type
+                = basic_future<next_value_type, next_future_options>;
 
-            using future_options_base
-                = future_options<executor_opt<Executor>, continuable_opt>;
-            using future_options_stop = conditional_append_future_option_t<
-                traits::continuation_expects_stop_token,
-                stoppable_opt,
-                future_options_base>;
-            using future_options = conditional_append_future_option_t<
-                is_deferred_v<Future>,
-                always_deferred_opt,
-                future_options_stop>;
-            using value_type = typename traits::value_type;
-            using future_type = basic_future<value_type, future_options>;
-
-            // Create task for continuation future
-            continuations_source cs_backup = copy_continuations_source(before);
-            unwrap_and_continue_task<
-                std::decay_t<Future>,
-                std::decay_t<Function>>
-                task{ move_if_not_shared(std::forward<Future>(before)),
-                      std::forward<Function>(after) };
-
-            // Create shared state for next task
-            auto state = make_initial_shared_state<value_type, future_options>(
-                ex,
-                std::move(task));
-            basic_future<value_type, future_options> fut(state);
-
-            // Attach or launch the future
-            if constexpr (is_deferred_v<future_type>) {
-                // continuation future is lazy
-                // - after.wait() needs to invoke before.wait() inline
-                // - this might start polling if `before` has no continuations
-                // - after.get() will already post the continuation task
-                state->set_wait_callback([&before = task.before_]() mutable {
-                    before.wait();
-                });
-            } else if constexpr (is_continuable_v<std::decay_t<Future>>) {
-                // before is continuable / futures are eager
-                // - attach as continuation to before
-                auto apply_fn =
-                    [state = std::move(state),
-                     task = std::move(task)]() mutable {
-                    state->apply(std::move(task));
-                }; // make task copyable because `before` is not copyable
-                auto fn_shared_ptr = std::make_shared<decltype(apply_fn)>(
-                    std::move(apply_fn));
-                auto copyable_handle = [fn_shared_ptr]() {
-                    (*fn_shared_ptr)();
-                };
-                cs_backup.push(ex, copyable_handle);
+            // If future is continuable, just use the then function
+            if constexpr (
+                !is_deferred_v<
+                    next_future_type> && is_continuable_v<std::decay_t<Future>>)
+            {
+                // before is continuable: both futures are eager
+                // - attach as continuation to before, and we are done
+                return std::forward<Future>(before)
+                    .then(ex, std::forward<Function>(after));
             } else {
-                // before not continuable / futures are eager
-                // - start polling now
-                auto poll_and_set_value =
-                    [state = std::move(state), f = std::move(task)]() mutable {
-                    state->apply(std::move(f));
-                };
-                asio::post(ex, std::move(poll_and_set_value));
+                // Previous is not continuable or both are deferred, so we don't
+                // need the continuations because next will wait for prev.
+
+                // Create task for continuation future
+                continuations_source cs_backup = copy_continuations_source(
+                    before);
+                unwrap_and_continue_task<
+                    std::decay_t<Future>,
+                    std::decay_t<Function>>
+                    task{ move_if_not_shared(std::forward<Future>(before)),
+                          std::forward<Function>(after) };
+
+                // Create shared state for next future
+                auto state = detail::make_continuation_shared_state<
+                    next_value_type,
+                    next_future_options>(ex, std::move(task));
+                next_future_type fut(state);
+
+                // Attach or launch the future
+                if constexpr (is_deferred_v<next_future_type>) {
+                    // if before is lazy -> continuation lazy by default
+                    // - after.wait() will invoke before.wait() inline
+                    // - after.get() will already post the continuation task
+                    state->set_wait_callback(
+                        [&before = task.before_]() mutable { before.wait(); });
+                } else {
+                    // Before not continuable -> both futures are eager
+                    // - post a task that starts polling
+                    auto poll_and_set_value =
+                        [state = std::move(state),
+                         f = std::move(task)]() mutable {
+                        state->apply(std::move(f));
+                    };
+                    asio::post(ex, std::move(poll_and_set_value));
+                }
+                return fut;
             }
-            return fut;
         }
     };
 

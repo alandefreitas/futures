@@ -5,7 +5,7 @@ function(target_pedantic_warnings TARGET_NAME)
     if (MSVC)
         target_compile_options(${TARGET_NAME} INTERFACE /W3 /WX)
     else ()
-        target_compile_options(${TARGET_NAME} INTERFACE -Wall -Wextra -pedantic -Werror)
+        target_compile_options(${TARGET_NAME} INTERFACE -Wall -Wextra -pedantic -Werror -ftemplate-backtrace-limit=0)
     endif ()
 endfunction()
 

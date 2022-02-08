@@ -15,7 +15,7 @@
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/futures.hpp>
-#include <futures/detail/container/lock_free_queue.hpp>
+#include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/utility/empty_base.hpp>
 #include <execution>
 #include <variant>
@@ -105,7 +105,7 @@ namespace futures {
             }
 
         private:
-            detail::lock_free_queue<basic_future<
+            detail::atomic_queue<basic_future<
                 bool,
                 future_options<executor_opt<Executor>, continuable_opt>>>
                 tasks_{};

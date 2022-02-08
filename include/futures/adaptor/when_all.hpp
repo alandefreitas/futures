@@ -36,11 +36,11 @@
 /// If the input futures are not shared, they are moved into `when_all_future`
 /// and are invalidated, as usual. The `when_all_future` cannot be shared.
 
-#include <futures/futures/traits/to_future.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/detail/traits/is_tuple.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
+#include <futures/futures/traits/to_future.hpp>
 
 namespace futures {
     /** \addtogroup adaptors Adaptors
@@ -67,8 +67,7 @@ namespace futures {
     private:
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
-        static constexpr bool sequence_is_range = is_range_v<
-            sequence_type>;
+        static constexpr bool sequence_is_range = is_range_v<sequence_type>;
         static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
 
@@ -127,7 +126,8 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -155,7 +155,8 @@ namespace futures {
         wait() const {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                detail::throw_exception<std::future_error>(
+                    std::future_errc::no_state);
             }
             if constexpr (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
@@ -189,7 +190,8 @@ namespace futures {
 
                 // Check if the sequence is valid
                 if (!valid()) {
-                    detail::throw_exception<std::future_error>(std::future_errc::no_state);
+                    detail::throw_exception<std::future_error>(
+                        std::future_errc::no_state);
                 }
                 using duration_type = std::chrono::duration<Rep, Period>;
                 using namespace std::chrono;
@@ -629,9 +631,9 @@ namespace futures {
                         decltype(f)> && !is_future_v<decltype(f)>) {
                     // Convert to future with the default executor if not a
                     // future yet
-                    return asio::post(
+                    return futures::async(
                         make_default_executor(),
-                        asio::use_future(std::forward<decltype(f)>(f)));
+                        std::forward<decltype(f)>(f));
                 } else {
                     if constexpr (is_shared_future_v<decltype(f)>) {
                         return std::forward<decltype(f)>(f);

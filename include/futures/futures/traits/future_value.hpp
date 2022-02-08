@@ -8,8 +8,8 @@
 #ifndef FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
 #define FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
 
-#include <futures/futures/traits/is_future.hpp>
 #include <futures/detail/traits/has_get.hpp>
+#include <futures/futures/traits/is_future.hpp>
 
 namespace futures {
     /** \addtogroup futures Futures
@@ -27,9 +27,7 @@ namespace futures {
     /// \note Not to be confused with continuation unwrapping
     template <typename T, class Enable = void>
     struct future_value
-    {
-        using type = void;
-    };
+    {};
 
     /// \brief Determine type a future object holds (specialization for types
     /// that implement `get()`)

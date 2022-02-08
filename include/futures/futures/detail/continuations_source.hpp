@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 #define FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
-#include <futures/detail/container/lock_free_queue.hpp>
+#include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <memory>
 #include <shared_mutex>
@@ -56,7 +56,7 @@ namespace futures::detail {
         /// continuations per task
         using continuation_vector = std::conditional_t<
             !is_always_deferred,
-            detail::lock_free_queue<continuation_type>,
+            detail::atomic_queue<continuation_type>,
             detail::small_vector<continuation_type>>;
 
         /// @}
@@ -108,22 +108,23 @@ namespace futures::detail {
         template <class Executor, class Fn>
         bool
         push(const Executor &ex, Fn &&fn) {
+            // Although this is a write operation, this is a shared lock
+            // because many threads are allowed to emplace continuations
+            // at the same time in the atomic queue.
+            std::shared_lock lock(continuations_mutex_);
             if (!is_run_requested()) {
-                // Although this is a write operation, this is a shared lock
-                // because many threads can emplace continuations at the same
-                // time in the atomic queue.
                 if constexpr (!is_always_deferred) {
-                    std::shared_lock lock(continuations_mutex_);
                     continuations_.push(std::forward<Fn>(fn));
                 } else {
                     continuations_.emplace_back(std::forward<Fn>(fn));
                 }
                 return true;
             } else {
+                lock.unlock();
                 // When the shared state currently associated with *this is
                 // ready, the continuation is called on an unspecified thread of
                 // execution
-                asio::post(ex, asio::use_future(std::forward<Fn>(fn)));
+                asio::post(ex, std::forward<Fn>(fn));
                 return false;
             }
         }
