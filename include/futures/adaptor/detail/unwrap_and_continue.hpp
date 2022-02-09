@@ -17,6 +17,7 @@
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
 #include <futures/futures/future_options.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/futures/detail/move_if_not_shared.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 
@@ -24,7 +25,6 @@ namespace futures::detail {
     struct unwrapping_failure_t
     {};
 
-    // make it a functor to copy into deferred shared states
     struct unwrap_and_continue_functor
     {
         /// \brief Unwrap the results from `before` future object and give them
@@ -46,8 +46,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                std::is_invocable_v<Function, PrefixArgs..., Future> // no unwrap
+                is_no_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -67,9 +66,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                std::is_invocable_v<Function, PrefixArgs...> // no input
+                is_no_input_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -88,10 +85,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> // value unwrap
+                is_value_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -112,11 +106,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> // lvalue unwrap
+                is_lvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -137,12 +127,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> // rvalue unwrap
+                is_rvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -163,40 +148,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> // rvalue unwrap
-                // clang-format on
-                ,
-                int> = 0>
-        decltype(auto)
-        operator()(
-            Future &&before_future,
-            Function &&continuation,
-            PrefixArgs &&...prefix_args) const {
-            future_value_t<Future> prev_state = before_future.get();
-            return continuation(
-                std::forward<PrefixArgs>(prefix_args)...,
-                std::move(prev_state));
-        }
-
-        template <
-            class Future,
-            typename Function,
-            typename... PrefixArgs,
-            std::enable_if_t<
-                // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                (is_future_v<std::decay_t<future_value_t<Future>>> && std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>) // double unwrap
+                is_double_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -216,14 +168,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                !(is_future_v<std::decay_t<future_value_t<Future>>> && std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>) && // double unwrap
-                is_tuple_v<future_value_t<Future>> // tuple unwrap
+                is_tuple_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -293,15 +238,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                !(is_future_v<std::decay_t<future_value_t<Future>>> && std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>) && // double unwrap
-                !is_tuple_v<future_value_t<Future>> && // tuple unwrap
-                is_range_v<future_value_t<Future>> // range unwrap
+                is_range_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -361,16 +298,7 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                !(is_future_v<std::decay_t<future_value_t<Future>>> && std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>) && // double unwrap
-                !is_tuple_v<future_value_t<Future>> && // tuple unwrap
-                !is_range_v<future_value_t<Future>> && // range unwrap
-                is_when_any_result_v<future_value_t<Future>> // when_any unwrap
+                is_when_any_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
@@ -384,14 +312,13 @@ namespace futures::detail {
             // when_any<tuple<future<T1>, future<T2>, ...>> ->
             // function(size_t, tuple<future<T1>, future<T2>, ...>)
             using when_any_index = typename future_value_t<Future>::size_type;
-            using when_any_sequence = typename future_value_t<Future>::sequence_type;
+            using when_any_sequence = typename future_value_t<
+                Future>::sequence_type;
             using when_any_members_as_tuple = std::
                 tuple<when_any_index, when_any_sequence>;
             constexpr bool when_any_split = is_tuple_invocable_v<
                 Function,
-                tuple_type_concat_t<
-                    prefix_as_tuple,
-                    when_any_members_as_tuple>>;
+                tuple_type_concat_t<prefix_as_tuple, when_any_members_as_tuple>>;
 
             // when_any<tuple<future<>,...>> -> function(size_t,
             // future<T1>, future<T2>, ...)
@@ -411,7 +338,8 @@ namespace futures::detail {
             // when_any_result<tuple<future<T>, future<T>, ...>> ->
             // continuation(future<T>)
             constexpr bool when_any_same_type
-                = is_range_v<when_any_sequence> || is_single_type_tuple_v<when_any_sequence>;
+                = is_range_v<
+                      when_any_sequence> || is_single_type_tuple_v<when_any_sequence>;
             using when_any_element_type = range_or_tuple_value_t<
                 when_any_sequence>;
             constexpr bool when_any_element
@@ -430,8 +358,7 @@ namespace futures::detail {
                       Function,
                       tuple_type_concat_t<
                           prefix_as_tuple,
-                          std::tuple<
-                              future_value_t<when_any_element_type>>>>;
+                          std::tuple<future_value_t<when_any_element_type>>>>;
 
             auto w = before_future.get();
             if constexpr (when_any_split) {
@@ -449,16 +376,14 @@ namespace futures::detail {
                             std::forward<PrefixArgs>(prefix_args)...,
                             w.index),
                         std::move(w.tasks)));
-            } else if constexpr (
-                when_any_element || when_any_unwrap_element) {
+            } else if constexpr (when_any_element || when_any_unwrap_element) {
                 constexpr auto get_nth_future = [](auto &when_any_f) {
                     if constexpr (is_tuple_v<when_any_sequence>) {
                         return std::move(futures::get(
                             std::move(when_any_f.tasks),
                             when_any_f.index));
                     } else {
-                        return std::move(
-                            when_any_f.tasks[when_any_f.index]);
+                        return std::move(when_any_f.tasks[when_any_f.index]);
                     }
                 };
                 auto nth_future = get_nth_future(w);
@@ -472,8 +397,8 @@ namespace futures::detail {
                         std::move(nth_future.get()));
                 } else {
                     detail::throw_exception<std::logic_error>(
-                    "Continuation unwrapping not possible");
-                return unwrapping_failure_t{};
+                        "Continuation unwrapping not possible");
+                    return unwrapping_failure_t{};
                 }
             } else {
                 detail::throw_exception<std::logic_error>(
@@ -488,30 +413,15 @@ namespace futures::detail {
             typename... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
-                is_future_v<std::decay_t<Future>> &&
-                !std::is_invocable_v<Function, PrefixArgs..., Future> && // no unwrap
-                !std::is_invocable_v<Function, PrefixArgs...> && // no input
-                !std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>> && // value unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>> && // lvalue unwrap
-                !std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>> && // rvalue unwrap
-                !(is_future_v<std::decay_t<future_value_t<Future>>> && std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>) && // double unwrap
-                !is_tuple_v<future_value_t<Future>> && // tuple unwrap
-                !is_range_v<future_value_t<Future>> && // range unwrap
-                !is_when_any_result_v<future_value_t<Future>> // when_any unwrap
+                !is_valid_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
                 int> = 0>
         decltype(auto)
-        operator()(
-            Future &&before_future,
-            Function &&continuation,
-            PrefixArgs &&...prefix_args) const {
+        operator()(Future &&, Function &&, PrefixArgs &&...) const {
             // Could not unwrap, return unwrapping_failure_t to indicate we
-            // couldn't unwrap the continuation The function still needs to
-            // be well-formed because other templates depend on it
-            (void)before_future;
-            (void)continuation;
-            ((void)prefix_args,...);
+            // couldn't unwrap the continuation. The function still needs to
+            // be well-formed to facilitate other templates that depend on it
             detail::throw_exception<std::logic_error>(
                 "Continuation unwrapping not possible");
             return unwrapping_failure_t{};
@@ -545,26 +455,48 @@ namespace futures::detail {
     using result_of_unwrap_t = typename result_of_unwrap<Future, Function>::type;
 
     /// \brief Find the result of unwrap and continue with token or return
-    /// unwrapping_failure_t otherwise
-    template <class Future, class Function, class = void>
-    struct result_of_unwrap_with_token
+    /// unwrapping_failure_t otherwise. The implementation avoids even trying
+    /// if the previous future has no stop token
+    template <bool Enable, class Future, class Function, class = void>
+    struct result_of_unwrap_with_token_impl
     {
         using type = unwrapping_failure_t;
     };
 
     template <class Future, class Function>
-    struct result_of_unwrap_with_token<
+    struct result_of_unwrap_with_token_impl<
+        true,
         Future,
         Function,
-        std::void_t<decltype(unwrap_and_continue_functor{}(
-            std::declval<Future>(),
-            std::declval<Function>(),
-            std::declval<stop_token>()))>>
+        std::void_t<
+            // unwrapping with stop token is possible
+            decltype(unwrap_and_continue_functor{}(
+                std::declval<Future>(),
+                std::declval<Function>(),
+                std::declval<stop_token>()))>>
     {
         using type = decltype(unwrap_and_continue_functor{}(
             std::declval<Future>(),
             std::declval<Function>(),
             std::declval<stop_token>()));
+    };
+
+    /// \brief Find the result of unwrap and continue with token or return
+    /// unwrapping_failure_t otherwise
+    template <class Future, class Function>
+    struct result_of_unwrap_with_token
+    {
+        using type = typename result_of_unwrap_with_token_impl<
+            // clang-format off
+            // only attempt to invoke the function if:
+            // previous future is stoppable
+            is_stoppable_v<std::decay_t<Future>> &&
+            // unwrapping without stop token fails
+            std::is_same_v<result_of_unwrap_t<Future, Function>,unwrapping_failure_t>
+            // clang-format on
+            ,
+            Future,
+            Function>::type;
     };
 
     template <class Future, class Function>
@@ -575,17 +507,17 @@ namespace futures::detail {
     struct continuation_traits_helper
     {
         // The return type of unwrap and continue function
-        using unwrap_result_no_token_type = result_of_unwrap_t<Future, Function>;
-        using unwrap_result_with_token_type
+        using unwrap_result = result_of_unwrap_t<Future, Function>;
+
+        using unwrap_result_with_token_prefix
             = result_of_unwrap_with_token_t<Future, Function>;
 
         // Whether the continuation expects a token
-        static constexpr bool is_valid_without_stop_token = !std::is_same_v<
-            unwrap_result_no_token_type,
-            unwrapping_failure_t>;
+        static constexpr bool is_valid_without_stop_token
+            = !std::is_same_v<unwrap_result, unwrapping_failure_t>;
 
         static constexpr bool is_valid_with_stop_token = !std::is_same_v<
-            unwrap_result_with_token_type,
+            unwrap_result_with_token_prefix,
             unwrapping_failure_t>;
 
         // Whether the continuation is valid
@@ -596,8 +528,8 @@ namespace futures::detail {
         // without token
         using next_value_type = std::conditional_t<
             is_valid_with_stop_token,
-            unwrap_result_with_token_type,
-            unwrap_result_no_token_type>;
+            unwrap_result_with_token_prefix,
+            unwrap_result>;
 
         // Stop token for the continuation function
         constexpr static bool expects_stop_token = is_valid_with_stop_token;

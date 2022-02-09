@@ -9,20 +9,20 @@ nav:
   - Quickstart: quickstart.md
   - Motivation: motivation.md
   - Futures:
-    - Future Types: future_types.md
-    - Launching Tasks: launching.md
-    - Promises and Tasks: promises.md
-    - Continuable Futures: continuable_futures.md
-    - Stoppable Futures: stoppable_futures.md
-    - Shared Futures: shared_futures.md
-    - Waiting for Futures: waiting.md
+    - Future Types: futures/future_types.md
+    - Launching Tasks: futures/launching.md
+    - Promises and Tasks: futures/promises.md
+    - Continuable Futures: futures/continuable_futures.md
+    - Stoppable Futures: futures/stoppable_futures.md
+    - Shared Futures: futures/shared_futures.md
+    - Waiting for Futures: futures/waiting.md
   - Future Adaptors:
-    - Continuations: continuations.md
-    - Conjunctions: conjunctions.md
-    - Disjunctions: disjunctions.md
+    - Continuations: adaptors/continuations.md
+    - Conjunctions: adaptors/conjunctions.md
+    - Disjunctions: adaptors/disjunctions.md
   - Parallel Algorithms:
-    - Algorithms: algorithms.md
-    - Partitioners: partitioners.md
+    - Algorithms: algorithms/algorithms.md
+    - Partitioners: algorithms/partitioners.md
   # doxygen && rm -r reference && mkdir reference && doxybook2 --input ./xml --output ./reference --config ./.doxybook/config.json
   - Reference: # Reference is organized by module
     - Futures: reference/Modules/group__futures.md        # futures module

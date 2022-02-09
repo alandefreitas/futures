@@ -221,30 +221,29 @@ main() {
         //[ambiguous Ambiguous unwrapping
         auto f1 = async([]() { return 1; });
         auto f2 = f1 >> [](auto f) {
-            /*
-             * Ambiguous
-             * Should `f` be `cfuture<int>` or `int`?
-             */
-            return f;
+             // Is `f` a `cfuture<int>` or `int`?
+             // `cfuture<int>` has the highest priority
+             return f.get();
         };
+        std::cout << f2.get() << '\n';
         //]
     }
 
-    //    {
-    //        //[stop_source Ambiguous unwrapping
-    //        auto f1 = async([](stop_token st) {
-    //            while (!st.stop_requested()) {
-    //                some_task();
-    //            }
-    //        });
-    //        auto ss = f1.get_stop_source();
-    //        auto f2 = f1 >> []() {
-    //            std::cout << "Done\n";
-    //        };
-    //        ss.request_stop(); // f1.request_stop() won't work
-    //        anymore f2.get();
-    //        //]
-    //    }
+    {
+        //[stop_source Continuation stop source
+        auto f1 = async([](stop_token st) {
+            while (!st.stop_requested()) {
+                some_task();
+            }
+        });
+        auto ss = f1.get_stop_source();
+        auto f2 = f1 >> []() {
+            std::cout << "Done\n";
+        };
+        ss.request_stop(); // f1.request_stop() won't work anymore
+        f2.get();
+        //]
+    }
 
     return 0;
 }

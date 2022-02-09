@@ -24,6 +24,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
 
             using unwrap_result_no_token_type = detail::
                 result_of_unwrap_t<Future, Function>;
+
             STATIC_REQUIRE(std::is_same_v<unwrap_result_no_token_type, int>);
             static constexpr bool is_valid_without_stop_token = !std::is_same_v<
                 unwrap_result_no_token_type,
@@ -105,7 +106,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
                 asio::thread_pool::executor_type ex = pool.executor();
                 cfuture<int> before = async([] { return 2; });
                 REQUIRE(before.valid());
-                cfuture<int> after = then(before, ex, [](int v) {
+                cfuture<int> after = then(ex, before, [](int v) {
                     return v * 2;
                 });
                 REQUIRE(after.get() == 4);
@@ -117,7 +118,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
                 asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
-                cfuture<int> after = then(before, ex, []() { return 2; });
+                cfuture<int> after = then(ex, before, []() { return 2; });
                 REQUIRE(after.get() == 2);
                 REQUIRE(i == 1);
                 REQUIRE_FALSE(before.valid());
@@ -128,7 +129,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
                 asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&i] { ++i; });
-                cfuture<void> after = then(before, ex, [&i]() { ++i; });
+                cfuture<void> after = then(ex, before, [&i]() { ++i; });
                 REQUIRE_NOTHROW(after.get());
                 REQUIRE(i == 2);
                 REQUIRE_FALSE(before.valid());

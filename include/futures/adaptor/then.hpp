@@ -76,36 +76,6 @@ namespace futures {
             std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future, allow an executor
-    /// as second parameter
-    ///
-    /// \see @ref then
-    template <
-        class Future,
-        typename Executor,
-        typename Function
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<std::decay_t<Executor>> &&
-            !is_executor_v<std::decay_t<Function>> &&
-            !is_executor_v<std::decay_t<Future>> &&
-            is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid
-            // clang-format on
-            ,
-            int> = 0
-#endif
-        >
-    decltype(auto)
-    then(Future &&before, const Executor &ex, Function &&after) {
-        return then(
-            ex,
-            std::forward<Future>(before),
-            std::forward<Function>(after));
-    }
-
     /// \brief Schedule a continuation function to a future with the default
     /// executor
     ///

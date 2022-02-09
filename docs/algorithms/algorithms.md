@@ -1,6 +1,6 @@
 # Algorithms
 
-The header [`algorithm.h`](reference/Files/algorithm_8h.md) includes implementations of common STL algorithms using the
+The header [`algorithm.h`](/futures/reference/Files/algorithm_8h.md) includes implementations of common STL algorithms using the
 library primitives.
 
 {{ code_snippet("algorithm/algorithms.cpp", "algorithm") }}

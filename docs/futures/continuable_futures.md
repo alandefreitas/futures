@@ -160,8 +160,9 @@ which inspired the [C++ Extensions for Concurrency].
 ## Deferred continuations
 
 The process of attaching continuations to a future whose main task is potentially executing has a synchronization cost.
-When attaching a continuation, we to check if the future is not attempting to run the continuations and vice-versa. This
-synchronization cost was identified in [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf).
+When attaching a continuation, we need to check if the future is not currently attempting to run the continuations and
+vice-versa. This synchronization cost was identified
+in [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf).
 
 The library implements this procedure with [atomic](https://en.cppreference.com/w/cpp/atomic/atomic) queues to avoid
 this cost. However, in some contexts, the cost of continuations can be further minimized
@@ -179,12 +180,15 @@ sequenceDiagram
     Main-->>C: Attach to B
     Main->>C : Wait
     activate Main
-    C->>A : Request
+    C->>B : Request start
+    B->>A : Request start
     activate A
-    A->>B: Launch
+    B->>A: Wait
+    A->>B: Return
     deactivate A
     activate B
-    B->>C: Launch
+    C->>B: Wait
+    B->>C: Return
     deactivate B
     activate C
     Main->>Main: Do work
@@ -194,6 +198,68 @@ sequenceDiagram
 </div>
 
 In this case, the synchronization cost can be completely removed because the task will only be sent to the executor once
-its continuations have already been attached to it.
+its continuations have already been attached to it. Notice how tasks B and C are never waiting at the same time.
+
+Deferred futures can also avoid the list of continuations all together. When requesting a deferred continuation to
+start, it can simply wait for the previous task inline before sending its own task to the executor.
+
+While an eager future stores its continuations:
+
+<div class="mermaid">
+graph LR
+subgraph Eager futures
+A --> |store|B --> |store|C
+end
+</div>
+
+A deferred continuation can store the previous task:
+
+<div class="mermaid">
+graph LR
+subgraph Deferred futures
+C --> |store|D --> |store|A
+end
+</div>
+
+Thus, deferred futures without explicit continuation lists can still have lazy continuations, as the continuation task
+will store its previous task, forming a chain of tasks in the shared state of these objects. This allows deferred
+futures to have the member function [basic_future::then] defined even we no continuation list is available.
+
+In fact, this is safer than continuation lists for deferred futures. Let A and B be deferred tasks. Because they are not
+eager, task A will _not be launched before task B_ and then post task B to the executor. When we wait for task B, it
+will be launched, which would take room in the executor. Task B, already running, will need to wait for task A. At the
+point, however, the executor might not have the enough capacity for launching task A because B is already running and
+polling A:
+
+<div class="mermaid">
+sequenceDiagram
+    Main ->> A: Create
+    Main ->> B: Create
+    A ->> B: Store as continuation
+    Main ->> B: Wait
+    B ->> B: Post task
+    B ->> A: Wait (using executor)
+    A ->> A: Do work (might fail)
+    A ->> B: Return
+    B ->> B: Do work
+</div>
+
+The library solves this problem by checking for previous continuations of A before starting B. But deferred
+continuations can solve the problem natively:
+
+<div class="mermaid">
+sequenceDiagram
+    Main ->> A: Create
+    Main ->> B: Create
+    B ->> A: Stores inline
+    Main ->> B: Wait
+    B ->> A: Wait inline
+    A ->> A: Do work (executor is free)
+    A ->> B: Return
+    B ->> B: Post task
+    B ->> B: Do work
+</div>
+
+For this reason, by default, [then] attaches the previous future to its deferred continuation instead of attaching the
 
 --8<-- "docs/references.md"

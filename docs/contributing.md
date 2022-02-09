@@ -1,10 +1,10 @@
 ## Roadmap 🛣
 
 - Additional future types and options
-- Additional launching policies
 - Additional future adaptors
 - Additional algorithms
 - Additional executors
+- Additional networking facilities
 
 ## Guidelines 📐
 
