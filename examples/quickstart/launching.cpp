@@ -6,6 +6,7 @@ int
 main() {
     using namespace futures;
 
+    //[launching Launching Futures
     auto f1 = async([] {
         std::cout << "Task 1 in default executor. A thread pool.\n";
     });
@@ -33,6 +34,7 @@ main() {
     f3.wait();
     f4.request_stop();
     f4.wait();
+    //]
 
     return 0;
 }

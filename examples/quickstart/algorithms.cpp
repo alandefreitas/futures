@@ -6,6 +6,7 @@ int
 main() {
     using namespace futures;
 
+    //[algorithms Algorithms
     std::vector<int> v(50000);
     std::iota(v.begin(), v.end(), 1);
     std::cout << "Sum: " << futures::reduce(v, 0) << '\n';
@@ -15,6 +16,7 @@ main() {
     futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
         std::cout << x << '\n';
     });
+    //]
 
     return 0;
 }

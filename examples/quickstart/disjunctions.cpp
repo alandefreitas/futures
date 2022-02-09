@@ -6,6 +6,7 @@ int
 main() {
     using namespace futures;
 
+    //[disjunctions Disjunctions
     auto f1 = futures::async([]() -> int { return 10; });
     auto f2 = futures::async([]() -> int { return 11; });
     auto f3 = futures::async([]() -> int { return 12; });
@@ -24,6 +25,7 @@ main() {
     } else {
         std::cout << std::get<1>(r.tasks).get() << '\n';
     }
+    //]
 
     return 0;
 }

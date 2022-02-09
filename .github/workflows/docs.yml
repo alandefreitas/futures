@@ -51,5 +51,7 @@ jobs:
         run: pip install mkdocs-material
       - name: Install Mermaid for Mkdocs
         run: pip install mkdocs-mermaid2-plugin
+      - name: Install Macros for Mkdocs
+        run: pip install mkdocs-macros-plugin
       - name: Deploy mkdocs to gh-pages branch
         run: mkdocs gh-deploy --force

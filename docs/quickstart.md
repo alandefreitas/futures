@@ -116,35 +116,14 @@
 
 ## Hello world 👋
 
-=== "Launching futures"
+{{ code_snippet("quickstart/launching.cpp", "launching") }}
 
-    ```cpp
-    --8<-- "examples/quickstart/launching.cpp"
-    ```
+{{ code_snippet("quickstart/continuations.cpp", "continuations") }}
 
-=== "Continuations"
+{{ code_snippet("quickstart/conjunctions.cpp", "conjunctions") }}
 
-    ```cpp
-    --8<-- "examples/quickstart/continuations.cpp"
-    ```
+{{ code_snippet("quickstart/disjunctions.cpp", "disjunctions") }}
 
-=== "Conjunctions"
-
-    ```cpp
-    --8<-- "examples/quickstart/conjunctions.cpp"
-    ```
-
-=== "Disjunctions"
-
-    ```cpp
-    --8<-- "examples/quickstart/disjunctions.cpp"
-    ```
-
-=== "Algorithms"
-
-    ```cpp
-    --8<-- "examples/quickstart/algorithms.cpp"
-    ```
-
+{{ code_snippet("quickstart/algorithms.cpp", "algorithms") }}
 
 --8<-- "docs/references.md"

@@ -15,7 +15,7 @@ nav:
     - Continuable Futures: continuable_futures.md
     - Stoppable Futures: stoppable_futures.md
     - Shared Futures: shared_futures.md
-    - Waiting: waiting.md
+    - Waiting for Futures: waiting.md
   - Future Adaptors:
     - Continuations: continuations.md
     - Conjunctions: conjunctions.md
@@ -49,6 +49,9 @@ edit_uri: ""
 plugins:
   - search
   - mermaid2
+  - macros:
+      module_name: docs/macros
+      include_dir: ..
 
 extra:
   analytics:

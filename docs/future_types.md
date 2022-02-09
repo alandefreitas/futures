@@ -1,10 +1,29 @@
 # Futures types
 
-This library implements a number of future types as a *concept* rather than a single concrete object. Algorithms work with any given class that has the requirements of the future concept, as defined by the trait [is_future]. The [std::future] class also has the requirements of this concept, so it can interoperate with any of the new algorithms and future types.
+This library implements a number of future types as a *concept* rather than a single concrete object.
+For instance, consider a task we are launching with C++11 [std::async]:
 
-```cpp
---8<-- "examples/future_types/interoperability.cpp"
-```
+{{ code_snippet("future_types/interoperability.cpp", "std_async") }}
+
+We could do something similar with the library function [futures::async]:
+
+{{ code_snippet("future_types/interoperability.cpp", "cfuture") }}
+
+Notice how [async] returns a [cfuture] by default, which is a future to which we can attach continuations. 
+The function [async] does not always return [cfuture]. For instance, suppose we call [async] with a 
+function that accepts a [stop_token]:
+
+{{ code_snippet("future_types/interoperability.cpp", "jcfuture") }}
+
+It now returns [jcfuture] by default, which is a future type that supports stop tokens. 
+We can ask the task to stop through the future at any time with:
+
+{{ code_snippet("future_types/interoperability.cpp", "jcfuture_stop") }}
+
+We now have three types of future objects. Because all of these types has the requirements of the [is_future] concept,
+the library functions allow them to interoperate:
+
+{{ code_snippet("future_types/interoperability.cpp", "wait_for_all") }}
 
 ## Some future types
 
@@ -35,13 +54,12 @@ Some other future types are:
 | [when_all_future] | Represent the conjunction of other futures    | 
 | [when_any_future] | Represent the disjunction of other futures    | 
 
-- 
-- [when_all_future] and [when_any_future] are proxy future classes to hold the results of the [when_all] and [when_all] functions. This proxy allows different future types to interoperate and save resources on new tasks.
+Unlike other future types, [when_all_future] and [when_any_future] are proxy future classes to hold the results of the [when_all] and [when_all] functions. This proxy allows different future types to interoperate and save resources on new tasks.
 
 ## Custom future types
 
-Any custom type with the requirements of [is_future] can interoperate with other future type. These classes might represent any process for which a result will only be available in the future, such as child processes and network requests with third-party libraries (such as CURL).
+Any custom type with the requirements of [is_future] can interoperate with other future type. These classes might represent any process for which a result will only be available in the future, such as child processes and network requests with third-party libraries.
 
-A simpler alternative for custom future types is with specific template instantiations of [basic_future], which can be configured at compile-time with [future_options]. Many future types provided by the library as aliases [basic_future] with specific [future_options].
+A simpler alternative for custom future types is through specific template instantiations of [basic_future], which can be configured at compile-time with [future_options]. Many future types provided by the library as aliases [basic_future] with specific [future_options].
 
 --8<-- "docs/references.md"

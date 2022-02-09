@@ -2,7 +2,11 @@
 
 ## Futures tasks
 
-The easiest way to create futures is by launching tasks.  
+The easiest way to create futures is by launching tasks:
+
+{{ code_snippet("future_types/launching.cpp", "no_param") }}
+
+This is what happens under the hood:
 
 <div class="mermaid">
 graph LR
@@ -16,7 +20,7 @@ end
 </div>
 
 1. While an executor handles a task, the main thread holds a future value.
-2. When the task is completed, it fulfills its promise by setting the shared state with its result. 
+2. When the task is completed, it fulfills its promise by setting the shared state with its result.
 3. The future is considered ready and the main thread can obtain its value.
 
 This is how these three steps might happen:
@@ -44,25 +48,40 @@ sequenceDiagram
     end
 </div>
 
-Note that the shared state is a private implementation detail with which the user does not interact.
-This ensures all write operations will happen through the promised task and all read operations
-will happen through the future. It also enables optimizations based on assumptions about
-how specific future and promise types can access the shared state.
+Note that the shared state is a private implementation detail with which the user does not interact. This ensures all
+write operations will happen through the promised task and all read operations will happen through the future. It also
+enables optimizations based on assumptions about how specific future and promise types can access the shared state.
 
 ## Eager tasks
 
-Like [std::async], [futures::async] is used to launch new tasks.  
+Like [std::async], [futures::async] is used to launch new tasks in parallel.
 
-```cpp
---8<-- "examples/future_types/launching.cpp"
-```
+{{ code_snippet("future_types/launching.cpp", "no_param") }}
 
-However, [futures::async] implements a few improvements and extensions to [std::async]:
+In this example, this function returns a continuable [cfuture] by default instead of a [std::future]. If the first task
+parameter is a [stop_source], it returns a [jcfuture] we can stop from the main thread with `request_stop`.
 
-- Its launch policy is replaced with a concrete [executor].
-- If the [executor] is not defined, a default executor (a thread pool) is used for the tasks, instead of always launching a new thread for the task
-- It returns a continuable [cfuture] by default instead of a [std::future]
-- If the first task parameter is a [stop_source], it returns a [jcfuture]
+{{ code_snippet("future_types/launching.cpp", "no_param_jcfuture") }}
+
+If the task accepts parameters, we can provide them directly to [async].
+
+{{ code_snippet("future_types/launching.cpp", "with_params") }}
+
+Unlike [std::async], which uses launch policies, [futures::async] can use any concrete [executor] specifying details
+about how the task should be executed.
+
+{{ code_snippet("future_types/launching.cpp", "with_executor") }}
+
+If the [executor] is not defined, the default executor is used for the tasks. This executor ensures we do not launch a
+new thread for each task.
+
+To block execution of the main thread until the tasks are complete, we can use the functions [basic_future::wait]
+and [basic_future::get].
+
+{{ code_snippet("future_types/launching.cpp", "waiting") }}
+
+The function [basic_future::wait] will only block execution until the task is ready, while [basic_future::get] can be
+used to wait for and retrieve the final value.
 
 Note that eager tasks are allowed to start as soon as they are launched:
 
@@ -75,19 +94,14 @@ sequenceDiagram
     Task->>-Main: Return
 </div>
 
-
-## Lazy tasks
+## Deferred tasks
 
 The function [schedule] can be used to create lazy tasks.
 
-```cpp
---8<-- "examples/future_types/schedule.cpp"
-```
+{{ code_snippet("future_types/schedule.cpp", "schedule") }}
 
-The difference between [async] and [schedule] is the latter only posts the task to the executor when we call wait
-on the corresponding future. 
-
-Note that lazy tasks are allowed to start only after we announce we are waiting for its results:
+The main difference between [async] and [schedule] is the latter only posts the task to the executor when we
+call [basic_future::wait] or [basic_future::get] on the corresponding future:
 
 <div class="mermaid">
 sequenceDiagram
@@ -97,20 +111,19 @@ sequenceDiagram
     Task->>-Main: Return
 </div>
 
-Most of the time, the choice between eager and lazy futures is determined by the 
-application.
+Most of the time, the choice between eager and lazy futures is determined by the application. When both eager and lazy
+futures are applicable, a few criteria might be considered.
 
-When both eager and lazy futures are applicable, a few criteria might be considered. 
-
-- Eager futures ✅: have the obvious benefit of allowing us to already start with the tasks we know about 
-  before assembling the complete execution graph. This is especially useful when not all tasks are available at the same time. 
-- Deferred futures ✅: On the other hand, lazy futures permit a few optimizations for functions operating on the shared state, 
-  since we can assume there is nothing else we need to synchronize when a task is launched. This means:
+- Eager futures ✅: have the obvious benefit of allowing us to already start with the tasks we know about before
+  assembling the complete execution graph. This is especially useful when not all tasks are available at the same time.
+- Deferred futures ✅: On the other hand, lazy futures permit a few optimizations for functions operating on the shared
+  state, since we can assume there is nothing else we need to synchronize when a task is launched. This means:
     1. We can make extra assumptions about the condition of the shared state before waiting, and
     2. We don't have to handle a potential race with the task and its own continuations
-- Eager futures ✅: The library implements the synchronization of eager futures using atomic operations to reduce 
-  this synchronization cost. 
-- Both futures ✅: For applications with reasonably long tasks, the difference between the two is likely to be negligible.  
+- Eager futures ✅: The library implements the synchronization of eager futures using atomic operations to reduce this
+  synchronization cost.
+- Both futures ✅: For applications with reasonably long tasks, the difference between the two is likely to be
+  negligible.
 
 !!! hint "Deferred Future Continuations"
 
@@ -124,15 +137,33 @@ When both eager and lazy futures are applicable, a few criteria might be conside
     If the deferred future is already executing in one thread, this means it is *not thread safe*
     to attempt to attach a continuation in a second thread.      
 
+## Ready tasks
+
+When assembling task graphs, it's often useful to include constant values for which we already know the result but
+behave like a future type. This can be achieved through [make_ready_future]:
+
+{{ code_snippet("future_types/launching.cpp", "ready_future") }}
+
+The function returns a [vfuture], which represents a [basic_future] with no associated shared state extensions.
+
 ## Executors
 
-The concept defined for an [executor] uses Asio executors. This model for executors has been evolving for over a 
-decade and is widely adopted in C++. If the C++ standard eventually adopts a common vocabulary for executors, 
-the [executor] concept can be easily adjusted to handle these new executors.
+The concept defined for an [executor] uses Asio executors as defined
+by [P1393r0](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1393r0.html). This model for executors has been
+evolving for over a decade and is widely adopted in C++. If the C++ standard eventually adopts a common vocabulary for
+executors, the [executor] concept can be easily adjusted to handle these new executors types.
 
 ## Exceptions
 
 Future objects defined in this library handle exceptions the same way [std::future] does. If the task throws an
-exception internally, the exception is rethrown when we attempt to retrieve the value from the future. 
+exception internally, the exception is rethrown when we attempt to retrieve the value from the future
+with [basic_future::get].
+
+{{ code_snippet("future_types/launching.cpp", "throw_exception") }}
+
+When working without exceptions, we can avoid terminating the process by querying the state of the future before
+attempting to get its value.
+
+{{ code_snippet("future_types/launching.cpp", "query_exception") }}
 
 --8<-- "docs/references.md"

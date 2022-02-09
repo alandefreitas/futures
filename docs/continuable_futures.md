@@ -19,8 +19,12 @@ end
 
 ## Non-continuable tasks
 
-When we only need a single parallel task with future types, the main thread is allowed to wait or do
-some other work while the task is running.
+Consider what happens when we launch a task with C++11 [std::async]:
+
+{{ code_snippet("future_types/continuable.cpp", "std_async") }}
+
+When we only need a single parallel task with future types, the main thread is allowed to wait or do some other work
+while the task is running.
 
 <div class="mermaid">
 sequenceDiagram
@@ -33,9 +37,9 @@ sequenceDiagram
     deactivate Main
 </div>
 
-In this example, the main thread spent some time waiting but this is often OK, as long as it had nothing better
-to do but to wait for the asynchronous task. This is common in user interfaces that need to be refreshed
-while a longer task is running.
+In this example, the main thread spent some time waiting but this is often OK, as long as it had nothing better to do
+but to wait for the asynchronous task. This is common in user interfaces that need to be refreshed while a longer task
+is running.
 
 Now say we want to execute a sequence of asynchronous tasks as simple as:
 
@@ -49,8 +53,12 @@ C --> End
 Main --> End
 </div>
 
-As we shall see, [std::async] does not provide the mechanisms to make this happen properly. The first alternative
-that comes to mind is obviously waiting for one task after launching the next, where we would have:
+As we shall see, [std::async] does not provide the mechanisms to make this happen properly. The first alternative that
+usually comes to mind is waiting for one task after launching the next.
+
+{{ code_snippet("future_types/continuable.cpp", "wait_for_next") }}
+
+The code looks reasonable but, in that case, we would have:
 
 <div class="mermaid">
 sequenceDiagram
@@ -71,14 +79,18 @@ sequenceDiagram
     deactivate Main
 </div>
 
-We have a number of problems here. The more tasks we have, and the shorter the tasks, the less time the main thread
-has to do any useful work before waiting and the more time it spends waiting for tasks. Even worse, it's waiting for tasks
-we already know how they should continue. At a certain point, it's not even worth using asynchronous code at all.
+We have a number of problems here. The more tasks we have, and the shorter the tasks, the less time the main thread has
+to do any useful work before waiting and the more time it spends waiting for tasks. Even worse, it's waiting for tasks
+we already know how they should continue. At a certain point, it might not even be worth using asynchronous code at all.
 
 ## Polling
 
-The second alternative to solve this problem is polling. In this case, we would make task B wait for A before doing
-its work. The same for task B and C.
+The second alternative to solve this problem is polling. In this case, we would make task B wait for A before doing its
+work. The same for task B and C.
+
+{{ code_snippet("future_types/continuable.cpp", "polling") }}
+
+And now we have:
 
 <div class="mermaid">
 sequenceDiagram
@@ -94,27 +106,28 @@ sequenceDiagram
     C->>-Main: Return
 </div>
 
-This looks more reasonable. The main thread is not waiting for so long, and it has more time to do work.
-However, this outsources the cost of waiting to other threads while we know the initial task is not ready.
-Note for how long the tasks A, B, and C are active in this example.
+This might look more reasonable from the perspective of the main thread. We are not waiting for so long inline, and we
+have more time to do work in parallel. However, this outsources the cost of waiting to other threads even though we know
+the initial task is not ready. Note for how long the tasks A, B, and C are active in this example.
 
-This, the biggest problem with this strategy is that cannot scale properly. For every task in our application,
-we would need one idle thread waiting for the previous task. For instance, in an application with 2000 tasks,
-we would need to create 1999 tasks for polling the previous task and only one thread would be executing the 
-current task. 
+Thus, the biggest problem with this strategy is it cannot scale properly. For every task in our application, we would
+need one idle thread waiting for the previous task. In an application with 2000 tasks, we would need 1999 threads for
+polling the previous task and only one thread would to execute real work.
 
 ## Continuable futures
 
 Continuable futures allow us to launch a second task as a continuation to the first task, instead of an independent
 task.
- 
-```cpp
---8<-- "examples/future_types/continuable.cpp"
-```
 
-In this example, it's to up to the continuation to wait for the previous task. It's up to the previous task
-to launch its own continuations. In other words, task B does not have to wait for task A because task A is
-launching task B, which can just take it from there.
+{{ code_snippet("future_types/continuable.cpp", "continuables") }}
+
+Note we can use both the member function [basic_future::then] or the free function [then]. In this example,
+
+- it's to up to the continuation to wait for the previous task, and
+- it's up to the previous task to launch its own continuations.
+
+In other words, task B does not have to pool task A because task A is launching task B. Task B know A is ready and can
+just take it from there.
 
 <div class="mermaid">
 sequenceDiagram
@@ -136,21 +149,28 @@ sequenceDiagram
     deactivate C
 </div>
 
-In this solution, the main thread has more time to do useful work, such as scheduling other tasks, and 
-the processing time we spend on waiting is minimized. 
+In this solution, the main thread has more time to do useful work, such as scheduling other tasks, and the processing
+time we spend on waiting is minimized.
 
-For this reason, continuations are one of the most common proposed extensions for [std::future], including
-the original model presented by the [Microsoft PPL Library](https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?redirectedfrom=MSDN&view=msvc-160).
+For this reason, continuations are one of the most common proposed extensions for [std::future], including the original
+model presented by
+the [Microsoft PPL Library](https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?redirectedfrom=MSDN&view=msvc-160)
+which inspired the [C++ Extensions for Concurrency].
 
 ## Deferred continuations
 
-The process of attaching continuations to a future whose main task is potentially executing 
-has a synchronization cost. The process attaching the continuation needs to check the future is not
-attempting to run the continuations and vice-versa. This synchronization cost was identified
-in [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf).
+The process of attaching continuations to a future whose main task is potentially executing has a synchronization cost.
+When attaching a continuation, we to check if the future is not attempting to run the continuations and vice-versa. This
+synchronization cost was identified in [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf).
 
-The library implements this procedure with atomic queues to avoid this cost. However, in some contexts, 
-the cost of continuations can be further minimized by [launching deferred futures](/futures/launching/).
+The library implements this procedure with [atomic](https://en.cppreference.com/w/cpp/atomic/atomic) queues to avoid
+this cost. However, in some contexts, the cost of continuations can be further minimized
+by [launching deferred futures](/futures/launching/).
+
+{{ code_snippet("future_types/continuable.cpp", "deferred_continuables") }}
+
+The continuation to a deferred shared state created with [schedule] is also deferred by default. When the task related
+to any shared state is deferred, we have a different sequence of events:
 
 <div class="mermaid">
 sequenceDiagram
@@ -173,7 +193,7 @@ sequenceDiagram
     deactivate Main
 </div>
 
-In this case, the synchronization cost can be completely removed because the task will
-only be sent to the executor once its continuations have already been attached to it. 
+In this case, the synchronization cost can be completely removed because the task will only be sent to the executor once
+its continuations have already been attached to it.
 
 --8<-- "docs/references.md"

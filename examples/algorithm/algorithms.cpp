@@ -6,30 +6,34 @@ int
 main() {
     using namespace futures;
 
+    //[algorithm Parallel Algorithms
     std::vector<int> v(50000);
     std::iota(v.begin(), v.end(), 1);
 
-    // Parallel by default
-    int c = futures::reduce(v, 0);
+    int c = futures::reduce(v, 0); // parallel by default
     std::cout << "Sum: " << c << '\n';
+    //]
 
-    // The launch policy can be replaced with a custom executor
-    asio::thread_pool custom_pool2(4);
-    asio::thread_pool::executor_type ex2 = custom_pool2.executor();
-    futures::for_each(ex2, v.begin(), v.begin() + 10, [](int x) {
+    //[executor Custom executor
+    asio::thread_pool pool(4);
+    auto ex = pool.executor();
+    futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
         std::cout << x << '\n';
     });
+    //]
 
-    // Use a custom partitioner
-    auto p = [](std::vector<int>::iterator first,
-                std::vector<int>::iterator last) {
+    //[partitioner Defining a custom partitioner
+    auto p = [](auto first, auto last) {
         return std::next(first, (last - first) / 2);
     };
-    auto it = find(ex2, p, v, 3000);
+    //]
+    //[partitioner_algorithm Using a custom partitioner
+    auto it = find(ex, p, v, 3000);
     if (it != v.end()) {
-        std::cout << *it << " found at v[" << it - v.begin() << "]"
-                  << '\n';
+        std::ptrdiff_t pos = it - v.begin();
+        std::cout << *it << " found at v[" << pos << "]\n";
     }
+    //]
 
     return 0;
 }

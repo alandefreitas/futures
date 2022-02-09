@@ -6,6 +6,7 @@ int
 main() {
     using namespace futures;
 
+    //[conjunctions Conjunctions
     auto f1 = futures::async([] { std::cout << "f1" << '\n'; });
     auto f2 = futures::async([] { std::cout << "f2" << '\n'; });
     auto f3 = futures::async([] { std::cout << "f3" << '\n'; });
@@ -22,6 +23,7 @@ main() {
         return a * b * c;
     });
     std::cout << f10.get() << '\n';
+    //]
 
     return 0;
 }
