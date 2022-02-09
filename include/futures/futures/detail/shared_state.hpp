@@ -377,7 +377,7 @@ namespace futures::detail {
                     auto lk = create_wait_lock();
                     std::function<void()> local_callback(
                         std::move(wait_callback_));
-                    relocker relock(lk);
+                    relocker rlk(lk);
                     local_callback();
                 }
             }
@@ -521,6 +521,12 @@ namespace futures::detail {
         /// ready with a value.
         ///
         ~shared_state() override {
+            if constexpr (Options::is_continuable) {
+                // The state might have been destroyed by the executor
+                // by now. Use another shared reference to the
+                // continuations.
+                this->get_continuations_source().request_run();
+            }
             if (this->succeeded()) {
                 shared_state_storage<R>::destroy();
             }

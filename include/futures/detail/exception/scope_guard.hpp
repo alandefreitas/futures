@@ -72,7 +72,7 @@ namespace futures {
                 std::is_nothrow_copy_constructible<FunctionType>::value)
                 : scope_guard_impl(
                     as_const(fn),
-                    makeFailsafe(
+                    make_fail_safe(
                         std::is_nothrow_copy_constructible<FunctionType>{},
                         &fn)) {}
 
@@ -80,7 +80,7 @@ namespace futures {
                 std::is_nothrow_copy_constructible<FunctionType>::value)
                 : scope_guard_impl(
                     fn,
-                    makeFailsafe(
+                    make_fail_safe(
                         std::is_nothrow_copy_constructible<FunctionType>{},
                         &fn)) {}
 
@@ -88,7 +88,7 @@ namespace futures {
                 std::is_nothrow_move_constructible<FunctionType>::value)
                 : scope_guard_impl(
                     std::move_if_noexcept(fn),
-                    makeFailsafe(
+                    make_fail_safe(
                         std::is_nothrow_move_constructible<FunctionType>{},
                         &fn)) {}
 
@@ -125,13 +125,13 @@ namespace futures {
 
         private:
             static scope_guard_impl_base
-            makeFailsafe(std::true_type, const void *) noexcept {
+            make_fail_safe(std::true_type, const void *) noexcept {
                 return make_empty_scope_guard();
             }
 
             template <typename Fn>
             static auto
-            makeFailsafe(std::false_type, Fn *fn) noexcept
+            make_fail_safe(std::false_type, Fn *fn) noexcept
                 -> scope_guard_impl<decltype(std::ref(*fn)), InvokeNoexcept> {
                 return scope_guard_impl<decltype(std::ref(*fn)), InvokeNoexcept>{
                     std::ref(*fn)

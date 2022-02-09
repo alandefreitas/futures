@@ -6,7 +6,8 @@
 TEST_CASE(TEST_CASE_PREFIX "Launch") {
     using namespace futures;
 
-    STATIC_REQUIRE(std::is_copy_constructible_v<cfuture<void>>);
+    STATIC_REQUIRE(!std::is_copy_constructible_v<cfuture<void>>);
+    STATIC_REQUIRE(std::is_copy_constructible_v<shared_cfuture<void>>);
 
     auto test_launch_function = [](std::string_view name, auto async_fn) {
         SECTION(name.data()) {

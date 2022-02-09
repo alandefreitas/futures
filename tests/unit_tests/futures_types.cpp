@@ -25,6 +25,9 @@ TEST_CASE(TEST_CASE_PREFIX "Futures types") {
     }
 
     SECTION("Shared") {
+        STATIC_REQUIRE(!std::is_copy_constructible_v<cfuture<int>>);
+        STATIC_REQUIRE(std::is_copy_constructible_v<shared_cfuture<int>>);
+
         using future_options_t = future_options<continuable_opt>;
         using shared_state_options = detail::
             remove_future_option_t<shared_opt, future_options_t>;

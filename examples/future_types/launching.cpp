@@ -5,7 +5,7 @@
 int
 task_that_might_fail() {
     throw std::logic_error("This always fails");
-};
+}
 
 int
 main() {

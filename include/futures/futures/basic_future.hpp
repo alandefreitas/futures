@@ -10,6 +10,7 @@
 
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_copyable.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/futures/future_options.hpp>
 #include <futures/futures/stop_token.hpp>
@@ -17,6 +18,7 @@
 #include <futures/adaptor/detail/make_continuation_shared_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
+#include <futures/futures/detail/share_if_not_shared.hpp>
 #include <futures/futures/detail/shared_state.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 #include <futures/futures/detail/traits/is_executor_then_function.hpp>
@@ -82,7 +84,8 @@ namespace futures {
     ///
     template <class T, class Options = future_options<>>
     class basic_future
-        : private detail::conditional_base<!Options::is_always_detached, bool>
+        : private detail::maybe_copyable<Options::is_shared>
+        , private detail::conditional_base<!Options::is_always_detached, bool>
     {
     private:
         using join_base = detail::
@@ -136,7 +139,8 @@ namespace futures {
         /// \param s Future shared state
         explicit basic_future(
             const std::shared_ptr<shared_state_type> &s) noexcept
-            : join_base(initial_join_value()), state_{ std::move(s) } {}
+            : detail::maybe_copyable<Options::is_shared>{},
+              join_base(initial_join_value()), state_{ std::move(s) } {}
 
     public:
         /// \name Public types
@@ -156,7 +160,8 @@ namespace futures {
         ///
         /// Null shared state. Properties inherited from base classes.
         basic_future() noexcept
-            : join_base(initial_join_value()), state_{ nullptr } {};
+            : detail::maybe_copyable<Options::is_shared>{},
+              join_base(initial_join_value()), state_{ nullptr } {};
 
         /// \brief Copy constructor for shared futures only.
         ///
@@ -168,17 +173,34 @@ namespace futures {
         /// \param other Another future used as source to initialize the shared
         /// state
         basic_future(const basic_future &other)
-            : join_base{ other.join_base::get() }, state_{ other.state_ } {
+            : detail::maybe_copyable<Options::is_shared>{ other },
+              join_base{ other.join_base::get() }, state_{ other.state_ } {
             static_assert(
                 Options::is_shared,
                 "Copy constructor is only available for shared futures");
         }
 
+#ifndef FUTURES_DOXYGEN
+    private:
+        // This makes a non-eligible template instances have two copy
+        // constructors, which makes it not copy constructible.
+        // This is the least intrusive way to achieve a conditional
+        // copy constructor that fails std::is_copy_constructible before
+        // C++20.
+        struct moo
+        {};
+        basic_future(
+            std::conditional_t<!Options::is_shared, const basic_future &, moo>,
+            moo = moo());
+    public:
+#endif
+
         /// \brief Move constructor.
         ///
         /// Inherited from base classes.
         basic_future(basic_future &&other) noexcept
-            : join_base{ std::move(other.join_base::get()) },
+            : detail::maybe_copyable<Options::is_shared>{},
+              join_base{ std::move(other.join_base::get()) },
               state_{ std::move(other.state_) } {
             other.state_.reset();
         }
@@ -197,14 +219,6 @@ namespace futures {
                 }
             }
             wait_if_last();
-            if constexpr (Options::is_continuable) {
-                if (valid()) {
-                    auto &cs = state_->get_continuations_source();
-                    if (cs.run_possible()) {
-                        cs.request_run();
-                    }
-                }
-            }
         }
 
         /// \brief Copy assignment for shared futures only.
@@ -300,12 +314,12 @@ namespace futures {
                 = basic_future<next_value_type, next_future_options>;
 
             // Create task for continuation future
-            detail::continuations_source continuations_handle
+            detail::continuations_source cont_source
                 = state_->get_continuations_source();
             detail::unwrap_and_continue_task<
                 std::decay_t<basic_future>,
                 std::decay_t<Fn>>
-                task{ move_if_not_shared(*this), std::forward<Fn>(fn) };
+                task{ detail::move_if_not_shared(*this), std::forward<Fn>(fn) };
 
             // Create shared state for next future
             auto state = detail::make_continuation_shared_state<
@@ -313,21 +327,19 @@ namespace futures {
                 next_future_options>(ex, std::move(task));
             next_future_type fut(state);
 
-            // Task that sets the next state by applying the continuation
+            // Push task to set next state to this continuation list
             auto apply_fn =
                 [state = std::move(state), task = std::move(task)]() mutable {
                 state->apply(std::move(task));
             };
 
-            // make task copyable because `before` is not copyable
             auto fn_shared_ptr = std::make_shared<decltype(apply_fn)>(
                 std::move(apply_fn));
             auto copyable_handle = [fn_shared_ptr]() {
                 (*fn_shared_ptr)();
             };
 
-            // push task to this continuation list
-            continuations_handle.push(ex, copyable_handle);
+            cont_source.push(ex, copyable_handle);
 
             return fut;
         }
@@ -451,6 +463,20 @@ namespace futures {
             }
         }
 
+
+        /// \brief Get exception pointer without throwing exception
+        ///
+        /// This extends std::future so that we can always check if the future
+        /// threw an exception
+        std::exception_ptr
+        get_exception_ptr() {
+            if (!valid()) {
+                detail::throw_exception<future_uninitialized>();
+            }
+            state_->wait();
+            return state_->get_exception_ptr();
+        }
+
         /// \brief Create another future whose state is shared
         ///
         /// Create a shared variant of the current future type.
@@ -476,17 +502,6 @@ namespace futures {
             return res;
         }
 
-        /// \brief Get exception pointer without throwing exception
-        ///
-        /// This extends std::future so that we can always check if the future
-        /// threw an exception
-        std::exception_ptr
-        get_exception_ptr() {
-            if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
-            }
-            return state_->get_exception_ptr();
-        }
 
         /// \brief Checks if the future refers to a shared state
         [[nodiscard]] bool
@@ -706,6 +721,21 @@ namespace futures {
     using cfuture = basic_future<
         T,
         future_options<executor_opt<default_executor_type>, continuable_opt>>;
+
+    /// \brief A deferred future type
+    template <class T>
+    using dfuture = basic_future<
+        T,
+        future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
+
+    /// \brief A deferred future type with lazy continuations
+    template <class T>
+    using dcfuture = basic_future<
+        T,
+        future_options<
+            executor_opt<default_executor_type>,
+            continuable_opt,
+            always_deferred_opt>>;
 
     /// \brief A future type with lazy continuations and stop tokens
     ///

@@ -91,39 +91,56 @@ namespace futures::detail {
                 // Previous is not continuable or both are deferred, so we don't
                 // need the continuations because next will wait for prev.
 
-                // Create task for continuation future
-                continuations_source cs_backup = copy_continuations_source(
-                    before);
-                unwrap_and_continue_task<
-                    std::decay_t<Future>,
-                    std::decay_t<Function>>
-                    task{ move_if_not_shared(std::forward<Future>(before)),
-                          std::forward<Function>(after) };
-
-                // Create shared state for next future
-                auto state = detail::make_continuation_shared_state<
-                    next_value_type,
-                    next_future_options>(ex, std::move(task));
-                next_future_type fut(state);
-
-                // Attach or launch the future
                 if constexpr (is_deferred_v<next_future_type>) {
+                    // Create a shared version of the previous future, because
+                    // multiple handles will need to access this shared state
+                    // now Create task for the continuation future
+                    auto shared_before = before.share();
+
+                    unwrap_and_continue_task<
+                        std::decay_t<decltype(shared_before)>,
+                        std::decay_t<Function>>
+                        task{ shared_before, std::forward<Function>(after) };
+
+                    // Create shared state for the next future
+                    auto state = detail::make_continuation_shared_state<
+                        next_value_type,
+                        next_future_options>(ex, std::move(task));
+                    next_future_type fut(state);
+
                     // if before is lazy -> continuation lazy by default
                     // - after.wait() will invoke before.wait() inline
                     // - after.get() will already post the continuation task
-                    state->set_wait_callback(
-                        [&before = task.before_]() mutable { before.wait(); });
+                    state->set_wait_callback([shared_before]() mutable {
+                        shared_before.wait();
+                    });
+                    return fut;
                 } else {
+                    // Create a shared version of the previous future, because
+                    // multiple handles will need to access this shared state
+                    // now Create task for the continuation future
+                    unwrap_and_continue_task<
+                        std::decay_t<Future>,
+                        std::decay_t<Function>>
+                        task{ move_if_not_shared(before),
+                              std::forward<Function>(after) };
+
+                    // Create shared state for the next future
+                    auto state = detail::make_continuation_shared_state<
+                        next_value_type,
+                        next_future_options>(ex, std::move(task));
+                    next_future_type fut(state);
+
                     // Before not continuable -> both futures are eager
                     // - post a task that starts polling
                     auto poll_and_set_value =
                         [state = std::move(state),
-                         f = std::move(task)]() mutable {
-                        state->apply(std::move(f));
+                         task = std::move(task)]() mutable {
+                        state->apply(std::move(task));
                     };
                     asio::post(ex, std::move(poll_and_set_value));
+                    return fut;
                 }
-                return fut;
             }
         }
     };

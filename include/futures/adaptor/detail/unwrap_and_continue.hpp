@@ -205,10 +205,9 @@ namespace futures::detail {
             Future &&before_future,
             Function &&continuation,
             PrefixArgs &&...prefix_args) const {
-            future_value_t<Future> prev_state = before_future.get();
             return continuation(
                 std::forward<PrefixArgs>(prefix_args)...,
-                prev_state.get());
+                before_future.get().get());
         }
 
         template <

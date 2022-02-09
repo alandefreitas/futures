@@ -63,7 +63,7 @@ namespace futures {
             !is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<Executor, Function, Future>::is_valid,
+            detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
             // clang-format on
             int> = 0
 #endif
