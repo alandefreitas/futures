@@ -20,6 +20,7 @@ nav:
     - Continuations: adaptors/continuations.md
     - Conjunctions: adaptors/conjunctions.md
     - Disjunctions: adaptors/disjunctions.md
+    - Task Graphs: adaptors/task_graphs.md
   - Parallel Algorithms:
     - Algorithms: algorithms/algorithms.md
     - Partitioners: algorithms/partitioners.md

@@ -3,10 +3,30 @@
 The function [when_any] is defined for task disjunctions. [when_any] returns a [when_any_future] that is able to
 aggregate different futures types and become ready when any of the internal futures is ready.
 
-{{ code_snippet("adaptors/disjunctions.cpp", "disjunction") }}
+Say we want to execute the following sequence of asynchronous tasks where the first future between `B` and `C` to get
+ready should be used as input for the continuation `D`.
+
+<div class="mermaid">
+graph LR
+subgraph Async
+A --> B
+A --> C
+B --> |set if first|D
+C --> |set if first|D
+end
+Main --> A
+D --> End
+Main --> End
+</div>
+
+Achieving that with the function [when_all] is as simple as:
+
+{{ code_snippet("adaptors/disjunctions.cpp", "small_graph") }}
 
 The [when_any_future] object acts as a proxy that checks the state of each internal future. If none of the internal
 futures is ready yet, [is_ready] returns `false`.
+
+{{ code_snippet("adaptors/disjunctions.cpp", "disjunction") }}
 
 An instance of [when_any_future] returns a [when_any_result] which keeps the sequence of futures and the index of the
 first future to get ready.

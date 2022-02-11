@@ -79,77 +79,6 @@ namespace futures {
         }
     }
 
-    /// \brief Wait for any future in a sequence to be ready
-    ///
-    /// \tparam Iterator Iterator type in a range of futures
-    /// \tparam Rep Duration Rep
-    /// \tparam Period Duration Period
-    /// \param timeout_duration Time to wait for
-    /// \param first Iterator to the first element in the range
-    /// \param last Iterator to one past the last element in the range
-    ///
-    /// \return Iterator to the future which got ready
-    template <
-        typename Iterator,
-        class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
-#endif
-        >
-    Iterator
-    wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
-        Iterator first,
-        Iterator last) {
-        if (const bool is_empty = first == last; is_empty) {
-            return last;
-        } else if (const bool is_single = std::next(first) == last; is_single) {
-            first->wait_for(timeout_duration);
-            return first;
-        } else {
-            detail::waiter_for_any waiter(first, last);
-            auto ready_future_index = waiter.wait_for(timeout_duration);
-            return std::next(first, ready_future_index);
-        }
-    }
-
-    /// \brief Wait for any future in a sequence to be ready
-    ///
-    /// \tparam Iterator Iterator type in a range of futures
-    /// \tparam Clock Time point clock
-    /// \tparam Duration Time point duration
-    /// \param timeout_time Limit time point
-    /// \param first Iterator to the first element in the range
-    /// \param last Iterator to one past the last element in the range
-    ///
-    /// \return Iterator to the future which got ready
-    template <
-        typename Iterator,
-        class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
-#endif
-        >
-    Iterator
-    wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
-        Iterator first,
-        Iterator last) {
-        if (const bool is_empty = first == last; is_empty) {
-            return last;
-        } else if (const bool is_single = std::next(first) == last; is_single) {
-            first->wait_until(timeout_time);
-            return first;
-        } else {
-            detail::waiter_for_any waiter(first, last);
-            auto ready_future_index = waiter.wait_until(timeout_time);
-            return std::next(first, ready_future_index);
-        }
-    }
 
     /// \brief Wait for any future in a sequence to be ready
     ///
@@ -186,68 +115,6 @@ namespace futures {
 
     /// \brief Wait for any future in a sequence to be ready
     ///
-    /// \tparam Range Iterator type in a range of futures
-    /// \tparam Rep Duration Rep
-    /// \tparam Period Duration Period
-    /// \param timeout_duration Time to wait for
-    /// \param r Range of futures
-    ///
-    /// \return Iterator to the future which got ready
-    template <
-        typename Range,
-        class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_range_v<Range> &&
-            is_future_v<range_value_t<Range>>
-            // clang-format on
-            ,
-            int> = 0
-#endif
-        >
-    iterator_t<Range>
-    wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
-        Range &&r) {
-        return wait_for_any_for(timeout_duration, std::begin(r), std::end(r));
-    }
-
-    /// \brief Wait for any future in a sequence to be ready
-    ///
-    /// \tparam Range Range of futures
-    /// \tparam Clock Time point clock
-    /// \tparam Duration Time point duration
-    /// \param timeout_time Limit time point
-    /// \param r Range of futures
-    ///
-    /// \return Iterator to the future which got ready
-    template <
-        typename Range,
-        class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_range_v<Range> &&
-            is_future_v<range_value_t<Range>>
-            // clang-format on
-            ,
-            int> = 0
-#endif
-        >
-    iterator_t<Range>
-    wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
-        Range &&r) {
-        return wait_for_any_until(timeout_time, std::begin(r), std::end(r));
-    }
-
-    /// \brief Wait for any future in a sequence to be ready
-    ///
     /// This function waits for all specified futures `fs`... to be ready.
     ///
     /// \note This function is adapted from `boost::wait_for_any`
@@ -280,86 +147,6 @@ namespace futures {
             detail::waiter_for_any waiter;
             waiter.add(std::forward<Fs>(fs)...);
             return waiter.wait();
-        }
-    }
-
-    /// \brief Wait for any future in a sequence to be ready
-    ///
-    /// \tparam Fs Future types
-    /// \tparam Rep Duration Rep
-    /// \tparam Period Duration Period
-    /// \param timeout_duration Time to wait for
-    /// \param fs Future objects
-    ///
-    /// \return Index of the future which got ready
-    template <
-        typename... Fs,
-        class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>
-            // clang-format on
-            ,
-            int> = 0
-#endif
-        >
-    std::size_t
-    wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
-        Fs &&...fs) {
-        constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (const bool is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
-            wait_for_all_for(timeout_duration, std::forward<Fs>(fs)...);
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            waiter.add(std::forward<Fs>(fs)...);
-            return waiter.wait_for(timeout_duration);
-        }
-    }
-
-    /// \brief Wait for any future in a sequence to be ready
-    ///
-    /// \tparam Fs Future types
-    /// \tparam Clock Time point clock
-    /// \tparam Duration Time point duration
-    /// \param timeout_time Limit time point
-    /// \param fs Future objects
-    ///
-    /// \return Index of the future which got ready
-    template <
-        typename... Fs,
-        class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>
-            // clang-format on
-            ,
-            int> = 0
-#endif
-        >
-    std::size_t
-    wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
-        Fs &&...fs) {
-        constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (const bool is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
-            wait_for_all_until(timeout_time, std::forward<Fs>(fs)...);
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            waiter.add(std::forward<Fs>(fs)...);
-            return waiter.wait_until(timeout_time);
         }
     }
 
@@ -407,6 +194,115 @@ namespace futures {
 
     /// \brief Wait for any future in a sequence to be ready
     ///
+    /// \tparam Iterator Iterator type in a range of futures
+    /// \tparam Rep Duration Rep
+    /// \tparam Period Duration Period
+    /// \param timeout_duration Time to wait for
+    /// \param first Iterator to the first element in the range
+    /// \param last Iterator to one past the last element in the range
+    ///
+    /// \return Iterator to the future which got ready
+    template <
+        typename Iterator,
+        class Rep,
+        class Period
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
+#endif
+        >
+    Iterator
+    wait_for_any_for(
+        const std::chrono::duration<Rep, Period> &timeout_duration,
+        Iterator first,
+        Iterator last) {
+        if (const bool is_empty = first == last; is_empty) {
+            return last;
+        } else if (const bool is_single = std::next(first) == last; is_single) {
+            first->wait_for(timeout_duration);
+            return first;
+        } else {
+            detail::waiter_for_any waiter(first, last);
+            auto ready_future_index = waiter.wait_for(timeout_duration);
+            return std::next(first, ready_future_index);
+        }
+    }
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
+    /// \tparam Range Iterator type in a range of futures
+    /// \tparam Rep Duration Rep
+    /// \tparam Period Duration Period
+    /// \param timeout_duration Time to wait for
+    /// \param r Range of futures
+    ///
+    /// \return Iterator to the future which got ready
+    template <
+        typename Range,
+        class Rep,
+        class Period
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<
+            // clang-format off
+            is_range_v<Range> &&
+            is_future_v<range_value_t<Range>>
+            // clang-format on
+            ,
+            int> = 0
+#endif
+        >
+    iterator_t<Range>
+    wait_for_any_for(
+        const std::chrono::duration<Rep, Period> &timeout_duration,
+        Range &&r) {
+        return wait_for_any_for(timeout_duration, std::begin(r), std::end(r));
+    }
+
+
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
+    /// \tparam Fs Future types
+    /// \tparam Rep Duration Rep
+    /// \tparam Period Duration Period
+    /// \param timeout_duration Time to wait for
+    /// \param fs Future objects
+    ///
+    /// \return Index of the future which got ready
+    template <
+        typename... Fs,
+        class Rep,
+        class Period
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<
+            // clang-format off
+            std::conjunction_v<is_future<std::decay_t<Fs>>...>
+            // clang-format on
+            ,
+            int> = 0
+#endif
+        >
+    std::size_t
+    wait_for_any_for(
+        const std::chrono::duration<Rep, Period> &timeout_duration,
+        Fs &&...fs) {
+        constexpr std::size_t size = sizeof...(Fs);
+        if constexpr (const bool is_empty = size == 0; is_empty) {
+            return 0;
+        } else if constexpr (const bool is_single = size == 1; is_single) {
+            wait_for_all_for(timeout_duration, std::forward<Fs>(fs)...);
+            return 0;
+        } else {
+            detail::waiter_for_any waiter;
+            waiter.add(std::forward<Fs>(fs)...);
+            return waiter.wait_for(timeout_duration);
+        }
+    }
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
     /// \tparam Tuple Tuple of futures
     /// \tparam Rep Duration Rep
     /// \tparam Period Duration Period
@@ -446,6 +342,118 @@ namespace futures {
                 waiter.add(f);
             });
             return waiter.wait_for(timeout_duration);
+        }
+    }
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
+    /// \tparam Iterator Iterator type in a range of futures
+    /// \tparam Clock Time point clock
+    /// \tparam Duration Time point duration
+    /// \param timeout_time Limit time point
+    /// \param first Iterator to the first element in the range
+    /// \param last Iterator to one past the last element in the range
+    ///
+    /// \return Iterator to the future which got ready
+    template <
+        typename Iterator,
+        class Clock,
+        class Duration
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0
+#endif
+        >
+    Iterator
+    wait_for_any_until(
+        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        Iterator first,
+        Iterator last) {
+        if (const bool is_empty = first == last; is_empty) {
+            return last;
+        } else if (const bool is_single = std::next(first) == last; is_single) {
+            first->wait_until(timeout_time);
+            return first;
+        } else {
+            detail::waiter_for_any waiter(first, last);
+            auto ready_future_index = waiter.wait_until(timeout_time);
+            return std::next(first, ready_future_index);
+        }
+    }
+
+
+
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
+    /// \tparam Range Range of futures
+    /// \tparam Clock Time point clock
+    /// \tparam Duration Time point duration
+    /// \param timeout_time Limit time point
+    /// \param r Range of futures
+    ///
+    /// \return Iterator to the future which got ready
+    template <
+        typename Range,
+        class Clock,
+        class Duration
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<
+            // clang-format off
+            is_range_v<Range> &&
+            is_future_v<range_value_t<Range>>
+            // clang-format on
+            ,
+            int> = 0
+#endif
+        >
+    iterator_t<Range>
+    wait_for_any_until(
+        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        Range &&r) {
+        return wait_for_any_until(timeout_time, std::begin(r), std::end(r));
+    }
+
+
+
+    /// \brief Wait for any future in a sequence to be ready
+    ///
+    /// \tparam Fs Future types
+    /// \tparam Clock Time point clock
+    /// \tparam Duration Time point duration
+    /// \param timeout_time Limit time point
+    /// \param fs Future objects
+    ///
+    /// \return Index of the future which got ready
+    template <
+        typename... Fs,
+        class Clock,
+        class Duration
+#ifndef FUTURES_DOXYGEN
+        ,
+        typename std::enable_if_t<
+            // clang-format off
+            std::conjunction_v<is_future<std::decay_t<Fs>>...>
+            // clang-format on
+            ,
+            int> = 0
+#endif
+        >
+    std::size_t
+    wait_for_any_until(
+        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        Fs &&...fs) {
+        constexpr std::size_t size = sizeof...(Fs);
+        if constexpr (const bool is_empty = size == 0; is_empty) {
+            return 0;
+        } else if constexpr (const bool is_single = size == 1; is_single) {
+            wait_for_all_until(timeout_time, std::forward<Fs>(fs)...);
+            return 0;
+        } else {
+            detail::waiter_for_any waiter;
+            waiter.add(std::forward<Fs>(fs)...);
+            return waiter.wait_until(timeout_time);
         }
     }
 

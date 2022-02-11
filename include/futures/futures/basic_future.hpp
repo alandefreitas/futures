@@ -683,6 +683,14 @@ namespace futures {
         : detail::is_in_args<always_deferred_opt, Args...>
     {};
     /// @}
+
+    /// \name Define deferred basic_futures as having an executor
+    /// @{
+    template <class T, class... Args>
+    struct has_executor<basic_future<T, future_options<Args...>>>
+        : detail::is_type_template_in_args<executor_opt, Args...>
+    {};
+    /// @}
 #endif
 
     /// \brief A simple future type similar to `std::future`
@@ -690,56 +698,38 @@ namespace futures {
     using future
         = basic_future<T, future_options<executor_opt<default_executor_type>>>;
 
-    /// \brief A future that simply holds a ready value
-    ///
-    /// These futures have no associated executor
-    template <class T>
-    using vfuture = basic_future<T, future_options<>>;
-
-    /// \brief A future type with stop tokens
-    ///
-    /// This class is like a version of jthread for futures
-    ///
-    /// It's a quite common use case that we need a way to cancel futures and
-    /// jfuture provides us with an even better way to do that.
-    ///
-    /// @ref async is adapted to return a jcfuture whenever:
-    /// 1. the callable receives 1 more argument than the caller provides @ref
-    /// async
-    /// 2. the first callable argument is a stop token
-    template <class T>
-    using jfuture = basic_future<
-        T,
-        future_options<executor_opt<default_executor_type>, stoppable_opt>>;
-
     /// \brief A future type with lazy continuations
     ///
-    /// This is what a @ref futures::async returns when the first function
-    /// parameter is not a @ref futures::stop_token
+    /// Futures with lazy continuations contains a list of continuation tasks
+    /// to be launched once the main task is complete.
+    ///
+    /// This is what a @ref futures::async returns by default when the first
+    /// function parameter is not a @ref futures::stop_token.
     ///
     template <class T>
     using cfuture = basic_future<
         T,
         future_options<executor_opt<default_executor_type>, continuable_opt>>;
 
-    /// \brief A deferred future type
+    /// \brief A future type with stop tokens
+    ///
+    /// Futures with stop token contain a stop token in their shared state.
+    /// This stop token can be used to request the main task to stop.
+    ///
+    /// It's a quite common use case that we need a way to cancel futures and
+    /// jfuture provides us with an even better way to do that.
+    ///
     template <class T>
-    using dfuture = basic_future<
+    using jfuture = basic_future<
         T,
-        future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
-
-    /// \brief A deferred future type with lazy continuations
-    template <class T>
-    using dcfuture = basic_future<
-        T,
-        future_options<
-            executor_opt<default_executor_type>,
-            continuable_opt,
-            always_deferred_opt>>;
+        future_options<executor_opt<default_executor_type>, stoppable_opt>>;
 
     /// \brief A future type with lazy continuations and stop tokens
     ///
-    /// This is what a @ref futures::async returns when the first function
+    /// It's a quite common use case that we need a way to cancel futures and
+    /// jcfuture provides us with an even better way to do that.
+    ///
+    /// This is what @ref futures::async returns when the first function
     /// parameter is a @ref futures::stop_token
     template <class T>
     using jcfuture = basic_future<
@@ -748,6 +738,47 @@ namespace futures {
             executor_opt<default_executor_type>,
             continuable_opt,
             stoppable_opt>>;
+
+    /// \brief A deferred future type
+    ///
+    /// This is a future type whose main task will only be launched when we
+    /// wait for its results from another execution context.
+    ///
+    /// This is what the function @ref schedule returns when the first task
+    /// parameter is not a stop token.
+    ///
+    template <class T>
+    using dfuture = basic_future<
+        T,
+        future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
+
+    /// \brief A deferred stoppable future type
+    ///
+    /// This is a future type whose main task will only be launched when we
+    /// wait for its results from another execution context.
+    ///
+    /// Once the task is launched, it can be requested to stop through its
+    /// stop source.
+    ///
+    /// This is what the function @ref schedule returns when the first task
+    /// parameter is a stop token.
+    ///
+    template <class T>
+    using jdfuture = basic_future<
+        T,
+        future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
+
+    /// \brief A future that simply holds a ready value
+    ///
+    /// This is the future type we use for constant values. This is the
+    /// future type we usually return from functions such as
+    /// @ref make_ready_future.
+    ///
+    /// These futures have no support for associated executors, continuations,
+    /// or deferred tasks.
+    ///
+    template <class T>
+    using vfuture = basic_future<T, future_options<>>;
 
     /// \brief A simple std::shared_future
     ///

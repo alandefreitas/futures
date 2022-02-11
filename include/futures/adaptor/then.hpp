@@ -100,10 +100,17 @@ namespace futures {
         >
     decltype(auto)
     then(Future &&before, Function &&after) {
-        return then(
-            ::futures::make_default_executor(),
-            std::forward<Future>(before),
-            std::forward<Function>(after));
+        if constexpr (has_executor_v<std::decay_t<Future>>) {
+            return then(
+                before.get_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        } else {
+            return then(
+                ::futures::make_default_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        }
     }
 
     /// \brief Operator to schedule a continuation function to a future

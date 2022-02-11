@@ -49,6 +49,7 @@
 [executor]: /futures/reference/Namespaces/namespacefutures/#using-is_executor
 [futures::async]: /futures/reference/Namespaces/namespacefutures/#function-async
 [is_future]: /futures/reference/Classes/structfutures_1_1is__future/
+[inline_executor]: /futures/reference/Classes/structfutures_1_1inline__executor/
 [basic_future]: /futures/reference/Classes/classfutures_1_1basic__future/
 [basic_future::get]: /futures/reference/Classes/classfutures_1_1basic__future/#function-get
 [basic_future::is_ready]: /futures/reference/Classes/classfutures_1_1basic__future/#function-is_ready

@@ -3,8 +3,23 @@
 Continuations are the main primitive to assemble asynchronous task graphs. An instance of [basic_future] can have
 continuations, which allows us to create tasks chains.
 
+Say we want to execute the following sequence of asynchronous tasks:
+
+<div class="mermaid">
+graph LR
+subgraph Async
+A --> B --> C
+end
+Main --> A
+C --> End
+Main --> End
+</div>
+
+Achieving that with the function [then] is as simple as:
+
 {{ code_snippet("future_types/continuable.cpp", "continuables") }}
 
+All instances of [basic_future] that support lazy continuations also have the member function [basic_future::then].
 However, the free function [then] is used to create a continuation to any future, which is itself another future value.
 
 {{ code_snippet("adaptors/continuations.cpp", "continuable") }}
@@ -13,8 +28,8 @@ However, the free function [then] is used to create a continuation to any future
 
 !!! hint "Continuation Function"
 
-    Only futures with lazy continuable have a [basic_future::then] member function. For the general case, we should 
-    use the free function [then].
+    Only futures with lazy continuations have a [basic_future::then] member function. For the general case, we should 
+    prefer the free function [then].
 
 The free function [then] allows us to create task graphs with future continuations regardless of underlying support for
 lazy continuations.

@@ -31,6 +31,7 @@ add_futures_example(adaptors/conjunctions.cpp)
 add_futures_example(adaptors/conjunctions_unwrap.cpp)
 add_futures_example(adaptors/disjunctions.cpp)
 add_futures_example(adaptors/disjunctions_unwrap.cpp)
+add_futures_example(adaptors/task_graph.cpp)
 add_futures_example(algorithm/algorithms.cpp)
 
 add_executable(networking-echo_server networking/echo_server.cpp)

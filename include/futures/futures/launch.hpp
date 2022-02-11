@@ -8,9 +8,9 @@
 #ifndef FUTURES_FUTURES_LAUNCH_HPP
 #define FUTURES_FUTURES_LAUNCH_HPP
 
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/futures/await.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/future_launcher.hpp>
 #include <futures/futures/detail/traits/launch_result.hpp>
 
@@ -66,7 +66,12 @@ namespace futures {
     /// \param f Function to execute
     /// \param args Function arguments
     ///
-    /// \return A future object with the function results
+    /// \return An eager future object whose shared state refers to the task
+    /// result. The type of this future object depends on the task. If the task
+    /// expects a @stop_token, the future will return a continuable, stoppable,
+    /// eager future. Otherwise, the function will return a continuable eager
+    /// future.
+    ///
     template <
         typename Executor,
         typename Function,
@@ -84,53 +89,11 @@ namespace futures {
         >
     decltype(auto)
     async(const Executor &ex, Function &&f, Args &&...args) {
-        return detail::schedule_future<true>(
-            ex,
-            std::forward<Function>(f),
-            std::forward<Args>(args)...);
+        return detail::schedule_future<
+            true>(ex, std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
-    /// \brief Schedule an asynchronous task with the specified executor
-    ///
-    /// This function schedules a deferred future. The task is only
-    /// scheduled in the executor when we wait for the value of the future.
-    ///
-    /// \see
-    ///      \ref basic_future
-    ///
-    /// \tparam Executor Executor from an execution context
-    /// \tparam Function A callable object
-    /// \tparam Args Arguments for the Function
-    ///
-    /// \param ex Executor
-    /// \param f Function to execute
-    /// \param args Function arguments
-    ///
-    /// \return A future object with the function results
-    template <
-        typename Executor,
-        typename Function,
-        typename... Args
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<Executor> &&
-            (std::is_invocable_v<Function, Args...> ||
-             std::is_invocable_v<Function, stop_token, Args...>),
-            // clang-format on
-            int> = 0
-#endif
-        >
-    decltype(auto)
-    schedule(const Executor &ex, Function &&f, Args &&...args) {
-        return detail::schedule_future<false>(
-            ex,
-            std::forward<Function>(f),
-            std::forward<Args>(args)...);
-    }
-
-    /// \brief Launch an async function with the default executor
+    /// \brief Launch an asynchronous task with the default executor
     ///
     /// \tparam Executor Executor from an execution context
     /// \tparam Function A callable object
@@ -162,7 +125,50 @@ namespace futures {
             std::forward<Args>(args)...);
     }
 
-    /// \brief Schedule an async function with the default executor
+    /// \brief Schedule an asynchronous task with the specified executor
+    ///
+    /// This function schedules a deferred future. The task will only
+    /// be launched in the executor when some other execution context waits
+    /// for the value associated to this future.
+    ///
+    /// \see
+    ///      \ref basic_future
+    ///
+    /// \tparam Executor Executor from an execution context
+    /// \tparam Function A callable object
+    /// \tparam Args Arguments for the Function
+    ///
+    /// \param ex Executor
+    /// \param f Function to execute
+    /// \param args Function arguments
+    ///
+    /// \return A deferred future object whose shared state refers to the task
+    /// result. The type of this future object depends on the task. If the task
+    /// expects a @stop_token, the future will return a stoppable deferred
+    /// future. Otherwise, the function will return a deferred future.
+    ///
+    template <
+        typename Executor,
+        typename Function,
+        typename... Args
+#ifndef FUTURES_DOXYGEN
+        ,
+        std::enable_if_t<
+            // clang-format off
+            is_executor_v<Executor> &&
+            (std::is_invocable_v<Function, Args...> ||
+             std::is_invocable_v<Function, stop_token, Args...>),
+            // clang-format on
+            int> = 0
+#endif
+        >
+    decltype(auto)
+    schedule(const Executor &ex, Function &&f, Args &&...args) {
+        return detail::schedule_future<
+            false>(ex, std::forward<Function>(f), std::forward<Args>(args)...);
+    }
+
+    /// \brief Schedule an asynchronous task with the default executor
     ///
     /// \tparam Executor Executor from an execution context
     /// \tparam Function A callable object

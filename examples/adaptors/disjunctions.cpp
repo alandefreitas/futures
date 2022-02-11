@@ -7,6 +7,21 @@ main() {
     using namespace futures;
 
     {
+        //[small_graph Task graph with conjunction
+        shared_cfuture<int> A = async([]() { return 2; }).share();
+
+        cfuture<int> B = then(A, [](int a) { return a * 2; });
+        cfuture<int> C = then(A, [](int a) { return a * 3; });
+
+        cfuture<int> D = then(when_any(B, C), [](int b_or_c) {
+            return b_or_c * 3;
+        });
+
+        std::cout << D.get() << '\n'; // 12 or 18
+        //]
+    }
+
+    {
         //[disjunction Tuple disjunction
         cfuture<int> f1 = async([]() { return 2; });
         cfuture<double> f2 = async([]() { return 3.5; });

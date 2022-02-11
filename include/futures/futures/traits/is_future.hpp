@@ -106,6 +106,16 @@ namespace futures {
     template <class T>
     constexpr bool is_deferred_v = is_always_deferred<T>::value;
 
+    /// \brief Determine if a future type has an executor
+    template <typename>
+    struct has_executor : std::false_type
+    {};
+
+    /// \brief Determine if a future type has an executor
+    template <class T>
+    constexpr bool has_executor_v = has_executor<T>::value;
+
+
     /** @} */ // \addtogroup future-traits Future Traits
     /** @} */ // \addtogroup futures Futures
 } // namespace futures

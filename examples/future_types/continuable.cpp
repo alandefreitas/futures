@@ -67,11 +67,11 @@ main() {
 
     {
         //[deferred_continuables Continuable futures
-        dcfuture<int> A = schedule([]() { return 65; });
+        auto A = schedule([]() { return 65; });
 
-        dcfuture<char> B = then(A, [](int v) { return static_cast<char>(v); });
+        auto B = then(A, [](int v) { return static_cast<char>(v); });
 
-        dcfuture<void> C = then(B, [](char c) {
+        auto C = then(B, [](char c) {
             std::cout << "Result " << c << '\n';
         });
 

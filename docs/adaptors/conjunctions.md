@@ -3,12 +3,31 @@
 ## Conjunctions
 
 Like in [C++ Extensions for Concurrency], the [when_all] function is defined for task conjunctions.
+Say we want to execute the following sequence of asynchronous tasks:
+
+<div class="mermaid">
+graph LR
+subgraph Async
+A --> B
+A --> C
+B --> D
+C --> D
+end
+Main --> A
+D --> End
+Main --> End
+</div>
+
+Achieving that with the function [when_all] is as simple as:
+
+{{ code_snippet("adaptors/conjunctions.cpp", "small_graph") }}
+
+The function [when_all] returns a [when_all_future] that is a future adaptor able to aggregate different futures types
+and become ready when all internal futures are ready.
 
 {{ code_snippet("adaptors/conjunctions.cpp", "conjunction") }}
 
-The function [when_all] returns a [when_all_future] that is a future adaptor able to aggregate different futures types
-and become ready when all internal futures are ready. When retrieving results, a tuple with the original future objects
-is returned.
+When retrieving results, a tuple with the original future objects is returned.
 
 {{ code_snippet("adaptors/conjunctions.cpp", "conjunction_return") }}
 

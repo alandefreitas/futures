@@ -8,6 +8,9 @@
 #ifndef FUTURES_DETAIL_UTILITY_EMPTY_BASE_HPP
 #define FUTURES_DETAIL_UTILITY_EMPTY_BASE_HPP
 
+#include <type_traits>
+#include <utility>
+
 namespace futures::detail {
     /** \addtogroup futures Futures
      *  @{

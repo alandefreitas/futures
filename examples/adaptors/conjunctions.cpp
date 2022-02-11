@@ -6,6 +6,21 @@ main() {
     using namespace futures;
 
     {
+        //[small_graph Task graph with conjunction
+        shared_cfuture<int> A = async([]() { return 2; }).share();
+
+        cfuture<int> B = then(A, [](int a) { return a * 3; });
+        cfuture<int> C = then(A, [](int a) { return a * 2; });
+
+        cfuture<int> D = then(when_all(B, C), [](int b, int c) {
+            return b + c;
+        });
+
+        std::cout << D.get() << '\n'; // 10
+        //]
+    }
+
+    {
         //[conjunction Future conjunction
         auto f1 = async([]() { return 2; });
         auto f2 = async([]() { return 3.5; });
