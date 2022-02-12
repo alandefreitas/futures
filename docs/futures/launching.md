@@ -48,9 +48,15 @@ sequenceDiagram
     end
 </div>
 
-Note that the shared state is a private implementation detail with which the user does not interact. This ensures all
-write operations will happen through the promised task and all read operations will happen through the future. It also
-enables optimizations based on assumptions about how specific future and promise types can access the shared state.
+!!! note "The shared state"
+
+    The shared state is a private implementation detail with which the user does not interact. 
+
+    This encapsulation ensures all write operations will happen through the promised task and all read operations 
+    will happen through the future.
+
+    It also enables optimizations based on assumptions about how specific future and promise types can access the 
+    shared state. In some circumstances, the shared state might not even need to be allocated. 
 
 ## Eager tasks
 

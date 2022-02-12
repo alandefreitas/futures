@@ -15,10 +15,15 @@ main() {
         std::cout << first_ready << '\n';
     });
     f5.wait();
+    //]
 
+    //[operators Operators
     auto f6 = futures::async([]() -> int { return 15; });
     auto f7 = futures::async([]() -> int { return 16; });
     auto f8 = f6 || f7;
+    //]
+
+    //[observers Observers
     auto r = f8.get();
     if (r.index == 0) {
         std::cout << std::get<0>(r.tasks).get() << '\n';

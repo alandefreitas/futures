@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_DETAIL_TRAITS_PREPEND_FUTURE_OPTION_HPP
 #define FUTURES_FUTURES_DETAIL_TRAITS_PREPEND_FUTURE_OPTION_HPP
 
-#include <futures/futures/future_options.hpp>
+#include <futures/futures/detail/future_options_list.hpp>
 
 namespace futures::detail {
     template <class Opt, class Opts, class = void>
@@ -20,10 +20,10 @@ namespace futures::detail {
     template <class Opt, class... Args>
     struct prepend_future_option<
         Opt,
-        future_options<Args...>,
+        future_options_list<Args...>,
         std::enable_if_t<!detail::is_in_args_v<Opt>>>
     {
-        using type = future_options<Opt, Args...>;
+        using type = future_options_list<Opt, Args...>;
     };
 
     template <class Opt, class Opts>

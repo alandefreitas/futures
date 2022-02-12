@@ -6,21 +6,26 @@ int
 main() {
     using namespace futures;
 
-    //[launching Launching Futures
-    auto f1 = async([] {
+    //[launching Basic Usage
+    cfuture<void> f1 = async([] {
         std::cout << "Task 1 in default executor. A thread pool.\n";
     });
 
-    auto f2 = std::async([] {
+    // analogous to:
+    std::future<void> f2 = std::async([] {
         std::cout << "Task 2 in a new thread from std::async.\n";
     });
+    //]
 
+    //[executor Custom executor
     asio::thread_pool custom_pool(1);
     asio::thread_pool::executor_type ex = custom_pool.executor();
     auto f3 = async(ex, [] {
         std::cout << "Task 3 in a custom executor.\n";
     });
+    //]
 
+    //[stoppable Stop token
     auto f4 = async(ex, [](stop_token st) {
         int a = 0;
         while (!st.stop_requested()) {
@@ -28,12 +33,18 @@ main() {
         }
         std::cout << "Task 4 stopped when a = " << a << '\n';
     });
-
-    f1.wait();
-    f2.wait();
-    f3.wait();
+    // ...
     f4.request_stop();
-    f4.wait();
+    //]
+
+    //[deferred Deferred sender
+    auto f5 = schedule([] {
+        std::cout << "Deferred task.\n";
+    });
+    //]
+
+    //[interop Interoperation
+    wait_for_all(f1, f2, f3, f4, f5);
     //]
 
     return 0;

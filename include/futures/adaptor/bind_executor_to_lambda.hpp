@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_BIND_EXECUTOR_TO_LAMBDA_HPP
-#define FUTURES_BIND_EXECUTOR_TO_LAMBDA_HPP
+#ifndef FUTURES_ADAPTOR_BIND_EXECUTOR_TO_LAMBDA_HPP
+#define FUTURES_ADAPTOR_BIND_EXECUTOR_TO_LAMBDA_HPP
 
 #include <futures/detail/traits/is_callable.hpp>
 #include <futures/executor/is_executor.hpp>
@@ -80,4 +80,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_BIND_EXECUTOR_TO_LAMBDA_HPP
+#endif // FUTURES_ADAPTOR_BIND_EXECUTOR_TO_LAMBDA_HPP

@@ -19,6 +19,7 @@
 #include <futures/detail/traits/is_tuple.hpp>
 #include <futures/futures/launch.hpp>
 #include <futures/futures/traits/to_future.hpp>
+#include <futures/futures/is_ready.hpp>
 #include <array>
 #include <optional>
 #include <condition_variable>

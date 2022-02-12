@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_WAIT_FOR_ALL_HPP
 #define FUTURES_FUTURES_WAIT_FOR_ALL_HPP
 
-#include <futures/adaptor/ready_future.hpp>
+#include <futures/adaptor/make_ready_future.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/range_value.hpp>

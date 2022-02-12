@@ -72,7 +72,7 @@
 #include <futures/futures/wait_for_any.hpp>
 
 // Adaptors
-#include <futures/adaptor/ready_future.hpp>
+#include <futures/adaptor/make_ready_future.hpp>
 #include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_all.hpp>
 #include <futures/adaptor/when_any.hpp>

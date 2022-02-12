@@ -648,7 +648,8 @@ namespace futures {
     /// @name Define shared basic_futures as supporting shared values
     /// @{
     template <class T, class... Args>
-    struct is_shared_future<basic_future<T, future_options<Args...>>>
+    struct is_shared_future<
+        basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_in_args<shared_opt, Args...>
     {};
     /// @}
@@ -656,7 +657,7 @@ namespace futures {
     /// @name Define continuable basic_futures as supporting lazy continuations
     /// @{
     template <class T, class... Args>
-    struct is_continuable<basic_future<T, future_options<Args...>>>
+    struct is_continuable<basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_in_args<continuable_opt, Args...>
     {};
     /// @}
@@ -667,19 +668,20 @@ namespace futures {
     ///
     /// @{
     template <class T, class... Args>
-    struct is_stoppable<basic_future<T, future_options<Args...>>>
+    struct is_stoppable<basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_in_args<stoppable_opt, Args...>
     {};
 
     template <class T, class... Args>
-    struct has_stop_token<basic_future<T, future_options<Args...>>>
+    struct has_stop_token<basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_in_args<stoppable_opt, Args...>
     {};
 
     /// @name Define deferred basic_futures as being deferred
     /// @{
     template <class T, class... Args>
-    struct is_always_deferred<basic_future<T, future_options<Args...>>>
+    struct is_always_deferred<
+        basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_in_args<always_deferred_opt, Args...>
     {};
     /// @}
@@ -687,7 +689,7 @@ namespace futures {
     /// @name Define deferred basic_futures as having an executor
     /// @{
     template <class T, class... Args>
-    struct has_executor<basic_future<T, future_options<Args...>>>
+    struct has_executor<basic_future<T, detail::future_options_list<Args...>>>
         : detail::is_type_template_in_args<executor_opt, Args...>
     {};
     /// @}

@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_DETAIL_TRAITS_REMOVE_FUTURE_OPTION_HPP
 #define FUTURES_FUTURES_DETAIL_TRAITS_REMOVE_FUTURE_OPTION_HPP
 
-#include <futures/futures/future_options.hpp>
+#include <futures/futures/detail/future_options_list.hpp>
 #include <futures/futures/detail/traits/prepend_future_option.hpp>
 
 namespace futures::detail {
@@ -19,29 +19,29 @@ namespace futures::detail {
     };
 
     template <class Opt>
-    struct remove_future_option<Opt, future_options<>>
+    struct remove_future_option<Opt, future_options_list<>>
     {
-        using type = future_options<>;
+        using type = future_options_list<>;
     };
 
     template <class Opt>
-    struct remove_future_option<Opt, future_options<Opt>>
+    struct remove_future_option<Opt, future_options_list<Opt>>
     {
-        using type = future_options<>;
+        using type = future_options_list<>;
     };
 
     template <class Opt, class Arg0>
-    struct remove_future_option<Opt, future_options<Arg0>>
+    struct remove_future_option<Opt, future_options_list<Arg0>>
     {
-        using type = future_options<Arg0>;
+        using type = future_options_list<Arg0>;
     };
 
     template <class Opt, class Arg0, class... Args>
-    struct remove_future_option<Opt, future_options<Arg0, Args...>>
+    struct remove_future_option<Opt, future_options_list<Arg0, Args...>>
     {
         using type = prepend_future_option_t<
             Arg0,
-            typename remove_future_option<Opt, future_options<Args...>>::type>;
+            typename remove_future_option<Opt, future_options_list<Args...>>::type>;
     };
 
     template <class Opt, class Opts>

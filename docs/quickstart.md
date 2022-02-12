@@ -116,14 +116,36 @@
 
 ## Hello world 👋
 
-{{ code_snippet("quickstart/launching.cpp", "launching") }}
+### Launching Futures
 
-{{ code_snippet("quickstart/continuations.cpp", "continuations") }}
+{{ code_snippet("quickstart/launching.cpp", "launching") }}
+{{ code_snippet("quickstart/launching.cpp", "executor") }}
+{{ code_snippet("quickstart/launching.cpp", "stoppable") }}
+{{ code_snippet("quickstart/launching.cpp", "deferred") }}
+{{ code_snippet("quickstart/launching.cpp", "interop") }}
+
+### Continuations
+
+{{ code_snippet("quickstart/continuations.cpp", "basic") }}
+{{ code_snippet("quickstart/continuations.cpp", "operator") }}
+{{ code_snippet("quickstart/continuations.cpp", "unwrapping") }}
+
+### Conjunctions
 
 {{ code_snippet("quickstart/conjunctions.cpp", "conjunctions") }}
+{{ code_snippet("quickstart/conjunctions.cpp", "operator") }}
+{{ code_snippet("quickstart/conjunctions.cpp", "unwrapping") }}
+
+### Disjunctions
 
 {{ code_snippet("quickstart/disjunctions.cpp", "disjunctions") }}
+{{ code_snippet("quickstart/disjunctions.cpp", "operators") }}
+{{ code_snippet("quickstart/disjunctions.cpp", "observers") }}
+
+### Algorithms
 
 {{ code_snippet("quickstart/algorithms.cpp", "algorithms") }}
+{{ code_snippet("quickstart/algorithms.cpp", "executor") }}
+{{ code_snippet("quickstart/algorithms.cpp", "partitioner") }}
 
 --8<-- "docs/references.md"

@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fix bug in doxybook reference anchors
-    let brokenAnchors = ['#function-', '#variable-']
+    let brokenAnchors = ['#function-', '#variable-', '#using-']
     for (const anchor of brokenAnchors) {
         for (const link of futures_reference_link) {
             anchorPos = link.href.lastIndexOf(anchor);
