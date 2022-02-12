@@ -45,6 +45,9 @@ With [when_any_result] unwrapping, this becomes a powerful tool to manage contin
 
 {{ code_snippet("adaptors/disjunctions.cpp", "disjunction_result_unwrap") }}
 
+Note that the operator `&&` uses expression templates to create a single disjunction of futures. Thus, `f1 || f2 || f3`
+is equivalent to `when_any(f1, f2, f3)` rather than `when_any(when_any(f1, f2), f3)`.
+
 The operator `||` can also be used with lambdas as an easy way to launch new tasks already into disjunctions:
 
 {{ code_snippet("adaptors/disjunctions.cpp", "operator_lambda") }}

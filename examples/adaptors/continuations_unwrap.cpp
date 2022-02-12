@@ -28,26 +28,31 @@ main() {
     }
 
     {
-        //[verbose Verbose continuations
+        //[verbose_create Task returning 3 values
         auto f1 = async([]() {
             return std::make_tuple(
                 make_ready_future(1),
                 make_ready_future(2.0),
                 make_ready_future<std::string>("3"));
         });
+        //]
+        //[verbose_continue Verbose continuations
         cfuture<void> f2 = then(
             f1,
             [](cfuture<std::tuple<
                    vfuture<int>,
                    vfuture<double>,
                    vfuture<std::string>>> f) {
+            // retrieve futures
             auto t = f.get();
             vfuture<int> fa = std::move(std::get<0>(t));
             vfuture<double> fb = std::move(std::get<1>(t));
             vfuture<std::string> fc = std::move(std::get<2>(t));
+            // get their values
             int a = fa.get();
             double b = fb.get();
             std::string c = fc.get();
+            // use values
             std::cout << a << ' ' << b << ' ' << c << '\n';
             });
         //]
@@ -226,6 +231,17 @@ main() {
              return f.get();
         };
         std::cout << f2.get() << '\n';
+        //]
+    }
+
+    {
+        //[return_future Getting a future from a future
+        cfuture<cfuture<int>> f = async([]() {
+            return async([]() {
+                return 1;
+            });
+        });
+        std::cout << f.get().get() << '\n';
         //]
     }
 

@@ -46,7 +46,7 @@ main() {
         //[reschedule_struct Structure to reschedule operation
         struct graph_launcher
         {
-            promise<int> C_completed;
+            promise<int> end_;
             // ...
             //]
 
@@ -58,7 +58,7 @@ main() {
                 cfuture<int> A = async([]() { return 2; });
                 inline_executor ex = make_inline_executor();
                 then(ex, A, [this](int a) { schedule_B(a); }).detach();
-                return C_completed.get_future();
+                return end_.get_future();
             }
             // ...
             //]
@@ -90,7 +90,7 @@ main() {
             schedule_C() {
                 async([this]() {
                     int r = handle_success();
-                    C_completed.set_value(1);
+                    end_.set_value(1);
                     return r;
                 }).detach();
             }
@@ -108,12 +108,12 @@ main() {
         //[loop_struct Structure to reschedule operation
         struct graph_launcher
         {
-            promise<int> C_completed;
+            promise<int> end_;
 
             cfuture<int>
             start() {
                 schedule_A();
-                return C_completed.get_future();
+                return end_.get_future();
             }
             // ...
             //]
@@ -157,7 +157,7 @@ main() {
             schedule_C() {
                 async([this]() {
                     int r = handle_success();
-                    C_completed.set_value(1);
+                    end_.set_value(1);
                     return r;
                 }).detach();
             }

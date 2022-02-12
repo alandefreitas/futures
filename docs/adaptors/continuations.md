@@ -92,7 +92,13 @@ However, continuations involve accessing the future object from the previous tas
 the previous task is derived from a number of container adaptors can easily become verbose and error-prone. For
 instance, consider a very simple continuation to a task that depends on 3 other futures objects.
 
-{{ code_snippet("adaptors/continuations_unwrap.cpp", "verbose") }}
+This is the task for which we need a continuation.
+
+{{ code_snippet("adaptors/continuations_unwrap.cpp", "verbose_create") }}
+
+And this is how verbose the continuation looks like without unwrapping:
+
+{{ code_snippet("adaptors/continuations_unwrap.cpp", "verbose_continue") }}
 
 Although this pattern could be slightly simplified with more recent C++ features, such as structured bindings, this
 pattern is unmaintainable. To simplify this process, the function [then] accepts continuations that expect the unwrapped
@@ -215,6 +221,21 @@ be `cfuture<int>`. However, this is not always possible if the unwrapping overlo
 The continuation with the highest priority is always the safer and usually more verbose continuation. This means a
 template continuation will usually unwrap to `future<T>` over `T` continuation input variants. On the other hand, this
 is also useful since the most verbose continuation patterns are the ones that could benefit the most from `auto`.
+
+## Return type unwrapping
+
+Future are allowed to expect other futures:
+
+{{ code_snippet("adaptors/continuations_unwrap.cpp", "return_future") }}
+
+In this example, we can choose to wait for the value of the first future or the value of the future it encapsulates.
+
+Unlike the function [std::experimental::future::then] in [C++ Extensions for Concurrency], this library does not
+automatically unwrap a continuation return type from `future<future<int>>` to `future<int>`. There are two reasons for
+that: not unwrapping the return type (i) facilitates generic algorithms that operate on futures, and (ii) avoids
+potentially blocking the executor with two tasks to execute the unwrapping.
+
+However, other algorithms based on the function [then] can still perform return type unwrapping.
 
 ## Continuation stop
 

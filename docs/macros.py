@@ -65,7 +65,10 @@ def declare_variables(variables, macro):
                 contents = ''
                 if len(header) != 0:
                     contents += '=== "' + header + '"\n\n    '
-                contents += '```' + language + '\n'
+                contents += '```' + language
+                if len(content_lines) > 10:
+                    contents += ' linenums="1" '
+                contents += '\n'
                 for line in content_lines[1:]:
                     if len(header) != 0:
                         contents += '    '
