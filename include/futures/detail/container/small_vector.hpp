@@ -22,7 +22,7 @@
 #include <ratio>
 
 namespace futures::detail {
-    /// \brief Vector of elements with a buffer for small vectors
+    /// Vector of elements with a buffer for small vectors
     ///
     /// A vector optimized for the case when it's small.
     ///
@@ -64,8 +64,8 @@ namespace futures::detail {
     ///
     /// This implementation was used folly, abseil, and LLVM as a reference.
     ///
-    /// \tparam T Array type
-    /// \tparam N Array maximum expected size
+    /// @tparam T Array type
+    /// @tparam N Array maximum expected size
     template <
         class T,
         size_t N
@@ -77,7 +77,7 @@ namespace futures::detail {
     class small_vector : public maybe_empty<Allocator>
     {
     public:
-        /// \name Common container types
+        /// @name Common container types
         using size_type = SizeType;
         using value_type = T;
         using allocator_type = Allocator;
@@ -99,9 +99,9 @@ namespace futures::detail {
             (std::is_same_v<typename allocator_type::value_type, value_type>),
             "Allocator::value_type must be same type as value_type");
 
-        /// \name Rule of five constructors
+        /// @name Rule of five constructors
 
-        /// \brief Destructor
+        /// Destructor
         /// Deallocate memory if it's not inline
         ~small_vector() {
             if constexpr (!std::is_trivially_destructible_v<T>) {
@@ -112,7 +112,7 @@ namespace futures::detail {
             free_heap();
         }
 
-        /// \brief Copy constructor
+        /// Copy constructor
         small_vector(const small_vector &rhs)
             : maybe_empty<Allocator>(
                 std::allocator_traits<allocator_type>::
@@ -140,7 +140,7 @@ namespace futures::detail {
             this->set_internal_size(n);
         }
 
-        /// \brief Move constructor
+        /// Move constructor
         small_vector(small_vector &&rhs) noexcept
             : maybe_empty<Allocator>(
                 std::allocator_traits<
@@ -179,7 +179,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Copy assignment
+        /// Copy assignment
         small_vector &
         operator=(const small_vector &rhs) {
             if (this == &rhs) {
@@ -219,7 +219,7 @@ namespace futures::detail {
             return *this;
         }
 
-        /// \brief Move assignment
+        /// Move assignment
         small_vector &
         operator=(small_vector &&rhs) noexcept(
             std::is_nothrow_move_constructible_v<
@@ -286,7 +286,7 @@ namespace futures::detail {
             }
         }
 
-        /// \name Lambda constructor from which we can construct
+        /// @name Lambda constructor from which we can construct
         template <
             typename InitFunc,
             std::enable_if_t<std::is_invocable_v<InitFunc, void *>, int> = 0>
@@ -305,19 +305,19 @@ namespace futures::detail {
         }
 
     public /* constructors */:
-        /// \name Initialization constructors
+        /// @name Initialization constructors
 
-        /// \brief Construct empty small array
+        /// Construct empty small array
         /// Create the default allocator
         constexpr small_vector() noexcept(
             std::is_nothrow_default_constructible_v<allocator_type>)
             : small_vector(allocator_type()) {}
 
-        /// \brief Construct small vector with a given allocator
+        /// Construct small vector with a given allocator
         constexpr explicit small_vector(const allocator_type &alloc)
             : small_vector(0, alloc) {}
 
-        /// \brief Construct small array with size n
+        /// Construct small array with size n
         /// Any of the n values should be constructed with new (p) value_type();
         constexpr explicit small_vector(
             size_type n,
@@ -327,7 +327,7 @@ namespace futures::detail {
                 [&](void *p) { new (p) value_type(); },
                 alloc) {}
 
-        /// \brief Construct small array with size n and fill with single value
+        /// Construct small array with size n and fill with single value
         constexpr small_vector(
             size_type n,
             const value_type &value,
@@ -337,7 +337,7 @@ namespace futures::detail {
                 [&](void *p) { new (p) value_type(value); },
                 alloc) {}
 
-        /// \brief Construct small array from a pair of iterators
+        /// Construct small array from a pair of iterators
         template <
             class Iterator,
             std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
@@ -381,13 +381,13 @@ namespace futures::detail {
             assert(invariants());
         }
 
-        /// \brief Construct small array from initializer list
+        /// Construct small array from initializer list
         constexpr small_vector(
             std::initializer_list<value_type> il,
             const allocator_type &alloc = allocator_type())
             : small_vector(il.begin(), il.end(), alloc) {}
 
-        /// \brief Construct small array from a range
+        /// Construct small array from a range
         /// This range might also be a std::vector
         template <class Range, std::enable_if_t<is_range_v<Range>, int> = 0>
         constexpr explicit small_vector(
@@ -395,14 +395,14 @@ namespace futures::detail {
             const allocator_type &alloc = allocator_type())
             : small_vector(r.begin(), r.end(), alloc) {}
 
-        /// \brief Assign small array from initializer list
+        /// Assign small array from initializer list
         constexpr small_vector &
         operator=(std::initializer_list<value_type> il) {
             assign(il.begin(), il.end());
             return *this;
         }
 
-        /// \brief Assign small array from iterators
+        /// Assign small array from iterators
         template <
             class Iterator,
             std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
@@ -412,27 +412,27 @@ namespace futures::detail {
             insert(end(), first, last);
         }
 
-        /// \brief Assign small array from size and fill with value
+        /// Assign small array from size and fill with value
         constexpr void
         assign(size_type n, const value_type &u) {
             clear();
             insert(end(), n, u);
         }
 
-        /// \brief Assign small array from initializer list
+        /// Assign small array from initializer list
         constexpr void
         assign(std::initializer_list<value_type> il) {
             assign(il.begin(), il.end());
         }
 
-        /// \brief Fill small array with value u
+        /// Fill small array with value u
         constexpr void
         fill(const T &u) {
             std::fill(begin(), end(), u);
             assert(invariants());
         }
 
-        /// \brief Swap the contents of two small arrays
+        /// Swap the contents of two small arrays
         constexpr void
         swap(small_vector &rhs) noexcept(
             std::is_nothrow_move_constructible_v<value_type>
@@ -551,86 +551,86 @@ namespace futures::detail {
         }
 
     public /* iterators */:
-        /// \brief Get iterator to first element
+        /// Get iterator to first element
         constexpr iterator
         begin() noexcept {
             return iterator(data());
         }
 
-        /// \brief Get constant iterator to first element[[nodiscard]]
+        /// Get constant iterator to first element[[nodiscard]]
         constexpr const_iterator
         begin() const noexcept {
             return const_iterator(data());
         }
 
-        /// \brief Get iterator to last element
+        /// Get iterator to last element
         constexpr iterator
         end() noexcept {
             return iterator(data() + size());
         }
 
-        /// \brief Get constant iterator to last element
+        /// Get constant iterator to last element
         constexpr const_iterator
         end() const noexcept {
             return const_iterator(data() + size());
         }
 
-        /// \brief Get iterator to first element in reverse order
+        /// Get iterator to first element in reverse order
         constexpr reverse_iterator
         rbegin() noexcept {
             return std::reverse_iterator<iterator>(end());
         }
 
-        /// \brief Get constant iterator to first element in reverse order
+        /// Get constant iterator to first element in reverse order
         constexpr const_reverse_iterator
         rbegin() const noexcept {
             return std::reverse_iterator<const_iterator>(end());
         }
 
-        /// \brief Get iterator to last element in reverse order
+        /// Get iterator to last element in reverse order
         constexpr reverse_iterator
         rend() noexcept {
             return std::reverse_iterator<iterator>(begin());
         }
 
-        /// \brief Get constant iterator to last element in reverse order
+        /// Get constant iterator to last element in reverse order
         constexpr const_reverse_iterator
         rend() const noexcept {
             return std::reverse_iterator<const_iterator>(begin());
         }
 
-        /// \brief Get constant iterator to first element
+        /// Get constant iterator to first element
         constexpr const_iterator
         cbegin() const noexcept {
             return const_iterator(begin());
         }
 
-        /// \brief Get constant iterator to last element
+        /// Get constant iterator to last element
         constexpr const_iterator
         cend() const noexcept {
             return cbegin() + size();
         }
 
-        /// \brief Get constant iterator to first element in reverse order
+        /// Get constant iterator to first element in reverse order
         constexpr const_reverse_iterator
         crbegin() const noexcept {
             return std::reverse_iterator<const_iterator>(cend());
         }
 
-        /// \brief Get constant iterator to last element in reverse order
+        /// Get constant iterator to last element in reverse order
         constexpr const_reverse_iterator
         crend() const noexcept {
             return std::reverse_iterator<const_iterator>(cbegin());
         }
 
     public /* capacity */:
-        /// \brief Get small array size
+        /// Get small array size
         [[nodiscard]] constexpr size_type
         size() const noexcept {
             return get_unmasked_size();
         }
 
-        /// \brief Get small array max size
+        /// Get small array max size
         [[nodiscard]] constexpr size_type
         max_size() const noexcept {
             if constexpr (!should_use_heap) {
@@ -644,7 +644,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Get small array capacity (same as max_size())
+        /// Get small array capacity (same as max_size())
         [[nodiscard]] constexpr size_type
         capacity() const noexcept {
             if constexpr (!should_use_heap) {
@@ -658,19 +658,19 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Check if small array is empty
+        /// Check if small array is empty
         [[nodiscard]] constexpr bool
         empty() const noexcept {
             return !size();
         }
 
-        /// \brief Check if small_vector is inline
+        /// Check if small_vector is inline
         [[nodiscard]] constexpr bool
         is_inline() const {
             return !is_external();
         }
 
-        /// \brief Reserve space for n elements
+        /// Reserve space for n elements
         /// We concentrate the logic to switch the variant types in these
         /// functions
         void
@@ -678,7 +678,7 @@ namespace futures::detail {
             make_size(n);
         }
 
-        /// \brief Reserve space for n elements
+        /// Reserve space for n elements
         /// We concentrate the logic to switch the variant types in these
         /// functions The behaviour of this function might change
         void
@@ -686,7 +686,7 @@ namespace futures::detail {
             shrink_to_fit();
         }
 
-        /// \brief Shrink internal array to fit only the current elements
+        /// Shrink internal array to fit only the current elements
         /// We concentrate the logic to switch the variant types in these
         /// functions
         void
@@ -699,7 +699,7 @@ namespace futures::detail {
         }
 
     public /* element access */:
-        /// \brief Get reference to n-th element in small array
+        /// Get reference to n-th element in small array
         constexpr reference
         operator[](size_type n) {
             assert(
@@ -707,7 +707,7 @@ namespace futures::detail {
             return *(begin() + n);
         }
 
-        /// \brief Get constant reference to n-th element in small array
+        /// Get constant reference to n-th element in small array
         constexpr const_reference
         operator[](size_type n) const {
             assert(
@@ -715,7 +715,7 @@ namespace futures::detail {
             return *(begin() + n);
         }
 
-        /// \brief Check bounds and get reference to n-th element in small array
+        /// Check bounds and get reference to n-th element in small array
         constexpr reference
         at(size_type n) {
             if (n >= size()) {
@@ -725,7 +725,7 @@ namespace futures::detail {
             return (*this)[n];
         }
 
-        /// \brief Check bounds and get constant reference to n-th element in
+        /// Check bounds and get constant reference to n-th element in
         /// small array
         constexpr const_reference
         at(size_type n) const {
@@ -737,60 +737,60 @@ namespace futures::detail {
             return (*this)[n];
         }
 
-        /// \brief Get reference to first element in small array
+        /// Get reference to first element in small array
         constexpr reference
         front() {
             assert(!empty() && "front() called for empty small array");
             return *begin();
         }
 
-        /// \brief Get constant reference to first element in small array
+        /// Get constant reference to first element in small array
         constexpr const_reference
         front() const {
             assert(!empty() && "front() called for empty small array");
             return *begin();
         }
 
-        /// \brief Get reference to last element in small array
+        /// Get reference to last element in small array
         constexpr reference
         back() {
             assert(!empty() && "back() called for empty small array");
             return *(end() - 1);
         }
 
-        /// \brief Get constant reference to last element in small array
+        /// Get constant reference to last element in small array
         constexpr const_reference
         back() const {
             assert(!empty() && "back() called for empty small array");
             return *(end() - 1);
         }
 
-        /// \brief Get reference to internal pointer to small array data
+        /// Get reference to internal pointer to small array data
         constexpr T *
         data() noexcept {
             return this->is_external() ? data_.heap() : data_.buffer();
         }
 
-        /// \brief Get constant reference to internal pointer to small array data
+        /// Get constant reference to internal pointer to small array data
         constexpr const T *
         data() const noexcept {
             return this->is_external() ? data_.heap() : data_.buffer();
         }
 
     public /* modifiers */:
-        /// \brief Copy element to end of small array
+        /// Copy element to end of small array
         constexpr void
         push_back(const value_type &v) {
             emplace_back(v);
         }
 
-        /// \brief Move element to end of small array
+        /// Move element to end of small array
         constexpr void
         push_back(value_type &&v) {
             emplace_back(std::move(v));
         }
 
-        /// \brief Emplace element to end of small array
+        /// Emplace element to end of small array
         template <class... Args>
         constexpr reference
         emplace_back(Args &&...args) {
@@ -829,13 +829,13 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Remove element from end of small array
+        /// Remove element from end of small array
         constexpr void
         pop_back() {
             destroy_and_downsize(size() - 1);
         }
 
-        /// \brief Emplace element to a position in small array
+        /// Emplace element to a position in small array
         template <class... Args>
         constexpr iterator
         emplace(const_iterator position, Args &&...args) {
@@ -850,13 +850,13 @@ namespace futures::detail {
             return insert(position, value_type(std::forward<Args>(args)...));
         }
 
-        /// \brief Copy element to a position in small array
+        /// Copy element to a position in small array
         constexpr iterator
         insert(const_iterator position, const value_type &x) {
             return insert(position, 1, x);
         }
 
-        /// \brief Move element to a position in small array
+        /// Move element to a position in small array
         constexpr iterator
         insert(const_iterator position, value_type &&x) {
             iterator p = unconst(position);
@@ -886,7 +886,7 @@ namespace futures::detail {
             return begin() + offset;
         }
 
-        /// \brief Copy n elements to a position in small array
+        /// Copy n elements to a position in small array
         constexpr iterator
         insert(const_iterator position, size_type n, const value_type &x) {
             auto offset = position - begin();
@@ -901,7 +901,7 @@ namespace futures::detail {
             return begin() + offset;
         }
 
-        /// \brief Copy element range stating at a position in small array
+        /// Copy element range stating at a position in small array
         template <
             class Iterator,
             std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
@@ -936,20 +936,20 @@ namespace futures::detail {
             return begin() + offset;
         }
 
-        /// \brief Copy elements from initializer list to a position in small
+        /// Copy elements from initializer list to a position in small
         /// array
         constexpr iterator
         insert(const_iterator position, std::initializer_list<value_type> il) {
             return insert(position, il.begin(), il.end());
         }
 
-        /// \brief Erase element at a position in small array
+        /// Erase element at a position in small array
         constexpr iterator
         erase(const_iterator position) {
             return erase(position, std::next(position));
         }
 
-        /// \brief Erase range of elements in the small array
+        /// Erase range of elements in the small array
         constexpr iterator
         erase(const_iterator first, const_iterator last) {
             if (first == last) {
@@ -985,13 +985,13 @@ namespace futures::detail {
             return unconst(first);
         }
 
-        /// \brief Clear elements in the small array
+        /// Clear elements in the small array
         constexpr void
         clear() noexcept {
             destroy_and_downsize(0);
         }
 
-        /// \brief Resize the small array
+        /// Resize the small array
         /// If we are using a small_vector to store the data, resize will not
         /// move the data back to the stack even if the new size is less
         /// than the small_vector capacity
@@ -1009,7 +1009,7 @@ namespace futures::detail {
             this->increment_internal_size(extra);
         }
 
-        /// \brief Resize and fill the small array
+        /// Resize and fill the small array
         constexpr void
         resize(size_type n, const value_type &v) {
             if (n < size()) {
@@ -1025,7 +1025,7 @@ namespace futures::detail {
         }
 
     private:
-        /// \brief Check if small array invariants are ok
+        /// Check if small array invariants are ok
         [[nodiscard]] constexpr bool
         invariants() const {
             if (size() > capacity()) {
@@ -1040,67 +1040,67 @@ namespace futures::detail {
             return true;
         }
 
-        /// \name Compile-time inferences
+        /// @name Compile-time inferences
 
-        /// \brief Size of a pointer
+        /// Size of a pointer
         static constexpr size_t pointer_size = sizeof(value_type *);
 
-        /// \brief Size of a size type
+        /// Size of a size type
         static constexpr size_t size_type_size = sizeof(size_type);
 
-        /// \brief Size of new for the heap pointers
+        /// Size of new for the heap pointers
         static constexpr size_t heap_storage_size = pointer_size
                                                     + size_type_size;
 
-        /// \brief Size of a value
+        /// Size of a value
         static constexpr size_t value_size = sizeof(value_type);
 
-        /// \brief How many values we can store in the space allocated for the
+        /// How many values we can store in the space allocated for the
         /// heap
         static constexpr size_t inline_values_per_heap = heap_storage_size
                                                          / value_size;
 
-        /// \brief Min reasonable inline
+        /// Min reasonable inline
         /// It's reasonable that:
         /// - less than can fit is the heap pointers is a waste
         /// - 0 is doesn't make sense
         /// - 1 is no reason to create a vector
         static constexpr size_t min_reasonable_inline_elements = 2;
 
-        /// \brief Pointers per value
+        /// Pointers per value
         static constexpr size_t min_inline_elements = std::
             max(inline_values_per_heap, min_reasonable_inline_elements);
 
-        /// \brief Pointers per value
+        /// Pointers per value
         static constexpr auto requested_inline_size = N;
 
-        /// \brief Number of elements we should inline
+        /// Number of elements we should inline
         /// If the requested number is below the number we can fit in the
         /// pointer itself, use that instead
         static constexpr std::size_t num_inline_elements = std::
             max(min_inline_elements, requested_inline_size);
 
-        /// \brief The type of the raw array we would use to store inline vectors
+        /// The type of the raw array we would use to store inline vectors
         using raw_value_type_array = value_type[num_inline_elements];
 
-        /// \brief Type we would use for inline storage if we do
+        /// Type we would use for inline storage if we do
         using inline_storage_data_type = typename std::aligned_storage_t<
             sizeof(raw_value_type_array),
             alignof(raw_value_type_array)>;
 
-        /// \brief True if inline storage would always be empty
+        /// True if inline storage would always be empty
         static constexpr bool inline_storage_empty
             = sizeof(value_type) * num_inline_elements == 0;
 
-        /// \brief Final inline storage type
+        /// Final inline storage type
         /// This is the inline storage data type or (very rarely) just a pointer
         using inline_storage_type = typename std::conditional_t<
             !inline_storage_empty,
             inline_storage_data_type,
             pointer>;
 
-        /// \brief An assumption about the size of a cache line
-        /// \note Clang unfortunately defines
+        /// An assumption about the size of a cache line
+        /// @note Clang unfortunately defines
         /// __cpp_lib_hardware_interference_size without defining
         /// hardware_constructive_interference_size.
         static constexpr std::size_t cache_line_size =
@@ -1110,19 +1110,19 @@ namespace futures::detail {
             2 * sizeof(std::max_align_t);
 #endif
 
-        /// \brief True if we should just copy the inline storage
+        /// True if we should just copy the inline storage
         static constexpr bool should_copy_inline
             = std::is_trivially_copyable_v<
                   value_type> && sizeof(inline_storage_type) <= cache_line_size / 2;
 
-        /// \brief True if we are using the std::allocator
+        /// True if we are using the std::allocator
         static constexpr bool using_std_allocator = std::
             is_same<allocator_type, std::allocator<value_type>>::value;
 
-        /// \brief An empty type when we want to remove a member from the class
+        /// An empty type when we want to remove a member from the class
         using empty_type = std::tuple<>;
 
-        /// \brief Type we use to internally store the allocator
+        /// Type we use to internally store the allocator
         /// We don't really represent the std::allocator in the class because it
         /// has no members We can just recreate it at get_alloc()
         using internal_allocator_type = std::
@@ -1139,24 +1139,24 @@ namespace futures::detail {
         template <class U>
         static constexpr bool is_relocatable_v = is_relocatable<U>::value;
 
-        /// \brief Use memcpy to copy items
+        /// Use memcpy to copy items
         /// If type is relocatable, we just use memcpy
         static constexpr bool relocate_use_memcpy = is_relocatable<T>::value
                                                     && using_std_allocator;
 
 
-        /// \brief Whether this vector should also use the heap
+        /// Whether this vector should also use the heap
         static constexpr bool should_use_heap = AllowHeap::value;
 
-        /// \brief A mask with the most significant bit of the size type
+        /// A mask with the most significant bit of the size type
         static size_type constexpr size_type_most_significant_bit_mask
             = size_type(1) << (sizeof(size_type) * 8 - 1);
 
-        /// \brief A mask to identify if the array is external
+        /// A mask to identify if the array is external
         static size_type constexpr is_external_mask
             = should_use_heap ? size_type_most_significant_bit_mask : 0;
 
-        /// \brief Identify if we are using the heap
+        /// Identify if we are using the heap
         /// A mask to extract the size bits identifying whether the current
         /// vector it's external The two most significant digits can tell us if
         /// something is external / allocated in the heap
@@ -1165,7 +1165,7 @@ namespace futures::detail {
             return is_external_mask & size_;
         }
 
-        /// \brief Set the flag indicating the vector is external
+        /// Set the flag indicating the vector is external
         void
         set_external(bool b) {
             if (b) {
@@ -1175,7 +1175,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Set the capacity of the external vector
+        /// Set the capacity of the external vector
         void
         set_capacity(size_type new_capacity) {
             assert(this->is_external());
@@ -1183,11 +1183,11 @@ namespace futures::detail {
             data_.set_capacity(new_capacity);
         }
 
-        /// \brief Return the max size of this vector
+        /// Return the max size of this vector
         /// We remove the final digit we use to identify the use of the heap
         static size_type constexpr clear_size_mask = ~is_external_mask;
 
-        /// \brief Set the size variable
+        /// Set the size variable
         /// This sets the size and maintains the inline bit
         void
         set_internal_size(std::size_t sz) {
@@ -1195,13 +1195,13 @@ namespace futures::detail {
             size_ = (is_external_mask & size_) | size_type(sz);
         }
 
-        /// \brief Get the size value without the mask
+        /// Get the size value without the mask
         [[nodiscard]] constexpr size_t
         get_unmasked_size() const {
             return size_ & clear_size_mask;
         }
 
-        /// \brief Free the vector heap
+        /// Free the vector heap
         void
         free_heap() {
             if (is_external()) {
@@ -1212,7 +1212,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Copy the inline storage from rhs vector when type is
+        /// Copy the inline storage from rhs vector when type is
         /// trivially copyable
         template <
             class T2 = value_type,
@@ -1227,7 +1227,7 @@ namespace futures::detail {
             this->set_internal_size(rhs.size());
         }
 
-        /// \brief Copy the inline storage from rhs vector when type is not
+        /// Copy the inline storage from rhs vector when type is not
         /// trivially copyable
         template <
             class T2 = value_type,
@@ -1238,7 +1238,7 @@ namespace futures::detail {
                 "Attempting to trivially copy not trivially copyable type");
         }
 
-        /// \brief Make it empty and with no heap
+        /// Make it empty and with no heap
         void
         reset() {
             clear();
@@ -1246,7 +1246,7 @@ namespace futures::detail {
             size_ = 0;
         }
 
-        /// \brief Change the size to a new size
+        /// Change the size to a new size
         void
         make_size(size_type new_size) {
             if (new_size <= capacity()) {
@@ -1261,7 +1261,7 @@ namespace futures::detail {
                 0);
         }
 
-        /// \brief Change the size and emplace the elements as we go
+        /// Change the size and emplace the elements as we go
         template <typename EmplaceFunc>
         void
         make_size(
@@ -1275,7 +1275,7 @@ namespace futures::detail {
                 new_emplaced_size);
         }
 
-        /// \brief Change the current size to new size and emplace the elements
+        /// Change the current size to new size and emplace the elements
         /// This will heapify the vector if it's inline
         template <typename InsertVersion, typename EmplaceFunc>
         void
@@ -1345,7 +1345,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Move from begin/end range to uninitialized range out/pos and
+        /// Move from begin/end range to uninitialized range out/pos and
         /// call the emplace function at pos
         template <class EmplaceFunc>
         void
@@ -1381,7 +1381,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Move the range first/last to uninitialized memory starting at
+        /// Move the range first/last to uninitialized memory starting at
         /// out
         template <
             class T2 = value_type,
@@ -1405,7 +1405,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Move the range first/last to uninitialized memory starting at
+        /// Move the range first/last to uninitialized memory starting at
         /// out
         template <
             class T2 = value_type,
@@ -1419,7 +1419,7 @@ namespace futures::detail {
                 (last - first) * sizeof *first);
         }
 
-        /// \brief Compute the new size this vector should have after growing
+        /// Compute the new size this vector should have after growing
         /// This is a growth factor of 1.5
         constexpr size_type
         compute_new_size() const {
@@ -1448,7 +1448,7 @@ namespace futures::detail {
                 max_size());
         }
 
-        /// \brief Copy some elements as initialized and some as uninitialized
+        /// Copy some elements as initialized and some as uninitialized
         template <class Iterator1, class Iterator2>
         static void
         partially_uninitialized_copy(
@@ -1471,7 +1471,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief A std::memcpy implementation that ensures the values are
+        /// A std::memcpy implementation that ensures the values are
         /// moved byte by byte This is what std::memcpy usually does, but some
         /// compilers implement it differently
         static void
@@ -1481,7 +1481,7 @@ namespace futures::detail {
             std::copy(char_source, char_source + n, char_destination);
         }
 
-        /// \brief Move elements to the right a construct at the new location
+        /// Move elements to the right a construct at the new location
         template <
             class Construct,
             class T2 = value_type,
@@ -1559,7 +1559,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Shirt the range [first, last] to [new_first, new_last] and
+        /// Shirt the range [first, last] to [new_first, new_last] and
         /// fill the range [first, new_first] with the `create` function
         template <
             class Construct,
@@ -1586,7 +1586,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Populate memory with the given function
+        /// Populate memory with the given function
         template <class Function>
         void
         populate_mem_forward(
@@ -1608,14 +1608,14 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Increment the internal size
+        /// Increment the internal size
         void
         increment_internal_size(std::size_t n) {
             assert(get_unmasked_size() + n <= max_size());
             size_ += size_type(n);
         }
 
-        /// \brief Destroy elements after n and decrement the internal size
+        /// Destroy elements after n and decrement the internal size
         /// If elements are relocatable and we are erasing elements, we should
         /// directly destroy the appropriate elements and call set_internal_size
         void
@@ -1638,7 +1638,7 @@ namespace futures::detail {
         }
 
     private:
-        /// \brief A pointer to the heap and the capacity of the array in the
+        /// A pointer to the heap and the capacity of the array in the
         /// heap This is usual storage we use when the vector is not inline.
         /// This class doesn't handle allocations directly though.
         struct heap_storage_type
@@ -1655,66 +1655,66 @@ namespace futures::detail {
             }
         };
 
-        /// \brief Data type used to represent the vector
+        /// Data type used to represent the vector
         /// This is a union that might be storing a inline or heap array at a
         /// given time
         union data_type
         {
-            /// \brief Storage when the vector is inline
+            /// Storage when the vector is inline
             inline_storage_type inline_storage_;
 
-            /// \brief Storage when the vector is in the heap
+            /// Storage when the vector is in the heap
             heap_storage_type heap_storage_;
 
-            /// \brief By default, we have a heap element pointing to nullptr
+            /// By default, we have a heap element pointing to nullptr
             /// (size == 0)
             explicit data_type() {
                 heap_storage_.pointer_ = nullptr;
                 heap_storage_.capacity_ = 0;
             }
 
-            /// \brief Get a pointer to the buffer if it's inline
+            /// Get a pointer to the buffer if it's inline
             value_type *
             buffer() noexcept {
                 void *vp = &inline_storage_;
                 return static_cast<value_type *>(vp);
             }
 
-            /// \brief Get a const pointer to the buffer if it's inline
+            /// Get a const pointer to the buffer if it's inline
             value_type const *
             buffer() const noexcept {
                 return const_cast<data_type *>(this)->buffer();
             }
 
-            /// \brief Get a pointer to the array if it's not inline
+            /// Get a pointer to the array if it's not inline
             value_type *
             heap() noexcept {
                 return heap_storage_.pointer_;
             }
 
-            /// \brief Get a const pointer to the array if it's not inline
+            /// Get a const pointer to the array if it's not inline
             value_type const *
             heap() const noexcept {
                 return heap_storage_.pointer_;
             }
 
-            /// \brief Get the current allocated capacity if it's not inline
+            /// Get the current allocated capacity if it's not inline
             size_type
             get_capacity() const {
                 return heap_storage_.get_capacity();
             }
 
-            /// \brief Set the current allocated capacity if it's not inline
+            /// Set the current allocated capacity if it's not inline
             void
             set_capacity(size_type c) {
                 heap_storage_.set_capacity(c);
             }
         };
 
-        /// \brief Internal array or vector
+        /// Internal array or vector
         data_type data_{};
 
-        /// \brief The number of elements in the storage
+        /// The number of elements in the storage
         size_type size_{ 0 };
     };
 
@@ -1722,7 +1722,7 @@ namespace futures::detail {
     template <class T, class... U>
     small_vector(T, U...) -> small_vector<T, 1 + sizeof...(U)>;
 
-    /// \brief operator== for small arrays
+    /// operator== for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator==(
@@ -1731,7 +1731,7 @@ namespace futures::detail {
         return std::equal(x.begin(), x.end(), y.begin(), y.end());
     }
 
-    /// \brief operator!= for small arrays
+    /// operator!= for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator!=(
@@ -1740,7 +1740,7 @@ namespace futures::detail {
         return !(x == y);
     }
 
-    /// \brief operator< for small arrays
+    /// operator< for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator<(
@@ -1750,7 +1750,7 @@ namespace futures::detail {
             lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
     }
 
-    /// \brief operator> for small arrays
+    /// operator> for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator>(
@@ -1759,7 +1759,7 @@ namespace futures::detail {
         return y < x;
     }
 
-    /// \brief operator<= for small arrays
+    /// operator<= for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator<=(
@@ -1768,7 +1768,7 @@ namespace futures::detail {
         return !(y < x);
     }
 
-    /// \brief operator>= for small arrays
+    /// operator>= for small arrays
     template <class T, size_t N, class A, class H, class S>
     constexpr bool
     operator>=(
@@ -1777,7 +1777,7 @@ namespace futures::detail {
         return !(x < y);
     }
 
-    /// \brief swap the contents of two small arrays
+    /// swap the contents of two small arrays
     template <class T, size_t N, class A, class H, class S>
     void
     swap(
@@ -1786,7 +1786,7 @@ namespace futures::detail {
         x.swap(y);
     }
 
-    /// \brief Create a small_vector from a raw array
+    /// Create a small_vector from a raw array
     /// This is similar to std::to_array
     template <
         class T,
@@ -1799,7 +1799,7 @@ namespace futures::detail {
         return small_vector<std::remove_cv_t<T>, N_OUTPUT>(a, a + N_INPUT);
     }
 
-    /// \brief Create a small_vector from a raw array
+    /// Create a small_vector from a raw array
     /// This is similar to std::to_array
     template <
         class T,

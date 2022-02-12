@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_HPP
 #define FUTURES_FUTURES_HPP
 
-/// \file
+/// @file
 /// Future types and functions to work with futures
 ///
 /// Many of the ideas for these functions are based on:
@@ -58,9 +58,9 @@
 ///   cancellation, progress, queries, .... More interestingly, the concepts
 ///   allow for all these possible future types to interoperate.
 ///
-/// \see https://en.cppreference.com/w/cpp/experimental/concurrency
-/// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
-/// \see https://github.com/Amanieu/asyncplusplus
+/// @see https://en.cppreference.com/w/cpp/experimental/concurrency
+/// @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
+/// @see https://github.com/Amanieu/asyncplusplus
 
 // Future classes
 #include <futures/futures/launch.hpp>

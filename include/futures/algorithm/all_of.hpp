@@ -21,15 +21,15 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref all_of function
+    /// Functor representing the overloads for the @ref all_of function
     class all_of_functor : public unary_invoke_algorithm_functor<all_of_functor>
     {
         friend unary_invoke_algorithm_functor<all_of_functor>;
@@ -112,18 +112,18 @@ namespace futures {
         };
 
 
-        /// \brief Complete overload of the all_of algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c all_of
+        /// Complete overload of the all_of algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c all_of
         template <
             class E,
             class P,
@@ -151,7 +151,7 @@ namespace futures {
         }
     };
 
-    /// \brief Checks if a predicate is true for all the elements in a range
+    /// Checks if a predicate is true for all the elements in a range
     inline constexpr all_of_functor all_of;
 
     /** @}*/

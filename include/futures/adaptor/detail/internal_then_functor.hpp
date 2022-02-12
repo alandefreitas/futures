@@ -30,21 +30,21 @@
 #include <futures/futures/detail/move_if_not_shared.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
     // Wrap implementation in empty struct to facilitate friends
     struct internal_then_functor
     {
-        /// \brief Maybe copy the previous continuations source
+        /// Maybe copy the previous continuations source
         template <class Future>
-        static continuations_source<is_deferred_v<Future>>
+        static continuations_source<is_always_deferred_v<Future>>
         copy_continuations_source(const Future &before) {
             if constexpr (is_continuable_v<std::decay_t<Future>>) {
                 return before.state_->get_continuations_source();
             } else {
-                return continuations_source<is_deferred_v<Future>>(
+                return continuations_source<is_always_deferred_v<Future>>(
                     nocontinuationsstate);
             }
         }
@@ -80,7 +80,7 @@ namespace futures::detail {
 
             // If future is continuable, just use the then function
             if constexpr (
-                !is_deferred_v<
+                !is_always_deferred_v<
                     next_future_type> && is_continuable_v<std::decay_t<Future>>)
             {
                 // before is continuable: both futures are eager
@@ -91,7 +91,7 @@ namespace futures::detail {
                 // Previous is not continuable or both are deferred, so we don't
                 // need the continuations because next will wait for prev.
 
-                if constexpr (is_deferred_v<next_future_type>) {
+                if constexpr (is_always_deferred_v<next_future_type>) {
                     // Create a shared version of the previous future, because
                     // multiple handles will need to access this shared state
                     // now Create task for the continuation future

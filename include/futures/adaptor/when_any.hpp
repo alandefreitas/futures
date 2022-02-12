@@ -8,9 +8,9 @@
 #ifndef FUTURES_ADAPTOR_WHEN_ANY_HPP
 #define FUTURES_ADAPTOR_WHEN_ANY_HPP
 
-/// \file Implement the when_any functionality for futures and executors
+/// @file Implement the when_any functionality for futures and executors
 /// The same rationale as when_all applies here
-/// \see https://en.cppreference.com/w/cpp/experimental/when_any
+/// @see https://en.cppreference.com/w/cpp/experimental/when_any
 
 #include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
@@ -25,11 +25,11 @@
 #include <shared_mutex>
 
 namespace futures {
-    /** \addtogroup adaptors Adaptors
+    /** @addtogroup adaptors Adaptors
      *  @{
      */
 
-    /// \brief Proxy future class referring to the result of a disjunction of
+    /// Proxy future class referring to the result of a disjunction of
     /// futures from @ref when_any
     ///
     /// This class implements another future type to identify when one of the
@@ -49,17 +49,17 @@ namespace futures {
     private:
         using sequence_type = Sequence;
         static constexpr bool sequence_is_range = is_range_v<sequence_type>;
-        static constexpr bool sequence_is_tuple = is_tuple_v<sequence_type>;
+        static constexpr bool sequence_is_tuple = detail::is_tuple_v<sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
 
     public:
-        /// \brief Default constructor.
+        /// Default constructor.
         ///
         /// Constructs a when_any_future with no shared state. After
         /// construction, valid() == false
         when_any_future() noexcept = default;
 
-        /// \brief Move a sequence of futures into the when_any_future
+        /// Move a sequence of futures into the when_any_future
         /// constructor. The sequence is moved into this future object and the
         /// objects from which the sequence was created get invalidated.
         ///
@@ -68,7 +68,7 @@ namespace futures {
         explicit when_any_future(sequence_type &&v) noexcept
             : v(std::move(v)) {}
 
-        /// \brief Move constructor.
+        /// Move constructor.
         ///
         /// Constructs a when_any_future with the shared state of other using
         /// move semantics. After construction, other.valid() == false
@@ -96,10 +96,10 @@ namespace futures {
         when_any_future(when_any_future &&other) noexcept
             : v(std::move(other.v)) {}
 
-        /// \brief when_any_future is not CopyConstructible
+        /// when_any_future is not CopyConstructible
         when_any_future(const when_any_future &other) = delete;
 
-        /// \brief Releases any shared state.
+        /// Releases any shared state.
         ///
         /// - If the return object or provider holds the last reference to its
         /// shared state, the shared state is destroyed.
@@ -113,7 +113,7 @@ namespace futures {
         ///
         ~when_any_future() = default;
 
-        /// \brief Assigns the contents of another future object.
+        /// Assigns the contents of another future object.
         ///
         /// Releases any shared state and move-assigns the contents of other to
         /// *this.
@@ -126,14 +126,14 @@ namespace futures {
             v = std::move(other.v);
         }
 
-        /// \brief Copy assigns the contents of another when_any_future object.
+        /// Copy assigns the contents of another when_any_future object.
         ///
         /// when_any_future is not copy assignable.
         when_any_future &
         operator=(const when_any_future &other)
             = delete;
 
-        /// \brief Wait until any future has a valid result and retrieves it
+        /// Wait until any future has a valid result and retrieves it
         ///
         /// It effectively calls wait() in order to wait for the result.
         /// This avoids replicating the logic behind continuations, polling, and
@@ -159,12 +159,12 @@ namespace futures {
             return r;
         }
 
-        /// \brief Checks if the future refers to a shared state
+        /// Checks if the future refers to a shared state
         ///
         /// This future is always valid() unless there are tasks and they are
         /// all invalid
         ///
-        /// \see https://en.cppreference.com/w/cpp/experimental/when_any
+        /// @see https://en.cppreference.com/w/cpp/experimental/when_any
         [[nodiscard]] bool
         valid() const noexcept {
             if constexpr (sequence_is_range) {
@@ -183,7 +183,7 @@ namespace futures {
             }
         }
 
-        /// \brief Blocks until the result becomes available.
+        /// Blocks until the result becomes available.
         /// valid() == true after the call.
         /// The behavior is undefined if valid() == false before the call to
         /// this function
@@ -198,14 +198,14 @@ namespace futures {
             wait_for_any(v);
         }
 
-        /// \brief Waits for the result to become available.
+        /// Waits for the result to become available.
         ///
         /// Blocks until specified timeout_duration has elapsed or the result
         /// becomes available, whichever comes first. Not-polling is easier to
         /// emulate for future conjunctions (when_all) because we can sleep on
         /// each task until they are all done, since we need all of them anyway.
         ///
-        /// \see https://en.m.wikipedia.org/wiki/Exponential_backoff
+        /// @see https://en.m.wikipedia.org/wiki/Exponential_backoff
         template <class Rep, class Period>
         std::future_status
         wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) {
@@ -220,7 +220,7 @@ namespace futures {
             }
         }
 
-        /// \brief wait_until waits for a result to become available.
+        /// wait_until waits for a result to become available.
         /// It blocks until specified timeout_time has been reached or the
         /// result becomes available, whichever comes first
         template <class Clock, class Duration>
@@ -238,14 +238,14 @@ namespace futures {
             }
         }
 
-        /// \brief Check if it's ready
+        /// Check if it's ready
         [[nodiscard]] bool
         is_ready() const {
             auto idx = get_ready_index();
             return idx != static_cast<size_t>(-1) || (size() == 0);
         }
 
-        /// \brief Move the underlying sequence somewhere else
+        /// Move the underlying sequence somewhere else
         ///
         /// The when_any_future is left empty and should now be considered
         /// invalid. This is useful for any algorithm that merges two
@@ -258,7 +258,7 @@ namespace futures {
         }
 
     private:
-        /// \brief Get index of the first internal future that is ready
+        /// Get index of the first internal future that is ready
         ///
         /// If no future is ready, this returns the sequence size as a sentinel
         template <class CheckLazyContinuables = std::true_type>
@@ -288,7 +288,7 @@ namespace futures {
             }
         }
 
-        /// \brief Get number of internal futures
+        /// Get number of internal futures
         [[nodiscard]] constexpr size_t
         size() const {
             if constexpr (sequence_is_tuple) {
@@ -298,7 +298,7 @@ namespace futures {
             }
         }
 
-        /// \brief Get number of internal futures with lazy continuations
+        /// Get number of internal futures with lazy continuations
         [[nodiscard]] constexpr size_t
         lazy_continuable_size() const {
             if constexpr (sequence_is_tuple) {
@@ -313,13 +313,13 @@ namespace futures {
             }
         }
 
-        /// \brief Check if all internal types are lazy continuable
+        /// Check if all internal types are lazy continuable
         [[nodiscard]] constexpr bool
         all_lazy_continuable() const {
             return lazy_continuable_size() == size();
         }
 
-        /// \brief Get size, if we know that at compile time
+        /// Get size, if we know that at compile time
         [[nodiscard]] static constexpr size_t
         compile_time_size() {
             if constexpr (sequence_is_tuple) {
@@ -329,7 +329,7 @@ namespace futures {
             }
         }
 
-        /// \brief Check if the i-th future is ready
+        /// Check if the i-th future is ready
         [[nodiscard]] bool
         is_ready(size_t index) const {
             if constexpr (!sequence_is_range) {
@@ -347,13 +347,13 @@ namespace futures {
         }
 
     private:
-        /// \brief Internal wait_any_future state
+        /// Internal wait_any_future state
         sequence_type v;
         /// @}
     };
 
 #ifndef FUTURES_DOXYGEN
-    /// \name Define when_any_future as a kind of future
+    /// @name Define when_any_future as a kind of future
     /// @{
     /// Specialization explicitly setting when_any_future<T> as a type of future
     template <typename T>
@@ -362,10 +362,10 @@ namespace futures {
 #endif
 
     namespace detail {
-        /// \name Useful traits for when_any
+        /// @name Useful traits for when_any
         /// @{
 
-        /// \brief Check if type is a when_any_future as a type
+        /// Check if type is a when_any_future as a type
         template <typename>
         struct is_when_any_future : std::false_type
         {};
@@ -373,11 +373,11 @@ namespace futures {
         struct is_when_any_future<when_any_future<Sequence>> : std::true_type
         {};
 
-        /// \brief Check if type is a when_any_future as constant bool
+        /// Check if type is a when_any_future as constant bool
         template <class T>
         constexpr bool is_when_any_future_v = is_when_any_future<T>::value;
 
-        /// \brief Check if a type can be used in a future disjunction (when_any
+        /// Check if a type can be used in a future disjunction (when_any
         /// or operator|| for futures)
         template <class T>
         using is_valid_when_any_argument = std::
@@ -387,7 +387,7 @@ namespace futures {
         constexpr bool is_valid_when_any_argument_v
             = is_valid_when_any_argument<T>::value;
 
-        /// \brief Trait to identify valid when_any inputs
+        /// Trait to identify valid when_any inputs
         template <class...>
         struct are_valid_when_any_arguments : std::true_type
         {};
@@ -405,10 +405,10 @@ namespace futures {
         constexpr bool are_valid_when_any_arguments_v
             = are_valid_when_any_arguments<Args...>::value;
 
-        /// \subsection Helpers for operator|| on futures, functions and
+        /// \name Helpers for operator|| on futures, functions and
         /// when_any futures
 
-        /// \brief Check if type is a when_any_future with tuples as a sequence
+        /// Check if type is a when_any_future with tuples as a sequence
         /// type
         template <typename T, class Enable = void>
         struct is_when_any_tuple_future : std::false_type
@@ -416,13 +416,13 @@ namespace futures {
         template <typename Sequence>
         struct is_when_any_tuple_future<
             when_any_future<Sequence>,
-            std::enable_if_t<is_tuple_v<Sequence>>> : std::true_type
+            std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type
         {};
         template <class T>
         constexpr bool is_when_any_tuple_future_v = is_when_any_tuple_future<
             T>::value;
 
-        /// \brief Check if all template parameters are when_any_future with
+        /// Check if all template parameters are when_any_future with
         /// tuples as a sequence type
         template <class...>
         struct are_when_any_tuple_futures : std::true_type
@@ -442,7 +442,7 @@ namespace futures {
         constexpr bool are_when_any_tuple_futures_v
             = are_when_any_tuple_futures<Args...>::value;
 
-        /// \brief Check if type is a when_any_future with a range as a sequence
+        /// Check if type is a when_any_future with a range as a sequence
         /// type
         template <typename T, class Enable = void>
         struct is_when_any_range_future : std::false_type
@@ -456,7 +456,7 @@ namespace futures {
         constexpr bool is_when_any_range_future_v = is_when_any_range_future<
             T>::value;
 
-        /// \brief Check if all template parameters are when_any_future with
+        /// Check if all template parameters are when_any_future with
         /// tuples as a sequence type
         template <class...>
         struct are_when_any_range_futures : std::true_type
@@ -475,15 +475,15 @@ namespace futures {
         constexpr bool are_when_any_range_futures_v
             = are_when_any_range_futures<Args...>::value;
 
-        /// \brief Constructs a when_any_future that is a concatenation of all
+        /// Constructs a when_any_future that is a concatenation of all
         /// when_any_futures in args It's important to be able to merge
         /// when_any_future objects because of operator|| When the user asks for
         /// f1 && f2 && f3, we want that to return a single future that waits
         /// for <f1,f2,f3> rather than a future that wait for two futures
-        /// <f1,<f2,f3>> \note This function only participates in overload
+        /// <f1,<f2,f3>> @note This function only participates in overload
         /// resolution if all types in std::decay_t<WhenAllFutures>... are
         /// specializations of when_any_future with a tuple sequence type
-        /// \overload "Merging" a single when_any_future of tuples. Overload
+        /// @overload "Merging" a single when_any_future of tuples. Overload
         /// provided for symmetry.
         template <
             class WhenAllFuture,
@@ -493,7 +493,7 @@ namespace futures {
             return std::forward<WhenAllFuture>(arg0);
         }
 
-        /// \overload Merging a two when_any_future objects of tuples
+        /// @overload Merging a two when_any_future objects of tuples
         template <
             class WhenAllFuture1,
             class WhenAllFuture2,
@@ -508,7 +508,7 @@ namespace futures {
             return when_any_future(std::move(s));
         }
 
-        /// \overload Merging two+ when_any_future of tuples
+        /// @overload Merging two+ when_any_future of tuples
         template <
             class WhenAllFuture1,
             class... WhenAllFutures,
@@ -528,7 +528,7 @@ namespace futures {
         /// @}
     } // namespace detail
 
-    /// \brief Create a future object that becomes ready when any of the futures
+    /// Create a future object that becomes ready when any of the futures
     /// in the range is ready
     ///
     /// This function does not participate in overload resolution unless
@@ -538,7 +538,7 @@ namespace futures {
     /// This overload uses a small vector to avoid further allocations for such
     /// a simple operation.
     ///
-    /// \return @ref when_any_future with all future objects
+    /// @return @ref when_any_future with all future objects
     template <
         class InputIt
 #ifndef FUTURES_DOXYGEN
@@ -585,14 +585,14 @@ namespace futures {
         return when_any_future<sequence_type>(std::move(v));
     }
 
-    /// \brief Create a future object that becomes ready when any of the futures
+    /// Create a future object that becomes ready when any of the futures
     /// in the range is ready
     ///
     /// This function does not participate in overload resolution unless every
     /// argument is either a (possibly cv-qualified) std::shared_future or a
     /// cv-unqualified std::future.
     ///
-    /// \return @ref when_any_future with all future objects
+    /// @return @ref when_any_future with all future objects
     template <
         class Range
 #ifndef FUTURES_DOXYGEN
@@ -609,14 +609,14 @@ namespace futures {
             std::end(std::forward<Range>(r)));
     }
 
-    /// \brief Create a future object that becomes ready when any of the input
+    /// Create a future object that becomes ready when any of the input
     /// futures is ready
     ///
     /// This function does not participate in overload resolution unless every
     /// argument is either a (possibly cv-qualified) std::shared_future or a
     /// cv-unqualified std::future.
     ///
-    /// \return @ref when_any_future with all future objects
+    /// @return @ref when_any_future with all future objects
     template <
         class... Futures
 #ifndef FUTURES_DOXYGEN
@@ -653,7 +653,7 @@ namespace futures {
         return when_any_future<sequence_type>(std::move(v));
     }
 
-    /// \brief Operator to create a future object that becomes ready when any of
+    /// Operator to create a future object that becomes ready when any of
     /// the input futures is ready
     ///
     /// ready operator|| works for futures and functions (which are converted to

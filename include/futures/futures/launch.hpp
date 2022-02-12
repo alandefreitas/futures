@@ -15,13 +15,13 @@
 #include <futures/futures/detail/traits/launch_result.hpp>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup launch Launch
+    /** @addtogroup launch Launch
      *  @{
      */
-    /** \addtogroup launch-algorithms Launch Algorithms
+    /** @addtogroup launch-algorithms Launch Algorithms
      *
      * \brief Function to launch and schedule future tasks
      *
@@ -36,7 +36,7 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Launch an asynchronous task with the specified executor
+    /// Launch an asynchronous task with the specified executor
     ///
     /// This version of the async function will always use the specified
     /// executor instead of creating a new thread.
@@ -49,24 +49,24 @@ namespace futures {
     /// case the function returns a continuable and stoppable future type.
     /// Otherwise, this function returns a continuable future type.
     ///
-    /// \par Example
-    /// \code
+    /// @par Example
+    /// @code
     /// auto f = async(ex, []() { return 2; });
     /// std::cout << f.get() << std::endl; // 2
-    /// \endcode
+    /// @endcode
     ///
-    /// \see
+    /// @see
     ///      \ref basic_future
     ///
-    /// \tparam Executor Executor from an execution context
-    /// \tparam Function A callable object
-    /// \tparam Args Arguments for the Function
+    /// @tparam Executor Executor from an execution context
+    /// @tparam Function A callable object
+    /// @tparam Args Arguments for the Function
     ///
-    /// \param ex Executor
-    /// \param f Function to execute
-    /// \param args Function arguments
+    /// @param ex Executor
+    /// @param f Function to execute
+    /// @param args Function arguments
     ///
-    /// \return An eager future object whose shared state refers to the task
+    /// @return An eager future object whose shared state refers to the task
     /// result. The type of this future object depends on the task. If the task
     /// expects a @stop_token, the future will return a continuable, stoppable,
     /// eager future. Otherwise, the function will return a continuable eager
@@ -93,16 +93,16 @@ namespace futures {
             true>(ex, std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
-    /// \brief Launch an asynchronous task with the default executor
+    /// Launch an asynchronous task with the default executor
     ///
-    /// \tparam Executor Executor from an execution context
-    /// \tparam Function A callable object
-    /// \tparam Args Arguments for the Function
+    /// @tparam Executor Executor from an execution context
+    /// @tparam Function A callable object
+    /// @tparam Args Arguments for the Function
     ///
-    /// \param f Function to execute
-    /// \param args Function arguments
+    /// @param f Function to execute
+    /// @param args Function arguments
     ///
-    /// \return A future object with the function results
+    /// @return A future object with the function results
     template <
         typename Function,
         typename... Args
@@ -125,24 +125,24 @@ namespace futures {
             std::forward<Args>(args)...);
     }
 
-    /// \brief Schedule an asynchronous task with the specified executor
+    /// Schedule an asynchronous task with the specified executor
     ///
     /// This function schedules a deferred future. The task will only
     /// be launched in the executor when some other execution context waits
     /// for the value associated to this future.
     ///
-    /// \see
+    /// @see
     ///      \ref basic_future
     ///
-    /// \tparam Executor Executor from an execution context
-    /// \tparam Function A callable object
-    /// \tparam Args Arguments for the Function
+    /// @tparam Executor Executor from an execution context
+    /// @tparam Function A callable object
+    /// @tparam Args Arguments for the Function
     ///
-    /// \param ex Executor
-    /// \param f Function to execute
-    /// \param args Function arguments
+    /// @param ex Executor
+    /// @param f Function to execute
+    /// @param args Function arguments
     ///
-    /// \return A deferred future object whose shared state refers to the task
+    /// @return A deferred future object whose shared state refers to the task
     /// result. The type of this future object depends on the task. If the task
     /// expects a @stop_token, the future will return a stoppable deferred
     /// future. Otherwise, the function will return a deferred future.
@@ -168,16 +168,16 @@ namespace futures {
             false>(ex, std::forward<Function>(f), std::forward<Args>(args)...);
     }
 
-    /// \brief Schedule an asynchronous task with the default executor
+    /// Schedule an asynchronous task with the default executor
     ///
-    /// \tparam Executor Executor from an execution context
-    /// \tparam Function A callable object
-    /// \tparam Args Arguments for the Function
+    /// @tparam Executor Executor from an execution context
+    /// @tparam Function A callable object
+    /// @tparam Args Arguments for the Function
     ///
-    /// \param f Function to execute
-    /// \param args Function arguments
+    /// @param f Function to execute
+    /// @param args Function arguments
     ///
-    /// \return A future object with the function results
+    /// @return A future object with the function results
     template <
         typename Function,
         typename... Args

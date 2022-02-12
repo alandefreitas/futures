@@ -13,7 +13,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /// \brief Check if all types in a tuple match a predicate
+    /// Check if all types in a tuple match a predicate
     template <class T, template <class...> class P>
     struct tuple_type_all_of : is_tuple<T>
     {};

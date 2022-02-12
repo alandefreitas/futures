@@ -12,11 +12,11 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief Check if a function can be invoked with the elements of a tuple
+    /// Check if a function can be invoked with the elements of a tuple
     /// as arguments, as in std::apply
     template <typename Function, typename Tuple>
     struct is_tuple_invocable : std::false_type

@@ -5,7 +5,7 @@
 #ifndef FUTURES_ASIO_COMPILE_H
 #define FUTURES_ASIO_COMPILE_H
 
-/// \file
+/// @file
 /// Compilation proxy to make the library not header-only
 ///
 /// To make the library *not* header-only, the user can:

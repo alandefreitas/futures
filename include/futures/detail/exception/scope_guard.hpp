@@ -15,18 +15,18 @@
 
 namespace futures {
     namespace detail {
-        /// \brief The common functions in a scope guard
-        /// \note Adapted from folly / abseil
+        /// The common functions in a scope guard
+        /// @note Adapted from folly / abseil
         class scope_guard_impl_base
         {
         public:
-            /// \brief Tell the scope guard not to run the function
+            /// Tell the scope guard not to run the function
             void
             dismiss() noexcept {
                 dismissed_ = true;
             }
 
-            /// \brief Tell the scope guard to run the function again
+            /// Tell the scope guard to run the function again
             void
             rehire() noexcept {
                 dismissed_ = false;
@@ -62,7 +62,7 @@ namespace futures {
             bool dismissed_;
         };
 
-        /// \brief A scope guard that calls a function when being destructed
+        /// A scope guard that calls a function when being destructed
         /// unless told otherwise
         template <typename FunctionType, bool InvokeNoexcept>
         class scope_guard_impl : public scope_guard_impl_base
@@ -168,11 +168,11 @@ namespace futures {
 
     } // namespace detail
 
-    /// \brief The default scope guard alias for a function
+    /// The default scope guard alias for a function
     template <class F>
     using scope_guard = detail::scope_guard_impl_decay<F, true>;
 
-    /// \brief Make a scope guard with a function
+    /// Make a scope guard with a function
     template <typename F>
     [[nodiscard]] scope_guard<F>
     make_guard(F &&f) noexcept(noexcept(scope_guard<F>(static_cast<F &&>(f)))) {

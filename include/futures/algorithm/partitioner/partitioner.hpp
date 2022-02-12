@@ -10,22 +10,22 @@
 #include <algorithm>
 #include <thread>
 
-/// \file Default partitioners
+/// @file Default partitioners
 /// A partitioner is a light callable object that takes a pair of iterators and
 /// returns the middle of the sequence. In particular, it returns an iterator
 /// `middle` that forms a subrange `first`/`middle` which the algorithm should
 /// solve inline before scheduling the subrange `middle`/`last` in the executor.
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup partitioners Partitioners
+    /** @addtogroup partitioners Partitioners
      *  @{
      */
 
-    /// \brief The halve partitioner always splits the sequence into two parts
+    /// The halve partitioner always splits the sequence into two parts
     /// of roughly equal size
     ///
     /// The sequence is split up to a minimum grain size.
@@ -39,17 +39,17 @@ namespace futures {
         std::size_t min_grain_size_;
 
     public:
-        /// \brief Halve partition constructor
-        /// \param min_grain_size_ Minimum grain size used to split ranges
+        /// Halve partition constructor
+        /// @param min_grain_size_ Minimum grain size used to split ranges
         inline explicit halve_partitioner(std::size_t min_grain_size_)
             : min_grain_size_(min_grain_size_) {}
 
-        /// \brief Split a range of elements
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel type
-        /// \param first First element in range
-        /// \param last Last element in range
-        /// \return Iterator to point where sequence should be split
+        /// Split a range of elements
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel type
+        /// @param first First element in range
+        /// @param last Last element in range
+        /// @return Iterator to point where sequence should be split
         template <typename I, typename S>
         auto
         operator()(I first, S last) {
@@ -60,7 +60,7 @@ namespace futures {
         }
     };
 
-    /// \brief A partitioner that splits the ranges until it identifies we are
+    /// A partitioner that splits the ranges until it identifies we are
     /// not moving to new threads.
     ///
     /// This partitioner splits the ranges until it identifies we are not moving
@@ -97,12 +97,12 @@ namespace futures {
         }
     };
 
-    /// \brief Default partitioner used by parallel algorithms
+    /// Default partitioner used by parallel algorithms
     ///
     /// Its type and parameters might change
     using default_partitioner = thread_partitioner;
 
-    /// \brief Determine a reasonable minimum grain size depending on the number
+    /// Determine a reasonable minimum grain size depending on the number
     /// of elements in a sequence
     inline std::size_t
     make_grain_size(std::size_t n) {
@@ -116,7 +116,7 @@ namespace futures {
             size_t(2048));
     }
 
-    /// \brief Create an instance of the default partitioner with a reasonable
+    /// Create an instance of the default partitioner with a reasonable
     /// grain size for @ref n elements
     ///
     /// The default partitioner type and parameters might change
@@ -125,7 +125,7 @@ namespace futures {
         return default_partitioner(make_grain_size(n));
     }
 
-    /// \brief Create an instance of the default partitioner with a reasonable
+    /// Create an instance of the default partitioner with a reasonable
     /// grain for the range @ref first , @ref last
     ///
     /// The default partitioner type and parameters might change
@@ -140,7 +140,7 @@ namespace futures {
         return make_default_partitioner(std::distance(first, last));
     }
 
-    /// \brief Create an instance of the default partitioner with a reasonable
+    /// Create an instance of the default partitioner with a reasonable
     /// grain for the range @ref r
     ///
     /// The default partitioner type and parameters might change
@@ -185,8 +185,8 @@ namespace futures {
     template <class T, class R>
     constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;
 
-    /** @}*/ // \addtogroup partitioners Partitioners
-    /** @}*/ // \addtogroup algorithms Algorithms
+    /** @}*/ // @addtogroup partitioners Partitioners
+    /** @}*/ // @addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_PARTITIONER_PARTITIONER_HPP

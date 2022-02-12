@@ -16,18 +16,18 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
     class find_functor;
     class find_if_not_functor;
 
-    /// \brief Functor representing the overloads for the @ref find_if function
+    /// Functor representing the overloads for the @ref find_if function
     class find_if_functor
         : public unary_invoke_algorithm_functor<find_if_functor>
     {
@@ -158,18 +158,18 @@ namespace futures {
                 tasks_{};
         };
 
-        /// \brief Complete overload of the find_if algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c find_if
+        /// Complete overload of the find_if algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c find_if
         template <
             class E,
             class P,
@@ -197,7 +197,7 @@ namespace futures {
         }
     };
 
-    /// \brief Finds the first element satisfying specific criteria
+    /// Finds the first element satisfying specific criteria
     inline constexpr find_if_functor find_if;
 
     /** @}*/

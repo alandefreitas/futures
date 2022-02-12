@@ -12,7 +12,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 

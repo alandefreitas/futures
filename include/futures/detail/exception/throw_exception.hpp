@@ -9,11 +9,11 @@
 #define FUTURES_DETAIL_EXCEPTION_THROW_EXCEPTION_HPP
 
 namespace futures::detail {
-    /** \addtogroup futures::detail Futures
+    /** @addtogroup futures::detail Futures
      *  @{
      */
 
-    /// \brief Throw an exception but terminate if we can't throw
+    /// Throw an exception but terminate if we can't throw
     template <typename Ex>
     [[noreturn]] void
     throw_exception(Ex &&ex) {
@@ -25,14 +25,14 @@ namespace futures::detail {
 #endif
     }
 
-    /// \brief Construct and throw an exception but terminate otherwise
+    /// Construct and throw an exception but terminate otherwise
     template <typename Ex, typename... Args>
     [[noreturn]] void
     throw_exception(Args &&...args) {
         throw_exception(Ex(std::forward<Args>(args)...));
     }
 
-    /// \brief Throw an exception but terminate if we can't throw
+    /// Throw an exception but terminate if we can't throw
     template <typename ThrowFn, typename CatchFn>
     void
     catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {

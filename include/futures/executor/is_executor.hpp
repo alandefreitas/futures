@@ -10,26 +10,26 @@
 
 #include <futures/detail/config/asio_include.hpp>
 
-
 namespace futures {
-    /** \addtogroup executors Executors
+    /** @addtogroup executors Executors
      *  @{
      */
 
-    /// \brief Determine if type is an executor
-    ///
-    /// We only consider asio executors to be executors for now
-    /// Future and previous executor models can be considered here, as long as
-    /// their interface is the same as asio or we implement their respective
-    /// traits to make @ref async work properly.
+    /// Determine if type is an executor
+    /**
+     *  We only consider asio executors to be executors for now
+     *  Future and previous executor models can be considered here, as long as
+     *  their interface is the same as asio or we implement their respective
+     *  traits to make @ref async work properly.
+     **/
     template <typename T>
     using is_executor = asio::is_executor<T>;
 
-    /// \brief Determine if type is an executor
+    /// Determine if type is an executor
     template <typename T>
     constexpr bool is_executor_v = is_executor<T>::value;
 
-    /** @} */ // \addtogroup executors Executors
+    /** @} */ // @addtogroup executors Executors
 } // namespace futures
 
 #endif // FUTURES_EXECUTOR_IS_EXECUTOR_HPP

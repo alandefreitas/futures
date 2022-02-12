@@ -11,7 +11,7 @@
 #include <tuple>
 
 namespace futures::detail {
-    /// \brief Concatenate type lists
+    /// Concatenate type lists
     /// The detail functions related to type lists assume we use std::tuple for
     /// all type lists
     template <class...>

@@ -16,33 +16,33 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
 
-    /// \brief Functor representing the overloads for the @ref find_if_not
+    /// Functor representing the overloads for the @ref find_if_not
     /// function
     class find_if_not_functor
         : public unary_invoke_algorithm_functor<find_if_not_functor>
     {
         friend unary_invoke_algorithm_functor<find_if_not_functor>;
 
-        /// \brief Complete overload of the find_if_not algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c find_if_not
+        /// Complete overload of the find_if_not algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c find_if_not
         template <
             class E,
             class P,
@@ -73,7 +73,7 @@ namespace futures {
         }
     };
 
-    /// \brief Finds the first element not satisfying specific criteria
+    /// Finds the first element not satisfying specific criteria
     inline constexpr find_if_not_functor find_if_not;
 
     /** @}*/

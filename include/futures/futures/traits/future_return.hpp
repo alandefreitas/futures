@@ -12,17 +12,17 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
     /// Determine the type to be stored and returned by a future object
     template <class T>
     using future_return = std::conditional<
-        is_reference_wrapper_v<std::decay_t<T>>,
+        detail::is_reference_wrapper_v<std::decay_t<T>>,
         T &,
         std::decay_t<T>>;
 
@@ -30,8 +30,8 @@ namespace futures {
     template <class T>
     using future_return_t = typename future_return<T>::type;
 
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_FUTURES_TRAITS_FUTURE_RETURN_HPP

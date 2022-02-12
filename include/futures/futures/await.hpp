@@ -12,11 +12,11 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /** \addtogroup waiting Waiting
+    /** @addtogroup waiting Waiting
      *
      * \brief Basic function to wait for futures
      *
@@ -25,20 +25,21 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Wait for future types and retrieve their values
-    ///
-    /// This syntax is most useful for cases where we are immediately requesting
-    /// the future result.
-    ///
-    /// The function also makes the syntax optionally a little closer to
-    /// languages such as javascript.
-    ///
-    /// \note This function only participates in overload resolutions if all
-    /// types are futures.
-    ///
-    /// \tparam Future A future type
-    ///
-    /// \return The result of the future object
+    /// Wait for future types and retrieve their values
+    /**
+     *  This syntax is most useful for cases where we are immediately requesting
+     *  the future result.
+     *
+     *  The function also makes the syntax optionally a little closer to
+     *  languages such as javascript.
+     *
+     *  @note This function only participates in overload resolutions if all
+     *  types are futures.
+     *
+     *  @tparam Future A future type
+     *
+     * @return The result of the future object
+     **/
     template <
         typename Future
 #ifndef FUTURES_DOXYGEN
@@ -97,15 +98,16 @@ namespace futures {
     } // namespace detail
 
 
-    /// \brief Wait for future types and retrieve their values as a tuple
-    ///
-    /// \note This function only participates in overload resolutions if all
-    /// types are futures.
-    ///
-    /// \tparam Future A future type
-    /// \tparam Futures Future types
-    ///
-    /// \return The result of the future object
+    /// Wait for future types and retrieve their values as a tuple
+    /**
+     * @note This function only participates in overload resolutions if all
+     * types are futures.
+     *
+     * @tparam Future A future type
+     * @tparam Futures Future types
+     *
+     * @return The result of the future object
+     **/
     template <
         typename... Futures
 #ifndef FUTURES_DOXYGEN

@@ -8,10 +8,10 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
@@ -29,8 +29,8 @@ namespace futures {
             : std::true_type
         {};
     }         // namespace detail
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_DETAIL_TRAITS_HAS_SHARE_HPP

@@ -13,19 +13,19 @@
 #include <utility>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief Helper class to set signals and wait for any future in a sequence
+    /// Helper class to set signals and wait for any future in a sequence
     /// of futures to become ready
     class waiter_for_any
     {
     public:
-        /// \brief Construct a waiter_for_any watching zero futures
+        /// Construct a waiter_for_any watching zero futures
         waiter_for_any() = default;
 
-        /// \brief Destruct the waiter
+        /// Destruct the waiter
         ///
         /// If the waiter is destroyed before we wait for a result, we disable
         /// the future notifications
@@ -36,7 +36,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Construct a waiter_for_any that waits for one of the futures
+        /// Construct a waiter_for_any that waits for one of the futures
         /// in a range of futures
         template <typename Iterator>
         waiter_for_any(Iterator first, Iterator last) {
@@ -54,7 +54,7 @@ namespace futures::detail {
         operator=(waiter_for_any &&)
             = delete;
 
-        /// \brief Watch the specified future
+        /// Watch the specified future
         template <typename F>
         void
         add(F &f) {
@@ -82,7 +82,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Watch the specified futures in the parameter pack
+        /// Watch the specified futures in the parameter pack
         template <typename F1, typename... Fs>
         void
         add(F1 &&f1, Fs &&...fs) {
@@ -90,7 +90,7 @@ namespace futures::detail {
             add(std::forward<Fs>(fs)...);
         }
 
-        /// \brief Wait for one of the futures to notify it got ready
+        /// Wait for one of the futures to notify it got ready
         std::size_t
         wait() {
             registered_waiter_range_lock lk(waiters_);
@@ -107,7 +107,7 @@ namespace futures::detail {
             return ready_idx;
         }
 
-        /// \brief Wait for one of the futures to notify it got ready
+        /// Wait for one of the futures to notify it got ready
         template <class Rep, class Period>
         std::size_t
         wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) {
@@ -127,7 +127,7 @@ namespace futures::detail {
             return std::size_t(-1);
         }
 
-        /// \brief Wait for one of the futures to notify it got ready
+        /// Wait for one of the futures to notify it got ready
         template <class Clock, class Duration>
         std::size_t
         wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time) {
@@ -148,11 +148,11 @@ namespace futures::detail {
         }
 
     private:
-        /// \brief Type of handle in the future object used to notify completion
+        /// Type of handle in the future object used to notify completion
         using notify_when_ready_handle = detail::shared_state_base<
             false>::notify_when_ready_handle;
 
-        /// \brief Helper class to store information about each of the futures
+        /// Helper class to store information about each of the futures
         /// we are waiting for
         ///
         /// Because the waiter can be associated with futures of different
@@ -161,17 +161,17 @@ namespace futures::detail {
         ///
         struct registered_waiter
         {
-            /// \brief Mutex associated with a future we are watching
+            /// Mutex associated with a future we are watching
             std::mutex *future_mutex_;
 
-            /// \brief Callback to disable notifications
+            /// Callback to disable notifications
             std::function<void(notify_when_ready_handle)>
                 disable_notification_callback;
 
-            /// \brief Callback to disable notifications
+            /// Callback to disable notifications
             std::function<bool()> is_ready_callback;
 
-            /// \brief Handler to the resource that will notify us when the
+            /// Handler to the resource that will notify us when the
             /// future is ready
             ///
             /// In the shared state, this usually represents a pointer to the
@@ -179,10 +179,10 @@ namespace futures::detail {
             ///
             notify_when_ready_handle handle;
 
-            /// \brief Index to this future in the underlying range
+            /// Index to this future in the underlying range
             std::size_t index;
 
-            /// \brief Construct a registered waiter to be enqueued in the main
+            /// Construct a registered waiter to be enqueued in the main
             /// waiter
             template <class Future>
             registered_waiter(
@@ -198,41 +198,41 @@ namespace futures::detail {
                   }),
                   handle(handle_), index(index_) {}
 
-            /// \brief Get the mutex associated with the future we are watching
+            /// Get the mutex associated with the future we are watching
             [[nodiscard]] std::mutex &
             mutex() const {
                 return *future_mutex_;
             }
 
-            /// \brief Disable notification when the future is ready
+            /// Disable notification when the future is ready
             void
             disable_notification() const {
                 disable_notification_callback(handle);
             }
 
-            /// \brief Check if underlying future is ready
+            /// Check if underlying future is ready
             [[nodiscard]] bool
             is_ready() const {
                 return is_ready_callback();
             }
         };
 
-        /// \brief Helper class to lock all futures
+        /// Helper class to lock all futures
         struct registered_waiter_range_lock
         {
-            /// \brief Type for a vector of locks
+            /// Type for a vector of locks
             using lock_vector = std::vector<std::unique_lock<std::mutex>>;
 
-            /// \brief Type for a shared vector of locks
+            /// Type for a shared vector of locks
             using shared_lock_vector = std::shared_ptr<lock_vector>;
 
-            /// \brief Number of futures locked
+            /// Number of futures locked
             std::size_t count{ 0 };
 
-            /// \brief Locks for each future in the range
+            /// Locks for each future in the range
             shared_lock_vector locks;
 
-            /// \brief Create a lock for each future in the specified vector of
+            /// Create a lock for each future in the specified vector of
             /// registered waiters
             template <typename WaiterIterator>
             explicit registered_waiter_range_lock(
@@ -257,13 +257,13 @@ namespace futures::detail {
                     std::forward<Range>(r).end()) {}
 
 
-            /// \brief Lock all future mutexes in the range
+            /// Lock all future mutexes in the range
             void
             lock() const {
                 futures::detail::lock(locks->begin(), locks->end());
             }
 
-            /// \brief Unlock all future mutexes in the range
+            /// Unlock all future mutexes in the range
             void
             unlock() const {
                 for (size_t i = 0; i < count; ++i) {
@@ -272,17 +272,17 @@ namespace futures::detail {
             }
         };
 
-        /// \brief Condition variable to warn about any ready future
+        /// Condition variable to warn about any ready future
         std::condition_variable_any cv;
 
-        /// \brief Waiters with information about each future and notification
+        /// Waiters with information about each future and notification
         /// handlers
         std::vector<registered_waiter> waiters_;
 
-        /// \brief Number of futures in this range
+        /// Number of futures in this range
         std::size_t future_count{ 0 };
 
-        /// \brief Poller futures
+        /// Poller futures
         ///
         /// Futures that support notifications wrapping future types that don't
         ///

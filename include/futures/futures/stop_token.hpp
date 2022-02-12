@@ -8,7 +8,7 @@
 #ifndef FUTURES_FUTURES_STOP_TOKEN_HPP
 #define FUTURES_FUTURES_STOP_TOKEN_HPP
 
-/// \file
+/// @file
 ///
 /// This header contains is an adapted version of std::stop_token for futures
 /// rather than threads.
@@ -18,7 +18,7 @@
 /// stop_callback.
 ///
 /// The API was initially adapted from Baker Josuttis' reference implementation
-/// for C++20: \see https://github.com/josuttis/jthread
+/// for C++20: @see https://github.com/josuttis/jthread
 ///
 /// Although the jfuture class is obviously different from std::jthread, this
 /// stop_token is not different from std::stop_token. The main goal here is just
@@ -31,10 +31,10 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup cancellation Cancellation
+    /** @addtogroup cancellation Cancellation
      *
      * \brief Future cancellation primitives
      *
@@ -47,18 +47,18 @@ namespace futures {
 
     class stop_source;
 
-    /// \brief Empty struct to initialize a @ref stop_source without a shared
+    /// Empty struct to initialize a @ref stop_source without a shared
     /// stop state
     struct nostopstate_t
     {
         explicit nostopstate_t() = default;
     };
 
-    /// \brief Empty struct to initialize a @ref stop_source without a shared
+    /// Empty struct to initialize a @ref stop_source without a shared
     /// stop state
     inline constexpr nostopstate_t nostopstate{};
 
-    /// \brief Token to check if a stop request has been made
+    /// Token to check if a stop request has been made
     ///
     /// The stop_token class provides the means to check if a stop request has
     /// been made or can be made, for its associated std::stop_source object. It
@@ -66,54 +66,54 @@ namespace futures {
     class stop_token
     {
     public:
-        /// \name Constructors
+        /// @name Constructors
         /// @{
 
-        /// \brief Constructs an empty stop_token with no associated stop-state
+        /// Constructs an empty stop_token with no associated stop-state
         ///
-        /// \post stop_possible() and stop_requested() are both false
+        /// @post stop_possible() and stop_requested() are both false
         ///
-        /// \param other another stop_token object to construct this stop_token
+        /// @param other another stop_token object to construct this stop_token
         /// object
         stop_token() noexcept = default;
 
-        /// \brief Copy constructor.
+        /// Copy constructor.
         ///
         /// Constructs a stop_token whose associated stop-state is the same as
         /// that of other.
         ///
-        /// \post *this and other share the same associated stop-state and
+        /// @post *this and other share the same associated stop-state and
         /// compare equal
         ///
-        /// \param other another stop_token object to construct this stop_token
+        /// @param other another stop_token object to construct this stop_token
         /// object
         stop_token(const stop_token &other) noexcept = default;
 
-        /// \brief Move constructor.
+        /// Move constructor.
         ///
         /// Constructs a stop_token whose associated stop-state is the same as
         /// that of other; other is left empty
         ///
-        /// \post *this has other's previously associated stop-state, and
+        /// @post *this has other's previously associated stop-state, and
         /// other.stop_possible() is false
         ///
-        /// \param other another stop_token object to construct this stop_token
+        /// @param other another stop_token object to construct this stop_token
         /// object
         stop_token(stop_token &&other) noexcept
             : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
-        /// \brief Destroys the stop_token object.
+        /// Destroys the stop_token object.
         ///
-        /// \post If *this has associated stop-state, releases ownership of it.
+        /// @post If *this has associated stop-state, releases ownership of it.
         ///
         ~stop_token() = default;
 
-        /// \brief Copy-assigns the associated stop-state of other to that of
+        /// Copy-assigns the associated stop-state of other to that of
         /// *this
         ///
         /// Equivalent to stop_token(other).swap(*this)
         ///
-        /// \param other Another stop_token object to share the stop-state with
+        /// @param other Another stop_token object to share the stop-state with
         /// to or acquire the stop-state from
         stop_token &
         operator=(const stop_token &other) noexcept {
@@ -124,7 +124,7 @@ namespace futures {
             return *this;
         }
 
-        /// \brief Move-assigns the associated stop-state of other to that of
+        /// Move-assigns the associated stop-state of other to that of
         /// *this
         ///
         /// After the assignment, *this contains the previous associated
@@ -132,7 +132,7 @@ namespace futures {
         ///
         /// Equivalent to stop_token(std::move(other)).swap(*this)
         ///
-        /// \param other Another stop_token object to share the stop-state with
+        /// @param other Another stop_token object to share the stop-state with
         /// to or acquire the stop-state from
         stop_token &
         operator=(stop_token &&other) noexcept {
@@ -145,12 +145,12 @@ namespace futures {
 
         /// @}
 
-        /// \name Modifiers
+        /// @name Modifiers
         /// @{
 
-        /// \brief Exchanges the associated stop-state of *this and other
+        /// Exchanges the associated stop-state of *this and other
         ///
-        /// \param other stop_token to exchange the contents with
+        /// @param other stop_token to exchange the contents with
         void
         swap(stop_token &other) noexcept {
             std::swap(shared_state_, other.shared_state_);
@@ -158,17 +158,17 @@ namespace futures {
 
         /// @}
 
-        /// \name Observers
+        /// @name Observers
         /// @{
 
-        /// \brief Checks whether the associated stop-state has been requested
+        /// Checks whether the associated stop-state has been requested
         /// to stop
         ///
         /// Checks if the stop_token object has associated stop-state and that
         /// state has received a stop request. A default constructed stop_token
         /// has no associated stop-state, and thus has not had stop requested
         ///
-        /// \return true if the stop_token object has associated stop-state and
+        /// @return true if the stop_token object has associated stop-state and
         /// it received a stop request, false otherwise.
         [[nodiscard]] bool
         stop_requested() const noexcept {
@@ -176,7 +176,7 @@ namespace futures {
                    && shared_state_->load(std::memory_order_relaxed);
         }
 
-        /// \brief Checks whether associated stop-state can be requested to stop
+        /// Checks whether associated stop-state can be requested to stop
         ///
         /// Checks if the stop_token object has associated stop-state, and that
         /// state either has already had a stop requested or it has associated
@@ -187,10 +187,10 @@ namespace futures {
         /// std::stop_source object(s) exist can also not be stopped if such a
         /// request has not already been made.
         ///
-        /// \note If the stop_token object has associated stop-state and a stop
+        /// @note If the stop_token object has associated stop-state and a stop
         /// request has already been made, this function still returns true.
         ///
-        /// \return false if the stop_token object has no associated stop-state,
+        /// @return false if the stop_token object has no associated stop-state,
         /// or it did not yet receive a stop request and there are no associated
         /// std::stop_source object(s); true otherwise
         [[nodiscard]] bool
@@ -202,33 +202,33 @@ namespace futures {
 
         /// @}
 
-        /// \name Non-member functions
+        /// @name Non-member functions
         /// @{
 
-        /// \brief compares two std::stop_token objects
+        /// compares two std::stop_token objects
         ///
         /// This function is not visible to ordinary unqualified or qualified
         /// lookup, and can only be found by argument-dependent lookup when
         /// std::stop_token is an associated class of the arguments.
         ///
-        /// \param a stop_tokens to compare
-        /// \param b stop_tokens to compare
+        /// @param a stop_tokens to compare
+        /// @param b stop_tokens to compare
         ///
-        /// \return true if lhs and rhs have the same associated stop-state, or
+        /// @return true if lhs and rhs have the same associated stop-state, or
         /// both have no associated stop-state, otherwise false
         [[nodiscard]] friend bool
         operator==(const stop_token &a, const stop_token &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
 
-        /// \brief compares two std::stop_token objects for inequality
+        /// compares two std::stop_token objects for inequality
         ///
         /// The != operator is synthesized from operator==
         ///
-        /// \param a stop_tokens to compare
-        /// \param b stop_tokens to compare
+        /// @param a stop_tokens to compare
+        /// @param b stop_tokens to compare
         ///
-        /// \return true if lhs and rhs have different associated stop-states
+        /// @return true if lhs and rhs have different associated stop-states
         [[nodiscard]] friend bool
         operator!=(const stop_token &a, const stop_token &b) noexcept {
             return a.shared_state_ != b.shared_state_;
@@ -239,19 +239,19 @@ namespace futures {
     private:
         friend class stop_source;
 
-        /// \brief Constructor that allows the stop_source to construct the
+        /// Constructor that allows the stop_source to construct the
         /// stop_token directly from the stop state
         ///
-        /// \param state State for the new token
+        /// @param state State for the new token
         explicit stop_token(detail::shared_stop_state state) noexcept
             : shared_state_(std::move(state)) {}
 
-        /// \brief Shared pointer to an atomic bool indicating if an external
+        /// Shared pointer to an atomic bool indicating if an external
         /// procedure should stop
         detail::shared_stop_state shared_state_{ nullptr };
     };
 
-    /// \brief Object used to issue a stop request
+    /// Object used to issue a stop request
     ///
     /// The stop_source class provides the means to issue a stop request, such
     /// as for std::jthread cancellation. A stop request made for one
@@ -263,55 +263,55 @@ namespace futures {
     class stop_source
     {
     public:
-        /// \name Constructors
+        /// @name Constructors
         /// @{
 
-        /// \brief Constructs a stop_source with new stop-state
+        /// Constructs a stop_source with new stop-state
         ///
-        /// \post stop_possible() is true and stop_requested() is false
+        /// @post stop_possible() is true and stop_requested() is false
         stop_source()
             : shared_state_(std::make_shared<std::atomic_bool>(false)) {}
 
-        /// \brief Constructs an empty stop_source with no associated stop-state
+        /// Constructs an empty stop_source with no associated stop-state
         ///
-        /// \post stop_possible() and stop_requested() are both false
+        /// @post stop_possible() and stop_requested() are both false
         explicit stop_source(nostopstate_t) noexcept {};
 
-        /// \brief Copy constructor
+        /// Copy constructor
         ///
         /// Constructs a stop_source whose associated stop-state is the same as
         /// that of other.
         ///
-        /// \post *this and other share the same associated stop-state and
+        /// @post *this and other share the same associated stop-state and
         /// compare equal
         ///
-        /// \param other another stop_source object to construct this
+        /// @param other another stop_source object to construct this
         /// stop_source object with
         stop_source(const stop_source &other) noexcept = default;
 
-        /// \brief Move constructor
+        /// Move constructor
         ///
         /// Constructs a stop_source whose associated stop-state is the same as
         /// that of other; other is left empty
         ///
-        /// \post *this has other's previously associated stop-state, and
+        /// @post *this has other's previously associated stop-state, and
         /// other.stop_possible() is false
         ///
-        /// \param other another stop_source object to construct this
+        /// @param other another stop_source object to construct this
         /// stop_source object with
         stop_source(stop_source &&other) noexcept
             : shared_state_(std::exchange(other.shared_state_, nullptr)) {}
 
-        /// \brief Destroys the stop_source object.
+        /// Destroys the stop_source object.
         ///
         /// If *this has associated stop-state, releases ownership of it.
         ~stop_source() = default;
 
-        /// \brief Copy-assigns the stop-state of other
+        /// Copy-assigns the stop-state of other
         ///
         /// Equivalent to stop_source(other).swap(*this)
         ///
-        /// \param other another stop_source object acquire the stop-state from
+        /// @param other another stop_source object acquire the stop-state from
         stop_source &
         operator=(stop_source &&other) noexcept {
             stop_source tmp{ std::move(other) };
@@ -319,14 +319,14 @@ namespace futures {
             return *this;
         }
 
-        /// \brief Move-assigns the stop-state of other
+        /// Move-assigns the stop-state of other
         ///
         /// Equivalent to stop_source(std::move(other)).swap(*this)
         ///
-        /// \post After the assignment, *this contains the previous stop-state
+        /// @post After the assignment, *this contains the previous stop-state
         /// of other, and other has no stop-state
         ///
-        /// \param other another stop_source object to share the stop-state with
+        /// @param other another stop_source object to share the stop-state with
         stop_source &
         operator=(const stop_source &other) noexcept {
             if (shared_state_ != other.shared_state_) {
@@ -338,10 +338,10 @@ namespace futures {
 
         /// @}
 
-        /// \name Modifiers
+        /// @name Modifiers
         /// @{
 
-        /// \brief Makes a stop request for the associated stop-state, if any
+        /// Makes a stop request for the associated stop-state, if any
         ///
         /// Issues a stop request to the stop-state, if the stop_source object
         /// has a stop-state, and it has not yet already had stop requested.
@@ -355,7 +355,7 @@ namespace futures {
         /// - request_stop() can be concurrently invoked on other stop_source
         /// objects, and only one will actually perform the stop request.
         ///
-        /// \return true if the stop_source object has a stop-state and this
+        /// @return true if the stop_source object has a stop-state and this
         /// invocation made a stop request (the underlying atomic value was
         /// successfully changed), otherwise false
         bool
@@ -370,8 +370,8 @@ namespace futures {
             return false;
         }
 
-        /// \brief Swaps two stop_source objects
-        /// \param other stop_source to exchange the contents with
+        /// Swaps two stop_source objects
+        /// @param other stop_source to exchange the contents with
         void
         swap(stop_source &other) noexcept {
             std::swap(shared_state_, other.shared_state_);
@@ -379,29 +379,29 @@ namespace futures {
 
         /// @}
 
-        /// \name Non-member functions
+        /// @name Non-member functions
         /// @{
 
-        /// \brief Returns a stop_token for the associated stop-state
+        /// Returns a stop_token for the associated stop-state
         ///
         /// Returns a stop_token object associated with the stop_source's
         /// stop-state, if the stop_source has stop-state, otherwise returns a
         /// default-constructed (empty) stop_token.
         ///
-        /// \return A stop_token object, which will be empty if
+        /// @return A stop_token object, which will be empty if
         /// this->stop_possible() == false
         [[nodiscard]] stop_token
         get_token() const noexcept {
             return stop_token{ shared_state_ };
         }
 
-        /// \brief Checks whether the associated stop-state has been requested
+        /// Checks whether the associated stop-state has been requested
         /// to stop
         ///
         /// Checks if the stop_source object has a stop-state and that state has
         /// received a stop request.
         ///
-        /// \return true if the stop_token object has a stop-state, and it has
+        /// @return true if the stop_token object has a stop-state, and it has
         /// received a stop request, false otherwise
         [[nodiscard]] bool
         stop_requested() const noexcept {
@@ -409,14 +409,14 @@ namespace futures {
                    && shared_state_->load(std::memory_order_relaxed);
         }
 
-        /// \brief Checks whether associated stop-state can be requested to stop
+        /// Checks whether associated stop-state can be requested to stop
         ///
         /// Checks if the stop_source object has a stop-state.
         ///
-        /// \note If the stop_source object has a stop-state and a stop request
+        /// @note If the stop_source object has a stop-state and a stop request
         /// has already been made, this function still returns true.
         ///
-        /// \return true if the stop_source object has a stop-state, otherwise
+        /// @return true if the stop_source object has a stop-state, otherwise
         /// false
         [[nodiscard]] bool
         stop_possible() const noexcept {
@@ -425,7 +425,7 @@ namespace futures {
 
         /// @}
 
-        /// \name Non-member functions
+        /// @name Non-member functions
         /// @{
 
         [[nodiscard]] friend bool
@@ -440,13 +440,13 @@ namespace futures {
         /// @}
 
     private:
-        /// \brief Shared pointer to an atomic bool indicating if an external
+        /// Shared pointer to an atomic bool indicating if an external
         /// procedure should stop
         detail::shared_stop_state shared_state_{ nullptr };
     };
 
-    /** @} */ // \addtogroup cancellation Cancellation
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup cancellation Cancellation
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_FUTURES_STOP_TOKEN_HPP

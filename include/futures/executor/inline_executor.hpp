@@ -12,19 +12,19 @@
 #include <futures/executor/is_executor.hpp>
 
 namespace futures {
-    /** \addtogroup executors Executors
+    /** @addtogroup executors Executors
      *  @{
      */
 
-    /// \brief A minimal executor that runs anything in the local thread in the
-    /// default context
-    ///
-    /// Although simple, it needs to meet the executor requirements:
-    /// - Executor concept
-    /// - Ability to query the execution context
-    ///     - Result being derived from execution_context
-    /// - The execute function
-    /// \see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
+    /// An executor that runs anything inline
+    /**
+     * Although simple, it needs to meet the executor requirements:
+     * - Executor concept
+     * - Ability to query the execution context
+     *     - Result being derived from execution_context
+     * - The execute function
+     * @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
+     */
     struct inline_executor
     {
         asio::execution_context *context_{ nullptr };
@@ -56,39 +56,39 @@ namespace futures {
         }
     };
 
-    /// \brief Get the inline execution context
+    /// Get the inline execution context
     inline asio::execution_context &
     inline_execution_context() {
         static asio::execution_context context;
         return context;
     }
 
-    /// \brief Make an inline executor object
+    /// Make an inline executor object
     inline inline_executor
     make_inline_executor() {
         asio::execution_context &ctx = inline_execution_context();
         return inline_executor{ &ctx };
     }
 
-    /** @} */ // \addtogroup executors Executors
+    /** @} */ // @addtogroup executors Executors
 } // namespace futures
 
 #ifdef FUTURES_USE_BOOST_ASIO
 namespace boost {
 #endif
     namespace asio {
-        /// \brief Ensure asio and our internal functions see inline_executor as
+        /// Ensure asio and our internal functions see inline_executor as
         /// an executor
-        ///
-        /// This traits ensures asio and our internal functions see
-        /// inline_executor as an executor, as asio traits don't always work.
-        ///
-        /// This is quite a workaround until things don't improve with our
-        /// executor traits.
-        ///
-        /// Ideally, we would have our own executor traits and let asio pick up
-        /// from those.
-        ///
+        /**
+         *  This traits ensures asio and our internal functions see
+         *  inline_executor as an executor, as asio traits don't always work.
+         *
+         *  This is quite a workaround until things don't improve with our
+         *  executor traits.
+         *
+         *  Ideally, we would have our own executor traits and let asio pick up
+         *  from those.
+         **/
         template <>
         class is_executor<futures::inline_executor> : public std::true_type
         {};

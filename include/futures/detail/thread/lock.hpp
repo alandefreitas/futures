@@ -11,11 +11,11 @@
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief Try to lock range of mutexes in a way that all of them should
+    /// Try to lock range of mutexes in a way that all of them should
     /// work
     ///
     /// Calls try_lock() on each of the Lockable objects in the supplied range.
@@ -26,19 +26,19 @@ namespace futures::detail {
     /// throws an exception any locks acquired by the function will be released
     /// before the function exits.
     ///
-    /// \throws exception Any exceptions thrown by calling try_lock() on the
+    /// @throws exception Any exceptions thrown by calling try_lock() on the
     /// supplied Lockable objects
     ///
-    /// \post All the supplied Lockable objects are locked by the calling
+    /// @post All the supplied Lockable objects are locked by the calling
     /// thread.
     ///
-    /// \see
+    /// @see
     /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.lock_functions.try_lock_range
     ///
-    /// \tparam Iterator Range iterator type
-    /// \param first Iterator to first mutex in the range
-    /// \param last Iterator to one past the last mutex in the range
-    /// \return Iterator to first element that could *not* be locked, or `end`
+    /// @tparam Iterator Range iterator type
+    /// @param first Iterator to first mutex in the range
+    /// @param last Iterator to one past the last mutex in the range
+    /// @return Iterator to first element that could *not* be locked, or `end`
     /// if all the supplied Lockable objects are now locked
     template <
         typename Iterator,
@@ -77,7 +77,7 @@ namespace futures::detail {
         return failed_mutex_it;
     }
 
-    /// \brief Lock range of mutexes in a way that avoids deadlock
+    /// Lock range of mutexes in a way that avoids deadlock
     ///
     /// Locks the Lockable objects in the range [`first`, `last`) supplied as
     /// arguments in an unspecified and indeterminate order in a way that avoids
@@ -87,18 +87,18 @@ namespace futures::detail {
     /// on the supplied Lockable objects throws an exception any locks acquired
     /// by the function will be released before the function exits.
     ///
-    /// \throws exception Any exceptions thrown by calling lock() or try_lock()
+    /// @throws exception Any exceptions thrown by calling lock() or try_lock()
     /// on the supplied Lockable objects
     ///
-    /// \post All the supplied Lockable objects are locked by the calling
+    /// @post All the supplied Lockable objects are locked by the calling
     /// thread.
     ///
-    /// \see
+    /// @see
     /// https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.lock_functions
     ///
-    /// \tparam Iterator Range iterator type
-    /// \param first Iterator to first mutex in the range
-    /// \param last Iterator to one past the last mutex in the range
+    /// @tparam Iterator Range iterator type
+    /// @param first Iterator to first mutex in the range
+    /// @param last Iterator to one past the last mutex in the range
     template <
         typename Iterator,
         std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
@@ -106,7 +106,7 @@ namespace futures::detail {
     lock(Iterator first, Iterator last) {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
 
-        /// \brief Auxiliary lock guard for a range of mutexes recursively using
+        /// Auxiliary lock guard for a range of mutexes recursively using
         /// this lock function
         struct range_lock_guard
         {
@@ -116,7 +116,7 @@ namespace futures::detail {
             /// Iterator to one past last locked mutex in the range
             Iterator end;
 
-            /// \brief Construct a lock guard for a range of mutexes
+            /// Construct a lock guard for a range of mutexes
             range_lock_guard(Iterator first, Iterator last)
                 : begin(first), end(last) {
                 // The range lock guard recursively calls the same lock function
@@ -143,7 +143,7 @@ namespace futures::detail {
                 return *this;
             };
 
-            /// \brief Unlock each mutex in the range
+            /// Unlock each mutex in the range
             ~range_lock_guard() {
                 while (begin != end) {
                     begin->unlock();
@@ -151,7 +151,7 @@ namespace futures::detail {
                 }
             }
 
-            /// \brief Make the range empty so nothing is unlocked at destruction
+            /// Make the range empty so nothing is unlocked at destruction
             void
             release() {
                 begin = end;
@@ -226,7 +226,7 @@ namespace futures::detail {
         }
     }
 
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 
 #endif // FUTURES_DETAIL_THREAD_LOCK_HPP

@@ -8,12 +8,13 @@
 #ifndef FUTURES_ADAPTOR_THEN_HPP
 #define FUTURES_ADAPTOR_THEN_HPP
 
+#include <futures/adaptor/bind_executor_to_lambda.hpp>
 #include <futures/adaptor/detail/internal_then_functor.hpp>
 #include <future>
 #include <version>
 
 namespace futures {
-    /** \addtogroup adaptors Adaptors
+    /** @addtogroup adaptors Adaptors
      *
      * \brief Functions to create new futures from existing functions.
      *
@@ -24,7 +25,7 @@ namespace futures {
      *  @{
      */
 
-    /// \brief Schedule a continuation function to a future
+    /// Schedule a continuation function to a future
     ///
     /// This creates a continuation that gets executed when the before future is
     /// over. The continuation needs to be invocable with the return type of the
@@ -50,7 +51,7 @@ namespace futures {
     ///   - Otherwise:                                      return cfuture with
     ///   no stop source
     ///
-    /// \return A continuation to the before future
+    /// @return A continuation to the before future
     template <
         typename Executor,
         typename Function,
@@ -76,12 +77,12 @@ namespace futures {
             std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future with the default
+    /// Schedule a continuation function to a future with the default
     /// executor
     ///
-    /// \return A continuation to the before future
+    /// @return A continuation to the before future
     ///
-    /// \see @ref then
+    /// @see @ref then
     template <
         class Future,
         typename Function
@@ -113,9 +114,9 @@ namespace futures {
         }
     }
 
-    /// \brief Operator to schedule a continuation function to a future
+    /// Operator to schedule a continuation function to a future
     ///
-    /// \return A continuation to the before future
+    /// @return A continuation to the before future
     template <
         class Future,
         typename Function
@@ -137,16 +138,16 @@ namespace futures {
         return then(std::forward<Future>(before), std::forward<Function>(after));
     }
 
-    /// \brief Schedule a continuation function to a future with a custom
+    /// Schedule a continuation function to a future with a custom
     /// executor
     ///
-    /// \return A continuation to the before future
+    /// @return A continuation to the before future
     template <
         class Executor,
         class Future,
-        typename Function
+        class Function,
 #ifndef FUTURES_DOXYGEN
-        ,
+        bool RValue,
         std::enable_if_t<
             // clang-format off
             is_executor_v<std::decay_t<Executor>> &&
@@ -162,37 +163,11 @@ namespace futures {
     decltype(auto)
     operator>>(
         Future &&before,
-        std::pair<const Executor &, Function &> &&after) {
+        detail::executor_and_callable_reference<Executor, Function, RValue> &&after) {
         return then(
-            after.first,
+            after.get_executor(),
             std::forward<Future>(before),
-            std::forward<Function>(after.second));
-    }
-
-    /// \brief Create a proxy pair to schedule a continuation function to a
-    /// future with a custom executor
-    ///
-    /// For this operation, we needed an operator with higher precedence than
-    /// operator>> Our options are: +, -, *, /, %, &, !, ~. Although + seems
-    /// like an obvious choice, % is the one that leads to less conflict with
-    /// other functions.
-    ///
-    /// \return A proxy pair to schedule execution
-    template <
-        class Executor,
-        typename Function,
-        typename... Args
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            is_executor_v<std::decay_t<
-                Executor>> && !is_executor_v<std::decay_t<Function>> && !is_callable_v<std::decay_t<Executor>> && is_callable_v<std::decay_t<Function>>,
-            int> = 0
-#endif
-        >
-    decltype(auto)
-    operator%(const Executor &ex, Function &&after) {
-        return std::make_pair(std::cref(ex), std::ref(after));
+            std::forward<Function>(after.get_callable()));
     }
 
     /** @} */

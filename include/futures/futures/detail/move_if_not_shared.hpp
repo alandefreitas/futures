@@ -11,19 +11,19 @@
 #include <futures/futures/traits/is_future.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
-    /// \brief Move or share a future, depending on the type of future input
+    /// Move or share a future, depending on the type of future input
     ///
     /// Create another future with the state of the before future (usually for a
     /// continuation function). This state should be copied to the new callback
     /// function. Shared futures can be copied. Normal futures should be moved.
-    /// \return The moved future or the shared future
+    /// @return The moved future or the shared future
     template <class Future>
     constexpr decltype(auto)
     move_if_not_shared(Future &&before) {
@@ -34,7 +34,7 @@ namespace futures::detail {
         }
     }
 
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 #endif // FUTURES_FUTURES_DETAIL_MOVE_IF_NOT_SHARED_HPP

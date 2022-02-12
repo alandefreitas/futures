@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_TRAITS_TO_FUTURE_HPP
 
 namespace futures {
-    /// \brief Trait to convert input type to its proper future type
+    /// Trait to convert input type to its proper future type
     ///
     /// - Futures become their decayed versions
     /// - Lambdas become futures
@@ -21,7 +21,7 @@ namespace futures {
         using type = void;
     };
 
-    /// \brief Trait to convert input type to its proper future type
+    /// Trait to convert input type to its proper future type
     /// (specialization for future types)
     ///
     /// - Futures become their decayed versions
@@ -34,7 +34,7 @@ namespace futures {
         using type = std::decay_t<Future>;
     };
 
-    /// \brief Trait to convert input type to its proper future type
+    /// Trait to convert input type to its proper future type
     /// (specialization for functions)
     ///
     /// - Futures become their decayed versions

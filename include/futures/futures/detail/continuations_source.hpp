@@ -14,11 +14,11 @@
 #include <shared_mutex>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief The continuation state as a small thread safe container that
+    /// The continuation state as a small thread safe container that
     /// holds continuation functions for a future
     ///
     /// The whole logic here is very similar to that of stop_tokens. There is a
@@ -41,17 +41,17 @@ namespace futures::detail {
     class continuations_state
     {
     public:
-        /// \name Public Types
+        /// @name Public Types
         /// @{
 
-        /// \brief Type of a continuation callback
+        /// Type of a continuation callback
         /// This is a callback function that posts the next task to an executor.
         /// We cannot ensure the tasks go to the same executor.
         /// This needs to be type erased because there are many types of
         /// callables that might become a continuation here.
         using continuation_type = std::function<void()>;
 
-        /// \brief The continuation vector
+        /// The continuation vector
         /// We use a small vector because of the common case when there few
         /// continuations per task
         using continuation_vector = std::conditional_t<
@@ -61,31 +61,31 @@ namespace futures::detail {
 
         /// @}
 
-        /// \name Constructors
+        /// @name Constructors
         /// @{
 
-        /// \brief Default constructor
+        /// Default constructor
         continuations_state() = default;
 
-        /// \brief Copy constructor
+        /// Copy constructor
         continuations_state(const continuations_state &) = delete;
 
-        /// \brief Destructor - Run continuations if they have not run yet
+        /// Destructor - Run continuations if they have not run yet
         ~continuations_state() {
             request_run();
         }
 
-        /// \brief Copy assignment
+        /// Copy assignment
         continuations_state &
         operator=(const continuations_state &)
             = delete;
 
         /// @}
 
-        /// \name Modifying
+        /// @name Modifying
         /// @{
 
-        /// \brief Check if some source asked already asked for the
+        /// Check if some source asked already asked for the
         /// continuations to run
         bool
         is_run_requested() const {
@@ -96,14 +96,14 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Check if some source asked already asked for the
+        /// Check if some source asked already asked for the
         /// continuations to run
         bool
         is_run_possible() const {
             return !is_run_requested();
         }
 
-        /// \brief Emplace a new continuation
+        /// Emplace a new continuation
         /// Use executor ex if more continuations are not possible
         template <class Executor, class Fn>
         bool
@@ -129,7 +129,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Run all continuations
+        /// Run all continuations
         bool
         request_run() {
             if constexpr (!is_always_deferred) {
@@ -165,11 +165,11 @@ namespace futures::detail {
         /// @}
 
     private:
-        /// \brief The actual pointers to the continuation functions
+        /// The actual pointers to the continuation functions
         /// This is encapsulated so we can't break anything
         continuation_vector continuations_;
 
-        /// \brief A mutex for the continuations.
+        /// A mutex for the continuations.
         ///
         /// Although the continuations are in an atomic queue and multiple
         /// threads can push continuations at the same time, we cannot
@@ -177,7 +177,7 @@ namespace futures::detail {
         /// dequeueing them.
         mutable std::shared_mutex continuations_mutex_;
 
-        /// \brief Run has already been requested
+        /// Run has already been requested
         std::conditional_t<!is_always_deferred, std::atomic<bool>, bool>
             run_requested_{ false };
     };
@@ -194,49 +194,49 @@ namespace futures::detail {
     /// the non-default constructor
     inline constexpr nocontinuationsstate_t nocontinuationsstate{};
 
-    /// \brief Token the future object uses to emplace continuations
+    /// Token the future object uses to emplace continuations
     template <bool is_always_deferred>
     class continuations_token
     {
     public:
-        /// \brief Constructs an empty continuations_token with no associated
+        /// Constructs an empty continuations_token with no associated
         /// continuations-state
         continuations_token() noexcept : state_(nullptr) {}
 
-        /// \brief Constructs a continuations_token whose associated
+        /// Constructs a continuations_token whose associated
         /// continuations-state is the same as that of other
         continuations_token(
             const continuations_token &other) noexcept = default;
 
-        /// \brief Constructs a continuations_token whose associated
+        /// Constructs a continuations_token whose associated
         /// continuations-state is the same as that of other; other is left empty
         continuations_token(continuations_token &&other) noexcept = default;
 
-        /// \brief Copy-assigns the associated continuations-state of other to
+        /// Copy-assigns the associated continuations-state of other to
         /// that of *this
         continuations_token &
         operator=(const continuations_token &other) noexcept = default;
 
-        /// \brief Move-assigns the associated continuations-state of other to
+        /// Move-assigns the associated continuations-state of other to
         /// that of *this
         continuations_token &
         operator=(continuations_token &&other) noexcept = default;
 
-        /// \brief Exchanges the associated continuations-state of *this and
+        /// Exchanges the associated continuations-state of *this and
         /// other.
         void
         swap(continuations_token &other) noexcept {
             std::swap(state_, other.state_);
         }
 
-        /// \brief Checks if the continuations_token object has associated
+        /// Checks if the continuations_token object has associated
         /// continuations-state and that state has received a run request
         [[nodiscard]] bool
         run_requested() const noexcept {
             return (state_ != nullptr) && state_->is_run_requested();
         }
 
-        /// \brief Checks if the continuations_token object has associated
+        /// Checks if the continuations_token object has associated
         /// continuations-state, and that state either has already had a run
         /// requested or it has associated continuations_source object(s)
         [[nodiscard]] bool
@@ -244,7 +244,7 @@ namespace futures::detail {
             return (state_ != nullptr) && (!state_->is_run_requested());
         }
 
-        /// \brief compares two std::run_token objects
+        /// compares two std::run_token objects
         [[nodiscard]] friend bool
         operator==(
             const continuations_token &lhs,
@@ -263,53 +263,53 @@ namespace futures::detail {
         template <bool is_always_deferred_source>
         friend class continuations_source;
 
-        /// \brief Create token from state
+        /// Create token from state
         explicit continuations_token(
             std::shared_ptr<continuations_state<is_always_deferred>>
                 state) noexcept
             : state_(std::move(state)) {}
 
-        /// \brief The state
+        /// The state
         std::shared_ptr<continuations_state<is_always_deferred>> state_;
     };
 
-    /// \brief The continuations_source class provides the means to issue a
+    /// The continuations_source class provides the means to issue a
     /// request to run the future continuations
     template <bool is_always_deferred>
     class continuations_source
     {
     public:
-        /// \brief Constructs a continuations_source with new continuations-state
+        /// Constructs a continuations_source with new continuations-state
         continuations_source()
             : state_(
                 std::make_shared<continuations_state<is_always_deferred>>()){};
 
-        /// \brief Constructs an empty continuations_source with no associated
+        /// Constructs an empty continuations_source with no associated
         /// continuations-state.
         explicit continuations_source(nocontinuationsstate_t) noexcept
             : state_{ nullptr } {}
 
-        /// \brief Copy constructor.
+        /// Copy constructor.
         /// Constructs a continuations_source whose associated
         /// continuations-state is the same as that of other.
         continuations_source(
             const continuations_source &other) noexcept = default;
 
-        /// \brief Move constructor.
+        /// Move constructor.
         /// Constructs a continuations_source whose associated
         /// continuations-state is the same as that of other; other is left
         /// empty.
         continuations_source(continuations_source &&other) noexcept = default;
 
-        /// \brief Copy-assigns the continuations-state of other to that of *this
+        /// Copy-assigns the continuations-state of other to that of *this
         continuations_source &
         operator=(const continuations_source &other) noexcept = default;
 
-        /// \brief Move-assigns the continuations-state of other to that of *this
+        /// Move-assigns the continuations-state of other to that of *this
         continuations_source &
         operator=(continuations_source &&other) noexcept = default;
 
-        /// \brief Run all continuations
+        /// Run all continuations
         /// The return reference is safe because the continuation vector has
         /// stability
         bool
@@ -320,7 +320,7 @@ namespace futures::detail {
             return false;
         }
 
-        /// \brief Run all continuations
+        /// Run all continuations
         /// The return reference is safe because the continuation vector has
         /// stability
         template <class Executor, class Fn>
@@ -332,13 +332,13 @@ namespace futures::detail {
             return false;
         }
 
-        /// \brief Exchanges the continuations-state of *this and other.
+        /// Exchanges the continuations-state of *this and other.
         void
         swap(continuations_source &other) noexcept {
             std::swap(state_, other.state_);
         }
 
-        /// \brief Get a token to this object
+        /// Get a token to this object
         ///
         /// Returns a continuations_token object associated with the
         /// continuations_source's continuations-state, if the
@@ -349,21 +349,21 @@ namespace futures::detail {
             return continuations_token(state_);
         }
 
-        /// \brief Checks if the continuations_source object has a
+        /// Checks if the continuations_source object has a
         /// continuations-state and that state has received a run request.
         [[nodiscard]] bool
         run_requested() const noexcept {
             return state_ != nullptr && state_->is_run_requested();
         }
 
-        /// \brief Checks if the continuations_source object has a
+        /// Checks if the continuations_source object has a
         /// continuations-state.
         [[nodiscard]] bool
         run_possible() const noexcept {
             return state_ != nullptr;
         }
 
-        /// \brief Compares two continuations_source values
+        /// Compares two continuations_source values
         [[nodiscard]] friend bool
         operator==(
             const continuations_source &a,
@@ -371,7 +371,7 @@ namespace futures::detail {
             return a.state_ == b.state_;
         }
 
-        /// \brief Compares two continuations_source values
+        /// Compares two continuations_source values
         [[nodiscard]] friend bool
         operator!=(
             const continuations_source &a,

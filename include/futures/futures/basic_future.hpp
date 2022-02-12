@@ -29,7 +29,7 @@
 #include <shared_mutex>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *
      * \brief Basic future types and functions
      *
@@ -38,7 +38,7 @@ namespace futures {
      *  @{
      */
 
-    /** \addtogroup future-types Future types
+    /** @addtogroup future-types Future types
      *
      * \brief Basic future types
      *
@@ -64,7 +64,7 @@ namespace futures {
     class packaged_task;
 #endif
 
-    /// \brief A basic future type with custom features
+    /// A basic future type with custom features
     ///
     /// Note that these classes only provide the capabilities of tracking these
     /// features, such as continuations.
@@ -76,10 +76,10 @@ namespace futures {
     ///
     /// All this behavior is already encapsulated in the @ref async function.
     ///
-    /// \tparam T Type of element
-    /// \tparam Shared `std::true_value` if this future is shared
-    /// \tparam LazyContinuable `std::true_value` if this future supports
-    /// continuations \tparam Stoppable `std::true_value` if this future
+    /// @tparam T Type of element
+    /// @tparam Shared `std::true_value` if this future is shared
+    /// @tparam LazyContinuable `std::true_value` if this future supports
+    /// continuations @tparam Stoppable `std::true_value` if this future
     /// contains a stop token
     ///
     template <class T, class Options = future_options<>>
@@ -130,30 +130,30 @@ namespace futures {
 
         friend class detail::waiter_for_any;
 
-        /// \brief Construct from a pointer to the shared state
+        /// Construct from a pointer to the shared state
         ///
         /// This constructor is private because we need to ensure the launching
         /// function appropriately sets this std::future handling these traits
         /// This is a function for async.
         ///
-        /// \param s Future shared state
+        /// @param s Future shared state
         explicit basic_future(
             const std::shared_ptr<shared_state_type> &s) noexcept
             : detail::maybe_copyable<Options::is_shared>{},
               join_base(initial_join_value()), state_{ std::move(s) } {}
 
     public:
-        /// \name Public types
+        /// @name Public types
         /// @{
 
         using value_type = T;
 
         /// @}
 
-        /// \name Constructors
+        /// @name Constructors
         /// @{
 
-        /// \brief Constructs the basic_future
+        /// Constructs the basic_future
         ///
         /// The default constructor creates an invalid future with no shared
         /// state.
@@ -163,14 +163,14 @@ namespace futures {
             : detail::maybe_copyable<Options::is_shared>{},
               join_base(initial_join_value()), state_{ nullptr } {};
 
-        /// \brief Copy constructor for shared futures only.
+        /// Copy constructor for shared futures only.
         ///
         /// Inherited from base classes.
         ///
-        /// \note The copy constructor only participates in overload resolution
+        /// @note The copy constructor only participates in overload resolution
         /// if `other` is shared
         ///
-        /// \param other Another future used as source to initialize the shared
+        /// @param other Another future used as source to initialize the shared
         /// state
         basic_future(const basic_future &other)
             : detail::maybe_copyable<Options::is_shared>{ other },
@@ -195,7 +195,7 @@ namespace futures {
     public:
 #endif
 
-        /// \brief Move constructor.
+        /// Move constructor.
         ///
         /// Inherited from base classes.
         basic_future(basic_future &&other) noexcept
@@ -205,7 +205,7 @@ namespace futures {
             other.state_.reset();
         }
 
-        /// \brief Destructor
+        /// Destructor
         ///
         /// The shared pointer will take care of decrementing the reference
         /// counter of the shared state, but we still take care of the special
@@ -221,7 +221,7 @@ namespace futures {
             wait_if_last();
         }
 
-        /// \brief Copy assignment for shared futures only.
+        /// Copy assignment for shared futures only.
         ///
         /// Inherited from base classes.
         template <class U, class O>
@@ -249,7 +249,7 @@ namespace futures {
             return *this;
         }
 
-        /// \brief Move assignment.
+        /// Move assignment.
         ///
         /// Inherited from base classes.
         template <class U, class O>
@@ -276,19 +276,19 @@ namespace futures {
         }
         /// @}
 
-        /// \brief Emplace a function to the shared vector of continuations
+        /// Emplace a function to the shared vector of continuations
         ///
         /// If the function is ready, this functions uses the given executor
         /// instead of executing with the previous executor.
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports continuations
         ///
-        /// \tparam Executor Executor type
-        /// \tparam Fn Function type
-        /// \param ex An executor
-        /// \param fn A continuation function
-        /// \return
+        /// @tparam Executor Executor type
+        /// @tparam Fn Function type
+        /// @param ex An executor
+        /// @param fn A continuation function
+        /// @return
         template <
             class Executor,
             class Fn
@@ -344,17 +344,17 @@ namespace futures {
             return fut;
         }
 
-        /// \brief Emplace a function to the shared vector of continuations
+        /// Emplace a function to the shared vector of continuations
         ///
         /// If properly setup (by async), this future holds the result from a
         /// function that runs these continuations after the main promise is
         /// fulfilled. However, if this future is already ready, we can just run
         /// the continuation right away.
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports continuations
         ///
-        /// \return True if the contination was emplaced without the using the
+        /// @return True if the contination was emplaced without the using the
         /// default executor
         template <
             class Fn
@@ -374,12 +374,12 @@ namespace futures {
             }
         }
 
-        /// \brief Get this future's continuations source
+        /// Get this future's continuations source
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports continuations
         ///
-        /// \return The continuations source
+        /// @return The continuations source
         template <
 #ifndef FUTURES_DOXYGEN
             bool U = Options::is_continuable,
@@ -391,12 +391,12 @@ namespace futures {
             return state_->get_continuations_source();
         }
 
-        /// \brief Request the future to stop whatever task it's running
+        /// Request the future to stop whatever task it's running
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports stop tokens
         ///
-        /// \return Whether the request was made
+        /// @return Whether the request was made
         template <
 #ifndef FUTURES_DOXYGEN
             bool U = Options::is_stoppable,
@@ -408,12 +408,12 @@ namespace futures {
             return state_->get_stop_source().request_stop();
         }
 
-        /// \brief Get this future's stop source
+        /// Get this future's stop source
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports stop tokens
         ///
-        /// \return The stop source
+        /// @return The stop source
         template <
 #ifndef FUTURES_DOXYGEN
             bool U = Options::is_stoppable,
@@ -425,12 +425,12 @@ namespace futures {
             return state_->get_stop_source();
         }
 
-        /// \brief Get this future's stop token
+        /// Get this future's stop token
         ///
-        /// \note This function only participates in overload resolution if the
+        /// @note This function only participates in overload resolution if the
         /// future supports stop tokens
         ///
-        /// \return The stop token
+        /// @return The stop token
         template <
 #ifndef FUTURES_DOXYGEN
             bool U = Options::is_stoppable,
@@ -442,7 +442,7 @@ namespace futures {
             return get_stop_source().get_token();
         }
 
-        /// \brief Wait until all futures have a valid result and retrieves it
+        /// Wait until all futures have a valid result and retrieves it
         ///
         /// The behaviour depends on shared_based.
         decltype(auto)
@@ -464,7 +464,7 @@ namespace futures {
         }
 
 
-        /// \brief Get exception pointer without throwing exception
+        /// Get exception pointer without throwing exception
         ///
         /// This extends std::future so that we can always check if the future
         /// threw an exception
@@ -477,14 +477,14 @@ namespace futures {
             return state_->get_exception_ptr();
         }
 
-        /// \brief Create another future whose state is shared
+        /// Create another future whose state is shared
         ///
         /// Create a shared variant of the current future type.
         /// If the current type is not shared, the object becomes invalid.
         /// If the current type is shared, the new object is equivalent to a
         /// copy.
         ///
-        /// \return A shared variant of this future
+        /// @return A shared variant of this future
         basic_future<T, detail::append_future_option_t<shared_opt, Options>>
         share() {
             if (!valid()) {
@@ -503,13 +503,13 @@ namespace futures {
         }
 
 
-        /// \brief Checks if the future refers to a shared state
+        /// Checks if the future refers to a shared state
         [[nodiscard]] bool
         valid() const {
             return nullptr != state_.get();
         }
 
-        /// \brief Blocks until the result becomes available.
+        /// Blocks until the result becomes available.
         void
         wait() const {
             if (!valid()) {
@@ -518,7 +518,7 @@ namespace futures {
             state_->wait();
         }
 
-        /// \brief Waits for the result to become available.
+        /// Waits for the result to become available.
         template <class Rep, class Period>
         std::future_status
         wait_for(
@@ -529,7 +529,7 @@ namespace futures {
             return state_->wait_for(timeout_duration);
         }
 
-        /// \brief Waits for the result to become available.
+        /// Waits for the result to become available.
         template <class Clock, class Duration>
         std::future_status
         wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time)
@@ -540,7 +540,7 @@ namespace futures {
             return state_->wait_until(timeout_time);
         }
 
-        /// \brief Checks if the shared state is ready
+        /// Checks if the shared state is ready
         [[nodiscard]] bool
         is_ready() const {
             if (!valid()) {
@@ -550,7 +550,7 @@ namespace futures {
             return state_->is_ready();
         }
 
-        /// \brief Tell this future not to join at destruction
+        /// Tell this future not to join at destruction
         ///
         /// For safety, all futures join at destruction
         void
@@ -558,7 +558,7 @@ namespace futures {
             join_base::get() = false;
         }
 
-        /// \brief Notify this condition variable when the future is ready
+        /// Notify this condition variable when the future is ready
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             if (!state_) {
@@ -567,7 +567,7 @@ namespace futures {
             return state_->notify_when_ready(cv);
         }
 
-        /// \brief Cancel request to notify this condition variable when the
+        /// Cancel request to notify this condition variable when the
         /// future is ready
         void
         unnotify_when_ready(notify_when_ready_handle h) {
@@ -577,12 +577,12 @@ namespace futures {
             return state_->unnotify_when_ready(h);
         }
 
-        /// \brief Get the current executor for this task
+        /// Get the current executor for this task
         ///
-        /// \note This function only participates in overload resolution
+        /// @note This function only participates in overload resolution
         /// if future_options has an associated executor
         ///
-        /// \return The executor associated with this future instance
+        /// @return The executor associated with this future instance
         template <
 #ifndef FUTURES_DOXYGEN
             bool U = Options::has_executor,
@@ -596,10 +596,10 @@ namespace futures {
         }
 
     private:
-        /// \name Private Functions
+        /// @name Private Functions
         /// @{
 
-        /// \brief Get a reference to the mutex in the underlying shared state
+        /// Get a reference to the mutex in the underlying shared state
         std::mutex &
         waiters_mutex() {
             if (!state_) {
@@ -623,29 +623,29 @@ namespace futures {
 
         /// @}
 
-        /// \name Members
+        /// @name Members
         /// @{
-        /// \brief Pointer to shared state
+        /// Pointer to shared state
         std::shared_ptr<shared_state_type> state_{};
         /// @}
     };
 
 #ifndef FUTURES_DOXYGEN
-    /// \name Define all basic_futures as a kind of future
+    /// @name Define all basic_futures as a kind of future
     /// @{
     template <typename... Args>
     struct is_future<basic_future<Args...>> : std::true_type
     {};
     /// @}
 
-    /// \name Define all basic_futures as a future with a ready notifier
+    /// @name Define all basic_futures as a future with a ready notifier
     /// @{
     template <typename... Args>
     struct has_ready_notifier<basic_future<Args...>> : std::true_type
     {};
     /// @}
 
-    /// \name Define shared basic_futures as supporting shared values
+    /// @name Define shared basic_futures as supporting shared values
     /// @{
     template <class T, class... Args>
     struct is_shared_future<basic_future<T, future_options<Args...>>>
@@ -653,7 +653,7 @@ namespace futures {
     {};
     /// @}
 
-    /// \name Define continuable basic_futures as supporting lazy continuations
+    /// @name Define continuable basic_futures as supporting lazy continuations
     /// @{
     template <class T, class... Args>
     struct is_continuable<basic_future<T, future_options<Args...>>>
@@ -661,7 +661,7 @@ namespace futures {
     {};
     /// @}
 
-    /// \name Define stoppable basic_futures as being stoppable
+    /// @name Define stoppable basic_futures as being stoppable
     ///
     /// Some futures might be stoppable without a stop token
     ///
@@ -676,7 +676,7 @@ namespace futures {
         : detail::is_in_args<stoppable_opt, Args...>
     {};
 
-    /// \name Define deferred basic_futures as being deferred
+    /// @name Define deferred basic_futures as being deferred
     /// @{
     template <class T, class... Args>
     struct is_always_deferred<basic_future<T, future_options<Args...>>>
@@ -684,7 +684,7 @@ namespace futures {
     {};
     /// @}
 
-    /// \name Define deferred basic_futures as having an executor
+    /// @name Define deferred basic_futures as having an executor
     /// @{
     template <class T, class... Args>
     struct has_executor<basic_future<T, future_options<Args...>>>
@@ -693,12 +693,12 @@ namespace futures {
     /// @}
 #endif
 
-    /// \brief A simple future type similar to `std::future`
+    /// A simple future type similar to `std::future`
     template <class T>
     using future
         = basic_future<T, future_options<executor_opt<default_executor_type>>>;
 
-    /// \brief A future type with lazy continuations
+    /// A future type with lazy continuations
     ///
     /// Futures with lazy continuations contains a list of continuation tasks
     /// to be launched once the main task is complete.
@@ -711,7 +711,7 @@ namespace futures {
         T,
         future_options<executor_opt<default_executor_type>, continuable_opt>>;
 
-    /// \brief A future type with stop tokens
+    /// A future type with stop tokens
     ///
     /// Futures with stop token contain a stop token in their shared state.
     /// This stop token can be used to request the main task to stop.
@@ -724,7 +724,7 @@ namespace futures {
         T,
         future_options<executor_opt<default_executor_type>, stoppable_opt>>;
 
-    /// \brief A future type with lazy continuations and stop tokens
+    /// A future type with lazy continuations and stop tokens
     ///
     /// It's a quite common use case that we need a way to cancel futures and
     /// jcfuture provides us with an even better way to do that.
@@ -739,7 +739,7 @@ namespace futures {
             continuable_opt,
             stoppable_opt>>;
 
-    /// \brief A deferred future type
+    /// A deferred future type
     ///
     /// This is a future type whose main task will only be launched when we
     /// wait for its results from another execution context.
@@ -752,7 +752,7 @@ namespace futures {
         T,
         future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
 
-    /// \brief A deferred stoppable future type
+    /// A deferred stoppable future type
     ///
     /// This is a future type whose main task will only be launched when we
     /// wait for its results from another execution context.
@@ -768,7 +768,7 @@ namespace futures {
         T,
         future_options<executor_opt<default_executor_type>, always_deferred_opt>>;
 
-    /// \brief A future that simply holds a ready value
+    /// A future that simply holds a ready value
     ///
     /// This is the future type we use for constant values. This is the
     /// future type we usually return from functions such as
@@ -780,7 +780,7 @@ namespace futures {
     template <class T>
     using vfuture = basic_future<T, future_options<>>;
 
-    /// \brief A simple std::shared_future
+    /// A simple std::shared_future
     ///
     /// This is what a futures::future::share() returns
     template <class T>
@@ -788,7 +788,7 @@ namespace futures {
         T,
         future_options<executor_opt<default_executor_type>, shared_opt>>;
 
-    /// \brief A shared future type with stop tokens
+    /// A shared future type with stop tokens
     ///
     /// This is what a @ref futures::jfuture::share() returns
     template <class T>
@@ -800,7 +800,7 @@ namespace futures {
             stoppable_opt,
             shared_opt>>;
 
-    /// \brief A shared future type with lazy continuations
+    /// A shared future type with lazy continuations
     ///
     /// This is what a @ref futures::cfuture::share() returns
     template <class T>
@@ -811,7 +811,7 @@ namespace futures {
             continuable_opt,
             shared_opt>>;
 
-    /// \brief A shared future type with lazy continuations and stop tokens
+    /// A shared future type with lazy continuations and stop tokens
     ///
     /// This is what a @ref futures::jcfuture::share() returns
     template <class T>

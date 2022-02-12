@@ -15,17 +15,17 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
     class count_functor;
 
-    /// \brief Functor representing the overloads for the @ref count_if function
+    /// Functor representing the overloads for the @ref count_if function
     class count_if_functor
         : public unary_invoke_algorithm_functor<count_if_functor>
     {
@@ -102,18 +102,18 @@ namespace futures {
                 tasks_{};
         };
 
-        /// \brief Complete overload of the count_if algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c count_if
+        /// Complete overload of the count_if algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c count_if
         template <
             class E,
             class P,
@@ -141,7 +141,7 @@ namespace futures {
         }
     };
 
-    /// \brief Returns the number of elements satisfying specific criteria
+    /// Returns the number of elements satisfying specific criteria
     inline constexpr count_if_functor count_if;
 
     /** @}*/

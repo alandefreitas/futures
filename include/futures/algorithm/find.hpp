@@ -18,31 +18,30 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref find function
+    /// Functor representing the overloads for the @ref find function
     class find_functor : public value_cmp_algorithm_functor<find_functor>
     {
         friend value_cmp_algorithm_functor<find_functor>;
 
-        /// \brief Complete overload of the find algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam T Value to compare
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param value Value
-        /// \brief function template \c find
+        /// Complete overload of the find algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam T Value to compare
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param value Value
         template <
             class E,
             class P,
@@ -72,7 +71,7 @@ namespace futures {
         }
     };
 
-    /// \brief Finds the first element equal to another element
+    /// Finds the first element equal to another element
     inline constexpr find_functor find;
 
     /** @}*/

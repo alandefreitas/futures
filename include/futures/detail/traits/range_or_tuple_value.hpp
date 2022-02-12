@@ -13,7 +13,7 @@
 #include <futures/algorithm/traits/range_value.hpp>
 
 namespace futures::detail {
-    /// \brief Get the element type of a when any result object
+    /// Get the element type of a when any result object
     /// This is a very specific helper trait we need
     template <typename T, class Enable = void>
     struct range_or_tuple_value
@@ -30,7 +30,7 @@ namespace futures::detail {
     template <typename Sequence>
     struct range_or_tuple_value<
         Sequence,
-        std::enable_if_t<is_tuple_v<Sequence>>>
+        std::enable_if_t<detail::is_tuple_v<Sequence>>>
     {
         using type = std::tuple_element_t<0, Sequence>;
     };

@@ -11,10 +11,10 @@
 #include <futures/detail/config/asio_include.hpp>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
@@ -22,7 +22,7 @@ namespace futures {
 } // namespace futures
 
 namespace futures::detail {
-    /// \brief Check if types are an executor then a function
+    /// Check if types are an executor then a function
     /// The function should be invocable with the given args, the executor be an
     /// executor, and vice-versa
     template <class E, class F, typename... Args>
@@ -73,8 +73,8 @@ namespace futures::detail {
     template <class F, typename... Args>
     constexpr bool is_async_input_non_executor_v
         = is_async_input_non_executor<F, Args...>::value;
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 
 #endif // FUTURES_FUTURES_DETAIL_TRAITS_IS_EXECUTOR_THEN_FUNCTION_HPP

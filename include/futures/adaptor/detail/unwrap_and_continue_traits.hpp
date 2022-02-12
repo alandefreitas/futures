@@ -338,7 +338,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              is_tuple_v<future_value_t<Future>>
+              detail::is_tuple_v<future_value_t<Future>>
                   // clang-format on
                   >
         {};

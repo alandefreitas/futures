@@ -12,11 +12,11 @@
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup traits Traits
+    /** @addtogroup traits Traits
      *  @{
      */
 

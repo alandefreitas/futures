@@ -37,8 +37,8 @@ namespace futures::detail {
     /// the nodes and the elements need to be stored in a vector
     /// to make this cache-friendly.
     ///
-    /// \tparam T Data type
-    /// \tparam Allocator Node allocator
+    /// @tparam T Data type
+    /// @tparam Allocator Node allocator
     template <class T, class Allocator = std::allocator<T>>
     class atomic_queue
         : private maybe_empty<

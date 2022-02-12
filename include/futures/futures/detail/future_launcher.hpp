@@ -50,7 +50,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Schedule the function in the executor
+        /// Schedule the function in the executor
         /// This is the internal function async uses to finally schedule the
         /// function after setting the default parameters and converting
         /// policies into scheduling strategies.

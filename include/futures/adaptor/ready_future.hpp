@@ -16,11 +16,11 @@
 #include <future>
 
 namespace futures {
-    /** \addtogroup adaptors Adaptors
+    /** @addtogroup adaptors Adaptors
      *  @{
      */
 
-    /// \brief Check if a future is ready
+    /// Check if a future is ready
     ///
     /// Although basic_future has its more efficient is_ready function, this
     /// free function allows us to query other futures that don't implement
@@ -45,11 +45,11 @@ namespace futures {
         }
     }
 
-    /// \brief Make a placeholder future object that is ready
+    /// Make a placeholder future object that is ready
     ///
-    /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
+    /// @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
-    /// \return A future associated with the shared state that is created.
+    /// @return A future associated with the shared state that is created.
     template <typename T>
     basic_future<typename std::decay_t<T>, future_options<>>
     make_ready_future(T &&value) {
@@ -59,11 +59,11 @@ namespace futures {
         return result;
     }
 
-    /// \brief Make a placeholder future object that is ready from a reference
+    /// Make a placeholder future object that is ready from a reference
     ///
-    /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
+    /// @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
-    /// \return A future associated with the shared state that is created.
+    /// @return A future associated with the shared state that is created.
     template <typename T>
     basic_future<T &, future_options<>>
     make_ready_future(std::reference_wrapper<T> value) {
@@ -73,11 +73,11 @@ namespace futures {
         return result;
     }
 
-    /// \brief Make a placeholder void future object that is ready
+    /// Make a placeholder void future object that is ready
     ///
-    /// \see https://en.cppreference.com/w/cpp/experimental/make_ready_future
+    /// @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
-    /// \return A future associated with the shared state that is created.
+    /// @return A future associated with the shared state that is created.
     inline basic_future<void, future_options<>>
     make_ready_future() {
         promise<void, future_options<>> p;
@@ -86,13 +86,13 @@ namespace futures {
         return result;
     }
 
-    /// \brief Make a placeholder future object that is ready with an exception
+    /// Make a placeholder future object that is ready with an exception
     /// from an exception ptr
     ///
-    /// \see
+    /// @see
     /// https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
-    /// \return A future associated with the shared state that is created.
+    /// @return A future associated with the shared state that is created.
     template <typename T = void>
     basic_future<T, future_options<>>
     make_exceptional_future(std::exception_ptr ex) {
@@ -101,13 +101,13 @@ namespace futures {
         return p.get_future();
     }
 
-    /// \brief Make a placeholder future object that is ready with from any
+    /// Make a placeholder future object that is ready with from any
     /// exception
     ///
-    /// \see
+    /// @see
     /// https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
-    /// \return A future associated with the shared state that is created.
+    /// @return A future associated with the shared state that is created.
     template <class T = void, class E>
     basic_future<T, future_options<>>
     make_exceptional_future(E ex) {

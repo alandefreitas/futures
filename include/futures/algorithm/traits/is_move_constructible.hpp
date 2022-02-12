@@ -13,11 +13,11 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup traits Traits
+    /** @addtogroup traits Traits
      *  @{
      */
 

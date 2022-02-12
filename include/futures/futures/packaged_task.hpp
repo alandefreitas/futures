@@ -14,15 +14,15 @@
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup shared_state Shared State
+    /** @addtogroup shared_state Shared State
      *  @{
      */
 
 #ifndef FUTURES_DOXYGEN
-    /// \brief Undefined packaged task class
+    /// Undefined packaged task class
     template <
         typename Signature,
         class Options
@@ -30,14 +30,14 @@ namespace futures {
     class packaged_task;
 #endif
 
-    /// \brief A packaged task that sets a shared state when done
+    /// A packaged task that sets a shared state when done
     ///
     /// A packaged task holds a task to be executed and a shared state for its
     /// result. It's very similar to a promise where the shared state is
     /// extended with a task to generate the state.
     ///
-    /// \tparam R Return type
-    /// \tparam Args Task arguments
+    /// @tparam R Return type
+    /// @tparam Args Task arguments
 #ifndef FUTURES_DOXYGEN
     template <typename R, typename... Args, class Options>
 #else
@@ -46,19 +46,19 @@ namespace futures {
     class packaged_task<R(Args...), Options>
     {
     public:
-        /// \brief Constructs a std::packaged_task object with no task and no
+        /// Constructs a std::packaged_task object with no task and no
         /// shared state
         packaged_task() = default;
 
-        /// \brief Construct a packaged task from a function with the default
+        /// Construct a packaged task from a function with the default
         /// std allocator
         ///
-        /// \par Constraints
+        /// @par Constraints
         /// This constructor only participates in overload resolution if Fn is
         /// not a packaged task itself.
         ///
-        /// \tparam Fn Function type
-        /// \param fn The callable target to execute
+        /// @tparam Fn Function type
+        /// @param fn The callable target to execute
         template <
             typename Fn
 #ifndef FUTURES_DOXYGEN
@@ -73,7 +73,7 @@ namespace futures {
                              std::forward<Fn>(fn) } {
         }
 
-        /// \brief Constructs a std::packaged_task object with a shared state
+        /// Constructs a std::packaged_task object with a shared state
         /// and a copy of the task
         ///
         /// This function constructs a std::packaged_task object with a shared
@@ -81,15 +81,15 @@ namespace futures {
         /// It uses the provided allocator to allocate memory necessary to store
         /// the task.
         ///
-        /// \par Constraints
+        /// @par Constraints
         /// This constructor does not participate in overload resolution if
         /// std::decay<Fn>::type is the same type as
         /// std::packaged_task<R(ArgTypes...)>.
         ///
-        /// \tparam Fn Function type
-        /// \tparam Allocator Allocator type
-        /// \param alloc The allocator to use when storing the task
-        /// \param fn The callable target to execute
+        /// @tparam Fn Function type
+        /// @tparam Allocator Allocator type
+        /// @param alloc The allocator to use when storing the task
+        /// @param fn The callable target to execute
         template <
             typename Fn,
             typename Allocator
@@ -111,11 +111,11 @@ namespace futures {
                 detail::shared_task_base<R, Options, Args...>>(typed_task_);
         }
 
-        /// \brief The copy constructor is deleted, std::packaged_task is
+        /// The copy constructor is deleted, std::packaged_task is
         /// move-only.
         packaged_task(packaged_task const &) = delete;
 
-        /// \brief Constructs a std::packaged_task with the shared state and
+        /// Constructs a std::packaged_task with the shared state and
         /// task formerly owned by other
         packaged_task(packaged_task &&other) noexcept
             : future_retrieved_{ other.future_retrieved_ },
@@ -123,13 +123,13 @@ namespace futures {
             other.future_retrieved_ = false;
         }
 
-        /// \brief The copy assignment is deleted, std::packaged_task is
+        /// The copy assignment is deleted, std::packaged_task is
         /// move-only.
         packaged_task &
         operator=(packaged_task const &)
             = delete;
 
-        /// \brief Assigns a std::packaged_task with the shared state and task
+        /// Assigns a std::packaged_task with the shared state and task
         /// formerly owned by other
         packaged_task &
         operator=(packaged_task &&other) noexcept {
@@ -140,34 +140,34 @@ namespace futures {
             return *this;
         }
 
-        /// \brief Destructs the task object
+        /// Destructs the task object
         ~packaged_task() {
             if (task_ && future_retrieved_) {
                 task_->signal_promise_destroyed();
             }
         }
 
-        /// \brief Checks if the task object has a valid function
+        /// Checks if the task object has a valid function
         ///
-        /// \return true if *this has a shared state, false otherwise
+        /// @return true if *this has a shared state, false otherwise
         [[nodiscard]] bool
         valid() const noexcept {
             return task_ != nullptr;
         }
 
-        /// \brief Swaps two task objects
+        /// Swaps two task objects
         ///
         /// This function exchanges the shared states and stored tasks of *this
         /// and other
         ///
-        /// \param other packaged task whose state to swap with
+        /// @param other packaged task whose state to swap with
         void
         swap(packaged_task &other) noexcept {
             std::swap(future_retrieved_, other.future_retrieved_);
             task_.swap(other.task_);
         }
 
-        /// \brief Returns a future object associated with the promised result
+        /// Returns a future object associated with the promised result
         ///
         /// This function constructs a future object that shares its state with
         /// this promise Because this library handles more than a single future
@@ -190,14 +190,14 @@ namespace futures {
             return f;
         }
 
-        /// \brief Executes the function and set the shared state
+        /// Executes the function and set the shared state
         ///
         /// Calls the stored task with args as the arguments. The return value
         /// of the task or any exceptions thrown are stored in the shared state
         /// The shared state is made ready and any threads waiting for this are
         /// unblocked.
         ///
-        /// \param args the parameters to pass on invocation of the stored task
+        /// @param args the parameters to pass on invocation of the stored task
         template <class... OtherArgs>
         void
         operator()(OtherArgs... args) {
@@ -210,7 +210,7 @@ namespace futures {
             }
         }
 
-        /// \brief Resets the shared state abandoning any stored results of
+        /// Resets the shared state abandoning any stored results of
         /// previous executions
         ///
         /// Resets the state abandoning the results of previous executions. A
@@ -225,7 +225,7 @@ namespace futures {
             future_retrieved_ = false;
         }
 
-        /// \brief Set the task we should execute before waiting
+        /// Set the task we should execute before waiting
         template <typename F>
         void
         set_wait_callback(F &&f) {
@@ -233,14 +233,14 @@ namespace futures {
         }
 
     private:
-        /// \brief True if the corresponding future has already been retrieved
+        /// True if the corresponding future has already been retrieved
         bool future_retrieved_{ false };
 
-        /// \brief The function this task should execute
+        /// The function this task should execute
         std::shared_ptr<detail::shared_task_base<R, Options, Args...>> task_{};
     };
 
-    /// \brief Specializes the std::swap algorithm
+    /// Specializes the std::swap algorithm
     template <typename Signature>
     void
     swap(packaged_task<Signature> &l, packaged_task<Signature> &r) noexcept {

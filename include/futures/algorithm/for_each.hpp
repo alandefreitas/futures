@@ -17,20 +17,20 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref for_each function
+    /// Functor representing the overloads for the @ref for_each function
     class for_each_functor
         : public unary_invoke_algorithm_functor<for_each_functor>
     {
         friend unary_invoke_algorithm_functor<for_each_functor>;
 
-        /// \brief Internal class that takes care of the sorting tasks and its
+        /// Internal class that takes care of the sorting tasks and its
         /// incomplete tasks
         ///
         /// If we could make sure no executors would ever block, recursion
@@ -87,7 +87,7 @@ namespace futures {
                 }
             }
 
-            /// \brief Wait for all tasks to finish
+            /// Wait for all tasks to finish
             ///
             /// This might sound like it should be as simple as a
             /// when_all(tasks_). However, while we wait for some tasks here,
@@ -96,7 +96,7 @@ namespace futures {
             /// relative cost of this operation should still be negligible,
             /// compared to other applications.
             ///
-            /// \return `true` if we had to wait for any tasks
+            /// @return `true` if we had to wait for any tasks
             void
             wait_for_sort_tasks() {
                 while (!tasks_.empty()) {
@@ -115,18 +115,18 @@ namespace futures {
             detail::atomic_queue<basic_future<void, future_options<executor_opt<Executor>, continuable_opt>>> tasks_;
         };
 
-        /// \brief Complete overload of the for_each algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c for_each
+        /// Complete overload of the for_each algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c for_each
         template <
             class E,
             class P,
@@ -147,7 +147,7 @@ namespace futures {
         }
     };
 
-    /// \brief Applies a function to a range of elements
+    /// Applies a function to a range of elements
     inline constexpr for_each_functor for_each;
 
     /** @}*/

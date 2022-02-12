@@ -12,7 +12,7 @@
 #include <futures/futures/detail/traits/launch_result_value_type.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
@@ -40,7 +40,7 @@ namespace futures::detail {
             invoke_result_t<std::decay_t<Function>, stop_token, Args...>;
     };
 
-    /// \brief The future type that results from calling async with a function
+    /// The future type that results from calling async with a function
     ///
     /// This is the future type returned by async and schedule.
     ///

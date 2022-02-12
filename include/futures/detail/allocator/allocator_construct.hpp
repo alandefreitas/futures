@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace futures::detail {
-    /// \brief Convenience to construct with allocator traits
+    /// Convenience to construct with allocator traits
     template <class A, class T, class... Args>
     auto
     allocator_construct(A& a, T* p, Args&&... args) {

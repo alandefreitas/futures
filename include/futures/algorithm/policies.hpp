@@ -8,15 +8,15 @@
 #ifndef FUTURES_ALGORITHM_POLICIES_HPP
 #define FUTURES_ALGORITHM_POLICIES_HPP
 
-/// \file Identify traits for algorithms, like we do for other types
+/// @file Identify traits for algorithms, like we do for other types
 ///
 /// The traits help us generate auxiliary algorithm overloads
 /// This is somewhat similar to the pattern of traits and algorithms for ranges
 /// and views It allows us to get algorithm overloads for free, including
 /// default inference of the best execution policies
 ///
-/// \see https://en.cppreference.com/w/cpp/ranges/transform_view
-/// \see https://en.cppreference.com/w/cpp/ranges/view
+/// @see https://en.cppreference.com/w/cpp/ranges/transform_view
+/// @see https://en.cppreference.com/w/cpp/ranges/view
 ///
 
 #include <execution>
@@ -31,11 +31,11 @@
 #endif
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup execution-policies Execution Policies
+    /** @addtogroup execution-policies Execution Policies
      *  @{
      */
 
@@ -57,19 +57,19 @@ namespace futures {
 
     /// @name Instances of the execution policy types
 
-    /// \brief Tag used in algorithms for a sequenced_policy
+    /// Tag used in algorithms for a sequenced_policy
     inline constexpr sequenced_policy seq{};
 
-    /// \brief Tag used in algorithms for a parallel_policy
+    /// Tag used in algorithms for a parallel_policy
     inline constexpr parallel_policy par{};
 
-    /// \brief Tag used in algorithms for a parallel_unsequenced_policy
+    /// Tag used in algorithms for a parallel_unsequenced_policy
     inline constexpr parallel_unsequenced_policy par_unseq{};
 
-    /// \brief Tag used in algorithms for an unsequenced_policy
+    /// Tag used in algorithms for an unsequenced_policy
     inline constexpr unsequenced_policy unseq{};
 
-    /// \brief Checks whether T is a standard or implementation-defined
+    /// Checks whether T is a standard or implementation-defined
     /// execution policy type.
     template <class T>
     struct is_execution_policy
@@ -80,12 +80,12 @@ namespace futures {
               std::is_same<T, unsequenced_policy>>
     {};
 
-    /// \brief Checks whether T is a standard or implementation-defined
+    /// Checks whether T is a standard or implementation-defined
     /// execution policy type.
     template <class T>
     inline constexpr bool is_execution_policy_v = is_execution_policy<T>::value;
 
-    /// \brief Make an executor appropriate to a given policy and a pair of
+    /// Make an executor appropriate to a given policy and a pair of
     /// iterators This depends, of course, of the default executors we have
     /// available and
     template <

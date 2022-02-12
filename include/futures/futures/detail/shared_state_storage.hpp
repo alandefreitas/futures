@@ -12,7 +12,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /// \brief Determine the type we should use to store a shared state
+    /// Determine the type we should use to store a shared state
     /// internally
     ///
     /// We usually need uninitialized storage for a given type, since the

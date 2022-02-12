@@ -13,12 +13,11 @@
 #include <futures/executor/is_executor.hpp>
 
 namespace futures {
-    /** \addtogroup executors Executors
+    /** @addtogroup executors Executors
      *  @{
      */
 
-    /// \brief An executor that runs anything in a new thread, like std::async
-    /// does
+    /// An executor that runs anything in a new thread, like std::async does
     struct new_thread_executor
     {
         asio::execution_context *context_{ nullptr };
@@ -51,28 +50,28 @@ namespace futures {
         }
     };
 
-    /// \brief Make an new thread executor object
+    /// Make an new thread executor object
     new_thread_executor
     make_new_thread_executor() {
         asio::execution_context &ctx = inline_execution_context();
         return new_thread_executor{ &ctx };
     }
-    /** @} */ // \addtogroup executors Executors
+    /** @} */ // @addtogroup executors Executors
 } // namespace futures
 
 #ifdef FUTURES_USE_BOOST_ASIO
 namespace boost {
 #endif
     namespace asio {
-        /// \brief Ensure asio (and our internal functions) sees these as
+        /// Ensure asio (and our internal functions) sees these as
         /// executors, as traits don't always work
-        ///
-        /// This is quite a workaround until things don't improve with our
-        /// executor traits.
-        ///
-        /// Ideally, we would have our own executor traits and let asio pick up
-        /// from those.
-        ///
+        /**
+         * This is quite a workaround until things don't improve with our
+         * executor traits.
+         *
+         * Ideally, we would have our own executor traits and let asio pick up
+         * from those.
+         **/
         template <>
         class is_executor<futures::new_thread_executor> : public std::true_type
         {};

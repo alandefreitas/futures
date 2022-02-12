@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace futures::detail {
-    /// \brief Convenience to destroy with allocator traits
+    /// Convenience to destroy with allocator traits
     template <class A, class T>
     auto
     allocator_destroy(A& a, T* p) {

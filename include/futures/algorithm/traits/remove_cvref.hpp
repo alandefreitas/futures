@@ -11,11 +11,11 @@
 #include <type_traits>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup traits Traits
+    /** @addtogroup traits Traits
      *  @{
      */
     /** \brief A C++17 type trait equivalent to the C++20 remove_cvref

@@ -11,42 +11,42 @@
 #include <system_error>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup error Error
+    /** @addtogroup error Error
      *
      * \brief Basic future errors
      *
      *  @{
      */
 
-    /// \brief Class for errors in the futures library
+    /// Class for errors in the futures library
     /// All errors in the futures library derive from this class
     class futures_error : public std::system_error
     {
     public:
-        /// \brief Construct underlying system error with a specified error code
-        /// \param ec Error code
+        /// Construct underlying system error with a specified error code
+        /// @param ec Error code
         explicit futures_error(std::error_code ec) : std::system_error{ ec } {}
 
-        /// \brief Construct underlying system error with a specified error code
-        /// and literal string message \param ec Error code \param what_arg
+        /// Construct underlying system error with a specified error code
+        /// and literal string message @param ec Error code @param what_arg
         /// Error string
         futures_error(std::error_code ec, const char *what_arg)
             : std::system_error{ ec, what_arg } {}
 
-        /// \brief Construct underlying system error with a specified error code
-        /// and std::string message \param ec Error code \param what_arg Error
+        /// Construct underlying system error with a specified error code
+        /// and std::string message @param ec Error code @param what_arg Error
         /// string
         futures_error(std::error_code ec, std::string const &what_arg)
             : std::system_error{ ec, what_arg } {}
 
-        /// \brief Destructor
+        /// Destructor
         ~futures_error() override = default;
     };
 
-    /// \brief Error codes for futures
+    /// Error codes for futures
     enum class future_errc
     {
         /// The state owner got destroyed before the promise has been fulfilled
@@ -63,18 +63,18 @@ namespace futures {
     inline std::error_category const &
     future_category() noexcept;
 
-    /// \brief Class representing the common error category properties for
+    /// Class representing the common error category properties for
     /// future errors
     class future_error_category : public std::error_category
     {
     public:
-        /// \brief Name for future_error_category errors
+        /// Name for future_error_category errors
         [[nodiscard]] const char *
         name() const noexcept override {
             return "future";
         }
 
-        /// \brief Generate error condition
+        /// Generate error condition
         [[nodiscard]] std::error_condition
         default_error_condition(int ev) const noexcept override {
             switch (static_cast<future_errc>(ev)) {
@@ -103,7 +103,7 @@ namespace futures {
             }
         }
 
-        /// \brief Check error condition
+        /// Check error condition
         [[nodiscard]] bool
         equivalent(std::error_code const &code, int condition)
             const noexcept override {
@@ -113,7 +113,7 @@ namespace futures {
                           == condition;
         }
 
-        /// \brief Generate message
+        /// Generate message
         [[nodiscard]] std::string
         message(int ev) const override {
             switch (static_cast<future_errc>(ev)) {
@@ -141,7 +141,7 @@ namespace futures {
         }
     };
 
-    /// \brief Function to return a common reference to a global future error
+    /// Function to return a common reference to a global future error
     /// category
     inline std::error_category const &
     future_category() noexcept {
@@ -149,13 +149,13 @@ namespace futures {
         return cat;
     }
 
-    /// \brief Class for errors with specific future types or their
+    /// Class for errors with specific future types or their
     /// dependencies, such as promises
     class future_error : public futures_error
     {
     public:
-        /// \brief Construct underlying futures error with a specified error
-        /// code \param ec Error code
+        /// Construct underlying futures error with a specified error
+        /// code @param ec Error code
         explicit future_error(std::error_code ec) : futures_error{ ec } {}
     };
 
@@ -167,17 +167,17 @@ namespace futures {
         };
     }
 
-    /// \brief Class for errors when a promise is not delivered properly
+    /// Class for errors when a promise is not delivered properly
     class broken_promise : public future_error
     {
     public:
-        /// \brief Construct underlying future error with a specified error code
-        /// \param ec Error code
+        /// Construct underlying future error with a specified error code
+        /// @param ec Error code
         broken_promise()
             : future_error{ make_error_code(future_errc::broken_promise) } {}
     };
 
-    /// \brief Class for errors when a promise is not delivered properly
+    /// Class for errors when a promise is not delivered properly
     class promise_already_satisfied : public future_error
     {
     public:

@@ -14,7 +14,7 @@
 #include <tuple>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
@@ -38,7 +38,7 @@ namespace futures {
         }
     } // namespace detail
 
-    /// \brief tuple_for_each for tuples
+    /// tuple_for_each for tuples
     template <class Function, class... Args>
     static void
     tuple_for_each(const std::tuple<Args...> &t, Function &&fn) {
@@ -73,7 +73,7 @@ namespace futures {
         }
     } // namespace detail
 
-    /// \brief for_each_paired for paired tuples of same size
+    /// for_each_paired for paired tuples of same size
     template <class Function, class... Args1, class... Args2>
     static void
     for_each_paired(
@@ -107,7 +107,7 @@ namespace futures {
         }
     } // namespace detail
 
-    /// \brief for_each_paired for paired tuples and arrays of same size
+    /// for_each_paired for paired tuples and arrays of same size
     template <class Function, class... Args1, class T, size_t N>
     static void
     for_each_paired(
@@ -122,7 +122,7 @@ namespace futures {
             std::index_sequence_for<Args1...>{});
     }
 
-    /// \brief find_if for tuples
+    /// find_if for tuples
     template <class Function, size_t t_idx = 0, class... Args>
     static size_t
     tuple_find_if(const std::tuple<Args...> &t, Function &&fn) {
@@ -149,7 +149,7 @@ namespace futures {
         }
     } // namespace detail
 
-    /// \brief all_of for tuples
+    /// all_of for tuples
     template <class Function, class... Args>
     static bool
     tuple_all_of(const std::tuple<Args...> &t, Function &&fn) {
@@ -170,7 +170,7 @@ namespace futures {
         }
     } // namespace detail
 
-    /// \brief any_of for tuples
+    /// any_of for tuples
     template <class Function, class... Args>
     static bool
     tuple_any_of(const std::tuple<Args...> &t, Function &&fn) {
@@ -180,15 +180,15 @@ namespace futures {
             std::index_sequence_for<Args...>{});
     }
 
-    /// \brief Apply a function to a single tuple element at runtime
+    /// Apply a function to a single tuple element at runtime
     /// The function must, of course, be valid for all tuple elements
     template <
         class Function,
         class Tuple,
         size_t current_tuple_idx = 0,
         std::enable_if_t<
-            is_callable_v<
-                Function> && is_tuple_v<Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            detail::is_callable_v<
+                Function> && detail::is_tuple_v<Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
     constexpr static auto
@@ -209,14 +209,14 @@ namespace futures {
         }
     }
 
-    /// \brief Return the i-th element from a tuple whose types are the same
+    /// Return the i-th element from a tuple whose types are the same
     /// The return expression function must, of course, be valid for all tuple
     /// elements
     template <
         class Tuple,
         size_t current_tuple_idx = 0,
         std::enable_if_t<
-            is_tuple_v<
+            detail::is_tuple_v<
                 Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
@@ -237,7 +237,7 @@ namespace futures {
         }
     }
 
-    /// \brief Return the i-th element from a tuple with a transformation
+    /// Return the i-th element from a tuple with a transformation
     /// function whose return is always the same The return expression function
     /// must, of course, be valid for all tuple elements
     template <
@@ -245,7 +245,7 @@ namespace futures {
         size_t current_tuple_idx = 0,
         class TransformFn,
         std::enable_if_t<
-            is_tuple_v<
+            detail::is_tuple_v<
                 Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
@@ -341,7 +341,7 @@ namespace futures {
         };
     } // namespace detail
 
-    /// \brief Filter tuple elements based on their types
+    /// Filter tuple elements based on their types
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
@@ -357,7 +357,7 @@ namespace futures {
             tup);
     }
 
-    /// \brief Remove tuple elements based on their types
+    /// Remove tuple elements based on their types
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
@@ -373,7 +373,7 @@ namespace futures {
             tup);
     }
 
-    /// \brief Transform tuple elements based on their types
+    /// Transform tuple elements based on their types
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         transformed_tuple<UnaryPredicate, std::tuple<Ts...>>::type
@@ -387,7 +387,7 @@ namespace futures {
             tup);
     }
 
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_DETAIL_ALGORITHM_TUPLE_ALGORITHM_HPP

@@ -11,11 +11,11 @@
 #include <tuple>
 #include <type_traits>
 
-namespace futures {
-    /** \addtogroup futures Futures
+namespace futures::detail {
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
@@ -42,8 +42,8 @@ namespace futures {
 
     template <class T>
     constexpr bool is_tuple_v = is_tuple<T>::value;
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_DETAIL_TRAITS_IS_TUPLE_HPP

@@ -5,7 +5,7 @@
 #ifndef FUTURES_DETAIL_CONFIG_ASIO_INCLUDE_HPP
 #define FUTURES_DETAIL_CONFIG_ASIO_INCLUDE_HPP
 
-/// \file
+/// @file
 /// Indirectly includes asio or boost.asio
 ///
 /// Whenever including <asio.hpp>, we include this file instead.
@@ -82,12 +82,12 @@
  */
 
 namespace futures {
-    /** \addtogroup executors Executors
+    /** @addtogroup executors Executors
      *  @{
      */
 
 #if defined(FUTURES_USE_ASIO) || defined(FUTURES_DOXYGEN)
-    /// \brief Alias to the asio namespace
+    /// Alias to the asio namespace
     ///
     /// This futures::asio alias might point to ::asio or ::boost::asio.
     ///

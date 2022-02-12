@@ -8,15 +8,15 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_VALUE_CMP_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_TRAITS_VALUE_CMP_ALGORITHM_HPP
 
-/// \file Identify traits for algorithms, like we do for other types
+/// @file Identify traits for algorithms, like we do for other types
 ///
 /// The traits help us generate auxiliary algorithm overloads
 /// This is somewhat similar to the pattern of traits and algorithms for ranges
 /// and views It allows us to get algorithm overloads for free, including
 /// default inference of the best execution policies
 ///
-/// \see https://en.cppreference.com/w/cpp/ranges/transform_view
-/// \see https://en.cppreference.com/w/cpp/ranges/view
+/// @see https://en.cppreference.com/w/cpp/ranges/transform_view
+/// @see https://en.cppreference.com/w/cpp/ranges/view
 ///
 
 #include <futures/algorithm/comparisons/equal_to.hpp>
@@ -28,15 +28,15 @@
 #include <execution>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup algorithm-traits Algorithm Traits
+    /** @addtogroup algorithm-traits Algorithm Traits
      *  @{
      */
 
-    /// \brief CRTP class with the overloads for classes that look for
+    /// CRTP class with the overloads for classes that look for
     /// elements in a sequence with an unary function This includes
     /// algorithms such as for_each, any_of, all_of, ...
     template <class Derived>
@@ -67,7 +67,7 @@ namespace futures {
             return Derived().run(ex, p, first, last, f);
         }
 
-        /// \overload execution policy instead of executor
+        /// @overload execution policy instead of executor
         /// we can't however, count on std::is_execution_policy being defined
         template <
             class E,
@@ -95,7 +95,7 @@ namespace futures {
                 .run(make_policy_executor<E, I, S>(), p, first, last, f);
         }
 
-        /// \overload Ranges
+        /// @overload Ranges
         template <
             class E,
             class P,
@@ -120,7 +120,7 @@ namespace futures {
                 .run(ex, p, std::begin(r), std::end(r), std::move(f));
         }
 
-        /// \overload Iterators / default parallel executor
+        /// @overload Iterators / default parallel executor
         template <
             class P,
             class I,
@@ -145,7 +145,7 @@ namespace futures {
                 .run(make_default_executor(), p, first, last, std::move(f));
         }
 
-        /// \overload Ranges / default parallel executor
+        /// @overload Ranges / default parallel executor
         template <
             class P,
             class R,
@@ -172,7 +172,7 @@ namespace futures {
                 std::move(f));
         }
 
-        /// \overload Iterators / default partitioner
+        /// @overload Iterators / default partitioner
         template <
             class E,
             class I,
@@ -200,7 +200,7 @@ namespace futures {
                 std::move(f));
         }
 
-        /// \overload Ranges / default partitioner
+        /// @overload Ranges / default partitioner
         template <
             class E,
             class R,
@@ -227,7 +227,7 @@ namespace futures {
                 std::move(f));
         }
 
-        /// \overload Iterators / default executor / default partitioner
+        /// @overload Iterators / default executor / default partitioner
         template <
             class I,
             class S,
@@ -254,7 +254,7 @@ namespace futures {
                 std::move(f));
         }
 
-        /// \overload Ranges / default executor / default partitioner
+        /// @overload Ranges / default executor / default partitioner
         template <
             class R,
             class T

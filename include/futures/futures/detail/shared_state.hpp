@@ -19,10 +19,10 @@
 #include <condition_variable>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /// \brief Members functions and objects common to all shared state
+    /// Members functions and objects common to all shared state
     /// object types (bool ready and exception ptr)
     ///
     /// Shared states for asynchronous operations contain an element of a
@@ -35,30 +35,30 @@ namespace futures::detail {
     class shared_state_base
     {
     private:
-        /// \brief A list of waiters: condition variables to notify any
+        /// A list of waiters: condition variables to notify any
         /// object waiting for this shared state to be ready
         using waiter_list = detail::small_vector<std::condition_variable_any *>;
 
     public:
-        /// \brief A handle to notify an external context about this state
+        /// A handle to notify an external context about this state
         /// being ready
         using notify_when_ready_handle = waiter_list::iterator;
 
-        /// \brief A default constructed shared state data
+        /// A default constructed shared state data
         shared_state_base() = default;
 
-        /// \brief Cannot copy construct the shared state data
+        /// Cannot copy construct the shared state data
         ///
         /// We cannot copy construct the shared state data because its
         /// parent class holds synchronization primitives
         shared_state_base(const shared_state_base &) = delete;
 
-        /// \brief Virtual shared state data destructor
+        /// Virtual shared state data destructor
         ///
         /// Virtual to make it inheritable
         virtual ~shared_state_base() = default;
 
-        /// \brief Cannot copy assign the shared state data
+        /// Cannot copy assign the shared state data
         ///
         /// We cannot copy assign the shared state data because this parent
         /// class holds synchronization primitives
@@ -66,7 +66,7 @@ namespace futures::detail {
         operator=(const shared_state_base &)
             = delete;
 
-        /// \brief Indicate to the shared state the state is ready in the
+        /// Indicate to the shared state the state is ready in the
         /// derived class
         ///
         /// This operation marks the ready_ flags and warns any future
@@ -98,7 +98,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Check if state is ready
+        /// Check if state is ready
         ///
         /// This overload uses the default global mutex for synchronization
         bool
@@ -110,7 +110,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Check if state is ready without locking
+        /// Check if state is ready without locking
         ///
         /// Although the parent shared state class doesn't store the state,
         /// we know it's ready with state because it's the only way it's
@@ -120,7 +120,7 @@ namespace futures::detail {
             return is_ready() && !except_;
         }
 
-        /// \brief Set shared state to an exception
+        /// Set shared state to an exception
         ///
         /// This sets the exception value and marks the shared state as
         /// ready. If we try to set an exception on a shared state that's
@@ -139,7 +139,7 @@ namespace futures::detail {
             set_ready();
         }
 
-        /// \brief Get the shared state when it's an exception
+        /// Get the shared state when it's an exception
         ///
         /// This overload uses the default global mutex for synchronization
         std::exception_ptr
@@ -150,13 +150,13 @@ namespace futures::detail {
             return except_;
         }
 
-        /// \brief Rethrow the exception we have stored
+        /// Rethrow the exception we have stored
         void
         throw_internal_exception() const {
             std::rethrow_exception(get_exception_ptr());
         }
 
-        /// \brief Indicate to the shared state its owner has been destroyed
+        /// Indicate to the shared state its owner has been destroyed
         ///
         /// If owner has been destroyed before the shared state is ready,
         /// this means a promise has been broken and the shared state should
@@ -169,13 +169,13 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Check if state is ready without locking
+        /// Check if state is ready without locking
         bool
         failed() const {
             return is_ready() && except_ != nullptr;
         }
 
-        /// \brief Wait for shared state to become ready
+        /// Wait for shared state to become ready
         ///
         /// This function uses the condition variable waiters to wait for
         /// this shared state to be marked as ready.
@@ -208,17 +208,17 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Wait for the shared state to become ready
+        /// Wait for the shared state to become ready
         ///
         /// This function uses the condition variable waiters to wait for
         /// this shared state to be marked as ready for a specified
         /// duration. This overload is meant to be used by derived classes
         /// that might need to use another mutex for this operation
         ///
-        /// \tparam Rep An arithmetic type representing the number of ticks
-        /// \tparam Period A std::ratio representing the tick period
-        /// \param timeout_duration maximum duration to block for
-        /// \return The state of the shared value
+        /// @tparam Rep An arithmetic type representing the number of ticks
+        /// @tparam Period A std::ratio representing the tick period
+        /// @param timeout_duration maximum duration to block for
+        /// @return The state of the shared value
         template <typename Rep, typename Period>
         std::future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
@@ -252,7 +252,7 @@ namespace futures::detail {
             return std::future_status::ready;
         }
 
-        /// \brief Wait for the shared state to become ready
+        /// Wait for the shared state to become ready
         ///
         /// This function uses the condition variable waiters
         /// to wait for this shared state to be marked as ready until a
@@ -260,10 +260,10 @@ namespace futures::detail {
         /// derived classes that might need to use another mutex for this
         /// operation
         ///
-        /// \tparam Clock The clock type
-        /// \tparam Duration The duration type
-        /// \param timeout_time maximum time point to block until
-        /// \return The state of the shared value
+        /// @tparam Clock The clock type
+        /// @tparam Duration The duration type
+        /// @param timeout_time maximum time point to block until
+        /// @return The state of the shared value
         template <typename Clock, typename Duration>
         std::future_status
         wait_until(
@@ -298,12 +298,12 @@ namespace futures::detail {
             return std::future_status::ready;
         }
 
-        /// \brief Include a condition variable in the list of waiters we
+        /// Include a condition variable in the list of waiters we
         /// need to notify when the state is ready
         ///
-        /// \param cv Reference to an external condition variable
+        /// @param cv Reference to an external condition variable
         ///
-        /// \return Handle which can be used to unnotify when ready
+        /// @return Handle which can be used to unnotify when ready
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             status prev = [this]() {
@@ -326,10 +326,10 @@ namespace futures::detail {
             return external_waiters_.insert(external_waiters_.end(), &cv);
         }
 
-        /// \brief Remove condition variable from list of condition
+        /// Remove condition variable from list of condition
         /// variables we need to warn about this state
         ///
-        /// \param it External condition variable
+        /// @param it External condition variable
         void
         unnotify_when_ready(notify_when_ready_handle it) {
             auto lk = create_wait_lock();
@@ -346,13 +346,13 @@ namespace futures::detail {
         virtual void
         post_deferred(){};
 
-        /// \brief Get a reference to the mutex in the shared state
+        /// Get a reference to the mutex in the shared state
         std::mutex &
         waiters_mutex() {
             return waiters_mutex_;
         }
 
-        /// \brief Generate unique lock for the shared state
+        /// Generate unique lock for the shared state
         ///
         /// This lock can be used for any operations on the state that might
         /// need to be protected/
@@ -362,7 +362,7 @@ namespace futures::detail {
         }
 
     private:
-        /// \brief Call the internal wait callback function
+        /// Call the internal wait callback function
         void
         run_wait_callback() const {
             if (wait_callback_) {
@@ -383,7 +383,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief The current status of this shared state
+        /// The current status of this shared state
         enum status : uint8_t
         {
             /// Nothing happened yet
@@ -394,25 +394,25 @@ namespace futures::detail {
             ready,
         };
 
-        /// \brief Indicates if the shared state is already set
+        /// Indicates if the shared state is already set
         ///
         /// There are three states possible: nothing, waiting, ready
         mutable std::
             conditional_t<is_always_deferred, status, std::atomic<status>>
                 status_{ status::initial };
 
-        /// \brief Pointer to an exception, when the shared_state fails
+        /// Pointer to an exception, when the shared_state fails
         ///
         /// std::exception_ptr does not need to be atomic because
         /// the status variable is guarding it.
         ///
         std::exception_ptr except_{ nullptr };
 
-        /// \brief Callback function we should call before waiting for the
+        /// Callback function we should call before waiting for the
         /// shared state
         std::function<void()> wait_callback_;
 
-        /// \brief Condition variable to notify any object waiting for this
+        /// Condition variable to notify any object waiting for this
         /// shared state to be ready
         ///
         /// This is the object we use to be able to block until the shared
@@ -425,14 +425,14 @@ namespace futures::detail {
         ///
         mutable std::condition_variable waiter_{};
 
-        /// \brief List of external condition variables also waiting for
+        /// List of external condition variables also waiting for
         /// this shared state to be ready
         ///
         /// While the internal waiter is intended for
         ///
         waiter_list external_waiters_;
 
-        /// \brief Mutex for threads that want to wait on the result
+        /// Mutex for threads that want to wait on the result
         ///
         /// While the shared state is lock-free, it also includes a mutex
         /// that can be used for communication between futures, such as
@@ -447,7 +447,7 @@ namespace futures::detail {
         mutable std::mutex waiters_mutex_{};
     };
 
-    /// \brief Shared state with its concrete storage
+    /// Shared state with its concrete storage
     ///
     /// This class stores the data for a shared state holding an element of
     /// type `R`, which might be a concrete type, a reference, or `void`.
@@ -487,7 +487,7 @@ namespace futures::detail {
         , private conditional_base<Options::is_stoppable, stop_source, 2>
     {
     protected:
-        /// \brief Executor storage
+        /// Executor storage
         using executor_base = conditional_base<
             Options::has_executor,
             typename Options::executor_t,
@@ -495,7 +495,7 @@ namespace futures::detail {
 
         using executor_type = typename executor_base::value_type;
 
-        /// \brief Continuations storage
+        /// Continuations storage
         using continuations_base = conditional_base<
             Options::is_continuable,
             continuations_source<Options::is_always_deferred>,
@@ -503,7 +503,7 @@ namespace futures::detail {
 
         using continuations_type = typename continuations_base::value_type;
 
-        /// \brief Stop source storage
+        /// Stop source storage
         using stop_source_base
             = conditional_base<Options::is_stoppable, stop_source, 2>;
 
@@ -515,7 +515,7 @@ namespace futures::detail {
             detail::empty_value_type>;
 
     public:
-        /// \brief Destructor
+        /// Destructor
         ///
         /// We might need to destroy the shared object R if the state is
         /// ready with a value.
@@ -532,20 +532,20 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Constructor
+        /// Constructor
         ///
         /// This function will construct the state with storage for R.
         ///
         shared_state() = default;
 
-        /// \brief Constructor for state with reference to executor
+        /// Constructor for state with reference to executor
         ///
         /// The executor allows us to emplace continuations on the
         /// same executor by default.
         ///
         explicit shared_state(const executor_type &ex) : executor_base(ex) {}
 
-        /// \brief Deleted copy constructor
+        /// Deleted copy constructor
         ///
         /// The copy constructor does not make sense for shared states as
         /// they are meant to be shared in all of our use cases with
@@ -553,13 +553,13 @@ namespace futures::detail {
         ///
         shared_state(shared_state const &) = delete;
 
-        /// \brief Move constructor
+        /// Move constructor
         ///
         shared_state(shared_state &&) noexcept = default;
 
-        /// \brief Move constructor from shared state with different options
+        /// Move constructor from shared state with different options
         ///
-        /// \param other Other shared state
+        /// @param other Other shared state
         template <class OtherOptions>
         shared_state(shared_state<R, OtherOptions> &&other) noexcept
             : shared_state_base<Options::is_always_deferred>(std::move(other)),
@@ -567,7 +567,7 @@ namespace futures::detail {
               continuations_base(std::move(other)),
               stop_source_base(std::move(other)) {}
 
-        /// \brief Deleted copy assignment operator
+        /// Deleted copy assignment operator
         ///
         /// These functions do not make sense for shared states as they are
         /// meant to be shared.
@@ -576,7 +576,7 @@ namespace futures::detail {
         operator=(shared_state const &)
             = delete;
 
-        /// \brief Move assignment operator
+        /// Move assignment operator
         ///
         /// These functions do not make sense for shared states as they are
         /// meant to be shared.
@@ -585,7 +585,7 @@ namespace futures::detail {
         operator=(shared_state &&)
             = default;
 
-        /// \brief Set the value of the shared state to a copy of value
+        /// Set the value of the shared state to a copy of value
         ///
         /// This function locks the shared state and makes a copy of the
         /// value into the storage.
@@ -596,7 +596,7 @@ namespace futures::detail {
         ///
         /// This function is unsynchronized and should only be invoked once.
         ///
-        /// \param value New state value
+        /// @param value New state value
         template <class... Args>
         void
         set_value(Args &&...args) {
@@ -607,7 +607,7 @@ namespace futures::detail {
             this->set_ready();
         }
 
-        /// \brief Set value with a callable and an argument list
+        /// Set value with a callable and an argument list
         template <typename Fn, typename... Args>
         void
         apply(Fn &&fn, Args &&...args) {
@@ -655,7 +655,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Set value with a callable and a tuple or arguments
+        /// Set value with a callable and a tuple or arguments
         template <typename Fn, typename Tuple>
         void
         apply_tuple(Fn &&fn, Tuple &&targs) {
@@ -666,7 +666,7 @@ namespace futures::detail {
                     std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
         }
 
-        /// \brief Get the value of the shared state
+        /// Get the value of the shared state
         ///
         /// This function waits for the shared state to become ready and
         /// returns its value.
@@ -674,7 +674,7 @@ namespace futures::detail {
         /// This function return `R&` unless this is a shared state to
         /// `void`.
         ///
-        /// \return Reference to the state as a reference to R
+        /// @return Reference to the state as a reference to R
         std::add_lvalue_reference_t<R>
         get() {
             this->wait();
@@ -730,7 +730,7 @@ namespace futures::detail {
         }
     };
 
-    /// \brief An extension of shared state with storage for a deferred task
+    /// An extension of shared state with storage for a deferred task
     ///
     /// This class provides the same functionality as shared state and
     /// extra storage for a deferred task.
@@ -750,30 +750,30 @@ namespace futures::detail {
         , private maybe_empty<std::tuple<std::decay_t<Args>...>, 4>
     {
     private:
-        /// \brief Deferred function storage
+        /// Deferred function storage
         using deferred_base = maybe_empty<Fn, 3>;
         using deferred_type = typename deferred_base::value_type;
 
-        /// \brief Deferred Args storage
+        /// Deferred Args storage
         using deferred_args_base
             = maybe_empty<std::tuple<std::decay_t<Args>...>, 4>;
         using deferred_args_type = typename deferred_args_base::value_type;
 
     public:
-        /// \brief Destructor
+        /// Destructor
         ///
         /// We might need to destroy the shared object R if the state is
         /// ready with a value.
         ///
         ~deferred_shared_state() override = default;
 
-        /// \brief Constructor
+        /// Constructor
         ///
         /// This function will construct the state with storage for R.
         ///
         deferred_shared_state() = default;
 
-        /// \brief Constructor for deferred state
+        /// Constructor for deferred state
         ///
         /// The function accepts other function and args types so
         /// (i) we can forward the variables, and (ii) allow compatible
@@ -788,7 +788,7 @@ namespace futures::detail {
               deferred_base(std::forward<OtherFn>(f)),
               deferred_args_base(std::forward<OtherArgs>(args)...) {}
 
-        /// \brief Deleted copy constructor
+        /// Deleted copy constructor
         ///
         /// The copy constructor does not make sense for shared states as
         /// they are meant to be shared in all of our use cases with
@@ -796,13 +796,13 @@ namespace futures::detail {
         ///
         deferred_shared_state(deferred_shared_state const &) = delete;
 
-        /// \brief Move constructor
+        /// Move constructor
         ///
         deferred_shared_state(deferred_shared_state &&) noexcept = default;
 
-        /// \brief Move constructor from shared state with different options
+        /// Move constructor from shared state with different options
         ///
-        /// \param other Other shared state
+        /// @param other Other shared state
         template <class OtherOptions>
         deferred_shared_state(
             deferred_shared_state<R, OtherOptions, Fn, Args...> &&other) noexcept
@@ -810,7 +810,7 @@ namespace futures::detail {
               deferred_base(std::move(other)),
               deferred_args_base(std::move(other)) {}
 
-        /// \brief Deleted copy assignment operator
+        /// Deleted copy assignment operator
         ///
         /// These functions do not make sense for shared states as they are
         /// meant to be shared.
@@ -819,7 +819,7 @@ namespace futures::detail {
         operator=(deferred_shared_state const &)
             = delete;
 
-        /// \brief Move assignment operator
+        /// Move assignment operator
         ///
         /// These functions do not make sense for shared states as they are
         /// meant to be shared.
@@ -854,7 +854,7 @@ namespace futures::detail {
         }
     };
 
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 
 #endif // FUTURES_FUTURES_DETAIL_SHARED_STATE_HPP

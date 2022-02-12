@@ -16,14 +16,14 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
-    /// \brief Functor representing the overloads for the @ref any_of function
+    /// Functor representing the overloads for the @ref any_of function
     class any_of_functor : public unary_invoke_algorithm_functor<any_of_functor>
     {
         friend unary_invoke_algorithm_functor<any_of_functor>;
@@ -105,18 +105,18 @@ namespace futures {
                 tasks_{};
         };
 
-        /// \brief Complete overload of the any_of algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param f Function
-        /// \brief function template \c any_of
+        /// Complete overload of the any_of algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param f Function
+        /// function template \c any_of
         template <
             class E,
             class P,
@@ -143,7 +143,7 @@ namespace futures {
         }
     };
 
-    /// \brief Checks if a predicate is true for any of the elements in a range
+    /// Checks if a predicate is true for any of the elements in a range
     inline constexpr any_of_functor any_of;
 
     /** @}*/

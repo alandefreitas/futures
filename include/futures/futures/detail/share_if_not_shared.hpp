@@ -12,10 +12,10 @@
 #include <futures/detail/traits/has_share.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
@@ -31,7 +31,7 @@ namespace futures::detail {
         }
     }
 
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 #endif // FUTURES_FUTURES_DETAIL_SHARE_IF_NOT_SHARED_HPP

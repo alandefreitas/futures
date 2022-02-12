@@ -27,19 +27,19 @@ namespace futures::detail {
 
     struct unwrap_and_continue_functor
     {
-        /// \brief Unwrap the results from `before` future object and give them
+        /// Unwrap the results from `before` future object and give them
         /// to `continuation`
         ///
         /// This function unfortunately has very high cyclomatic complexity
         /// because it's the only way we can concatenate so many `if constexpr`
         /// without negating all previous conditions.
         ///
-        /// \param before_future The antecedent future to be unwrapped
-        /// \param continuation The continuation function
-        /// \param args Arguments we send to the function before the unwrapped
+        /// @param before_future The antecedent future to be unwrapped
+        /// @param continuation The continuation function
+        /// @param args Arguments we send to the function before the unwrapped
         /// result (stop_token or <empty>)
         ///
-        /// \return The continuation result
+        /// @return The continuation result
         template <
             class Future,
             typename Function,
@@ -323,7 +323,7 @@ namespace futures::detail {
             // when_any<tuple<future<>,...>> -> function(size_t,
             // future<T1>, future<T2>, ...)
             constexpr bool when_any_explode = []() {
-                if constexpr (is_tuple_v<when_any_sequence>) {
+                if constexpr (detail::is_tuple_v<when_any_sequence>) {
                     return is_tuple_invocable_v<
                         Function,
                         tuple_type_concat_t<
@@ -378,7 +378,7 @@ namespace futures::detail {
                         std::move(w.tasks)));
             } else if constexpr (when_any_element || when_any_unwrap_element) {
                 constexpr auto get_nth_future = [](auto &when_any_f) {
-                    if constexpr (is_tuple_v<when_any_sequence>) {
+                    if constexpr (detail::is_tuple_v<when_any_sequence>) {
                         return std::move(futures::get(
                             std::move(when_any_f.tasks),
                             when_any_f.index));
@@ -430,7 +430,7 @@ namespace futures::detail {
 
     constexpr unwrap_and_continue_functor unwrap_and_continue;
 
-    /// \brief Find the result of unwrap and continue or return
+    /// Find the result of unwrap and continue or return
     /// unwrapping_failure_t if expression is not well-formed
     template <class Future, class Function, class = void>
     struct result_of_unwrap
@@ -454,7 +454,7 @@ namespace futures::detail {
     template <class Future, class Function>
     using result_of_unwrap_t = typename result_of_unwrap<Future, Function>::type;
 
-    /// \brief Find the result of unwrap and continue with token or return
+    /// Find the result of unwrap and continue with token or return
     /// unwrapping_failure_t otherwise. The implementation avoids even trying
     /// if the previous future has no stop token
     template <bool Enable, class Future, class Function, class = void>
@@ -481,7 +481,7 @@ namespace futures::detail {
             std::declval<stop_token>()));
     };
 
-    /// \brief Find the result of unwrap and continue with token or return
+    /// Find the result of unwrap and continue with token or return
     /// unwrapping_failure_t otherwise
     template <class Future, class Function>
     struct result_of_unwrap_with_token
@@ -555,7 +555,7 @@ namespace futures::detail {
         // The result type of unwrap and continue for the valid version, with or
         // without token
         using next_future_options = conditional_append_future_option_t<
-            is_deferred_v<Future>,
+            is_always_deferred_v<Future>,
             always_deferred_opt,
             eager_future_options>;
     };

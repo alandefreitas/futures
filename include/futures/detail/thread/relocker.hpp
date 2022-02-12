@@ -11,37 +11,37 @@
 #include <mutex>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /// \brief An object that temporarily unlocks a lock
+    /// An object that temporarily unlocks a lock
     struct relocker
     {
-        /// \brief The underlying lock
+        /// The underlying lock
         std::unique_lock<std::mutex> &lock_;
 
-        /// \brief Construct a relocker
+        /// Construct a relocker
         ///
         /// A relocker keeps a temporary reference to the lock and
         /// immediately unlocks it
         ///
-        /// \param lk Reference to underlying lock
+        /// @param lk Reference to underlying lock
         explicit relocker(std::unique_lock<std::mutex> &lk) : lock_(lk) {
             lock_.unlock();
         }
 
-        /// \brief Copy constructor is deleted
+        /// Copy constructor is deleted
         relocker(const relocker &) = delete;
         relocker(relocker &&other) noexcept = delete;
 
-        /// \brief Copy assignment is deleted
+        /// Copy assignment is deleted
         relocker &
         operator=(const relocker &)
             = delete;
         relocker &
         operator=(relocker &&other) noexcept = delete;
 
-        /// \brief Destroy the relocker
+        /// Destroy the relocker
         ///
         /// The relocker locks the underlying lock when it's done
         ~relocker() {
@@ -50,7 +50,7 @@ namespace futures::detail {
             }
         }
 
-        /// \brief Lock the underlying lock
+        /// Lock the underlying lock
         void
         lock() {
             if (!lock_.owns_lock()) {

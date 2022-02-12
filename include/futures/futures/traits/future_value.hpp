@@ -12,29 +12,29 @@
 #include <futures/futures/traits/is_future.hpp>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup future-traits Future Traits
+    /** @addtogroup future-traits Future Traits
      *  @{
      */
 
 
-    /// \brief Determine type the future object holds
+    /// Determine type the future object holds
     ///
     /// Primary template handles non-future types
     ///
-    /// \note Not to be confused with continuation unwrapping
+    /// @note Not to be confused with continuation unwrapping
     template <typename T, class Enable = void>
     struct future_value
     {};
 
-    /// \brief Determine type a future object holds (specialization for types
+    /// Determine type a future object holds (specialization for types
     /// that implement `get()`)
     ///
     /// Template for types that implement ::get()
     ///
-    /// \note Not to be confused with continuation unwrapping
+    /// @note Not to be confused with continuation unwrapping
     template <typename Future>
     struct future_value<
         Future,
@@ -44,14 +44,14 @@ namespace futures {
             decltype(std::declval<std::decay_t<Future>>().get())>;
     };
 
-    /// \brief Determine type a future object holds
+    /// Determine type a future object holds
     ///
-    /// \note Not to be confused with continuation unwrapping
+    /// @note Not to be confused with continuation unwrapping
     template <class T>
     using future_value_t = typename future_value<T>::type;
 
-    /** @} */ // \addtogroup future-traits Future Traits
-    /** @} */ // \addtogroup futures Futures
+    /** @} */ // @addtogroup future-traits Future Traits
+    /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
 #endif // FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP

@@ -12,11 +12,11 @@
 #include <futures/detail/traits/type_member_or_void.hpp>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief The return type of a callable given to futures::async with the
+    /// The return type of a callable given to futures::async with the
     /// Args... This is the value type of the future object returned by async.
     /// In typical implementations this is usually the same as
     /// result_of_t<Function, Args...>. However, our implementation is a little

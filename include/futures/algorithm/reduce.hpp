@@ -16,15 +16,15 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
 
-    /// \brief Functor representing the overloads for the @ref reduce function
+    /// Functor representing the overloads for the @ref reduce function
     class reduce_functor
         : public binary_invoke_algorithm_functor<reduce_functor>
     {
@@ -92,19 +92,19 @@ namespace futures {
                 tasks_{};
         };
 
-        /// \brief Complete overload of the reduce algorithm
+        /// Complete overload of the reduce algorithm
         ///
         /// The reduce algorithm is equivalent to a version std::accumulate
-        /// where the binary operation is applied out of order. \tparam E
-        /// Executor type \tparam P Partitioner type \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam Fun Function type
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param i Initial value for the reduction
-        /// \param f Function
+        /// where the binary operation is applied out of order. @tparam E
+        /// Executor type @tparam P Partitioner type @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam Fun Function type
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param i Initial value for the reduction
+        /// @param f Function
         template <
             class E,
             class P,
@@ -134,7 +134,7 @@ namespace futures {
         }
     };
 
-    /// \brief Sums up (or accumulate with a custom function) a range of
+    /// Sums up (or accumulate with a custom function) a range of
     /// elements, except out of order
     inline constexpr reduce_functor reduce;
 

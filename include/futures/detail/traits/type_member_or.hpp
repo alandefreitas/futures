@@ -11,11 +11,11 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
 
-    /// \brief Return T::type or a second type as a placeholder if T::type
+    /// Return T::type or a second type as a placeholder if T::type
     /// doesn't exist This class is meant to avoid errors in std::conditional
     template <class, class Placeholder = void, class = void>
     struct type_member_or

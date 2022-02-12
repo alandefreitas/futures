@@ -12,7 +12,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /// \brief Transform all types in a tuple
+    /// Transform all types in a tuple
     template <class L, template <class...> class P>
     struct tuple_type_transform
     {

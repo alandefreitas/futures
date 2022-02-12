@@ -20,32 +20,32 @@
 #include <variant>
 
 namespace futures {
-    /** \addtogroup algorithms Algorithms
+    /** @addtogroup algorithms Algorithms
      *  @{
      */
 
-    /** \addtogroup functions Functions
+    /** @addtogroup functions Functions
      *  @{
      */
 
 
-    /// \brief Functor representing the overloads for the @ref count function
+    /// Functor representing the overloads for the @ref count function
     class count_functor : public value_cmp_algorithm_functor<count_functor>
     {
         friend value_cmp_algorithm_functor<count_functor>;
 
-        /// \brief Complete overload of the count algorithm
-        /// \tparam E Executor type
-        /// \tparam P Partitioner type
-        /// \tparam I Iterator type
-        /// \tparam S Sentinel iterator type
-        /// \tparam T Value to compare
-        /// \param ex Executor
-        /// \param p Partitioner
-        /// \param first Iterator to first element in the range
-        /// \param last Iterator to (last + 1)-th element in the range
-        /// \param value Value
-        /// \brief function template \c count
+        /// Complete overload of the count algorithm
+        /// @tparam E Executor type
+        /// @tparam P Partitioner type
+        /// @tparam I Iterator type
+        /// @tparam S Sentinel iterator type
+        /// @tparam T Value to compare
+        /// @param ex Executor
+        /// @param p Partitioner
+        /// @param first Iterator to first element in the range
+        /// @param last Iterator to (last + 1)-th element in the range
+        /// @param value Value
+        /// function template \c count
         template <
             class E,
             class P,
@@ -75,7 +75,7 @@ namespace futures {
         }
     };
 
-    /// \brief Returns the number of elements matching an element
+    /// Returns the number of elements matching an element
     inline constexpr count_functor count;
 
     /** @}*/

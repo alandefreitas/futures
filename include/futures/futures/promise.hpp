@@ -16,17 +16,17 @@
 #include <memory>
 
 namespace futures {
-    /** \addtogroup futures Futures
+    /** @addtogroup futures Futures
      *  @{
      */
-    /** \addtogroup shared_state Shared State
+    /** @addtogroup shared_state Shared State
      *
      * \brief Shared state objects
      *
      *  @{
      */
 
-    /// \brief Common members to promises of all types
+    /// Common members to promises of all types
     ///
     /// This includes a pointer to the corresponding shared_state for the future
     /// and the functions to manage the promise.
@@ -41,7 +41,7 @@ namespace futures {
     class promise_base
     {
     public:
-        /// \brief Create the base promise with std::allocator
+        /// Create the base promise with std::allocator
         ///
         /// Use std::allocator_arg tag to dispatch and select allocator aware
         /// constructor
@@ -49,7 +49,7 @@ namespace futures {
             : promise_base{ std::allocator_arg,
                             std::allocator<promise_base>{} } {}
 
-        /// \brief Create a base promise setting the shared state with the
+        /// Create a base promise setting the shared state with the
         /// specified allocator
         ///
         /// This function allocates memory for and allocates an initial
@@ -60,22 +60,22 @@ namespace futures {
         promise_base(std::allocator_arg_t, const Allocator &alloc)
             : shared_state_(make_shared_state(alloc)) {}
 
-        /// \brief No copy constructor
+        /// No copy constructor
         promise_base(promise_base const &) = delete;
 
-        /// \brief Move constructor
+        /// Move constructor
         promise_base(promise_base &&other) noexcept
             : obtained_{ other.obtained_ },
               shared_state_{ std::move(other.shared_state_) } {
             other.obtained_ = false;
         }
 
-        /// \brief No copy assignment
+        /// No copy assignment
         promise_base &
         operator=(promise_base const &)
             = delete;
 
-        /// \brief Move assignment
+        /// Move assignment
         promise_base &
         operator=(promise_base &&other) noexcept {
             if (this != &other) {
@@ -85,7 +85,7 @@ namespace futures {
             return *this;
         }
 
-        /// \brief Destructor
+        /// Destructor
         ///
         /// This promise owns the shared state, so we need to warn the shared
         /// state when it's destroyed.
@@ -95,7 +95,7 @@ namespace futures {
             }
         }
 
-        /// \brief Gets a future that shares its state with this promise
+        /// Gets a future that shares its state with this promise
         ///
         /// This function constructs a future object that shares its state with
         /// this promise. Because this library handles more than a single future
@@ -115,8 +115,8 @@ namespace futures {
             return basic_future<R, Options>{ shared_state_ };
         }
 
-        /// \brief Set the promise result as an exception
-        /// \note The set_value operation is only available at the concrete
+        /// Set the promise result as an exception
+        /// @note The set_value operation is only available at the concrete
         /// derived class, where we know the class type
         void
         set_exception(std::exception_ptr p) {
@@ -126,7 +126,7 @@ namespace futures {
             shared_state_->set_exception(p);
         }
 
-        /// \brief Set the promise result as an exception
+        /// Set the promise result as an exception
         template <
             typename E
 #ifndef FUTURES_DOXYGEN
@@ -140,14 +140,14 @@ namespace futures {
         }
 
     protected:
-        /// \brief Swap the value of two promises
+        /// Swap the value of two promises
         void
         swap(promise_base &other) noexcept {
             std::swap(obtained_, other.obtained_);
             shared_state_.swap(other.shared_state_);
         }
 
-        /// \brief Intrusive pointer to the future corresponding to this promise
+        /// Intrusive pointer to the future corresponding to this promise
         constexpr std::shared_ptr<detail::shared_state<R, Options>> &
         get_shared_state() {
             return shared_state_;
@@ -166,14 +166,14 @@ namespace futures {
             }
         }
 
-        /// \brief True if the future has already obtained the promise
+        /// True if the future has already obtained the promise
         bool obtained_{ false };
 
-        /// \brief Pointer to the shared state for this promise
+        /// Pointer to the shared state for this promise
         std::shared_ptr<detail::shared_state<R, Options>> shared_state_{};
     };
 
-    /// \brief A shared state that will later be acquired by a future type
+    /// A shared state that will later be acquired by a future type
     ///
     /// The shared state is accessed by a future and a promise. The promise
     /// can write to the shared state while the future can read from it.
@@ -182,7 +182,7 @@ namespace futures {
     /// of the properties of futures and promises to avoid locking and
     /// wasteful memory allocations.
     ///
-    /// \tparam R The shared state type
+    /// @tparam R The shared state type
     template <
         class R,
         class Options
@@ -190,14 +190,14 @@ namespace futures {
     class promise : public promise_base<R, Options>
     {
     public:
-        /// \brief Create the promise for type R
+        /// Create the promise for type R
         using promise_base<R, Options>::promise_base;
 
-        /// \brief Set the promise value
+        /// Set the promise value
         ///
         /// After this value is set, it can be obtained by the future object
         ///
-        /// \param args arguments to set the promise
+        /// @param args arguments to set the promise
         template <class... Args>
         void
         set_value(Args &&...args) {
@@ -208,14 +208,14 @@ namespace futures {
                 std::forward<Args>(args)...);
         }
 
-        /// \brief Swap the value of two promises
+        /// Swap the value of two promises
         void
         swap(promise &other) noexcept {
             promise_base<R, Options>::swap(other);
         }
     };
 
-    /// \brief Swap the value of two promises
+    /// Swap the value of two promises
     template <typename R>
     void
     swap(promise<R> &l, promise<R> &r) noexcept {

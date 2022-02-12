@@ -9,11 +9,11 @@
 #define FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP
 
 namespace futures {
-    /** \addtogroup adaptors Adaptors
+    /** @addtogroup adaptors Adaptors
      *  @{
      */
 
-    /// \brief Result type for when_any_future objects
+    /// Result type for when_any_future objects
     ///
     /// This is defined in a separate file because many other concepts depend on
     /// this definition, especially the inferences for unwrapping `then`

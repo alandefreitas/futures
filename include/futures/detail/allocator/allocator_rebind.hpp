@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace futures::detail {
-    /// \brief Convenience traits to rebind allocators
+    /// Convenience traits to rebind allocators
     template <class A, class T>
     struct allocator_rebind
     {
