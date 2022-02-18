@@ -32,10 +32,11 @@ namespace futures::detail {
             is_type_template_in_args_v<executor_opt, Args...>;
 
         /// Executor used by the shared state
-        ///
-        /// This is the executor the shared state is using for the
-        /// current task and the default executor it uses for
-        /// potential continuations
+        /**
+         *  This is the executor the shared state is using for the
+         *  current task and the default executor it uses for
+         *  potential continuations
+         */
         using executor_t = detail::get_type_template_in_args_t<
             default_executor_type,
             executor_opt,
@@ -54,19 +55,36 @@ namespace futures::detail {
             is_in_args_v<always_detached_opt, Args...>;
 
         /// Whether the future is always deferred
-        ///
-        /// Deferred futures are associated to a task that is only
-        /// sent to the executor when we request or wait for the
-        /// future value
+        /**
+         *  Deferred futures are associated to a task that is only
+         *  sent to the executor when we request or wait for the
+         *  future value
+         */
         static constexpr bool is_always_deferred = detail::
             is_in_args_v<always_deferred_opt, Args...>;
 
+        /// Whether the future holds an associated function with the task
+        static constexpr bool has_deferred_function = detail::
+            is_type_template_in_args_v<deferred_function_opt, Args...>;
+
+        /// Function used by the deferred shared state
+        /**
+         *  This is the function the deferred state will use when the task
+         *  is launched
+         */
+        using function_t = detail::get_type_template_in_args_t<
+            std::function<void()>,
+            deferred_function_opt,
+            Args...>;
+        static_assert(std::is_invocable_v<function_t>);
+
         /// Whether the future is shared
-        ///
-        /// The value of shared futures is not consumed when requested.
-        /// Instead, it makes copies of the return value. On the other
-        /// hand, simple unique future move their result from the
-        /// shared state when their value is requested.
+        /**
+         *  The value of shared futures is not consumed when requested.
+         *  Instead, it makes copies of the return value. On the other
+         *  hand, simple unique future move their result from the
+         *  shared state when their value is requested.
+         */
         static constexpr bool is_shared = detail::
             is_in_args_v<shared_opt, Args...>;
 
@@ -78,31 +96,54 @@ namespace futures::detail {
         static constexpr std::size_t continuable_idx
             = index_in_args_v<continuable_opt, Args...>;
         static_assert(
-            executor_idx == std::size_t(-1) || executor_idx < continuable_idx);
+            executor_idx == std::size_t(-1) || executor_idx < continuable_idx,
+            "The executor_opt tag should be defined before the continuable_opt "
+            "tag");
 
         // continuable_opt < stoppable_opt
         static constexpr std::size_t stoppable_idx
             = index_in_args_v<stoppable_opt, Args...>;
         static_assert(
-            continuable_idx == std::size_t(-1) || continuable_idx < stoppable_idx);
+            continuable_idx == std::size_t(-1)
+                || continuable_idx < stoppable_idx,
+            "The continuable_opt tag should be defined before the "
+            "stoppable_opt tag");
 
         // stoppable_opt < always_detached_opt
         static constexpr std::size_t always_detached_idx
             = index_in_args_v<always_detached_opt, Args...>;
         static_assert(
-            stoppable_idx == std::size_t(-1) || stoppable_idx < always_detached_idx);
+            stoppable_idx == std::size_t(-1)
+                || stoppable_idx < always_detached_idx,
+            "The stoppable_opt tag should be defined before the "
+            "always_detached_opt tag");
 
         // always_detached_opt < always_deferred_opt
         static constexpr std::size_t always_deferred_idx
             = index_in_args_v<always_deferred_opt, Args...>;
         static_assert(
-            always_detached_idx == std::size_t(-1) || always_detached_idx < always_deferred_idx);
+            always_detached_idx == std::size_t(-1)
+                || always_detached_idx < always_deferred_idx,
+            "The always_detached_opt tag should be defined before the "
+            "always_deferred_opt tag");
+
+        // always_deferred_opt < deferred_function_opt
+        static constexpr std::size_t deferred_function_idx
+            = index_in_args_v<deferred_function_opt<function_t>, Args...>;
+        static_assert(
+            always_deferred_idx == std::size_t(-1)
+                || always_deferred_idx < deferred_function_idx,
+            "The always_deferred_opt tag should be defined before the "
+            "deferred_function_opt tag");
 
         // always_deferred_opt < shared_opt
         static constexpr std::size_t shared_idx
             = index_in_args_v<shared_opt, Args...>;
         static_assert(
-            always_deferred_idx == std::size_t(-1) || always_deferred_idx < shared_idx);
+            always_deferred_idx == std::size_t(-1)
+                || always_deferred_idx < shared_idx,
+            "The always_deferred_opt tag should be defined before the "
+            "shared_opt tag");
     };
 
     /** @} */

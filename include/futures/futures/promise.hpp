@@ -11,7 +11,7 @@
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/detail/utility/empty_base.hpp>
-#include <futures/futures/detail/shared_state.hpp>
+#include <futures/futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <memory>
 
@@ -148,21 +148,21 @@ namespace futures {
         }
 
         /// Intrusive pointer to the future corresponding to this promise
-        constexpr std::shared_ptr<detail::shared_state<R, Options>> &
+        constexpr detail::shared_state<R, Options> &
         get_shared_state() {
             return shared_state_;
         };
 
     private:
         template <class Allocator>
-        std::shared_ptr<detail::shared_state<R, Options>>
+        detail::shared_state<R, Options>
         make_shared_state(const Allocator &alloc) {
             if constexpr (Options::has_executor) {
-                return std::allocate_shared<detail::shared_state<R, Options>>(
+                return std::allocate_shared<detail::operation_state<R, Options>>(
                     alloc,
                     make_default_executor());
             } else {
-                return std::allocate_shared<detail::shared_state<R, Options>>(alloc);
+                return std::allocate_shared<detail::operation_state<R, Options>>(alloc);
             }
         }
 
@@ -170,7 +170,7 @@ namespace futures {
         bool obtained_{ false };
 
         /// Pointer to the shared state for this promise
-        std::shared_ptr<detail::shared_state<R, Options>> shared_state_{};
+        detail::shared_state<R, Options> shared_state_{};
     };
 
     /// A shared state that will later be acquired by a future type

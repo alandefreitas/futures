@@ -8,6 +8,7 @@
 #ifndef FUTURES_FUTURES_AWAIT_HPP
 #define FUTURES_FUTURES_AWAIT_HPP
 
+#include <futures/futures/traits/future_value.hpp>
 #include <futures/futures/traits/is_future.hpp>
 #include <type_traits>
 
@@ -72,7 +73,13 @@ namespace futures {
             >
         decltype(auto)
         await_tuple(Future &&f1) {
-            return std::make_tuple(std::forward<Future>(f1).get());
+            if constexpr (std::is_void_v<future_value_t<std::decay_t<Future>>>)
+            {
+                std::forward<Future>(f1).get();
+                return std::make_tuple();
+            } else {
+                return std::make_tuple(std::forward<Future>(f1).get());
+            }
         }
 
         template <

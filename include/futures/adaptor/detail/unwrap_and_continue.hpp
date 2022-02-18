@@ -8,6 +8,8 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 #define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 
+#include <futures/futures/future_options.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple_invocable.hpp>
@@ -16,8 +18,7 @@
 #include <futures/detail/traits/tuple_type_all_of.hpp>
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
-#include <futures/futures/future_options.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <futures/futures/detail/move_if_not_shared.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 
@@ -430,6 +431,36 @@ namespace futures::detail {
 
     constexpr unwrap_and_continue_functor unwrap_and_continue;
 
+
+    template <class Future, class Function>
+    struct unwrap_and_continue_task
+    {
+        Future before_;
+        Function after_;
+
+        decltype(auto)
+        operator()() {
+            return unwrap_and_continue(std::move(before_), std::move(after_));
+        }
+
+        decltype(auto)
+        operator()(stop_token st) {
+            return unwrap_and_continue(
+                std::move(before_),
+                std::move(after_),
+                st);
+        }
+    };
+
+    template <class Function>
+    struct is_unwrap_and_continue_task : std::false_type
+    {};
+
+    template <class Future, class Function>
+    struct is_unwrap_and_continue_task<
+        unwrap_and_continue_task<Future, Function>> : std::true_type
+    {};
+
     /// Find the result of unwrap and continue or return
     /// unwrapping_failure_t if expression is not well-formed
     template <class Future, class Function, class = void>
@@ -547,17 +578,29 @@ namespace futures::detail {
 
         // The result type of unwrap and continue for the valid version, with or
         // without token
-        using eager_future_options = std::conditional_t<
-            after_has_stop_token,
-            future_options<executor_opt<Executor>, continuable_opt, stoppable_opt>,
-            future_options<executor_opt<Executor>, continuable_opt>>;
+        using base_future_options = std::conditional_t<
+            !is_always_deferred_v<Future>,
+            future_options<executor_opt<Executor>, continuable_opt>,
+            future_options<executor_opt<Executor>>>;
 
-        // The result type of unwrap and continue for the valid version, with or
-        // without token
-        using next_future_options = conditional_append_future_option_t<
+        using eager_future_options = conditional_append_future_option_t<
+            after_has_stop_token,
+            stoppable_opt,
+            base_future_options>;
+
+        using maybe_deferred_future_options = conditional_append_future_option_t<
             is_always_deferred_v<Future>,
             always_deferred_opt,
             eager_future_options>;
+
+        using maybe_function_type_future_options = conditional_append_future_option_t<
+            is_always_deferred_v<Future>,
+            deferred_function_opt<detail::unwrap_and_continue_task<Future, Function>>,
+            maybe_deferred_future_options>;
+
+        // The result type of unwrap and continue for the valid version, with or
+        // without token
+        using next_future_options = maybe_function_type_future_options;
     };
 
     template <class Executor, class Function, class Future>
@@ -577,25 +620,6 @@ namespace futures::detail {
         using next_future_options = typename helper::next_future_options;
     };
 
-    template <class Future, class Function>
-    struct unwrap_and_continue_task
-    {
-        Future before_;
-        Function after_;
-
-        decltype(auto)
-        operator()() {
-            return unwrap_and_continue(std::move(before_), std::move(after_));
-        }
-
-        decltype(auto)
-        operator()(stop_token st) {
-            return unwrap_and_continue(
-                std::move(before_),
-                std::move(after_),
-                st);
-        }
-    };
 
 } // namespace futures::detail
 

@@ -183,7 +183,7 @@ namespace futures {
                 detail::throw_exception<packaged_task_uninitialized>();
             }
             Future f{
-                std::static_pointer_cast<detail::shared_state<R, Options>>(
+                std::static_pointer_cast<detail::operation_state<R, Options>>(
                     task_)
             };
             future_retrieved_ = true;

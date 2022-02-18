@@ -31,13 +31,17 @@
  * we use some common assumptions.
  *
  */
-#if defined __has_include
+#if ASIO_HAS_CONSTEXPR
+#    define FUTURES_HAS_ASIO
+#elif defined __has_include
 #    if __has_include(<asio.hpp>)
 #        define FUTURES_HAS_ASIO
 #    endif
 #endif
 
-#if defined __has_include
+#if BOOST_ASIO_HAS_CONSTEXPR
+#    define FUTURES_HAS_BOOST_ASIO
+#elif defined __has_include
 #    if __has_include(<boost/asio.hpp>)
 #        define FUTURES_HAS_BOOST_ASIO
 #    endif

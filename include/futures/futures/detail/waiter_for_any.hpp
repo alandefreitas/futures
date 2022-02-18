@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 
 #include <futures/detail/thread/lock.hpp>
-#include <futures/futures/detail/shared_state.hpp>
+#include <futures/futures/detail/operation_state.hpp>
 #include <utility>
 
 namespace futures::detail {
@@ -149,7 +149,7 @@ namespace futures::detail {
 
     private:
         /// Type of handle in the future object used to notify completion
-        using notify_when_ready_handle = detail::shared_state_base<
+        using notify_when_ready_handle = detail::operation_state_base<
             false>::notify_when_ready_handle;
 
         /// Helper class to store information about each of the futures

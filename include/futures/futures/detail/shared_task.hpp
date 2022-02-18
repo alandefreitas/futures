@@ -10,7 +10,7 @@
 
 #include <futures/detail/allocator/allocator_rebind.hpp>
 #include <futures/detail/utility/empty_base.hpp>
-#include <futures/futures/detail/shared_state.hpp>
+#include <futures/futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
 
 namespace futures::detail {
@@ -28,7 +28,7 @@ namespace futures::detail {
     /// @tparam R Type returned by the task callable
     /// @tparam Args Argument types to run the task callable
     template <class R, class Options, class... Args>
-    class shared_task_base : public shared_state<R, Options>
+    class shared_task_base : public operation_state<R, Options>
     {
     public:
         /// Virtual task destructor

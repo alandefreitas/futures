@@ -33,6 +33,7 @@ add_futures_example(adaptors/disjunctions.cpp)
 add_futures_example(adaptors/disjunctions_unwrap.cpp)
 add_futures_example(adaptors/task_graph.cpp)
 add_futures_example(algorithm/algorithms.cpp)
+add_futures_example(networking/asio.cpp)
 
 add_executable(networking-echo_server networking/echo_server.cpp)
 target_link_libraries(networking-echo_server futures-compiled)

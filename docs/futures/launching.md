@@ -48,7 +48,7 @@ sequenceDiagram
     end
 </div>
 
-!!! note "The shared state"
+!!! hint "The shared state"
 
     The shared state is a private implementation detail with which the user does not interact. 
 
@@ -56,7 +56,7 @@ sequenceDiagram
     will happen through the future.
 
     It also enables optimizations based on assumptions about how specific future and promise types can access the 
-    shared state. In some circumstances, the shared state might not even need to be allocated. 
+    shared state. In some circumstances, the shared state might not even need to be [allocated](#allocations). 
 
 ## Eager tasks
 
@@ -171,5 +171,62 @@ When working without exceptions, we can avoid terminating the process by queryin
 attempting to get its value.
 
 {{ code_snippet("future_types/launching.cpp", "query_exception") }}
+
+## Allocations
+
+The shared state is a private implementation detail with which the user does not interact. It is usually implemented as
+a shared pointer to the concrete Operation State, which is where the task will store its result.
+
+<div class="mermaid">
+graph LR
+F[Future] --> |read|S1[Shared State Pointer]
+T[Promise] --> |write|S2[Shared State Pointer]
+subgraph Shared State
+S1 --> O[Operation State]
+S2 --> O[Operation State]
+end
+</div>
+
+In the general case, the operation state needs a stable address so that futures and promises can access it. In turn,
+this requires dynamic allocation of this shared state. For smaller tasks, the cost of this allocation might dominate the
+time spent by the parallel task.
+
+For this reason, functions used for launching futures allow custom memory allocators for the shared tasks. Because a
+chain of futures implicitly work as task queue, simple and efficient linear allocators can reduce this allocation cost
+reasonably. When no allocator is provided to launching functions, such an optimized allocator is provided for the
+allocating the operation state.
+
+However, in some circumstances, the library implements a few optimizations to avoid allocations altogether. In the
+following example, we have a deferred future where no allocations are required.
+
+{{ code_snippet("future_types/schedule.cpp", "no_alloc") }}
+
+In this example, the operation state might be stored inline with the future:
+
+<div class="mermaid">
+graph RL
+F[Future<br>+<br>Operation State] --> |read|F
+T[Promise] --> |write|F
+</div>
+
+With this optimization, the operation state is stored in the future, so the future can read the results from its own
+operation state. The promise can use the address of the operation state in the future to write its result. In this case,
+the promise is **connected** with the future and can store results directly in its operation state.
+
+This optimization is only applicable if the address of the future will not change, i.e.: will not be moved or destroyed,
+during task execution, i.e.: (i) after the task to set the operation state is launched and (ii) before the operation
+state is set. This is easiest to achieve in deferred futures, because the thread waiting for its result is blocked when
+we call [basic_future::wait] and the future can only be moved or destroyed after the underlying operation state is set.
+
+Note that this optimization is only possible if we can ensure the future cannot be moved or destroyed during task
+execution:
+
+- Functions such as [basic_future::wait_for] will disable this optimization for deferred futures because the underlying
+  object might be moved after [basic_future::wait_for] times out and during task execution.
+- This optimization can be enabled for eager futures that we know should not be moved or destroyed during task
+  execution. This is common in applications represented as classes that store their future instances. If we mistakenly
+  attempt to move or destroy the future during execution, it blocks the calling thread until the operation state is set.
+- Similarly, this optimization can be enabled for shared futures if the future object from where the task is launched is
+  not moved or destroyed during execution.
 
 --8<-- "docs/references.md"

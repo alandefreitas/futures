@@ -12,9 +12,7 @@ main() {
     auto f1 = schedule([] { std::cout << "No params\n"; });
     auto f2 = schedule([](int x) { std::cout << x << '\n'; }, 2);
     auto f3 = schedule([](int x, int y) { return x + y; }, 2, 3);
-    auto f4 = schedule(ex, [] {
-        std::cout << "custom executor\n";
-    });
+    auto f4 = schedule(ex, [] { std::cout << "custom executor\n"; });
     auto f5 = schedule(make_inline_executor(), [] {
         std::cout << "custom executor\n";
     });
@@ -26,4 +24,19 @@ main() {
     f4.wait();
     f5.wait();
     //]
+
+    {
+        //[no_alloc Allocations not required
+        auto f = schedule([]() { return 1; });
+        std::cout << f.get() << '\n';
+        //]
+    }
+
+    {
+        //[then Deferred continuations
+        auto fa = schedule([]() { return 1; });
+        auto fb = fa.then([](int a) { return a * 2; });
+        std::cout << fb.get() << '\n';
+        //]
+    }
 }

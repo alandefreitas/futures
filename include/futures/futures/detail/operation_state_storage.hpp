@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP
-#define FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP
+#ifndef FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
+#define FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
 #include <futures/detail/utility/empty_base.hpp>
 #include <type_traits>
@@ -23,11 +23,11 @@ namespace futures::detail {
     /// When the shared state is a reference, we store pointers internally.
     ///
     template <typename R, class Enable = void>
-    struct shared_state_storage
+    struct operation_state_storage
     {};
 
     template <typename R>
-    struct shared_state_storage<R, std::enable_if_t<std::is_void_v<R>>>
+    struct operation_state_storage<R, std::enable_if_t<std::is_void_v<R>>>
     {
         template <class... Args>
         void
@@ -40,7 +40,7 @@ namespace futures::detail {
     };
 
     template <typename R>
-    struct shared_state_storage<
+    struct operation_state_storage<
         R,
         std::enable_if_t<
             // clang-format off
@@ -66,7 +66,7 @@ namespace futures::detail {
     };
 
     template <typename R>
-    struct shared_state_storage<
+    struct operation_state_storage<
         R,
         std::enable_if_t<
             // clang-format off
@@ -92,7 +92,7 @@ namespace futures::detail {
     };
 
     template <typename R>
-    struct shared_state_storage<
+    struct operation_state_storage<
         R,
         std::enable_if_t<
             // clang-format off
@@ -123,4 +123,4 @@ namespace futures::detail {
 
 } // namespace futures::detail
 
-#endif // FUTURES_FUTURES_DETAIL_SHARED_STATE_STORAGE_HPP
+#endif // FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
