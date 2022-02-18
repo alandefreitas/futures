@@ -577,6 +577,18 @@ what `begin` semantically represents and why it is the same type as other tasks 
                       });
     ```
 
+### Senders and Futures
+
+[P2300 Section 1.10.1](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2300r4.html#intro-prior-art-futures)
+briefly describes two reasons for preferring senders to futures ("as traditionally realized"):
+
+- futures require the dynamic allocation and management of a shared state
+- futures require type-erasure of work and continuation
+
+As it should be clear from this review, from a [computer science perspective](#in-computer-science), senders _are_
+futures, even though they don't represent what was "traditionally realized" in [std::future]. All optimizations possible
+for "single-shot senders" are also possible in "unique deferred futures".
+
 ## The futures library
 
 Given the pros and cons of each model described in our [review](#previous-work), this library models future types as a
@@ -591,6 +603,7 @@ deferred work. We implement optimizations possible to each future types while st
       such as continuations, stop tokens, and deferred work
     - Reusable algorithms **work for** [**all future types**](#standard-futures), including any new and existing future
       types, such as [std::future], `boost::future`, `boost::fiber::future`.
+    - All optimizations possible for "single-shot senders" are also implemented for "unique deferred futures".
     - Futures can still match and work with whatever constraints C++ eventually imposes on future types
 - Executors
     - Custom executors can be defined and its traits are a subset of existing Asio executors.

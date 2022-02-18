@@ -171,6 +171,8 @@ IncludeCategories:
     Priority:        2
   - Regex:           '^["<]futures/.*/detail/'     # details
     Priority:        4
+  - Regex:           '^["<]futures/detail/'     # details
+    Priority:        4
   - Regex:           '^["<]futures/'               # internal
     Priority:        3
   - Regex:           '^(["<](boost|small|asio)/)'  # external
