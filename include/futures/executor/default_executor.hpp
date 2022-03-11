@@ -8,8 +8,8 @@
 #ifndef FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 
-#include <futures/detail/config/asio_include.hpp>
 #include <futures/executor/is_executor.hpp>
+#include <futures/detail/config/asio_include.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -39,7 +39,7 @@ namespace futures {
         static std::size_t value = std::thread::hardware_concurrency();
 
         // Always return at least 1 core
-        return std::max(static_cast<std::size_t>(1), value);
+        return (std::max)(static_cast<std::size_t>(1), value);
     }
 
     /// The default execution context for async operations
@@ -85,7 +85,8 @@ namespace futures {
         const std::size_t default_thread_pool_size
             = FUTURES_DEFAULT_THREAD_POOL_SIZE;
 #else
-        const std::size_t default_thread_pool_size = hardware_concurrency();
+        const std::size_t default_thread_pool_size = std::
+            max(hardware_concurrency(), std::size_t(2));
 #endif
         static asio::thread_pool pool(default_thread_pool_size);
         return pool;

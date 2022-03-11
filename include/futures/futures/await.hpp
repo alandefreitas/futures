@@ -34,7 +34,7 @@ namespace futures {
      *  The function also makes the syntax optionally a little closer to
      *  languages such as javascript.
      *
-     *  @note This function only participates in overload resolutions if all
+     *  @note This function only participates in overload resolution if all
      *  types are futures.
      *
      *  @tparam Future A future type

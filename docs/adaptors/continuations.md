@@ -197,18 +197,18 @@ The following table describes all unwrapping functions by their priority:
 
 | Future output                                                 | Continuation input                             | Inputs |
 |---------------------------------------------------------------|------------------------------------------------|--------|
-| `future<T>`                                                   | `future<T>`                                    | 1      |
-| `future<T>`                                                   | ``                                             | 0      |
-| `future<T>`                                                   | `T`                                            | 1      |
+| `future<R>`                                                   | `future<R>`                                    | 1      |
+| `future<R>`                                                   | ``                                             | 0      |
+| `future<R>`                                                   | `R`                                            | 1      |
 | `future<tuple<future<T1>, future<T2>, ...>>`                  | `future<T1>`, `future<T2>` ...                 | N      |
 | `future<tuple<future<T1>, future<T2>, ...>>`                  | `T1`, `T2` ...                                 | N      |
-| `future<vector<future<T>>>`                                   | `vector<T>`                                    | 1      |
+| `future<vector<future<R>>>`                                   | `vector<R>`                                    | 1      |
 | `future<when_any_result<tuple<future<T1>, future<T2>, ...>>>` | `size_t`, `tuple<future<T1>, future<T2>, ...>` | 2      |
 | `future<when_any_result<tuple<future<T1>, future<T2>, ...>>>` | `size_t`, `future<T1>`, `future<T2>`, ...      | N + 1  |
-| `future<when_any_result<tuple<future<T>, future<T>, ...>>>`   | `future<T>`                                    | 1      |
-| `future<when_any_result<vector<future<T>>>>`                  | `future<T>`                                    | 1      |
-| `future<when_any_result<tuple<future<T>, future<T>, ...>>>`   | `T`                                            | 1      |
-| `future<when_any_result<vector<future<T>>>>`                  | `T`                                            | 1      |
+| `future<when_any_result<tuple<future<R>, future<R>, ...>>>`   | `future<R>`                                    | 1      |
+| `future<when_any_result<vector<future<R>>>>`                  | `future<R>`                                    | 1      |
+| `future<when_any_result<tuple<future<R>, future<R>, ...>>>`   | `R`                                            | 1      |
+| `future<when_any_result<vector<future<R>>>>`                  | `R`                                            | 1      |
 
 Note that types are very important here. Whenever the continuation has the same number of arguments for the same future
 output, a template function or a lambda using `auto` would be ambiguous.
@@ -219,7 +219,7 @@ In this case, the continuation function will attempt to use the unwrapping with 
 be `cfuture<int>`. However, this is not always possible if the unwrapping overloads are ambiguous enough.
 
 The continuation with the highest priority is always the safer and usually more verbose continuation. This means a
-template continuation will usually unwrap to `future<T>` over `T` continuation input variants. On the other hand, this
+template continuation will usually unwrap to `future<R>` over `R` continuation input variants. On the other hand, this
 is also useful since the most verbose continuation patterns are the ones that could benefit the most from `auto`.
 
 ## Return type unwrapping

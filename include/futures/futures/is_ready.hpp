@@ -43,6 +43,6 @@ namespace futures {
                    == std::future_status::ready;
         }
     }
-}
+} // namespace futures
 
 #endif // FUTURES_FUTURES_IS_READY_HPP

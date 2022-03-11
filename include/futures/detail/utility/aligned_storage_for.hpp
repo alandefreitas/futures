@@ -3,8 +3,8 @@
 // See accompanying file LICENSE
 //
 
-#ifndef FUTURES_ALIGNED_STORAGE_FOR_H
-#define FUTURES_ALIGNED_STORAGE_FOR_H
+#ifndef FUTURES_DETAIL_UTILITY_ALIGNED_STORAGE_FOR_HPP
+#define FUTURES_DETAIL_UTILITY_ALIGNED_STORAGE_FOR_HPP
 
 #include <futures/detail/utility/byte.hpp>
 #include <algorithm>
@@ -19,7 +19,7 @@ namespace futures::detail {
             return data_;
         }
 
-        [[nodiscard]] constexpr byte*
+        [[nodiscard]] constexpr const byte*
         data() const {
             return data_;
         }
@@ -34,4 +34,4 @@ namespace futures::detail {
     };
 } // namespace futures::detail
 
-#endif // FUTURES_ALIGNED_STORAGE_FOR_H
+#endif // FUTURES_DETAIL_UTILITY_ALIGNED_STORAGE_FOR_HPP

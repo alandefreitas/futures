@@ -56,7 +56,9 @@ namespace futures {
         /// Promise has already been fulfilled
         promise_already_satisfied = 3,
         /// There is no shared state we can access
-        no_state = 4
+        no_state = 4,
+        /// Invalid operation on deferred future
+        future_deferred = 5
     };
 
     // fwd-declare
@@ -98,6 +100,11 @@ namespace futures {
                     static_cast<int>(future_errc::no_state),
                     future_category()
                 };
+            case future_errc::future_deferred:
+                return std::error_condition{
+                    static_cast<int>(future_errc::future_deferred),
+                    future_category()
+                };
             default:
                 return std::error_condition{ ev, *this };
             }
@@ -135,6 +142,10 @@ namespace futures {
                 return std::string{
                     "Operation not permitted on an object without "
                     "an associated state."
+                };
+            case future_errc::future_deferred:
+                return std::string{
+                    "Operation not permitted on a deferred future."
                 };
             }
             return std::string{ "unspecified future_errc value\n" };
@@ -213,6 +224,13 @@ namespace futures {
     public:
         future_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
+    };
+
+    class future_deferred : public future_error
+    {
+    public:
+        future_deferred()
+            : future_error{ make_error_code(future_errc::future_deferred) } {}
     };
 
     /** @} */

@@ -3,8 +3,8 @@
 // See accompanying file LICENSE
 //
 
-#ifndef FUTURES_BYTE_HPP
-#define FUTURES_BYTE_HPP
+#ifndef FUTURES_DETAIL_UTILITY_BYTE_HPP
+#define FUTURES_DETAIL_UTILITY_BYTE_HPP
 
 #include <type_traits>
 
@@ -93,4 +93,4 @@ namespace futures::detail {
 
 } // namespace futures::detail
 
-#endif // FUTURES_BYTE_HPP
+#endif // FUTURES_DETAIL_UTILITY_BYTE_HPP

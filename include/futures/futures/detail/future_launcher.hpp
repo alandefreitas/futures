@@ -48,28 +48,36 @@ namespace futures::detail {
             // Future traits
             using value_type = launch_result_t<Function, Args...>;
             static constexpr bool is_eager = !FutureOptions::is_always_deferred;
-
-            // Create shared state
-            auto state = make_initial_state<is_eager, value_type, FutureOptions>(
-                ex,
-                std::forward<Function>(f),
-                std::forward<Args>(args)...);
-            basic_future<value_type, FutureOptions> fut(
-                move_if_not_shared_ptr(state));
-
             if constexpr (is_eager) {
+                // Create shared state
+                auto shared_state = make_initial_state<is_eager, value_type, FutureOptions>(
+                    ex,
+                    std::forward<Function>(f),
+                    std::forward<Args>(args)...);
+                basic_future<value_type, FutureOptions> fut(shared_state);
+
                 // Launch task to fulfill the eager promise now
                 asio::post(
                     ex,
                     std::move(
-                        [state = std::move(state),
+                        [state = std::move(shared_state),
                          f = std::forward<Function>(f),
                          args = std::make_tuple(
                              std::forward<Args>(args)...)]() mutable {
                     state->apply_tuple(std::move(f), std::move(args));
                     }));
+                return fut;
+            } else {
+                // Create shared state
+                auto op_state
+                    = make_initial_state<is_eager, value_type, FutureOptions>(
+                    ex,
+                    std::forward<Function>(f),
+                    std::forward<Args>(args)...);
+                basic_future<value_type, FutureOptions> fut(
+                    move_if_not_shared_ptr(op_state));
+                return fut;
             }
-            return fut;
         }
 
         template <class T>

@@ -94,7 +94,7 @@ jobs:
       - name: Archive Single-Header as is
         uses: kittaakos/upload-artifact-as-is@v0
         with:
-          path: build/source/single-header/futures/futures.h
+          path: build/include/single-header/futures/futures.hpp
       - name: Archive Installer Packages as is
         uses: kittaakos/upload-artifact-as-is@v0
         with:

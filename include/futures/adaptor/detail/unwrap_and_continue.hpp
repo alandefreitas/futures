@@ -11,6 +11,7 @@
 #include <futures/futures/future_options.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
+#include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple_invocable.hpp>
 #include <futures/detail/traits/is_when_any_result.hpp>
@@ -207,20 +208,24 @@ namespace futures::detail {
                         std::tuple<PrefixArgs...>,
                         unwrapped_elements>>;
                 if constexpr (tuple_explode_unwrap) {
-                    return transform_and_apply(
-                        continuation,
-                        [](auto &&el) {
+                    auto future_to_value = [](auto &&el) {
                         if constexpr (!is_future_v<std::decay_t<decltype(el)>>)
                         {
                             return el;
                         } else {
                             return el.get();
                         }
-                        },
+                    };
+                    auto prefix_as_tuple = std::make_tuple(
+                        std::forward<PrefixArgs>(prefix_args)...);
+                    auto futures_tuple = before_future.get();
+                    // transform each tuple with future_to_value
+                    return transform_and_apply(
+                        continuation,
+                        future_to_value,
                         std::tuple_cat(
-                            std::make_tuple(
-                                std::forward<PrefixArgs>(prefix_args)...),
-                            before_future.get()));
+                            prefix_as_tuple,
+                            std::move(futures_tuple)));
                 } else {
                     detail::throw_exception<std::logic_error>(
                         "Continuation unwrapping not possible");
@@ -537,26 +542,24 @@ namespace futures::detail {
     template <class Executor, class Function, class Future>
     struct continuation_traits_helper
     {
-        // The return type of unwrap and continue function
+        // The possible return types of unwrap and continue function
         using unwrap_result = result_of_unwrap_t<Future, Function>;
-
         using unwrap_result_with_token_prefix
             = result_of_unwrap_with_token_t<Future, Function>;
 
         // Whether the continuation expects a token
         static constexpr bool is_valid_without_stop_token
             = !std::is_same_v<unwrap_result, unwrapping_failure_t>;
-
         static constexpr bool is_valid_with_stop_token = !std::is_same_v<
             unwrap_result_with_token_prefix,
             unwrapping_failure_t>;
 
-        // Whether the continuation is valid
+        // Whether the continuation is valid at all
         static constexpr bool is_valid = is_valid_without_stop_token
                                          || is_valid_with_stop_token;
 
-        // The result type of unwrap and continue for the valid version, with or
-        // without token
+        // The result type of unwrap and continue for the valid overload
+        // (with or without the token)
         using next_value_type = std::conditional_t<
             is_valid_with_stop_token,
             unwrap_result_with_token_prefix,
@@ -565,7 +568,7 @@ namespace futures::detail {
         // Stop token for the continuation function
         constexpr static bool expects_stop_token = is_valid_with_stop_token;
 
-        // Check if the stop token should be inherited from previous future
+        // Check if the stop token can be inherited from to next future
         constexpr static bool previous_future_has_stop_token = has_stop_token_v<
             Future>;
         constexpr static bool previous_future_is_shared = is_shared_future_v<
@@ -574,33 +577,45 @@ namespace futures::detail {
             = previous_future_has_stop_token && (!previous_future_is_shared);
 
         // Continuation future should have stop token
+        // note: this is separate from `expects_stop_token` because (in the
+        // future), the continuation might reuse the stop source without
+        // actually containing a function that expects the token.
         constexpr static bool after_has_stop_token = expects_stop_token;
 
-        // The result type of unwrap and continue for the valid version, with or
-        // without token
-        using base_future_options = std::conditional_t<
+        // The result type of unwrap and continue for the valid unwrap overload
+        // (with or without token)
+
+        // Next needs to inherit the constructor from previous future
+        // Next needs continuation source if previous is eager
+        using next_maybe_continuable_future_options = std::conditional_t<
             !is_always_deferred_v<Future>,
             future_options<executor_opt<Executor>, continuable_opt>,
             future_options<executor_opt<Executor>>>;
 
-        using eager_future_options = conditional_append_future_option_t<
-            after_has_stop_token,
-            stoppable_opt,
-            base_future_options>;
+        // Next is stoppable if we identified the function expects a token
+        using next_maybe_stoppable_future_options
+            = conditional_append_future_option_t<
+                after_has_stop_token,
+                stoppable_opt,
+                next_maybe_continuable_future_options>;
 
-        using maybe_deferred_future_options = conditional_append_future_option_t<
-            is_always_deferred_v<Future>,
-            always_deferred_opt,
-            eager_future_options>;
+        // Next needs the always_deferred_opt if it's deferred
+        using next_maybe_deferred_future_options
+            = conditional_append_future_option_t<
+                is_always_deferred_v<Future>,
+                always_deferred_opt,
+                next_maybe_stoppable_future_options>;
 
-        using maybe_function_type_future_options = conditional_append_future_option_t<
-            is_always_deferred_v<Future>,
-            deferred_function_opt<detail::unwrap_and_continue_task<Future, Function>>,
-            maybe_deferred_future_options>;
+        // Next needs the continuation function type if it's deferred
+        using next_maybe_function_type_future_options
+            = conditional_append_future_option_t<
+                is_always_deferred_v<Future>,
+                deferred_function_opt<
+                    detail::unwrap_and_continue_task<Future, Function>>,
+                next_maybe_deferred_future_options>;
 
-        // The result type of unwrap and continue for the valid version, with or
-        // without token
-        using next_future_options = maybe_function_type_future_options;
+        // The result options type of unwrap and continue
+        using next_future_options = next_maybe_function_type_future_options;
     };
 
     template <class Executor, class Function, class Future>

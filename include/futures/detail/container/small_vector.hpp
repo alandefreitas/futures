@@ -69,7 +69,7 @@ namespace futures::detail {
     template <
         class T,
         size_t N
-        = std::max(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+        = (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
         class Allocator = std::allocator<T>,
         class AllowHeap = std::true_type,
         class SizeType = size_t,
@@ -1426,7 +1426,7 @@ namespace futures::detail {
             const auto old_capacity = capacity();
             // Set the initial capacity
             if (old_capacity == 0) {
-                return std::max(64 / sizeof(value_type), size_type(5));
+                return (std::max)(64 / sizeof(value_type), size_type(5));
             }
             // Blocks larger than or equal to 4096 bytes can be expanded in place
             constexpr size_t min_in_place_expansion = 4096;
@@ -1791,8 +1791,8 @@ namespace futures::detail {
     template <
         class T,
         size_t N_INPUT,
-        size_t N_OUTPUT = std::max(
-            std::max(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+        size_t N_OUTPUT = (std::max)(
+            (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
             N_INPUT)>
     constexpr small_vector<std::remove_cv_t<T>, N_OUTPUT>
     to_small_vector(T (&a)[N_INPUT]) {
@@ -1804,8 +1804,8 @@ namespace futures::detail {
     template <
         class T,
         size_t N_INPUT,
-        size_t N_OUTPUT = std::max(
-            std::max(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+        size_t N_OUTPUT = (std::max)(
+            (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
             N_INPUT)>
     constexpr small_vector<std::remove_cv_t<T>, N_OUTPUT>
     to_small_vector(T(&&a)[N_INPUT]) {
@@ -1815,7 +1815,7 @@ namespace futures::detail {
     template <
         class T,
         size_t N
-        = std::max((sizeof(std::vector<T>) * 2) / sizeof(T), std::size_t(5)),
+        = (std::max)((sizeof(std::vector<T>) * 2) / sizeof(T), std::size_t(5)),
         class Allocator = std::allocator<T>,
         class SizeType = size_t>
     using max_size_small_vector
@@ -1824,7 +1824,7 @@ namespace futures::detail {
     template <
         class T,
         size_t N
-        = std::max((sizeof(std::vector<T>) * 2) / sizeof(T), std::size_t(5)),
+        = (std::max)((sizeof(std::vector<T>) * 2) / sizeof(T), std::size_t(5)),
         class Allocator = std::allocator<T>,
         class SizeType = size_t>
     using inline_small_vector

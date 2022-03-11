@@ -8,10 +8,7 @@
 #ifndef FUTURES_ADAPTOR_MAKE_READY_FUTURE_HPP
 #define FUTURES_ADAPTOR_MAKE_READY_FUTURE_HPP
 
-#include <futures/futures/basic_future.hpp>
-#include <futures/futures/promise.hpp>
-#include <futures/futures/traits/is_future.hpp>
-#include <future>
+#include <futures/adaptor/detail/make_ready_future.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -26,10 +23,8 @@ namespace futures {
     template <typename T>
     basic_future<typename std::decay_t<T>, future_options<>>
     make_ready_future(T &&value) {
-        promise<std::decay_t<T>, future_options<>> p;
-        basic_future<std::decay_t<T>, future_options<>> result = p.get_future();
-        p.set_value(std::forward<T>(value));
-        return result;
+        return detail::make_ready_future_impl{}.template make_ready_future<T>(
+            std::forward<T>(value));
     }
 
     /// Make a placeholder future object that is ready from a reference
@@ -40,10 +35,8 @@ namespace futures {
     template <typename T>
     basic_future<T &, future_options<>>
     make_ready_future(std::reference_wrapper<T> value) {
-        promise<T &, future_options<>> p;
-        basic_future<T &, future_options<>> result = p.get_future();
-        p.set_value(value);
-        return result;
+        return detail::make_ready_future_impl{}.template make_ready_future<T>(
+            value);
     }
 
     /// Make a placeholder void future object that is ready
@@ -53,10 +46,7 @@ namespace futures {
     /// @return A future associated with the shared state that is created.
     inline basic_future<void, future_options<>>
     make_ready_future() {
-        promise<void, future_options<>> p;
-        basic_future<void, future_options<>> result = p.get_future();
-        p.set_value();
-        return result;
+        return detail::make_ready_future_impl{}.make_ready_future();
     }
 
     /// Make a placeholder future object that is ready with an exception
@@ -69,9 +59,8 @@ namespace futures {
     template <typename T = void>
     basic_future<T, future_options<>>
     make_exceptional_future(std::exception_ptr ex) {
-        promise<T, future_options<>> p;
-        p.set_exception(ex);
-        return p.get_future();
+        return detail::make_ready_future_impl{}
+            .template make_exceptional_future<T>(ex);
     }
 
     /// Make a placeholder future object that is ready with from any
@@ -84,10 +73,10 @@ namespace futures {
     template <class T = void, class E>
     basic_future<T, future_options<>>
     make_exceptional_future(E ex) {
-        promise<T, future_options<>> p;
-        p.set_exception(std::make_exception_ptr(ex));
-        return p.get_future();
+        return detail::make_ready_future_impl{}
+            .template make_exceptional_future<T, E>(ex);
     }
+
     /** @} */
 } // namespace futures
 
