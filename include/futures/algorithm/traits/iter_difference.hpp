@@ -8,10 +8,10 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
 
-#include <futures/algorithm/traits/has_iterator_traits_difference_type.hpp>
-#include <futures/algorithm/traits/remove_cvref.hpp>
 #include <futures/algorithm/traits/has_difference_type.hpp>
+#include <futures/algorithm/traits/has_iterator_traits_difference_type.hpp>
 #include <futures/algorithm/traits/is_subtractable.hpp>
+#include <futures/algorithm/traits/remove_cvref.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -104,7 +104,8 @@ namespace futures {
             // clang-format on
             >>
     {
-        using type = std::make_signed_t<decltype(std::declval<T>() - std::declval<T>())>;
+        using type = std::make_signed_t<
+            decltype(std::declval<T>() - std::declval<T>())>;
     };
 #endif
     template <class T>

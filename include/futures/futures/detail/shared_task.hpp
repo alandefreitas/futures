@@ -10,8 +10,8 @@
 
 #include <futures/detail/allocator/allocator_rebind.hpp>
 #include <futures/detail/utility/empty_base.hpp>
-#include <futures/futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
+#include <futures/futures/detail/operation_state.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

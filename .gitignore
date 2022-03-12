@@ -10,6 +10,7 @@ cmake-build-release-msvc
 cmake-build-debug-*
 cmake-build-release-*
 build*/
+build/
 out
 
 # Local dependencies build
@@ -17,13 +18,22 @@ cpp_modules
 
 # IDE settings
 .idea
-codealike.json
 .vs
+.vscode/
+/.vs
+codealike.json
+
+# CMake
 CMakeLists.txt.user
 CMakeSettings.json
-gh-md-toc
-/.vs
+CMakeUserPresets.json
+cmake/open-cpp-coverage.cmake
+cmake-build-*/
+prefix/
 /CMakeSettings.json
+
+# Gh
+gh-md-toc
 
 # Hidden files
 .DS_Store

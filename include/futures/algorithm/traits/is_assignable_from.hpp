@@ -35,7 +35,8 @@ namespace futures {
 
     template <class LHS, class RHS>
     struct is_assignable_from<
-        LHS, RHS,
+        LHS,
+        RHS,
         std::enable_if_t<
             // clang-format off
             std::is_lvalue_reference_v<LHS> &&

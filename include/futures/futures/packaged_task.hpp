@@ -8,9 +8,9 @@
 #ifndef FUTURES_FUTURES_PACKAGED_TASK_HPP
 #define FUTURES_FUTURES_PACKAGED_TASK_HPP
 
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/future_options.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {
@@ -25,8 +25,7 @@ namespace futures {
     /// Undefined packaged task class
     template <
         typename Signature,
-        class Options
-        = future_options<continuable_opt>>
+        class Options = future_options<continuable_opt>>
     class packaged_task;
 #endif
 

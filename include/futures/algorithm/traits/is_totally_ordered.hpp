@@ -5,11 +5,11 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_H
-#define FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP
 
-#include <type_traits>
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <type_traits>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -53,4 +53,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP

@@ -1,17 +1,16 @@
 #######################################################
 ### Dependencies                                    ###
 #######################################################
-find_package(Catch2 2.13.6 CONFIG)
+find_package(Catch2 2.13.8 CONFIG)
 if (Catch2_FOUND)
     include(${Catch2_DIR}/Catch.cmake)
 else ()
-    FetchContent_Declare(Catch2 URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.6.zip)
+    FetchContent_Declare(Catch2 URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.8.zip)
     FetchContent_GetProperties(Catch2)
     if (NOT Catch2_POPULATED)
         FetchContent_Populate(Catch2)
         set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
         set(CATCH_USE_VALGRIND OFF) # "Perform SelfTests with Valgrind"
-        set(CATCH_BUILD_TESTING OFF) # "Build SelfTest project"
         set(CATCH_BUILD_EXAMPLES OFF) # "Build documentation examples"
         set(CATCH_BUILD_EXTRA_TESTS OFF) # "Build extra tests"
         set(CATCH_BUILD_STATIC_LIBRARY OFF) # "Builds static library from the main implementation. EXPERIMENTAL"
@@ -57,6 +56,7 @@ macro(add_futures_test TEST_NAME)
     endforeach ()
 
     if (LINK_LIBS_EXIST)
+        # Define test target variants
         set(TEST_NAME_VARIANTS ${TEST_NAME})
         if(N_PROCESSORS GREATER 1)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
@@ -67,6 +67,8 @@ macro(add_futures_test TEST_NAME)
         if (FUTURES_BUILD_SINGLE_HEADER)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_single_header)
         endif()
+
+        # Create executables for each variant
         foreach (TEST_NAME_VARIANT ${TEST_NAME_VARIANTS})
             # Create executable for test
             add_executable(ut_${TEST_NAME_VARIANT} ${TEST_NAME}.cpp)
@@ -81,7 +83,19 @@ macro(add_futures_test TEST_NAME)
             target_msvc_compile_options(ut_${TEST_NAME_VARIANT} "/bigobj")
 
             # Register with ctest
-            catch_discover_tests(ut_${TEST_NAME_VARIANT})
+            if (FUTURES_CATCH2_REPORTER STREQUAL "console")
+                catch_discover_tests(ut_${TEST_NAME_VARIANT})
+            else ()
+                if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/reports)
+                    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/reports)
+                endif()
+                catch_discover_tests(
+                        ut_${TEST_NAME_VARIANT}
+                        REPORTER ${FUTURES_CATCH2_REPORTER}
+                        OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/reports
+                        OUTPUT_SUFFIX ".${FUTURES_CATCH2_REPORTER}"
+                )
+            endif()
 
             # Link futures
             if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
@@ -142,8 +156,10 @@ add_futures_test(futures-algorithm)
 #####################################################
 # All tests as a single target                      #
 #####################################################
-file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
-add_executable(ut_futures_all detail/catch_main.cpp ${FUTURES_TESTS_SOURCE})
-target_link_libraries(ut_futures_all PUBLIC futures::futures-compiled Catch2::Catch2)
-target_compile_features(ut_futures_all PUBLIC cxx_std_17)
-target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
+if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
+    file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
+    add_executable(ut_futures_all detail/catch_main.cpp ${FUTURES_TESTS_SOURCE})
+    target_link_libraries(ut_futures_all PUBLIC futures::futures-compiled Catch2::Catch2)
+    target_compile_features(ut_futures_all PUBLIC cxx_std_17)
+    target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
+endif()

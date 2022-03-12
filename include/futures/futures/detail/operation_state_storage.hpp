@@ -8,8 +8,8 @@
 #ifndef FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 #define FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/detail/utility/aligned_storage_for.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <type_traits>
 
 namespace futures::detail {
@@ -213,7 +213,7 @@ namespace futures::detail {
         }
 
         detail::aligned_storage_for<R> value_{};
-        bool has_value_{false};
+        bool has_value_{ false };
     };
 
 } // namespace futures::detail

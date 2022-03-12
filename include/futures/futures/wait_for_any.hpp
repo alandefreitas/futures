@@ -161,7 +161,9 @@ namespace futures {
     /// wait_for_any](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any)
     ///
     /// @tparam Fs A list of future types
-    /// @param fs A list of future objects
+    ///
+    /// @param t A list of future objects
+    ///
     /// @return Index of the first future that got ready
     template <
         class Tuple
@@ -258,7 +260,6 @@ namespace futures {
         Range &&r) {
         return wait_for_any_for(timeout_duration, std::begin(r), std::end(r));
     }
-
 
 
     /// Wait for any future in a sequence to be ready
@@ -382,8 +383,6 @@ namespace futures {
     }
 
 
-
-
     /// Wait for any future in a sequence to be ready
     ///
     /// @tparam Range Range of futures
@@ -414,7 +413,6 @@ namespace futures {
         Range &&r) {
         return wait_for_any_until(timeout_time, std::begin(r), std::end(r));
     }
-
 
 
     /// Wait for any future in a sequence to be ready

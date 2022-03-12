@@ -8,8 +8,8 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_HPP
 
-#include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/is_assignable_from.hpp>
+#include <futures/algorithm/traits/is_movable.hpp>
 #include <type_traits>
 
 namespace futures {

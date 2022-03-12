@@ -73,8 +73,6 @@ namespace futures {
         ///
         /// @post stop_possible() and stop_requested() are both false
         ///
-        /// @param other another stop_token object to construct this stop_token
-        /// object
         stop_token() noexcept = default;
 
         /// Copy constructor.

@@ -22,7 +22,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 weakly_incrementable concept
+    /** \brief A C++17 type trait equivalent to the C++20 weakly_incrementable
+     * concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>

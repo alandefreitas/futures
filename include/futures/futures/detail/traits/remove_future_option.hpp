@@ -41,7 +41,8 @@ namespace futures::detail {
     {
         using type = prepend_future_option_t<
             Arg0,
-            typename remove_future_option<Opt, future_options_list<Args...>>::type>;
+            typename remove_future_option<Opt, future_options_list<Args...>>::
+                type>;
     };
 
     template <class Opt, class Opts>

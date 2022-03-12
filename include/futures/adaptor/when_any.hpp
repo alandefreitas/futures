@@ -8,18 +8,19 @@
 #ifndef FUTURES_ADAPTOR_WHEN_ANY_HPP
 #define FUTURES_ADAPTOR_WHEN_ANY_HPP
 
-/// @file Implement the when_any functionality for futures and executors
+/// @file
+/// Implement the when_any functionality for futures and executors
 /// The same rationale as when_all applies here
 /// @see https://en.cppreference.com/w/cpp/experimental/when_any
 
 #include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
+#include <futures/futures/is_ready.hpp>
+#include <futures/futures/launch.hpp>
+#include <futures/futures/traits/to_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
-#include <futures/futures/launch.hpp>
-#include <futures/futures/traits/to_future.hpp>
-#include <futures/futures/is_ready.hpp>
 #include <array>
 #include <optional>
 #include <condition_variable>
@@ -50,7 +51,8 @@ namespace futures {
     private:
         using sequence_type = Sequence;
         static constexpr bool sequence_is_range = is_range_v<sequence_type>;
-        static constexpr bool sequence_is_tuple = detail::is_tuple_v<sequence_type>;
+        static constexpr bool sequence_is_tuple = detail::is_tuple_v<
+            sequence_type>;
         static_assert(sequence_is_range || sequence_is_tuple);
 
     public:
@@ -484,8 +486,10 @@ namespace futures {
         /// <f1,<f2,f3>> @note This function only participates in overload
         /// resolution if all types in std::decay_t<WhenAllFutures>... are
         /// specializations of when_any_future with a tuple sequence type
-        /// @overload "Merging" a single when_any_future of tuples. Overload
+        ///
+        /// @note "Merging" a single when_any_future of tuples. Overload
         /// provided for symmetry.
+        ///
         template <
             class WhenAllFuture,
             std::enable_if_t<is_when_any_tuple_future_v<WhenAllFuture>, int> = 0>

@@ -30,6 +30,6 @@ namespace futures::detail {
 
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures
-} // namespace futures
+} // namespace futures::detail
 
 #endif // FUTURES_DETAIL_TRAITS_HAS_GET_HPP

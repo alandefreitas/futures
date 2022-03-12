@@ -8,8 +8,8 @@
 #ifndef FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
 #define FUTURES_FUTURES_TRAITS_FUTURE_VALUE_HPP
 
-#include <futures/detail/traits/has_get.hpp>
 #include <futures/futures/traits/is_future.hpp>
+#include <futures/detail/traits/has_get.hpp>
 
 namespace futures {
     /** @addtogroup futures Futures

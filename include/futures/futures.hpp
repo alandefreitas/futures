@@ -63,9 +63,9 @@
 /// @see https://github.com/Amanieu/asyncplusplus
 
 // Future classes
-#include <futures/futures/launch.hpp>
 #include <futures/futures/await.hpp>
 #include <futures/futures/basic_future.hpp>
+#include <futures/futures/launch.hpp>
 #include <futures/futures/packaged_task.hpp>
 #include <futures/futures/promise.hpp>
 #include <futures/futures/wait_for_all.hpp>

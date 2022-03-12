@@ -439,8 +439,8 @@ namespace futures::detail {
         /// Wait for the operation state to become ready
         template <typename Clock, typename Duration>
         std::future_status
-        wait_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time) const {
+        wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
+            const {
             if constexpr (is_always_deferred) {
                 detail::throw_exception<future_deferred>();
             }
@@ -1077,7 +1077,7 @@ namespace futures::detail {
         /// Storage for the deferred function
         /**
          * Deferred operation states need to store their tasks because
-         * it's not being launched immediatly.
+         * it's not being launched immediately.
          */
         using deferred_function_base
             = maybe_empty<typename Options::function_t, 3>;

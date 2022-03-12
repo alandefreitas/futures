@@ -8,8 +8,8 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITER_CONCEPT_HPP
 
-#include <futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp>
 #include <futures/algorithm/traits/has_iterator_traits_iterator_category.hpp>
+#include <futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp>
 #include <futures/algorithm/traits/remove_cvref.hpp>
 #include <iterator>
 #include <type_traits>
@@ -42,7 +42,7 @@ namespace futures {
             // clang-format off
             has_iterator_traits_iterator_concept_v<remove_cvref_t<T>>
             // clang-format on
-        >>
+            >>
     {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::iterator_concept;
@@ -56,7 +56,7 @@ namespace futures {
             !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
             has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
             // clang-format on
-        >>
+            >>
     {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::iterator_category;
@@ -70,7 +70,7 @@ namespace futures {
             !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
             !has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
             // clang-format on
-        >>
+            >>
     {
         using type = std::random_access_iterator_tag;
     };

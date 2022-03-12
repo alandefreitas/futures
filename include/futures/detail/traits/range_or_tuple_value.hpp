@@ -8,9 +8,9 @@
 #ifndef FUTURES_DETAIL_TRAITS_RANGE_OR_TUPLE_VALUE_HPP
 #define FUTURES_DETAIL_TRAITS_RANGE_OR_TUPLE_VALUE_HPP
 
-#include <futures/detail/traits/is_tuple.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
 
 namespace futures::detail {
     /// Get the element type of a when any result object
@@ -20,9 +20,7 @@ namespace futures::detail {
     {};
 
     template <typename Sequence>
-    struct range_or_tuple_value<
-        Sequence,
-        std::enable_if_t<is_range_v<Sequence>>>
+    struct range_or_tuple_value<Sequence, std::enable_if_t<is_range_v<Sequence>>>
     {
         using type = range_value_t<Sequence>;
     };
@@ -36,8 +34,7 @@ namespace futures::detail {
     };
 
     template <class T>
-    using range_or_tuple_value_t = typename range_or_tuple_value<
-        T>::type;
-}
+    using range_or_tuple_value_t = typename range_or_tuple_value<T>::type;
+} // namespace futures::detail
 
 #endif // FUTURES_DETAIL_TRAITS_RANGE_OR_TUPLE_VALUE_HPP

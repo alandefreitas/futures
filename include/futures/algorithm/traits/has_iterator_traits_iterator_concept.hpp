@@ -8,8 +8,8 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CONCEPT_HPP
 #define FUTURES_ALGORITHM_TRAITS_HAS_ITERATOR_TRAITS_ITERATOR_CONCEPT_HPP
 
-#include <type_traits>
 #include <iterator>
+#include <type_traits>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms

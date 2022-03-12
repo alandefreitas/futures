@@ -19,7 +19,6 @@
 #include <futures/detail/traits/tuple_type_all_of.hpp>
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
-#include <futures/detail/container/small_vector.hpp>
 #include <futures/futures/detail/move_if_not_shared.hpp>
 #include <futures/futures/detail/traits/append_future_option.hpp>
 

@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_FUTURES_TRAITS_FUTURE_RETURN_HPP
-#define FUTURES_FUTURES_TRAITS_FUTURE_RETURN_HPP
+#ifndef FUTURES_DETAIL_TRAITS_FUTURE_RETURN_HPP
+#define FUTURES_DETAIL_TRAITS_FUTURE_RETURN_HPP
 
 #include <futures/detail/traits/is_reference_wrapper.hpp>
 #include <type_traits>
@@ -36,4 +36,4 @@ namespace futures {
     /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
-#endif // FUTURES_FUTURES_TRAITS_FUTURE_RETURN_HPP
+#endif // FUTURES_DETAIL_TRAITS_FUTURE_RETURN_HPP

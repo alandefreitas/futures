@@ -128,9 +128,9 @@ namespace futures {
      *
      *  @return An eager future object whose shared state refers to the task
      *  result. The type of this future object depends on the task. If the task
-     *  expects a @stop_token, the future will return a continuable, stoppable,
-     *  eager future. Otherwise, the function will return a continuable eager
-     *  future.
+     *  expects a @ref stop_token, the future will return a continuable,
+     * stoppable, eager future. Otherwise, the function will return a
+     * continuable eager future.
      */
     template <
         class Executor,
@@ -213,7 +213,7 @@ namespace futures {
      *
      *  @return A deferred future object whose shared state refers to the task
      *  result. The type of this future object depends on the task. If the task
-     *  expects a @stop_token, the future will return a stoppable deferred
+     *  expects a @ref stop_token, the future will return a stoppable deferred
      *  future. Otherwise, the function will return a deferred future.
      */
     template <

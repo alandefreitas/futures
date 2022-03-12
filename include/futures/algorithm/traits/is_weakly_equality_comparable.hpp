@@ -20,8 +20,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 weakly_equality_comparable
-     * concept
+    /** \brief A C++17 type trait equivalent to the C++20
+     * weakly_equality_comparable concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T, class U>

@@ -339,7 +339,7 @@ namespace futures {
          *
          * This function might be used by eager and deferred futures.
          *
-         * @param s Future value
+         * @param v Future value
          */
         template <
             class T

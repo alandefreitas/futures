@@ -8,8 +8,8 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_HPP
 
-#include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
+#include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <type_traits>
 
@@ -23,8 +23,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 indirectly_unary_invocable
-     * concept
+    /** \brief A C++17 type trait equivalent to the C++20
+     * indirectly_unary_invocable concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class F, class I>
@@ -36,7 +36,8 @@ namespace futures {
 
     template <class F, class I>
     struct is_indirectly_unary_invocable<
-        F, I,
+        F,
+        I,
         std::enable_if_t<
             // clang-format off
             is_indirectly_readable_v<I> &&
@@ -47,7 +48,8 @@ namespace futures {
     {};
 #endif
     template <class F, class I>
-    bool constexpr is_indirectly_unary_invocable_v = is_indirectly_unary_invocable<F, I>::value;
+    bool constexpr is_indirectly_unary_invocable_v
+        = is_indirectly_unary_invocable<F, I>::value;
     /** @}*/
     /** @}*/
 

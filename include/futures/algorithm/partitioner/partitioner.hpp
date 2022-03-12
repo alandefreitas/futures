@@ -10,11 +10,14 @@
 #include <algorithm>
 #include <thread>
 
-/// @file Default partitioners
-/// A partitioner is a light callable object that takes a pair of iterators and
-/// returns the middle of the sequence. In particular, it returns an iterator
-/// `middle` that forms a subrange `first`/`middle` which the algorithm should
-/// solve inline before scheduling the subrange `middle`/`last` in the executor.
+/// @file
+/// Default partitioners
+/**
+ *  A partitioner is a light callable object that takes a pair of iterators and
+ *  returns the middle of the sequence. In particular, it returns an iterator
+ *  `middle` that forms a subrange `first`/`middle` which the algorithm should
+ *  solve inline before scheduling the subrange `middle`/`last` in the executor.
+ */
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -69,7 +72,7 @@ namespace futures {
     class thread_partitioner
     {
         std::size_t min_grain_size_;
-        std::size_t num_threads_{hardware_concurrency()};
+        std::size_t num_threads_{ hardware_concurrency() };
         std::thread::id last_thread_id_{};
 
     public:
@@ -117,7 +120,7 @@ namespace futures {
     }
 
     /// Create an instance of the default partitioner with a reasonable
-    /// grain size for @ref n elements
+    /// grain size for `n` elements
     ///
     /// The default partitioner type and parameters might change
     inline default_partitioner
@@ -126,7 +129,7 @@ namespace futures {
     }
 
     /// Create an instance of the default partitioner with a reasonable
-    /// grain for the range @ref first , @ref last
+    /// grain for the range `first`, `last`
     ///
     /// The default partitioner type and parameters might change
     template <
@@ -141,12 +144,10 @@ namespace futures {
     }
 
     /// Create an instance of the default partitioner with a reasonable
-    /// grain for the range @ref r
+    /// grain for the range `r`
     ///
     /// The default partitioner type and parameters might change
-    template <
-        class R,
-        std::enable_if_t<is_input_range_v<R>, int> = 0>
+    template <class R, std::enable_if_t<is_input_range_v<R>, int> = 0>
     default_partitioner
     make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
@@ -176,10 +177,7 @@ namespace futures {
 
     template <class T, class R>
     struct is_range_partitioner<T, R, std::enable_if_t<is_range_v<R>>>
-        : is_partitioner<
-              T,
-              iterator_t<R>,
-              iterator_t<R>>
+        : is_partitioner<T, iterator_t<R>, iterator_t<R>>
     {};
 
     template <class T, class R>

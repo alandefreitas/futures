@@ -8,16 +8,17 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_VALUE_CMP_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_TRAITS_VALUE_CMP_ALGORITHM_HPP
 
-/// @file Identify traits for algorithms, like we do for other types
-///
-/// The traits help us generate auxiliary algorithm overloads
-/// This is somewhat similar to the pattern of traits and algorithms for ranges
-/// and views It allows us to get algorithm overloads for free, including
-/// default inference of the best execution policies
-///
-/// @see https://en.cppreference.com/w/cpp/ranges/transform_view
-/// @see https://en.cppreference.com/w/cpp/ranges/view
-///
+/// @file
+/// Identify traits for algorithms, like we do for other types
+/**
+ * The traits help us generate auxiliary algorithm overloads
+ * This is somewhat similar to the pattern of traits and algorithms for ranges
+ * and views It allows us to get algorithm overloads for free, including
+ * default inference of the best execution policies
+ *
+ * @see https://en.cppreference.com/w/cpp/ranges/transform_view
+ * @see https://en.cppreference.com/w/cpp/ranges/view
+ */
 
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -67,7 +68,8 @@ namespace futures {
             return Derived().run(ex, p, first, last, f);
         }
 
-        /// @overload execution policy instead of executor
+        /// execution policy instead of executor
+        ///
         /// we can't however, count on std::is_execution_policy being defined
         template <
             class E,

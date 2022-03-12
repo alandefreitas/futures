@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_H
-#define FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_H
+#ifndef FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP
+#define FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
@@ -51,11 +51,12 @@ namespace futures {
     {};
 #endif
     template <class T, class U>
-    bool constexpr is_totally_ordered_with_v = is_totally_ordered_with<T, U>::value;
+    bool constexpr is_totally_ordered_with_v = is_totally_ordered_with<T, U>::
+        value;
 
     /** @}*/
     /** @}*/
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_H
+#endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP

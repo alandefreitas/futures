@@ -2,8 +2,8 @@
 // Copyright (c) Alan de Freitas 11/18/21.
 //
 
-#ifndef FUTURES_ASIO_COMPILE_H
-#define FUTURES_ASIO_COMPILE_H
+#ifndef FUTURES_DETAIL_CONFIG_ASIO_COMPILE_HPP
+#define FUTURES_DETAIL_CONFIG_ASIO_COMPILE_HPP
 
 /// @file
 /// Compilation proxy to make the library not header-only
@@ -50,4 +50,4 @@
 
 #endif // FUTURES_SEPARATE_COMPILATION
 
-#endif // FUTURES_ASIO_COMPILE_H
+#endif // FUTURES_DETAIL_CONFIG_ASIO_COMPILE_HPP

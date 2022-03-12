@@ -27,7 +27,7 @@ jobs:
         working-directory: ./docs
       - name: Download doxybook2
         uses: carlosperate/download-file-action@v1.0.3
-        id: download-mdsplit
+        id: download-doxybook2
         with:
           file-url: 'https://github.com/matusnovak/doxybook2/releases/download/v1.4.0/doxybook2-linux-amd64-v1.4.0.zip'
           file-name: 'doxybook2.zip'

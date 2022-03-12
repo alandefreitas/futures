@@ -44,6 +44,6 @@ namespace futures::detail {
     constexpr bool is_tuple_v = is_tuple<T>::value;
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures
-} // namespace futures
+} // namespace futures::detail
 
 #endif // FUTURES_DETAIL_TRAITS_IS_TUPLE_HPP

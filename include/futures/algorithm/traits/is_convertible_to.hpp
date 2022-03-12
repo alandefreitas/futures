@@ -33,7 +33,8 @@ namespace futures {
 
     template <class From, class To>
     struct is_convertible_to<
-        From, To,
+        From,
+        To,
         std::void_t<
             // clang-format off
             std::enable_if_t<std::is_convertible_v<From, To>>,

@@ -20,7 +20,7 @@ namespace futures {
      *
      * This module defines functions we can use to create new futures from
      * existing futures. Future adaptors are future types of whose values are
-     * dependant on the condition of other future objects.
+     * dependent on the condition of other future objects.
      *
      *  @{
      */
@@ -163,7 +163,8 @@ namespace futures {
     decltype(auto)
     operator>>(
         Future &&before,
-        detail::executor_and_callable_reference<Executor, Function, RValue> &&after) {
+        detail::executor_and_callable_reference<Executor, Function, RValue>
+            &&after) {
         return then(
             after.get_executor(),
             std::forward<Future>(before),

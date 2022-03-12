@@ -27,7 +27,7 @@ struct config
     std::vector<fs::path> double_include;
     bool remove_leading_comments{ true };
     bool show_progress{ false };
-    bool fix_include_guards{ true };
+    bool verbose{ false };
 };
 
 std::string
@@ -75,9 +75,9 @@ parse_config(config &c, const std::vector<std::string_view> &args) {
         c.show_progress = is_key(*key_it) || !is_false(*key_it);
     }
 
-    key_it = find_key("fix_include_guards");
+    key_it = find_key("verbose");
     if (key_it != args.end()) {
-        c.fix_include_guards = is_key(*key_it) || !is_false(*key_it);
+        c.verbose = is_key(*key_it) || !is_false(*key_it);
     }
 
     key_it = find_key("remove_leading_comments");
@@ -270,6 +270,7 @@ main(int argc, char **argv) {
         "(^|\n) *# *include *< *([a-zA-Z_/\\. ]+) *>");
     auto search_begin(content.cbegin());
     std::smatch include_match;
+    double next_perc = 0;
     while (std::regex_search(
         search_begin,
         content.cend(),
@@ -282,7 +283,12 @@ main(int argc, char **argv) {
         double perc = static_cast<double>(search_begin - content.cbegin())
                       / static_cast<double>(content.size());
         if (c.show_progress) {
-            std::cout << "- " << 100 * perc << "% - " << file_path << "\n";
+            if (c.verbose || perc > next_perc) {
+                std::cout << "- " << 100 * perc << "% - " << file_path << "\n";
+                if (!c.verbose) {
+                    next_perc += 0.1;
+                }
+            }
         }
 
         // Check if already included
@@ -350,117 +356,6 @@ main(int argc, char **argv) {
     } else {
         std::cerr << "- Error opening " << c.output << "\n";
         return 1;
-    }
-
-    // Fix include guards
-    if (c.fix_include_guards) {
-        std::cout << "Fix include guards in patched files\n";
-        for (auto &p: patched_files) {
-            // Validate the file
-            if (c.show_progress) {
-                std::cout << p << '\n';
-            }
-            if (!fs::exists(p)) {
-                if (c.show_progress) {
-                    std::cout << "File in not in include paths\n";
-                }
-                continue;
-            }
-
-            std::ifstream t(p);
-            if (!t) {
-                if (c.show_progress) {
-                    std::cout << "Failed to open file\n";
-                }
-                continue;
-            }
-
-            auto parent_it = find_parent_path(c.include_paths, p);
-            if (parent_it == c.include_paths.end()) {
-                if (c.show_progress) {
-                    std::cout << "Cannot find file include paths\n";
-                }
-                continue;
-            }
-
-            // Look for current guard
-            std::string file_content{
-                std::istreambuf_iterator<char>(t),
-                std::istreambuf_iterator<char>()
-            };
-            std::regex include_guard_expression(
-                "(^|\n) *# *ifndef *([a-zA-Z_/\\. ]+)");
-            std::smatch include_guard_match;
-            if (std::regex_search(
-                    file_content,
-                    include_guard_match,
-                    include_guard_expression))
-            {
-                if (c.show_progress) {
-                    std::cout
-                        << "Found guard " << include_guard_match[2] << '\n';
-                }
-            } else {
-                if (c.show_progress) {
-                    std::cout << "Cannot find include guard\n";
-                }
-                continue;
-            }
-
-            // Calculate expected guard
-            std::string prev_guard = include_guard_match[2].str();
-            fs::path relative_p = fs::relative(p, *parent_it);
-            std::string expected_guard = relative_p.string();
-            std::transform(
-                expected_guard.begin(),
-                expected_guard.end(),
-                expected_guard.begin(),
-                [](char x) {
-                if (x == '/' || x == '.') {
-                    return '_';
-                }
-                return static_cast<char>(std::toupper(x));
-                });
-
-            if (prev_guard == expected_guard) {
-                if (c.show_progress) {
-                    std::cout << "Guard " << prev_guard << " is correct\n";
-                }
-                continue;
-            } else {
-                if (c.show_progress) {
-                    std::cout << "Convert guard from " << prev_guard << " to "
-                              << expected_guard << '\n';
-                }
-            }
-
-            // Check if the expected guard is OK
-            bool new_guard_ok = std::all_of(
-                expected_guard.begin(),
-                expected_guard.end(),
-                [](char x) { return std::isalnum(x) || x == '_'; });
-            if (!new_guard_ok) {
-                if (c.show_progress) {
-                    std::cout << "Inferred guard " << expected_guard
-                              << " is not OK\n";
-                }
-                continue;
-            }
-
-            // Replace all guards in the file
-            std::size_t guard_search_begin = 0;
-            std::size_t guard_match_pos;
-            while ((guard_match_pos = file_content.find(prev_guard, guard_search_begin))
-                   != std::string::npos)
-            {
-                file_content.replace(guard_match_pos, prev_guard.size(), expected_guard);
-                guard_search_begin = guard_match_pos + prev_guard.size();
-            }
-
-            t.close();
-            std::ofstream fout(p);
-            fout << file_content;
-        }
     }
 
     return 0;

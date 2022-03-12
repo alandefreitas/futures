@@ -8,21 +8,22 @@
 #ifndef FUTURES_ALGORITHM_POLICIES_HPP
 #define FUTURES_ALGORITHM_POLICIES_HPP
 
-/// @file Identify traits for algorithms, like we do for other types
-///
-/// The traits help us generate auxiliary algorithm overloads
-/// This is somewhat similar to the pattern of traits and algorithms for ranges
-/// and views It allows us to get algorithm overloads for free, including
-/// default inference of the best execution policies
-///
-/// @see https://en.cppreference.com/w/cpp/ranges/transform_view
-/// @see https://en.cppreference.com/w/cpp/ranges/view
-///
+/// @file
+/// Identify traits for algorithms, like we do for other types
+/**
+ *  The traits help us generate auxiliary algorithm overloads
+ *  This is somewhat similar to the pattern of traits and algorithms for ranges
+ *  and views It allows us to get algorithm overloads for free, including
+ *  default inference of the best execution policies
+ *
+ *  @see https://en.cppreference.com/w/cpp/ranges/transform_view
+ *  @see https://en.cppreference.com/w/cpp/ranges/view
+ */
 
-#include <execution>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
+#include <execution>
 
 #ifdef __has_include
 #    if __has_include(<version>)

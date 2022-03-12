@@ -153,7 +153,7 @@ namespace futures::detail {
             } else {
                 if (!run_requested_) {
                     run_requested_ = true;
-                    for (auto& c: continuations_) {
+                    for (auto &c: continuations_) {
                         c();
                     }
                     continuations_.clear();

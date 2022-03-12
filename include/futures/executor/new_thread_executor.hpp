@@ -5,12 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_NEW_THREAD_EXECUTOR_H
-#define FUTURES_NEW_THREAD_EXECUTOR_H
+#ifndef FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
+#define FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 
-#include <futures/detail/config/asio_include.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
+#include <futures/detail/config/asio_include.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -133,4 +133,4 @@ namespace boost {
 }
 #endif
 
-#endif // FUTURES_NEW_THREAD_EXECUTOR_H
+#endif // FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP

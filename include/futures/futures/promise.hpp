@@ -11,8 +11,8 @@
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/detail/utility/empty_base.hpp>
-#include <futures/futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
+#include <futures/futures/detail/operation_state.hpp>
 #include <memory>
 
 namespace futures {
@@ -34,10 +34,7 @@ namespace futures {
     /// The specific promise specialization will only differ by their set_value
     /// functions.
     ///
-    template <
-        class R,
-        class Options
-        = future_options<continuable_opt>>
+    template <class R, class Options = future_options<continuable_opt>>
     class promise_base
     {
     public:
@@ -162,7 +159,8 @@ namespace futures {
                     alloc,
                     make_default_executor());
             } else {
-                return std::allocate_shared<detail::operation_state<R, Options>>(alloc);
+                return std::allocate_shared<detail::operation_state<R, Options>>(
+                    alloc);
             }
         }
 

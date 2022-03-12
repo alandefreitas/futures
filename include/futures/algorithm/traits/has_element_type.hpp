@@ -19,8 +19,8 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 has-member-element-type
-     * concept
+    /** \brief A C++17 type trait equivalent to the C++20
+     * has-member-element-type concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

@@ -22,8 +22,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 equality_comparable_with
-     * concept
+    /** \brief A C++17 type trait equivalent to the C++20
+     * equality_comparable_with concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T, class U>

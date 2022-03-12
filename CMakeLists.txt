@@ -1,157 +1,91 @@
 #######################################################
 ### Futures                                         ###
 #######################################################
-# Project information
 cmake_minimum_required(VERSION 3.16)
-project(futures VERSION 0.1.2)
+project(
+        futures
+        VERSION 0.1.3
+        DESCRIPTION "C++ Lock-Free Task Programming"
+        HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
+)
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
 message(STATUS "${CMAKE_PROJECT_NAME} v${CMAKE_PROJECT_VERSION}: ${CMAKE_PROJECT_HOMEPAGE_URL}")
-
-#######################################################
-### CMake Functions                                 ###
-#######################################################
-# CMake dependencies for installer
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
-
-# Append ./cmake directory to our include paths for the find_package scripts
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-# Functions to find or download packages if we can't find_package
-include(FetchContent)
-
-# Our custom cmake functions
-include(cmake/functions.cmake)
+include(cmake/futures/in_source_guard.cmake)
+include(cmake/futures/variables.cmake)
 
 #######################################################
 ### Options                                         ###
 #######################################################
-# Set variables with project properties
-set_master_project_booleans()
-set_debug_booleans()
-set_optimization_flags()
-set_compiler_booleans()
-
 # What to build
-option(FUTURES_BUILD_SINGLE_HEADER "Build single-header library" ${MASTER_PROJECT})
 option(FUTURES_BUILD_INSTALLER "Build installer target" ${MASTER_PROJECT})
 option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 
 # How to build
 option(FUTURES_PREFER_BOOST_DEPENDENCIES "Prefer boost dependencies if available (boost::asio and boost::small_vector)" OFF)
 option(FUTURES_PREFER_STANDALONE_DEPENDENCIES "Prefer standalone dependencies if available (asio and small::vector)" OFF)
-option(FUTURES_DEV_BUILD "Development build" ${MASTER_PROJECT})
+option(FUTURES_BUILD_WITH_EXCEPTIONS "Add compiler flags to use exceptions if needed." ON)
 
-#######################################################
-### Dev Options                                     ###
-#######################################################
-# What to build
-option(FUTURES_BUILD_EXAMPLES "Build examples" ${FUTURES_DEV_BUILD})
-option(FUTURES_BUILD_TESTS "Build tests" ${FUTURES_DEV_BUILD})
-option(FUTURES_BUILD_TESTS_WITH_PCH "Build tests with precompiled headers" ${DEFAULT_FUTURES_BUILD_TESTS_WITH_PCH})
-
-# How to build
-option(FUTURES_BUILD_WITH_PEDANTIC_WARNINGS "Use pedantic warnings. This is useful for developers because many of these warnings will be in continuous integration anyway." ${FUTURES_DEV_BUILD})
-option(FUTURES_BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(FUTURES_BUILD_WITH_SANITIZERS "Build with sanitizers." ${DEBUG_MODE})
-
-# MSVC hacks
-option(FUTURES_BUILD_WITH_MSVC_HACKS "Accept utf-8 in MSVC by default." ON)
-option(FUTURES_BUILD_WITH_UTF8 "Accept utf-8 in MSVC by default." ON)
-option(FUTURES_BUILD_WITH_EXCEPTIONS "Add compiler flags to use exceptions." ON)
-
-#######################################################
-### Apply global options                            ###
-#######################################################
-# In development, we can set some options for all targets
-if (MASTER_PROJECT)
-    message("Setting global options")
-    # Maybe add sanitizers to all targets
-    if (FUTURES_BUILD_WITH_SANITIZERS AND NOT EMSCRIPTEN)
-        add_sanitizers()
-    endif ()
-
-    # Allow exceptions in MSVC
-    if (MSVC AND FUTURES_BUILD_WITH_EXCEPTIONS)
-        add_compile_options(/EHsc)
-    endif ()
-
-    # Allow utf-8 in MSVC
-    if (FUTURES_BUILD_WITH_UTF8 AND MSVC)
-        set(CMAKE_CXX_FLAGS "/utf-8")
-    endif ()
-
-    # MSVC hack to disable windows min/max
-    # http://www.suodenjoki.dk/us/archive/2010/min-max.htm
-    if (MSVC AND FUTURES_BUILD_WITH_MSVC_HACKS)
-        # Check for min in Windows.h
-        # include(CheckSymbolExists)
-        # check_symbol_exists(min "WinDef.h" HAVE_WINDOWS_MINMAX)
-        # if (NOT HAVE_WINDOWS_MINMAX)
-        #     check_symbol_exists(min "Windows.h" HAVE_WINDOWS_MINMAX)
-        # endif ()
-        # if (HAVE_WINDOWS_MINMAX)
-        add_compile_definitions(NOMINMAX)
-        # endif ()
-    endif ()
-endif ()
-
-#######################################################
-### Tools                                           ###
-#######################################################
-add_subdirectory(tools)
+# Development options
+include(cmake/futures/dev-options.cmake)
 
 #######################################################
 ### Libraries                                       ###
 #######################################################
+include(cmake/futures/dependencies.cmake)
 add_subdirectory(include)
-add_subdirectory(src)
-
-#######################################################
-### Tests                                           ###
-#######################################################
-if (FUTURES_BUILD_TESTS)
-    include(CTest)
-    set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
-    enable_testing()
-    add_subdirectory(tests)
-endif ()
-
-#######################################################
-### Examples                                        ###
-#######################################################
-if (FUTURES_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif ()
+add_subdirectory(source)
 
 #######################################################
 ### Installer                                       ###
 #######################################################
 if (FUTURES_BUILD_INSTALLER)
-    # https://cliutils.gitlab.io/modern-cmake/chapters/install/installing.html
+    set(INSTALL_TARGET_LIST futures futures-compiled)
+
+    # Install targets
+    install(TARGETS ${INSTALL_TARGET_LIST}
+            EXPORT futures-targets
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            )
+
+    # Install headers
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/futures
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILES_MATCHING PATTERN "include/*.hpp"
+            )
+
+    # Install cmake targets script
+    install(EXPORT futures-targets
+            FILE futures-targets.cmake
+            NAMESPACE futures::
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/futures
+            )
+
     # Set variable where the cmake config is
+    # https://cliutils.gitlab.io/modern-cmake/chapters/install/installing.html
     set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/futures)
     message(STATUS "${CMAKE_PROJECT_NAME} install directory: ${CMAKE_INSTALL_PREFIX}")
     message(STATUS "${CMAKE_PROJECT_NAME} library install directory: ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
-    # Create futures-config-version.cmake and install it
+    # Create futures-config-version.cmake
     if (CMAKE_PROJECT_VERSION VERSION_LESS 1.0.0)
         set(compatibility_mode SameMajorVersion)
     else ()
         set(compatibility_mode SameMinorVersion)
     endif ()
+
     write_basic_package_version_file(
             futures-config-version.cmake
             VERSION ${PACKAGE_VERSION}
             COMPATIBILITY ${compatibility_mode}
     )
 
-    # Install the file futures-config-version.cmake
+    # Install futures-config-version.cmake
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/futures-config-version.cmake
             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/futures)
 
-    # Create futures-config.cmake from futures-config.cmake.in
+    # Create futures-config.cmake
     configure_package_config_file(
             ${CMAKE_CURRENT_SOURCE_DIR}/futures-config.cmake.in # input file
             ${CMAKE_CURRENT_BINARY_DIR}/futures-config.cmake    # output file
@@ -192,4 +126,39 @@ if (FUTURES_BUILD_INSTALLER AND FUTURES_BUILD_PACKAGE)
 
     # Always include CPack at last
     include(CPack)
+endif ()
+
+#######################################################
+### Developer mode                                  ###
+#######################################################
+if (NOT FUTURES_DEVELOPER_MODE)
+    return()
+elseif (NOT MASTER_PROJECT)
+    message(
+            AUTHOR_WARNING
+            "Developer mode is intended for developers"
+    )
+endif ()
+
+add_subdirectory(dev-tools)
+
+if (FUTURES_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif ()
+
+if (FUTURES_BUILD_DOCS)
+    add_subdirectory(docs)
+endif()
+
+if (FUTURES_BUILD_COVERAGE_REPORT)
+    include(cmake/futures/coverage-report.cmake)
+endif()
+
+if (FUTURES_BUILD_LINT)
+    include(cmake/futures/lint-targets.cmake)
+endif()
+
+if (FUTURES_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif ()

@@ -37,11 +37,12 @@ namespace futures {
         /// @tparam I Iterator type
         /// @tparam S Sentinel iterator type
         /// @tparam T Value to compare
+        ///
         /// @param ex Executor
         /// @param p Partitioner
         /// @param first Iterator to first element in the range
         /// @param last Iterator to (last + 1)-th element in the range
-        /// @param value Value
+        /// @param v Value
         template <
             class E,
             class P,

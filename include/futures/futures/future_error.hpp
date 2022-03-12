@@ -183,7 +183,6 @@ namespace futures {
     {
     public:
         /// Construct underlying future error with a specified error code
-        /// @param ec Error code
         broken_promise()
             : future_error{ make_error_code(future_errc::broken_promise) } {}
     };

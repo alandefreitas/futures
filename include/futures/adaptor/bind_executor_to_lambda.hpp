@@ -8,8 +8,8 @@
 #ifndef FUTURES_ADAPTOR_BIND_EXECUTOR_TO_LAMBDA_HPP
 #define FUTURES_ADAPTOR_BIND_EXECUTOR_TO_LAMBDA_HPP
 
-#include <futures/detail/traits/is_callable.hpp>
 #include <futures/executor/is_executor.hpp>
+#include <futures/detail/traits/is_callable.hpp>
 #include <type_traits>
 
 namespace futures {

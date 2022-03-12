@@ -44,7 +44,8 @@ namespace futures {
     {};
 #endif
     template <class T>
-    bool constexpr is_default_initializable_v = is_default_initializable<T>::value;
+    bool constexpr is_default_initializable_v = is_default_initializable<
+        T>::value;
     /** @}*/
     /** @}*/
 

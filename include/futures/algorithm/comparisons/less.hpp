@@ -5,12 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_COMPARISONS_LESS_H
-#define FUTURES_ALGORITHM_TRAITS_COMPARISONS_LESS_H
+#ifndef FUTURES_ALGORITHM_COMPARISONS_LESS_HPP
+#define FUTURES_ALGORITHM_COMPARISONS_LESS_HPP
 
 #include <futures/algorithm/traits/is_totally_ordered_with.hpp>
-#include <type_traits>
 #include <utility>
+#include <type_traits>
 
 namespace futures {
     /** A C++17 functor equivalent to the C++20 std::ranges::less
@@ -34,4 +34,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_TRAITS_COMPARISONS_LESS_H
+#endif // FUTURES_ALGORITHM_COMPARISONS_LESS_HPP

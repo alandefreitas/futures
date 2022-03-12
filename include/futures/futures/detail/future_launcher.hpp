@@ -50,10 +50,11 @@ namespace futures::detail {
             static constexpr bool is_eager = !FutureOptions::is_always_deferred;
             if constexpr (is_eager) {
                 // Create shared state
-                auto shared_state = make_initial_state<is_eager, value_type, FutureOptions>(
-                    ex,
-                    std::forward<Function>(f),
-                    std::forward<Args>(args)...);
+                auto shared_state
+                    = make_initial_state<is_eager, value_type, FutureOptions>(
+                        ex,
+                        std::forward<Function>(f),
+                        std::forward<Args>(args)...);
                 basic_future<value_type, FutureOptions> fut(shared_state);
 
                 // Launch task to fulfill the eager promise now
@@ -71,9 +72,9 @@ namespace futures::detail {
                 // Create shared state
                 auto op_state
                     = make_initial_state<is_eager, value_type, FutureOptions>(
-                    ex,
-                    std::forward<Function>(f),
-                    std::forward<Args>(args)...);
+                        ex,
+                        std::forward<Function>(f),
+                        std::forward<Args>(args)...);
                 basic_future<value_type, FutureOptions> fut(
                     move_if_not_shared_ptr(op_state));
                 return fut;

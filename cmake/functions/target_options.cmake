@@ -50,8 +50,6 @@ function(target_exception_options TARGET_NAME)
     target_msvc_compile_options(${TARGET_NAME} PRIVATE /EHsc)
 endfunction()
 
-
-
 # @brief Enable big object files for the target
 function(target_bigobj_options TARGET_NAME)
     # MSVC requires this flag if the file has a lot of code

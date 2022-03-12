@@ -8,11 +8,11 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_HPP
 
+#include <futures/algorithm/traits/is_derived_from.hpp>
+#include <futures/algorithm/traits/is_incrementable.hpp>
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/algorithm/traits/iter_concept.hpp>
-#include <futures/algorithm/traits/is_derived_from.hpp>
-#include <futures/algorithm/traits/is_incrementable.hpp>
 #include <type_traits>
 
 namespace futures {

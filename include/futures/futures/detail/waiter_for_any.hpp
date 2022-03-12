@@ -114,14 +114,15 @@ namespace futures::detail {
             registered_waiter_range_lock lk(waiters_);
             std::size_t ready_idx;
             if (cv.wait_for(lk, timeout_duration, [this, &ready_idx]() {
-                for (auto const &waiter: waiters_) {
-                    if (waiter.is_ready()) {
-                        ready_idx = waiter.index;
-                        return true;
+                    for (auto const &waiter: waiters_) {
+                        if (waiter.is_ready()) {
+                            ready_idx = waiter.index;
+                            return true;
+                        }
                     }
-                }
-                return false;
-            })) {
+                    return false;
+                }))
+            {
                 return ready_idx;
             }
             return std::size_t(-1);
@@ -130,18 +131,20 @@ namespace futures::detail {
         /// Wait for one of the futures to notify it got ready
         template <class Clock, class Duration>
         std::size_t
-        wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time) {
+        wait_until(
+            const std::chrono::time_point<Clock, Duration> &timeout_time) {
             registered_waiter_range_lock lk(waiters_);
             std::size_t ready_idx;
             if (cv.wait_until(lk, timeout_time, [this, &ready_idx]() {
-                for (auto const &waiter: waiters_) {
-                    if (waiter.is_ready()) {
-                        ready_idx = waiter.index;
-                        return true;
+                    for (auto const &waiter: waiters_) {
+                        if (waiter.is_ready()) {
+                            ready_idx = waiter.index;
+                            return true;
+                        }
                     }
-                }
-                return false;
-            })) {
+                    return false;
+                }))
+            {
                 return ready_idx;
             }
             return std::size_t(-1);

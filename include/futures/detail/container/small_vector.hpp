@@ -10,9 +10,9 @@
 
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/detail/exception/scope_guard.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -1792,7 +1792,9 @@ namespace futures::detail {
         class T,
         size_t N_INPUT,
         size_t N_OUTPUT = (std::max)(
-            (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+            (std::max)(
+                std::size_t(5),
+                (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
             N_INPUT)>
     constexpr small_vector<std::remove_cv_t<T>, N_OUTPUT>
     to_small_vector(T (&a)[N_INPUT]) {
@@ -1805,10 +1807,12 @@ namespace futures::detail {
         class T,
         size_t N_INPUT,
         size_t N_OUTPUT = (std::max)(
-            (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+            (std::max)(
+                std::size_t(5),
+                (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
             N_INPUT)>
     constexpr small_vector<std::remove_cv_t<T>, N_OUTPUT>
-    to_small_vector(T(&&a)[N_INPUT]) {
+    to_small_vector(T (&&a)[N_INPUT]) {
         return small_vector<std::remove_cv_t<T>, N_OUTPUT>(a, a + N_INPUT);
     }
 

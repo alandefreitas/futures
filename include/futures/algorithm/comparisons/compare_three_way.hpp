@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_H
-#define FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_H
+#ifndef FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_HPP
+#define FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_HPP
 
 #include <futures/algorithm/comparisons/less.hpp>
 #include <utility>
@@ -43,4 +43,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_H
+#endif // FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_HPP

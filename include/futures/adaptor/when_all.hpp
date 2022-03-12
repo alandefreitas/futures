@@ -8,59 +8,62 @@
 #ifndef FUTURES_ADAPTOR_WHEN_ALL_HPP
 #define FUTURES_ADAPTOR_WHEN_ALL_HPP
 
-/// @file Implement the when_all functionality for futures and executors
-///
-/// Because all tasks need to be done to achieve the result, the algorithm
-/// doesn't depend much on the properties of the underlying futures. The thread
-/// that is awaiting just needs sleep and await for each of the internal
-/// futures.
-///
-/// The usual approach, without our future concepts, like in returning another
-/// std::future, is to start another polling thread, which sets a promise when
-/// all other futures are ready. If the futures support lazy continuations,
-/// these promises can be set from the previous objects. However, this has an
-/// obvious cost for such a trivial operation, given that the solutions is
-/// already available in the underlying futures.
-///
-/// Instead, we implement one more future type `when_all_future` that can query
-/// if the futures are ready and waits for them to be ready whenever get() is
-/// called. This proxy object can then be converted to a regular future if the
-/// user needs to.
-///
-/// This has a disadvantage over futures with lazy continuations because we
-/// might need to schedule another task if we need notifications from this
-/// future. However, we avoid scheduling another task right now, so this is, at
-/// worst, as good as the common approach of wrapping it into another existing
-/// future type.
-///
-/// If the input futures are not shared, they are moved into `when_all_future`
-/// and are invalidated, as usual. The `when_all_future` cannot be shared.
+/// @file
+/// Implement the when_all functionality for futures and executors
+/**
+ *  Because all tasks need to be done to achieve the result, the algorithm
+ *  doesn't depend much on the properties of the underlying futures. The thread
+ *  that is awaiting just needs sleep and await for each of the internal
+ *  futures.
+ *
+ *  The usual approach, without our future concepts, like in returning another
+ *  std::future, is to start another polling thread, which sets a promise when
+ *  all other futures are ready. If the futures support lazy continuations,
+ *  these promises can be set from the previous objects. However, this has an
+ *  obvious cost for such a trivial operation, given that the solutions is
+ *  already available in the underlying futures.
+ *
+ *  Instead, we implement one more future type `when_all_future` that can query
+ *  if the futures are ready and waits for them to be ready whenever get() is
+ *  called. This proxy object can then be converted to a regular future if the
+ *  user needs to.
+ *
+ *  This has a disadvantage over futures with lazy continuations because we
+ *  might need to schedule another task if we need notifications from this
+ *  future. However, we avoid scheduling another task right now, so this is, at
+ *  worst, as good as the common approach of wrapping it into another existing
+ *  future type.
+ *
+ *  If the input futures are not shared, they are moved into `when_all_future`
+ *  and are invalidated, as usual. The `when_all_future` cannot be shared.
+ */
 
 #include <futures/algorithm/traits/is_range.hpp>
+#include <futures/futures/traits/to_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
-#include <futures/futures/traits/to_future.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
      *  @{
      */
 
-    /// Proxy future class referring to the result of a conjunction of
-    /// futures from @ref when_all
-    ///
-    /// This class implements the behavior of the `when_all` operation as
-    /// another future type, which can handle heterogeneous future objects.
-    ///
-    /// This future type logically checks the results of other futures in place
-    /// to avoid creating a real conjunction of futures that would need to be
-    /// polling (or be a lazy continuation) on another thread.
-    ///
-    /// If the user does want to poll on another thread, then this can be
-    /// converted into a cfuture as usual with async. If the other future holds
-    /// the when_all_state as part of its state, then it can become another
-    /// future.
+    /// Proxy future class referring to a conjunction of futures from @ref
+    /// when_all
+    /**
+     *  This class implements the behavior of the `when_all` operation as
+     *  another future type, which can handle heterogeneous future objects.
+     *
+     *  This future type logically checks the results of other futures in place
+     *  to avoid creating a real conjunction of futures that would need to be
+     *  polling (or be a lazy continuation) on another thread.
+     *
+     *  If the user does want to poll on another thread, then this can be
+     *  converted into a cfuture as usual with async. If the other future holds
+     *  the when_all_state as part of its state, then it can become another
+     *  future.
+     */
     template <class Sequence>
     class when_all_future
     {
@@ -73,20 +76,26 @@ namespace futures {
         static_assert(sequence_is_range || sequence_is_tuple);
 
     public:
-        /// Default constructor.
-        /// Constructs a when_all_future with no shared state. After
-        /// construction, valid() == false
+        /// Constructor.
+        /**
+         *  Constructs a when_all_future with no shared state. After
+         *  construction, valid() == false
+         */
         when_all_future() noexcept = default;
 
         /// Move a sequence of futures into the when_all_future
-        /// constructor. The sequence is moved into this future object and the
-        /// objects from which the sequence was created get invalidated
+        /**
+         *  The sequence is moved into this future object and the
+         *  objects from which the sequence was created get invalidated
+         */
         explicit when_all_future(sequence_type &&v) noexcept
             : v(std::move(v)) {}
 
         /// Move constructor.
-        /// Constructs a when_all_future with the shared state of other using
-        /// move semantics. After construction, other.valid() == false
+        /**
+         *  Constructs a when_all_future with the shared state of other using
+         *  move semantics. After construction, other.valid() == false
+         */
         when_all_future(when_all_future &&other) noexcept
             : v(std::move(other.v)) {}
 
@@ -94,35 +103,40 @@ namespace futures {
         when_all_future(const when_all_future &other) = delete;
 
         /// Releases any shared state.
-        /// - If the return object or provider holds the last reference to its
-        /// shared state, the shared state is destroyed
-        /// - the return object or provider gives up its reference to its shared
-        /// state This means we just need to let the internal futures destroy
-        /// themselves
+        /**
+         *  - If the return object or provider holds the last reference to its
+         *  shared state, the shared state is destroyed
+         *  - the return object or provider gives up its reference to its shared
+         *  state This means we just need to let the internal futures destroy
+         *  themselves
+         */
         ~when_all_future() = default;
 
         /// Assigns the contents of another future object.
-        /// Releases any shared state and move-assigns the contents of other to
-        /// *this. After the assignment, other.valid() == false and
-        /// this->valid() will yield the same value as other.valid() before the
-        /// assignment.
+        /**
+         *  Releases any shared state and move-assigns the contents of other to
+         *  *this. After the assignment, other.valid() == false and
+         *  this->valid() will yield the same value as other.valid() before the
+         *  assignment.
+         */
         when_all_future &
         operator=(when_all_future &&other) noexcept {
             v = std::move(other.v);
         }
 
-        /// Assigns the contents of another future object.
         /// when_all_future is not CopyAssignable.
         when_all_future &
         operator=(const when_all_future &other)
             = delete;
 
         /// Wait until all futures have a valid result and retrieves it
-        /// It effectively calls wait() in order to wait for the result.
-        /// The behavior is undefined if valid() is false before the call to
-        /// this function. Any shared state is released. valid() is false after
-        /// a call to this method. The value v stored in the shared state, as
-        /// std::move(v)
+        /**
+         *  It effectively calls wait() in order to wait for the result.
+         *  The behavior is undefined if valid() is false before the call to
+         *  this function. Any shared state is released. valid() is false after
+         *  a call to this method. The value v stored in the shared state, as
+         *  std::move(v)
+         */
         sequence_type
         get() {
             // Check if the sequence is valid
@@ -149,9 +163,11 @@ namespace futures {
         }
 
         /// Blocks until the result becomes available.
-        /// valid() == true after the call.
-        /// The behavior is undefined if valid() == false before the call to
-        /// this function
+        /**
+         *  valid() == true after the call.
+         *  The behavior is undefined if valid() == false before the call to
+         *  this function
+         */
         void
         wait() const {
             // Check if the sequence is valid
@@ -167,8 +183,10 @@ namespace futures {
         }
 
         /// Waits for the result to become available.
-        /// Blocks until specified timeout_duration has elapsed or the result
-        /// becomes available, whichever comes first.
+        /**
+         *  Blocks until specified timeout_duration has elapsed or the result
+         *  becomes available, whichever comes first.
+         */
         template <class Rep, class Period>
         [[nodiscard]] std::future_status
         wait_for(
@@ -232,9 +250,11 @@ namespace futures {
             }
         }
 
-        /// wait_until waits for a result to become available.
-        /// It blocks until specified timeout_time has been reached or the
-        /// result becomes available, whichever comes first
+        /// Waits for a result to become available.
+        /**
+         *  It blocks until specified timeout_time has been reached or the
+         *  result becomes available, whichever comes first
+         */
         template <class Clock, class Duration>
         std::future_status
         wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time)
@@ -247,10 +267,12 @@ namespace futures {
         }
 
         /// Allow move the underlying sequence somewhere else
-        /// The when_all_future is left empty and should now be considered
-        /// invalid. This is useful for the algorithm that merges two
-        /// wait_all_future objects without forcing encapsulation of the merge
-        /// function.
+        /**
+         *  The when_all_future is left empty and should now be considered
+         *  invalid. This is useful for the algorithm that merges two
+         *  wait_all_future objects without forcing encapsulation of the merge
+         *  function.
+         */
         sequence_type &&
         release() {
             return std::move(v);
@@ -285,9 +307,11 @@ namespace futures {
 #endif
 
     namespace detail {
-        /// @name when_all helper traits
-        /// Useful traits for when all future
-        ///@{
+        /**
+         *  @name when_all helper traits
+         *  Useful traits for when all future
+         * @{
+         */
 
         /// Check if type is a when_all_future as a type
         template <typename>
@@ -301,8 +325,8 @@ namespace futures {
         template <class T>
         constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
 
-        /// Check if a type can be used in a future conjunction (when_all
-        /// or operator&& for futures)
+        /// Check if a type can be used in a future conjunction
+        /// (when_all or operator&& for futures)
         template <class T>
         using is_valid_when_all_argument = std::disjunction<
             is_future<std::decay_t<T>>,
@@ -328,14 +352,17 @@ namespace futures {
         template <class... Args>
         constexpr bool are_valid_when_all_arguments_v
             = are_valid_when_all_arguments<Args...>::value;
-        /// @}
+        /**
+         * @}
+         */
 
-        /// @name Helpers and traits for operator&& on futures, functions and
-        /// when_all futures
-        /// @{
+        /**
+         * @name Helpers and traits for operator&& on futures, functions and
+         * when_all futures
+         * @{
+         */
 
-        /// Check if type is a when_all_future with tuples as a sequence
-        /// type
+        /// Check if type is a when_all_future with tuples as a sequence type
         template <typename T, class Enable = void>
         struct is_when_all_tuple_future : std::false_type
         {};
@@ -402,15 +429,20 @@ namespace futures {
             = are_when_all_range_futures<Args...>::value;
 
         /// Constructs a when_all_future that is a concatenation of all
-        /// when_all_futures in args It's important to be able to merge
-        /// when_all_future objects because of operator&& When the user asks for
-        /// f1 && f2 && f3, we want that to return a single future that waits
-        /// for <f1,f2,f3> rather than a future that wait for two futures
-        /// <f1,<f2,f3>> @note This function only participates in overload
-        /// resolution if all types in std::decay_t<WhenAllFutures>... are
-        /// specializations of when_all_future with a tuple sequence type
-        /// @overload "Merging" a single when_all_future of tuples. Overload
-        /// provided for symmetry.
+        /// when_all_futures in args
+        /**
+         *  It's important to be able to merge when_all_future objects because
+         *  of operator&& When the user asks for f1 && f2 && f3, we want that
+         *  to return a single future that waits for <f1,f2,f3> rather than
+         *  a future that wait for two futures <f1,<f2,f3>>
+         *
+         *  @note "Merging" a single when_all_future of tuples. Overload
+         *  provided for symmetry.
+         *
+         *  @note This function only participates in overload
+         *  resolution if all types in std::decay_t<WhenAllFutures>... are
+         *  specializations of when_all_future with a tuple sequence type
+         */
         template <
             class WhenAllFuture,
             std::enable_if_t<is_when_all_tuple_future_v<WhenAllFuture>, int> = 0>
@@ -419,7 +451,7 @@ namespace futures {
             return std::forward<WhenAllFuture>(arg0);
         }
 
-        /// @overload Merging a two when_all_future objects of tuples
+        /// Merging a two when_all_future objects of tuples
         template <
             class WhenAllFuture1,
             class WhenAllFuture2,
@@ -434,7 +466,7 @@ namespace futures {
             return when_all_future(std::move(s));
         }
 
-        /// @overload Merging two+ when_all_future of tuples
+        /// Merging two+ when_all_future of tuples
         template <
             class WhenAllFuture1,
             class... WhenAllFutures,
@@ -466,21 +498,24 @@ namespace futures {
                 return futures::async(std::forward<F>(f));
             }
         }
-        ///@}
+        /**
+         * @}
+         */
     } // namespace detail
 
     /// Create a future object that becomes ready when the range of input
     /// futures becomes ready
-    ///
-    /// This function does not participate in overload resolution unless
-    /// InputIt's value type (i.e., typename
-    /// std::iterator_traits<InputIt>::value_type) is a std::future or
-    /// std::shared_future.
-    ///
-    /// This overload uses a small vector for avoid further allocations for such
-    /// a simple operation.
-    ///
-    /// @return Future object of type @ref when_all_future
+    /**
+     *  This function does not participate in overload resolution unless
+     *  InputIt's value type (i.e., typename
+     *  std::iterator_traits<InputIt>::value_type) is a std::future or
+     *  std::shared_future.
+     *
+     *  This overload uses a small vector for avoid further allocations for such
+     *  a simple operation.
+     *
+     *  @return Future object of type @ref when_all_future
+     */
     template <
         class InputIt
 #ifndef FUTURES_DOXYGEN
@@ -527,11 +562,12 @@ namespace futures {
 
     /// Create a future object that becomes ready when the range of input
     /// futures becomes ready
-    ///
-    /// This function does not participate in overload resolution unless the
-    /// range type @ref is_future.
-    ///
-    /// @return Future object of type @ref when_all_future
+    /**
+     *  This function does not participate in overload resolution unless the
+     *  range type @ref is_future.
+     *
+     *  @return Future object of type @ref when_all_future
+     */
     template <
         class Range
 #ifndef FUTURES_DOXYGEN
@@ -552,12 +588,13 @@ namespace futures {
 
     /// Create a future object that becomes ready when all of the input
     /// futures become ready
-    ///
-    /// This function does not participate in overload resolution unless every
-    /// argument is either a (possibly cv-qualified) shared_future or a
-    /// cv-unqualified future, as defined by the trait @ref is_future.
-    ///
-    /// @return Future object of type @ref when_all_future
+    /**
+     *  This function does not participate in overload resolution unless every
+     *  argument is either a (possibly cv-qualified) shared_future or a
+     *  cv-unqualified future, as defined by the trait @ref is_future.
+     *
+     *  @return Future object of type @ref when_all_future
+     */
     template <
         class... Futures
 #ifndef FUTURES_DOXYGEN
@@ -581,26 +618,27 @@ namespace futures {
 
     /// Operator to create a future object that becomes ready when all of
     /// the input futures are ready
-    ///
-    /// Cperator&& works for futures and functions (which are converted to
-    /// futures with the default executor) If the future is a when_all_future
-    /// itself, then it gets merged instead of becoming a child future of
-    /// another when_all_future.
-    ///
-    /// When the user asks for f1 && f2 && f3, we want that to return a single
-    /// future that waits for <f1,f2,f3> rather than a future that wait for two
-    /// futures <f1,<f2,f3>>.
-    ///
-    /// This emulates the usual behavior we expect from other types with
-    /// operator&&.
-    ///
-    /// Note that this default behaviour is different from when_all(...), which
-    /// doesn't merge the when_all_future objects by default, because they are
-    /// variadic functions and this intention can be controlled explicitly:
-    /// - when_all(f1,f2,f3) -> <f1,f2,f3>
-    /// - when_all(f1,when_all(f2,f3)) -> <f1,<f2,f3>>
-    ///
-    /// @return @ref when_all_future object that concatenates all futures
+    /**
+     *  Operator&& works for futures and functions (which are converted to
+     *  futures with the default executor) If the future is a when_all_future
+     *  itself, then it gets merged instead of becoming a child future of
+     *  another when_all_future.
+     *
+     *  When the user asks for f1 && f2 && f3, we want that to return a single
+     *  future that waits for <f1,f2,f3> rather than a future that wait for two
+     *  futures <f1,<f2,f3>>.
+     *
+     *  This emulates the usual behavior we expect from other types with
+     *  operator&&.
+     *
+     *  Note that this default behaviour is different from when_all(...), which
+     *  doesn't merge the when_all_future objects by default, because they are
+     *  variadic functions and this intention can be controlled explicitly:
+     *  - when_all(f1,f2,f3) -> <f1,f2,f3>
+     *  - when_all(f1,when_all(f2,f3)) -> <f1,<f2,f3>>
+     *
+     *  @return @ref when_all_future object that concatenates all futures
+     */
     template <
         class T1,
         class T2

@@ -8,8 +8,8 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP
 
-#include <futures/algorithm/traits/is_move_constructible.hpp>
 #include <futures/algorithm/traits/is_assignable_from.hpp>
+#include <futures/algorithm/traits/is_move_constructible.hpp>
 #include <futures/algorithm/traits/is_swappable.hpp>
 #include <type_traits>
 

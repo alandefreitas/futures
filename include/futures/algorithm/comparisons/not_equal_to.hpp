@@ -5,13 +5,13 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_H
-#define FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_H
+#ifndef FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP
+#define FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP
 
-#include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <futures/algorithm/comparisons/equal_to.hpp>
-#include <type_traits>
+#include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <utility>
+#include <type_traits>
 
 namespace futures {
     /** A C++17 functor equivalent to the C++20 std::ranges::not_equal_to
@@ -35,4 +35,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_H
+#endif // FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP

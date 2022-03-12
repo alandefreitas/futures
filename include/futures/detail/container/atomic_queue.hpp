@@ -11,8 +11,8 @@
 #include <futures/detail/allocator/allocator_construct.hpp>
 #include <futures/detail/allocator/allocator_destroy.hpp>
 #include <futures/detail/allocator/allocator_rebind.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/utility/empty_base.hpp>
 #include <atomic>
 #include <memory>
 

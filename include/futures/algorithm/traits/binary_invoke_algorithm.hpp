@@ -476,8 +476,8 @@ namespace futures {
                 std::move(f));
         }
 
-        /// @overload Iterators / default executor / default partitioner /
-        /// default init value
+        /// Iterators / default executor / default partitioner / default init
+        /// value
         template <
             class I,
             class S,
@@ -534,8 +534,7 @@ namespace futures {
                 std::move(f));
         }
 
-        /// @overload Ranges / default executor / default partitioner / default
-        /// init value
+        /// Ranges / default executor / default partitioner / default init value
         template <
             class R,
             class Fun = std::plus<>

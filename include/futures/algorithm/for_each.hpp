@@ -112,7 +112,10 @@ namespace futures {
             }
 
         private:
-            detail::atomic_queue<basic_future<void, future_options<executor_opt<Executor>, continuable_opt>>> tasks_;
+            detail::atomic_queue<basic_future<
+                void,
+                future_options<executor_opt<Executor>, continuable_opt>>>
+                tasks_;
         };
 
         /// Complete overload of the for_each algorithm

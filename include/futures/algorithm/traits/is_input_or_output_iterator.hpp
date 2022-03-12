@@ -20,8 +20,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 input_or_output_iterator
-     * concept
+    /** \brief A C++17 type trait equivalent to the C++20
+     * input_or_output_iterator concept
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
