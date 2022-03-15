@@ -27,18 +27,6 @@ namespace futures::detail {
     template <typename... Args>
     struct is_tuple<std::tuple<Args...>> : std::true_type
     {};
-    template <typename... Args>
-    struct is_tuple<const std::tuple<Args...>> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_tuple<std::tuple<Args...> &> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_tuple<std::tuple<Args...> &&> : std::true_type
-    {};
-    template <typename... Args>
-    struct is_tuple<const std::tuple<Args...> &> : std::true_type
-    {};
 
     template <class T>
     constexpr bool is_tuple_v = is_tuple<T>::value;

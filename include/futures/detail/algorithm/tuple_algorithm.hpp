@@ -188,7 +188,7 @@ namespace futures {
         size_t current_tuple_idx = 0,
         std::enable_if_t<
             detail::is_callable_v<
-                Function> && detail::is_tuple_v<Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+                Function> && detail::is_tuple_v<std::decay_t<Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
     constexpr static auto
@@ -216,8 +216,8 @@ namespace futures {
         class Tuple,
         size_t current_tuple_idx = 0,
         std::enable_if_t<
-            detail::is_tuple_v<
-                Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            detail::is_tuple_v<std::decay_t<
+                Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
     constexpr static decltype(auto)
@@ -245,8 +245,8 @@ namespace futures {
         size_t current_tuple_idx = 0,
         class TransformFn,
         std::enable_if_t<
-            detail::is_tuple_v<
-                Tuple> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            detail::is_tuple_v<std::decay_t<
+                Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
             int> = 0>
 
     constexpr static decltype(auto)
