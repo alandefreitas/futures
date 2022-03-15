@@ -10,7 +10,7 @@
         and include it in your project.
 
         The single-header version of the library is intended for immediate experimentation, and use cases like 
-        Compiler Explorer.
+        [Compiler Explorer](https://godbolt.org/z/fbjEqjer1).
 
         Make sure the headers for the dependencies are also available:
         

@@ -283,8 +283,12 @@ main(int argc, char **argv) {
         double perc = static_cast<double>(search_begin - content.cbegin())
                       / static_cast<double>(content.size());
         if (c.show_progress) {
-            if (c.verbose || perc > next_perc) {
-                std::cout << "- " << 100 * perc << "% - " << file_path << "\n";
+            if (c.verbose) {
+                std::cout << "- " << 100 * perc << "% - Patching " << file_path
+                          << '\n';
+            } else if (perc > next_perc) {
+                std::cout << "- " << 100 * perc << "% - "
+                          << patched_files.size() << " files patched\n";
                 if (!c.verbose) {
                     next_perc += 0.1;
                 }

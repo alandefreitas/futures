@@ -60,7 +60,7 @@ jobs:
           }
     steps:
       - uses: actions/checkout@v2
-      - name: Create Work Dir
+      - name: Create Build Dir
         run: mkdir build
       - name: Configure
         working-directory: ./build
@@ -93,6 +93,15 @@ jobs:
         uses: kittaakos/upload-artifact-as-is@v0
         with:
           path: build/include/single-header/futures/futures.hpp
+      - name: Deploy single-header to gist
+        if: ${{ matrix.config.build_single_header == 'ON' }}
+        uses: exuanbo/actions-deploy-gist@v1.1.2
+        with:
+          token: ${{ secrets.GIST_TOKEN }}
+          gist_id: 15c8cd11b9230cc75e163c7d7eb63a15
+          gist_description: "Single-header futures library"
+          gist_file_name: futures.hpp
+          file_path: ./build/include/single-header/futures/futures.hpp
       - name: Archive Installer Packages as is
         uses: kittaakos/upload-artifact-as-is@v0
         with:
