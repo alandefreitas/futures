@@ -33,11 +33,11 @@ namespace futures {
         friend count_functor;
 
         template <class Executor, class I>
-        class count_if_graph : public detail::maybe_empty<Executor>
+        class count_if_graph : public detail::maybe_empty_executor<Executor>
         {
         public:
             explicit count_if_graph(const Executor &ex)
-                : detail::maybe_empty<Executor>(ex) {}
+                : detail::maybe_empty_executor<Executor>(ex) {}
 
             template <class P, class S, class Fun>
             iter_difference_t<I>
@@ -56,7 +56,7 @@ namespace futures {
                         iter_difference_t<I>,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            detail::maybe_empty<Executor>::get(),
+                            this->get_executor(),
                             [this, p, middle, last, f] {
                         return launch_count_if_tasks(p, middle, last, f);
                             });

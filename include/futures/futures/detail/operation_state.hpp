@@ -14,7 +14,11 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/thread/relocker.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
+#include <futures/executor/detail/maybe_empty_executor.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
+#include <futures/futures/detail/maybe_empty_continuations_source.hpp>
+#include <futures/futures/detail/maybe_empty_function.hpp>
+#include <futures/futures/detail/maybe_empty_stop_source.hpp>
 #include <futures/futures/detail/operation_state_storage.hpp>
 #include <futures/futures/detail/traits/is_in_args.hpp>
 #include <atomic>
@@ -192,11 +196,14 @@ namespace futures::detail {
                 maybe_atomic_thread_fence<!is_always_deferred>(
                     std::memory_order_acquire);
                 // notify all waiters (internal and external)
+                // We should notify external waiters first so no external
+                // code attempts to destroy this object before we notify them
+                // as soon as the main waiter is notified
                 auto lk = create_wait_lock();
-                waiter_.notify_all();
                 for (auto &&external_waiter: external_waiters_) {
                     external_waiter->notify_all();
                 }
+                waiter_.notify_all();
             }
         }
 
@@ -648,17 +655,15 @@ namespace futures::detail {
         // storage for the results
         , private operation_state_storage<R>
         // storage for the executor
-        , private conditional_base<
+        , public conditional_executor<
               Options::has_executor,
-              typename Options::executor_t,
-              0>
+              typename Options::executor_t>
         // storage for the continuations
-        , private conditional_base<
+        , public conditional_continuations_source<
               Options::is_continuable,
-              continuations_source<Options::is_always_deferred>,
-              1>
+              continuations_source<Options::is_always_deferred>>
         // storage for the stop token
-        , private conditional_base<Options::is_stoppable, stop_source, 2>
+        , public conditional_stop_source<Options::is_stoppable, stop_source>
     {
     protected:
         static_assert(
@@ -675,24 +680,22 @@ namespace futures::detail {
             Options::is_always_deferred>;
 
         /// Executor storage
-        using executor_base = conditional_base<
+        using executor_base = conditional_executor<
             Options::has_executor,
-            typename Options::executor_t,
-            0>;
+            typename Options::executor_t>;
 
         using executor_type = typename executor_base::value_type;
 
         /// Continuations storage
-        using continuations_base = conditional_base<
+        using continuations_base = conditional_continuations_source<
             Options::is_continuable,
-            continuations_source<Options::is_always_deferred>,
-            1>;
+            continuations_source<Options::is_always_deferred>>;
 
         using continuations_type = typename continuations_base::value_type;
 
         /// Stop source storage
         using stop_source_base
-            = conditional_base<Options::is_stoppable, stop_source, 2>;
+            = conditional_stop_source<Options::is_stoppable, stop_source>;
 
         using stop_source_type = typename stop_source_base::value_type;
 
@@ -718,7 +721,7 @@ namespace futures::detail {
          */
         ~operation_state() override {
             if constexpr (Options::is_stoppable) {
-                get_stop_source().request_stop();
+                this->get_stop_source().request_stop();
             }
         };
 
@@ -815,13 +818,13 @@ namespace futures::detail {
                     if constexpr (std::is_void_v<R>) {
                         std::invoke(
                             std::forward<Fn>(fn),
-                            this->get_stop_token(),
+                            this->get_stop_source().get_token(),
                             std::forward<Args>(args)...);
                         this->set_value();
                     } else {
                         this->set_value(std::invoke(
                             std::forward<Fn>(fn),
-                            this->get_stop_token(),
+                            this->get_stop_source().get_token(),
                             std::forward<Args>(args)...));
                     }
                 }
@@ -885,133 +888,6 @@ namespace futures::detail {
          * @}
          */
 
-        /**
-         * @name Observers
-         *
-         * Observe some trait-dependant properties of the operation state.
-         *
-         * @{
-         */
-
-        /// Get executor associated with the operation
-        /**
-         * The executor associated with the operation state is required to
-         * enable continuations on the default executor. Because these are
-         * replicas of the executor, they need to be lightweight handles to
-         * the execution context.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits contain an executor type.
-         *
-         * @return Constant reference to the executor.
-         *
-         * @note
-         */
-        const executor_type &
-        get_executor() const noexcept {
-            static_assert(Options::has_executor);
-            return executor_base::get();
-        }
-
-        /// Get reference to continuations source
-        /**
-         * The continuation source stores all functions that should
-         * be executed when the operation state has executed its main
-         * task.
-         *
-         * This operation state understands the main task to be complete when we
-         * either set its value or the object gets destroyed.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits is continuable.
-         *
-         * @return Reference to continuations source
-         */
-        typename continuations_base::value_type &
-        get_continuations_source() noexcept {
-            static_assert(Options::is_continuable);
-            return continuations_base::get();
-        }
-
-        /// Get constant reference to continuations source
-        /**
-         * The continuation source stores all functions that should
-         * be executed when the operation state has executed its main
-         * task.
-         *
-         * This operation state understands the main task to be complete when we
-         * either set its value or the object gets destroyed.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits is continuable.
-         *
-         * @return Reference to continuations source
-         */
-        typename continuations_base::value_type &
-        get_continuations_source() const noexcept {
-            static_assert(Options::is_continuable);
-            return continuations_base::get();
-        }
-
-        /// Get reference to operation stop source
-        /**
-         * The stop source is a shared object associated with the operation
-         * state to indicate whether its main task should stop. This stop
-         * source can be shared with other tasks and be user to create a
-         * stop token, a read-only view of the stop state a task can use to
-         * determine if it should stop.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits is stoppable.
-         *
-         * @return A constant reference to the stop source
-         */
-        const stop_source &
-        get_stop_source() const noexcept {
-            static_assert(Options::is_stoppable);
-            return stop_source_base::get();
-        }
-
-        /// Get reference to operation stop source
-        /**
-         * The stop source is a shared object associated with the operation
-         * state to indicate whether its main task should stop. This stop
-         * source can be shared with other tasks and be user to create a
-         * stop token, a read-only view of the stop state a task can use to
-         * determine if it should stop.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits is stoppable.
-         *
-         * @return Reference to the stop source
-         */
-        stop_source &
-        get_stop_source() noexcept {
-            static_assert(Options::is_stoppable);
-            return stop_source_base::get();
-        }
-
-        /// Create stop token associated with the operation state
-        /**
-         * A stop token is a read-only view created from the operation stop
-         * source. This token can be used by tasks to identify whether they
-         * should stop.
-         *
-         * @note This function only participates in overload resolution if the
-         * operation state traits is stoppable.
-         *
-         * @return
-         */
-        [[nodiscard]] stop_token
-        get_stop_token() const noexcept {
-            static_assert(Options::is_stoppable);
-            return stop_source_base::get().get_token();
-        }
-
-        /**
-         * @}
-         */
-
     private:
         template <typename Fn, typename Tuple, std::size_t... I>
         void
@@ -1067,7 +943,7 @@ namespace futures::detail {
     template <class R, class Options>
     class deferred_operation_state
         : public operation_state<R, Options>
-        , private maybe_empty<typename Options::function_t, 3>
+        , private maybe_empty_function<typename Options::function_t>
     {
     private:
         /**
@@ -1079,8 +955,8 @@ namespace futures::detail {
          * Deferred operation states need to store their tasks because
          * it's not being launched immediately.
          */
-        using deferred_function_base
-            = maybe_empty<typename Options::function_t, 3>;
+        using deferred_function_base = maybe_empty_function<
+            typename Options::function_t>;
 
         using deferred_function_type = typename deferred_function_base::
             value_type;
@@ -1198,11 +1074,10 @@ namespace futures::detail {
                     asio::post(
                         operation_state<R, Options>::get_executor(),
                         [this]() {
-                        this->apply(
-                            std::move(this->deferred_function_base::get()));
+                        this->apply(std::move(this->get_function()));
                         });
                 } else {
-                    this->apply(std::move(deferred_function_base::get()));
+                    this->apply(std::move(this->get_function()));
                 }
             }
         }
@@ -1229,7 +1104,7 @@ namespace futures::detail {
         wait_for_parent() override {
             if constexpr (is_unwrap_and_continue_task<
                               deferred_function_type>::value) {
-                deferred_function_base::get().before_.wait();
+                this->get_function().before_.wait();
             }
         }
 

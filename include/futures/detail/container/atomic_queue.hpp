@@ -11,8 +11,8 @@
 #include <futures/detail/allocator/allocator_construct.hpp>
 #include <futures/detail/allocator/allocator_destroy.hpp>
 #include <futures/detail/allocator/allocator_rebind.hpp>
+#include <futures/detail/allocator/maybe_empty_allocator.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <atomic>
 #include <memory>
 
@@ -41,22 +41,12 @@ namespace futures::detail {
     /// @tparam Allocator Node allocator
     template <class T, class Allocator = std::allocator<T>>
     class atomic_queue
-        : private maybe_empty<
+        : private maybe_empty_node_allocator<
               allocator_rebind_t<Allocator, lock_free_queue_node<T>>>
-        , private maybe_empty<allocator_rebind_t<Allocator, T>>
+        , private maybe_empty_allocator<allocator_rebind_t<Allocator, T>>
     {
         using node = lock_free_queue_node<T>;
         using node_allocator_type = allocator_rebind_t<Allocator, node>;
-
-        allocator_rebind_t<Allocator, T>&
-        get_element_allocator() {
-            return maybe_empty<allocator_rebind_t<Allocator, T>>::get();
-        }
-
-        allocator_rebind_t<Allocator, node>&
-        get_node_allocator() {
-            return maybe_empty<allocator_rebind_t<Allocator, node>>::get();
-        }
 
     public:
         using allocator_type = allocator_rebind_t<Allocator, T>;
@@ -65,17 +55,18 @@ namespace futures::detail {
             node* old_head = head_.load(std::memory_order_relaxed);
             while (old_head) {
                 head_.store(old_head->next, std::memory_order_relaxed);
-                allocator_destroy(get_node_allocator(), old_head);
-                get_node_allocator().deallocate(old_head, 1);
+                allocator_destroy(this->get_node_allocator(), old_head);
+                this->get_node_allocator().deallocate(old_head, 1);
                 old_head = head_.load(std::memory_order_relaxed);
             }
         }
 
         explicit atomic_queue(const Allocator& alloc = std::allocator<T>{})
-            : maybe_empty<allocator_rebind_t<Allocator, node>>(alloc),
-              maybe_empty<allocator_rebind_t<Allocator, T>>(alloc) {
-            node* dummy_node_ptr = get_node_allocator().allocate(1);
-            allocator_construct(get_node_allocator(), dummy_node_ptr);
+            : maybe_empty_node_allocator<allocator_rebind_t<Allocator, node>>(
+                alloc),
+              maybe_empty_allocator<allocator_rebind_t<Allocator, T>>(alloc) {
+            node* dummy_node_ptr = this->get_node_allocator().allocate(1);
+            allocator_construct(this->get_node_allocator(), dummy_node_ptr);
             head_.store(dummy_node_ptr);
             tail_.store(dummy_node_ptr);
         }
@@ -95,17 +86,17 @@ namespace futures::detail {
         void
         push(const T& data) {
             // Construct node we should push
-            node* new_node_ptr = get_node_allocator().allocate(1);
-            allocator_construct(get_node_allocator(), new_node_ptr, data);
+            node* new_node_ptr = this->get_node_allocator().allocate(1);
+            allocator_construct(this->get_node_allocator(), new_node_ptr, data);
             push(new_node_ptr);
         }
 
         void
         push(T&& data) {
             // Construct node we should push
-            node* new_node_ptr = get_node_allocator().allocate(1);
+            node* new_node_ptr = this->get_node_allocator().allocate(1);
             allocator_construct(
-                get_node_allocator(),
+                this->get_node_allocator(),
                 new_node_ptr,
                 std::move(data));
             push(new_node_ptr);
@@ -139,8 +130,10 @@ namespace futures::detail {
                         // Update head_
                         if (head_.compare_exchange_weak(old_head, old_head_next))
                         {
-                            allocator_destroy(get_node_allocator(), old_head);
-                            get_node_allocator().deallocate(old_head, 1);
+                            allocator_destroy(
+                                this->get_node_allocator(),
+                                old_head);
+                            this->get_node_allocator().deallocate(old_head, 1);
                             return std::move(*ret);
                         }
                     }

@@ -12,7 +12,7 @@
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/futures.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/executor/detail/maybe_empty_executor.hpp>
 #include <execution>
 #include <variant>
 
@@ -49,11 +49,11 @@ namespace futures {
         /// compared to the cost of the whole procedure.
         ///
         template <class Executor>
-        class sort_graph : public detail::maybe_empty<Executor>
+        class sort_graph : public detail::maybe_empty_executor<Executor>
         {
         public:
             explicit sort_graph(const Executor &ex)
-                : detail::maybe_empty<Executor>(ex) {}
+                : detail::maybe_empty_executor<Executor>(ex) {}
 
             template <class P, class I, class S, class Fun>
             void
@@ -68,10 +68,9 @@ namespace futures {
                     std::for_each(first, last, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
-                    auto rhs_task = futures::async(
-                        detail::maybe_empty<Executor>::get(),
-                        [this, p, middle, last, f] {
-                        launch_sort_tasks(p, middle, last, f);
+                    auto rhs_task = futures::
+                        async(this->get_executor(), [this, p, middle, last, f] {
+                            launch_sort_tasks(p, middle, last, f);
                         });
 
                     // Launch tasks for lhs: [first, middle]

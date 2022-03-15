@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_FUTURE_STATE_HPP
 
 #include <futures/detail/utility/aligned_storage_for.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/futures/detail/operation_state.hpp>
 #include <futures/futures/detail/operation_state_storage.hpp>
 #include <futures/futures/detail/shared_state.hpp>

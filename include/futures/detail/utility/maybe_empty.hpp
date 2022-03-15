@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_DETAIL_UTILITY_EMPTY_BASE_HPP
-#define FUTURES_DETAIL_UTILITY_EMPTY_BASE_HPP
+#ifndef FUTURES_DETAIL_UTILITY_MAYBE_EMPTY_HPP
+#define FUTURES_DETAIL_UTILITY_MAYBE_EMPTY_HPP
 
 #include <utility>
 #include <type_traits>
@@ -110,7 +110,57 @@ namespace futures::detail {
     using conditional_base
         = maybe_empty<std::conditional_t<B, T, empty_value_type>, BaseIndex>;
 
+
+    // A macro to declare a new maybe_empty type with different
+    // member names, so that we can better differentiate the
+    // members and write pretty-printers
+#define FUTURES_MAYBE_EMPTY_TYPE(MEMBER)                \
+    template <class T, bool E = std::is_empty_v<T>>     \
+    class maybe_empty_##MEMBER                          \
+    {                                                   \
+    public:                                             \
+        using value_type = T;                           \
+                                                        \
+        template <class... Args>                        \
+        explicit maybe_empty_##MEMBER(Args &&...args)   \
+            : MEMBER##_(std::forward<Args>(args)...) {} \
+                                                        \
+        const T &get_##MEMBER() const noexcept {        \
+            return MEMBER##_;                           \
+        }                                               \
+                                                        \
+        T &get_##MEMBER() noexcept {                    \
+            return MEMBER##_;                           \
+        }                                               \
+    private:                                            \
+        T MEMBER##_;                                    \
+    };                                                  \
+                                                        \
+    template <class T>                                  \
+    class maybe_empty_##MEMBER<T, true> : public T      \
+    {                                                   \
+    public:                                             \
+        using value_type = T;                           \
+                                                        \
+        template <class... Args>                        \
+        explicit maybe_empty_##MEMBER(Args &&...args)   \
+            : T(std::forward<Args>(args)...) {}         \
+                                                        \
+        const T &get_##MEMBER() const noexcept {        \
+            return *this;                               \
+        }                                               \
+                                                        \
+        T &get_##MEMBER() noexcept {                    \
+            return *this;                               \
+        }                                               \
+    };                                                  \
+                                                        \
+    template <bool B, class T>                          \
+    using conditional_##MEMBER = maybe_empty_##MEMBER<  \
+        std::conditional_t<B, T, empty_value_type>>;
+
+
     /** @} */
 } // namespace futures::detail
 
-#endif // FUTURES_DETAIL_UTILITY_EMPTY_BASE_HPP
+#endif // FUTURES_DETAIL_UTILITY_MAYBE_EMPTY_HPP

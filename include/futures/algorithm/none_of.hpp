@@ -30,11 +30,11 @@ namespace futures {
         friend unary_invoke_algorithm_functor<none_of_functor>;
 
         template <class Executor>
-        class none_of_graph : public detail::maybe_empty<Executor>
+        class none_of_graph : public detail::maybe_empty_executor<Executor>
         {
         public:
             explicit none_of_graph(const Executor &ex)
-                : detail::maybe_empty<Executor>(ex) {}
+                : detail::maybe_empty_executor<Executor>(ex) {}
 
             template <class P, class I, class S, class Fun>
             bool
@@ -53,7 +53,7 @@ namespace futures {
                         bool,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            detail::maybe_empty<Executor>::get(),
+                            this->get_executor(),
                             [this, p, middle, last, f] {
                         return launch_none_of_tasks(p, middle, last, f);
                             });

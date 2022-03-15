@@ -10,9 +10,9 @@
 
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
+#include <futures/detail/allocator/maybe_empty_allocator.hpp>
 #include <futures/detail/exception/scope_guard.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -74,7 +74,7 @@ namespace futures::detail {
         class AllowHeap = std::true_type,
         class SizeType = size_t,
         class GrowthFactor = std::ratio<3, 2>>
-    class small_vector : public maybe_empty<Allocator>
+    class small_vector : public maybe_empty_allocator<Allocator>
     {
     public:
         /// @name Common container types
@@ -114,10 +114,10 @@ namespace futures::detail {
 
         /// Copy constructor
         small_vector(const small_vector &rhs)
-            : maybe_empty<Allocator>(
+            : maybe_empty_allocator<Allocator>(
                 std::allocator_traits<allocator_type>::
                     select_on_container_copy_construction(
-                        rhs.maybe_empty<Allocator>::get())) {
+                        rhs.get_allocator())) {
             if constexpr (should_copy_inline) {
                 if (rhs.is_inline()) {
                     copy_inline_trivial(rhs);
@@ -142,11 +142,11 @@ namespace futures::detail {
 
         /// Move constructor
         small_vector(small_vector &&rhs) noexcept
-            : maybe_empty<Allocator>(
+            : maybe_empty_allocator<Allocator>(
                 std::allocator_traits<
                     Allocator>::propagate_on_container_move_assignment::value ?
-                    std::move(rhs.maybe_empty<Allocator>::get()) :
-                    rhs.get()) {
+                    std::move(rhs.get_allocator()) :
+                    rhs.get_allocator()) {
             if (rhs.is_external()) {
                 this->data_.heap_storage_.pointer_ = rhs.data_.heap_storage_
                                                          .pointer_;
@@ -188,7 +188,7 @@ namespace futures::detail {
             if constexpr (std::allocator_traits<allocator_type>::
                               propagate_on_container_copy_assignment::value)
             {
-                maybe_empty<Allocator>::get() = rhs.alloc_;
+                this->get_allocator() = rhs.alloc_;
             }
 
             if constexpr (should_copy_inline) {
@@ -232,10 +232,9 @@ namespace futures::detail {
                     std::make_move_iterator(rhs.end()));
             } else {
                 if constexpr (std::is_empty_v<allocator_type>) {
-                    maybe_empty<Allocator>::get() = rhs.maybe_empty<
-                        Allocator>::get();
+                    this->get_allocator() = rhs.get_allocator();
                 } else {
-                    maybe_empty<Allocator>::get() = (std::move(rhs.alloc_));
+                    this->get_allocator() = std::move(rhs.get_allocator());
                 }
                 move_internals(std::move(rhs));
             }
@@ -291,8 +290,8 @@ namespace futures::detail {
             typename InitFunc,
             std::enable_if_t<std::is_invocable_v<InitFunc, void *>, int> = 0>
         small_vector(size_type n, InitFunc &&func, const allocator_type &alloc)
-            : maybe_empty<Allocator>() {
-            maybe_empty<Allocator>::get() = (alloc);
+            : maybe_empty_allocator<Allocator>() {
+            this->get_allocator() = alloc;
             make_size(n);
             assert(size() == 0);
             this->increment_internal_size(n);
@@ -345,7 +344,7 @@ namespace futures::detail {
             Iterator first,
             Iterator last,
             const allocator_type &alloc = allocator_type()) {
-            maybe_empty<Allocator>::get() = alloc;
+            this->get_allocator() = alloc;
             // Handle input iterators
             constexpr bool is_input_iterator = std::is_same_v<
                 typename std::iterator_traits<Iterator>::iterator_category,
@@ -639,7 +638,7 @@ namespace futures::detail {
                 constexpr size_type max_with_mask = size_type(clear_size_mask);
                 return std::min<size_type>(
                     std::allocator_traits<allocator_type>::max_size(
-                        maybe_empty<Allocator>::get()),
+                        this->get_allocator()),
                     max_with_mask);
             }
         }
@@ -1205,7 +1204,7 @@ namespace futures::detail {
         void
         free_heap() {
             if (is_external()) {
-                auto alloc_instance = maybe_empty<Allocator>::get();
+                auto alloc_instance = this->get_allocator();
                 std::allocator_traits<allocator_type>::
                     deallocate(alloc_instance, data(), capacity());
                 data_.heap_storage_.pointer_ = nullptr;
@@ -1294,7 +1293,7 @@ namespace futures::detail {
                     // New heap pointer
                     size_type new_capacity = std::
                         max(new_size, compute_new_size());
-                    auto alloc_instance = maybe_empty<Allocator>::get();
+                    auto alloc_instance = this->get_allocator();
                     value_type *new_heap_ptr = std::allocator_traits<
                         allocator_type>::allocate(alloc_instance, new_capacity);
 
@@ -1812,7 +1811,7 @@ namespace futures::detail {
                 (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
             N_INPUT)>
     constexpr small_vector<std::remove_cv_t<T>, N_OUTPUT>
-    to_small_vector(T (&&a)[N_INPUT]) {
+    to_small_vector(T(&&a)[N_INPUT]) {
         return small_vector<std::remove_cv_t<T>, N_OUTPUT>(a, a + N_INPUT);
     }
 

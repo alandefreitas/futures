@@ -36,11 +36,11 @@ namespace futures {
         friend find_if_not_functor;
 
         template <class Executor, class I>
-        class find_if_graph : public detail::maybe_empty<Executor>
+        class find_if_graph : public detail::maybe_empty_executor<Executor>
         {
         public:
             explicit find_if_graph(const Executor &ex)
-                : detail::maybe_empty<Executor>(ex) {}
+                : detail::maybe_empty_executor<Executor>(ex) {}
 
             template <class P, class S, class Fun>
             std::pair<I, std::bitset<64>>
@@ -73,7 +73,7 @@ namespace futures {
                         std::pair<I, std::bitset<64>>,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            detail::maybe_empty<Executor>::get(),
+                            this->get_executor(),
                             [this,
                              p,
                              middle,

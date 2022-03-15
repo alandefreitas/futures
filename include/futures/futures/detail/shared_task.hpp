@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_SHARED_TASK_HPP
 
 #include <futures/detail/allocator/allocator_rebind.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/futures/detail/operation_state.hpp>
 
@@ -71,8 +71,8 @@ namespace futures::detail {
     class shared_task
         : public shared_task_base<R, Options, Args...>
 #ifndef FUTURES_DOXYGEN
-        , public maybe_empty<Fn>
-        , public maybe_empty<allocator_rebind_t<
+        , public maybe_empty_function<Fn>
+        , public maybe_empty_allocator<allocator_rebind_t<
               Allocator,
               shared_task<Fn, Allocator, Options, R, Args...>>>
 #endif
@@ -92,15 +92,16 @@ namespace futures::detail {
         /// Construct a task object for the specified allocator and
         /// function, copying the function
         shared_task(const allocator_type &alloc, const Fn &fn)
-            : shared_task_base<R, Options, Args...>{}, maybe_empty<Fn>{ fn },
-              maybe_empty<allocator_type>{ alloc } {}
+            : shared_task_base<R, Options, Args...>{},
+              maybe_empty_function<Fn>{ fn },
+              maybe_empty_allocator<allocator_type>{ alloc } {}
 
         /// Construct a task object for the specified allocator and
         /// function, moving the function
         shared_task(const allocator_type &alloc, Fn &&fn)
             : shared_task_base<R, Options, Args...>{},
-              maybe_empty<Fn>{ std::move(fn) },
-              maybe_empty<allocator_type>{ alloc } {}
+              maybe_empty_function<Fn>{ std::move(fn) },
+              maybe_empty_allocator<allocator_type>{ alloc } {}
 
         /// No copy constructor
         shared_task(shared_task const &) = delete;
@@ -132,9 +133,9 @@ namespace futures::detail {
         typename std::shared_ptr<shared_task_base<R, Options, Args...>>
         reset() final {
             return std::allocate_shared<shared_task>(
-                maybe_empty<allocator_type>::get(),
-                maybe_empty<allocator_type>::get(),
-                std::move(maybe_empty<Fn>::get()));
+                this->get_allocator(),
+                this->get_allocator(),
+                std::move(this->get_function()));
         }
 
         typename stop_source_base::value_type
@@ -148,11 +149,11 @@ namespace futures::detail {
         apply(UArgs &&...args) {
             try {
                 if constexpr (std::is_void_v<R>) {
-                    std::apply(maybe_empty<Fn>::get(), std::make_tuple(args...));
+                    std::apply(this->get_function(), std::make_tuple(args...));
                     this->set_value();
                 } else {
                     this->set_value(std::apply(
-                        maybe_empty<Fn>::get(),
+                        this->get_function(),
                         std::make_tuple(args...)));
                 }
             }

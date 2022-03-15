@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
 #include <futures/detail/utility/aligned_storage_for.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <type_traits>
 
 namespace futures::detail {
@@ -162,11 +162,15 @@ namespace futures::detail {
         operation_state_storage() = default;
 
         operation_state_storage(const operation_state_storage& other) {
-            set_value(other.get());
+            if (other.has_value_) {
+                set_value(other.get());
+            }
         }
 
         operation_state_storage(operation_state_storage&& other) noexcept {
-            set_value(std::move(other.get()));
+            if (other.has_value_) {
+                set_value(std::move(other.get()));
+            }
         }
 
         template <class... Args>
@@ -176,12 +180,18 @@ namespace futures::detail {
 
         operation_state_storage&
         operator=(const operation_state_storage& other) {
-            set_value(other.get());
+            destroy();
+            if (other.has_value_) {
+                set_value(other.get());
+            }
         }
 
         operation_state_storage&
         operator=(operation_state_storage&& other) noexcept {
-            set_value(other.get());
+            destroy();
+            if (other.has_value_) {
+                set_value(other.get());
+            }
         }
 
         template <class... Args>

@@ -10,7 +10,7 @@
 #define FUTURES_FUTURES_PROMISE_HPP
 
 #include <futures/futures/basic_future.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/futures/detail/operation_state.hpp>
 #include <memory>

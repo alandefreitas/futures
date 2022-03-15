@@ -10,7 +10,7 @@
 
 #include <futures/futures/basic_future.hpp>
 #include <futures/futures/future_options.hpp>
-#include <futures/detail/utility/empty_base.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/futures/detail/shared_task.hpp>
 
 namespace futures {

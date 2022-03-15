@@ -31,11 +31,11 @@ namespace futures {
         friend binary_invoke_algorithm_functor<reduce_functor>;
 
         template <class Executor, class T>
-        class reduce_graph : public detail::maybe_empty<Executor>
+        class reduce_graph : public detail::maybe_empty_executor<Executor>
         {
         public:
             explicit reduce_graph(const Executor &ex)
-                : detail::maybe_empty<Executor>(ex) {}
+                : detail::maybe_empty_executor<Executor>(ex) {}
 
             template <class P, class I, class S, class Fun>
             T
@@ -54,7 +54,7 @@ namespace futures {
                         T,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            detail::maybe_empty<Executor>::get(),
+                            this->get_executor(),
                             [this, p, middle, last, i, f] {
                         return launch_reduce_tasks(p, middle, last, i, f);
                             });

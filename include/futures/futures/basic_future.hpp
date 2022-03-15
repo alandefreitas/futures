@@ -15,8 +15,8 @@
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
-#include <futures/detail/utility/empty_base.hpp>
 #include <futures/detail/utility/maybe_copyable.hpp>
+#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/futures/detail/continuations_source.hpp>
 #include <futures/futures/detail/future_state.hpp>
 #include <futures/futures/detail/share_if_not_shared.hpp>
