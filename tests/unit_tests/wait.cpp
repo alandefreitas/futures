@@ -25,15 +25,12 @@ TEST_CASE(TEST_CASE_PREFIX "Wait") {
                             decltype(async_fn),
                             std::function<int()>>;
                         std::vector<future_t> fs;
-                        fs.emplace_back(async_fn(std::function<int()>([]() {
-                            return 2;
-                        })));
-                        fs.emplace_back(async_fn(std::function<int()>([]() {
-                            return 3;
-                        })));
-                        fs.emplace_back(async_fn(std::function<int()>([]() {
-                            return 4;
-                        })));
+                        fs.emplace_back(
+                            async_fn(std::function<int()>([]() { return 2; })));
+                        fs.emplace_back(
+                            async_fn(std::function<int()>([]() { return 3; })));
+                        fs.emplace_back(
+                            async_fn(std::function<int()>([]() { return 4; })));
                         SECTION("Iterators") {
                             wait_for_all(fs.begin(), fs.end());
                             REQUIRE(
@@ -148,13 +145,14 @@ TEST_CASE(TEST_CASE_PREFIX "Wait") {
                             break;
                         }
                         default:
-                            REQUIRE(false);
+                            FAIL("Impossible switch case");
                         }
                     }
                 }
             }
         }
     };
+
     test_launch_function("Async", [](auto &&...args) {
         return futures::async(std::forward<decltype(args)>(args)...);
     });

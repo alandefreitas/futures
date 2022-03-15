@@ -38,6 +38,17 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
                         REQUIRE(r.get() == 6);
                     }
                 }
+                SECTION("Non-trivial return") {
+                    SECTION("No args") {
+                        auto r = async_fn([]() { return std::string("Hello"); });
+                        REQUIRE(r.get() == "Hello");
+                    }
+
+                    SECTION("With args") {
+                        auto r = async_fn([](int c) { return std::string(5, c); }, '_');
+                        REQUIRE(r.get() == "_____");
+                    }
+                }
             }
 
             SECTION("Custom executor") {
@@ -85,9 +96,11 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
         std::is_same_v<
             deferred_options,
             detail::remove_future_option_t<shared_opt, deferred_options>>);
+
     test_launch_function("Async", [](auto &&...args) {
         return async(std::forward<decltype(args)>(args)...);
     });
+
     test_launch_function("Schedule", [](auto &&...args) {
         return schedule(std::forward<decltype(args)>(args)...);
     });
