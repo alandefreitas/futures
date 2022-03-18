@@ -8,8 +8,8 @@
 #ifndef FUTURES_FUTURES_DETAIL_FUTURE_STATE_HPP
 #define FUTURES_FUTURES_DETAIL_FUTURE_STATE_HPP
 
-#include <futures/detail/utility/aligned_storage_for.hpp>
 #include <futures/detail/utility/maybe_empty.hpp>
+#include <futures/detail/utility/byte.hpp>
 #include <futures/futures/detail/operation_state.hpp>
 #include <futures/futures/detail/operation_state_storage.hpp>
 #include <futures/futures/detail/shared_state.hpp>
@@ -80,12 +80,26 @@ namespace futures::detail {
         static constexpr bool is_future_state_type_v = is_future_state_type<
             T>::value;
 
-        using aligned_storage_t = aligned_storage_for<
-            empty_t,
-            operation_storage_t,
-            shared_storage_t,
-            operation_state_t,
-            shared_state_t>;
+        union aligned_storage_t
+        {
+            // this union effectively works as aligned_storage_for<...>
+            // while still much easier to debug
+            empty_t empty_;
+            operation_storage_t operation_storage_;
+            shared_storage_t shared_storage_;
+            operation_state_t operation_state_;
+            shared_state_t shared_state_;
+
+            aligned_storage_t() {
+                this->empty_ = empty_t{};
+            }
+
+            ~aligned_storage_t() {
+                // needs to know which member is active, only possible in
+                // the union-like class future_state
+                // the whole union occupies max({Ts}...)
+            };
+        };
 
         /**
          * @}
@@ -742,12 +756,12 @@ namespace futures::detail {
          */
         constexpr byte*
         data() {
-            return data_.data();
+            return reinterpret_cast<byte*>(&data_);
         }
 
         constexpr const byte*
         data() const {
-            return data_.data();
+            return reinterpret_cast<const byte*>(&data_);
         }
 
         void

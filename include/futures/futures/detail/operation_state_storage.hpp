@@ -8,7 +8,6 @@
 #ifndef FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 #define FUTURES_FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
-#include <futures/detail/utility/aligned_storage_for.hpp>
 #include <futures/detail/utility/maybe_empty.hpp>
 #include <type_traits>
 
@@ -200,15 +199,14 @@ namespace futures::detail {
             if (has_value_) {
                 destroy();
             }
-            ::new (static_cast<void*>(value_.data()))
-                R(std::forward<Args>(args)...);
+            ::new (&data_.value_) R(std::forward<Args>(args)...);
             has_value_ = true;
         }
 
         R&
         get() {
             if (has_value_) {
-                return *reinterpret_cast<R*>(value_.data());
+                return data_.value_;
             }
             detail::throw_exception<promise_uninitialized>();
         }
@@ -222,7 +220,15 @@ namespace futures::detail {
             }
         }
 
-        detail::aligned_storage_for<R> value_{};
+        union aligned_storage
+        {
+            R value_;
+
+            aligned_storage() {}
+            ~aligned_storage() {}
+        };
+
+        aligned_storage data_{};
         bool has_value_{ false };
     };
 
