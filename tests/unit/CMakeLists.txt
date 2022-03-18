@@ -117,6 +117,10 @@ macro(add_futures_test TEST_NAME)
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
             endif ()
 
+            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
+            endif ()
+
             # Define test case prefix
             if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
@@ -137,20 +141,29 @@ endmacro()
 ######################################################
 # Separate CMake tests                               #
 ######################################################
+# Detail
 add_futures_test(asio_executors)
 add_futures_test(queue)
-add_futures_test(shared_state)
+add_futures_test(operation_state)
+
+# Futures
 add_futures_test(futures_types)
 add_futures_test(make_ready)
+add_futures_test(exceptions)
 add_futures_test(launch)
 add_futures_test(wait)
+
+# Extensions
+add_futures_test(shared_futures)
+add_futures_test(cancel_futures)
+add_futures_test(continuation_stop)
+
+# Adaptors
 add_futures_test(continuations)
 add_futures_test(conjunction)
 add_futures_test(disjunction)
-add_futures_test(cancel_futures)
-add_futures_test(continuation_stop)
-add_futures_test(exceptions)
-add_futures_test(shared_futures)
+
+# Algorithms
 add_futures_test(futures-algorithm)
 
 #####################################################

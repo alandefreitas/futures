@@ -1,4 +1,4 @@
-> C++ Lock-Free Task Programming with Asio Executors
+> C++ Task Programming
 
 [![Futures](img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 

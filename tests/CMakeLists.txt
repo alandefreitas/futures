@@ -1,1 +1,2 @@
-add_subdirectory(unit_tests)
+add_subdirectory(unit)
+add_subdirectory(stress)

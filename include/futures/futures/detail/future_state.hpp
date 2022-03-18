@@ -520,7 +520,9 @@ namespace futures::detail {
         wait_for_impl(
             std::conditional_t<is_const, const future_state, future_state>& s,
             const std::chrono::duration<Rep, Period>& timeout_duration) {
-            // Ensure the state type is shared
+            // Ensure an inline state type becomes shared because we cannot
+            // guarantee what happens to the address after this operation
+            // times out
             if constexpr (!is_const) {
                 if (s.type_id_ == type_id::inline_state) {
                     s.share();
@@ -560,7 +562,9 @@ namespace futures::detail {
         wait_until_impl(
             std::conditional_t<is_const, const future_state, future_state>& s,
             const std::chrono::time_point<Clock, Duration>& timeout_time) {
-            // Ensure the state type is shared
+            // Ensure an inline state type becomes shared because we cannot
+            // guarantee what happens to the address after this operation
+            // times out
             if constexpr (is_const) {
                 if (s.type_id_ == type_id::inline_state) {
                     s.share();

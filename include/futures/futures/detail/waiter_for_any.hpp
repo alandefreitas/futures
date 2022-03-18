@@ -94,7 +94,7 @@ namespace futures::detail {
         std::size_t
         wait() {
             registered_waiter_range_lock lk(waiters_);
-            std::size_t ready_idx;
+            std::size_t ready_idx(future_count);
             cv.wait(lk, [this, &ready_idx]() {
                 for (auto const &waiter: waiters_) {
                     if (waiter.is_ready()) {
@@ -152,8 +152,8 @@ namespace futures::detail {
 
     private:
         /// Type of handle in the future object used to notify completion
-        using notify_when_ready_handle = detail::operation_state_base<
-            false>::notify_when_ready_handle;
+        using notify_when_ready_handle = detail::operation_state_base::
+            notify_when_ready_handle;
 
         /// Helper class to store information about each of the futures
         /// we are waiting for

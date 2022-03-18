@@ -294,8 +294,8 @@ which would also avoid the synchronization overhead for continuations:
   a [custom tag](https://cppalliance.org/richard/2021/10/10/RichardsOctoberUpdate.html#asio-and-the-power-of-completion-tokens)
   indicating the initiating function should return a future type representing the result of the second operation.
 - [Lazy futures](https://github.com/facebookexperimental/libunifex/blob/main/doc/concepts.md#starting-an-async-operation):
-  Likewise, lock-free continuations can be implemented as a future type such that the continuation is guaranteed to be
-  available when the first task starts.
+  Likewise, lock-free continuations can be implemented as a (deferred) future type such that the continuation is 
+  guaranteed to be available when the first task starts.
 
 This is what these models would look like:
 
@@ -617,7 +617,7 @@ deferred work. We implement optimizations possible to each future types while st
     - The future adaptors still work for existing future types, such as [std::future] by polling.
     - Integrations with Asio are provided, such as completion tokens and async IO operations.
 - Data races
-    - Both eager and lazy futures are lock-free through atomic operations.
+    - Both eager and lazy futures continuations are lock-free through atomic operations.
     - Future types might indicate [**deferred** work](#deferred-futures) at compile-time or be eager, avoiding the
       synchronization costs of attaching continuations and other optimizations.
     - Eager futures use lock-free operations and data structures to minimize synchronization costs.

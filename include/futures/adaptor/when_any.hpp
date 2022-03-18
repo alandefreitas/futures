@@ -25,6 +25,7 @@
 #include <optional>
 #include <condition_variable>
 #include <shared_mutex>
+#include <futures/futures/wait_for_any.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors

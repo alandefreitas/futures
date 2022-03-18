@@ -14,6 +14,7 @@ namespace futures::detail {
     /** @addtogroup futures Futures
      *  @{
      */
+
     /// An object that temporarily unlocks a lock
     struct relocker
     {

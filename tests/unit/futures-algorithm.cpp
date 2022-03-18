@@ -1,7 +1,7 @@
 #include <futures/futures.hpp>
 #include <array>
 #include <catch2/catch.hpp>
-#if __has_include(<futures/algorithm.hpp>)
+#ifndef FUTURES_IS_SINGLE_HEADER
 #    include <futures/algorithm.hpp>
 #endif
 

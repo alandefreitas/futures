@@ -55,6 +55,25 @@ namespace futures::detail {
             return value_.load(order);
         }
 
+        /// Replaces the value of the atomic object with non-atomic argument
+        /**
+         * Atomically replaces the current value with desired. Memory is
+         * affected according to the value of order.
+         *
+         * `order` must be one of std::memory_order_relaxed,
+         * std::memory_order_release or std::memory_order_seq_cst.
+         *
+         * Otherwise the behavior is undefined.
+         *
+         * @param desired the value to store into the atomic variable
+         * @param order memory order constraints to enforce
+         */
+        void
+        store(
+            T desired,
+            std::memory_order order = std::memory_order_seq_cst) noexcept {
+            value_.store(desired, order);
+        }
 
         /// Atomically replaces the underlying value with desired
         /**
@@ -129,6 +148,27 @@ namespace futures::detail {
             const noexcept {
             (void) order;
             return value_;
+        }
+
+        /// Replaces the value of the atomic object with non-atomic argument
+        /**
+         * Atomically replaces the current value with desired. Memory is
+         * affected according to the value of order.
+         *
+         * `order` must be one of std::memory_order_relaxed,
+         * std::memory_order_release or std::memory_order_seq_cst.
+         *
+         * Otherwise the behavior is undefined.
+         *
+         * @param desired the value to store into the atomic variable
+         * @param order memory order constraints to enforce
+         */
+        void
+        store(
+            T desired,
+            std::memory_order order = std::memory_order_seq_cst) noexcept {
+            (void) order;
+            value_ = desired;
         }
 
         /// Atomically replaces the underlying value with desired

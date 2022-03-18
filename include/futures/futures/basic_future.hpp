@@ -147,8 +147,7 @@ namespace futures {
          * notification handle lives, so we can also expose it in the future
          * type.
          */
-        using operation_state_base = detail::operation_state_base<
-            Options::is_always_deferred>;
+        using operation_state_base = detail::operation_state_base;
 
         /// Determine the type of notification handles
         /**
