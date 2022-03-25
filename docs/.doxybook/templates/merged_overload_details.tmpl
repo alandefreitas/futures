@@ -121,7 +121,8 @@ template <{% for param in overload.templateParams %}{{param.typePlain}}{{param.n
 {# Render return type -#}
 {% if existsIn(overload, "typePlain") -%}
 {%- if overload.typePlain in ["__implementation_defined__", "auto", "decltype(auto)"] -%}
-/* see below */{% else -%}
+/* see below */{% else if overload.typePlain == "decltype(auto) constexpr" -%}
+constexpr /* see below */{% else -%}
 {{- overload.typePlain -}}
 {%- endif %} {% endif %}
 {# Render function name -#}

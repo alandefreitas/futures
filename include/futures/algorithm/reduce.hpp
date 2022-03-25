@@ -92,6 +92,32 @@ namespace futures {
                 tasks_{};
         };
 
+        template <
+            class I,
+            class S,
+            class T,
+            class Fun = std::plus<>
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                std::is_same_v<iter_value_t<I>, T> &&
+                is_indirectly_binary_invocable_v<Fun, I, I> &&
+                std::is_copy_constructible_v<Fun>,
+                // clang-format on
+                int> = 0
+#endif
+            >
+        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
+        inline_accumulate(I first, S last, T init, Fun op) {
+            for (; first != last; ++first) {
+                init = op(std::move(init), *first); // std::move since C++20
+            }
+            return init;
+        }
+
         /// Complete overload of the reduce algorithm
         ///
         /// The reduce algorithm is equivalent to a version std::accumulate
@@ -127,10 +153,18 @@ namespace futures {
                 int> = 0
 #endif
             >
-        T
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
         run(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
-            return reduce_graph<E, T>(ex).reduce(p, first, last, i, f);
+            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                return inline_accumulate(first, last, i, f);
+            } else {
+                if (detail::is_constant_evaluated()) {
+                    return inline_accumulate(first, last, i, f);
+                } else {
+                    return reduce_graph<E, T>(ex).reduce(p, first, last, i, f);
+                }
+            }
         }
     };
 

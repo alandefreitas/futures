@@ -35,8 +35,8 @@ namespace futures {
         T,
         std::void_t<
             // clang-format off
-            decltype(*begin(std::declval<T>())),
-            decltype(*end(std::declval<T>()))
+            decltype(*std::begin(std::declval<T>())),
+            decltype(*std::end(std::declval<T>()))
             // clang-format on
             >> : std::true_type
     {};

@@ -12,6 +12,7 @@
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/futures.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/detail/utility/is_constant_evaluated.hpp>
 #include <futures/executor/detail/maybe_empty_executor.hpp>
 #include <execution>
 #include <variant>
@@ -32,22 +33,24 @@ namespace futures {
 
         /// Internal class that takes care of the sorting tasks and its
         /// incomplete tasks
-        ///
-        /// If we could make sure no executors would ever block, recursion
-        /// wouldn't be a problem, and we wouldn't need this class. In fact,
-        /// this is what most related libraries do, counting on the executor to
-        /// be some kind of work stealing thread pool.
-        ///
-        /// However, we cannot count on that, or these algorithms wouldn't work
-        /// for many executors in which we are interested, such as an io_context
-        /// or a thread pool that doesn't steel work (like asio's). So we need
-        /// to separate the process of launching the tasks from the process of
-        /// waiting for them. Fortunately, we can count that most executors
-        /// wouldn't need this blocking procedure very often, because that's
-        /// what usually make them useful executors. We also assume that, unlike
-        /// in the other applications, the cost of this reading lock is trivial
-        /// compared to the cost of the whole procedure.
-        ///
+        /**
+         * If we could make sure no executors would ever block, recursion
+         * wouldn't be a problem, and we wouldn't need this class. In fact,
+         * this is what most related libraries do, counting on the executor to
+         * be some kind of work stealing thread pool.
+         *
+         * However, we cannot count on that, or these algorithms wouldn't work
+         * for many executors in which we are interested, such as an io_context
+         * or a thread pool that doesn't steel work (like asio's). So we need
+         * to separate the process of launching the tasks from the process of
+         * waiting for them.
+         *
+         * Fortunately, we can count that most executors wouldn't need this
+         * blocking procedure very often, because that's what usually makes
+         * them useful executors. We also assume that, unlike in the other
+         * applications, the cost of this reading lock is trivial
+         * compared to the cost of the whole procedure and .
+         */
         template <class Executor>
         class sort_graph : public detail::maybe_empty_executor<Executor>
         {
@@ -117,6 +120,31 @@ namespace futures {
                 tasks_;
         };
 
+        template <
+            class I,
+            class S,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+
+            >
+        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR void
+        inline_for_each(I first, S last, Fun f) {
+            for (; first != last; ++first) {
+                f(*first);
+            }
+        }
+
         /// Complete overload of the for_each algorithm
         /// @tparam E Executor type
         /// @tparam P Partitioner type
@@ -138,14 +166,29 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<
-                is_executor_v<
-                    E> && is_partitioner_v<P, I, S> && is_input_iterator_v<I> && is_sentinel_for_v<S, I> && is_indirectly_unary_invocable_v<Fun, I> && std::is_copy_constructible_v<Fun>,
+                // clang-format off
+                is_executor_v<E> &&
+                is_partitioner_v<P, I, S> &&
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
                 int> = 0
 #endif
             >
-        void
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR void
         run(const E &ex, P p, I first, S last, Fun f) const {
-            sort_graph<E>(ex).sort(p, first, last, f);
+            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                inline_for_each(first, last, f);
+            } else {
+                if (detail::is_constant_evaluated()) {
+                    inline_for_each(first, last, f);
+                } else {
+                    sort_graph<E>(ex).sort(p, first, last, f);
+                }
+            }
         }
     };
 

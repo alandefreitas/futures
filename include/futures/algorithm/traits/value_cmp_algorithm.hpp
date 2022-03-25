@@ -37,13 +37,17 @@ namespace futures {
      *  @{
      */
 
-    /// CRTP class with the overloads for classes that look for
-    /// elements in a sequence with an unary function This includes
-    /// algorithms such as for_each, any_of, all_of, ...
+    /// Value-compare algorithm overloads
+    /**
+     * CRTP class with the overloads for classes that look for
+     * elements in a sequence with an unary function This includes
+     * algorithms such as for_each, any_of, all_of, ...
+     */
     template <class Derived>
     class value_cmp_algorithm_functor
     {
     public:
+        /// Complete overload
         template <
             class E,
             class P,
@@ -63,14 +67,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(const E &ex, P p, I first, S last, T f) const {
-            return Derived().run(ex, p, first, last, f);
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    first,
+                    last,
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    ex,
+                    p,
+                    first,
+                    last,
+                    std::move(f));
+            }
         }
 
-        /// execution policy instead of executor
-        ///
-        /// we can't however, count on std::is_execution_policy being defined
+        /// Execution policy instead of executor
         template <
             class E,
             class P,
@@ -91,13 +107,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(const E &, P p, I first, S last, T f) const {
-            return Derived()
-                .run(make_policy_executor<E, I, S>(), p, first, last, f);
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    first,
+                    last,
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    make_policy_executor<E, I, S>(),
+                    p,
+                    first,
+                    last,
+                    std::move(f));
+            }
         }
 
-        /// @overload Ranges
+        /// Overload for Ranges
         template <
             class E,
             class P,
@@ -116,13 +145,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(const E &ex, P p, R &&r, T f) const {
-            return Derived()
-                .run(ex, p, std::begin(r), std::end(r), std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    ex,
+                    p,
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            }
         }
 
-        /// @overload Iterators / default parallel executor
+        /// Overload for Iterators / default parallel executor
         template <
             class P,
             class I,
@@ -141,13 +183,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(P p, I first, S last, T f) const {
-            return Derived()
-                .run(make_default_executor(), p, first, last, std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    first,
+                    last,
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    make_default_executor(),
+                    p,
+                    first,
+                    last,
+                    std::move(f));
+            }
         }
 
-        /// @overload Ranges / default parallel executor
+        /// Overload for Ranges / default parallel executor
         template <
             class P,
             class R,
@@ -164,17 +219,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(P p, R &&r, T f) const {
-            return Derived().run(
-                make_default_executor(),
-                p,
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    make_default_executor(),
+                    p,
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            }
         }
 
-        /// @overload Iterators / default partitioner
+        /// Overload for Iterators / default partitioner
         template <
             class E,
             class I,
@@ -192,17 +256,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(const E &ex, I first, S last, T f) const {
-            return operator()(
-                ex,
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return operator()(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    first,
+                    last,
+                    std::move(f));
+            } else {
+                return operator()(
+                    ex,
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
+            }
         }
 
-        /// @overload Ranges / default partitioner
+        /// Overload for Ranges / default partitioner
         template <
             class E,
             class R,
@@ -219,17 +292,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(const E &ex, R &&r, T f) const {
-            return operator()(
-                ex,
-                make_default_partitioner(std::forward<R>(r)),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return operator()(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            } else {
+                return operator()(
+                    ex,
+                    make_default_partitioner(std::forward<R>(r)),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            }
         }
 
-        /// @overload Iterators / default executor / default partitioner
+        /// Overload for Iterators / default executor / default partitioner
         template <
             class I,
             class S,
@@ -246,17 +328,26 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(I first, S last, T f) const {
-            return Derived().run(
-                make_default_executor(),
-                make_default_partitioner(first, last),
-                first,
-                last,
-                std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    first,
+                    last,
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    make_default_executor(),
+                    make_default_partitioner(first, last),
+                    first,
+                    last,
+                    std::move(f));
+            }
         }
 
-        /// @overload Ranges / default executor / default partitioner
+        /// Overload for Ranges / default executor / default partitioner
         template <
             class R,
             class T
@@ -271,14 +362,23 @@ namespace futures {
                 int> = 0
 #endif
             >
-        decltype(auto)
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
         operator()(R &&r, T f) const {
-            return Derived().run(
-                make_default_executor(),
-                make_default_partitioner(r),
-                std::begin(r),
-                std::end(r),
-                std::move(f));
+            if (detail::is_constant_evaluated()) {
+                return Derived().run(
+                    make_inline_executor(),
+                    halve_partitioner(1),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            } else {
+                return Derived().run(
+                    make_default_executor(),
+                    make_default_partitioner(r),
+                    std::begin(r),
+                    std::end(r),
+                    std::move(f));
+            }
         }
     };
     /** @}*/

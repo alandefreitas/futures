@@ -64,10 +64,9 @@ namespace futures {
     }
 
     /// Make an inline executor object
-    inline inline_executor
+    constexpr inline_executor
     make_inline_executor() {
-        asio::execution_context &ctx = inline_execution_context();
-        return inline_executor{ &ctx };
+        return inline_executor{};
     }
 
     /** @} */ // @addtogroup executors Executors

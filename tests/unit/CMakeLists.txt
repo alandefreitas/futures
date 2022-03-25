@@ -146,7 +146,7 @@ add_futures_test(conjunction)
 add_futures_test(disjunction)
 
 # Algorithms
-add_futures_test(futures-algorithm)
+add_futures_test(algorithm)
 
 #####################################################
 # All tests as a single target                      #

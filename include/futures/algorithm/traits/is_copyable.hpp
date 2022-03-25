@@ -41,8 +41,8 @@ namespace futures {
             std::is_copy_constructible_v<T> &&
             is_movable_v<T> &&
             is_assignable_from_v<T&, T&> &&
-            is_assignable_from_v<T&, const T&> &&
-            is_assignable_from_v<T&, const T>
+            is_assignable_from_v<T&, std::add_const_t<T>&> &&
+            is_assignable_from_v<T&, std::add_const_t<T>>
             // clang-format on
             >> : std::true_type
     {};

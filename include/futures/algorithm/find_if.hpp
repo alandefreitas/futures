@@ -158,6 +158,33 @@ namespace futures {
                 tasks_{};
         };
 
+        template <
+            class I,
+            class S,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
+        inline_find_if(I first, S last, Fun p) {
+            for (; first != last; ++first) {
+                if (p(*first)) {
+                    return first;
+                }
+            }
+            return last;
+        }
+
         /// Complete overload of the find_if algorithm
         /// @tparam E Executor type
         /// @tparam P Partitioner type
@@ -191,9 +218,17 @@ namespace futures {
                 int> = 0
 #endif
             >
-        I
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
         run(const E &ex, P p, I first, S last, Fun f) const {
-            return find_if_graph<E, I>(ex).find_if(p, first, last, f);
+            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                return inline_find_if(first, last, f);
+            } else {
+                if (detail::is_constant_evaluated()) {
+                    return inline_find_if(first, last, f);
+                } else {
+                    return find_if_graph<E, I>(ex).find_if(p, first, last, f);
+                }
+            }
         }
     };
 

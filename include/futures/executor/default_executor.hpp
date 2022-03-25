@@ -10,6 +10,7 @@
 
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/config/asio_include.hpp>
+#include <futures/detail/utility/is_constant_evaluated.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -25,21 +26,26 @@ namespace futures {
      *  - It never returns 0, 1 is returned instead.
      *  - It is guaranteed to remain constant for the duration of the program.
      *
+     *  It also improves on hardware_concurrency to provide a default value
+     *  of 1 when the function is being executed at compile time. This allows
+     *  partitioners and algorithms to be constexpr.
+     *
      *  @see
      *  https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
      *
      *  @return Number of concurrent threads supported. If the value is not
      *  well-defined or not computable, returns 1.
      **/
-    std::size_t
-    hardware_concurrency() noexcept;
-    inline std::size_t
+    FUTURES_CONSTANT_EVALUATED_CONSTEXPR std::size_t
     hardware_concurrency() noexcept {
         // Cache the value because calculating it may be expensive
-        static std::size_t value = std::thread::hardware_concurrency();
-
-        // Always return at least 1 core
-        return (std::max)(static_cast<std::size_t>(1), value);
+        if (detail::is_constant_evaluated()) {
+            return 1;
+        } else {
+            std::size_t value = std::thread::hardware_concurrency();
+            // Return at least 1 core
+            return (std::max)(static_cast<std::size_t>(1), value);
+        }
     }
 
     /// The default execution context for async operations

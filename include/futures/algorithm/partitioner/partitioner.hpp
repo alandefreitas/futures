@@ -44,7 +44,7 @@ namespace futures {
     public:
         /// Halve partition constructor
         /// @param min_grain_size_ Minimum grain size used to split ranges
-        inline explicit halve_partitioner(std::size_t min_grain_size_)
+        constexpr explicit halve_partitioner(std::size_t min_grain_size_)
             : min_grain_size_(min_grain_size_) {}
 
         /// Split a range of elements
@@ -107,14 +107,14 @@ namespace futures {
 
     /// Determine a reasonable minimum grain size depending on the number
     /// of elements in a sequence
-    inline std::size_t
+    FUTURES_CONSTANT_EVALUATED_CONSTEXPR std::size_t
     make_grain_size(std::size_t n) {
         return std::clamp(
             n
                 / (8
                    * std::
-                       max(std::thread::hardware_concurrency(),
-                           static_cast<unsigned int>(1))),
+                       max(futures::hardware_concurrency(),
+                           static_cast<std::size_t>(1))),
             size_t(1),
             size_t(2048));
     }

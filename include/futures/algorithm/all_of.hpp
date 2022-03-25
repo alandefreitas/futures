@@ -111,6 +111,32 @@ namespace futures {
                 tasks_{};
         };
 
+        template <
+            class I,
+            class S,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
+        inline_all_of(I first, S last, Fun p) {
+            for (; first != last; ++first) {
+                if (!p(*first)) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /// Complete overload of the all_of algorithm
         /// @tparam E Executor type
@@ -145,9 +171,17 @@ namespace futures {
                 int> = 0
 #endif
             >
-        bool
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
         run(const E &ex, P p, I first, S last, Fun f) const {
-            return all_of_graph<E>(ex).all_of(p, first, last, f);
+            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                return inline_all_of(first, last, f);
+            } else {
+                if (detail::is_constant_evaluated()) {
+                    return inline_all_of(first, last, f);
+                } else {
+                    return all_of_graph<E>(ex).all_of(p, first, last, f);
+                }
+            }
         }
     };
 

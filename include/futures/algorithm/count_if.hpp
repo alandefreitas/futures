@@ -102,6 +102,35 @@ namespace futures {
                 tasks_{};
         };
 
+        template <
+            class I,
+            class S,
+            class Fun
+#ifndef FUTURES_DOXYGEN
+            ,
+            std::enable_if_t<
+                // clang-format off
+                is_input_iterator_v<I> &&
+                is_sentinel_for_v<S, I> &&
+                is_indirectly_unary_invocable_v<Fun, I> &&
+                std::is_copy_constructible_v<Fun>
+                // clang-format on
+                ,
+                int> = 0
+#endif
+            >
+        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
+        inline_count_if(I first, S last, Fun p) {
+            iter_difference_t<I> ret = 0;
+            for (; first != last; ++first) {
+                if (p(*first)) {
+                    ret++;
+                }
+            }
+            return ret;
+        }
+
+
         /// Complete overload of the count_if algorithm
         /// @tparam E Executor type
         /// @tparam P Partitioner type
@@ -135,9 +164,17 @@ namespace futures {
                 int> = 0
 #endif
             >
-        iter_difference_t<I>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
         run(const E &ex, P p, I first, S last, Fun f) const {
-            return count_if_graph<E, I>(ex).count_if(p, first, last, f);
+            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                return inline_count_if(first, last, f);
+            } else {
+                if (detail::is_constant_evaluated()) {
+                    return inline_count_if(first, last, f);
+                } else {
+                    return count_if_graph<E, I>(ex).count_if(p, first, last, f);
+                }
+            }
         }
     };
 
