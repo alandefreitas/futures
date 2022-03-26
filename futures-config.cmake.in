@@ -9,9 +9,8 @@ set(FUTURES_BUILT_CXX_COMPILER_VERSION "@CMAKE_CXX_COMPILER_VERSION@")
 include(CMakeFindDependencyMacro)
 list(APPEND CMAKE_MODULE_PATH ${FUTURES_CONFIG_INSTALL_DIR})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
-find_dependency(small)
-find_dependency(range-v3)
-find_dependency(asio)
+find_dependency(Boost)
+find_dependency(Asio 1.21.0)
 list(POP_BACK CMAKE_MODULE_PATH)
 
 # Create imported targets

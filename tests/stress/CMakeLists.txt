@@ -26,65 +26,44 @@ macro(add_futures_stress_test TEST_NAME)
 
     if (LINK_LIBS_EXIST)
         # Define test target variants
-        set(TEST_NAME_VARIANTS ${TEST_NAME})
-        if(N_PROCESSORS GREATER 1)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
-        endif()
+        set(TEST_NAME_VARIANTS "")
+        if (asio_FOUND OR Asio_FOUND)
+            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_asio)
+        endif ()
         if (Boost_FOUND)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_boost)
-        endif()
+        endif ()
+        if (N_PROCESSORS GREATER 1)
+            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
+        endif ()
         if (FUTURES_BUILD_SINGLE_HEADER)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_single_header)
-        endif()
+        endif ()
 
         # Create executables for each variant
         foreach (TEST_NAME_VARIANT ${TEST_NAME_VARIANTS})
             # Create executable for test
             add_executable(stress_${TEST_NAME_VARIANT} ${TEST_NAME}.cpp)
 
-            # Enable UTF-8 on windows
-            target_msvc_compile_options(stress_${TEST_NAME_VARIANT} "/utf-8")
-
-            # Enable /bigobj on windows
-            target_msvc_compile_options(stress_${TEST_NAME_VARIANT} "/bigobj")
+            # Link futures
+            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_asio)
+                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures_asio)
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Asio ")
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
+                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures_boost)
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
+                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures)
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
+                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC single_header)
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
+                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
+            endif ()
 
             # Register with ctest
             add_test(NAME stress_${TEST_NAME_VARIANT} COMMAND stress_${TEST_NAME_VARIANT} 10)
-
-            # Link futures
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures::single-header-futures)
-            else()
-                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures::futures-compiled)
-            endif()
-
-            # Include boost compile options
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES=1)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES=0)
-            endif()
-
-            # Define size of thread pool
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
-                # Purposefully set thread pool size to 1 in a target variant to ensure tests work for
-                # all pool sizes. Some tests might lead to deadlocks that won't happen in large pools.
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
-            endif ()
-
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
-            endif ()
-
-            # Define test case prefix
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
-            else()
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="")
-            endif()
         endforeach ()
     else ()
         # Library not found. Throw.

@@ -9,7 +9,7 @@ target_compile_features(amalgamator PUBLIC cxx_std_17)
 ###########################################################
 # Generate a single-header version of futures
 if (FUTURES_BUILD_SINGLE_HEADER)
-    set(SINGLE_HEADER_PATH "${PROJECT_BINARY_DIR}/include/single-header/futures/futures.hpp")
+    set(SINGLE_HEADER_PATH "${PROJECT_BINARY_DIR}/include/single_header/futures/futures.hpp")
     add_custom_command(
             OUTPUT ${SINGLE_HEADER_PATH}
 
@@ -26,50 +26,50 @@ if (FUTURES_BUILD_SINGLE_HEADER)
 
             # CMake command options
             DEPENDS amalgamator ${FUTURES_HEADERS}
-            COMMENT "Creating single-header library"
+            COMMENT "Creating single_header library"
             VERBATIM
     )
     add_custom_target(build_single_include DEPENDS ${SINGLE_HEADER_PATH})
 
-    add_library(single-header-futures INTERFACE)
-    add_library(futures::single-header-futures ALIAS single-header-futures)
+    add_library(single_header INTERFACE)
+    add_library(futures::single_header ALIAS single_header)
 
-    add_dependencies(single-header-futures build_single_include)
-    target_compile_features(single-header-futures INTERFACE cxx_std_17)
+    add_dependencies(single_header build_single_include)
+    target_compile_features(single_header INTERFACE cxx_std_17)
 
 
-    target_include_directories(single-header-futures
-            INTERFACE $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/single-header>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/futures/single-header>
+    target_include_directories(single_header
+            INTERFACE $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/single_header>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/futures/single_header>
             )
 
     # Compiler options
     # MSVC compatibility
-    target_bigobj_options(single-header-futures)
-    target_utf8_options(single-header-futures)
+    target_bigobj_options(single_header)
+    target_utf8_options(single_header)
     if (BUILD_WITH_EXCEPTIONS)
-        target_exception_options(single-header-futures)
+        target_exception_options(single_header)
     endif ()
 
     # Always enable warnings in development mode
-    maybe_target_pedantic_warnings(single-header-futures)
+    maybe_target_pedantic_warnings(single_header)
 
     # Get properties from main futures target
     if (Boost_FOUND)
-        target_link_libraries(single-header-futures INTERFACE Boost::boost)
+        target_link_libraries(single_header INTERFACE Boost::boost)
     endif ()
     if (small_FOUND OR Small_FOUND)
-        target_link_libraries(single-header-futures INTERFACE small::small)
+        target_link_libraries(single_header INTERFACE small::small)
     endif ()
     if (asio_FOUND OR Asio_FOUND)
-        target_link_libraries(single-header-futures INTERFACE asio::asio)
+        target_link_libraries(single_header INTERFACE asio::asio)
     endif ()
-    target_link_libraries(single-header-futures INTERFACE ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(single_header INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 
     if (FUTURES_PREFER_BOOST_DEPENDENCIES)
-        target_compile_definitions(single-header-futures INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
+        target_compile_definitions(single_header INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
     endif ()
     if (FUTURES_PREFER_STANDALONE_DEPENDENCIES)
-        target_compile_definitions(single-header-futures INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
+        target_compile_definitions(single_header INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
     endif ()
 endif ()

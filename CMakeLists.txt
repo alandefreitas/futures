@@ -22,8 +22,8 @@ option(FUTURES_BUILD_INSTALLER "Build installer target" ${MASTER_PROJECT})
 option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 
 # How to build
-option(FUTURES_PREFER_BOOST_DEPENDENCIES "Prefer boost dependencies if available (boost::asio and boost::small_vector)" OFF)
 option(FUTURES_PREFER_STANDALONE_DEPENDENCIES "Prefer standalone dependencies if available (asio and small::vector)" OFF)
+option(FUTURES_PREFER_BOOST_DEPENDENCIES "Prefer boost dependencies if available (boost::asio and boost::small_vector)" OFF)
 option(FUTURES_BUILD_WITH_EXCEPTIONS "Add compiler flags to use exceptions if needed." ON)
 
 # Development options
@@ -40,7 +40,7 @@ add_subdirectory(source)
 ### Installer                                       ###
 #######################################################
 if (FUTURES_BUILD_INSTALLER)
-    set(INSTALL_TARGET_LIST futures futures-compiled)
+    set(INSTALL_TARGET_LIST headers futures)
 
     # Install targets
     install(TARGETS ${INSTALL_TARGET_LIST}
@@ -50,10 +50,20 @@ if (FUTURES_BUILD_INSTALLER)
             )
 
     # Install headers
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/futures
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/futures
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-            FILES_MATCHING PATTERN "include/*.hpp"
+            FILES_MATCHING PATTERN "*.hpp"
             )
+
+    # If Asio had to be fetched, install it
+    # This installation has no targets, since those will be defined by
+    # FindAsio.cmake
+    if (DEFINED asio_SOURCE_DIR)
+        install(DIRECTORY ${asio_SOURCE_DIR}/asio/include/asio
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+                FILES_MATCHING PATTERN "*.hpp"
+                )
+    endif()
 
     # Install cmake targets script
     install(EXPORT futures-targets

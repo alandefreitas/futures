@@ -57,80 +57,62 @@ macro(add_futures_test TEST_NAME)
 
     if (LINK_LIBS_EXIST)
         # Define test target variants
-        set(TEST_NAME_VARIANTS ${TEST_NAME})
-        if(N_PROCESSORS GREATER 1)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
-        endif()
+        set(TEST_NAME_VARIANTS "")
+        if (asio_FOUND OR Asio_FOUND)
+            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_asio)
+        endif ()
         if (Boost_FOUND)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_boost)
-        endif()
+        endif ()
+        if (N_PROCESSORS GREATER 1)
+            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
+        endif ()
         if (FUTURES_BUILD_SINGLE_HEADER)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_single_header)
-        endif()
+        endif ()
 
         # Create executables for each variant
         foreach (TEST_NAME_VARIANT ${TEST_NAME_VARIANTS})
+
             # Create executable for test
             add_executable(ut_${TEST_NAME_VARIANT} ${TEST_NAME}.cpp)
 
             # Link with catch-main
             target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC ${LINK_LIBS} catch_main)
 
-            # Enable UTF-8 on windows
-            target_msvc_compile_options(ut_${TEST_NAME_VARIANT} "/utf-8")
-
-            # Enable /bigobj on windows
-            target_msvc_compile_options(ut_${TEST_NAME_VARIANT} "/bigobj")
+            # Link futures
+            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_asio)
+                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_asio)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Asio ")
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
+                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_boost)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
+                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
+                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC single_header)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
+                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
+            endif ()
 
             # Register with ctest
             if (FUTURES_CATCH2_REPORTER STREQUAL "console")
+                # This is the default normally used for local tests
                 catch_discover_tests(ut_${TEST_NAME_VARIANT})
             else ()
+                # This is custom reporter (usually junit) normally used for CI
                 if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/reports)
                     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/reports)
-                endif()
+                endif ()
                 catch_discover_tests(
                         ut_${TEST_NAME_VARIANT}
                         REPORTER ${FUTURES_CATCH2_REPORTER}
                         OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/reports
                         OUTPUT_SUFFIX ".${FUTURES_CATCH2_REPORTER}"
                 )
-            endif()
-
-            # Link futures
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures::single-header-futures)
-            else()
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures::futures-compiled)
-            endif()
-
-            # Include boost compile options
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES=1)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES=0)
-            endif()
-
-            # Define size of thread pool
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
-                # Purposefully set thread pool size to 1 in a target variant to ensure tests work for
-                # all pool sizes. Some tests might lead to deadlocks that won't happen in large pools.
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
             endif ()
-
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
-            endif ()
-
-            # Define test case prefix
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
-            else()
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="")
-            endif()
         endforeach ()
     else ()
         # Library not found. Throw.
@@ -172,7 +154,7 @@ add_futures_test(futures-algorithm)
 if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
     file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
     add_executable(ut_futures_all detail/catch_main.cpp ${FUTURES_TESTS_SOURCE})
-    target_link_libraries(ut_futures_all PUBLIC futures::futures-compiled Catch2::Catch2)
+    target_link_libraries(ut_futures_all PUBLIC futures::futures Catch2::Catch2)
     target_compile_features(ut_futures_all PUBLIC cxx_std_17)
     target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
-endif()
+endif ()
