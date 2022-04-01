@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__error" kind="group">
+    <compoundname>error</compoundname>
+    <title>Error</title>
+    <innerclass refid="classfutures_1_1futures__error" prot="public">futures::futures_error</innerclass>
+    <innerclass refid="classfutures_1_1future__error__category" prot="public">futures::future_error_category</innerclass>
+    <innerclass refid="classfutures_1_1future__error" prot="public">futures::future_error</innerclass>
+    <innerclass refid="classfutures_1_1broken__promise" prot="public">futures::broken_promise</innerclass>
+    <innerclass refid="classfutures_1_1promise__already__satisfied" prot="public">futures::promise_already_satisfied</innerclass>
+    <innerclass refid="classfutures_1_1future__already__retrieved" prot="public">futures::future_already_retrieved</innerclass>
+    <innerclass refid="classfutures_1_1promise__uninitialized" prot="public">futures::promise_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1packaged__task__uninitialized" prot="public">futures::packaged_task_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__uninitialized" prot="public">futures::future_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__deferred" prot="public">futures::future_deferred</innerclass>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__error_1ga6b514c11923c676167997aae802757b8" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>future_errc</name>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a2c6bc6062e72db1c0915032943cb6452" prot="public">
+          <name>broken_promise</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+<para>The state owner got destroyed before the promise has been fulfilled. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a829037befd349f04ff71ddea385bdb9a" prot="public">
+          <name>future_already_retrieved</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+<para>Attempted to retrieve a unique future twice. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a9327d6f7b9aca59b62b436696fd17a00" prot="public">
+          <name>promise_already_satisfied</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+<para>Promise has already been fulfilled. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8ac537dcef56fd6ff75592c0220fd3dae1" prot="public">
+          <name>no_state</name>
+          <initializer>= 4</initializer>
+          <briefdescription>
+<para>There is no shared state we can access. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a2002f5e501ea387b93c160010199797b" prot="public">
+          <name>future_deferred</name>
+          <initializer>= 5</initializer>
+          <briefdescription>
+<para>Invalid operation on deferred future. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Error codes for futures. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="51" column="1" bodyfile="futures/futures/future_error.hpp" bodystart="50" bodyend="62"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__error_1gaea315d19ebafd9b9aff200128d674568" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>const std::error_category &amp;</type>
+        <definition>const std::error_category &amp; futures::future_category</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>future_category</name>
+        <briefdescription>
+<para>Function to return a common reference to a global future error category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="158" column="5" bodyfile="futures/futures/future_error.hpp" bodystart="158" bodyend="161" declfile="futures/futures/future_error.hpp" declline="66" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="group__error_1gaea6833b62b5eb3f5ce305bf5ffcd613d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::error_code</type>
+        <definition>std::error_code futures::make_error_code</definition>
+        <argsstring>(future_errc code)</argsstring>
+        <name>make_error_code</name>
+        <param>
+          <type>future_errc</type>
+          <declname>code</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="174" column="5" bodyfile="futures/futures/future_error.hpp" bodystart="174" bodyend="179"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Basic future errors. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

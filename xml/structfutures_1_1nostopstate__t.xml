@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1nostopstate__t" kind="struct" language="C++" prot="public">
+    <compoundname>futures::nostopstate_t</compoundname>
+    <includes refid="stop__token_8hpp" local="no">stop_token.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structfutures_1_1nostopstate__t_1ab53174751f13a3591d62d0866f966feb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::nostopstate_t::nostopstate_t</definition>
+        <argsstring>()=default</argsstring>
+        <name>nostopstate_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="54" column="18"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Empty struct to initialize a <ref refid="classfutures_1_1stop__source" kindref="compound">stop_source</ref> without a shared stop state. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/futures/stop_token.hpp" line="53" column="1" bodyfile="futures/futures/stop_token.hpp" bodystart="52" bodyend="55"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1nostopstate__t_1ab53174751f13a3591d62d0866f966feb" prot="public" virt="non-virtual"><scope>futures::nostopstate_t</scope><name>nostopstate_t</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

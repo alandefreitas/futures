@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_aa33a8ec432c6f5e0463cb865daa31ea" kind="dir">
+    <compoundname>futures/algorithm/comparisons</compoundname>
+    <innerfile refid="compare__three__way_8hpp">compare_three_way.hpp</innerfile>
+    <innerfile refid="equal__to_8hpp">equal_to.hpp</innerfile>
+    <innerfile refid="greater_8hpp">greater.hpp</innerfile>
+    <innerfile refid="greater__equal_8hpp">greater_equal.hpp</innerfile>
+    <innerfile refid="less_8hpp">less.hpp</innerfile>
+    <innerfile refid="less__equal_8hpp">less_equal.hpp</innerfile>
+    <innerfile refid="not__equal__to_8hpp">not_equal_to.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/algorithm/comparisons/"/>
+  </compounddef>
+</doxygen>

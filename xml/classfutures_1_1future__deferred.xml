@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1future__deferred" kind="class" language="C++" prot="public">
+    <compoundname>futures::future_deferred</compoundname>
+    <basecompoundref refid="classfutures_1_1future__error" prot="public" virt="non-virtual">futures::future_error</basecompoundref>
+    <includes refid="future__error_8hpp" local="no">future_error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1future__deferred_1a3a5b5f6f4f5732ad2f50ee404fb384ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::future_deferred::future_deferred</definition>
+        <argsstring>()</argsstring>
+        <name>future_deferred</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="231" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="231" bodyend="232"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>futures::future_error</label>
+        <link refid="classfutures_1_1future__error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::system_error</label>
+      </node>
+      <node id="1">
+        <label>futures::future_deferred</label>
+        <link refid="classfutures_1_1future__deferred"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures::futures_error</label>
+        <link refid="classfutures_1_1futures__error"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>futures::future_error</label>
+        <link refid="classfutures_1_1future__error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::system_error</label>
+      </node>
+      <node id="1">
+        <label>futures::future_deferred</label>
+        <link refid="classfutures_1_1future__deferred"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures::futures_error</label>
+        <link refid="classfutures_1_1futures__error"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/futures/future_error.hpp" line="229" column="1" bodyfile="futures/futures/future_error.hpp" bodystart="228" bodyend="233"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1future__deferred_1a3a5b5f6f4f5732ad2f50ee404fb384ba" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>future_deferred</name></member>
+      <member refid="classfutures_1_1future__error_1a0b375a5f9da3cf5bbf61943f6977a123" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>future_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a5b439838aa6058880b54136bd82cff56" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1adaa75bbd85c397e5b02fbcc4f5a7dd13" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a860032d4671f9a61283bd9a6eb0f4415" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a9663b54333194410fef1d63b2f611234" prot="public" virt="non-virtual"><scope>futures::future_deferred</scope><name>~futures_error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

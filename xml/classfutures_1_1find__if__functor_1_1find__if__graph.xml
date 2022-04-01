@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1find__if__functor_1_1find__if__graph" kind="class" language="C++" prot="private">
+    <compoundname>futures::find_if_functor::find_if_graph</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::maybe_empty_executor&lt; Executor &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>class Executor</type>
+      </param>
+      <param>
+        <type>class I</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1find__if__functor_1_1find__if__graph_1a4fb1e2c4a5153b7f8104522006bf39f7" prot="private" static="no" mutable="no">
+        <type>detail::atomic_queue&lt; <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; std::pair&lt; I, std::bitset&lt; 64 &gt; &gt;, <ref refid="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" kindref="member">future_options</ref>&lt; <ref refid="structfutures_1_1executor__opt" kindref="compound">executor_opt</ref>&lt; Executor &gt;, <ref refid="structfutures_1_1continuable__opt" kindref="compound">continuable_opt</ref> &gt; &gt; &gt;</type>
+        <definition>detail::atomic_queue&lt;basic_future&lt; std::pair&lt;I, std::bitset&lt;64&gt; &gt;, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt&gt; &gt; &gt; futures::find_if_functor::find_if_graph&lt; Executor, I &gt;::tasks_</definition>
+        <argsstring></argsstring>
+        <name>tasks_</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="158" column="17" bodyfile="futures/algorithm/find_if.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1find__if__functor_1_1find__if__graph_1a704427ef43659ea28b60b9a9da315af3" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::find_if_functor::find_if_graph&lt; Executor, I &gt;::find_if_graph</definition>
+        <argsstring>(const Executor &amp;ex)</argsstring>
+        <name>find_if_graph</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="42" column="22" bodyfile="futures/algorithm/find_if.hpp" bodystart="42" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1find__if__functor_1_1find__if__graph_1a6f1648847907d5f02606d0a1a9b1b098" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; I, std::bitset&lt; 64 &gt; &gt;</type>
+        <definition>std::pair&lt;I, std::bitset&lt;64&gt; &gt; futures::find_if_functor::find_if_graph&lt; Executor, I &gt;::launch_find_if_tasks</definition>
+        <argsstring>(P p, I first, S last, S overall_last, Fun f, std::size_t level=0, std::bitset&lt; 64 &gt; branch=0)</argsstring>
+        <name>launch_find_if_tasks</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>overall_last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>level</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>std::bitset&lt; 64 &gt;</type>
+          <declname>branch</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="47" column="13" bodyfile="futures/algorithm/find_if.hpp" bodystart="47" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1find__if__functor_1_1find__if__graph_1afa34162cad3d51bc3abb593028a9b104" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class S</type>
+          </param>
+        </templateparamlist>
+        <type>I</type>
+        <definition>I futures::find_if_functor::find_if_graph&lt; Executor, I &gt;::wait_for_find_if_tasks</definition>
+        <argsstring>(S last)</argsstring>
+        <name>wait_for_find_if_tasks</name>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="130" column="13" bodyfile="futures/algorithm/find_if.hpp" bodystart="130" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1find__if__functor_1_1find__if__graph_1a5504a51f67799d4aaa8db3a031d9c9a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>I</type>
+        <definition>I futures::find_if_functor::find_if_graph&lt; Executor, I &gt;::find_if</definition>
+        <argsstring>(P p, I first, S last, Fun f)</argsstring>
+        <name>find_if</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="144" column="13" bodyfile="futures/algorithm/find_if.hpp" bodystart="144" bodyend="152"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::find_if_functor::find_if_graph&lt; Executor, I &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::find_if_functor::find_if_graph&lt; Executor, I &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/find_if.hpp" line="40" column="1" bodyfile="futures/algorithm/find_if.hpp" bodystart="39" bodyend="159"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1find__if__functor_1_1find__if__graph_1a5504a51f67799d4aaa8db3a031d9c9a9" prot="public" virt="non-virtual"><scope>futures::find_if_functor::find_if_graph</scope><name>find_if</name></member>
+      <member refid="classfutures_1_1find__if__functor_1_1find__if__graph_1a704427ef43659ea28b60b9a9da315af3" prot="public" virt="non-virtual"><scope>futures::find_if_functor::find_if_graph</scope><name>find_if_graph</name></member>
+      <member refid="classfutures_1_1find__if__functor_1_1find__if__graph_1a6f1648847907d5f02606d0a1a9b1b098" prot="public" virt="non-virtual"><scope>futures::find_if_functor::find_if_graph</scope><name>launch_find_if_tasks</name></member>
+      <member refid="classfutures_1_1find__if__functor_1_1find__if__graph_1a4fb1e2c4a5153b7f8104522006bf39f7" prot="private" virt="non-virtual"><scope>futures::find_if_functor::find_if_graph</scope><name>tasks_</name></member>
+      <member refid="classfutures_1_1find__if__functor_1_1find__if__graph_1afa34162cad3d51bc3abb593028a9b104" prot="public" virt="non-virtual"><scope>futures::find_if_functor::find_if_graph</scope><name>wait_for_find_if_tasks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

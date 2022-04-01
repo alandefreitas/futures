@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1future__error__category" kind="class" language="C++" prot="public">
+    <compoundname>futures::future_error_category</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">error_category</basecompoundref>
+    <includes refid="future__error_8hpp" local="no">future_error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1future__error__category_1a65fcdcd88947f7ec74101627c7a66bef" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char* futures::future_error_category::name</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>name</name>
+        <briefdescription>
+<para>Name for <ref refid="classfutures_1_1future__error__category" kindref="compound">future_error_category</ref> errors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="75" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1future__error__category_1a8154583c729ece629920be99f4853ba7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>std::error_condition</type>
+        <definition>std::error_condition futures::future_error_category::default_error_condition</definition>
+        <argsstring>(int ev) const noexcept override</argsstring>
+        <name>default_error_condition</name>
+        <param>
+          <type>int</type>
+          <declname>ev</declname>
+        </param>
+        <briefdescription>
+<para>Generate error condition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="81" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="81" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1future__error__category_1a9e540b087bcf0b30c02b6512ccbf5fe7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::future_error_category::equivalent</definition>
+        <argsstring>(std::error_code const &amp;code, int condition) const noexcept override</argsstring>
+        <name>equivalent</name>
+        <param>
+          <type>std::error_code const &amp;</type>
+          <declname>code</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>condition</declname>
+        </param>
+        <briefdescription>
+<para>Check error condition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="115" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="115" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1future__error__category_1af6629c802eb5fd0731ea3d8337eb7e7d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string futures::future_error_category::message</definition>
+        <argsstring>(int ev) const override</argsstring>
+        <name>message</name>
+        <param>
+          <type>int</type>
+          <declname>ev</declname>
+        </param>
+        <briefdescription>
+<para>Generate message. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="125" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="125" bodyend="152"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Class representing the common error category properties for future errors. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::future_error_category</label>
+        <link refid="classfutures_1_1future__error__category"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::error_category</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::future_error_category</label>
+        <link refid="classfutures_1_1future__error__category"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::error_category</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/futures/future_error.hpp" line="71" column="1" bodyfile="futures/futures/future_error.hpp" bodystart="70" bodyend="153"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1future__error__category_1a8154583c729ece629920be99f4853ba7" prot="public" virt="non-virtual"><scope>futures::future_error_category</scope><name>default_error_condition</name></member>
+      <member refid="classfutures_1_1future__error__category_1a9e540b087bcf0b30c02b6512ccbf5fe7" prot="public" virt="non-virtual"><scope>futures::future_error_category</scope><name>equivalent</name></member>
+      <member refid="classfutures_1_1future__error__category_1af6629c802eb5fd0731ea3d8337eb7e7d" prot="public" virt="non-virtual"><scope>futures::future_error_category</scope><name>message</name></member>
+      <member refid="classfutures_1_1future__error__category_1a65fcdcd88947f7ec74101627c7a66bef" prot="public" virt="non-virtual"><scope>futures::future_error_category</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1stop__token" kind="class" language="C++" prot="public">
+    <compoundname>futures::stop_token</compoundname>
+    <includes refid="stop__token_8hpp" local="no">stop_token.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Constructors</header>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1acfa54c4029a929563dbf5b496f7483e5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::stop_token::stop_token</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>stop_token</name>
+        <briefdescription>
+<para>Constructs an empty <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> with no associated stop-state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="post"><para><ref refid="classfutures_1_1stop__token_1aeb2ee38adf29c373229318fc0bed6d4b" kindref="member">stop_possible()</ref> and <ref refid="classfutures_1_1stop__token_1a332648a2adf9a8a4e8bbf8506aedbc75" kindref="member">stop_requested()</ref> are both false </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="76" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1aaae629b15d9fd673e0d65690487da627" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::stop_token::stop_token</definition>
+        <argsstring>(const stop_token &amp;other) noexcept=default</argsstring>
+        <name>stop_token</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> whose associated stop-state is the same as that of other.</para>
+<para><simplesect kind="post"><para>*this and other share the same associated stop-state and compare equal</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>another <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object to construct this <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="88" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1ae47d601a7d7ffc2be469136a549a912b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::stop_token::stop_token</definition>
+        <argsstring>(stop_token &amp;&amp;other) noexcept</argsstring>
+        <name>stop_token</name>
+        <param>
+          <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> whose associated stop-state is the same as that of other; other is left empty</para>
+<para><simplesect kind="post"><para>*this has other&apos;s previously associated stop-state, and other.stop_possible() is false</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>another <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object to construct this <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="100" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="100" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1ab10369fbc3989b574a263d2828e70554" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::stop_token::~stop_token</definition>
+        <argsstring>()=default</argsstring>
+        <name>~stop_token</name>
+        <briefdescription>
+<para>Destroys the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="post"><para>If *this has associated stop-state, releases ownership of it. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="107" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1a2216264be5193d247676fbe2eb76b003" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+        <definition>stop_token&amp; futures::stop_token::operator=</definition>
+        <argsstring>(const stop_token &amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Copy-assigns the associated stop-state of other to that of *this. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Equivalent to stop_token(other).swap(*this)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Another <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object to share the stop-state with to or acquire the stop-state from </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="117" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="117" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1ad8d62da3b4ca4d09f30186ad1badd404" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+        <definition>stop_token&amp; futures::stop_token::operator=</definition>
+        <argsstring>(stop_token &amp;&amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move-assigns the associated stop-state of other to that of *this. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>After the assignment, *this contains the previous associated stop-state of other, and other has no associated stop-state</para>
+<para>Equivalent to stop_token(std::move(other)).swap(*this)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Another <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object to share the stop-state with to or acquire the stop-state from </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="136" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="136" bodyend="142"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Modifiers</header>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1acc0f57abb9ff333ad7a87447a61ee2e8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::stop_token::swap</definition>
+        <argsstring>(stop_token &amp;other) noexcept</argsstring>
+        <name>swap</name>
+        <param>
+          <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Exchanges the associated stop-state of *this and other. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> to exchange the contents with </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="153" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="153" bodyend="155"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Observers</header>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1a332648a2adf9a8a4e8bbf8506aedbc75" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::stop_token::stop_requested</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>stop_requested</name>
+        <briefdescription>
+<para>Checks whether the associated stop-state has been requested to stop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks if the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object has associated stop-state and that state has received a stop request. A default constructed <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> has no associated stop-state, and thus has not had stop requested</para>
+<para><simplesect kind="return"><para>true if the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object has associated stop-state and it received a stop request, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="172" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="172" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1stop__token_1aeb2ee38adf29c373229318fc0bed6d4b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::stop_token::stop_possible</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>stop_possible</name>
+        <briefdescription>
+<para>Checks whether associated stop-state can be requested to stop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks if the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object has associated stop-state, and that state either has already had a stop requested or it has associated std::stop_source object(s).</para>
+<para>A default constructed <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> has no associated <computeroutput>stop-state</computeroutput>, and thus cannot be stopped. the associated stop-state for which no std::stop_source object(s) exist can also not be stopped if such a request has not already been made.</para>
+<para><simplesect kind="note"><para>If the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object has associated stop-state and a stop request has already been made, this function still returns true.</para>
+</simplesect>
+<simplesect kind="return"><para>false if the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> object has no associated stop-state, or it did not yet receive a stop request and there are no associated std::stop_source object(s); true otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="195" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="195" bodyend="199"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Non-member functions</header>
+      <memberdef kind="friend" id="classfutures_1_1stop__token_1a9e2f48bf6c95d0b7565dc835e4e472c1" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(const stop_token &amp;a, const stop_token &amp;b) noexcept</argsstring>
+        <name>operator==</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>compares two std::stop_token objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function is not visible to ordinary unqualified or qualified lookup, and can only be found by argument-dependent lookup when std::stop_token is an associated class of the arguments.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>stop_tokens to compare </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>stop_tokens to compare</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if lhs and rhs have the same associated stop-state, or both have no associated stop-state, otherwise false </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="218" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="218" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="friend" id="classfutures_1_1stop__token_1a6308115e812629447d649270ef61f831" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator!=</definition>
+        <argsstring>(const stop_token &amp;a, const stop_token &amp;b) noexcept</argsstring>
+        <name>operator!=</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>compares two std::stop_token objects for inequality </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The != operator is synthesized from operator==</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>stop_tokens to compare </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>stop_tokens to compare</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if lhs and rhs have different associated stop-states </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="231" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="231" bodyend="233"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="classfutures_1_1stop__token_1a0a26096d0071b0d089255f8f56e42ea1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class stop_source</definition>
+        <argsstring></argsstring>
+        <name>stop_source</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="238" column="9" bodyfile="futures/futures/stop_token.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1stop__token_1a716b016bada7a6665cd6d17257991913" prot="private" static="no" mutable="no">
+        <type>detail::shared_stop_state</type>
+        <definition>detail::shared_stop_state futures::stop_token::shared_state_</definition>
+        <argsstring></argsstring>
+        <name>shared_state_</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+<para>Shared pointer to an atomic bool indicating if an external procedure should stop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="249" column="35" bodyfile="futures/futures/stop_token.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1stop__token_1a18485627436a61b70ef4f74791e0f206" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::stop_token::stop_token</definition>
+        <argsstring>(detail::shared_stop_state state) noexcept</argsstring>
+        <name>stop_token</name>
+        <param>
+          <type>detail::shared_stop_state</type>
+          <declname>state</declname>
+        </param>
+        <briefdescription>
+<para>Constructor that allows the <ref refid="classfutures_1_1stop__source" kindref="compound">stop_source</ref> to construct the <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> directly from the stop state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>State for the new token </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/stop_token.hpp" line="244" column="18" bodyfile="futures/futures/stop_token.hpp" bodystart="244" bodyend="245"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Token to check if a stop request has been made. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref> class provides the means to check if a stop request has been made or can be made, for its associated std::stop_source object. It is essentially a thread-safe &quot;view&quot; of the associated stop-state. </para>
+    </detaileddescription>
+    <location file="futures/futures/stop_token.hpp" line="67" column="1" bodyfile="futures/futures/stop_token.hpp" bodystart="66" bodyend="250"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1stop__token_1a6308115e812629447d649270ef61f831" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>operator!=</name></member>
+      <member refid="classfutures_1_1stop__token_1a2216264be5193d247676fbe2eb76b003" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1stop__token_1ad8d62da3b4ca4d09f30186ad1badd404" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1stop__token_1a9e2f48bf6c95d0b7565dc835e4e472c1" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>operator==</name></member>
+      <member refid="classfutures_1_1stop__token_1a716b016bada7a6665cd6d17257991913" prot="private" virt="non-virtual"><scope>futures::stop_token</scope><name>shared_state_</name></member>
+      <member refid="classfutures_1_1stop__token_1aeb2ee38adf29c373229318fc0bed6d4b" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_possible</name></member>
+      <member refid="classfutures_1_1stop__token_1a332648a2adf9a8a4e8bbf8506aedbc75" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_requested</name></member>
+      <member refid="classfutures_1_1stop__token_1a0a26096d0071b0d089255f8f56e42ea1" prot="private" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_source</name></member>
+      <member refid="classfutures_1_1stop__token_1acfa54c4029a929563dbf5b496f7483e5" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_token</name></member>
+      <member refid="classfutures_1_1stop__token_1aaae629b15d9fd673e0d65690487da627" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_token</name></member>
+      <member refid="classfutures_1_1stop__token_1ae47d601a7d7ffc2be469136a549a912b" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_token</name></member>
+      <member refid="classfutures_1_1stop__token_1a18485627436a61b70ef4f74791e0f206" prot="private" virt="non-virtual"><scope>futures::stop_token</scope><name>stop_token</name></member>
+      <member refid="classfutures_1_1stop__token_1acc0f57abb9ff333ad7a87447a61ee2e8" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>swap</name></member>
+      <member refid="classfutures_1_1stop__token_1ab10369fbc3989b574a263d2828e70554" prot="public" virt="non-virtual"><scope>futures::stop_token</scope><name>~stop_token</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

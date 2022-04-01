@@ -1,0 +1,573 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Futures: C++ Lock-Free Task Programming with ASIO executors" name="description"/>
+<link href="https://alandefreitas.github.io/futures/reference/Files/" rel="canonical"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.0, mkdocs-material-8.2.8" name="generator"/>
+<title>Files - Futures</title>
+<link href="../../assets/stylesheets/main.644de097.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-290016612",{page_path:e.pathname})})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-290016612"></script>
+</head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="futures" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#files">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Futures" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Futures
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Files
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<!-- Main navigation -->
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Futures" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+    Futures
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../quickstart/">
+        Quickstart
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Futures" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/future_types/">
+        Future Types
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/launching/">
+        Launching Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/promises/">
+        Promises and Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/continuable_futures/">
+        Continuable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/stoppable_futures/">
+        Stoppable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/shared_futures/">
+        Shared Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../futures/waiting/">
+        Waiting for Futures
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Future Adaptors" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adaptors/continuations/">
+        Continuations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adaptors/conjunctions/">
+        Conjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adaptors/disjunctions/">
+        Disjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../adaptors/task_graphs/">
+        Task Graphs
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Parallel Algorithms" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../algorithms/algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../algorithms/partitioners/">
+        Partitioners
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Networking" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../networking/asio/">
+        Asio
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Modules/group__futures/">
+        Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Modules/group__adaptors/">
+        Adaptors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Modules/group__executors/">
+        Executors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Modules/group__algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Namespaces/namespacefutures/">
+        Index
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Classes/">
+        Classes
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Files
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../acknowledgments/">
+        Acknowledgments
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+</nav>
+<div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="files">Files</h1>
+<ul>
+<li><strong>dir <a href="/futures/reference/Files/dir_1cd73713a542b57572a4ff9fdd4ed6a7/#dir-futures">futures</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/algorithm_8hpp/#file-algorithm.hpp">futures/algorithm.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/futures_8hpp/#file-futures.hpp">futures/futures.hpp</a></strong> </li>
+<li><strong>dir <a href="/futures/reference/Files/dir_7600b8ee04eb55a58ff8852c23efb638/#dir-futures/adaptor">futures/adaptor</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/bind__executor__to__lambda_8hpp/#file-bind-executor-to-lambda.hpp">futures/adaptor/bind_executor_to_lambda.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/make__ready__future_8hpp/#file-make-ready-future.hpp">futures/adaptor/make_ready_future.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/then_8hpp/#file-then.hpp">futures/adaptor/then.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/when__all_8hpp/#file-when-all.hpp">futures/adaptor/when_all.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/when__any_8hpp/#file-when-any.hpp">futures/adaptor/when_any.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/when__any__result_8hpp/#file-when-any-result.hpp">futures/adaptor/when_any_result.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>dir <a href="/futures/reference/Files/dir_e7b4090e56732c0d3902af1e1fd5618b/#dir-futures/algorithm">futures/algorithm</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/all__of_8hpp/#file-all-of.hpp">futures/algorithm/all_of.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/any__of_8hpp/#file-any-of.hpp">futures/algorithm/any_of.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/count_8hpp/#file-count.hpp">futures/algorithm/count.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/count__if_8hpp/#file-count-if.hpp">futures/algorithm/count_if.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/find_8hpp/#file-find.hpp">futures/algorithm/find.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/find__if_8hpp/#file-find-if.hpp">futures/algorithm/find_if.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/find__if__not_8hpp/#file-find-if-not.hpp">futures/algorithm/find_if_not.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/for__each_8hpp/#file-for-each.hpp">futures/algorithm/for_each.hpp</a></strong> </li>
+<li><strong>dir <a href="/futures/reference/Files/dir_aa33a8ec432c6f5e0463cb865daa31ea/#dir-futures/algorithm/comparisons">futures/algorithm/comparisons</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/compare__three__way_8hpp/#file-compare-three-way.hpp">futures/algorithm/comparisons/compare_three_way.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/equal__to_8hpp/#file-equal-to.hpp">futures/algorithm/comparisons/equal_to.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/greater_8hpp/#file-greater.hpp">futures/algorithm/comparisons/greater.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/greater__equal_8hpp/#file-greater-equal.hpp">futures/algorithm/comparisons/greater_equal.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/less_8hpp/#file-less.hpp">futures/algorithm/comparisons/less.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/less__equal_8hpp/#file-less-equal.hpp">futures/algorithm/comparisons/less_equal.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/not__equal__to_8hpp/#file-not-equal-to.hpp">futures/algorithm/comparisons/not_equal_to.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>dir <a href="/futures/reference/Files/dir_e0a1cc086a107475864c8fa8ce1ca572/#dir-futures/algorithm/partitioner">futures/algorithm/partitioner</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/partitioner_8hpp/#file-partitioner.hpp">futures/algorithm/partitioner/partitioner.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>dir <a href="/futures/reference/Files/dir_f487c0495566dbafde251364b6bff68f/#dir-futures/algorithm/traits">futures/algorithm/traits</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/binary__invoke__algorithm_8hpp/#file-binary-invoke-algorithm.hpp">futures/algorithm/traits/binary_invoke_algorithm.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__difference__type_8hpp/#file-has-difference-type.hpp">futures/algorithm/traits/has_difference_type.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__element__type_8hpp/#file-has-element-type.hpp">futures/algorithm/traits/has_element_type.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__iterator__traits__difference__type_8hpp/#file-has-iterator-traits-difference-type.hpp">futures/algorithm/traits/has_iterator_traits_difference_type.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__iterator__traits__iterator__category_8hpp/#file-has-iterator-traits-iterator-category.hpp">futures/algorithm/traits/has_iterator_traits_iterator_category.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__iterator__traits__iterator__concept_8hpp/#file-has-iterator-traits-iterator-concept.hpp">futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__iterator__traits__value__type_8hpp/#file-has-iterator-traits-value-type.hpp">futures/algorithm/traits/has_iterator_traits_value_type.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/has__value__type_8hpp/#file-has-value-type.hpp">futures/algorithm/traits/has_value_type.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__assignable__from_8hpp/#file-is-assignable-from.hpp">futures/algorithm/traits/is_assignable_from.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__constructible__from_8hpp/#file-is-constructible-from.hpp">futures/algorithm/traits/is_constructible_from.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__convertible__to_8hpp/#file-is-convertible-to.hpp">futures/algorithm/traits/is_convertible_to.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__copyable_8hpp/#file-is-copyable.hpp">futures/algorithm/traits/is_copyable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__default__initializable_8hpp/#file-is-default-initializable.hpp">futures/algorithm/traits/is_default_initializable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__derived__from_8hpp/#file-is-derived-from.hpp">futures/algorithm/traits/is_derived_from.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__equality__comparable_8hpp/#file-is-equality-comparable.hpp">futures/algorithm/traits/is_equality_comparable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__equality__comparable__with_8hpp/#file-is-equality-comparable-with.hpp">futures/algorithm/traits/is_equality_comparable_with.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__forward__iterator_8hpp/#file-is-forward-iterator.hpp">futures/algorithm/traits/is_forward_iterator.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__incrementable_8hpp/#file-is-incrementable.hpp">futures/algorithm/traits/is_incrementable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__indirectly__binary__invocable_8hpp/#file-is-indirectly-binary-invocable.hpp">futures/algorithm/traits/is_indirectly_binary_invocable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__indirectly__readable_8hpp/#file-is-indirectly-readable.hpp">futures/algorithm/traits/is_indirectly_readable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__indirectly__unary__invocable_8hpp/#file-is-indirectly-unary-invocable.hpp">futures/algorithm/traits/is_indirectly_unary_invocable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__input__iterator_8hpp/#file-is-input-iterator.hpp">futures/algorithm/traits/is_input_iterator.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__input__or__output__iterator_8hpp/#file-is-input-or-output-iterator.hpp">futures/algorithm/traits/is_input_or_output_iterator.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__input__range_8hpp/#file-is-input-range.hpp">futures/algorithm/traits/is_input_range.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__movable_8hpp/#file-is-movable.hpp">futures/algorithm/traits/is_movable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__move__constructible_8hpp/#file-is-move-constructible.hpp">futures/algorithm/traits/is_move_constructible.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__partially__ordered__with_8hpp/#file-is-partially-ordered-with.hpp">futures/algorithm/traits/is_partially_ordered_with.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__range_8hpp/#file-is-range.hpp">futures/algorithm/traits/is_range.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__regular_8hpp/#file-is-regular.hpp">futures/algorithm/traits/is_regular.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__semiregular_8hpp/#file-is-semiregular.hpp">futures/algorithm/traits/is_semiregular.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__sentinel__for_8hpp/#file-is-sentinel-for.hpp">futures/algorithm/traits/is_sentinel_for.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__subtractable_8hpp/#file-is-subtractable.hpp">futures/algorithm/traits/is_subtractable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__swappable_8hpp/#file-is-swappable.hpp">futures/algorithm/traits/is_swappable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__totally__ordered_8hpp/#file-is-totally-ordered.hpp">futures/algorithm/traits/is_totally_ordered.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__totally__ordered__with_8hpp/#file-is-totally-ordered-with.hpp">futures/algorithm/traits/is_totally_ordered_with.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__weakly__equality__comparable_8hpp/#file-is-weakly-equality-comparable.hpp">futures/algorithm/traits/is_weakly_equality_comparable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__weakly__incrementable_8hpp/#file-is-weakly-incrementable.hpp">futures/algorithm/traits/is_weakly_incrementable.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iter__concept_8hpp/#file-iter-concept.hpp">futures/algorithm/traits/iter_concept.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iter__difference_8hpp/#file-iter-difference.hpp">futures/algorithm/traits/iter_difference.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iter__reference_8hpp/#file-iter-reference.hpp">futures/algorithm/traits/iter_reference.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iter__rvalue__reference_8hpp/#file-iter-rvalue-reference.hpp">futures/algorithm/traits/iter_rvalue_reference.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iter__value_8hpp/#file-iter-value.hpp">futures/algorithm/traits/iter_value.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/iterator_8hpp/#file-iterator.hpp">futures/algorithm/traits/iterator.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/range__value_8hpp/#file-range-value.hpp">futures/algorithm/traits/range_value.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/remove__cvref_8hpp/#file-remove-cvref.hpp">futures/algorithm/traits/remove_cvref.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/unary__invoke__algorithm_8hpp/#file-unary-invoke-algorithm.hpp">futures/algorithm/traits/unary_invoke_algorithm.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/value__cmp__algorithm_8hpp/#file-value-cmp-algorithm.hpp">futures/algorithm/traits/value_cmp_algorithm.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>file <a href="/futures/reference/Files/none__of_8hpp/#file-none-of.hpp">futures/algorithm/none_of.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/policies_8hpp/#file-policies.hpp">futures/algorithm/policies.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/reduce_8hpp/#file-reduce.hpp">futures/algorithm/reduce.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>dir <a href="/futures/reference/Files/dir_df6dfc4d57e7b6f5a7fc1dc1541dbff4/#dir-futures/executor">futures/executor</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/default__executor_8hpp/#file-default-executor.hpp">futures/executor/default_executor.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/inline__executor_8hpp/#file-inline-executor.hpp">futures/executor/inline_executor.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__executor_8hpp/#file-is-executor.hpp">futures/executor/is_executor.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/new__thread__executor_8hpp/#file-new-thread-executor.hpp">futures/executor/new_thread_executor.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>dir <a href="/futures/reference/Files/dir_4e51475b242637de1f6b5559e8cff72d/#dir-futures/futures">futures/futures</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/await_8hpp/#file-await.hpp">futures/futures/await.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/basic__future_8hpp/#file-basic-future.hpp">futures/futures/basic_future.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/future__error_8hpp/#file-future-error.hpp">futures/futures/future_error.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/future__options_8hpp/#file-future-options.hpp">futures/futures/future_options.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/future__options__args_8hpp/#file-future-options-args.hpp">futures/futures/future_options_args.hpp</a></strong> </li>
+<li><strong>dir <a href="/futures/reference/Files/dir_3ecedf62ce3696a57cd3f646a588b67f/#dir-futures/futures/traits">futures/futures/traits</a></strong> <ul>
+<li><strong>file <a href="/futures/reference/Files/future__value_8hpp/#file-future-value.hpp">futures/futures/traits/future_value.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/is__future_8hpp/#file-is-future.hpp">futures/futures/traits/is_future.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/to__future_8hpp/#file-to-future.hpp">futures/futures/traits/to_future.hpp</a></strong> </li>
+</ul>
+</li>
+<li><strong>file <a href="/futures/reference/Files/is__ready_8hpp/#file-is-ready.hpp">futures/futures/is_ready.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/launch_8hpp/#file-launch.hpp">futures/futures/launch.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/packaged__task_8hpp/#file-packaged-task.hpp">futures/futures/packaged_task.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/promise_8hpp/#file-promise.hpp">futures/futures/promise.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/stop__token_8hpp/#file-stop-token.hpp">futures/futures/stop_token.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/wait__for__all_8hpp/#file-wait-for-all.hpp">futures/futures/wait_for_all.hpp</a></strong> </li>
+<li><strong>file <a href="/futures/reference/Files/wait__for__any_8hpp/#file-wait-for-any.hpp">futures/futures/wait_for_any.hpp</a></strong> </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<p><sub>Updated on 2022-04-01</sub></p>
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px;">
+<a class="md-button" href="https://github.com/alandefreitas/futures/" target="_blank" title="Futures">
+        ⭐️ Star Futures
+    </a>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application footer -->
+<footer class="md-footer">
+<!-- Link to previous and/or next page -->
+<div class="md-footer-nav">
+<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
+<!-- Link to previous page -->
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../Classes/" rel="prev">
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</div>
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                        Classes
+                    </div>
+</div>
+</a>
+<!-- Link to next page -->
+<a class="md-footer-nav__link md-footer-nav__link--next" href="../../contributing/" rel="next">
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Next
+                </span>
+                        Contributing
+                    </div>
+</div>
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+</div>
+</a>
+</nav>
+</div>
+<!-- Further information -->
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<!-- Copyright and theme information -->
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+                    Copyright © Alan Freitas
+                </div>
+                
+                Made with
+                <a href="https://alandefreitas.github.io/mdsplit/" rel="noopener" target="_blank">
+<code style="background-color: #323232;">mdsplit</code>
+</a>
+                and
+                <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+                    Material for MkDocs
+                </a>
+</div>
+<!-- Social links -->
+<div class="md-social">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.c44cc438.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+<script src="../../javascripts/extra.js"></script>
+</body>
+</html>

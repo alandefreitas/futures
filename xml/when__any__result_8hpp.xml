@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="when__any__result_8hpp" kind="file" language="C++">
+    <compoundname>when_any_result.hpp</compoundname>
+    <includedby refid="when__any_8hpp" local="no">futures/adaptor/when_any.hpp</includedby>
+    <invincdepgraph>
+      <node id="11">
+        <label>futures/algorithm/find_if_not.hpp</label>
+        <link refid="find__if__not_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>futures/algorithm/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>futures/algorithm/find_if.hpp</label>
+        <link refid="find__if_8hpp"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/adaptor/when_any_result.hpp</label>
+        <link refid="when__any__result_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>futures/algorithm/for_each.hpp</label>
+        <link refid="for__each_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/find.hpp</label>
+        <link refid="find_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/count.hpp</label>
+        <link refid="count_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>futures/algorithm/traits/binary_invoke_algorithm.hpp</label>
+        <link refid="binary__invoke__algorithm_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>futures/algorithm/none_of.hpp</label>
+        <link refid="none__of_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/adaptor/when_any.hpp</label>
+        <link refid="when__any_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures/algorithm/all_of.hpp</label>
+        <link refid="all__of_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures/algorithm/count_if.hpp</label>
+        <link refid="count__if_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures/algorithm.hpp</label>
+        <link refid="algorithm_8hpp"/>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/any_of.hpp</label>
+        <link refid="any__of_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structfutures_1_1when__any__result" prot="public">futures::when_any_result</innerclass>
+    <innernamespace refid="namespacefutures">futures</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2021<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacefutures" kindref="compound">futures</ref><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Sequence&gt;</highlight></codeline>
+<codeline lineno="22" refid="structfutures_1_1when__any__result" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structfutures_1_1when__any__result" kindref="compound">when_any_result</ref></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="24" refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kindref="member">size_type</ref><sp/>=<sp/>std::size_t;</highlight></codeline>
+<codeline lineno="25" refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" kindref="member">sequence_type</ref><sp/>=<sp/>Sequence;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="structfutures_1_1when__any__result_1a6e7503a645fb889c080ba674ac794fa0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kindref="member">size_type</ref><sp/><ref refid="structfutures_1_1when__any__result_1a6e7503a645fb889c080ba674ac794fa0" kindref="member">index</ref>{<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal"><ref refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kindref="member">size_type</ref></highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(-1)<sp/>};</highlight></codeline>
+<codeline lineno="28" refid="structfutures_1_1when__any__result_1a221787d150f27ae4f9234b8876525a6f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" kindref="member">sequence_type</ref><sp/><ref refid="structfutures_1_1when__any__result_1a221787d150f27ae4f9234b8876525a6f" kindref="member">tasks</ref>;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>futures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>FUTURES_ADAPTOR_WHEN_ANY_RESULT_HPP</highlight></codeline>
+    </programlisting>
+    <location file="futures/adaptor/when_any_result.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,489 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1when__any__future" kind="class" language="C++" prot="public">
+    <compoundname>futures::when_any_future</compoundname>
+    <includes refid="when__any_8hpp" local="no">when_any.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Sequence</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classfutures_1_1when__any__future_1a17121cd7e67d17481c5a32568fe94302" prot="private" static="no">
+        <type>Sequence</type>
+        <definition>using futures::when_any_future&lt; Sequence &gt;::sequence_type =  Sequence</definition>
+        <argsstring></argsstring>
+        <name>sequence_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="53" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classfutures_1_1when__any__future_1aa43637bb808f247d4c805902a8b3247c" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::when_any_future&lt; Sequence &gt;::sequence_is_range</definition>
+        <argsstring></argsstring>
+        <name>sequence_is_range</name>
+        <initializer>= <ref refid="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" kindref="member">is_range_v</ref>&lt;sequence_type&gt;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="54" column="31" bodyfile="futures/adaptor/when_any.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1when__any__future_1aed3b433e8d8b74c6a851576e8ceda459" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::when_any_future&lt; Sequence &gt;::sequence_is_tuple</definition>
+        <argsstring></argsstring>
+        <name>sequence_is_tuple</name>
+        <initializer>= detail::is_tuple_v&lt;
+            sequence_type&gt;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="55" column="31" bodyfile="futures/adaptor/when_any.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1when__any__future_1a0cec87bc76f0a4985e7c009afc040e4a" prot="private" static="no" mutable="no">
+        <type>sequence_type</type>
+        <definition>sequence_type futures::when_any_future&lt; Sequence &gt;::v</definition>
+        <argsstring></argsstring>
+        <name>v</name>
+        <briefdescription>
+<para>Internal wait_any_future state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="355" column="23" bodyfile="futures/adaptor/when_any.hpp" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1ae7b58471f1b37c66b07cffe7bdef2b97" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::when_any_future&lt; Sequence &gt;::when_any_future</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>when_any_future</name>
+        <briefdescription>
+<para>Default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> with no shared state. After construction, <ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> == false </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="64" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a8a990c356b0b2d85b44b51dd1b73b083" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::when_any_future&lt; Sequence &gt;::when_any_future</definition>
+        <argsstring>(sequence_type &amp;&amp;v) noexcept</argsstring>
+        <name>when_any_future</name>
+        <param>
+          <type>sequence_type &amp;&amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Move a sequence of futures into the <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The sequence is moved into this future object and the objects from which the sequence was created get invalidated.</para>
+<para>We immediately set up the notifiers for any input future that supports lazy continuations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="72" column="18" bodyfile="futures/adaptor/when_any.hpp" bodystart="72" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1af8f26de7e6cc33df79924d92255fba8a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::when_any_future&lt; Sequence &gt;::when_any_future</definition>
+        <argsstring>(when_any_future &amp;&amp;other) noexcept</argsstring>
+        <name>when_any_future</name>
+        <param>
+          <type><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> with the shared state of other using move semantics. After construction, other.valid() == false</para>
+<para>This is a class that controls resources, and their behavior needs to be moved. However, unlike a vector, some notifier resources cannot be moved and might need to be recreated, because they expect the underlying futures to be in a given address to work.</para>
+<para>We cannot move the notifiers because these expect things to be notified at certain addresses. This means the notifiers in <computeroutput>other</computeroutput> have to be stopped and we have to be sure of that before its destructor gets called.</para>
+<para>There are two in operations here.<itemizedlist>
+<listitem><para>Asking the notifiers to stop and waiting<itemizedlist>
+<listitem><para>This is what we need to do at the destructor because we can&apos;t destruct &quot;this&quot; until we are sure no notifiers are going to try to notify this object</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Asking the notifiers to stop<itemizedlist>
+<listitem><para>This is what we need to do when moving, because we know we won&apos;t need these notifiers anymore. When the moved object gets destructed, it will ensure its notifiers are stopped and finish the task. </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="100" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="100" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a74b8a6d2c142d48681aead44125392a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::when_any_future&lt; Sequence &gt;::when_any_future</definition>
+        <argsstring>(const when_any_future &amp;other)=delete</argsstring>
+        <name>when_any_future</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> is not CopyConstructible </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="104" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a2e8113044d166fadad102d9d0dd8b93a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::when_any_future&lt; Sequence &gt;::~when_any_future</definition>
+        <argsstring>()=default</argsstring>
+        <name>~when_any_future</name>
+        <briefdescription>
+<para>Releases any shared state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>If the return object or provider holds the last reference to its shared state, the shared state is destroyed.</para>
+</listitem><listitem><para>the return object or provider gives up its reference to its shared state</para>
+</listitem></itemizedlist>
+</para>
+<para>This means we just need to let the internal futures destroy themselves, but we have to stop notifiers if we have any, because these notifiers might later try to set tokens in a future that no longer exists. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="118" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1af31b5962d0590b387619aaf91b8c1a73" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;</type>
+        <definition>when_any_future&amp; futures::when_any_future&lt; Sequence &gt;::operator=</definition>
+        <argsstring>(when_any_future &amp;&amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Assigns the contents of another future object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Releases any shared state and move-assigns the contents of other to *this.</para>
+<para>After the assignment, other.valid() == false and this-&gt;<ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> will yield the same value as other.valid() before the assignment. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="129" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="129" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a34556fbc5fa7b4e552b69b1747329fa3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;</type>
+        <definition>when_any_future&amp; futures::when_any_future&lt; Sequence &gt;::operator=</definition>
+        <argsstring>(const when_any_future &amp;other)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>const <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Copy assigns the contents of another <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> is not copy assignable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="137" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1ab8bd20e86aa00b0a56a1b1d5da996f4a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structfutures_1_1when__any__result" kindref="compound">when_any_result</ref>&lt; sequence_type &gt;</type>
+        <definition>when_any_result&lt;sequence_type&gt; futures::when_any_future&lt; Sequence &gt;::get</definition>
+        <argsstring>()</argsstring>
+        <name>get</name>
+        <briefdescription>
+<para>Wait until any future has a valid result and retrieves it. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>It effectively calls <ref refid="classfutures_1_1when__any__future_1a15cff0500baa669d82e83b044e51f2a9" kindref="member">wait()</ref> in order to wait for the result. This avoids replicating the logic behind continuations, polling, and notifiers.</para>
+<para>The behavior is undefined if <ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> is false before the call to this function. Any shared state is released. <ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> is false after a call to this method. The value v stored in the shared state, as std::move(v) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="151" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="151" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::when_any_future&lt; Sequence &gt;::valid</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>valid</name>
+        <briefdescription>
+<para>Checks if the future refers to a shared state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This future is always <ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> unless there are tasks and they are all invalid</para>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/when_any">https://en.cppreference.com/w/cpp/experimental/when_any</ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="173" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="173" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a15cff0500baa669d82e83b044e51f2a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::when_any_future&lt; Sequence &gt;::wait</definition>
+        <argsstring>()</argsstring>
+        <name>wait</name>
+        <briefdescription>
+<para>Blocks until the result becomes available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> == true after the call. The behavior is undefined if <ref refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kindref="member">valid()</ref> == false before the call to this function </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="195" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="195" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a226d11e9ce939cc393d81387d5b7a3d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::when_any_future&lt; Sequence &gt;::wait_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration)</argsstring>
+        <name>wait_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <briefdescription>
+<para>Waits for the result to become available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Blocks until specified timeout_duration has elapsed or the result becomes available, whichever comes first. Not-polling is easier to emulate for future conjunctions (when_all) because we can sleep on each task until they are all done, since we need all of them anyway.</para>
+<para><simplesect kind="see"><para><ulink url="https://en.m.wikipedia.org/wiki/Exponential_backoff">https://en.m.wikipedia.org/wiki/Exponential_backoff</ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="215" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="215" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a7513fe653902f30fb695672f69de54b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::when_any_future&lt; Sequence &gt;::wait_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time)</argsstring>
+        <name>wait_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <briefdescription>
+<para>wait_until waits for a result to become available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>It blocks until specified timeout_time has been reached or the result becomes available, whichever comes first </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="232" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="232" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1abde344da4e051f163ff028d9383e1f35" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::when_any_future&lt; Sequence &gt;::is_ready</definition>
+        <argsstring>() const</argsstring>
+        <name>is_ready</name>
+        <briefdescription>
+<para>Check if it&apos;s ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="247" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="247" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a62246c98e0bcb4a1e0550d125dee9dc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sequence_type &amp;&amp;</type>
+        <definition>sequence_type&amp;&amp; futures::when_any_future&lt; Sequence &gt;::release</definition>
+        <argsstring>()</argsstring>
+        <name>release</name>
+        <briefdescription>
+<para>Move the underlying sequence somewhere else. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> is left empty and should now be considered invalid. This is useful for any algorithm that merges two wait_any_future objects without forcing encapsulation of the merge function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="260" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="260" bodyend="262"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a5b36c0441a264f2dba8f9d6eaf853e8e" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class CheckLazyContinuables</type>
+            <defval>std::true_type</defval>
+          </param>
+        </templateparamlist>
+        <type>size_t</type>
+        <definition>size_t futures::when_any_future&lt; Sequence &gt;::get_ready_index</definition>
+        <argsstring>() const</argsstring>
+        <name>get_ready_index</name>
+        <briefdescription>
+<para>Get index of the first internal future that is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If no future is ready, this returns the sequence size as a sentinel </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="270" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="270" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1abb4c0c4af57cb2d81ca3f46bd61225e2" prot="private" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr size_t</type>
+        <definition>constexpr size_t futures::when_any_future&lt; Sequence &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <briefdescription>
+<para>Get number of internal futures. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="297" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="297" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1ac6e7c54ac68fcfbda707539770d56de3" prot="private" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr size_t</type>
+        <definition>constexpr size_t futures::when_any_future&lt; Sequence &gt;::lazy_continuable_size</definition>
+        <argsstring>() const</argsstring>
+        <name>lazy_continuable_size</name>
+        <briefdescription>
+<para>Get number of internal futures with lazy continuations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="307" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="307" bodyend="318"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a451dd5c45319cb049fca8fe58cc6611c" prot="private" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::when_any_future&lt; Sequence &gt;::all_lazy_continuable</definition>
+        <argsstring>() const</argsstring>
+        <name>all_lazy_continuable</name>
+        <briefdescription>
+<para>Check if all internal types are lazy continuable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="322" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="322" bodyend="324"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1ad57d6e2cc4ba4e22551e26aa73007b7a" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::when_any_future&lt; Sequence &gt;::is_ready</definition>
+        <argsstring>(size_t index) const</argsstring>
+        <name>is_ready</name>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Check if the i-th future is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="338" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="338" bodyend="351"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="classfutures_1_1when__any__future_1a67567a9d38cdc2f483c47cf8feb3d0f5" prot="private" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr size_t</type>
+        <definition>static constexpr size_t futures::when_any_future&lt; Sequence &gt;::compile_time_size</definition>
+        <argsstring>()</argsstring>
+        <name>compile_time_size</name>
+        <briefdescription>
+<para>Get size, if we know that at compile time. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="328" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="328" bodyend="334"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Proxy future class referring to the result of a disjunction of futures from <ref refid="group__adaptors_1gab110a9d54ede3e3526e17431b11b747d" kindref="member">when_any</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This class implements another future type to identify when one of the tasks is over.</para>
+<para>As with <computeroutput>when_all</computeroutput>, this class acts as a future that checks the results of other futures to avoid creating a real disjunction of futures that would need another thread for polling.</para>
+<para>Not-polling is easier to emulate for future conjunctions (when_all) because we can sleep on each task until they are all done, since we need all of them anyway. </para>
+    </detaileddescription>
+    <location file="futures/adaptor/when_any.hpp" line="51" column="1" bodyfile="futures/adaptor/when_any.hpp" bodystart="50" bodyend="357"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1when__any__future_1a451dd5c45319cb049fca8fe58cc6611c" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>all_lazy_continuable</name></member>
+      <member refid="classfutures_1_1when__any__future_1a67567a9d38cdc2f483c47cf8feb3d0f5" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>compile_time_size</name></member>
+      <member refid="classfutures_1_1when__any__future_1ab8bd20e86aa00b0a56a1b1d5da996f4a" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>get</name></member>
+      <member refid="classfutures_1_1when__any__future_1a5b36c0441a264f2dba8f9d6eaf853e8e" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>get_ready_index</name></member>
+      <member refid="classfutures_1_1when__any__future_1abde344da4e051f163ff028d9383e1f35" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>is_ready</name></member>
+      <member refid="classfutures_1_1when__any__future_1ad57d6e2cc4ba4e22551e26aa73007b7a" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>is_ready</name></member>
+      <member refid="classfutures_1_1when__any__future_1ac6e7c54ac68fcfbda707539770d56de3" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>lazy_continuable_size</name></member>
+      <member refid="classfutures_1_1when__any__future_1af31b5962d0590b387619aaf91b8c1a73" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1when__any__future_1a34556fbc5fa7b4e552b69b1747329fa3" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1when__any__future_1a62246c98e0bcb4a1e0550d125dee9dc3" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>release</name></member>
+      <member refid="classfutures_1_1when__any__future_1aa43637bb808f247d4c805902a8b3247c" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>sequence_is_range</name></member>
+      <member refid="classfutures_1_1when__any__future_1aed3b433e8d8b74c6a851576e8ceda459" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>sequence_is_tuple</name></member>
+      <member refid="classfutures_1_1when__any__future_1a17121cd7e67d17481c5a32568fe94302" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>sequence_type</name></member>
+      <member refid="classfutures_1_1when__any__future_1abb4c0c4af57cb2d81ca3f46bd61225e2" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>size</name></member>
+      <member refid="classfutures_1_1when__any__future_1a0cec87bc76f0a4985e7c009afc040e4a" prot="private" virt="non-virtual"><scope>futures::when_any_future</scope><name>v</name></member>
+      <member refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>valid</name></member>
+      <member refid="classfutures_1_1when__any__future_1a15cff0500baa669d82e83b044e51f2a9" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>wait</name></member>
+      <member refid="classfutures_1_1when__any__future_1a226d11e9ce939cc393d81387d5b7a3d7" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>wait_for</name></member>
+      <member refid="classfutures_1_1when__any__future_1a7513fe653902f30fb695672f69de54b1" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>wait_until</name></member>
+      <member refid="classfutures_1_1when__any__future_1ae7b58471f1b37c66b07cffe7bdef2b97" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>when_any_future</name></member>
+      <member refid="classfutures_1_1when__any__future_1a8a990c356b0b2d85b44b51dd1b73b083" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>when_any_future</name></member>
+      <member refid="classfutures_1_1when__any__future_1af8f26de7e6cc33df79924d92255fba8a" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>when_any_future</name></member>
+      <member refid="classfutures_1_1when__any__future_1a74b8a6d2c142d48681aead44125392a5" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>when_any_future</name></member>
+      <member refid="classfutures_1_1when__any__future_1a2e8113044d166fadad102d9d0dd8b93a" prot="public" virt="non-virtual"><scope>futures::when_any_future</scope><name>~when_any_future</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

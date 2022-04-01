@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_1cd73713a542b57572a4ff9fdd4ed6a7" kind="dir">
+    <compoundname>futures</compoundname>
+    <innerdir refid="dir_7600b8ee04eb55a58ff8852c23efb638">futures/adaptor</innerdir>
+    <innerdir refid="dir_e7b4090e56732c0d3902af1e1fd5618b">futures/algorithm</innerdir>
+    <innerdir refid="dir_df6dfc4d57e7b6f5a7fc1dc1541dbff4">futures/executor</innerdir>
+    <innerdir refid="dir_4e51475b242637de1f6b5559e8cff72d">futures/futures</innerdir>
+    <innerfile refid="algorithm_8hpp">algorithm.hpp</innerfile>
+    <innerfile refid="futures_8hpp">futures.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/"/>
+  </compounddef>
+</doxygen>

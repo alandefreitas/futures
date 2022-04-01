@@ -1,0 +1,846 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1reduce__functor" kind="class" language="C++" prot="public">
+    <compoundname>futures::reduce_functor</compoundname>
+    <basecompoundref refid="classfutures_1_1binary__invoke__algorithm__functor" prot="public" virt="non-virtual">futures::binary_invoke_algorithm_functor&lt; reduce_functor &gt;</basecompoundref>
+    <includes refid="reduce_8hpp" local="no">reduce.hpp</includes>
+    <innerclass refid="classfutures_1_1reduce__functor_1_1reduce__graph" prot="private">futures::reduce_functor::reduce_graph</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1reduce__functor_1a783d529ba4fdecf2ab6b9c5a551b32bb" prot="private" static="no" mutable="no">
+        <type>friend</type>
+        <definition>friend futures::reduce_functor::binary_invoke_algorithm_functor&lt; reduce_functor &gt;</definition>
+        <argsstring></argsstring>
+        <name>binary_invoke_algorithm_functor&lt; reduce_functor &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/reduce.hpp" line="31" column="9" bodyfile="futures/algorithm/reduce.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="classfutures_1_1reduce__functor_1a5a3584750dfeb0c4513df2b670c5a060" prot="private" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr T</type>
+        <definition>static constexpr T futures::reduce_functor::inline_accumulate</definition>
+        <argsstring>(I first, S last, T init, Fun op)</argsstring>
+        <name>inline_accumulate</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>init</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/reduce.hpp" line="114" column="9" bodyfile="futures/algorithm/reduce.hpp" bodystart="114" bodyend="119"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1reduce__functor_1a288610344f50611a4478ba73354f2e94" prot="private" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr T</type>
+        <definition>constexpr T futures::reduce_functor::run</definition>
+        <argsstring>(const E &amp;ex, P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>run</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Complete overload of the reduce algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The reduce algorithm is equivalent to a version std::accumulate where the binary operation is applied out of order. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>E</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>P</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>I</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>S</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Fun</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to (last + 1)-th element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial value for the reduction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/reduce.hpp" line="157" column="9" bodyfile="futures/algorithm/reduce.hpp" bodystart="157" bodyend="168"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1abc2042fa47caa04261ad9c08e5fa92ed" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Complete overload. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="66" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="66" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a5d58f9da7f829fc6e099611b97513741" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="110" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="110" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a4e48e216ea1674866b242cda497712cb" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;, P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for execution policy instead of executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="161" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="161" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1aaf1270201d7e0ed6c7f0a12e07797506" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;, P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for execution policy instead of executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="207" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="207" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a397f49e0c92371896fd5d0d31341c98a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="249" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="249" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a335d3b1ccd16bbd3330a25eff7cbedcd" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="285" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="285" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a900faad5d84afcde4a52b87e6a6f532a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default parallel executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="319" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="319" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1aabdacbc47b42a34d0a97e853a683ec91" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default parallel executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="360" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="360" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ad69955ddfa48a477b67a33778daba922" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default parallel executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="399" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="399" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ab3d82a31aac8c3286fa459ea695e51ad" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default parallel executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="438" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="438" bodyend="454"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a8e6b2232b24f724495459ed77c07725f" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="479" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="479" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a6aa40124fd3115f83c879673d163345d" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="521" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="521" bodyend="537"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ad731dd5bc445de38455a0acfab816462" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="560" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="560" bodyend="578"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a1c3f58617f60161e219104c41441d6f2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="599" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="599" bodyend="615"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a1a115ae17cbb0f72816e73cdafd49c8a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default executor / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="638" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="638" bodyend="656"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a4ef4553a388ffe7735a82b4b4860c31b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Iterators / default executor / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="678" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="678" bodyend="694"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a88d0fc4c636752d4f2f4f3f4e7af69f4" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default executor / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="715" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="715" bodyend="733"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a188e0ef4125a813ebf9fad09625557ed" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; reduce_functor  &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Ranges / default executor / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="752" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="752" bodyend="768"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Functor representing the overloads for the <ref refid="group__functions_1ga12eba09a0c6fb20ae5a7f3c561e2b433" kindref="member">reduce</ref> function. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::reduce_functor</label>
+        <link refid="classfutures_1_1reduce__functor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::binary_invoke_algorithm_functor&lt; reduce_functor &gt;</label>
+        <link refid="classfutures_1_1binary__invoke__algorithm__functor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::reduce_functor</label>
+        <link refid="classfutures_1_1reduce__functor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::binary_invoke_algorithm_functor&lt; reduce_functor &gt;</label>
+        <link refid="classfutures_1_1binary__invoke__algorithm__functor"/>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/reduce.hpp" line="30" column="1" bodyfile="futures/algorithm/reduce.hpp" bodystart="28" bodyend="169"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1reduce__functor_1a783d529ba4fdecf2ab6b9c5a551b32bb" prot="private" virt="non-virtual"><scope>futures::reduce_functor</scope><name>binary_invoke_algorithm_functor&lt; reduce_functor &gt;</name></member>
+      <member refid="classfutures_1_1reduce__functor_1a5a3584750dfeb0c4513df2b670c5a060" prot="private" virt="non-virtual"><scope>futures::reduce_functor</scope><name>inline_accumulate</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1abc2042fa47caa04261ad9c08e5fa92ed" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a5d58f9da7f829fc6e099611b97513741" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a4e48e216ea1674866b242cda497712cb" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aaf1270201d7e0ed6c7f0a12e07797506" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a397f49e0c92371896fd5d0d31341c98a" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a335d3b1ccd16bbd3330a25eff7cbedcd" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a900faad5d84afcde4a52b87e6a6f532a" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aabdacbc47b42a34d0a97e853a683ec91" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ad69955ddfa48a477b67a33778daba922" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ab3d82a31aac8c3286fa459ea695e51ad" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8e6b2232b24f724495459ed77c07725f" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a6aa40124fd3115f83c879673d163345d" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ad731dd5bc445de38455a0acfab816462" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a1c3f58617f60161e219104c41441d6f2" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a1a115ae17cbb0f72816e73cdafd49c8a" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a4ef4553a388ffe7735a82b4b4860c31b" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a88d0fc4c636752d4f2f4f3f4e7af69f4" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a188e0ef4125a813ebf9fad09625557ed" prot="public" virt="non-virtual"><scope>futures::reduce_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1reduce__functor_1a288610344f50611a4478ba73354f2e94" prot="private" virt="non-virtual"><scope>futures::reduce_functor</scope><name>run</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

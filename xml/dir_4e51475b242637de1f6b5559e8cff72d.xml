@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_4e51475b242637de1f6b5559e8cff72d" kind="dir">
+    <compoundname>futures/futures</compoundname>
+    <innerdir refid="dir_3ecedf62ce3696a57cd3f646a588b67f">futures/futures/traits</innerdir>
+    <innerfile refid="await_8hpp">await.hpp</innerfile>
+    <innerfile refid="basic__future_8hpp">basic_future.hpp</innerfile>
+    <innerfile refid="future__error_8hpp">future_error.hpp</innerfile>
+    <innerfile refid="future__options_8hpp">future_options.hpp</innerfile>
+    <innerfile refid="future__options__args_8hpp">future_options_args.hpp</innerfile>
+    <innerfile refid="is__ready_8hpp">is_ready.hpp</innerfile>
+    <innerfile refid="launch_8hpp">launch.hpp</innerfile>
+    <innerfile refid="packaged__task_8hpp">packaged_task.hpp</innerfile>
+    <innerfile refid="promise_8hpp">promise.hpp</innerfile>
+    <innerfile refid="stop__token_8hpp">stop_token.hpp</innerfile>
+    <innerfile refid="wait__for__all_8hpp">wait_for_all.hpp</innerfile>
+    <innerfile refid="wait__for__any_8hpp">wait_for_any.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/futures/"/>
+  </compounddef>
+</doxygen>

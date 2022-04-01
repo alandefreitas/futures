@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1to__future" kind="struct" language="C++" prot="public">
+    <compoundname>futures::to_future</compoundname>
+    <includes refid="to__future_8hpp" local="no">to_future.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>class Enable</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structfutures_1_1to__future_1a0b71bda1106533d105252c532dcffeed" prot="public" static="no">
+        <type>void</type>
+        <definition>using futures::to_future&lt; T, Enable &gt;::type =  void</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/to_future.hpp" line="21" column="9" bodyfile="futures/futures/traits/to_future.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Trait to convert input type to its proper future type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><itemizedlist>
+<listitem><para>Futures become their decayed versions</para>
+</listitem><listitem><para>Lambdas become futures</para>
+</listitem></itemizedlist>
+</para>
+<para>The primary template handles non-future types </para>
+    </detaileddescription>
+    <location file="futures/futures/traits/to_future.hpp" line="20" column="1" bodyfile="futures/futures/traits/to_future.hpp" bodystart="19" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1to__future_1a0b71bda1106533d105252c532dcffeed" prot="public" virt="non-virtual"><scope>futures::to_future</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

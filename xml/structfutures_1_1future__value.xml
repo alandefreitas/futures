@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1future__value" kind="struct" language="C++" prot="public">
+    <compoundname>futures::future_value</compoundname>
+    <includes refid="future__value_8hpp" local="no">future_value.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>class Enable</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Determine type the future object holds. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Primary template handles non-future types</para>
+<para><simplesect kind="note"><para>Not to be confused with continuation unwrapping </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="futures/futures/traits/future_value.hpp" line="30" column="1" bodyfile="futures/futures/traits/future_value.hpp" bodystart="29" bodyend="30"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

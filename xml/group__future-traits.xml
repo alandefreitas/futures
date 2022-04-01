@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__future-traits" kind="group">
+    <compoundname>future-traits</compoundname>
+    <title>Future Traits</title>
+    <innerclass refid="structfutures_1_1future__value" prot="public">futures::future_value</innerclass>
+    <innerclass refid="structfutures_1_1is__future" prot="public">futures::is_future</innerclass>
+    <innerclass refid="structfutures_1_1has__ready__notifier" prot="public">futures::has_ready_notifier</innerclass>
+    <innerclass refid="structfutures_1_1is__shared__future" prot="public">futures::is_shared_future</innerclass>
+    <innerclass refid="structfutures_1_1is__continuable" prot="public">futures::is_continuable</innerclass>
+    <innerclass refid="structfutures_1_1is__stoppable" prot="public">futures::is_stoppable</innerclass>
+    <innerclass refid="structfutures_1_1has__stop__token" prot="public">futures::has_stop_token</innerclass>
+    <innerclass refid="structfutures_1_1is__always__deferred" prot="public">futures::is_always_deferred</innerclass>
+    <innerclass refid="structfutures_1_1has__executor" prot="public">futures::has_executor</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__future-traits_1ga6e31e50532fd1185e4321c4b76918907" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename future_value&lt; T &gt;::type</type>
+        <definition>using futures::future_value_t = typedef typename future_value&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>future_value_t</name>
+        <briefdescription>
+<para>Determine type a future object holds. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>Not to be confused with continuation unwrapping </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/future_value.hpp" line="51" column="5" bodyfile="futures/futures/traits/future_value.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__future-traits_1gabf9f55e489d61e352658483d5e090206" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_future_v</definition>
+        <argsstring></argsstring>
+        <name>is_future_v</name>
+        <initializer>= is_future&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type is a future type as a bool value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="45" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gaaa06f944510ee5b88b996ec9e1f41adb" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_ready_notifier_v</definition>
+        <argsstring></argsstring>
+        <name>has_ready_notifier_v</name>
+        <initializer>= has_ready_notifier&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type is a shared future type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="54" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga98d13b2d7d89edd37c377b59e2c3d6f5" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_shared_future_v</definition>
+        <argsstring></argsstring>
+        <name>is_shared_future_v</name>
+        <initializer>= is_shared_future&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type is a shared future type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="69" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gaa1dab24425678e965a56ff21c6d1624e" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_continuable_v</definition>
+        <argsstring></argsstring>
+        <name>is_continuable_v</name>
+        <initializer>= is_continuable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as supporting lazy continuations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="80" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gad4b42cfc7fecf09378dbf1548501a366" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_stoppable_v</definition>
+        <argsstring></argsstring>
+        <name>is_stoppable_v</name>
+        <initializer>= is_stoppable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as stoppable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="89" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga298d5e966d0a87153c8feb6dfaf6a222" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_stop_token_v</definition>
+        <argsstring></argsstring>
+        <name>has_stop_token_v</name>
+        <initializer>= has_stop_token&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future having a common stop token. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="98" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga61c743647bbfe6907f93a674af321ad1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_always_deferred_v</definition>
+        <argsstring></argsstring>
+        <name>is_always_deferred_v</name>
+        <initializer>= is_always_deferred&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as always deferred. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="111" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga1d65f925849576acd6b5a4a6333d1380" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_executor_v</definition>
+        <argsstring></argsstring>
+        <name>has_executor_v</name>
+        <initializer>= has_executor&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Determine if a future type has an executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/traits/is_future.hpp" line="120" column="20" bodyfile="futures/futures/traits/is_future.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Determine properties of future types. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

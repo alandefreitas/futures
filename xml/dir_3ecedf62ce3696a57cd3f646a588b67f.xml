@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_3ecedf62ce3696a57cd3f646a588b67f" kind="dir">
+    <compoundname>futures/futures/traits</compoundname>
+    <innerfile refid="future__value_8hpp">future_value.hpp</innerfile>
+    <innerfile refid="is__future_8hpp">is_future.hpp</innerfile>
+    <innerfile refid="to__future_8hpp">to_future.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/futures/traits/"/>
+  </compounddef>
+</doxygen>

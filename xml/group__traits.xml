@@ -1,0 +1,1755 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__traits" kind="group">
+    <compoundname>traits</compoundname>
+    <title>Traits</title>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__traits_1ga1d84e9254ea337f07f0069362bc482d3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_difference_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_difference_type</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 has-member-difference-type concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_difference_type.hpp" line="27" column="5" bodyfile="futures/algorithm/traits/has_difference_type.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga83daad6d65ae754a6f48a2010000c246" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_element_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_element_type</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 has-member-element-type concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_element_type.hpp" line="27" column="5" bodyfile="futures/algorithm/traits/has_element_type.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga9660db37d28cf2bda535dcb45e7cdbbe" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_iterator_traits_difference_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_difference_type</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 &quot;has-iterator-traits-difference-type&quot; concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_difference_type.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/has_iterator_traits_difference_type.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga3d5aacfeba2dda9b14a578e0fdc16c3b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_iterator_traits_iterator_category = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_iterator_category</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 &quot;has-iterator-traits-iterator-category&quot; concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_iterator_category.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/has_iterator_traits_iterator_category.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gab167e3d3a48acfaade84d3ece952e61a" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_iterator_traits_iterator_concept = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_iterator_concept</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 &quot;has-iterator-traits-iterator-concept&quot; concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gab92b36d73c49bd79671979d3b463d2e3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_iterator_traits_value_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_value_type</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 &quot;has-iterator-traits-value-type&quot; concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_value_type.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/has_iterator_traits_value_type.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaa5bc726025d56631f8e4d7b3ea2190c3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_value_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_value_type</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 has-member-value-type concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_value_type.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/has_value_type.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaec50b313086060f6eeda9568880c465b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class LHS</type>
+          </param>
+          <param>
+            <type>class RHS</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_assignable_from = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_assignable_from</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 assignable_from concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_assignable_from.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_assignable_from.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga5037a72ad5b50a93e037562d097b114f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_constructible_from = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_constructible_from</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 constructible_from concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_constructible_from.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_constructible_from.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaa2da2543b357d3b90534345f6243d035" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class From</type>
+          </param>
+          <param>
+            <type>class To</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_convertible_to = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_convertible_to</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 convertible_to concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_convertible_to.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_convertible_to.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga8ed539b99e653fa1ba50b0492d882ad7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_copyable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_copyable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 copyable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_copyable.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_copyable.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga8671fa77a1b299ced4ff4849ac9bb1bc" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_default_initializable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_default_initializable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 default_initializable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_default_initializable.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/is_default_initializable.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gafd2333b407be3bc8cc4aaca9f536a23a" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_derived_from = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_derived_from</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 derived_from concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_derived_from.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_derived_from.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga0c6e5b7eda673c3f4231c70da3caf202" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_equality_comparable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 equality_comparable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_equality_comparable.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga100d60de210202c6863aa15cc5421824" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_equality_comparable_with = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_with</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 equality_comparable_with concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable_with.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_equality_comparable_with.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga9b8782a0b3cb4c6a5aa611e72e22fa09" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_forward_iterator = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_forward_iterator</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 forward_iterator concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_forward_iterator.hpp" line="33" column="5" bodyfile="futures/algorithm/traits/is_forward_iterator.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga378e29ea7722be6af6960f6ae57dffda" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_incrementable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_incrementable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 incrementable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_incrementable.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/is_incrementable.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gacec3cf84299f155f1a34a4984c69a8e3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_indirectly_binary_invocable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_binary_invocable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 indirectly_binary_invocable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" line="31" column="5" bodyfile="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga5a97d5bd36705d21da09c8118d731516" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_indirectly_readable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_readable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 indirectly_readable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_readable.hpp" line="31" column="5" bodyfile="futures/algorithm/traits/is_indirectly_readable.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga32153eb8e1fdd9a9bff8212e71fa129e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_indirectly_unary_invocable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_unary_invocable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 indirectly_unary_invocable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" line="31" column="5" bodyfile="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga80bd3011ece5d9f209dd3d4e4f328890" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_input_iterator = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_input_iterator</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 input_iterator concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_iterator.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_input_iterator.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga458070c57ebb3337416d2caef79b2cda" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_input_or_output_iterator = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_input_or_output_iterator</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 input_or_output_iterator concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_or_output_iterator.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_input_or_output_iterator.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga2e8151b745860b67241f4b0af69069e9" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_input_range = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_input_range</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 input_range concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_range.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_input_range.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga13a598ce32124ea74b58451c1730fd8d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_movable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_movable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 movable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_movable.hpp" line="31" column="5" bodyfile="futures/algorithm/traits/is_movable.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga394360a4ffd8b87ba0f71d3da98ab4e9" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_move_constructible = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_move_constructible</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 move_constructible concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_move_constructible.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_move_constructible.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga07ffbf3c51b13494d79f3aaea1fc8bd0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_partially_ordered_with = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_partially_ordered_with</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 partially_ordered_with concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_partially_ordered_with.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_partially_ordered_with.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga8ff1b8c419cc699ef128cae5e36a4efe" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_range = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_range</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 range concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_range.hpp" line="27" column="5" bodyfile="futures/algorithm/traits/is_range.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga8fbb9a46e502bdc7adda653f69f57886" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_regular = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_regular</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 regular concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_regular.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_regular.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga201f984060925ef39c992ffe5a3a120d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_semiregular = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_semiregular</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 semiregular concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_semiregular.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_semiregular.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaae2628d04754c0b0d3c395ea7d64427f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_sentinel_for = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_sentinel_for</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 sentinel_for concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_sentinel_for.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_sentinel_for.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gac939461380d63d5d87a586c67ae48adc" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_subtractable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_subtractable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 subtractable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_subtractable.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_subtractable.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga3ef240c60939ccb3471270ff249256e5" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_swappable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_swappable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 swappable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_swappable.hpp" line="27" column="5" bodyfile="futures/algorithm/traits/is_swappable.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_totally_ordered = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 totally_ordered concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered.hpp" line="29" column="5" bodyfile="futures/algorithm/traits/is_totally_ordered.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga1ed471304addd694018037e240f5dae7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_totally_ordered_with = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_with</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 totally_ordered_with concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered_with.hpp" line="33" column="5" bodyfile="futures/algorithm/traits/is_totally_ordered_with.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga225eff424e67f3282f40ed1f5f450b97" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_weakly_equality_comparable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_equality_comparable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 weakly_equality_comparable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_equality_comparable.hpp" line="28" column="5" bodyfile="futures/algorithm/traits/is_weakly_equality_comparable.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga03c1a7bbf4c606a51950dbb0f911521b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_weakly_incrementable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_incrementable</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 weakly_incrementable concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_incrementable.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/is_weakly_incrementable.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga25d4a363083dbabfcb0cbdcc245ff286" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iter_concept = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iter_concept</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iter_concept concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_concept.hpp" line="32" column="5" bodyfile="futures/algorithm/traits/iter_concept.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gae4917f06658e26e7a928316aa5d9e386" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_concept&lt; T &gt;::type</type>
+        <definition>using futures::iter_concept_t = typedef typename iter_concept&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_concept_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_concept.hpp" line="79" column="5" bodyfile="futures/algorithm/traits/iter_concept.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaafef09091d509580920d281b758d5102" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iter_difference = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iter_difference</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iter_difference concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_difference.hpp" line="33" column="5" bodyfile="futures/algorithm/traits/iter_difference.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gadb88ead4be9c831ffd25b07850d1f1db" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_difference&lt; T &gt;::type</type>
+        <definition>using futures::iter_difference_t = typedef typename iter_difference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_difference_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_difference.hpp" line="112" column="5" bodyfile="futures/algorithm/traits/iter_difference.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga3bb4e5b9fdd090f0b70936c9b9054ee9" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iter_reference = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iter_reference</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iter_reference concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_reference.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/iter_reference.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga4b1badc7c239d872ac366d4a8c57101a" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_reference&lt; T &gt;::type</type>
+        <definition>using futures::iter_reference_t = typedef typename iter_reference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_reference_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_reference.hpp" line="44" column="5" bodyfile="futures/algorithm/traits/iter_reference.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga12a30cbe0a987b9362b6d4e29d874722" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iter_rvalue_reference = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iter_rvalue_reference</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iter_rvalue_reference concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_rvalue_reference.hpp" line="30" column="5" bodyfile="futures/algorithm/traits/iter_rvalue_reference.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga2de87617ebb91ba233b7d4f5ee08e703" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_rvalue_reference&lt; T &gt;::type</type>
+        <definition>using futures::iter_rvalue_reference_t = typedef typename iter_rvalue_reference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_rvalue_reference_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_rvalue_reference.hpp" line="43" column="5" bodyfile="futures/algorithm/traits/iter_rvalue_reference.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gafac650dc65ac3e0858e833d61d8cb10b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iter_value = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iter_value</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iter_value concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_value.hpp" line="33" column="5" bodyfile="futures/algorithm/traits/iter_value.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gabd912e4dacd864daedb36cd1f39e1723" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_value&lt; T &gt;::type</type>
+        <definition>using futures::iter_value_t = typedef typename iter_value&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_value_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_value.hpp" line="100" column="5" bodyfile="futures/algorithm/traits/iter_value.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaab49ab8494be12473067161028092e83" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::iterator = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 iterator_t concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iterator.hpp" line="33" column="5" bodyfile="futures/algorithm/traits/iterator.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga25b9349b8a29ca3bea4913f8b704e515" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iterator&lt; T &gt;::type</type>
+        <definition>using futures::iterator_t = typedef typename iterator&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iterator_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iterator.hpp" line="46" column="5" bodyfile="futures/algorithm/traits/iterator.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga04d0ae728bef81f44c5187d05439776d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::range_value = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>range_value</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 range_value concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/range_value.hpp" line="32" column="5" bodyfile="futures/algorithm/traits/range_value.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga36b10fa59d1005a75cecb03df26b12d8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+        </templateparamlist>
+        <type>typename range_value&lt; R &gt;::type</type>
+        <definition>using futures::range_value_t = typedef typename range_value&lt;R&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>range_value_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/range_value.hpp" line="45" column="5" bodyfile="futures/algorithm/traits/range_value.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga79e8a8443e8742dfcb761e61fea9f2f0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::remove_cvref = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>remove_cvref</name>
+        <briefdescription>
+<para>A C++17 type trait equivalent to the C++20 remove_cvref concept. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/remove_cvref.hpp" line="26" column="5" bodyfile="futures/algorithm/traits/remove_cvref.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga08dfd6b7fc387123f45b76f825a47193" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename remove_cvref&lt; T &gt;::type</type>
+        <definition>using futures::remove_cvref_t = typedef typename remove_cvref&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>remove_cvref_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/remove_cvref.hpp" line="36" column="5" bodyfile="futures/algorithm/traits/remove_cvref.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__traits_1ga2e3620e7a73de8f9b594e548dddefe82" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_difference_type_v</definition>
+        <argsstring></argsstring>
+        <name>has_difference_type_v</name>
+        <initializer>= has_difference_type&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_difference_type.hpp" line="39" column="20" bodyfile="futures/algorithm/traits/has_difference_type.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga9652f5c6aef8640b1e0a83e45504fd3d" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_element_type_v</definition>
+        <argsstring></argsstring>
+        <name>has_element_type_v</name>
+        <initializer>= has_element_type&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_element_type.hpp" line="39" column="20" bodyfile="futures/algorithm/traits/has_element_type.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga11bb21073efa174dc64741b4fd2bf0c2" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_iterator_traits_difference_type_v</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_difference_type_v</name>
+        <initializer>= has_iterator_traits_difference_type&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_difference_type.hpp" line="43" column="20" bodyfile="futures/algorithm/traits/has_iterator_traits_difference_type.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga247f22b67f0e39c1e0b62c61f33b3db7" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_iterator_traits_iterator_category_v</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_iterator_category_v</name>
+        <initializer>= has_iterator_traits_iterator_category&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_iterator_category.hpp" line="43" column="20" bodyfile="futures/algorithm/traits/has_iterator_traits_iterator_category.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga68193ef03bc73b37de6c18c156e9c1fe" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_iterator_traits_iterator_concept_v</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_iterator_concept_v</name>
+        <initializer>= has_iterator_traits_iterator_concept&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp" line="43" column="20" bodyfile="futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga3524de01313eba3ab358c0b197b29065" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_iterator_traits_value_type_v</definition>
+        <argsstring></argsstring>
+        <name>has_iterator_traits_value_type_v</name>
+        <initializer>= has_iterator_traits_value_type&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_iterator_traits_value_type.hpp" line="43" column="20" bodyfile="futures/algorithm/traits/has_iterator_traits_value_type.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gad87119c821da02d93602e9be85818d87" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_value_type_v</definition>
+        <argsstring></argsstring>
+        <name>has_value_type_v</name>
+        <initializer>= has_value_type&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/has_value_type.hpp" line="40" column="20" bodyfile="futures/algorithm/traits/has_value_type.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga77606ec080e615c4f83c1a737589268d" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class LHS</type>
+          </param>
+          <param>
+            <type>class RHS</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_assignable_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_assignable_from_v</name>
+        <initializer>= is_assignable_from&lt;LHS, RHS&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_assignable_from.hpp" line="49" column="20" bodyfile="futures/algorithm/traits/is_assignable_from.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga6c5fc06c5acf15dbbc0e490988e0bbcc" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_constructible_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_constructible_from_v</name>
+        <initializer>= is_constructible_from&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_constructible_from.hpp" line="38" column="20" bodyfile="futures/algorithm/traits/is_constructible_from.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga99d9a1bd8e1ab89863224c78b515e4e1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class From</type>
+          </param>
+          <param>
+            <type>class To</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_convertible_to_v</definition>
+        <argsstring></argsstring>
+        <name>is_convertible_to_v</name>
+        <initializer>= is_convertible_to&lt;From, To&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_convertible_to.hpp" line="47" column="20" bodyfile="futures/algorithm/traits/is_convertible_to.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga19bdaf3c43f699426957a966a1d16c37" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_copyable_v</definition>
+        <argsstring></argsstring>
+        <name>is_copyable_v</name>
+        <initializer>= is_copyable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_copyable.hpp" line="51" column="20" bodyfile="futures/algorithm/traits/is_copyable.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga25c80aeac9b688386b0755fd4f7e2236" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_default_initializable_v</definition>
+        <argsstring></argsstring>
+        <name>is_default_initializable_v</name>
+        <initializer>= is_default_initializable&lt;
+        T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_default_initializable.hpp" line="47" column="20" bodyfile="futures/algorithm/traits/is_default_initializable.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gac0544fcb34d2441bf49ecd2b4165b727" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class Derived</type>
+          </param>
+          <param>
+            <type>class Base</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_derived_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_derived_from_v</name>
+        <initializer>= is_derived_from&lt;Derived, Base&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_derived_from.hpp" line="40" column="20" bodyfile="futures/algorithm/traits/is_derived_from.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga8465918081b89b0713376f47aa9e51cf" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_equality_comparable_v</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_v</name>
+        <initializer>= is_equality_comparable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable.hpp" line="46" column="20" bodyfile="futures/algorithm/traits/is_equality_comparable.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga5a60f9e666ffd6d75f260a8cd79c4fcb" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_equality_comparable_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_with_v</name>
+        <initializer>= is_equality_comparable_with&lt;T, U&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable_with.hpp" line="50" column="20" bodyfile="futures/algorithm/traits/is_equality_comparable_with.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga39f0eb89da25215eabcb5b741a1f2f8f" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_forward_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_forward_iterator_v</name>
+        <initializer>= is_forward_iterator&lt;I&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_forward_iterator.hpp" line="53" column="20" bodyfile="futures/algorithm/traits/is_forward_iterator.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gab9d3117a9157923b43113f8950b58ea6" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_incrementable_v</definition>
+        <argsstring></argsstring>
+        <name>is_incrementable_v</name>
+        <initializer>= is_incrementable&lt;I&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_incrementable.hpp" line="53" column="20" bodyfile="futures/algorithm/traits/is_incrementable.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga2ce9de37185584b4cc70508a0c709f72" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_binary_invocable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_binary_invocable_v</name>
+        <initializer>= is_indirectly_binary_invocable&lt;F, I1, I2&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" line="53" column="20" bodyfile="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga39b8d413d2e15c20ad26708791d48c96" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_readable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_readable_v</name>
+        <initializer>= is_indirectly_readable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_readable.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_indirectly_readable.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga035daff7f18105b4ec196371bdeb6d5c" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_unary_invocable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_unary_invocable_v</name>
+        <initializer>= is_indirectly_unary_invocable&lt;F, I&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" line="51" column="20" bodyfile="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga164df25f7613782d753e35e084c236b7" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_input_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_iterator_v</name>
+        <initializer>= is_input_iterator&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_iterator.hpp" line="40" column="20" bodyfile="futures/algorithm/traits/is_input_iterator.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gac5975521439989723185832ac2645166" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_input_or_output_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_or_output_iterator_v</name>
+        <initializer>= is_input_or_output_iterator&lt;
+        T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_or_output_iterator.hpp" line="41" column="20" bodyfile="futures/algorithm/traits/is_input_or_output_iterator.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaa175e93443e64a0a217eda31385a7849" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_input_range_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_range_v</name>
+        <initializer>= is_input_range&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_range.hpp" line="47" column="20" bodyfile="futures/algorithm/traits/is_input_range.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga9900979cf6cb29a928197a494ccfd023" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_movable_v</definition>
+        <argsstring></argsstring>
+        <name>is_movable_v</name>
+        <initializer>= is_movable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_movable.hpp" line="51" column="20" bodyfile="futures/algorithm/traits/is_movable.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaaba2a10a79777082f19420c161b7ca40" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_move_constructible_v</definition>
+        <argsstring></argsstring>
+        <name>is_move_constructible_v</name>
+        <initializer>= is_move_constructible&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_move_constructible.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_move_constructible.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga39514f7608f1f0909a08a6b2e466402e" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_partially_ordered_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_partially_ordered_with_v</name>
+        <initializer>= is_partially_ordered_with&lt;T, U&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_partially_ordered_with.hpp" line="53" column="20" bodyfile="futures/algorithm/traits/is_partially_ordered_with.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_range_v</definition>
+        <argsstring></argsstring>
+        <name>is_range_v</name>
+        <initializer>= is_range&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_range.hpp" line="45" column="20" bodyfile="futures/algorithm/traits/is_range.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaaa5f05191e3a4aaf4b084d1c29559bc4" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_regular_v</definition>
+        <argsstring></argsstring>
+        <name>is_regular_v</name>
+        <initializer>= is_regular&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_regular.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_regular.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gadcef95d15ae7d9498b6c45d0f05bc648" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_semiregular_v</definition>
+        <argsstring></argsstring>
+        <name>is_semiregular_v</name>
+        <initializer>= is_semiregular&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_semiregular.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_semiregular.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gacadf25f8f6492d3710eb2d513b0dc7a7" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_sentinel_for_v</definition>
+        <argsstring></argsstring>
+        <name>is_sentinel_for_v</name>
+        <initializer>= is_sentinel_for&lt;S, I&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_sentinel_for.hpp" line="49" column="20" bodyfile="futures/algorithm/traits/is_sentinel_for.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gad282d79ae31fcfba2b31383387b00433" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_subtractable_v</definition>
+        <argsstring></argsstring>
+        <name>is_subtractable_v</name>
+        <initializer>= is_subtractable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_subtractable.hpp" line="47" column="20" bodyfile="futures/algorithm/traits/is_subtractable.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga3df986359d7ffe87ad775677e9e46326" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_swappable_v</definition>
+        <argsstring></argsstring>
+        <name>is_swappable_v</name>
+        <initializer>= is_swappable&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_swappable.hpp" line="44" column="20" bodyfile="futures/algorithm/traits/is_swappable.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_totally_ordered_v</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_v</name>
+        <initializer>= is_totally_ordered&lt;T&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered.hpp" line="49" column="20" bodyfile="futures/algorithm/traits/is_totally_ordered.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gafa9051526c36ea222da0f4d83f3d3b66" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_totally_ordered_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_with_v</name>
+        <initializer>= is_totally_ordered_with&lt;T, U&gt;::
+        value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered_with.hpp" line="54" column="20" bodyfile="futures/algorithm/traits/is_totally_ordered_with.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaa20276d0940ad0cb97c7288ec7938bca" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_weakly_equality_comparable_v</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_equality_comparable_v</name>
+        <initializer>= is_weakly_equality_comparable&lt;T, U&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_equality_comparable.hpp" line="49" column="20" bodyfile="futures/algorithm/traits/is_weakly_equality_comparable.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaa514a224bede48a6941ec53d58b3692f" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_weakly_incrementable_v</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_incrementable_v</name>
+        <initializer>= is_weakly_incrementable&lt;I&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_incrementable.hpp" line="55" column="20" bodyfile="futures/algorithm/traits/is_weakly_incrementable.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

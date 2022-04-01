@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1promise__base" kind="class" language="C++" prot="public">
+    <compoundname>futures::promise_base</compoundname>
+    <includes refid="promise_8hpp" local="no">promise.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class R</type>
+      </param>
+      <param>
+        <type>class Options</type>
+        <defval><ref refid="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" kindref="member">future_options</ref>&lt;<ref refid="structfutures_1_1continuable__opt" kindref="compound">continuable_opt</ref>&gt;</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1promise__base_1acc4d2d9a6715fa9c89e06f1881f15db0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool futures::promise_base&lt; R, Options &gt;::obtained_</definition>
+        <argsstring></argsstring>
+        <name>obtained_</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+<para>True if the future has already obtained the promise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="168" column="14" bodyfile="futures/futures/promise.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1promise__base_1abce8cf115d8ebb0a8bae17cda2c228f9" prot="private" static="no" mutable="no">
+        <type>detail::shared_state&lt; R, Options &gt;</type>
+        <definition>detail::shared_state&lt;R, Options&gt; futures::promise_base&lt; R, Options &gt;::shared_state_</definition>
+        <argsstring></argsstring>
+        <name>shared_state_</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Pointer to the shared state for this promise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="171" column="30" bodyfile="futures/futures/promise.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a6522cea0afdfc7ba1ad1df9e786c4d0f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::promise_base&lt; R, Options &gt;::promise_base</definition>
+        <argsstring>()</argsstring>
+        <name>promise_base</name>
+        <briefdescription>
+<para>Create the base promise with std::allocator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Use std::allocator_arg tag to dispatch and select allocator aware constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="45" column="9" bodyfile="futures/futures/promise.hpp" bodystart="45" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a1bac61215fb8421468ca3a582803eb42" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Allocator</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::promise_base&lt; R, Options &gt;::promise_base</definition>
+        <argsstring>(std::allocator_arg_t, const Allocator &amp;alloc)</argsstring>
+        <name>promise_base</name>
+        <param>
+          <type>std::allocator_arg_t</type>
+        </param>
+        <param>
+          <type>const Allocator &amp;</type>
+          <declname>alloc</declname>
+        </param>
+        <briefdescription>
+<para>Create a base promise setting the shared state with the specified allocator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function allocates memory for and allocates an initial promise_shared_state (the future value) with the specified allocator. This object is stored in the internal intrusive pointer as the future shared state. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="57" column="9" bodyfile="futures/futures/promise.hpp" bodystart="57" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a29777f0404b975e2fb03282dbb39994a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::promise_base&lt; R, Options &gt;::promise_base</definition>
+        <argsstring>(promise_base const &amp;)=delete</argsstring>
+        <name>promise_base</name>
+        <param>
+          <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>No copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="61" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a95f942d95d7c67d47cafa9c8224ab644" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::promise_base&lt; R, Options &gt;::promise_base</definition>
+        <argsstring>(promise_base &amp;&amp;other) noexcept</argsstring>
+        <name>promise_base</name>
+        <param>
+          <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="64" column="9" bodyfile="futures/futures/promise.hpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a62f222805c7914bbb2c384ed1e560241" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> &amp;</type>
+        <definition>promise_base&amp; futures::promise_base&lt; R, Options &gt;::operator=</definition>
+        <argsstring>(promise_base const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>No copy assignment. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="72" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a934559902b2d1e02f6fd7782ef63d608" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> &amp;</type>
+        <definition>promise_base&amp; futures::promise_base&lt; R, Options &gt;::operator=</definition>
+        <argsstring>(promise_base &amp;&amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move assignment. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="77" column="9" bodyfile="futures/futures/promise.hpp" bodystart="77" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a73b9131a13dec097ddf347d6d7967dc4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual futures::promise_base&lt; R, Options &gt;::~promise_base</definition>
+        <argsstring>()</argsstring>
+        <name>~promise_base</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This promise owns the shared state, so we need to warn the shared state when it&apos;s destroyed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="89" column="17" bodyfile="futures/futures/promise.hpp" bodystart="89" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a10d01f1680c84525ecfa97e9fda1b31c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; R, Options &gt;</type>
+        <definition>basic_future&lt;R, Options&gt; futures::promise_base&lt; R, Options &gt;::get_future</definition>
+        <argsstring>()</argsstring>
+        <name>get_future</name>
+        <briefdescription>
+<para>Gets a future that shares its state with this promise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function constructs a future object that shares its state with this promise. Because this library handles more than a single future type, the future type we want is a template parameter.</para>
+<para>This function expects future type constructors to accept pointers to shared states. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="104" column="9" bodyfile="futures/futures/promise.hpp" bodystart="104" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a6f78829ba8a4931bb41675757db2fcd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::promise_base&lt; R, Options &gt;::set_exception</definition>
+        <argsstring>(std::exception_ptr p)</argsstring>
+        <name>set_exception</name>
+        <param>
+          <type>std::exception_ptr</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+<para>Set the promise result as an exception. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>The set_value operation is only available at the concrete derived class, where we know the class type </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="119" column="9" bodyfile="futures/futures/promise.hpp" bodystart="119" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1ac4e6e170dfcd75a1b9100464bb6a70f1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename E</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::promise_base&lt; R, Options &gt;::set_exception</definition>
+        <argsstring>(E e)</argsstring>
+        <name>set_exception</name>
+        <param>
+          <type>E</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Set the promise result as an exception. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="135" column="9" bodyfile="futures/futures/promise.hpp" bodystart="135" bodyend="137"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classfutures_1_1promise__base_1aaee44c22691de0b7d1eab0b8a067eb3e" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::promise_base&lt; R, Options &gt;::swap</definition>
+        <argsstring>(promise_base &amp;other) noexcept</argsstring>
+        <name>swap</name>
+        <param>
+          <type><ref refid="classfutures_1_1promise__base" kindref="compound">promise_base</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Swap the value of two promises. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="142" column="9" bodyfile="futures/futures/promise.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a48590788204a0491e54a2d820277c571" prot="protected" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr detail::shared_state&lt; R, Options &gt; &amp;</type>
+        <definition>constexpr detail::shared_state&lt;R, Options&gt;&amp; futures::promise_base&lt; R, Options &gt;::get_shared_state</definition>
+        <argsstring>()</argsstring>
+        <name>get_shared_state</name>
+        <briefdescription>
+<para>Intrusive pointer to the future corresponding to this promise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="149" column="9" bodyfile="futures/futures/promise.hpp" bodystart="149" bodyend="151"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1promise__base_1a3b72cc17f44cba723cc57ec2d94ea9d3" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Allocator</type>
+          </param>
+        </templateparamlist>
+        <type>detail::shared_state&lt; R, Options &gt;</type>
+        <definition>detail::shared_state&lt;R, Options&gt; futures::promise_base&lt; R, Options &gt;::make_shared_state</definition>
+        <argsstring>(const Allocator &amp;alloc)</argsstring>
+        <name>make_shared_state</name>
+        <param>
+          <type>const Allocator &amp;</type>
+          <declname>alloc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/promise.hpp" line="156" column="9" bodyfile="futures/futures/promise.hpp" bodystart="156" bodyend="165"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Common members to promises of all types. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This includes a pointer to the corresponding shared_state for the future and the functions to manage the promise.</para>
+<para>The specific promise specialization will only differ by their set_value functions. </para>
+    </detaileddescription>
+    <location file="futures/futures/promise.hpp" line="39" column="1" bodyfile="futures/futures/promise.hpp" bodystart="38" bodyend="172"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1promise__base_1a10d01f1680c84525ecfa97e9fda1b31c" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>get_future</name></member>
+      <member refid="classfutures_1_1promise__base_1a48590788204a0491e54a2d820277c571" prot="protected" virt="non-virtual"><scope>futures::promise_base</scope><name>get_shared_state</name></member>
+      <member refid="classfutures_1_1promise__base_1a3b72cc17f44cba723cc57ec2d94ea9d3" prot="private" virt="non-virtual"><scope>futures::promise_base</scope><name>make_shared_state</name></member>
+      <member refid="classfutures_1_1promise__base_1acc4d2d9a6715fa9c89e06f1881f15db0" prot="private" virt="non-virtual"><scope>futures::promise_base</scope><name>obtained_</name></member>
+      <member refid="classfutures_1_1promise__base_1a62f222805c7914bbb2c384ed1e560241" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1promise__base_1a934559902b2d1e02f6fd7782ef63d608" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1promise__base_1a6522cea0afdfc7ba1ad1df9e786c4d0f" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>promise_base</name></member>
+      <member refid="classfutures_1_1promise__base_1a1bac61215fb8421468ca3a582803eb42" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>promise_base</name></member>
+      <member refid="classfutures_1_1promise__base_1a29777f0404b975e2fb03282dbb39994a" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>promise_base</name></member>
+      <member refid="classfutures_1_1promise__base_1a95f942d95d7c67d47cafa9c8224ab644" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>promise_base</name></member>
+      <member refid="classfutures_1_1promise__base_1a6f78829ba8a4931bb41675757db2fcd5" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>set_exception</name></member>
+      <member refid="classfutures_1_1promise__base_1ac4e6e170dfcd75a1b9100464bb6a70f1" prot="public" virt="non-virtual"><scope>futures::promise_base</scope><name>set_exception</name></member>
+      <member refid="classfutures_1_1promise__base_1abce8cf115d8ebb0a8bae17cda2c228f9" prot="private" virt="non-virtual"><scope>futures::promise_base</scope><name>shared_state_</name></member>
+      <member refid="classfutures_1_1promise__base_1aaee44c22691de0b7d1eab0b8a067eb3e" prot="protected" virt="non-virtual"><scope>futures::promise_base</scope><name>swap</name></member>
+      <member refid="classfutures_1_1promise__base_1a73b9131a13dec097ddf347d6d7967dc4" prot="public" virt="virtual"><scope>futures::promise_base</scope><name>~promise_base</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

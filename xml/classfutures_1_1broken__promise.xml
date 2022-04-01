@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1broken__promise" kind="class" language="C++" prot="public">
+    <compoundname>futures::broken_promise</compoundname>
+    <basecompoundref refid="classfutures_1_1future__error" prot="public" virt="non-virtual">futures::future_error</basecompoundref>
+    <includes refid="future__error_8hpp" local="no">future_error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1broken__promise_1a5298cab8c9eaa1ef8192086b2922a02b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::broken_promise::broken_promise</definition>
+        <argsstring>()</argsstring>
+        <name>broken_promise</name>
+        <briefdescription>
+<para>Construct underlying future error with a specified error code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/future_error.hpp" line="186" column="9" bodyfile="futures/futures/future_error.hpp" bodystart="186" bodyend="187"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Class for errors when a promise is not delivered properly. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::broken_promise</label>
+        <link refid="classfutures_1_1broken__promise"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::future_error</label>
+        <link refid="classfutures_1_1future__error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::system_error</label>
+      </node>
+      <node id="3">
+        <label>futures::futures_error</label>
+        <link refid="classfutures_1_1futures__error"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::broken_promise</label>
+        <link refid="classfutures_1_1broken__promise"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::future_error</label>
+        <link refid="classfutures_1_1future__error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::system_error</label>
+      </node>
+      <node id="3">
+        <label>futures::futures_error</label>
+        <link refid="classfutures_1_1futures__error"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/futures/future_error.hpp" line="183" column="1" bodyfile="futures/futures/future_error.hpp" bodystart="182" bodyend="188"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1broken__promise_1a5298cab8c9eaa1ef8192086b2922a02b" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>broken_promise</name></member>
+      <member refid="classfutures_1_1future__error_1a0b375a5f9da3cf5bbf61943f6977a123" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>future_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a5b439838aa6058880b54136bd82cff56" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1adaa75bbd85c397e5b02fbcc4f5a7dd13" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a860032d4671f9a61283bd9a6eb0f4415" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>futures_error</name></member>
+      <member refid="classfutures_1_1futures__error_1a9663b54333194410fef1d63b2f611234" prot="public" virt="non-virtual"><scope>futures::broken_promise</scope><name>~futures_error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

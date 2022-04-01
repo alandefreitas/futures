@@ -1,0 +1,1214 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Futures: C++ Lock-Free Task Programming with ASIO executors" name="description"/>
+<link href="https://alandefreitas.github.io/futures/motivation/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.0, mkdocs-material-8.2.8" name="generator"/>
+<title>Motivation - Futures</title>
+<link href="../assets/stylesheets/main.644de097.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-290016612",{page_path:e.pathname})})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-290016612"></script>
+</head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="futures" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#motivation">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Futures" class="md-header__button md-logo" data-md-component="logo" href=".." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Futures
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Motivation
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<!-- Main navigation -->
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Futures" class="md-nav__button md-logo" data-md-component="logo" href=".." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+    Futures
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../quickstart/">
+        Quickstart
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Motivation
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Motivation
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#summary">
+    Summary
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#outline">
+    Outline
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#standard-futures">
+    Standard Futures
+  </a>
+<nav aria-label="Standard Futures" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-computer-science">
+    In Computer Science
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-modern-c">
+    In Modern C++
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#previous-work">
+    Previous work
+  </a>
+<nav aria-label="Previous work" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#executors">
+    Executors
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#continuations">
+    Continuations
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lazy-continuations">
+    Lazy Continuations
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-callbacks">
+    Task Callbacks
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#deferred-futures">
+    Deferred futures
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#senders-and-receivers">
+    Senders and Receivers
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#senders-and-futures">
+    Senders and Futures
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-futures-library">
+    The futures library
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Futures" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/future_types/">
+        Future Types
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/launching/">
+        Launching Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/promises/">
+        Promises and Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/continuable_futures/">
+        Continuable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/stoppable_futures/">
+        Stoppable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/shared_futures/">
+        Shared Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../futures/waiting/">
+        Waiting for Futures
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Future Adaptors" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adaptors/continuations/">
+        Continuations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adaptors/conjunctions/">
+        Conjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adaptors/disjunctions/">
+        Disjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adaptors/task_graphs/">
+        Task Graphs
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Parallel Algorithms" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../algorithms/algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../algorithms/partitioners/">
+        Partitioners
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Networking" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/asio/">
+        Asio
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Modules/group__futures/">
+        Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Modules/group__adaptors/">
+        Adaptors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Modules/group__executors/">
+        Executors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Modules/group__algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Namespaces/namespacefutures/">
+        Index
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Classes/">
+        Classes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/Files/">
+        Files
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../acknowledgments/">
+        Acknowledgments
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#summary">
+    Summary
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#outline">
+    Outline
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#standard-futures">
+    Standard Futures
+  </a>
+<nav aria-label="Standard Futures" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-computer-science">
+    In Computer Science
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-modern-c">
+    In Modern C++
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#previous-work">
+    Previous work
+  </a>
+<nav aria-label="Previous work" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#executors">
+    Executors
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#continuations">
+    Continuations
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lazy-continuations">
+    Lazy Continuations
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-callbacks">
+    Task Callbacks
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#deferred-futures">
+    Deferred futures
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#senders-and-receivers">
+    Senders and Receivers
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#senders-and-futures">
+    Senders and Futures
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-futures-library">
+    The futures library
+  </a>
+</li>
+</ul>
+</nav>
+<div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="motivation">Motivation</h1>
+<h2 id="summary">Summary</h2>
+<p><strong>C++11</strong> presented <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> as its model for
+asynchronicity. <a href="https://en.wikipedia.org/wiki/Futures_and_promises">Futures and promises</a>
+are <a href="https://iucat.iu.edu/iub/1810628">a common construct from the 70s</a> where an object represents a value that is still
+unknown. By composing with the future objects, this construct allows us to synchronize the program execution in
+concurrent programming. On the other hand, <a href="#literature-review">many works</a> describe the specific C++11 <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>
+model as the wrong abstraction for asynchronous programming.</p>
+<p>Since then, many <strong>proposals</strong> have been presented to extend this standard <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> model, such as future
+continuations, callbacks, lazy/eager execution, cancellation tokens, custom executors, custom allocators, and waiting on
+destruction. However, because any handle to a future value is a "future" object, it is unlikely that a single concrete
+future definition will be appropriate for most applications.</p>
+<p>This library attempts to <a href="#the-futures-library">solve this problem</a> by defining generic algorithms for <strong>a
+common <a href="/futures/reference/Classes/structfutures_1_1is__future/">is_future</a> concept</strong>, which includes 1) existing future types, such as <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>, <code>boost::future</code>
+, <code>boost::fiber::future</code>; 2) library provided future types, such as <a href="/futures/reference/Namespaces/namespacefutures/#using-cfuture">cfuture</a> and <a href="/futures/reference/Namespaces/namespacefutures/#using-jfuture">jfuture</a>; and 3) custom future types.</p>
+<p>The concepts allow reusable algorithms for all future types, an alternative to <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> based on executors, various
+efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel
+variants of the STL algorithms.</p>
+<h2 id="outline">Outline</h2>
+<p>Our motivation is organized as follows:</p>
+<ul>
+<li><a href="#standard-futures">An introduction</a> to the model of futures and promises in C++11</li>
+<li><a href="#previous-work">An overview</a> of all related work presented since then</li>
+<li><a href="#the-futures-library">A brief description</a> of how this library relates this previous work</li>
+</ul>
+<p>Alternatively, you can move straight to <a href="../futures/future_types/">our guides</a> and see how the library works in practice.
+Be welcome.</p>
+<h2 id="standard-futures">Standard Futures</h2>
+<h3 id="in-computer-science">In Computer Science</h3>
+<p>A future <em>or</em> promise is a value that might not be available yet. They are also called "deferred", "delay", or simply
+"task" objects in some contexts. This storage for this value might be provided by the future object, the promise
+object, <em>or</em> by some form shared state between objects related to task execution. A shared state would usually be
+accessed by the set setting the future value.</p>
+<ul>
+<li>1977: The first mention of Futures was by <a href="https://dl.acm.org/doi/10.1145/872736.806932">Baker and Hewitt</a>. These
+  futures would contain a process, a memory location for the result, and a list of continuations.</li>
+<li>1978: The term Promises is used by <a href="https://ieeexplore.ieee.org/document/1675100">Daniel P. Friedman and David Wise</a>
+  for the same concept.</li>
+<li>1985: <a href="https://dl.acm.org/doi/10.1145/4472.4478">Multilisp</a> provided the future and delay annotations for values that
+  might not be available yet. A variable with the delay annotation would only be calculated when its value was
+  requested.</li>
+<li>1988: The term Promises is used by <a href="https://dl.acm.org/doi/10.1145/960116.54016">Liskov and Shrira</a> for a similar
+  construct in Argus. It also proposed "call-streams" to represent directed acyclic graphs (DAGs) of computation with
+  promises.</li>
+<li>1996: The term "eventual" is used
+  by <a href="http://www.erights.org/history/joule/MANUAL.BK2.pdf">Tribble, Miller, Hardy, &amp; Krieger</a> to represent promises of
+  "eventual" send value into a variable.</li>
+<li>2002: The Python <a href="https://github.com/twisted/twisted">Twisted</a> library presents Deferred objects for results of
+  operations that might still be incomplete.</li>
+<li>2009: The Javascript <a href="http://wiki.commonjs.org/wiki/Promises/A">CommonJS Promises/A spec</a> is proposed by Kris Zyp.</li>
+</ul>
+<p>The formulation implies the future value might always be in completed or incomplete <em>atomic</em> states. As all the
+formulations presented above, a language might have a single construct called future <em>or</em> promise for eventual values.
+Javascript defines the single <code>Promise</code> that acts like a read-only future value. When they are distinct, like in C++11,
+it's common to have two constructs: futures <em>and</em> promises, where one of them is a read-only reference to the expected
+value.</p>
+<p>Common asynchronous applications of futures are servers, user input, long-running computations, database queries, remote
+procedure calls, and timeouts. A number of variations of this pattern have emerged with slightly different meaning for
+the terms. These variations are used as a model of asynchronous operations in many languages such as JavaScript, Scala,
+Java, and C++.</p>
+<h3 id="in-modern-c">In Modern C++</h3>
+<p>C++11 proposed, in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3170.html">N3170</a>, <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> as its
+intended model of <a href="https://en.wikipedia.org/wiki/Futures_and_promises">futures and promises</a> for asynchronicity. A
+C++ <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> represents a read-only proxy for a result that might not been set by a write-only <a href="https://en.cppreference.com/w/cpp/thread/promise">std::promise</a> yet.</p>
+<p>When the operation is complete, the result is stored in a shared state, to which both the future and the promise have
+access. The future is a read-only view of this shared state while a promise allows an external operation to set its
+value.</p>
+<div class="mermaid">
+graph LR
+F[Future] --&gt; |read|S[(Shared State)]
+T[Promised Task] --&gt; |write|S
+</div>
+<p>In the most common use case, this promise is hidden. The user would call <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> to execute a task is parallel and
+set the promise at the end. After the task is scheduled, <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> would then return a <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> which allows us
+to query the status of this asynchronous operation:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1"><code>std::async</code></label><label for="__tabbed_1_2"><code>std::promise</code></label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Result is: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span><span class="w"> </span><span class="c1">// 8</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="p">;</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_future</span><span class="p">();</span><span class="w"></span>
+<span class="c1">// any async operation, such as std::async, can set this value</span>
+<span class="n">p</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span><span class="w"> </span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Result is: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span><span class="w"> </span><span class="c1">// 8</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></div>
+<p>One satisfactory thing about the combination of <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>, <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a>, and <a href="https://en.cppreference.com/w/cpp/thread/future/wait">std::future::wait</a> is it makes C++
+asynchronous programming somewhat similar and often even simpler to that of other programming languages, such
+as <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Choosing_the_right_approach">Javascript</a>
+futures and promises:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">C++ Futures and Promises</label><label for="__tabbed_2_2">JS Futures and Promises</label><label for="__tabbed_2_3">JS Async / Await</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Result is: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span><span class="w"> </span><span class="c1">// 8</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1">// std::future&lt;int&gt; f = std::async([]{ return 8; });</span>
+<span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="ow">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span> <span class="nx">resolve</span><span class="p">(</span><span class="mf">8</span><span class="p">)</span> <span class="p">});</span>
+<span class="c1">// std::cout &lt;&lt; "Result is: " &lt;&lt; f.get() &lt;&lt; '\n'; // 8</span>
+<span class="nx">f</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Result is: '</span> <span class="o">+</span> <span class="nx">value</span><span class="p">)</span> <span class="p">}</span> <span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1">// std::future&lt;int&gt; f = std::async([]{ return 8; });</span>
+<span class="c1">// `async` makes my_function `return Promise.resolve(8)`</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">my_function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="mf">8</span> <span class="p">};</span>
+<span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">my_function</span><span class="p">()</span>
+<span class="c1">// std::cout &lt;&lt; "Result is: " &lt;&lt; f.get() &lt;&lt; '\n'; // 8</span>
+<span class="kd">let</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">f</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Result is: '</span> <span class="o">+</span> <span class="nx">value</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></input></div>
+<p>However, because <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> relies on synchronization of a shared state, this initial model is incomplete, hard to
+use, inefficient, and lacks the usual generality of C++ algorithms.</p>
+<h2 id="previous-work">Previous work</h2>
+<h3 id="executors">Executors</h3>
+<p>The first clear problem identified with <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> is we cannot define its executor (or scheduler). That is, we cannot
+define <em>where</em> these tasks are executed. By default, every task is executed in a new thread in C++11, which is
+unacceptable to most applications. Common executors for these tasks would be thread pools, strands, or GPUs.</p>
+<p>Many <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html">models for standard executors</a> have been
+proposed <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html#appendix-executors-bibilography">over time</a>
+. In most current models, executors (or schedulers) are light handles representing an execution context <em>where</em> work can
+be executed. The context is usually called an execution context or execution resource. Executors might be constructed
+directly from execution contexts or adapted from other executors.</p>
+<h3 id="continuations">Continuations</h3>
+<p>The act of waiting for a <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> result is synchronous, which is not appropriate in communication-intensive code.
+In the original <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> model, if a continuation task <code>B</code> depends on the result of the first task <code>A</code>, we only
+have two options:</p>
+<ul>
+<li>waiting for the first task synchronously</li>
+<li>polling the first task asynchronously.</li>
+</ul>
+<p>If we always wait for the first task to start its continuation, the asynchronicity has no purpose. If we always poll for
+the first task, we waste resources and an extra thread to repeatedly check the status of the first task.</p>
+<p>For this reason, the most common extension proposed for <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>
+is <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf">continuations</a>, such as implemented in
+Microsoft's <a href="https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?view=msvc-160">PPL</a>, <a href="https://github.com/Amanieu/asyncplusplus">async++</a>, <a href="https://github.com/Naios/continuable">continuable</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><input id="__tabbed_3_3" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">Waiting</label><label for="__tabbed_3_2">Polling</label><label for="__tabbed_3_3">Continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">experimental</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</input></input></input></div>
+<h3 id="lazy-continuations">Lazy Continuations</h3>
+<p>Lazy continuations, such as in <a href="https://en.cppreference.com/w/cpp/experimental/future">std::experimental::future</a>, allow us to asynchronously register a second operation and
+pass data to it. So in the above example, the continuation is scheduled as soon as, but not before, the first task is
+ready without consuming any polling threads. The continuation can also have its continuations and so on.</p>
+<p>A lazy continuation stored in the shared state of the first task and all futures are programmed to run its internal
+continuations when they finish the main task. This avoids blocking waits and wasting threads pooling for the results of
+the antecedent task. A continuation is scheduled and executed only when the previous task completes.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><div class="tabbed-labels"><label for="__tabbed_4_1">Lazy Continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">experimental</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// This task is not scheduled until A completes</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</input></div>
+<p>If the antecedent future throws an exception, some models besides <a href="https://en.cppreference.com/w/cpp/experimental/concurrency">C++ Extensions for Concurrency</a>, such as
+<a href="https://github.com/Naios/continuable">Continuable</a>, allow the continuation to also catch this error:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio"/><div class="tabbed-labels"><label for="__tabbed_5_1">Catching errors</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">async</span><span class="p">([]{</span><span class="w"> </span><span class="cm">/* operation that might throw an error */</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="n">then</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="p">(</span><span class="s">"Some error"</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="n">fail</span><span class="p">([]</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">rethrow_exception</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Handle the exception or error code here</span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>By default, the first task usually includes an executor handle and the continuation inherits it unless some other
+executor is requested for the continuation. Futures with continuations can also be used as components
+of <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3650.pdf">resumable functions</a>.</p>
+<p>Finally, continuations are the foundation for composing task graphs, with operations such
+as <a href="https://en.cppreference.com/w/cpp/experimental/when_all">std::experimental::when_all</a> and <a href="https://en.cppreference.com/w/cpp/experimental/when_any">std::experimental::when_any</a>. These conjunction and disjunction operations depend
+on continuations so that previous tasks can inform the operation result when they are ready without polling.</p>
+<h3 id="task-callbacks">Task Callbacks</h3>
+<p>In <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf">N3747</a>
+, <a href="https://github.com/chriskohlhoff">Christopher Kohlhoff</a> compares the model of lazy continuations, such as
+in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf">N3784</a> to the model of callback functions used in
+the <a href="https://github.com/chriskohlhoff/asio">Asio</a> library:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio"/><input id="__tabbed_6_2" name="__tabbed_6" type="radio"/><div class="tabbed-labels"><label for="__tabbed_6_1">Futures</label><label for="__tabbed_6_2">Callbacks</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// the antecedent future represents the future result of `async_write`</span>
+<span class="w">    </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// The continuation function creates a new future</span>
+<span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns void</span>
+<span class="w">    </span><span class="n">asio</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">),</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// the continuation is provided when `async_write` schedules the first task</span>
+<span class="w">        </span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Continuable futures may attach the continuation <em>before or after</em> the antecedent future starts. With callbacks functions
+the calling function provides the continuation <em>before</em> the antecedent task starts, which avoids the synchronization
+cost in a race between the result and its continuation.</p>
+<h3 id="deferred-futures">Deferred futures</h3>
+<p>The advantage of callbacks functions is that calling function provides the continuation <em>before</em> the antecedent task
+starts. Thus, it's easy to see this model can serve as the foundation for an alternative "futures" model in two ways
+which would also avoid the synchronization overhead for continuations:</p>
+<ul>
+<li><a href="https://www.boost.org/doc/libs/1_77_0/doc/html/boost_asio/reference/asynchronous_operations.html">Completion Tokens</a>:
+  The calling function in the callback model provides
+  a <a href="https://cppalliance.org/richard/2021/10/10/RichardsOctoberUpdate.html#asio-and-the-power-of-completion-tokens">custom tag</a>
+  indicating the initiating function should return a future type representing the result of the second operation.</li>
+<li><a href="https://github.com/facebookexperimental/libunifex/blob/main/doc/concepts.md#starting-an-async-operation">Lazy futures</a>:
+  Likewise, lock-free continuations can be implemented as a (deferred) future type such that the continuation is 
+  guaranteed to be available when the first task starts.</li>
+</ul>
+<p>This is what these models would look like:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:5"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio"/><input id="__tabbed_7_2" name="__tabbed_7" type="radio"/><input id="__tabbed_7_3" name="__tabbed_7" type="radio"/><input id="__tabbed_7_4" name="__tabbed_7" type="radio"/><input id="__tabbed_7_5" name="__tabbed_7" type="radio"/><div class="tabbed-labels"><label for="__tabbed_7_1">Continuable Futures</label><label for="__tabbed_7_2">Callbacks</label><label for="__tabbed_7_3">Completion Token</label><label for="__tabbed_7_4">Callback Futures</label><label for="__tabbed_7_5">Lazy Futures</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns some continuable future type</span>
+<span class="w">    </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// synchronization cost: check if the current continuation is being read </span>
+<span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns void</span>
+<span class="w">    </span><span class="n">asio</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">),</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// no synchronization cost: `async_write` has not started yet </span>
+<span class="w">        </span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns some continuable future type defined by use_custom_future</span>
+<span class="w">    </span><span class="n">asio</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">),</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// synchronization cost: dependent on custom future type </span>
+<span class="w">        </span><span class="n">use_custom_future</span><span class="p">).</span><span class="n">then</span><span class="p">(</span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns some callback future type that always knows its continuation </span>
+<span class="w">    </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">),</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// no synchronization cost: no extra continuations might be attached </span>
+<span class="w">        </span><span class="n">schedule_read_function</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// async_write returns some deferred future type that we know is not executing yet </span>
+<span class="w">    </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">deferred_async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">))</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// no synchronization cost: async_write starts after the continuation is attached </span>
+<span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="n">schedule_read_function</span><span class="p">).</span><span class="n">detach</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In other words, while this synchronization requirement of <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> is a problem with <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> and
+other <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf">proposed</a> continuable futures, such
+as <a href="https://en.cppreference.com/w/cpp/experimental/future">std::experimental::future</a>, this is not a problem with the concept of futures. This synchronization cost is only a
+problem if we cannot <em>guarantee</em> the execution of the previous function has not started when the continuation is
+attached.</p>
+<p>Libraries such as <a href="https://github.com/taskflow/taskflow">Taskflow</a> and <a href="https://github.com/oneapi-src/oneTBB">TTB</a> provide facilities to compose complete task graphs:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:4"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio"/><input id="__tabbed_8_2" name="__tabbed_8" type="radio"/><input id="__tabbed_8_3" name="__tabbed_8" type="radio"/><input id="__tabbed_8_4" name="__tabbed_8" type="radio"/><div class="tabbed-labels"><label for="__tabbed_8_1">Futures</label><label for="__tabbed_8_2">Continuable Futures</label><label for="__tabbed_8_3">Taskflow</label><label for="__tabbed_8_4">TTB</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskA</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="c1">// A runs before B and C</span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="n">A</span><span class="p">]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">A</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// Polling :( </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskB</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="n">A</span><span class="p">]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">A</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// Polling :( </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskC</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="c1">// D runs after B and C</span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">C</span><span class="p">]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// Polling :(</span>
+<span class="w">    </span><span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// Polling :(</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskD</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="n">D</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskA</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="c1">// A runs before B and C</span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Synchronization cost :( </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskB</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No polling :) </span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Synchronization cost :( </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskC</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No polling :)</span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="c1">// D runs after B and C</span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">when_all</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">).</span><span class="n">then</span><span class="p">([]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskD</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="n">D</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">tf</span><span class="o">::</span><span class="n">Executor</span><span class="w"> </span><span class="n">executor</span><span class="p">;</span><span class="w"></span>
+<span class="n">tf</span><span class="o">::</span><span class="n">Taskflow</span><span class="w"> </span><span class="n">taskflow</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskA</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskB</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskC</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskD</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="n">A</span><span class="p">.</span><span class="n">precede</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :)  </span>
+<span class="n">D</span><span class="p">.</span><span class="n">succeed</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :)</span>
+
+<span class="n">executor</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="p">).</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">graph</span><span class="w"> </span><span class="n">g</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function_node</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="p">(</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskA</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="p">}</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+
+<span class="n">function_node</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="p">(</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskB</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="p">}</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+
+<span class="n">function_node</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskC</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="p">}</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+
+<span class="n">function_node</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">D</span><span class="p">(</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TaskD</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="c1">// No eager execution </span>
+<span class="p">}</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+
+<span class="n">make_edge</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :) </span>
+<span class="n">make_edge</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :) </span>
+<span class="n">make_edge</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :) </span>
+<span class="n">make_edge</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">);</span><span class="w"> </span><span class="c1">// No synchronization cost :) </span>
+
+<span class="n">g</span><span class="p">.</span><span class="n">wait_for_all</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Tasks in a task graph are analogous to deferred futures whose continuations are defined before the execution starts.
+However, we need to explicitly define all relationships between tasks before any execution starts, which might be
+inconvenient in some applications. Futures and async functions, on the other hand, allow us to 1) combine eager and lazy
+tasks, and 2) directly express their relationships in code without any explicit graph containers.</p>
+<p>On the other hand, <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf">P1055</a> proposed the concept of
+deferred work, in opposition to eager futures, such as <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>. The idea is that a task related to a future should
+not start before its continuation is applied. This eliminates the race between the result and the continuation in eager
+futures. Futures with deferred work are lock-free and easier to implement (<a href="https://godbolt.org/z/jWYno73nE">example</a>).</p>
+<h3 id="senders-and-receivers">Senders and Receivers</h3>
+<p>To differentiate this "Future" concept proposed in P1055 from a <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>,
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1194r0.html">P1194</a> proposes the name "senders" to represent
+the "deferred" concept defined in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf">P1055</a>. The
+paper also proposes to rename the function <code>then</code> to <code>submit</code> to suggest the possibility that it may in fact submit the
+task for execution.</p>
+<p>More recently, <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2300r1.html">P2300</a> and <a href="https://github.com/facebookexperimental/libunifex">libunifex</a> propose a
+model based on "senders" and "receivers" for asynchronous operations. From
+a <a href="#in-computer-science">computer science perspective</a>, senders and receivers are constraints for futures and promises.
+From a C++ perspective, these are defined as <a href="https://en.cppreference.com/w/cpp/language/constraints">concepts</a> rather
+than object types. For this reason, the syntax of sender types is still analogous to futures:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio"/><input id="__tabbed_9_2" name="__tabbed_9" type="radio"/><div class="tabbed-labels"><label for="__tabbed_9_1">Futures and Promises</label><label for="__tabbed_9_2">Senders and Receivers</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">ex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_thread_pool</span><span class="p">().</span><span class="n">executor</span><span class="p">();</span><span class="w"></span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="p">[]{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello world! Have an int."</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span><span class="w"></span>
+<span class="p">}).</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w">                                                                           </span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">scheduler</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">sch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_thread_pool</span><span class="p">().</span><span class="n">scheduler</span><span class="p">();</span><span class="w"></span>
+
+<span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">schedule</span><span class="p">(</span><span class="n">sch</span><span class="p">);</span><span class="w"></span>
+<span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">hi_again</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="p">[]{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello world! Have an int."</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+<span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_42</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">hi_again</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+
+<span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this_thread</span><span class="o">::</span><span class="n">sync_wait</span><span class="p">(</span><span class="n">add_42</span><span class="p">).</span><span class="n">value</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In parallel with <a href="https://isocpp.org/files/papers/P2464R0.html">discussions</a> about the proper model for C++ executors,
+senders/receivers have received criticism for attempting to abruptly reformulate common practice in C++ asynchronous
+computing. The most common objections:</p>
+<ol>
+<li><em>Lack of existing practice</em>:
+   Most <a href="https://github.com/facebookexperimental/libunifex/blob/main/doc/overview.md#different-sets-of-algorithms">libunifex algorithms</a>
+   are currently labeled as "not yet implemented".</li>
+<li><em>Unnecessarily reinventing the wheel</em>: a <a href="https://www.google.com/search?q=senders+and+receivers">sender/receive</a>
+   still represents a <a href="https://www.google.com/search?q=futures+and+promises">future/promise</a> from a computer science
+   perspective.</li>
+<li><em>Unnecessary deviation from common patterns</em>: it does not match the asynchronous model of other programming languages
+   and C++ historical constructs, which might be unnecessarily confusing.</li>
+<li><em>Unnecessary complexity</em>: it is difficult to foresee what problems we are going to have with this model
+   before <a href="https://github.com/facebookexperimental/libunifex">libunifex</a> is completely implemented, and the C++ standard is not a good place for experimentation.</li>
+</ol>
+<p>Coming from other programming languages or even from the historical C++ constructs, it is hard to distinguish
+what <code>begin</code> semantically represents and why it is the same type as other tasks in constructs such as:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:3"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio"/><input id="__tabbed_10_2" name="__tabbed_10" type="radio"/><input id="__tabbed_10_3" name="__tabbed_10" type="radio"/><div class="tabbed-labels"><label for="__tabbed_10_1">Futures and Promises</label><label for="__tabbed_10_2">Senders and Receivers v1</label><label for="__tabbed_10_3">Senders and Receivers v2</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="p">[]{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello world!"</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span><span class="w"> </span>
+<span class="p">}).</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libunifex</span><span class="o">::</span><span class="n">schedule</span><span class="p">(</span><span class="n">sch</span><span class="p">);</span><span class="w"></span>
+<span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">hello</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libunifex</span><span class="o">::</span><span class="n">then</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="p">[]{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello world!"</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+<span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libunifex</span><span class="o">::</span><span class="n">then</span><span class="p">(</span><span class="n">hello</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"> </span>
+<span class="p">});</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">sender</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">schedule</span><span class="p">(</span><span class="n">sch</span><span class="p">)</span><span class="w"> </span>
+<span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="n">libunifex</span><span class="o">::</span><span class="n">then</span><span class="p">([]{</span><span class="w"></span>
+<span class="w">                     </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello world!"</span><span class="p">;</span><span class="w"></span>
+<span class="w">                     </span><span class="k">return</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span><span class="w"></span>
+<span class="w">                  </span><span class="p">})</span><span class="w"> </span>
+<span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="n">libunifex</span><span class="o">::</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">                     </span><span class="k">return</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"> </span>
+<span class="w">                  </span><span class="p">});</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="senders-and-futures">Senders and Futures</h3>
+<p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2300r4.html#intro-prior-art-futures">P2300 Section 1.10.1</a>
+briefly describes two reasons for preferring senders to futures ("as traditionally realized"):</p>
+<ul>
+<li>futures require the dynamic allocation and management of a shared state</li>
+<li>futures require type-erasure of work and continuation</li>
+</ul>
+<p>As it should be clear from this review, from a <a href="#in-computer-science">computer science perspective</a>, senders <em>are</em>
+futures, even though they don't represent what was "traditionally realized" in <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>. All optimizations possible
+for "single-shot senders" are also possible in "unique deferred futures".</p>
+<h2 id="the-futures-library">The futures library</h2>
+<p>Given the pros and cons of each model described in our <a href="#previous-work">review</a>, this library models future types as a
+simple <a href="/futures/reference/Classes/structfutures_1_1is__future/">is_future</a> concept, which supports all the features we have discussed, such as executors, continuations and
+deferred work. We implement optimizations possible to each future types while sticking to existing practice.</p>
+<ul>
+<li>Futures and Promises<ul>
+<li>This library maintains the common model most programmers are familiar with</li>
+<li>Whenever possible, new features always use language familiar to C++ and other common programming languages</li>
+</ul>
+</li>
+<li>Future concept<ul>
+<li>By modeling futures as a concept, futures can be optionally instantiated with any combination of custom extensions
+  such as continuations, stop tokens, and deferred work</li>
+<li>Reusable algorithms <strong>work for</strong> <a href="#standard-futures"><strong>all future types</strong></a>, including any new and existing future
+  types, such as <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>, <code>boost::future</code>, <code>boost::fiber::future</code>.</li>
+<li>All optimizations possible for "single-shot senders" are also implemented for "unique deferred futures".</li>
+<li>Futures can still match and work with whatever constraints C++ eventually imposes on future types</li>
+</ul>
+</li>
+<li>Executors<ul>
+<li>Custom executors can be defined and its traits are a subset of existing Asio executors.</li>
+<li>Customization points can make other executor types work with the library types</li>
+<li>Provides an alternative to <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> <strong>based on <a href="#executors">executors</a></strong> while still adaptable to other
+  executor or scheduler concepts, including senders and receivers.</li>
+</ul>
+</li>
+<li>Extensions<ul>
+<li><a href="/futures/reference/Classes/classfutures_1_1basic__future/">basic_future</a> implements a <strong>vast number of concrete future types</strong>, including continuable, cancellable,
+  eager/deferred, and unique/shared futures.</li>
+<li>Future types support <a href="#lazy-continuations">lazy <strong>continuations</strong></a> without polling for existing types</li>
+<li>The future adaptors still work for existing future types, such as <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> by polling.</li>
+<li>Integrations with Asio are provided, such as completion tokens and async IO operations.</li>
+</ul>
+</li>
+<li>Data races<ul>
+<li>Both eager and lazy futures continuations are lock-free through atomic operations.</li>
+<li>Future types might indicate <a href="#deferred-futures"><strong>deferred</strong> work</a> at compile-time or be eager, avoiding the
+  synchronization costs of attaching continuations and other optimizations.</li>
+<li>Eager futures use lock-free operations and data structures to minimize synchronization costs.</li>
+</ul>
+</li>
+<li>Adaptors<ul>
+<li>Implements a large set of <a href="#senders-and-receivers"><strong>composition</strong> operations</a> with a <strong>syntax closer to the
+  existing future types</strong> users are used to, such as <a href="/futures/reference/Namespaces/namespacefutures/#function-when_all">when_all</a> and <a href="/futures/reference/Namespaces/namespacefutures/#function-when_any">when_any</a></li>
+<li>Adaptors are also provided to facilitate the creation of cyclic task graphs</li>
+</ul>
+</li>
+<li>Algorithms<ul>
+<li>Includes a large set of the <strong>STL-like algorithms in terms of futures and executors</strong></li>
+<li>Easy access to async algorithms based on executors without requiring external libraries,
+  as <a href="https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4">common</a> with C++ execution policies, such
+  as <a href="https://github.com/oneapi-src/oneTBB">TTB</a>.</li>
+</ul>
+</li>
+</ul>
+<!-- Standard C++ -->
+<!-- C++ Standard library -->
+<!-- C++ Standard library / Extensions and Proposals -->
+<!-- Libraries -->
+<!-- Futures -->
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px;">
+<a class="md-button" href="https://github.com/alandefreitas/futures/" target="_blank" title="Futures">
+        ⭐️ Star Futures
+    </a>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application footer -->
+<footer class="md-footer">
+<!-- Link to previous and/or next page -->
+<div class="md-footer-nav">
+<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
+<!-- Link to previous page -->
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../quickstart/" rel="prev">
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</div>
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                        Quickstart
+                    </div>
+</div>
+</a>
+<!-- Link to next page -->
+<a class="md-footer-nav__link md-footer-nav__link--next" href="../futures/future_types/" rel="next">
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Next
+                </span>
+                        Future Types
+                    </div>
+</div>
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+</div>
+</a>
+</nav>
+</div>
+<!-- Further information -->
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<!-- Copyright and theme information -->
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+                    Copyright © Alan Freitas
+                </div>
+                
+                Made with
+                <a href="https://alandefreitas.github.io/mdsplit/" rel="noopener" target="_blank">
+<code style="background-color: #323232;">mdsplit</code>
+</a>
+                and
+                <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+                    Material for MkDocs
+                </a>
+</div>
+<!-- Social links -->
+<div class="md-social">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../assets/javascripts/bundle.c44cc438.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+<script src="../javascripts/extra.js"></script>
+<script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script><script>mermaid.initialize({});</script></body>
+</html>

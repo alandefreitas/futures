@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1for__each__functor_1_1sort__graph" kind="class" language="C++" prot="private">
+    <compoundname>futures::for_each_functor::sort_graph</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::maybe_empty_executor&lt; Executor &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>class Executor</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1for__each__functor_1_1sort__graph_1a889a52477518118d9c6cd2e08c9e9be4" prot="private" static="no" mutable="no">
+        <type>detail::atomic_queue&lt; <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; void, <ref refid="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" kindref="member">future_options</ref>&lt; <ref refid="structfutures_1_1executor__opt" kindref="compound">executor_opt</ref>&lt; Executor &gt;, <ref refid="structfutures_1_1continuable__opt" kindref="compound">continuable_opt</ref> &gt; &gt; &gt;</type>
+        <definition>detail::atomic_queue&lt;basic_future&lt; void, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt&gt; &gt; &gt; futures::for_each_functor::sort_graph&lt; Executor &gt;::tasks_</definition>
+        <argsstring></argsstring>
+        <name>tasks_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="120" column="17" bodyfile="futures/algorithm/for_each.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1for__each__functor_1_1sort__graph_1a9a77235571f04fcdae68d30902dc9637" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::for_each_functor::sort_graph&lt; Executor &gt;::sort_graph</definition>
+        <argsstring>(const Executor &amp;ex)</argsstring>
+        <name>sort_graph</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="58" column="22" bodyfile="futures/algorithm/for_each.hpp" bodystart="58" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1for__each__functor_1_1sort__graph_1acc2b40e948f8248ae4383fff2f7e0068" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::for_each_functor::sort_graph&lt; Executor &gt;::launch_sort_tasks</definition>
+        <argsstring>(P p, I first, S last, Fun f)</argsstring>
+        <name>launch_sort_tasks</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="63" column="13" bodyfile="futures/algorithm/for_each.hpp" bodystart="63" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1for__each__functor_1_1sort__graph_1a6b5f39b4c72de9a4bd83f13e3d63c18e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::for_each_functor::sort_graph&lt; Executor &gt;::wait_for_sort_tasks</definition>
+        <argsstring>()</argsstring>
+        <name>wait_for_sort_tasks</name>
+        <briefdescription>
+<para>Wait for all tasks to finish. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This might sound like it should be as simple as a when_all(tasks_). However, while we wait for some tasks here, the running tasks might be enqueuing more tasks, so we still need a read lock here. The number of times this happens and the relative cost of this operation should still be negligible, compared to other applications.</para>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if we had to wait for any tasks </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="103" column="13" bodyfile="futures/algorithm/for_each.hpp" bodystart="103" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1for__each__functor_1_1sort__graph_1a2c46a937f08b544c07d5607ad5057a3b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::for_each_functor::sort_graph&lt; Executor &gt;::sort</definition>
+        <argsstring>(P p, I first, S last, Fun f)</argsstring>
+        <name>sort</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="111" column="13" bodyfile="futures/algorithm/for_each.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Internal class that takes care of the sorting tasks and its incomplete tasks. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>If we could make sure no executors would ever block, recursion wouldn&apos;t be a problem, and we wouldn&apos;t need this class. In fact, this is what most related libraries do, counting on the executor to be some kind of work stealing thread pool.</para>
+<para>However, we cannot count on that, or these algorithms wouldn&apos;t work for many executors in which we are interested, such as an io_context or a thread pool that doesn&apos;t steel work (like asio&apos;s). So we need to separate the process of launching the tasks from the process of waiting for them.</para>
+<para>Fortunately, we can count that most executors wouldn&apos;t need this blocking procedure very often, because that&apos;s what usually makes them useful executors. We also assume that, unlike in the other applications, the cost of this reading lock is trivial compared to the cost of the whole procedure and . </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::for_each_functor::sort_graph&lt; Executor &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::for_each_functor::sort_graph&lt; Executor &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/for_each.hpp" line="56" column="1" bodyfile="futures/algorithm/for_each.hpp" bodystart="55" bodyend="121"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1for__each__functor_1_1sort__graph_1acc2b40e948f8248ae4383fff2f7e0068" prot="public" virt="non-virtual"><scope>futures::for_each_functor::sort_graph</scope><name>launch_sort_tasks</name></member>
+      <member refid="classfutures_1_1for__each__functor_1_1sort__graph_1a2c46a937f08b544c07d5607ad5057a3b" prot="public" virt="non-virtual"><scope>futures::for_each_functor::sort_graph</scope><name>sort</name></member>
+      <member refid="classfutures_1_1for__each__functor_1_1sort__graph_1a9a77235571f04fcdae68d30902dc9637" prot="public" virt="non-virtual"><scope>futures::for_each_functor::sort_graph</scope><name>sort_graph</name></member>
+      <member refid="classfutures_1_1for__each__functor_1_1sort__graph_1a889a52477518118d9c6cd2e08c9e9be4" prot="private" virt="non-virtual"><scope>futures::for_each_functor::sort_graph</scope><name>tasks_</name></member>
+      <member refid="classfutures_1_1for__each__functor_1_1sort__graph_1a6b5f39b4c72de9a4bd83f13e3d63c18e" prot="public" virt="non-virtual"><scope>futures::for_each_functor::sort_graph</scope><name>wait_for_sort_tasks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

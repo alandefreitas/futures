@@ -1,0 +1,1814 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__waiting" kind="group">
+    <compoundname>waiting</compoundname>
+    <title>Waiting</title>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__waiting_1gaa17532ff234247297bc46dc73161674a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Future</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::await</definition>
+        <argsstring>(Future &amp;&amp;f)</argsstring>
+        <name>await</name>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Wait for future types and retrieve their values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This syntax is most useful for cases where we are immediately requesting the future result.</para>
+<para>The function also makes the syntax optionally a little closer to languages such as javascript.</para>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if all types are futures.</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Future</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A future type</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The result of the future object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/await.hpp" line="57" column="5" bodyfile="futures/futures/await.hpp" bodystart="57" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga949ce845baa7c0eafb3773ccfaa71659" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Futures</declname>
+            <defname>Futures</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::await</definition>
+        <argsstring>(Futures &amp;&amp;...fs)</argsstring>
+        <name>await</name>
+        <param>
+          <type>Futures &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for future types and retrieve their values as a tuple. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>This function only participates in overload resolutions if all types are futures.</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Future</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A future type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Futures</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future types</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The result of the future object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/await.hpp" line="131" column="5" bodyfile="futures/futures/await.hpp" bodystart="131" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gad776de770cbf5d578c39927a1b5136f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::wait_for_all</definition>
+        <argsstring>(Iterator first, Iterator last)</argsstring>
+        <name>wait_for_all</name>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for all futures in the range [<computeroutput>first</computeroutput>, <computeroutput>last</computeroutput>) to be ready. It simply waits iteratively for each of the futures to be ready.</para>
+<para><simplesect kind="note"><para>This function is adapted from boost::wait_for_all</para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all">boost.thread wait_for_all</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="53" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="53" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga342b10728ea048b560058c1291d3cf82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Range</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::wait_for_all</definition>
+        <argsstring>(Range &amp;&amp;r)</argsstring>
+        <name>wait_for_all</name>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for all futures in the range <computeroutput>r</computeroutput> to be ready. It simply waits iteratively for each of the futures to be ready.</para>
+<para><simplesect kind="note"><para>This function is adapted from boost::wait_for_all</para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all">boost.thread wait_for_all</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A range of futures type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="86" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="86" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gaa3ea0a0826fda6a1c9c7f9b5ad3be390" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::wait_for_all</definition>
+        <argsstring>(Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_all</name>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for all specified futures <computeroutput>fs</computeroutput>... to be ready.</para>
+<para>It creates a compile-time fixed-size data structure to store references to all of the futures and then waits for each of the futures to be ready.</para>
+<para><simplesect kind="note"><para>This function is adapted from boost::wait_for_all</para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all">boost.thread wait_for_all</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future types </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future objects </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="120" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="120" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gaded793b9063597662d472a0ccb6091c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::wait_for_all</definition>
+        <argsstring>(Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_all</name>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="138" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="138" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gaaa9789aa1df3a889bbe39152735c094e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Iterator first, Iterator last)</argsstring>
+        <name>wait_for_all_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="168" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="168" bodyend="181"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gac19fd9dc70360f80afd6581caadd39ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Range</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Range &amp;&amp;r)</argsstring>
+        <name>wait_for_all_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="209" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="209" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gaaaad7a6c58c0a28429471ae6a245041b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_all_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="241" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="241" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga6d62bab67b8cb8b117ebc5ed63d62950" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_all_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="280" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="280" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga2f833c503a18462c202ecc8e20221357" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Iterator first, Iterator last)</argsstring>
+        <name>wait_for_all_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="324" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="324" bodyend="336"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga72ae63ea915da3f03fe10808c4ccc4c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Range</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Range &amp;&amp;r)</argsstring>
+        <name>wait_for_all_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="364" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="364" bodyend="369"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga80c32b3b1504eff888b5d94357116a34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_all_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future objects </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="396" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="396" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga171648dcb689c02ba5ebb3cd308958aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::future_status</type>
+        <definition>std::future_status futures::wait_for_all_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_all_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for a sequence of futures to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>std::future_status::ready</computeroutput> if all futures got ready. <computeroutput>std::future_status::timeout</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_all.hpp" line="434" column="5" bodyfile="futures/futures/wait_for_all.hpp" bodystart="434" bodyend="448"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga8c1adcddaa210b50e71833f460719018" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+        </templateparamlist>
+        <type>Iterator</type>
+        <definition>Iterator futures::wait_for_any</definition>
+        <argsstring>(Iterator first, Iterator last)</argsstring>
+        <name>wait_for_any</name>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for any future in the range [<computeroutput>first</computeroutput>, <computeroutput>last</computeroutput>) to be ready.</para>
+<para>Unlike <ref refid="group__waiting_1gad776de770cbf5d578c39927a1b5136f9" kindref="member">wait_for_all</ref>, this function requires special data structures to allow that to happen without blocking.</para>
+<para>For disjunctions, we have few options:<itemizedlist>
+<listitem><para>If the input futures support external notifiers:<itemizedlist>
+<listitem><para>Attach continuations to notify when a task is over</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>If the input futures do not have lazy continuations:<itemizedlist>
+<listitem><para>Polling in a busy loop until one of the futures is ready</para>
+</listitem><listitem><para>Polling with exponential backoffs until one of the futures is ready</para>
+</listitem><listitem><para>Launching n continuation tasks that set a promise when one of the futures is ready</para>
+</listitem><listitem><para>Hybrids, usually polling for short tasks and launching threads for other tasks</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>If the input futures are mixed in regards to lazy continuations:<itemizedlist>
+<listitem><para>Mix the strategies above, depending on each input future</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<para>If the thresholds for these strategies are reasonable, this should be efficient for futures with or without lazy continuations.</para>
+<para><simplesect kind="note"><para>This function is adapted from <computeroutput>boost::wait_for_any</computeroutput></para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any">boost.thread wait_for_any</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the first future that got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="69" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="69" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga65a8db0ddd090611ae4482f993ca76f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Range</type>
+          </param>
+        </templateparamlist>
+        <type>iterator_t&lt; Range &gt;</type>
+        <definition>iterator_t&lt;Range&gt; futures::wait_for_any</definition>
+        <argsstring>(Range &amp;&amp;r)</argsstring>
+        <name>wait_for_any</name>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for any future in the range <computeroutput>r</computeroutput> to be ready. This function requires special data structures to allow that to happen without blocking.</para>
+<para><simplesect kind="note"><para>This function is adapted from <computeroutput>boost::wait_for_any</computeroutput></para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any">boost.thread wait_for_any</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A range of futures type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the first future that got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="112" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="112" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga7ad63bcada8c89257d6338a0f40c6622" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any</definition>
+        <argsstring>(Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_any</name>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for all specified futures <computeroutput>fs</computeroutput>... to be ready.</para>
+<para><simplesect kind="note"><para>This function is adapted from <computeroutput>boost::wait_for_any</computeroutput></para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any">boost.thread wait_for_any</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future types </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future objects </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the first future that got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="139" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="139" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga34267cfc463a82efaf5c542360ca4723" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any</definition>
+        <argsstring>(Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_any</name>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a tuple to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function waits for all specified futures <computeroutput>fs</computeroutput>... to be ready.</para>
+<para><simplesect kind="note"><para>This function is adapted from <computeroutput>boost::wait_for_any</computeroutput></para>
+</simplesect>
+<simplesect kind="see"><para><ulink url="https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_any">boost.thread wait_for_any</ulink></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future types</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the first future that got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="181" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="181" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gafe8055916acc6d61effbba07168b6b47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>Iterator</type>
+        <definition>Iterator futures::wait_for_any_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Iterator first, Iterator last)</argsstring>
+        <name>wait_for_any_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="217" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="217" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga8bbacdcd28a7fa2a7b6bfd6c3ba4de4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Range</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>iterator_t&lt; Range &gt;</type>
+        <definition>iterator_t&lt;Range&gt; futures::wait_for_any_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Range &amp;&amp;r)</argsstring>
+        <name>wait_for_any_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="258" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="258" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga6959983de891bd49a3a99fc3dfc09ae3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_any_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="289" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="289" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gab2b5cfd4af49a14281448adbe6ee5899" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any_for</definition>
+        <argsstring>(const std::chrono::duration&lt; Rep, Period &gt; &amp;timeout_duration, Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_any_for</name>
+        <param>
+          <type>const std::chrono::duration&lt; Rep, Period &gt; &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Rep </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Duration Period </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time to wait for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="329" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="329" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga1eead1bd483928bcaedb789a5d86dece" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Iterator</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>Iterator</type>
+        <definition>Iterator futures::wait_for_any_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Iterator first, Iterator last)</argsstring>
+        <name>wait_for_any_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>Iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Iterator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type in a range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to the first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to one past the last element in the range</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="369" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="369" bodyend="383"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga8c3d55e44a1f676c4c3a915a25e45ff7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Range</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>iterator_t&lt; Range &gt;</type>
+        <definition>iterator_t&lt;Range&gt; futures::wait_for_any_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Range &amp;&amp;r)</argsstring>
+        <name>wait_for_any_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Range of futures</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="411" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="411" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1ga952cba5e659b179bb56b657ec616a82b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Fs</declname>
+            <defname>Fs</defname>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Fs &amp;&amp;...fs)</argsstring>
+        <name>wait_for_any_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Fs &amp;&amp;...</type>
+          <declname>fs</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="442" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="442" bodyend="456"/>
+      </memberdef>
+      <memberdef kind="function" id="group__waiting_1gaa11747daf6faa849cb5b96c2128a7293" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Tuple</type>
+          </param>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type>std::size_t</type>
+        <definition>std::size_t futures::wait_for_any_until</definition>
+        <argsstring>(const std::chrono::time_point&lt; Clock, Duration &gt; &amp;timeout_time, Tuple &amp;&amp;t)</argsstring>
+        <name>wait_for_any_until</name>
+        <param>
+          <type>const std::chrono::time_point&lt; Clock, Duration &gt; &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <param>
+          <type>Tuple &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Wait for any future in a sequence to be ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of future types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Clock</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point clock </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time point duration </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Limit time point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tuple of future objects</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Index of the future which got ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/wait_for_any.hpp" line="482" column="5" bodyfile="futures/futures/wait_for_any.hpp" bodystart="482" bodyend="500"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Basic function to wait for futures. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This module defines a variety of auxiliary functions to wait for futures. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

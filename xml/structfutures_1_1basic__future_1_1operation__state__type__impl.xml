@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1basic__future_1_1operation__state__type__impl" kind="struct" language="C++" prot="private">
+    <compoundname>futures::basic_future::operation_state_type_impl</compoundname>
+    <templateparamlist>
+      <param>
+        <type>bool</type>
+        <declname>is_always_deferred</declname>
+        <defname>is_always_deferred</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structfutures_1_1basic__future_1_1operation__state__type__impl_1ad86acff38c666782614080115a953c9a" prot="public" static="no">
+        <type>std::conditional_t&lt; <ref refid="structfutures_1_1is__always__deferred" kindref="compound">is_always_deferred</ref>, detail::deferred_operation_state&lt; R, operation_state_options &gt;, detail::operation_state&lt; R, operation_state_options &gt; &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::operation_state_type_impl&lt; is_always_deferred &gt;::type =  std::conditional_t&lt; is_always_deferred, detail::deferred_operation_state&lt;R, operation_state_options&gt;, detail::operation_state&lt;R, operation_state_options&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/basic_future.hpp" line="116" column="13" bodyfile="futures/futures/basic_future.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Determine type of inline operation state. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>A future that is always deferred needs to store the function type beyond the state type. The extended operation state with information about the function type is implemented through the deferred operation state class, where the function type is not erased.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername><ref refid="structfutures_1_1is__always__deferred" kindref="compound">is_always_deferred</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>whether the future is always deferred </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="futures/futures/basic_future.hpp" line="115" column="1" bodyfile="futures/futures/basic_future.hpp" bodystart="114" bodyend="122"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1basic__future_1_1operation__state__type__impl_1ad86acff38c666782614080115a953c9a" prot="public" virt="non-virtual"><scope>futures::basic_future::operation_state_type_impl</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

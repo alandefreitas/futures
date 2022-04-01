@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1inline__executor" kind="struct" language="C++" prot="public">
+    <compoundname>futures::inline_executor</compoundname>
+    <includes refid="inline__executor_8hpp" local="no">inline_executor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structfutures_1_1inline__executor_1a614277227982b8850ad83677b58ca7c4" prot="public" static="no" mutable="no">
+        <type>asio::execution_context *</type>
+        <definition>asio::execution_context* futures::inline_executor::context_</definition>
+        <argsstring></argsstring>
+        <name>context_</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="30" column="33" bodyfile="futures/executor/inline_executor.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structfutures_1_1inline__executor_1a311f8b99a01e4f59b87208de10bba9c9" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::inline_executor::operator==</definition>
+        <argsstring>(const inline_executor &amp;other) const noexcept</argsstring>
+        <name>operator==</name>
+        <param>
+          <type>const <ref refid="structfutures_1_1inline__executor" kindref="compound">inline_executor</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="33" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="33" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="structfutures_1_1inline__executor_1a5cda7252ec9f5602773fb0168afa4583" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::inline_executor::operator!=</definition>
+        <argsstring>(const inline_executor &amp;other) const noexcept</argsstring>
+        <name>operator!=</name>
+        <param>
+          <type>const <ref refid="structfutures_1_1inline__executor" kindref="compound">inline_executor</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="38" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="38" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="structfutures_1_1inline__executor_1a35942952143bad5dec45836417cf4bf3" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr asio::execution_context &amp;</type>
+        <definition>constexpr asio::execution_context&amp; futures::inline_executor::query</definition>
+        <argsstring>(asio::execution::context_t) const noexcept</argsstring>
+        <name>query</name>
+        <param>
+          <type>asio::execution::context_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="43" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="43" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="structfutures_1_1inline__executor_1aef254311ce5caa1cc8a440d710cef8cb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::inline_executor::execute</definition>
+        <argsstring>(F f) const</argsstring>
+        <name>execute</name>
+        <param>
+          <type>F</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="54" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="54" bodyend="56"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structfutures_1_1inline__executor_1a9183a554ee818dc66fdf3474e638b976" prot="public" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr asio::execution::blocking_t::never_t</type>
+        <definition>static constexpr asio::execution::blocking_t::never_t futures::inline_executor::query</definition>
+        <argsstring>(asio::execution::blocking_t) noexcept</argsstring>
+        <name>query</name>
+        <param>
+          <type>asio::execution::blocking_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="48" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="48" bodyend="50"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>An executor that runs anything inline. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Although simple, it needs to meet the executor requirements:<itemizedlist>
+<listitem><para>Executor concept</para>
+</listitem><listitem><para>Ability to query the execution context<itemizedlist>
+<listitem><para>Result being derived from execution_context</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>The execute function <simplesect kind="see"><para><ulink url="https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html">https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html</ulink> </para>
+</simplesect>
+</para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <location file="futures/executor/inline_executor.hpp" line="29" column="1" bodyfile="futures/executor/inline_executor.hpp" bodystart="28" bodyend="57"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1inline__executor_1a614277227982b8850ad83677b58ca7c4" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>context_</name></member>
+      <member refid="structfutures_1_1inline__executor_1aef254311ce5caa1cc8a440d710cef8cb" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>execute</name></member>
+      <member refid="structfutures_1_1inline__executor_1a5cda7252ec9f5602773fb0168afa4583" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>operator!=</name></member>
+      <member refid="structfutures_1_1inline__executor_1a311f8b99a01e4f59b87208de10bba9c9" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>operator==</name></member>
+      <member refid="structfutures_1_1inline__executor_1a35942952143bad5dec45836417cf4bf3" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>query</name></member>
+      <member refid="structfutures_1_1inline__executor_1a9183a554ee818dc66fdf3474e638b976" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>query</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

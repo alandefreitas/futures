@@ -1,0 +1,446 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4" kind="class" language="C++" prot="public">
+    <compoundname>futures::packaged_task&lt; R(Args...), Options &gt;</compoundname>
+    <includes refid="packaged__task_8hpp" local="no">packaged_task.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Signature</type>
+      </param>
+      <param>
+        <type>Options</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a48392a1ea499a183203bfe995d0d1a98" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool futures::packaged_task&lt; R(Args...), Options &gt;::future_retrieved_</definition>
+        <argsstring></argsstring>
+        <name>future_retrieved_</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+<para>True if the corresponding future has already been retrieved. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="236" column="14" bodyfile="futures/futures/packaged_task.hpp" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9ef6d39cdf829157b1ed7f6e96b6ceb7" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; detail::shared_task_base&lt; R, Options, Args... &gt; &gt;</type>
+        <definition>std::shared_ptr&lt;detail::shared_task_base&lt;R, Options, Args...&gt; &gt; futures::packaged_task&lt; R(Args...), Options &gt;::task_</definition>
+        <argsstring></argsstring>
+        <name>task_</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>The function this task should execute. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="239" column="25" bodyfile="futures/futures/packaged_task.hpp" bodystart="239" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::packaged_task</definition>
+        <argsstring>()=default</argsstring>
+        <name>packaged_task</name>
+        <briefdescription>
+<para>Constructs a std::packaged_task object with no task and no shared state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9195940d60c6a83342fe8696cf19db90" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Fn</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::packaged_task</definition>
+        <argsstring>(Fn &amp;&amp;fn)</argsstring>
+        <name>packaged_task</name>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Construct a packaged task from a function with the default std allocator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="par"><title>Constraints</title><para>This constructor only participates in overload resolution if Fn is not a packaged task itself.</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The callable target to execute </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="69" column="18" bodyfile="futures/futures/packaged_task.hpp" bodystart="69" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1aab53fe7de7f2fa10d0655a0b036a6c51" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Fn</type>
+          </param>
+          <param>
+            <type>typename Allocator</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::packaged_task</definition>
+        <argsstring>(std::allocator_arg_t, const Allocator &amp;alloc, Fn &amp;&amp;fn)</argsstring>
+        <name>packaged_task</name>
+        <param>
+          <type>std::allocator_arg_t</type>
+        </param>
+        <param>
+          <type>const Allocator &amp;</type>
+          <declname>alloc</declname>
+        </param>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a std::packaged_task object with a shared state and a copy of the task. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function constructs a std::packaged_task object with a shared state and a copy of the task, initialized with std::forward&lt;Fn&gt;(fn). It uses the provided allocator to allocate memory necessary to store the task.</para>
+<para><simplesect kind="par"><title>Constraints</title><para>This constructor does not participate in overload resolution if std::decay&lt;Fn&gt;::type is the same type as std::packaged_task&lt;R(ArgTypes...)&gt;.</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Allocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Allocator type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>alloc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator to use when storing the task </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The callable target to execute </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="101" column="18" bodyfile="futures/futures/packaged_task.hpp" bodystart="101" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1aff5547bf1de1dbeb06fed08deadbc009" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::packaged_task</definition>
+        <argsstring>(packaged_task const &amp;)=delete</argsstring>
+        <name>packaged_task</name>
+        <param>
+          <type>packaged_task const &amp;</type>
+        </param>
+        <briefdescription>
+<para>The copy constructor is deleted, std::packaged_task is move-only. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="115" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a23e3853079417a44e641e7310dd00400" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::packaged_task</definition>
+        <argsstring>(packaged_task &amp;&amp;other) noexcept</argsstring>
+        <name>packaged_task</name>
+        <param>
+          <type>packaged_task &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a std::packaged_task with the shared state and task formerly owned by other. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="119" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="119" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a8c56726931fa1b8d286e67ebf8afb59f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kindref="member">packaged_task</ref> &amp;</type>
+        <definition>packaged_task&amp; futures::packaged_task&lt; R(Args...), Options &gt;::operator=</definition>
+        <argsstring>(packaged_task const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kindref="member">packaged_task</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>The copy assignment is deleted, std::packaged_task is move-only. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="128" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a2cfe55227c61953f4fdadcb6516cab12" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kindref="member">packaged_task</ref> &amp;</type>
+        <definition>packaged_task&amp; futures::packaged_task&lt; R(Args...), Options &gt;::operator=</definition>
+        <argsstring>(packaged_task &amp;&amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kindref="member">packaged_task</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Assigns a std::packaged_task with the shared state and task formerly owned by other. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="134" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="134" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acf0c0700f4cf9a433111e5bbf92983ac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::packaged_task&lt; R(Args...), Options &gt;::~packaged_task</definition>
+        <argsstring>()</argsstring>
+        <name>~packaged_task</name>
+        <briefdescription>
+<para>Destructs the task object. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="143" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="143" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9cce52a1a87367d72da16873d5b1053b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::packaged_task&lt; R(Args...), Options &gt;::valid</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>valid</name>
+        <briefdescription>
+<para>Checks if the task object has a valid function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>true if *this has a shared state, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="153" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="153" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a8f8c8ba026d9b9b6d24cd152a1148fbc" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::packaged_task&lt; R(Args...), Options &gt;::swap</definition>
+        <argsstring>(packaged_task &amp;other) noexcept</argsstring>
+        <name>swap</name>
+        <param>
+          <type><ref refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kindref="member">packaged_task</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Swaps two task objects. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function exchanges the shared states and stored tasks of *this and other</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>packaged task whose state to swap with </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="164" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="164" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9f7cb187c44ffc03fb4f68bf74b36838" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Future</type>
+            <defval><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt;R, Options&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>Future</type>
+        <definition>Future futures::packaged_task&lt; R(Args...), Options &gt;::get_future</definition>
+        <argsstring>()</argsstring>
+        <name>get_future</name>
+        <briefdescription>
+<para>Returns a future object associated with the promised result. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function constructs a future object that shares its state with this promise Because this library handles more than a single future type, the future type we want is a template parameter. This function expects future type constructors to accept pointers to shared states. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="177" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="177" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1af856bb3a9a0abfff217fc64bd70e6f1f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>OtherArgs</declname>
+            <defname>OtherArgs</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::packaged_task&lt; R(Args...), Options &gt;::operator()</definition>
+        <argsstring>(OtherArgs... args)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>OtherArgs...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+<para>Executes the function and set the shared state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls the stored task with args as the arguments. The return value of the task or any exceptions thrown are stored in the shared state The shared state is made ready and any threads waiting for this are unblocked.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the parameters to pass on invocation of the stored task </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="202" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="202" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acabfcd99100cf56e70bb6f1251b58587" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::packaged_task&lt; R(Args...), Options &gt;::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <briefdescription>
+<para>Resets the shared state abandoning any stored results of previous executions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Resets the state abandoning the results of previous executions. A new shared state is constructed. Equivalent to *this = packaged_task(std::move(f)), where f is the stored task. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="219" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="219" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9dd3937960988bdd7cbb10e695b20636" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::packaged_task&lt; R(Args...), Options &gt;::set_wait_callback</definition>
+        <argsstring>(F &amp;&amp;f)</argsstring>
+        <name>set_wait_callback</name>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Set the task we should execute before waiting. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/packaged_task.hpp" line="230" column="9" bodyfile="futures/futures/packaged_task.hpp" bodystart="230" bodyend="232"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A packaged task that sets a shared state when done. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>A packaged task holds a task to be executed and a shared state for its result. It&apos;s very similar to a promise where the shared state is extended with a task to generate the state.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>R</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Task arguments </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="futures/futures/packaged_task.hpp" line="46" column="1" bodyfile="futures/futures/packaged_task.hpp" bodystart="45" bodyend="240"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a48392a1ea499a183203bfe995d0d1a98" prot="private" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>future_retrieved_</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9f7cb187c44ffc03fb4f68bf74b36838" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>get_future</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1af856bb3a9a0abfff217fc64bd70e6f1f" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a8c56726931fa1b8d286e67ebf8afb59f" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a2cfe55227c61953f4fdadcb6516cab12" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>packaged_task</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9195940d60c6a83342fe8696cf19db90" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>packaged_task</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1aab53fe7de7f2fa10d0655a0b036a6c51" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>packaged_task</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1aff5547bf1de1dbeb06fed08deadbc009" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>packaged_task</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a23e3853079417a44e641e7310dd00400" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>packaged_task</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acabfcd99100cf56e70bb6f1251b58587" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>reset</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9dd3937960988bdd7cbb10e695b20636" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>set_wait_callback</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a8f8c8ba026d9b9b6d24cd152a1148fbc" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>swap</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9ef6d39cdf829157b1ed7f6e96b6ceb7" prot="private" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>task_</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9cce52a1a87367d72da16873d5b1053b" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>valid</name></member>
+      <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acf0c0700f4cf9a433111e5bbf92983ac" prot="public" virt="non-virtual"><scope>futures::packaged_task&lt; R(Args...), Options &gt;</scope><name>~packaged_task</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

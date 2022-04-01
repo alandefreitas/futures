@@ -1,0 +1,889 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1binary__invoke__algorithm__functor" kind="class" language="C++" prot="public">
+    <compoundname>futures::binary_invoke_algorithm_functor</compoundname>
+    <includes refid="binary__invoke__algorithm_8hpp" local="no">binary_invoke_algorithm.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Derived</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1abc2042fa47caa04261ad9c08e5fa92ed" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Complete overload. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="66" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="66" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a5d58f9da7f829fc6e099611b97513741" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="110" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="110" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a4e48e216ea1674866b242cda497712cb" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;, P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for execution policy instead of executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="161" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="161" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1aaf1270201d7e0ed6c7f0a12e07797506" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;, P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for execution policy instead of executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="207" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="207" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a397f49e0c92371896fd5d0d31341c98a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="249" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="249" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a335d3b1ccd16bbd3330a25eff7cbedcd" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, P p, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="285" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="285" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a900faad5d84afcde4a52b87e6a6f532a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default parallel executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="319" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="319" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1aabdacbc47b42a34d0a97e853a683ec91" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default parallel executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="360" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="360" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ad69955ddfa48a477b67a33778daba922" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default parallel executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="399" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="399" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ab3d82a31aac8c3286fa459ea695e51ad" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default parallel executor / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="438" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="438" bodyend="454"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a8e6b2232b24f724495459ed77c07725f" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="479" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="479" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a6aa40124fd3115f83c879673d163345d" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="521" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="521" bodyend="537"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1ad731dd5bc445de38455a0acfab816462" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="560" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="560" bodyend="578"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a1c3f58617f60161e219104c41441d6f2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(const E &amp;ex, R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const E &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="599" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="599" bodyend="615"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a1a115ae17cbb0f72816e73cdafd49c8a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(I first, S last, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Iterators / default executor / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="638" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="638" bodyend="656"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a4ef4553a388ffe7735a82b4b4860c31b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(I first, S last, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Iterators / default executor / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="678" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="678" bodyend="694"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a88d0fc4c636752d4f2f4f3f4e7af69f4" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, T i, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Overload for Ranges / default executor / default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="715" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="715" bodyend="733"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1binary__invoke__algorithm__functor_1a188e0ef4125a813ebf9fad09625557ed" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+            <defval>std::plus&lt;&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::binary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, Fun f=std::plus&lt;&gt;()) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+          <defval>std::plus&lt;&gt;()</defval>
+        </param>
+        <briefdescription>
+<para>Ranges / default executor / default partitioner / default init value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="752" column="9" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="752" bodyend="768"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Binary algorithm overloads. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>CRTP class with the overloads for algorithms that aggregate elements in a sequence with an binary function.</para>
+<para>This includes algorithms such as reduce and accumulate. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/traits/binary_invoke_algorithm.hpp" line="39" column="1" bodyfile="futures/algorithm/traits/binary_invoke_algorithm.hpp" bodystart="38" bodyend="769"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1abc2042fa47caa04261ad9c08e5fa92ed" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a5d58f9da7f829fc6e099611b97513741" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a4e48e216ea1674866b242cda497712cb" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aaf1270201d7e0ed6c7f0a12e07797506" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a397f49e0c92371896fd5d0d31341c98a" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a335d3b1ccd16bbd3330a25eff7cbedcd" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a900faad5d84afcde4a52b87e6a6f532a" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aabdacbc47b42a34d0a97e853a683ec91" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ad69955ddfa48a477b67a33778daba922" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ab3d82a31aac8c3286fa459ea695e51ad" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8e6b2232b24f724495459ed77c07725f" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a6aa40124fd3115f83c879673d163345d" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ad731dd5bc445de38455a0acfab816462" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a1c3f58617f60161e219104c41441d6f2" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a1a115ae17cbb0f72816e73cdafd49c8a" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a4ef4553a388ffe7735a82b4b4860c31b" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a88d0fc4c636752d4f2f4f3f4e7af69f4" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a188e0ef4125a813ebf9fad09625557ed" prot="public" virt="non-virtual"><scope>futures::binary_invoke_algorithm_functor</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

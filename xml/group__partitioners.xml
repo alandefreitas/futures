@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__partitioners" kind="group">
+    <compoundname>partitioners</compoundname>
+    <title>Partitioners</title>
+    <innerclass refid="classfutures_1_1halve__partitioner" prot="public">futures::halve_partitioner</innerclass>
+    <innerclass refid="classfutures_1_1thread__partitioner" prot="public">futures::thread_partitioner</innerclass>
+    <innerclass refid="structfutures_1_1is__range__partitioner" prot="public">futures::is_range_partitioner</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__partitioners_1gaf72dfb651b8f5e1d33d159918a391ec8" prot="public" static="no">
+        <type>thread_partitioner</type>
+        <definition>using futures::default_partitioner = typedef thread_partitioner</definition>
+        <argsstring></argsstring>
+        <name>default_partitioner</name>
+        <briefdescription>
+<para>Default partitioner used by parallel algorithms. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Its type and parameters might change </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="106" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__partitioners_1ga609b8e1245d10b6f97b9d9f1eb37b7f7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+        </templateparamlist>
+        <type>std::conjunction&lt; std::conditional_t&lt; is_input_iterator_v&lt; I &gt;, std::true_type, std::false_type &gt;, std::conditional_t&lt; is_input_iterator_v&lt; S &gt;, std::true_type, std::false_type &gt;, std::is_invocable&lt; T, I, S &gt; &gt;</type>
+        <definition>using futures::is_partitioner = typedef std::conjunction&lt; std::conditional_t&lt; is_input_iterator_v&lt;I&gt;, std::true_type, std::false_type&gt;, std::conditional_t&lt; is_input_iterator_v&lt;S&gt;, std::true_type, std::false_type&gt;, std::is_invocable&lt;T, I, S&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_partitioner</name>
+        <briefdescription>
+<para>Determine if P is a valid partitioner for the iterator range [I,S]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="158" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__partitioners_1gaf49c96a5a96c3aad76f100f1bb57f47b" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_partitioner_v</definition>
+        <argsstring></argsstring>
+        <name>is_partitioner_v</name>
+        <initializer>= is_partitioner&lt;T, I, S&gt;::value</initializer>
+        <briefdescription>
+<para>Determine if P is a valid partitioner for the iterator range [I,S]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="171" column="20" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__partitioners_1ga20fb52bb0d6a2993164cc1b667c5cd5a" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class R</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_range_partitioner_v</definition>
+        <argsstring></argsstring>
+        <name>is_range_partitioner_v</name>
+        <initializer>= is_range_partitioner&lt;T, R&gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="184" column="20" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__partitioners_1ga20c9290c9184f57260f5d6f8692d73b6" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t futures::make_grain_size</definition>
+        <argsstring>(std::size_t n)</argsstring>
+        <name>make_grain_size</name>
+        <param>
+          <type>std::size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>Determine a reasonable minimum grain size depending on the number of elements in a sequence. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="111" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="111" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="group__partitioners_1ga47766e8c4150a6b098bf298023669558" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>default_partitioner</type>
+        <definition>default_partitioner futures::make_default_partitioner</definition>
+        <argsstring>(size_t n)</argsstring>
+        <name>make_default_partitioner</name>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>Create an instance of the default partitioner with a reasonable grain size for <computeroutput>n</computeroutput> elements. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The default partitioner type and parameters might change </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="127" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="127" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="group__partitioners_1ga901edbf3693c6b1a608f031f10c1c1b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>std::enable_if_t&lt; is_input_iterator_v&lt; I &gt; &amp;&amp;is_sentinel_for_v&lt; S, I &gt;, int &gt;</type>
+            <defval>0</defval>
+          </param>
+        </templateparamlist>
+        <type>default_partitioner</type>
+        <definition>default_partitioner futures::make_default_partitioner</definition>
+        <argsstring>(I first, S last)</argsstring>
+        <name>make_default_partitioner</name>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Create an instance of the default partitioner with a reasonable grain for the range <computeroutput>first</computeroutput>, <computeroutput>last</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The default partitioner type and parameters might change </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="142" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="142" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="group__partitioners_1ga8a5844d71d556431fb2d182e6b256795" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>std::enable_if_t&lt; is_input_range_v&lt; R &gt;, int &gt;</type>
+            <defval>0</defval>
+          </param>
+        </templateparamlist>
+        <type>default_partitioner</type>
+        <definition>default_partitioner futures::make_default_partitioner</definition>
+        <argsstring>(R &amp;&amp;r)</argsstring>
+        <name>make_default_partitioner</name>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Create an instance of the default partitioner with a reasonable grain for the range <computeroutput>r</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The default partitioner type and parameters might change </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/partitioner.hpp" line="152" column="5" bodyfile="futures/algorithm/partitioner/partitioner.hpp" bodystart="152" bodyend="154"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

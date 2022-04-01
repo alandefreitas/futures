@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1any__of__functor_1_1any__of__graph" kind="class" language="C++" prot="private">
+    <compoundname>futures::any_of_functor::any_of_graph</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::maybe_empty_executor&lt; Executor &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>class Executor</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1any__of__functor_1_1any__of__graph_1a375e6ad923a1b6749db805b9569ceb62" prot="private" static="no" mutable="no">
+        <type>detail::atomic_queue&lt; <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; bool, <ref refid="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" kindref="member">future_options</ref>&lt; <ref refid="structfutures_1_1executor__opt" kindref="compound">executor_opt</ref>&lt; Executor &gt;, <ref refid="structfutures_1_1continuable__opt" kindref="compound">continuable_opt</ref> &gt; &gt; &gt;</type>
+        <definition>detail::atomic_queue&lt;basic_future&lt; bool, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt&gt; &gt; &gt; futures::any_of_functor::any_of_graph&lt; Executor &gt;::tasks_</definition>
+        <argsstring></argsstring>
+        <name>tasks_</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="105" column="17" bodyfile="futures/algorithm/any_of.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1any__of__functor_1_1any__of__graph_1aac515d41918e6f6f777d9addce3b10ed" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::any_of_functor::any_of_graph&lt; Executor &gt;::any_of_graph</definition>
+        <argsstring>(const Executor &amp;ex)</argsstring>
+        <name>any_of_graph</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="35" column="22" bodyfile="futures/algorithm/any_of.hpp" bodystart="35" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__of__functor_1_1any__of__graph_1af0db007a47bc9851f63aa82e926961d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool futures::any_of_functor::any_of_graph&lt; Executor &gt;::launch_any_of_tasks</definition>
+        <argsstring>(P p, I first, S last, Fun f)</argsstring>
+        <name>launch_any_of_tasks</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="40" column="13" bodyfile="futures/algorithm/any_of.hpp" bodystart="40" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__of__functor_1_1any__of__graph_1a569b107169eff18c296c1429ffe7e739" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::any_of_functor::any_of_graph&lt; Executor &gt;::wait_for_any_of_tasks</definition>
+        <argsstring>()</argsstring>
+        <name>wait_for_any_of_tasks</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="81" column="13" bodyfile="futures/algorithm/any_of.hpp" bodystart="81" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__of__functor_1_1any__of__graph_1a45115cd3448c27aaaba371bed6d67662" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class Fun</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool futures::any_of_functor::any_of_graph&lt; Executor &gt;::any_of</definition>
+        <argsstring>(P p, I first, S last, Fun f)</argsstring>
+        <name>any_of</name>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="92" column="13" bodyfile="futures/algorithm/any_of.hpp" bodystart="92" bodyend="99"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::any_of_functor::any_of_graph&lt; Executor &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>detail::maybe_empty_executor&lt; Executor &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::any_of_functor::any_of_graph&lt; Executor &gt;</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/any_of.hpp" line="33" column="1" bodyfile="futures/algorithm/any_of.hpp" bodystart="32" bodyend="106"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1any__of__functor_1_1any__of__graph_1a45115cd3448c27aaaba371bed6d67662" prot="public" virt="non-virtual"><scope>futures::any_of_functor::any_of_graph</scope><name>any_of</name></member>
+      <member refid="classfutures_1_1any__of__functor_1_1any__of__graph_1aac515d41918e6f6f777d9addce3b10ed" prot="public" virt="non-virtual"><scope>futures::any_of_functor::any_of_graph</scope><name>any_of_graph</name></member>
+      <member refid="classfutures_1_1any__of__functor_1_1any__of__graph_1af0db007a47bc9851f63aa82e926961d3" prot="public" virt="non-virtual"><scope>futures::any_of_functor::any_of_graph</scope><name>launch_any_of_tasks</name></member>
+      <member refid="classfutures_1_1any__of__functor_1_1any__of__graph_1a375e6ad923a1b6749db805b9569ceb62" prot="private" virt="non-virtual"><scope>futures::any_of_functor::any_of_graph</scope><name>tasks_</name></member>
+      <member refid="classfutures_1_1any__of__functor_1_1any__of__graph_1a569b107169eff18c296c1429ffe7e739" prot="public" virt="non-virtual"><scope>futures::any_of_functor::any_of_graph</scope><name>wait_for_any_of_tasks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

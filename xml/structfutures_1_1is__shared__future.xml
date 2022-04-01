@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="structfutures_1_1is__shared__future" kind="struct" language="C++" prot="public">
+    <compoundname>futures::is_shared_future</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">false_type</basecompoundref>
+    <includes refid="is__future_8hpp" local="no">is_future.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Customization point to determine if a type is a shared future type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>false_type</label>
+      </node>
+      <node id="1">
+        <label>futures::is_shared_future&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__shared__future"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>false_type</label>
+      </node>
+      <node id="1">
+        <label>futures::is_shared_future&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__shared__future"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/futures/traits/is_future.hpp" line="59" column="1" bodyfile="futures/futures/traits/is_future.hpp" bodystart="58" bodyend="59"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

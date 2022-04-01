@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Futures: C++ Lock-Free Task Programming with ASIO executors" name="description"/>
+<link href="https://alandefreitas.github.io/futures/reference/Files/inline__executor_8hpp/" rel="canonical"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.0, mkdocs-material-8.2.8" name="generator"/>
+<title>futures/executor/inline_executor.hpp - Futures</title>
+<link href="../../../assets/stylesheets/main.644de097.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-290016612",{page_path:e.pathname})})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-290016612"></script>
+</head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="futures" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#futuresexecutorinline_executorhpp">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Futures" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Futures
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              futures/executor/inline_executor.hpp
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<!-- Main navigation -->
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Futures" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+    Futures
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../quickstart/">
+        Quickstart
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Futures" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/future_types/">
+        Future Types
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/launching/">
+        Launching Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/promises/">
+        Promises and Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/continuable_futures/">
+        Continuable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/stoppable_futures/">
+        Stoppable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/shared_futures/">
+        Shared Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/waiting/">
+        Waiting for Futures
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Future Adaptors" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/continuations/">
+        Continuations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/conjunctions/">
+        Conjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/disjunctions/">
+        Disjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/task_graphs/">
+        Task Graphs
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Parallel Algorithms" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../algorithms/algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../algorithms/partitioners/">
+        Partitioners
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Networking" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../networking/asio/">
+        Asio
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Modules/group__futures/">
+        Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Modules/group__adaptors/">
+        Adaptors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Modules/group__executors/">
+        Executors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Modules/group__algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Namespaces/namespacefutures/">
+        Index
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Classes/">
+        Classes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+        Files
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../acknowledgments/">
+        Acknowledgments
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+</ul>
+</nav>
+<div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="futuresexecutorinline_executorhpp">futures/executor/inline_executor.hpp</h1>
+<table>
+<thead>
+<tr>
+<th>Namespaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/Namespaces/namespacefutures/">futures</a></strong> <br/>Because all tasks need to be done to achieve the result, the algorithm doesn't depend much on the properties of the underlying futures.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Classes</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/Classes/structfutures_1_1inline__executor/">inline_executor</a></strong></td>
+<td>An executor that runs anything inline. <br/> <sup><span style="color:green">(struct)</span></sup></td>
+</tr>
+</tbody>
+</table>
+<h2 id="source-code">Source code</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">//</span>
+<span class="c1">// Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)</span>
+<span class="c1">//</span>
+<span class="c1">// Distributed under the Boost Software License, Version 1.0.</span>
+<span class="c1">// https://www.boost.org/LICENSE_1_0.txt</span>
+<span class="c1">//</span>
+
+<span class="cp">#ifndef FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP</span>
+<span class="cp">#define FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;futures/executor/is_executor.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;futures/detail/config/asio_include.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">futures</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">inline_executor</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">asio</span><span class="o">::</span><span class="n">execution_context</span><span class="w"> </span><span class="o">*</span><span class="n">context_</span><span class="p">{</span><span class="w"> </span><span class="k">nullptr</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"></span>
+<span class="w">        </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">inline_executor</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">context_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">context_</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"></span>
+<span class="w">        </span><span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">inline_executor</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution_context</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">        </span><span class="n">query</span><span class="p">(</span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">context_t</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">context_</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">blocking_t</span><span class="o">::</span><span class="n">never_t</span><span class="w"></span>
+<span class="w">        </span><span class="n">query</span><span class="p">(</span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">blocking_t</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">blocking_t</span><span class="o">::</span><span class="n">never</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">F</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="w"></span>
+<span class="w">        </span><span class="n">execute</span><span class="p">(</span><span class="n">F</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">f</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="w">    </span><span class="kr">inline</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution_context</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="nf">inline_execution_context</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution_context</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">inline_executor</span><span class="w"></span>
+<span class="w">    </span><span class="nf">make_inline_executor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">inline_executor</span><span class="p">{};</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w"> </span><span class="c1">// @addtogroup executors Executors</span>
+<span class="p">}</span><span class="w"> </span><span class="c1">// namespace futures</span>
+
+<span class="cp">#ifdef FUTURES_USE_BOOST_ASIO</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="w">    </span><span class="k">namespace</span><span class="w"> </span><span class="nn">asio</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"></span>
+<span class="w">        </span><span class="k">class</span><span class="w"> </span><span class="nc">is_executor</span><span class="o">&lt;</span><span class="n">futures</span><span class="o">::</span><span class="n">inline_executor</span><span class="o">&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">true_type</span><span class="w"></span>
+<span class="w">        </span><span class="p">{};</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">namespace</span><span class="w"> </span><span class="nn">traits</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="cp">#if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)</span>
+<span class="w">            </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">F</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">execute_member</span><span class="o">&lt;</span><span class="n">futures</span><span class="o">::</span><span class="n">inline_executor</span><span class="p">,</span><span class="w"> </span><span class="n">F</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">result_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">};</span><span class="w"></span>
+
+<span class="cp">#endif </span><span class="c1">// !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)</span>
+<span class="cp">#if !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)</span>
+<span class="w">            </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">equality_comparable</span><span class="o">&lt;</span><span class="n">futures</span><span class="o">::</span><span class="n">inline_executor</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">};</span><span class="w"></span>
+
+<span class="cp">#endif </span><span class="c1">// !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)</span>
+<span class="cp">#if !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)</span>
+<span class="w">            </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">query_member</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">                </span><span class="n">futures</span><span class="o">::</span><span class="n">inline_executor</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">context_t</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">typedef</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution_context</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">};</span><span class="w"></span>
+
+<span class="cp">#endif </span><span class="c1">// !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)</span>
+<span class="cp">#if !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)</span>
+<span class="w">            </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Property</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">query_static_constexpr_member</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">                </span><span class="n">futures</span><span class="o">::</span><span class="n">inline_executor</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">Property</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="k">typename</span><span class="w"> </span><span class="nc">enable_if</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_convertible</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">Property</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">blocking_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">typedef</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">blocking_t</span><span class="o">::</span><span class="n">never_t</span><span class="w"> </span><span class="n">result_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">result_type</span><span class="w"></span>
+<span class="w">                </span><span class="nf">value</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="n">result_type</span><span class="p">();</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">};</span><span class="w"></span>
+
+<span class="cp">#endif </span><span class="c1">// !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)</span>
+
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="c1">// namespace traits</span>
+<span class="w">    </span><span class="p">}</span><span class="w">     </span><span class="c1">// namespace asio</span>
+<span class="cp">#ifdef FUTURES_USE_BOOST_ASIO</span>
+<span class="p">}</span><span class="w"></span>
+<span class="cp">#endif</span>
+
+<span class="cp">#endif </span><span class="c1">// FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP</span>
+</code></pre></div>
+<hr/>
+<p><sub>Updated on 2022-04-01</sub></p>
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px;">
+<a class="md-button" href="https://github.com/alandefreitas/futures/" target="_blank" title="Futures">
+        ⭐️ Star Futures
+    </a>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application footer -->
+<footer class="md-footer">
+<!-- Link to previous and/or next page -->
+<!-- Further information -->
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<!-- Copyright and theme information -->
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+                    Copyright © Alan Freitas
+                </div>
+                
+                Made with
+                <a href="https://alandefreitas.github.io/mdsplit/" rel="noopener" target="_blank">
+<code style="background-color: #323232;">mdsplit</code>
+</a>
+                and
+                <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+                    Material for MkDocs
+                </a>
+</div>
+<!-- Social links -->
+<div class="md-social">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../../../assets/javascripts/bundle.c44cc438.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+<script src="../../../javascripts/extra.js"></script>
+</body>
+</html>

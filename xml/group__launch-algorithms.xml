@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__launch-algorithms" kind="group">
+    <compoundname>launch-algorithms</compoundname>
+    <title>Launch Algorithms</title>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__launch-algorithms_1ga7747cea4a54690660a15732beb807e99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Function</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::async</definition>
+        <argsstring>(const Executor &amp;ex, Function &amp;&amp;f, Args &amp;&amp;...args)</argsstring>
+        <name>async</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+<para>Launch an asynchronous task with the specified executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This version of the async function will always use the specified executor instead of creating a new thread.</para>
+<para>If no executor is provided, then the function is run in a default executor created from the default thread pool. The default executor also ensures the function will not launch one thread per task.</para>
+<para>The task might accept a stop token as its first parameter, in which case the function returns a continuable and stoppable future type. Otherwise, this function returns a continuable future type.</para>
+<para><simplesect kind="par"><title>Example</title><para><programlisting><codeline><highlight class="normal">auto<sp/>f<sp/>=<sp/>async(ex,<sp/>[]()<sp/>{<sp/>return<sp/>2;<sp/>});</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>f.get()<sp/>&lt;&lt;<sp/>std::endl;<sp/>//<sp/>2</highlight></codeline>
+</programlisting></para>
+</simplesect>
+<simplesect kind="see"><para><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor from an execution context </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callable object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Arguments for the Function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function to execute </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function arguments</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An eager future object whose shared state refers to the task result. The type of this future object depends on the task. If the task expects a <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref>, the future will return a continuable, stoppable, eager future. Otherwise, the function will return a continuable eager future. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/launch.hpp" line="151" column="5" bodyfile="futures/futures/launch.hpp" bodystart="151" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="group__launch-algorithms_1ga73ae8b3caf8bf793bf04a0d3461fdae9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Function</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::async</definition>
+        <argsstring>(Function &amp;&amp;f, Args &amp;&amp;...args)</argsstring>
+        <name>async</name>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+<para>Launch an asynchronous task with the default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor from an execution context </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callable object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Arguments for the Function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function to execute </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function arguments</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A future object with the function results </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/launch.hpp" line="186" column="5" bodyfile="futures/futures/launch.hpp" bodystart="186" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="group__launch-algorithms_1gad7add4197d5c46f1016c85dd83ced3bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Function</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::schedule</definition>
+        <argsstring>(const Executor &amp;ex, Function &amp;&amp;f, Args &amp;&amp;...args)</argsstring>
+        <name>schedule</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+<para>Schedule an asynchronous task with the specified executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function schedules a deferred future. The task will only be launched in the executor when some other execution context waits for the value associated to this future.</para>
+<para><simplesect kind="see"><para><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref></para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor from an execution context </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callable object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Arguments for the Function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function to execute </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function arguments</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A deferred future object whose shared state refers to the task result. The type of this future object depends on the task. If the task expects a <ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref>, the future will return a stoppable deferred future. Otherwise, the function will return a deferred future. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/launch.hpp" line="235" column="5" bodyfile="futures/futures/launch.hpp" bodystart="235" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="function" id="group__launch-algorithms_1gadbbebb4845d703c3fdc21c4b99f3acd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Function</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::schedule</definition>
+        <argsstring>(Function &amp;&amp;f, Args &amp;&amp;...args)</argsstring>
+        <name>schedule</name>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+<para>Schedule an asynchronous task with the default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor from an execution context </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callable object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Arguments for the Function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function to execute </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>args</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function arguments</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A future object with the function results </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/launch.hpp" line="270" column="5" bodyfile="futures/futures/launch.hpp" bodystart="270" bodyend="279"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Function to launch and schedule future tasks. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This module contains functions we can use to launch and schedule tasks. Tasks can be scheduled lazily instead of eagerly to avoid a race between the task and its dependencies.</para>
+<para>When tasks are scheduled eagerly, the function <ref refid="group__launch-algorithms_1ga7747cea4a54690660a15732beb807e99" kindref="member">async</ref> provides an alternatives to launch tasks on specific executors instead of creating a new thread for each asynchronous task. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

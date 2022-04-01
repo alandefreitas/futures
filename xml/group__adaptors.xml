@@ -1,0 +1,635 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__adaptors" kind="group">
+    <compoundname>adaptors</compoundname>
+    <title>Adaptors</title>
+    <innerclass refid="classfutures_1_1when__all__future" prot="public">futures::when_all_future</innerclass>
+    <innerclass refid="classfutures_1_1when__any__future" prot="public">futures::when_any_future</innerclass>
+    <innerclass refid="structfutures_1_1when__any__result" prot="public">futures::when_any_result</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__adaptors_1gaf2b7909595712c066c97f3cdb93d13cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>typename Function</type>
+          </param>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::operator%</definition>
+        <argsstring>(const Executor &amp;ex, Function &amp;&amp;after)</argsstring>
+        <name>operator%</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>after</declname>
+        </param>
+        <briefdescription>
+<para>Create a proxy pair with a lambda and an executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For this operation, we needed an operator with higher precedence than operator&gt;&gt; Our options are: +, -, *, /, %, &amp;, !, ~. Although + seems like an obvious choice, % is the one that leads to less conflict with other functions.</para>
+<para><simplesect kind="return"><para>A proxy pair to schedule execution </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/bind_executor_to_lambda.hpp" line="69" column="5" bodyfile="futures/adaptor/bind_executor_to_lambda.hpp" bodystart="69" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga3cfcc6ebdf07d06e5e032e3cf261460a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; typename std::decay_t&lt; T &gt;, future_options&lt;&gt; &gt;</type>
+        <definition>basic_future&lt;typename std::decay_t&lt;T&gt;, future_options&lt;&gt; &gt; futures::make_ready_future</definition>
+        <argsstring>(T &amp;&amp;value)</argsstring>
+        <name>make_ready_future</name>
+        <param>
+          <type>T &amp;&amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Make a placeholder future object that is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/make_ready_future">https://en.cppreference.com/w/cpp/experimental/make_ready_future</ulink></para>
+</simplesect>
+<simplesect kind="return"><para>A future associated with the shared state that is created. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/make_ready_future.hpp" line="25" column="5" bodyfile="futures/adaptor/make_ready_future.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1gaa42d861638654f615f134c540dd4baf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T &amp;, future_options&lt;&gt; &gt;</type>
+        <definition>basic_future&lt;T &amp;, future_options&lt;&gt; &gt; futures::make_ready_future</definition>
+        <argsstring>(std::reference_wrapper&lt; T &gt; value)</argsstring>
+        <name>make_ready_future</name>
+        <param>
+          <type>std::reference_wrapper&lt; T &gt;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Make a placeholder future object that is ready from a reference. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/make_ready_future">https://en.cppreference.com/w/cpp/experimental/make_ready_future</ulink></para>
+</simplesect>
+<simplesect kind="return"><para>A future associated with the shared state that is created. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/make_ready_future.hpp" line="37" column="5" bodyfile="futures/adaptor/make_ready_future.hpp" bodystart="37" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga1aad9ceef0be1fac97761efe5391faf3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>basic_future&lt; void, future_options&lt;&gt; &gt;</type>
+        <definition>basic_future&lt;void, future_options&lt;&gt; &gt; futures::make_ready_future</definition>
+        <argsstring>()</argsstring>
+        <name>make_ready_future</name>
+        <briefdescription>
+<para>Make a placeholder void future object that is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/make_ready_future">https://en.cppreference.com/w/cpp/experimental/make_ready_future</ulink></para>
+</simplesect>
+<simplesect kind="return"><para>A future associated with the shared state that is created. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/make_ready_future.hpp" line="48" column="5" bodyfile="futures/adaptor/make_ready_future.hpp" bodystart="48" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1gacb1886c5d2dcceb807398e2b2d2b37fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt;&gt; &gt;</type>
+        <definition>basic_future&lt;T, future_options&lt;&gt; &gt; futures::make_exceptional_future</definition>
+        <argsstring>(std::exception_ptr ex)</argsstring>
+        <name>make_exceptional_future</name>
+        <param>
+          <type>std::exception_ptr</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+<para>Make a placeholder future object that is ready with an exception from an exception ptr. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/make_exceptional_future">https://en.cppreference.com/w/cpp/experimental/make_exceptional_future</ulink></para>
+</simplesect>
+<simplesect kind="return"><para>A future associated with the shared state that is created. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/make_ready_future.hpp" line="61" column="5" bodyfile="futures/adaptor/make_ready_future.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga085b4ec19b2716c7867db303f5f7b819" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+            <defval>void</defval>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt;&gt; &gt;</type>
+        <definition>basic_future&lt;T, future_options&lt;&gt; &gt; futures::make_exceptional_future</definition>
+        <argsstring>(E ex)</argsstring>
+        <name>make_exceptional_future</name>
+        <param>
+          <type>E</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+<para>Make a placeholder future object that is ready with from any exception. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/experimental/make_exceptional_future">https://en.cppreference.com/w/cpp/experimental/make_exceptional_future</ulink></para>
+</simplesect>
+<simplesect kind="return"><para>A future associated with the shared state that is created. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/make_ready_future.hpp" line="75" column="5" bodyfile="futures/adaptor/make_ready_future.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga32ee251a83f3f07463f540b377adeac1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Executor</type>
+          </param>
+          <param>
+            <type>typename Function</type>
+          </param>
+          <param>
+            <type>class Future</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::then</definition>
+        <argsstring>(const Executor &amp;ex, Future &amp;&amp;before, Function &amp;&amp;after)</argsstring>
+        <name>then</name>
+        <param>
+          <type>const Executor &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>before</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>after</declname>
+        </param>
+        <briefdescription>
+<para>Schedule a continuation function to a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This creates a continuation that gets executed when the before future is over. The continuation needs to be invocable with the return type of the previous future.</para>
+<para>This function works for all kinds of futures but behavior depends on the input:<itemizedlist>
+<listitem><para>If previous future is continuable, attach the function to the continuation list</para>
+</listitem><listitem><para>If previous future is not continuable (such as std::future), post to execution with deferred policy In both cases, the result becomes a cfuture or jcfuture.</para>
+</listitem></itemizedlist>
+</para>
+<para>Stop tokens are also propagated:<itemizedlist>
+<listitem><para>If after function expects a stop token:<itemizedlist>
+<listitem><para>If previous future is stoppable and not-shared: return jcfuture with shared stop source</para>
+</listitem><listitem><para>Otherwise: return jcfuture with new stop source</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>If after function does not expect a stop token:<itemizedlist>
+<listitem><para>If previous future is stoppable and not-shared: return jcfuture with shared stop source</para>
+</listitem><listitem><para>Otherwise: return cfuture with no stop source</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="return"><para>A continuation to the before future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/then.hpp" line="73" column="5" bodyfile="futures/adaptor/then.hpp" bodystart="73" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga81dc939b60b76219a09ecab9661f0927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Future</type>
+          </param>
+          <param>
+            <type>typename Function</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::then</definition>
+        <argsstring>(Future &amp;&amp;before, Function &amp;&amp;after)</argsstring>
+        <name>then</name>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>before</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>after</declname>
+        </param>
+        <briefdescription>
+<para>Schedule a continuation function to a future with the default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A continuation to the before future</para>
+</simplesect>
+<simplesect kind="see"><para><ref refid="group__adaptors_1ga32ee251a83f3f07463f540b377adeac1" kindref="member">then</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/then.hpp" line="103" column="5" bodyfile="futures/adaptor/then.hpp" bodystart="103" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga170ce9f0b20adf27938909338adcb674" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Future</type>
+          </param>
+          <param>
+            <type>typename Function</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::operator&gt;&gt;</definition>
+        <argsstring>(Future &amp;&amp;before, Function &amp;&amp;after)</argsstring>
+        <name>operator&gt;&gt;</name>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>before</declname>
+        </param>
+        <param>
+          <type>Function &amp;&amp;</type>
+          <declname>after</declname>
+        </param>
+        <briefdescription>
+<para>Operator to schedule a continuation function to a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A continuation to the before future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/then.hpp" line="137" column="5" bodyfile="futures/adaptor/then.hpp" bodystart="137" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1gafc3b35ccdae55406b93ce91d247224c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Future</type>
+          </param>
+          <param>
+            <type>class Function</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>decltype(auto) futures::operator&gt;&gt;</definition>
+        <argsstring>(Future &amp;&amp;before, detail::executor_and_callable_reference&lt; Executor, Function, RValue &gt; &amp;&amp;after)</argsstring>
+        <name>operator&gt;&gt;</name>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>before</declname>
+        </param>
+        <param>
+          <type>detail::executor_and_callable_reference&lt; Executor, Function, RValue &gt; &amp;&amp;</type>
+          <declname>after</declname>
+        </param>
+        <briefdescription>
+<para>Schedule a continuation function to a future with a custom executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A continuation to the before future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/then.hpp" line="164" column="5" bodyfile="futures/adaptor/then.hpp" bodystart="164" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga8995968de95b8a3aae485ebac1cf2994" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class InputIt</type>
+          </param>
+        </templateparamlist>
+        <type>when_all_future&lt; detail::small_vector&lt; to_future_t&lt; typename std::iterator_traits&lt; InputIt &gt;::value_type &gt; &gt; &gt;</type>
+        <definition>when_all_future&lt;detail::small_vector&lt; to_future_t&lt;typename std::iterator_traits&lt;InputIt&gt;::value_type&gt; &gt; &gt; futures::when_all</definition>
+        <argsstring>(InputIt first, InputIt last)</argsstring>
+        <name>when_all</name>
+        <param>
+          <type>InputIt</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>InputIt</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when the range of input futures becomes ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless InputIt&apos;s value type (i.e., typename std::iterator_traits&lt;InputIt&gt;::value_type) is a std::future or std::shared_future.</para>
+<para>This overload uses a small vector for avoid further allocations for such a simple operation.</para>
+<para><simplesect kind="return"><para>Future object of type <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_all.hpp" line="531" column="5" bodyfile="futures/adaptor/when_all.hpp" bodystart="531" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga9de3518cfc276f4866e941a156b8a3f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Range</type>
+          </param>
+        </templateparamlist>
+        <type>when_all_future&lt; detail::small_vector&lt; to_future_t&lt; typename std::iterator_traits&lt; typename std::decay_t&lt; Range &gt;::iterator &gt;::value_type &gt; &gt; &gt;</type>
+        <definition>when_all_future&lt; detail::small_vector&lt;to_future_t&lt;typename std::iterator_traits&lt; typename std::decay_t&lt;Range&gt;::iterator&gt;::value_type&gt; &gt; &gt; futures::when_all</definition>
+        <argsstring>(Range &amp;&amp;r)</argsstring>
+        <name>when_all</name>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when the range of input futures becomes ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless the range type <ref refid="structfutures_1_1is__future" kindref="compound">is_future</ref>.</para>
+<para><simplesect kind="return"><para>Future object of type <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_all.hpp" line="581" column="5" bodyfile="futures/adaptor/when_all.hpp" bodystart="581" bodyend="587"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1gaac5a0ea0fe4615fad0fca5c1d185f54b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>Futures</declname>
+            <defname>Futures</defname>
+          </param>
+        </templateparamlist>
+        <type>when_all_future&lt; std::tuple&lt; to_future_t&lt; Futures &gt;... &gt; &gt;</type>
+        <definition>when_all_future&lt;std::tuple&lt;to_future_t&lt;Futures&gt;...&gt; &gt; futures::when_all</definition>
+        <argsstring>(Futures &amp;&amp;...futures)</argsstring>
+        <name>when_all</name>
+        <param>
+          <type>Futures &amp;&amp;...</type>
+          <declname>futures</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when all of the input futures become ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless every argument is either a (possibly cv-qualified) shared_future or a cv-unqualified future, as defined by the trait <ref refid="structfutures_1_1is__future" kindref="compound">is_future</ref>.</para>
+<para><simplesect kind="return"><para>Future object of type <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_all.hpp" line="608" column="5" bodyfile="futures/adaptor/when_all.hpp" bodystart="608" bodyend="617"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga0ece82019efe58d95672f13d3f7c2034" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T1</type>
+          </param>
+          <param>
+            <type>class T2</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto futures::operator&amp;&amp;</definition>
+        <argsstring>(T1 &amp;&amp;lhs, T2 &amp;&amp;rhs)</argsstring>
+        <name>operator&amp;&amp;</name>
+        <param>
+          <type>T1 &amp;&amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Operator to create a future object that becomes ready when all of the input futures are ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operator&amp;&amp; works for futures and functions (which are converted to futures with the default executor) If the future is a <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> itself, then it gets merged instead of becoming a child future of another <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref>.</para>
+<para>When the user asks for f1 &amp;&amp; f2 &amp;&amp; f3, we want that to return a single future that waits for &lt;f1,f2,f3&gt; rather than a future that wait for two futures &lt;f1,&lt;f2,f3&gt;&gt;.</para>
+<para>This emulates the usual behavior we expect from other types with operator&amp;&amp;.</para>
+<para>Note that this default behaviour is different from when_all(...), which doesn&apos;t merge the <ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> objects by default, because they are variadic functions and this intention can be controlled explicitly:<itemizedlist>
+<listitem><para>when_all(f1,f2,f3) -&gt; &lt;f1,f2,f3&gt;</para>
+</listitem><listitem><para>when_all(f1,when_all(f2,f3)) -&gt; &lt;f1,&lt;f2,f3&gt;&gt;</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="return"><para><ref refid="classfutures_1_1when__all__future" kindref="compound">when_all_future</ref> object that concatenates all futures </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_all.hpp" line="654" column="5" bodyfile="futures/adaptor/when_all.hpp" bodystart="654" bodyend="707"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1gab110a9d54ede3e3526e17431b11b747d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class InputIt</type>
+          </param>
+        </templateparamlist>
+        <type>when_any_future&lt; detail::small_vector&lt; to_future_t&lt; typename std::iterator_traits&lt; InputIt &gt;::value_type &gt; &gt; &gt;</type>
+        <definition>when_any_future&lt;detail::small_vector&lt; to_future_t&lt;typename std::iterator_traits&lt;InputIt&gt;::value_type&gt; &gt; &gt; futures::when_any</definition>
+        <argsstring>(InputIt first, InputIt last)</argsstring>
+        <name>when_any</name>
+        <param>
+          <type>InputIt</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>InputIt</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when any of the futures in the range is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless InputIt&apos;s value type (i.e., typename std::iterator_traits&lt;InputIt&gt;::value_type) <ref refid="structfutures_1_1is__future" kindref="compound">is_future</ref> .</para>
+<para>This overload uses a small vector to avoid further allocations for such a simple operation.</para>
+<para><simplesect kind="return"><para><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> with all future objects </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="562" column="5" bodyfile="futures/adaptor/when_any.hpp" bodystart="562" bodyend="592"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga1c3315bbc9acaece8df566d238f91519" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Range</type>
+          </param>
+        </templateparamlist>
+        <type>when_any_future&lt; detail::small_vector&lt; to_future_t&lt; typename std::iterator_traits&lt; typename std::decay_t&lt; Range &gt;::iterator &gt;::value_type &gt; &gt; &gt;</type>
+        <definition>when_any_future&lt; detail::small_vector&lt;to_future_t&lt;typename std::iterator_traits&lt; typename std::decay_t&lt;Range&gt;::iterator&gt;::value_type&gt; &gt; &gt; futures::when_any</definition>
+        <argsstring>(Range &amp;&amp;r)</argsstring>
+        <name>when_any</name>
+        <param>
+          <type>Range &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when any of the futures in the range is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless every argument is either a (possibly cv-qualified) std::shared_future or a cv-unqualified std::future.</para>
+<para><simplesect kind="return"><para><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> with all future objects </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="612" column="5" bodyfile="futures/adaptor/when_any.hpp" bodystart="612" bodyend="616"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga6ca06c1ab1dd1dcf2e7e7b8e4a5dc54e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>Futures</declname>
+            <defname>Futures</defname>
+          </param>
+        </templateparamlist>
+        <type>when_any_future&lt; std::tuple&lt; to_future_t&lt; Futures &gt;... &gt; &gt;</type>
+        <definition>when_any_future&lt;std::tuple&lt;to_future_t&lt;Futures&gt;...&gt; &gt; futures::when_any</definition>
+        <argsstring>(Futures &amp;&amp;...futures)</argsstring>
+        <name>when_any</name>
+        <param>
+          <type>Futures &amp;&amp;...</type>
+          <declname>futures</declname>
+        </param>
+        <briefdescription>
+<para>Create a future object that becomes ready when any of the input futures is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function does not participate in overload resolution unless every argument is either a (possibly cv-qualified) std::shared_future or a cv-unqualified std::future.</para>
+<para><simplesect kind="return"><para><ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> with all future objects </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="638" column="5" bodyfile="futures/adaptor/when_any.hpp" bodystart="638" bodyend="660"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga20811371aa4c8f4ed90738d716d018c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T1</type>
+          </param>
+          <param>
+            <type>class T2</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto futures::operator||</definition>
+        <argsstring>(T1 &amp;&amp;lhs, T2 &amp;&amp;rhs)</argsstring>
+        <name>operator||</name>
+        <param>
+          <type>T1 &amp;&amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Operator to create a future object that becomes ready when any of the input futures is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>ready operator|| works for futures and functions (which are converted to futures with the default executor) If the future is a <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> itself, then it gets merged instead of becoming a child future of another <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref>.</para>
+<para>When the user asks for f1 || f2 || f3, we want that to return a single future that waits for &lt;f1 || f2 || f3&gt; rather than a future that wait for two futures &lt;f1 || &lt;f2 || f3&gt;&gt;.</para>
+<para>This emulates the usual behavior we expect from other types with operator||.</para>
+<para>Note that this default behaviour is different from when_any(...), which doesn&apos;t merge the <ref refid="classfutures_1_1when__any__future" kindref="compound">when_any_future</ref> objects by default, because they are variadic functions and this intention can be controlled explicitly:<itemizedlist>
+<listitem><para>when_any(f1,f2,f3) -&gt; &lt;f1 || f2 || f3&gt;</para>
+</listitem><listitem><para>when_any(f1,when_any(f2,f3)) -&gt; &lt;f1 || &lt;f2 || f3&gt;&gt; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="694" column="5" bodyfile="futures/adaptor/when_any.hpp" bodystart="694" bodyend="745"/>
+      </memberdef>
+      <memberdef kind="function" id="group__adaptors_1ga4b25abc5ba5c39102a1545d29d8c03a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Future</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool futures::is_ready</definition>
+        <argsstring>(Future &amp;&amp;f)</argsstring>
+        <name>is_ready</name>
+        <param>
+          <type>Future &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Check if a future is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Although <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> has its more efficient is_ready function, this free function allows us to query other futures that don&apos;t implement is_ready, such as std::future. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/futures/is_ready.hpp" line="35" column="5" bodyfile="futures/futures/is_ready.hpp" bodystart="35" bodyend="45"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Functions to create new futures from existing functions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This module defines functions we can use to create new futures from existing futures. Future adaptors are future types of whose values are dependent on the condition of other future objects. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

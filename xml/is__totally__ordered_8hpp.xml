@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="is__totally__ordered_8hpp" kind="file" language="C++">
+    <compoundname>is_totally_ordered.hpp</compoundname>
+    <includes refid="is__equality__comparable_8hpp" local="no">futures/algorithm/traits/is_equality_comparable.hpp</includes>
+    <includes local="no">type_traits</includes>
+    <includedby refid="is__totally__ordered__with_8hpp" local="no">futures/algorithm/traits/is_totally_ordered_with.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>futures/algorithm/traits/is_totally_ordered.hpp</label>
+        <link refid="is__totally__ordered_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>type_traits</label>
+      </node>
+      <node id="2">
+        <label>futures/algorithm/traits/is_equality_comparable.hpp</label>
+        <link refid="is__equality__comparable_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>futures/algorithm/comparisons/less.hpp</label>
+        <link refid="less_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/comparisons/less_equal.hpp</label>
+        <link refid="less__equal_8hpp"/>
+      </node>
+      <node id="5">
+        <label>futures/algorithm/comparisons/greater.hpp</label>
+        <link refid="greater_8hpp"/>
+      </node>
+      <node id="4">
+        <label>futures/algorithm/comparisons/compare_three_way.hpp</label>
+        <link refid="compare__three__way_8hpp"/>
+      </node>
+      <node id="2">
+        <label>futures/algorithm/traits/is_totally_ordered_with.hpp</label>
+        <link refid="is__totally__ordered__with_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/comparisons/greater_equal.hpp</label>
+        <link refid="greater__equal_8hpp"/>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/traits/is_totally_ordered.hpp</label>
+        <link refid="is__totally__ordered_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespacefutures">futures</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2022<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__equality__comparable_8hpp" kindref="compound">futures/algorithm/traits/is_equality_comparable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacefutures" kindref="compound">futures</ref><sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="preprocessor">#ifdef<sp/>FUTURES_DOXYGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="29" refid="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" kindref="member">is_totally_ordered</ref><sp/>=<sp/>__see_below__;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>=<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" kindref="member">is_totally_ordered</ref><sp/>:<sp/>std::false_type</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>{};</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" kindref="member">is_totally_ordered</ref>&lt;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T,</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::void_t&lt;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>clang-format<sp/>off</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()<sp/>&lt;<sp/>std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()),</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()<sp/>&gt;<sp/>std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()),</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()<sp/>&lt;=<sp/>std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()),</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;()<sp/>&gt;=<sp/>std::declval&lt;const<sp/>std::remove_reference_t&lt;T&gt;&amp;&gt;())</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>clang-format<sp/>on</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;&gt;<sp/>:<sp/><ref refid="group__traits_1ga0c6e5b7eda673c3f4231c70da3caf202" kindref="member">is_equality_comparable</ref>&lt;T&gt;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>{};</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="49" refid="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>constexpr<sp/><ref refid="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" kindref="member">is_totally_ordered_v</ref><sp/>=<sp/><ref refid="group__traits_1gadcb6b10ddfc81f3cdd9f9aaea4204949" kindref="member">is_totally_ordered&lt;T&gt;::value</ref>;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>futures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP</highlight></codeline>
+    </programlisting>
+    <location file="futures/algorithm/traits/is_totally_ordered.hpp"/>
+  </compounddef>
+</doxygen>

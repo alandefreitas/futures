@@ -1,0 +1,1720 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Futures: C++ Lock-Free Task Programming with ASIO executors" name="description"/>
+<link href="https://alandefreitas.github.io/futures/reference/Modules/group__traits/" rel="canonical"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.0, mkdocs-material-8.2.8" name="generator"/>
+<title>Traits - Futures</title>
+<link href="../../../assets/stylesheets/main.644de097.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-290016612",{page_path:e.pathname})})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-290016612"></script>
+</head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="futures" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#traits-module">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Futures" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Futures
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Traits
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<!-- Main navigation -->
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Futures" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="Futures">
+<svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m414.8 40.79-128 448.01c-4.9 17-22.6 26.8-39.6 22-17-4.9-26.8-22.6-22-39.6l128-447.99c4.9-16.994 22.6-26.834 39.6-21.978 17 4.855 26.8 22.568 22 39.558zm103.8 80.61 112 112c12.5 12.5 12.5 32.7 0 45.2l-112 112c-12.5 12.5-32.7 12.5-45.2 0s-12.5-32.7 0-45.2l89.3-89.4-89.3-89.4c-12.5-12.5-12.5-32.7 0-45.2s32.7-12.5 45.2 0zm-352 45.2L77.25 256l89.35 89.4c12.5 12.5 12.5 32.7 0 45.2s-32.7 12.5-45.2 0L9.372 278.6c-12.496-12.5-12.496-32.7 0-45.2l112.028-112c12.5-12.5 32.7-12.5 45.2 0s12.5 32.7 0 45.2z"></path></svg>
+</a>
+    Futures
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/alandefreitas/futures/" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../quickstart/">
+        Quickstart
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Futures" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/future_types/">
+        Future Types
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/launching/">
+        Launching Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/promises/">
+        Promises and Tasks
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/continuable_futures/">
+        Continuable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/stoppable_futures/">
+        Stoppable Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/shared_futures/">
+        Shared Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../futures/waiting/">
+        Waiting for Futures
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Future Adaptors" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/continuations/">
+        Continuations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/conjunctions/">
+        Conjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/disjunctions/">
+        Disjunctions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../adaptors/task_graphs/">
+        Task Graphs
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Parallel Algorithms" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../algorithms/algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../algorithms/partitioners/">
+        Partitioners
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Networking" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../networking/asio/">
+        Asio
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../group__futures/">
+        Futures
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../group__adaptors/">
+        Adaptors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../group__executors/">
+        Executors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../group__algorithms/">
+        Algorithms
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Namespaces/namespacefutures/">
+        Index
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Classes/">
+        Classes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Files/">
+        Files
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../acknowledgments/">
+        Acknowledgments
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#types">
+    Types
+  </a>
+<nav aria-label="Types" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_difference_type">
+    using has_difference_type
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_element_type">
+    using has_element_type
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_iterator_traits_difference_type">
+    using has_iterator_traits_difference_type
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_iterator_traits_iterator_category">
+    using has_iterator_traits_iterator_category
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_iterator_traits_iterator_concept">
+    using has_iterator_traits_iterator_concept
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_iterator_traits_value_type">
+    using has_iterator_traits_value_type
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-has_value_type">
+    using has_value_type
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_assignable_from">
+    using is_assignable_from
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_constructible_from">
+    using is_constructible_from
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_convertible_to">
+    using is_convertible_to
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_copyable">
+    using is_copyable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_default_initializable">
+    using is_default_initializable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_derived_from">
+    using is_derived_from
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_equality_comparable">
+    using is_equality_comparable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_equality_comparable_with">
+    using is_equality_comparable_with
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_forward_iterator">
+    using is_forward_iterator
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_incrementable">
+    using is_incrementable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_indirectly_binary_invocable">
+    using is_indirectly_binary_invocable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_indirectly_readable">
+    using is_indirectly_readable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_indirectly_unary_invocable">
+    using is_indirectly_unary_invocable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_input_iterator">
+    using is_input_iterator
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_input_or_output_iterator">
+    using is_input_or_output_iterator
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_input_range">
+    using is_input_range
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_movable">
+    using is_movable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_move_constructible">
+    using is_move_constructible
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_partially_ordered_with">
+    using is_partially_ordered_with
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_range">
+    using is_range
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_regular">
+    using is_regular
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_semiregular">
+    using is_semiregular
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_sentinel_for">
+    using is_sentinel_for
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_subtractable">
+    using is_subtractable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_swappable">
+    using is_swappable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_totally_ordered">
+    using is_totally_ordered
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_totally_ordered_with">
+    using is_totally_ordered_with
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_weakly_equality_comparable">
+    using is_weakly_equality_comparable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-is_weakly_incrementable">
+    using is_weakly_incrementable
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_concept">
+    using iter_concept
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_concept_t">
+    using iter_concept_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_difference">
+    using iter_difference
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_difference_t">
+    using iter_difference_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_reference">
+    using iter_reference
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_reference_t">
+    using iter_reference_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_rvalue_reference">
+    using iter_rvalue_reference
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_rvalue_reference_t">
+    using iter_rvalue_reference_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_value">
+    using iter_value
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iter_value_t">
+    using iter_value_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iterator">
+    using iterator
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-iterator_t">
+    using iterator_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-range_value">
+    using range_value
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-range_value_t">
+    using range_value_t
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-remove_cvref">
+    using remove_cvref
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-remove_cvref_t">
+    using remove_cvref_t
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#attributes">
+    Attributes
+  </a>
+<nav aria-label="Attributes" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_difference_type_v">
+    variable has_difference_type_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_element_type_v">
+    variable has_element_type_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_iterator_traits_difference_type_v">
+    variable has_iterator_traits_difference_type_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_iterator_traits_iterator_category_v">
+    variable has_iterator_traits_iterator_category_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_iterator_traits_iterator_concept_v">
+    variable has_iterator_traits_iterator_concept_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_iterator_traits_value_type_v">
+    variable has_iterator_traits_value_type_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-has_value_type_v">
+    variable has_value_type_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_assignable_from_v">
+    variable is_assignable_from_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_constructible_from_v">
+    variable is_constructible_from_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_convertible_to_v">
+    variable is_convertible_to_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_copyable_v">
+    variable is_copyable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_default_initializable_v">
+    variable is_default_initializable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_derived_from_v">
+    variable is_derived_from_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_equality_comparable_v">
+    variable is_equality_comparable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_equality_comparable_with_v">
+    variable is_equality_comparable_with_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_forward_iterator_v">
+    variable is_forward_iterator_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_incrementable_v">
+    variable is_incrementable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_indirectly_binary_invocable_v">
+    variable is_indirectly_binary_invocable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_indirectly_readable_v">
+    variable is_indirectly_readable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_indirectly_unary_invocable_v">
+    variable is_indirectly_unary_invocable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_input_iterator_v">
+    variable is_input_iterator_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_input_or_output_iterator_v">
+    variable is_input_or_output_iterator_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_input_range_v">
+    variable is_input_range_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_movable_v">
+    variable is_movable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_move_constructible_v">
+    variable is_move_constructible_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_partially_ordered_with_v">
+    variable is_partially_ordered_with_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_range_v">
+    variable is_range_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_regular_v">
+    variable is_regular_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_semiregular_v">
+    variable is_semiregular_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_sentinel_for_v">
+    variable is_sentinel_for_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_subtractable_v">
+    variable is_subtractable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_swappable_v">
+    variable is_swappable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_totally_ordered_v">
+    variable is_totally_ordered_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_totally_ordered_with_v">
+    variable is_totally_ordered_with_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_weakly_equality_comparable_v">
+    variable is_weakly_equality_comparable_v
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-is_weakly_incrementable_v">
+    variable is_weakly_incrementable_v
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+<div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="traits-module">Traits Module</h1>
+<p><strong><a href="/futures/reference/Modules/group__algorithms/">Algorithms</a></strong> <strong>/</strong>
+<strong><a href="/futures/reference/Modules/group__traits/">Traits</a></strong></p>
+<table>
+<thead>
+<tr>
+<th>Types</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-difference-type">has_difference_type</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 has-member-difference-type concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-element-type">has_element_type</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 has-member-element-type concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-iterator-traits-difference-type">has_iterator_traits_difference_type</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 "has-iterator-traits-difference-type" concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-iterator-traits-iterator-category">has_iterator_traits_iterator_category</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 "has-iterator-traits-iterator-category" concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-iterator-traits-iterator-concept">has_iterator_traits_iterator_concept</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 "has-iterator-traits-iterator-concept" concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-iterator-traits-value-type">has_iterator_traits_value_type</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 "has-iterator-traits-value-type" concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-has-value-type">has_value_type</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 has-member-value-type concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-assignable-from">is_assignable_from</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 assignable_from concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-constructible-from">is_constructible_from</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 constructible_from concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-convertible-to">is_convertible_to</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 convertible_to concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-copyable">is_copyable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 copyable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-default-initializable">is_default_initializable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 default_initializable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-derived-from">is_derived_from</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 derived_from concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-equality-comparable">is_equality_comparable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 equality_comparable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-equality-comparable-with">is_equality_comparable_with</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 equality_comparable_with concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-forward-iterator">is_forward_iterator</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 forward_iterator concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-incrementable">is_incrementable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 incrementable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-indirectly-binary-invocable">is_indirectly_binary_invocable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 indirectly_binary_invocable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-indirectly-readable">is_indirectly_readable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 indirectly_readable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-indirectly-unary-invocable">is_indirectly_unary_invocable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 indirectly_unary_invocable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-input-iterator">is_input_iterator</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 input_iterator concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-input-or-output-iterator">is_input_or_output_iterator</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 input_or_output_iterator concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-input-range">is_input_range</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 input_range concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-movable">is_movable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 movable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-move-constructible">is_move_constructible</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 move_constructible concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-partially-ordered-with">is_partially_ordered_with</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 partially_ordered_with concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-range">is_range</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 range concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-regular">is_regular</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 regular concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-semiregular">is_semiregular</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 semiregular concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-sentinel-for">is_sentinel_for</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 sentinel_for concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-subtractable">is_subtractable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 subtractable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-swappable">is_swappable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 swappable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-totally-ordered">is_totally_ordered</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 totally_ordered concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-totally-ordered-with">is_totally_ordered_with</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 totally_ordered_with concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-weakly-equality-comparable">is_weakly_equality_comparable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 weakly_equality_comparable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-is-weakly-incrementable">is_weakly_incrementable</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 weakly_incrementable concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-concept">iter_concept</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iter_concept concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-concept-t">iter_concept_t</a></strong></td>
+<td><code>typename iter_concept&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-difference">iter_difference</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iter_difference concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-difference-t">iter_difference_t</a></strong></td>
+<td><code>typename iter_difference&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-reference">iter_reference</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iter_reference concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-reference-t">iter_reference_t</a></strong></td>
+<td><code>typename iter_reference&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-rvalue-reference">iter_rvalue_reference</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iter_rvalue_reference concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-rvalue-reference-t">iter_rvalue_reference_t</a></strong></td>
+<td><code>typename iter_rvalue_reference&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-value">iter_value</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iter_value concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iter-value-t">iter_value_t</a></strong></td>
+<td><code>typename iter_value&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iterator">iterator</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 iterator_t concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-iterator-t">iterator_t</a></strong></td>
+<td><code>typename iterator&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-range-value">range_value</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 range_value concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-range-value-t">range_value_t</a></strong></td>
+<td><code>typename range_value&lt; R &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-remove-cvref">remove_cvref</a></strong></td>
+<td>A C++17 type trait equivalent to the C++20 remove_cvref concept. <br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#using-remove-cvref-t">remove_cvref_t</a></strong></td>
+<td><code>typename remove_cvref&lt; T &gt;::type</code><br/> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Attributes</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-difference-type-v">has_difference_type_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-element-type-v">has_element_type_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-iterator-traits-difference-type-v">has_iterator_traits_difference_type_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-iterator-traits-iterator-category-v">has_iterator_traits_iterator_category_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-iterator-traits-iterator-concept-v">has_iterator_traits_iterator_concept_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-iterator-traits-value-type-v">has_iterator_traits_value_type_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-has-value-type-v">has_value_type_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-assignable-from-v">is_assignable_from_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-constructible-from-v">is_constructible_from_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-convertible-to-v">is_convertible_to_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-copyable-v">is_copyable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-default-initializable-v">is_default_initializable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-derived-from-v">is_derived_from_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-equality-comparable-v">is_equality_comparable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-equality-comparable-with-v">is_equality_comparable_with_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-forward-iterator-v">is_forward_iterator_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-incrementable-v">is_incrementable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-indirectly-binary-invocable-v">is_indirectly_binary_invocable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-indirectly-readable-v">is_indirectly_readable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-indirectly-unary-invocable-v">is_indirectly_unary_invocable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-input-iterator-v">is_input_iterator_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-input-or-output-iterator-v">is_input_or_output_iterator_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-input-range-v">is_input_range_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-movable-v">is_movable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-move-constructible-v">is_move_constructible_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-partially-ordered-with-v">is_partially_ordered_with_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-range-v">is_range_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-regular-v">is_regular_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-semiregular-v">is_semiregular_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-sentinel-for-v">is_sentinel_for_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-subtractable-v">is_subtractable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-swappable-v">is_swappable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-totally-ordered-v">is_totally_ordered_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-totally-ordered-with-v">is_totally_ordered_with_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-weakly-equality-comparable-v">is_weakly_equality_comparable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/Modules/group__traits/#variable-is-weakly-incrementable-v">is_weakly_incrementable_v</a></strong></td>
+<td><code>constexpr bool</code><br/> <sup><span style="color:green">(variable)</span></sup></td>
+</tr>
+</tbody>
+</table>
+<h2 id="types">Types</h2>
+<h3 id="using-has_difference_type">using has_difference_type</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_difference_type.hpp"><code>&lt;futures/algorithm/traits/has_difference_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_difference_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 has-member-difference-type concept. </p>
+<h3 id="using-has_element_type">using has_element_type</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_element_type.hpp"><code>&lt;futures/algorithm/traits/has_element_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_element_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 has-member-element-type concept. </p>
+<h3 id="using-has_iterator_traits_difference_type">using has_iterator_traits_difference_type</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_difference_type.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_difference_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_iterator_traits_difference_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 "has-iterator-traits-difference-type" concept. </p>
+<h3 id="using-has_iterator_traits_iterator_category">using has_iterator_traits_iterator_category</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_iterator_category.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_iterator_category.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 "has-iterator-traits-iterator-category" concept. </p>
+<h3 id="using-has_iterator_traits_iterator_concept">using has_iterator_traits_iterator_concept</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_concept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 "has-iterator-traits-iterator-concept" concept. </p>
+<h3 id="using-has_iterator_traits_value_type">using has_iterator_traits_value_type</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_value_type.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_value_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_iterator_traits_value_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 "has-iterator-traits-value-type" concept. </p>
+<h3 id="using-has_value_type">using has_value_type</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_value_type.hpp"><code>&lt;futures/algorithm/traits/has_value_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">has_value_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 has-member-value-type concept. </p>
+<h3 id="using-is_assignable_from">using is_assignable_from</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_assignable_from.hpp"><code>&lt;futures/algorithm/traits/is_assignable_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">LHS</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RHS</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_assignable_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 assignable_from concept. </p>
+<h3 id="using-is_constructible_from">using is_constructible_from</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_constructible_from.hpp"><code>&lt;futures/algorithm/traits/is_constructible_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_constructible_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 constructible_from concept. </p>
+<h3 id="using-is_convertible_to">using is_convertible_to</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_convertible_to.hpp"><code>&lt;futures/algorithm/traits/is_convertible_to.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">From</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">To</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_convertible_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 convertible_to concept. </p>
+<h3 id="using-is_copyable">using is_copyable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_copyable.hpp"><code>&lt;futures/algorithm/traits/is_copyable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_copyable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 copyable concept. </p>
+<h3 id="using-is_default_initializable">using is_default_initializable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_default_initializable.hpp"><code>&lt;futures/algorithm/traits/is_default_initializable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_default_initializable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 default_initializable concept. </p>
+<h3 id="using-is_derived_from">using is_derived_from</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_derived_from.hpp"><code>&lt;futures/algorithm/traits/is_derived_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_derived_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 derived_from concept. </p>
+<h3 id="using-is_equality_comparable">using is_equality_comparable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_equality_comparable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 equality_comparable concept. </p>
+<h3 id="using-is_equality_comparable_with">using is_equality_comparable_with</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_equality_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_equality_comparable_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 equality_comparable_with concept. </p>
+<h3 id="using-is_forward_iterator">using is_forward_iterator</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_forward_iterator.hpp"><code>&lt;futures/algorithm/traits/is_forward_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_forward_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 forward_iterator concept. </p>
+<h3 id="using-is_incrementable">using is_incrementable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_incrementable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_incrementable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 incrementable concept. </p>
+<h3 id="using-is_indirectly_binary_invocable">using is_indirectly_binary_invocable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_binary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_binary_invocable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">I1</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">I2</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 indirectly_binary_invocable concept. </p>
+<h3 id="using-is_indirectly_readable">using is_indirectly_readable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_readable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_readable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_readable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 indirectly_readable concept. </p>
+<h3 id="using-is_indirectly_unary_invocable">using is_indirectly_unary_invocable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_unary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_unary_invocable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 indirectly_unary_invocable concept. </p>
+<h3 id="using-is_input_iterator">using is_input_iterator</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 input_iterator concept. </p>
+<h3 id="using-is_input_or_output_iterator">using is_input_or_output_iterator</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_or_output_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_or_output_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_or_output_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 input_or_output_iterator concept. </p>
+<h3 id="using-is_input_range">using is_input_range</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_range.hpp"><code>&lt;futures/algorithm/traits/is_input_range.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 input_range concept. </p>
+<h3 id="using-is_movable">using is_movable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_movable.hpp"><code>&lt;futures/algorithm/traits/is_movable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_movable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 movable concept. </p>
+<h3 id="using-is_move_constructible">using is_move_constructible</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_move_constructible.hpp"><code>&lt;futures/algorithm/traits/is_move_constructible.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_move_constructible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 move_constructible concept. </p>
+<h3 id="using-is_partially_ordered_with">using is_partially_ordered_with</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_partially_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_partially_ordered_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_partially_ordered_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 partially_ordered_with concept. </p>
+<h3 id="using-is_range">using is_range</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_range.hpp"><code>&lt;futures/algorithm/traits/is_range.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 range concept. </p>
+<h3 id="using-is_regular">using is_regular</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_regular.hpp"><code>&lt;futures/algorithm/traits/is_regular.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_regular</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 regular concept. </p>
+<h3 id="using-is_semiregular">using is_semiregular</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_semiregular.hpp"><code>&lt;futures/algorithm/traits/is_semiregular.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_semiregular</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 semiregular concept. </p>
+<h3 id="using-is_sentinel_for">using is_sentinel_for</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_sentinel_for.hpp"><code>&lt;futures/algorithm/traits/is_sentinel_for.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">S</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_sentinel_for</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 sentinel_for concept. </p>
+<h3 id="using-is_subtractable">using is_subtractable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_subtractable.hpp"><code>&lt;futures/algorithm/traits/is_subtractable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_subtractable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 subtractable concept. </p>
+<h3 id="using-is_swappable">using is_swappable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_swappable.hpp"><code>&lt;futures/algorithm/traits/is_swappable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_swappable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 swappable concept. </p>
+<h3 id="using-is_totally_ordered">using is_totally_ordered</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_totally_ordered.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_totally_ordered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 totally_ordered concept. </p>
+<h3 id="using-is_totally_ordered_with">using is_totally_ordered_with</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_totally_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_totally_ordered_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 totally_ordered_with concept. </p>
+<h3 id="using-is_weakly_equality_comparable">using is_weakly_equality_comparable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_weakly_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_equality_comparable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_weakly_equality_comparable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 weakly_equality_comparable concept. </p>
+<h3 id="using-is_weakly_incrementable">using is_weakly_incrementable</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_weakly_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_incrementable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_weakly_incrementable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 weakly_incrementable concept. </p>
+<h3 id="using-iter_concept">using iter_concept</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_concept.hpp"><code>&lt;futures/algorithm/traits/iter_concept.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_concept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iter_concept concept. </p>
+<h3 id="using-iter_concept_t">using iter_concept_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_concept.hpp"><code>&lt;futures/algorithm/traits/iter_concept.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_concept_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_concept</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-iter_difference">using iter_difference</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_difference.hpp"><code>&lt;futures/algorithm/traits/iter_difference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_difference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iter_difference concept. </p>
+<h3 id="using-iter_difference_t">using iter_difference_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_difference.hpp"><code>&lt;futures/algorithm/traits/iter_difference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_difference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_difference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-iter_reference">using iter_reference</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_reference.hpp"><code>&lt;futures/algorithm/traits/iter_reference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iter_reference concept. </p>
+<h3 id="using-iter_reference_t">using iter_reference_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_reference.hpp"><code>&lt;futures/algorithm/traits/iter_reference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_reference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_reference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-iter_rvalue_reference">using iter_rvalue_reference</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_rvalue_reference.hpp"><code>&lt;futures/algorithm/traits/iter_rvalue_reference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_rvalue_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iter_rvalue_reference concept. </p>
+<h3 id="using-iter_rvalue_reference_t">using iter_rvalue_reference_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_rvalue_reference.hpp"><code>&lt;futures/algorithm/traits/iter_rvalue_reference.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_rvalue_reference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_rvalue_reference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-iter_value">using iter_value</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_value.hpp"><code>&lt;futures/algorithm/traits/iter_value.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iter_value concept. </p>
+<h3 id="using-iter_value_t">using iter_value_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iter_value.hpp"><code>&lt;futures/algorithm/traits/iter_value.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_value_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_value</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-iterator">using iterator</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iterator.hpp"><code>&lt;futures/algorithm/traits/iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 iterator_t concept. </p>
+<h3 id="using-iterator_t">using iterator_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/iterator.hpp"><code>&lt;futures/algorithm/traits/iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">iterator_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-range_value">using range_value</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/range_value.hpp"><code>&lt;futures/algorithm/traits/range_value.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">range_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 range_value concept. </p>
+<h3 id="using-range_value_t">using range_value_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/range_value.hpp"><code>&lt;futures/algorithm/traits/range_value.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">range_value_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">range_value</span><span class="o">&lt;</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="using-remove_cvref">using remove_cvref</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/remove_cvref.hpp"><code>&lt;futures/algorithm/traits/remove_cvref.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">remove_cvref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__see_below__</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<p>A C++17 type trait equivalent to the C++20 remove_cvref concept. </p>
+<h3 id="using-remove_cvref_t">using remove_cvref_t</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/remove_cvref.hpp"><code>&lt;futures/algorithm/traits/remove_cvref.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">remove_cvref_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">remove_cvref</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h2 id="attributes">Attributes</h2>
+<h3 id="variable-has_difference_type_v">variable has_difference_type_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_difference_type.hpp"><code>&lt;futures/algorithm/traits/has_difference_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_difference_type_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_difference_type</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_element_type_v">variable has_element_type_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_element_type.hpp"><code>&lt;futures/algorithm/traits/has_element_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_element_type_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_element_type</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_iterator_traits_difference_type_v">variable has_iterator_traits_difference_type_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_difference_type.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_difference_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_iterator_traits_difference_type_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_iterator_traits_difference_type</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_iterator_traits_iterator_category_v">variable has_iterator_traits_iterator_category_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_iterator_category.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_iterator_category.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_category_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_category</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_iterator_traits_iterator_concept_v">variable has_iterator_traits_iterator_concept_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_iterator_concept.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_concept_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_iterator_traits_iterator_concept</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_iterator_traits_value_type_v">variable has_iterator_traits_value_type_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_iterator_traits_value_type.hpp"><code>&lt;futures/algorithm/traits/has_iterator_traits_value_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_iterator_traits_value_type_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_iterator_traits_value_type</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-has_value_type_v">variable has_value_type_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/has_value_type.hpp"><code>&lt;futures/algorithm/traits/has_value_type.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_value_type_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">has_value_type</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_assignable_from_v">variable is_assignable_from_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_assignable_from.hpp"><code>&lt;futures/algorithm/traits/is_assignable_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_assignable_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_assignable_from</span><span class="o">&lt;</span><span class="n">LHS</span><span class="p">,</span><span class="w"> </span><span class="n">RHS</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_constructible_from_v">variable is_constructible_from_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_constructible_from.hpp"><code>&lt;futures/algorithm/traits/is_constructible_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_constructible_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_constructible_from</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_convertible_to_v">variable is_convertible_to_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_convertible_to.hpp"><code>&lt;futures/algorithm/traits/is_convertible_to.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_convertible_to_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_convertible_to</span><span class="o">&lt;</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">To</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_copyable_v">variable is_copyable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_copyable.hpp"><code>&lt;futures/algorithm/traits/is_copyable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_copyable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_copyable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_default_initializable_v">variable is_default_initializable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_default_initializable.hpp"><code>&lt;futures/algorithm/traits/is_default_initializable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_default_initializable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_default_initializable</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">        </span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_derived_from_v">variable is_derived_from_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_derived_from.hpp"><code>&lt;futures/algorithm/traits/is_derived_from.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_derived_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_derived_from</span><span class="o">&lt;</span><span class="n">Derived</span><span class="p">,</span><span class="w"> </span><span class="n">Base</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_equality_comparable_v">variable is_equality_comparable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_equality_comparable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_equality_comparable_with_v">variable is_equality_comparable_with_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_equality_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_equality_comparable_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_equality_comparable_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_forward_iterator_v">variable is_forward_iterator_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_forward_iterator.hpp"><code>&lt;futures/algorithm/traits/is_forward_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_forward_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_forward_iterator</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_incrementable_v">variable is_incrementable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_incrementable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_incrementable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_incrementable</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_indirectly_binary_invocable_v">variable is_indirectly_binary_invocable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_binary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_binary_invocable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">I1</span><span class="p">,</span><span class="w"> </span><span class="n">I2</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_indirectly_readable_v">variable is_indirectly_readable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_readable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_readable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_readable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_readable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_indirectly_unary_invocable_v">variable is_indirectly_unary_invocable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_indirectly_unary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_unary_invocable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_input_iterator_v">variable is_input_iterator_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_input_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_iterator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_input_or_output_iterator_v">variable is_input_or_output_iterator_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_or_output_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_or_output_iterator.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_input_or_output_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_or_output_iterator</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">        </span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_input_range_v">variable is_input_range_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_input_range.hpp"><code>&lt;futures/algorithm/traits/is_input_range.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_input_range_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_range</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_movable_v">variable is_movable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_movable.hpp"><code>&lt;futures/algorithm/traits/is_movable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_movable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_movable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_move_constructible_v">variable is_move_constructible_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_move_constructible.hpp"><code>&lt;futures/algorithm/traits/is_move_constructible.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_move_constructible_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_move_constructible</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_partially_ordered_with_v">variable is_partially_ordered_with_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_partially_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_partially_ordered_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_partially_ordered_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_partially_ordered_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_range_v">variable is_range_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_range.hpp"><code>&lt;futures/algorithm/traits/is_range.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_range_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_range</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_regular_v">variable is_regular_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_regular.hpp"><code>&lt;futures/algorithm/traits/is_regular.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_regular_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_regular</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_semiregular_v">variable is_semiregular_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_semiregular.hpp"><code>&lt;futures/algorithm/traits/is_semiregular.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_semiregular_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_semiregular</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_sentinel_for_v">variable is_sentinel_for_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_sentinel_for.hpp"><code>&lt;futures/algorithm/traits/is_sentinel_for.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_sentinel_for_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_sentinel_for</span><span class="o">&lt;</span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_subtractable_v">variable is_subtractable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_subtractable.hpp"><code>&lt;futures/algorithm/traits/is_subtractable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_subtractable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_subtractable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_swappable_v">variable is_swappable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_swappable.hpp"><code>&lt;futures/algorithm/traits/is_swappable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_swappable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_swappable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_totally_ordered_v">variable is_totally_ordered_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_totally_ordered.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_totally_ordered_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_totally_ordered</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_totally_ordered_with_v">variable is_totally_ordered_with_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_totally_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered_with.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_totally_ordered_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_totally_ordered_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_weakly_equality_comparable_v">variable is_weakly_equality_comparable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_weakly_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_equality_comparable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_weakly_equality_comparable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_weakly_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="variable-is_weakly_incrementable_v">variable is_weakly_incrementable_v</h3>
+<p><sup>Defined in header <a href="https://github.com/alandefreitas/futures/blob/master/include/futures/algorithm/traits/is_weakly_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_incrementable.hpp&gt;</code></a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_weakly_incrementable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_weakly_incrementable</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<hr/>
+<p><sub>Updated on 2022-04-01</sub></p>
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px;">
+<a class="md-button" href="https://github.com/alandefreitas/futures/" target="_blank" title="Futures">
+        ⭐️ Star Futures
+    </a>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application footer -->
+<footer class="md-footer">
+<!-- Link to previous and/or next page -->
+<!-- Further information -->
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<!-- Copyright and theme information -->
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+                    Copyright © Alan Freitas
+                </div>
+                
+                Made with
+                <a href="https://alandefreitas.github.io/mdsplit/" rel="noopener" target="_blank">
+<code style="background-color: #323232;">mdsplit</code>
+</a>
+                and
+                <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+                    Material for MkDocs
+                </a>
+</div>
+<!-- Social links -->
+<div class="md-social">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../../../assets/javascripts/bundle.c44cc438.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+<script src="../../../javascripts/extra.js"></script>
+</body>
+</html>

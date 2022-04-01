@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1unary__invoke__algorithm__functor" kind="class" language="C++" prot="public">
+    <compoundname>futures::unary_invoke_algorithm_functor</compoundname>
+    <derivedcompoundref refid="classfutures_1_1all__of__functor" prot="public" virt="non-virtual">futures::all_of_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1count__if__functor" prot="public" virt="non-virtual">futures::count_if_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1none__of__functor" prot="public" virt="non-virtual">futures::none_of_functor</derivedcompoundref>
+    <includes refid="unary__invoke__algorithm_8hpp" local="no">unary_invoke_algorithm.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Derived</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Overloads for unary invoke algorithms. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>CRTP class with the overloads for classes that look for elements in a sequence with an unary function.</para>
+<para>This includes algorithms such as for_each, any_of, all_of, ... </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>futures::none_of_functor&lt; none_of_functor &gt;</label>
+        <link refid="classfutures_1_1none__of__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::all_of_functor&lt; all_of_functor &gt;</label>
+        <link refid="classfutures_1_1all__of__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::unary_invoke_algorithm_functor&lt; Derived &gt;</label>
+        <link refid="classfutures_1_1unary__invoke__algorithm__functor"/>
+      </node>
+      <node id="3">
+        <label>futures::count_if_functor&lt; count_if_functor &gt;</label>
+        <link refid="classfutures_1_1count__if__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="49" column="1" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="48" bodyend="388"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

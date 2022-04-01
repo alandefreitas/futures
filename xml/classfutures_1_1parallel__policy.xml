@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classfutures_1_1parallel__policy" kind="class" language="C++" prot="public">
+    <compoundname>futures::parallel_policy</compoundname>
+    <includes refid="policies_8hpp" local="no">policies.hpp</includes>
+    <briefdescription>
+<para>Class representing a type for a <ref refid="classfutures_1_1parallel__policy" kindref="compound">parallel_policy</ref> tag. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/algorithm/policies.hpp" line="49" column="1" bodyfile="futures/algorithm/policies.hpp" bodystart="48" bodyend="49"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

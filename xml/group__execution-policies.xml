@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="group__execution-policies" kind="group">
+    <compoundname>execution-policies</compoundname>
+    <title>Execution Policies</title>
+    <innerclass refid="classfutures_1_1sequenced__policy" prot="public">futures::sequenced_policy</innerclass>
+    <innerclass refid="classfutures_1_1parallel__policy" prot="public">futures::parallel_policy</innerclass>
+    <innerclass refid="classfutures_1_1parallel__unsequenced__policy" prot="public">futures::parallel_unsequenced_policy</innerclass>
+    <innerclass refid="classfutures_1_1unsequenced__policy" prot="public">futures::unsequenced_policy</innerclass>
+    <innerclass refid="structfutures_1_1is__execution__policy" prot="public">futures::is_execution_policy</innerclass>
+      <sectiondef kind="user-defined">
+      <header>Instances of the execution policy types</header>
+      <memberdef kind="variable" id="group__execution-policies_1gabc55040ea2bc2503075ab0b70004899a" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr sequenced_policy</type>
+        <definition>constexpr sequenced_policy futures::seq</definition>
+        <argsstring></argsstring>
+        <name>seq</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a <ref refid="classfutures_1_1sequenced__policy" kindref="compound">sequenced_policy</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="62" column="39" bodyfile="futures/algorithm/policies.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga15d309529b3196659d901c905bd0bbc6" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr parallel_policy</type>
+        <definition>constexpr parallel_policy futures::par</definition>
+        <argsstring></argsstring>
+        <name>par</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a <ref refid="classfutures_1_1parallel__policy" kindref="compound">parallel_policy</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="65" column="38" bodyfile="futures/algorithm/policies.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga2dfc04fa043d76435dfc6531db67a93d" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr parallel_unsequenced_policy</type>
+        <definition>constexpr parallel_unsequenced_policy futures::par_unseq</definition>
+        <argsstring></argsstring>
+        <name>par_unseq</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a <ref refid="classfutures_1_1parallel__unsequenced__policy" kindref="compound">parallel_unsequenced_policy</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="68" column="50" bodyfile="futures/algorithm/policies.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga92c59cac6e6ea17c04b929917c037446" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr unsequenced_policy</type>
+        <definition>constexpr unsequenced_policy futures::unseq</definition>
+        <argsstring></argsstring>
+        <name>unseq</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for an <ref refid="classfutures_1_1unsequenced__policy" kindref="compound">unsequenced_policy</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="71" column="41" bodyfile="futures/algorithm/policies.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga91acd0da3465836ab08bfa9ed016d2dd" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_execution_policy_v</definition>
+        <argsstring></argsstring>
+        <name>is_execution_policy_v</name>
+        <initializer>= is_execution_policy&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Checks whether T is a standard or implementation-defined execution policy type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="87" column="27" bodyfile="futures/algorithm/policies.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__execution-policies_1ga210a4269121673e21469021c7eb80d77" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr decltype(auto)</type>
+        <definition>constexpr decltype(auto) futures::make_policy_executor</definition>
+        <argsstring>()</argsstring>
+        <name>make_policy_executor</name>
+        <briefdescription>
+<para>Make an executor appropriate to a given policy and a pair of iterators This depends, of course, of the default executors we have available and. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="105" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="105" bodyend="111"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>
