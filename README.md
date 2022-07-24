@@ -1,8 +1,10 @@
-# Futures
+# Better Futures
 
-> C++ Task Programming
+> Because futures don't have to suck
 
 [![Futures](docs/img/futures_banner.png)](https://alandefreitas.github.io/futures/)
+
+<!--[abstract -->
 
 <br/>
 
@@ -31,6 +33,10 @@
 [![Line.me](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Share+on+Line.me&logo=line)](https://lineit.line.me/share/ui?url=https://github.com/alandefreitas/futures/&text=futures:%20C%2B%2B%20task%20programming%20with%20asio%20executors)
 [![Telegram.me](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Share+on+Telegram.me&logo=telegram)](https://telegram.me/share/url?url=https://github.com/alandefreitas/futures/&text=futures:%20C%2B%2B%20task%20programming%20with%20asio%20executors)
 [![HackerNews](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Share+on+HackerNews&logo=y-combinator)](https://news.ycombinator.com/submitlink?u=https://github.com/alandefreitas/futures/&t=futures:%20C%2B%2B%20task%20programming%20with%20asio%20executors)
+
+<br/>
+
+<!--] -->
 
 <br/>
 
