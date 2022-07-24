@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(
         futures
-        VERSION 0.1.3
+        VERSION 0.1.4
         DESCRIPTION "C++ Lock-Free Task Programming"
         HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
 )
