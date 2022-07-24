@@ -1,15 +1,25 @@
-# Futures
+# Better Futures
 
-> C++ Task Programming
+> Because futures don't have to be awful
 
 [![Futures](docs/img/futures_banner.png)](https://alandefreitas.github.io/futures/)
 
+<!--[abstract -->
+
 <br/>
 
-- A *Future* 🔮 object represents a handle to a value that will only be available when an asynchronous operation fulfills its *Promise* 🤞. To compose with multiple tasks, *Futures* allow us to query whether this future value is ready and obtain its value once it is made available.
-- A number of proposals have been presented as extend the model proposed in C++11 for Futures (`std::future`). These are suggestions such as future continuations, cancellation tokens, association with executors, and algorithms.  
-- Rather than proposing one more concrete future type 😐, this library implements a number of types that follow a *Future* [concept](https://en.cppreference.com/w/cpp/language/constraints) 💡. The concept is able to handle existing future types, such as `std::future` and `boost::future` as well as custom types.  
-- The concepts allow reusable algorithms for all future types, an alternative to `std::async` based on executors, various efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel variants of the STL algorithms.
+<!--What it is -->
+- A *Future* 🔮 is a value to be available when an operation fulfills its *Promise* 🤞. 
+<!--Why this is interesting -->
+- This future/promise model includes all operations for async computing: queries, continuations, adaptors, and algorithms.
+<!--What is the problem -->
+- C++ provides `std::future` but most implementations are useless for efficient applications.
+<!--Why is it unsolved -->
+- There are countless proposals to improve `std::future`: continuations, cancellation, executors, and algorithms.
+<!--What is the solution -->
+- This library provides concepts to handle existing future types and provides its own types with all sorts of extensions.
+<!--What the solution achieves -->
+- It also provides generic algorithms, executors, adaptors, and number of extensions for efficient future types.
 
 <br/>
 
@@ -34,11 +44,15 @@
 
 <br/>
 
+<!--] -->
+
+<br/>
+
 <h2>
 
-[READ THE DOCUMENTATION FOR A QUICK START AND EXAMPLES](https://alandefreitas.github.io/futures/)
+<a href="https://alandefreitas.github.io/futures/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Documentation-plain.svg" width="50%"/></a>
 
-[![Futures](https://upload.wikimedia.org/wikipedia/commons/2/2a/Documentation-plain.svg)](https://alandefreitas.github.io/futures/)
+[READ THE DOCUMENTATION FOR A QUICK START AND EXAMPLES](https://alandefreitas.github.io/futures/)
 
 </h2>
 

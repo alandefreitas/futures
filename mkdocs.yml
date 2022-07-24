@@ -1,8 +1,9 @@
-site_name: Futures
+site_name: Better Futures
 site_url: https://alandefreitas.github.io/futures/
 repo_url: https://github.com/alandefreitas/futures/
+edit_uri: edit/develop/docs/
 repo_name: alandefreitas/futures
-site_description: "Futures: C++ Lock-Free Task Programming with ASIO executors"
+site_description: "Better Futures: Because futures don't have to be awful"
 
 nav:
   - Home: index.md
@@ -47,7 +48,7 @@ theme:
     repo: fontawesome/brands/git-alt
     logo: fontawesome/solid/code
 
-edit_uri: ""
+
 
 plugins:
   - search
