@@ -4,7 +4,9 @@
 find_program(LCOV_EXECUTABLE lcov)
 if (LCOV_EXECUTABLE)
     message(STATUS "lcov found: ${LCOV_EXECUTABLE}")
-else ()
+elseif (LINUX)
+    message(FATAL_ERROR "lcov executable not found (try \"sudo apt-get -y install lcov\")")
+else()
     message(FATAL_ERROR "lcov executable not found (https://github.com/linux-test-project/lcov)")
 endif()
 

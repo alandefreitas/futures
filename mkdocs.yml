@@ -73,6 +73,7 @@ markdown_extensions:
       linenums_style: pymdownx.inline
   - pymdownx.inlinehilite
   - pymdownx.superfences
+  - pymdownx.progressbar
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.snippets

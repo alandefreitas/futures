@@ -5,7 +5,9 @@
 !!! example ""
 
     === "Single header"
-    
+
+        [=0% "Just checking it out"]
+ 
         You can copy the single-header file from our [release page](https://github.com/alandefreitas/futures/releases)
         and include it in your project.
 
@@ -18,6 +20,8 @@
 
     === "Header only"
     
+        [=20% "Piece of Cake"]
+
         You can use the library by simply copying the contents from the `include` directory into your project.
 
         Make sure the headers for the dependencies are also available:
@@ -26,6 +30,8 @@
 
     === "CMake"
     
+        [=40% "Easy and faster"]
+
         === "Add subdirectory"
     
             Download source:
@@ -101,8 +107,25 @@
             target_link_libraries(your_target PUBLIC futures::futures)
             ```
 
+    === "Packages"
+    
+        [=80% "Not available for all platforms"]
+
+        !!! note
+    
+            Get the binary packages from the [release section](https://github.com/alandefreitas/futures/releases). 
+    
+            These binaries refer to the latest release version of futures.
+    
+        !!! hint
+            
+            If you need a more recent version of `futures`, you can download the binary packages from the
+            CI artifacts or build the library from the source files.
+
     === "From source"
     
+        [=100% "You might need some setup"]
+
         === "Windows + MSVC"
         
             Build:            
@@ -166,19 +189,6 @@
             cpack build
             ```
         
-    === "Packages"
-    
-        !!! note
-    
-            Get the binary packages from the [release section](https://github.com/alandefreitas/futures/releases). 
-    
-            These binaries refer to the latest release version of futures.
-    
-        !!! hint
-            
-            If you need a more recent version of `futures`, you can download the binary packages from the
-            CI artifacts or build the library from the source files.
-    
 
 
 ## Hello world 👋

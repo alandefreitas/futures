@@ -9,17 +9,17 @@
 <br/>
 
 <!--What it is -->
-- A *Future* 🔮 is a value to be available when an operation fulfills its *Promise* 🤞. 
+- A *Future* 🔮 is a value to be available an operation fulfills its *Promise* 🤞. 
 <!--Why this is interesting -->
-- This future/promise model includes all operations for async computing: queries, continuations, adaptors, and algorithms.
+- The Future/Promise model supports all operations for async computing: queries, continuations, adaptors, and algorithms.
 <!--What is the problem -->
-- C++ provides `std::future` but most implementations are useless for efficient applications.
+- C++11 provides `std::future` but most implementations are useless for efficient applications.
 <!--Why is it unsolved -->
 - There are countless proposals to improve `std::future`: continuations, cancellation, executors, and algorithms.
 <!--What is the solution -->
-- This library provides concepts to handle existing future types and provides its own types with all sorts of extensions.
+- This library provides a concepts to integrate existing applications and a new extended future types.
 <!--What the solution achieves -->
-- It also provides generic algorithms, executors, adaptors, and number of extensions for efficient future types.
+- This design allows for generic algorithms, executors, adaptors, and custom extensions.
 
 <br/>
 
