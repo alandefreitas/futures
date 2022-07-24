@@ -645,8 +645,8 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
-            detail::is_valid_when_all_argument_v<
-                T1> && detail::is_valid_when_all_argument_v<T2>,
+            detail::is_valid_when_all_argument_v<T1> &&
+            detail::is_valid_when_all_argument_v<T2>,
             int> = 0
 #endif
         >

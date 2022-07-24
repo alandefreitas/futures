@@ -2,23 +2,20 @@
 
 ## Summary
 
-**C++11** presented [std::future] as its model for
+- **The problem**: **C++11** presented [std::future] as its model for
 asynchronicity. [Futures and promises](https://en.wikipedia.org/wiki/Futures_and_promises)
 are [a common construct from the 70s](https://iucat.iu.edu/iub/1810628) where an object represents a value that is still
 unknown. By composing with the future objects, this construct allows us to synchronize the program execution in
 concurrent programming. On the other hand, [many works](#literature-review) describe the specific C++11 [std::future]
 model as the wrong abstraction for asynchronous programming.
-
-Since then, many **proposals** have been presented to extend this standard [std::future] model, such as future
+- **Solutions**: Since then, many **proposals** have been presented to extend this standard [std::future] model, such as future
 continuations, callbacks, lazy/eager execution, cancellation tokens, custom executors, custom allocators, and waiting on
 destruction. However, because any handle to a future value is a "future" object, it is unlikely that a single concrete
 future definition will be appropriate for most applications.
-
-This library attempts to [solve this problem](#the-futures-library) by defining generic algorithms for **a
+- **This library**: This library attempts to [solve this problem](#the-futures-library) by defining generic algorithms for **a
 common [is_future] concept**, which includes 1) existing future types, such as [std::future], `boost::future`
 , `boost::fiber::future`; 2) library provided future types, such as [cfuture] and [jfuture]; and 3) custom future types.
-
-The concepts allow reusable algorithms for all future types, an alternative to [std::async] based on executors, various
+- **Results**: The concepts allow reusable algorithms for all future types, an alternative to [std::async] based on executors, various
 efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel
 variants of the STL algorithms.
 
@@ -27,11 +24,11 @@ variants of the STL algorithms.
 Our motivation is organized as follows:
 
 - [An introduction](#standard-futures) to the model of futures and promises in C++11
-- [An overview](#previous-work) of all related work presented since then
+- [An long overview](#previous-work) of all related work presented since then
 - [A brief description](#the-futures-library) of how this library relates this previous work
 
 Alternatively, you can move straight to [our guides](futures/future_types.md) and see how the library works in practice.
-Be welcome.
+Be welcome to come back later.
 
 ## Standard Futures
 
@@ -42,30 +39,30 @@ A future _or_ promise is a value that might not be available yet. They are also 
 object, _or_ by some form shared state between objects related to task execution. A shared state would usually be
 accessed by the set setting the future value.
 
-- 1977: The first mention of Futures was by [Baker and Hewitt](https://dl.acm.org/doi/10.1145/872736.806932). These
+- **1977 - Futures**: The first mention of Futures was by [Baker and Hewitt](https://dl.acm.org/doi/10.1145/872736.806932). These
   futures would contain a process, a memory location for the result, and a list of continuations.
-- 1978: The term Promises is used by [Daniel P. Friedman and David Wise](https://ieeexplore.ieee.org/document/1675100)
+- **1978 - Promises**: The term Promises is used by [Daniel P. Friedman and David Wise](https://ieeexplore.ieee.org/document/1675100)
   for the same concept.
-- 1985: [Multilisp](https://dl.acm.org/doi/10.1145/4472.4478) provided the future and delay annotations for values that
+- **1985 - Multilisp**: [Multilisp](https://dl.acm.org/doi/10.1145/4472.4478) provided the future and delay annotations for values that
   might not be available yet. A variable with the delay annotation would only be calculated when its value was
   requested.
-- 1988: The term Promises is used by [Liskov and Shrira](https://dl.acm.org/doi/10.1145/960116.54016) for a similar
+- **1988 - Argus**: The term Promises is used by [Liskov and Shrira](https://dl.acm.org/doi/10.1145/960116.54016) for a similar
   construct in Argus. It also proposed "call-streams" to represent directed acyclic graphs (DAGs) of computation with
   promises.
-- 1996: The term "eventual" is used
+- **1996 - Eventual**: The term "eventual" is used
   by [Tribble, Miller, Hardy, & Krieger](http://www.erights.org/history/joule/MANUAL.BK2.pdf) to represent promises of
   "eventual" send value into a variable.
-- 2002: The Python [Twisted](https://github.com/twisted/twisted) library presents Deferred objects for results of
+- **2002 - Python**: The Python [Twisted](https://github.com/twisted/twisted) library presents Deferred objects for results of
   operations that might still be incomplete.
-- 2009: The Javascript [CommonJS Promises/A spec](http://wiki.commonjs.org/wiki/Promises/A) is proposed by Kris Zyp.
+- **2009 - Javascript**: The Javascript [CommonJS Promises/A spec](http://wiki.commonjs.org/wiki/Promises/A) is proposed by Kris Zyp.
 
-The formulation implies the future value might always be in completed or incomplete _atomic_ states. As all the
+The formulation implies the future value might always be in completed or incomplete **_atomic_ states**. As all the
 formulations presented above, a language might have a single construct called future _or_ promise for eventual values.
 Javascript defines the single `Promise` that acts like a read-only future value. When they are distinct, like in C++11,
 it's common to have two constructs: futures _and_ promises, where one of them is a read-only reference to the expected
 value.
 
-Common asynchronous applications of futures are servers, user input, long-running computations, database queries, remote
+Common asynchronous **applications** of futures are servers, user input, long-running computations, database queries, remote
 procedure calls, and timeouts. A number of variations of this pattern have emerged with slightly different meaning for
 the terms. These variations are used as a model of asynchronous operations in many languages such as JavaScript, Scala,
 Java, and C++.
@@ -74,9 +71,9 @@ Java, and C++.
 
 C++11 proposed, in [N3170](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3170.html), [std::future] as its
 intended model of [futures and promises](https://en.wikipedia.org/wiki/Futures_and_promises) for asynchronicity. A
-C++ [std::future] represents a read-only proxy for a result that might not been set by a write-only [std::promise] yet.
+C++ [std::future] represents a **read-only proxy** for a result that might not been set by a write-only [std::promise] yet.
 
-When the operation is complete, the result is stored in a shared state, to which both the future and the promise have
+When the operation is complete, the result is stored in a **shared state**, to which both the future and the promise have
 access. The future is a read-only view of this shared state while a promise allows an external operation to set its
 value.
 
@@ -86,7 +83,7 @@ F[Future] --> |read|S[(Shared State)]
 T[Promised Task] --> |write|S
 </div>
 
-In the most common use case, this promise is hidden. The user would call [std::async] to execute a task is parallel and
+In the most common use case, this **promise** is hidden. The user would call [std::async] to execute a task is parallel and
 set the promise at the end. After the task is scheduled, [std::async] would then return a [std::future] which allows us
 to query the status of this asynchronous operation:
 
@@ -108,7 +105,7 @@ to query the status of this asynchronous operation:
     ```
 
 One satisfactory thing about the combination of [std::future], [std::async], and [std::future::wait] is it makes C++
-asynchronous programming somewhat similar and often even simpler to that of other programming languages, such
+asynchronous programming somewhat **similar** and often even **simpler** to that of other programming languages, such
 as [Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Choosing_the_right_approach)
 futures and promises:
 
@@ -141,35 +138,37 @@ futures and promises:
     ```
 
 However, because [std::future] relies on synchronization of a shared state, this initial model is incomplete, hard to
-use, inefficient, and lacks the usual generality of C++ algorithms.
+use, **inefficient**, and lacks the usual generality of C++ algorithms. Most implementations could be used for
+useful for a background threads but are unusable in any context where performance is a requirement. The usual
+[std::future] will create one thread per task, which either doesn't scale at all or kills the machine.
 
 ## Previous work
 
 ### Executors
 
-The first clear problem identified with [std::async] is we cannot define its executor (or scheduler). That is, we cannot
+The first clear problem identified with [std::async] is we **cannot define its executor** (or scheduler). That is, we cannot
 define _where_ these tasks are executed. By default, every task is executed in a new thread in C++11, which is
 unacceptable to most applications. Common executors for these tasks would be thread pools, strands, or GPUs.
 
 Many [models for standard executors](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html) have been
 proposed [over time](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html#appendix-executors-bibilography)
-. In most current models, executors (or schedulers) are light handles representing an execution context _where_ work can
+. In most current models, executors (or schedulers) are **light handles** representing an execution context _where_ work can
 be executed. The context is usually called an execution context or execution resource. Executors might be constructed
 directly from execution contexts or adapted from other executors.
 
 ### Continuations
 
-The act of waiting for a [std::future] result is synchronous, which is not appropriate in communication-intensive code.
+The act of waiting for a [std::future] **result is synchronous**, which is not appropriate in communication-intensive code.
 In the original [std::future] model, if a continuation task `B` depends on the result of the first task `A`, we only
 have two options:
 
 - waiting for the first task synchronously
 - polling the first task asynchronously.
 
-If we always wait for the first task to start its continuation, the asynchronicity has no purpose. If we always poll for
-the first task, we waste resources and an extra thread to repeatedly check the status of the first task.
+If we always wait for the first task to start its continuation, the asynchronicity has **no purpose**. If we always poll for
+the first task, we **waste resources** and an extra thread to repeatedly check the status of the first task.
 
-For this reason, the most common extension proposed for [std::future]
+For this reason, the most common **extension** proposed for [std::future]
 is [continuations](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf), such as implemented in
 Microsoft's [PPL], [async++], [continuable].
 
@@ -202,17 +201,30 @@ Microsoft's [PPL], [async++], [continuable].
     B.wait();
     ```
 
-### Lazy Continuations
+#### Eager Futures
 
-Lazy continuations, such as in [std::experimental::future], allow us to asynchronously register a second operation and
-pass data to it. So in the above example, the continuation is scheduled as soon as, but not before, the first task is
-ready without consuming any polling threads. The continuation can also have its continuations and so on.
+_Eager_ futures with _eager_ continuation chaining, such as in [std::experimental::future], allow us to **asynchronously** 
+register a second operation and pass data to it. The first task **might already be running** eagerly. 
 
-A lazy continuation stored in the shared state of the first task and all futures are programmed to run its internal
-continuations when they finish the main task. This avoids blocking waits and wasting threads pooling for the results of
-the antecedent task. A continuation is scheduled and executed only when the previous task completes.
+- The continuation is attached after the first task is scheduled
+- The continuation is scheduled as soon as, but not before, the first task is ready
 
-=== "Lazy Continuations"
+The process does not consume any polling threads. The continuation can also have its continuations and so on. 
+In this scenario, attaching a continuation has its own synchronization cost.
+
+#### Lazy futures
+
+_Lazy_ futures with _lazy_ continuation chaining store the continuation in the shared state of the
+first task **before** the task is scheduled. 
+
+- The continuation is attached before the first task starts to execute
+- The continuation is scheduled as soon as, but not before, the first task is ready
+
+As usual, all futures are programmed to run its internal continuations when they finish their 
+main task. This also avoids blocking waits and wasting threads pooling for the results of the 
+antecedent task. In this scenario, attaching a continuation has no synchronization cost. 
+
+=== "Continuations"
 
     ```cpp
     auto A = std::experimental::async([]() { return 2; });
@@ -223,8 +235,11 @@ the antecedent task. A continuation is scheduled and executed only when the prev
     B.wait();
     ```
 
-If the antecedent future throws an exception, some models besides [C++ Extensions for Concurrency], such as
-[Continuable](https://github.com/Naios/continuable), allow the continuation to also catch this error:
+#### Exceptions
+
+If the antecedent future throws an exception, attempting to retrieve the result usually rethrows the error.
+Some models besides [C++ Extensions for Concurrency], such as [Continuable](https://github.com/Naios/continuable), 
+allow the continuation to also catch this error:
 
 === "Catching errors"
 
@@ -242,19 +257,24 @@ If the antecedent future throws an exception, some models besides [C++ Extension
       });
     ```
 
+#### Continuation Executor
+
 By default, the first task usually includes an executor handle and the continuation inherits it unless some other
 executor is requested for the continuation. Futures with continuations can also be used as components
 of [resumable functions](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3650.pdf).
 
-Finally, continuations are the foundation for composing task graphs, with operations such
-as [std::experimental::when_all] and [std::experimental::when_any]. These conjunction and disjunction operations depend
-on continuations so that previous tasks can inform the operation result when they are ready without polling.
+#### Continuations Overview
 
-### Task Callbacks
+Continuations are the foundation for composing task graphs, with operations such
+as [std::experimental::when_all] and [std::experimental::when_any]. These conjunction and disjunction 
+operations depend on continuations so that previous tasks can inform the operation result when they 
+are ready without polling.
+
+### Task Callbacks and Eager Futures
 
 In [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf)
-, [Christopher Kohlhoff](https://github.com/chriskohlhoff) compares the model of lazy continuations, such as
-in [N3784](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf) to the model of callback functions used in
+, [Christopher Kohlhoff](https://github.com/chriskohlhoff) compares the model of eager continuations, such as
+in [N3784](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf) to the model of **callback functions** used in
 the [Asio](https://github.com/chriskohlhoff/asio) library:
 
 === "Futures"
@@ -279,15 +299,16 @@ the [Asio](https://github.com/chriskohlhoff/asio) library:
     }
     ``` 
 
-Continuable futures may attach the continuation *before or after* the antecedent future starts. With callbacks functions
-the calling function provides the continuation *before* the antecedent task starts, which avoids the synchronization
-cost in a race between the result and its continuation.
+Eager continuable futures may attach the continuation *before or after* the antecedent future starts. With
+callbacks functions the calling function provides the continuation *before* the antecedent task starts, which
+**avoids the synchronization cost** in a race between the result and its continuation.
 
 ### Deferred futures
 
-The advantage of callbacks functions is that calling function provides the continuation *before* the antecedent task
-starts. Thus, it's easy to see this model can serve as the foundation for an alternative "futures" model in two ways
-which would also avoid the synchronization overhead for continuations:
+The advantage of callbacks functions is that the calling function provides the continuation *before* 
+the antecedent task starts. Thus, it's easy to see this model can serve as the foundation for an 
+alternative model of futures in two ways which would also avoid the synchronization overhead of 
+continuations:
 
 - [Completion Tokens](https://www.boost.org/doc/libs/1_77_0/doc/html/boost_asio/reference/asynchronous_operations.html):
   The calling function in the callback model provides
@@ -356,9 +377,11 @@ This is what these models would look like:
 
 In other words, while this synchronization requirement of [std::future] is a problem with [std::future] and
 other [proposed](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf) continuable futures, such
-as [std::experimental::future], this is not a problem with the concept of futures. This synchronization cost is only a
-problem if we cannot *guarantee* the execution of the previous function has not started when the continuation is
+as [std::experimental::future], this is **not a problem** with the concept of futures. This synchronization cost is only an
+issue if we cannot *guarantee* the execution of the previous function has not started when the continuation is
 attached.
+
+### Task graphs
 
 Libraries such as [Taskflow] and [TTB] provide facilities to compose complete task graphs:
 
@@ -470,27 +493,27 @@ Libraries such as [Taskflow] and [TTB] provide facilities to compose complete ta
     g.wait_for_all();
     ```
 
-Tasks in a task graph are analogous to deferred futures whose continuations are defined before the execution starts.
+Tasks in a task graph are **analogous to deferred futures** whose continuations are defined before the execution starts.
 However, we need to explicitly define all relationships between tasks before any execution starts, which might be
 inconvenient in some applications. Futures and async functions, on the other hand, allow us to 1) combine eager and lazy
 tasks, and 2) directly express their relationships in code without any explicit graph containers.
 
 On the other hand, [P1055](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf) proposed the concept of
-deferred work, in opposition to eager futures, such as [std::future]. The idea is that a task related to a future should
+**deferred work**, in opposition to eager futures, such as [std::future]. The idea is that a task related to a future should
 not start before its continuation is applied. This eliminates the race between the result and the continuation in eager
-futures. Futures with deferred work are lock-free and easier to implement ([example](https://godbolt.org/z/jWYno73nE)).
+futures. Futures with deferred work are also easier to implement ([example](https://godbolt.org/z/jWYno73nE)).
 
 ### Senders and Receivers
 
 To differentiate this "Future" concept proposed in P1055 from a [std::future],
-[P1194](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1194r0.html) proposes the name "senders" to represent
-the "deferred" concept defined in [P1055](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf). The
+[P1194](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1194r0.html) proposes the name "**senders**" to represent
+the "**deferred**" concept defined in [P1055](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf). The
 paper also proposes to rename the function `then` to `submit` to suggest the possibility that it may in fact submit the
 task for execution.
 
 More recently, [P2300](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2300r1.html) and [libunifex] propose a
 model based on "senders" and "receivers" for asynchronous operations. From
-a [computer science perspective](#in-computer-science), senders and receivers are constraints for futures and promises.
+a [computer science perspective](#in-computer-science), senders and receivers are constraints for **futures and promises**.
 From a C++ perspective, these are defined as [concepts](https://en.cppreference.com/w/cpp/language/constraints) rather
 than object types. For this reason, the syntax of sender types is still analogous to futures:
 
@@ -523,7 +546,7 @@ than object types. For this reason, the syntax of sender types is still analogou
     ```
 
 In parallel with [discussions](https://isocpp.org/files/papers/P2464R0.html) about the proper model for C++ executors,
-senders/receivers have received criticism for attempting to abruptly reformulate common practice in C++ asynchronous
+senders/receivers have received **criticism** for attempting to abruptly reformulate common practice in C++ asynchronous
 computing. The most common objections:
 
 1. _Lack of existing practice_:
@@ -577,7 +600,7 @@ what `begin` semantically represents and why it is the same type as other tasks 
                       });
     ```
 
-### Senders and Futures
+#### Senders and Futures
 
 [P2300 Section 1.10.1](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2300r4.html#intro-prior-art-futures)
 briefly describes two reasons for preferring senders to futures ("as traditionally realized"):
@@ -589,46 +612,51 @@ As it should be clear from this review, from a [computer science perspective](#i
 futures, even though they don't represent what was "traditionally realized" in [std::future]. All optimizations possible
 for "single-shot senders" are also possible in "unique deferred futures".
 
-## The futures library
+## The better futures library
 
 Given the pros and cons of each model described in our [review](#previous-work), this library models future types as a
-simple [is_future] concept, which supports all the features we have discussed, such as executors, continuations and
-deferred work. We implement optimizations possible to each future types while sticking to existing practice.
+simple "[is_future]" concept, which supports all the features we have discussed in this overview, such as executors, 
+continuations, and deferred work. We implement optimizations possible to each future types while sticking to existing
+practice.
 
 - Futures and Promises
     - This library maintains the common model most programmers are familiar with
     - Whenever possible, new features always use language familiar to C++ and other common programming languages
-- Future concept
-    - By modeling futures as a concept, futures can be optionally instantiated with any combination of custom extensions
-      such as continuations, stop tokens, and deferred work
-    - Reusable algorithms **work for** [**all future types**](#standard-futures), including any new and existing future
-      types, such as [std::future], `boost::future`, `boost::fiber::future`.
-    - All optimizations possible for "single-shot senders" are also implemented for "unique deferred futures".
+    - Whenever possible, we reuse the syntax of [std::future]/[std::promise]
+- Future concept and concrete types
+    - Reusable algorithms **work for** [**all future types**](#standard-futures),
+        - [std::future]
+        - `boost::future`
+        - `boost::fiber::future`
+        - Any new and existing future type
+    - Concrete futures can be optionally instantiated with any combination of custom extensions, such as:
+        - Eager/deferred work
+        - Unique/shared
+        - Continuations
+        - Cancellation
+        - Allocators
+    - All optimizations possible for "senders" are also implemented for "deferred futures".
+    - Synchronization costs are reduced with deferred futures, atomic operations, and atomic data structures
     - Futures can still match and work with whatever constraints C++ eventually imposes on future types
 - Executors
-    - Custom executors can be defined and its traits are a subset of existing Asio executors.
+    - Support for custom executors
+        - Its traits are currently a subset of existing Asio executors.
     - Customization points can make other executor types work with the library types
-    - Provides an alternative to [std::async] **based on [executors](#executors)** while still adaptable to other
-      executor or scheduler concepts, including senders and receivers.
-- Extensions
-    - [basic_future] implements a **vast number of concrete future types**, including continuable, cancellable,
-      eager/deferred, and unique/shared futures.
-    - Future types support [lazy **continuations**](#lazy-continuations) without polling for existing types
-    - The future adaptors still work for existing future types, such as [std::future] by polling.
-    - Integrations with Asio are provided, such as completion tokens and async IO operations.
-- Data races
-    - Both eager and lazy futures continuations are lock-free through atomic operations.
-    - Future types might indicate [**deferred** work](#deferred-futures) at compile-time or be eager, avoiding the
-      synchronization costs of attaching continuations and other optimizations.
-    - Eager futures use lock-free operations and data structures to minimize synchronization costs.
+    - Provides an alternative to [std::async] **based on [executors](#executors)** 
+        - Still adaptable to other executor or scheduler concepts, including senders and receivers.
+        - The default executor does NOT create a new thread for each task
 - Adaptors
-    - Implements a large set of [**composition** operations](#senders-and-receivers) with a **syntax closer to the
-      existing future types** users are used to, such as [when_all] and [when_any]
-    - Adaptors are also provided to facilitate the creation of cyclic task graphs
-- Algorithms
-    - Includes a large set of the **STL-like algorithms in terms of futures and executors**
-    - Easy access to async algorithms based on executors without requiring external libraries,
-      as [common](https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4) with C++ execution policies, such
+    - Large set of [**composition** operations](#senders-and-receivers), such as [when_all] and [when_any]
+        - Easier composition of task graphs
+        - Syntax closer to the existing future types users are used to 
+    - The future adaptors still work for existing future types
+    - Adaptors are also provided to facilitate the creation of cyclic task graphs      
+    - Continuations are attached to old future types with a single polling future
+    - Integrations with Asio are provided, such as completion tokens and async IO operations.
+- Async Algorithms
+    - Large set of the STL-like algorithms in terms of futures and executors
+    - Easy access to async algorithms based on executors without requiring other external libraries
+        - This is [common](https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4) with C++ execution policies, such
       as [TTB].
 
 --8<-- "docs/references.md"
