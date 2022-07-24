@@ -22,8 +22,8 @@ BraceWrapping:
   BeforeWhile: true
   # Definition
   AfterNamespace: false
-  AfterStruct: true
-  AfterClass: true
+  AfterStruct: false
+  AfterClass: false
   SplitEmptyRecord: false
   AfterFunction: false
   SplitEmptyFunction: false
