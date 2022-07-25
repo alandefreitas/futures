@@ -14,12 +14,10 @@
 #include <utility>
 #include <string_view>
 
-#ifdef FUTURES_USE_ASIO
-
+#ifdef FUTURES_USE_STANDALONE_ASIO
 #    include <asio/ts/buffer.hpp>
 #    include <asio/ts/internet.hpp>
 #    include <asio.hpp>
-
 #else
 #    include <boost/asio.hpp>
 #    include <boost/asio/ts/buffer.hpp>

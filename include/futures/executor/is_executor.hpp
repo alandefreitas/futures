@@ -8,7 +8,8 @@
 #ifndef FUTURES_EXECUTOR_IS_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_IS_EXECUTOR_HPP
 
-#include <futures/detail/config/asio_include.hpp>
+#include <futures/detail/config.hpp>
+#include <futures/detail/deps/asio/is_executor.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors

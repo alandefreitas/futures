@@ -62,6 +62,8 @@
 /// @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
 /// @see https://github.com/Amanieu/asyncplusplus
 
+#include <futures/detail/config.hpp>
+
 // Future classes
 #include <futures/futures/await.hpp>
 #include <futures/futures/basic_future.hpp>

@@ -8,8 +8,11 @@
 #ifndef FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 #define FUTURES_FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
+#include <futures/detail/config.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/deps/asio/post.hpp>
+#include <futures/detail/deps/asio/use_future.hpp>
 #include <memory>
 #include <shared_mutex>
 
@@ -38,8 +41,7 @@ namespace futures::detail {
     /// trying to attach new continuations to this future type, and the main
     /// future callback needs to wait for it.
     template <bool is_always_deferred>
-    class continuations_state
-    {
+    class continuations_state {
     public:
         /// @name Public Types
         /// @{
@@ -184,8 +186,7 @@ namespace futures::detail {
 
     /// Unit type intended for use as a placeholder in continuations_source
     /// non-default constructor
-    struct nocontinuationsstate_t
-    {
+    struct nocontinuationsstate_t {
         explicit nocontinuationsstate_t() = default;
     };
 
@@ -196,8 +197,7 @@ namespace futures::detail {
 
     /// Token the future object uses to emplace continuations
     template <bool is_always_deferred>
-    class continuations_token
-    {
+    class continuations_token {
     public:
         /// Constructs an empty continuations_token with no associated
         /// continuations-state
@@ -276,8 +276,7 @@ namespace futures::detail {
     /// The continuations_source class provides the means to issue a
     /// request to run the future continuations
     template <bool is_always_deferred>
-    class continuations_source
-    {
+    class continuations_source {
     public:
         /// Constructs a continuations_source with new continuations-state
         continuations_source()
