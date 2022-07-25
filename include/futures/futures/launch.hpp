@@ -8,6 +8,7 @@
 #ifndef FUTURES_FUTURES_LAUNCH_HPP
 #define FUTURES_FUTURES_LAUNCH_HPP
 
+#include <futures/detail/config.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/futures/await.hpp>
 #include <futures/futures/basic_future.hpp>
@@ -15,6 +16,8 @@
 #include <futures/futures/detail/future_launcher.hpp>
 #include <futures/futures/detail/traits/is_future_options.hpp>
 #include <futures/futures/detail/traits/launch_result.hpp>
+#include <futures/detail/deps/asio/defer.hpp>
+#include <futures/detail/deps/asio/post.hpp>
 
 namespace futures {
     /** @addtogroup futures Futures
@@ -41,8 +44,7 @@ namespace futures {
     namespace detail {
         /// Determine the options for a basic_future returned from async
         template <class Executor, class Function, class... Args>
-        struct async_future_options
-        {
+        struct async_future_options {
             using type = conditional_append_future_option_t<
                 std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
                 stoppable_opt,
@@ -56,8 +58,7 @@ namespace futures {
 
         /// Determine the options for a basic_future returned from schedule
         template <class Executor, class Function, class... Args>
-        struct schedule_future_options
-        {
+        struct schedule_future_options {
         private:
             // base options
             using base_options = future_options<executor_opt<Executor>>;

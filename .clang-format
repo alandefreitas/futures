@@ -165,21 +165,23 @@ IncludeBlocks: Merge
 IncludeCategories:
   - Regex:           '^["<]futures/.*/detail/prologue.h'  # config
     Priority:        1
-  - Regex:           '^["<]futures/.*/detail/epilogue.h'  # config
-    Priority:        10
-  - Regex:           '^["<]futures/config/'        # config
+  - Regex:           '^["<]futures/config/'               # config
     Priority:        2
-  - Regex:           '^["<]futures/.*/detail/'     # details
+  - Regex:           '^["<]futures/detail/config.hpp'     # config
+    Priority:        2
+  - Regex:           '^["<]futures/.*/detail/'            # details
     Priority:        4
-  - Regex:           '^["<]futures/detail/'     # details
-    Priority:        4
-  - Regex:           '^["<]futures/'               # internal
-    Priority:        3
-  - Regex:           '^(["<](boost|small|asio)/)'  # external
+  - Regex:           '^["<]futures/detail/deps'           # external
     Priority:        5
-  - Regex:           '<[[:alnum:].]+>'             # C++
+  - Regex:           '^["<]futures/detail/'               # details
+    Priority:        4
+  - Regex:           '^["<]futures/'                      # internal
+    Priority:        3
+  - Regex:           '^(["<](boost|small|asio)/)'         # external
+    Priority:        5
+  - Regex:           '<[[:alnum:].]+>'                    # C++
     Priority:        6
-  - Regex:           '.*'                          # any other
+  - Regex:           '.*'                                 # any other
     Priority:        7
 
 # Comments

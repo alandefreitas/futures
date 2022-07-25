@@ -97,22 +97,26 @@ with both versions of Asio.
 
     === "Manual configuration"
     
-        When using this library as header-only or using another build system, the appropriate macros to choose the
+        When using this library as header-only or using another build system, use the appropriate macros to choose the
         Asio version should be set:
 
-        - The macros `FUTURES_HAS_ASIO` and `FUTURES_HAS_BOOST_ASIO` can be used to indicate that Asio is available 
-          and should be included. *Build systems should prefer automatically setting these macros instead of relying
-          on the strategies below*.
-        - From C++17, the library can automatically identify the availability of Asio versions with the 
+        - The macros `FUTURES_HAS_ASIO` and `FUTURES_HAS_BOOST` can be used to indicate that Asio or Boost are 
+          available. 
+            - Build systems should be automatically setting these macros
+            - If both are undefined, the bundled version of the libraries will be used
+        - When both are available, the macros `FUTURES_PREFER_ASIO` and `FUTURES_PREFER_BOOST` can be used to
+          indicate whether Asio or Boost.Asio is preferred. 
+
+        When the macros are undefined, the following steps will be performed to infer their values:        
+
+        - Identify whether any of dependencies has already been included before `futures` by checking for the
+          existence of macros. 
+        - From C++17, the library can automatically identify the availability of dependencies with the 
           [`__has_include`](https://en.cppreference.com/w/cpp/preprocessor/include) macro and set the appropriate
-          flags accordingly. *Users shouldn't rely on this strategy if the code is not intented for C++17 compilers 
-          only or a specific version of Asio is required*.
-        - If none of these macros are set, the library attempts to identify whether any version of Asio has been 
-          included before `futures` by checking for the existence of Asio specific macros. *Library developers should
-          not rely on this heuristic because it's not possible to ensure a valid version of Asio will be available
-          before futures is included in user code for the first time*.
-        - When both versions of Asio are available, the macros `FUTURES_PREFER_STANDALONE_DEPENDENCIES`, and 
-          `FUTURES_PREFER_BOOST_DEPENDENCIES` can be used to indicate which version should be preferred. 
+          flags accordingly. 
+        - On other compilers, the library can automatically identify the availability of dependencies with local fake
+          fake headers.
+        - If no dependency headers can be found, the library defaults to the bundled version of the libraries.
     
         Asio is provided as both a header-only or compiled library. To use the compiled version of Asio, the macro 
         `ASIO_SEPARATE_COMPILATION` should be defined.

@@ -7,6 +7,11 @@
 
 #include <futures/algorithm.hpp>
 #include <futures/futures.hpp>
+#ifdef FUTURES_USE_STANDALONE_ASIO
+#include <asio/io_context.hpp>
+#else
+#include <boost/asio/io_context.hpp>
+#endif
 #include <iostream>
 
 int

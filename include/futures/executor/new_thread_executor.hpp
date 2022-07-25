@@ -8,9 +8,11 @@
 #ifndef FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 
+#include <futures/detail/config.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
-#include <futures/detail/config/asio_include.hpp>
+#include <futures/detail/deps/asio/execution.hpp>
+#include <futures/detail/deps/asio/execution_context.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -18,8 +20,7 @@ namespace futures {
      */
 
     /// An executor that runs anything in a new thread, like std::async does
-    struct new_thread_executor
-    {
+    struct new_thread_executor {
         asio::execution_context *context_{ nullptr };
 
         constexpr bool
@@ -73,14 +74,13 @@ namespace boost {
          * from those.
          **/
         template <>
-        class is_executor<futures::new_thread_executor> : public std::true_type
-        {};
+        class is_executor<futures::new_thread_executor>
+            : public std::true_type {};
 
         namespace traits {
 #if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
             template <typename F>
-            struct execute_member<futures::new_thread_executor, F>
-            {
+            struct execute_member<futures::new_thread_executor, F> {
                 static constexpr bool is_valid = true;
                 static constexpr bool is_noexcept = true;
                 typedef void result_type;
@@ -88,8 +88,7 @@ namespace boost {
 #endif // !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
 #if !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
             template <>
-            struct equality_comparable<futures::new_thread_executor>
-            {
+            struct equality_comparable<futures::new_thread_executor> {
                 static constexpr bool is_valid = true;
                 static constexpr bool is_noexcept = true;
             };
@@ -99,8 +98,7 @@ namespace boost {
             template <>
             struct query_member<
                 futures::new_thread_executor,
-                asio::execution::context_t>
-            {
+                asio::execution::context_t> {
                 static constexpr bool is_valid = true;
                 static constexpr bool is_noexcept = true;
                 typedef asio::execution_context &result_type;
@@ -114,8 +112,7 @@ namespace boost {
                 Property,
                 typename enable_if<std::is_convertible<
                     Property,
-                    asio::execution::blocking_t>::value>::type>
-            {
+                    asio::execution::blocking_t>::value>::type> {
                 static constexpr bool is_valid = true;
                 static constexpr bool is_noexcept = true;
                 typedef asio::execution::blocking_t::never_t result_type;
