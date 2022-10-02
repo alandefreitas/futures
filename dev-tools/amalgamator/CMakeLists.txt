@@ -17,8 +17,11 @@ if (FUTURES_BUILD_SINGLE_HEADER)
 
             # Files
             --include_paths "${FUTURES_ROOT_DIR}/include"
-            --entry_points "futures/futures.hpp" "futures/algorithm.hpp"
+            --entry_points "futures/futures.hpp"
             --output  "${SINGLE_HEADER_PATH}"
+
+            # Directory with our bundled dependencies
+            --bundled_deps_path "${FUTURES_ROOT_DIR}/include/futures/detail/bundled"
 
             # Amalgamator options
             --remove_leading_comments

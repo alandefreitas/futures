@@ -8,7 +8,7 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 #define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 
-#include <futures/futures/future_options.hpp>
+#include <futures/future_options.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
@@ -19,8 +19,8 @@
 #include <futures/detail/traits/tuple_type_all_of.hpp>
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
-#include <futures/futures/detail/move_if_not_shared.hpp>
-#include <futures/futures/detail/traits/append_future_option.hpp>
+#include <futures/detail/move_if_not_shared.hpp>
+#include <futures/detail/traits/append_future_option.hpp>
 
 namespace futures::detail {
     struct unwrapping_failure_t

@@ -62,21 +62,23 @@
 /// @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
 /// @see https://github.com/Amanieu/asyncplusplus
 
-#include <futures/detail/config.hpp>
+#include <futures/config.hpp>
 
-// Future classes
-#include <futures/futures/await.hpp>
-#include <futures/futures/basic_future.hpp>
-#include <futures/futures/launch.hpp>
-#include <futures/futures/packaged_task.hpp>
-#include <futures/futures/promise.hpp>
-#include <futures/futures/wait_for_all.hpp>
-#include <futures/futures/wait_for_any.hpp>
+#include <futures/await.hpp>
+#include <futures/basic_future.hpp>
+#include <futures/future_error.hpp>
+#include <futures/future_options.hpp>
+#include <futures/future_options_args.hpp>
+#include <futures/is_ready.hpp>
+#include <futures/launch.hpp>
+#include <futures/packaged_task.hpp>
+#include <futures/promise.hpp>
+#include <futures/stop_token.hpp>
+#include <futures/wait_for_all.hpp>
+#include <futures/wait_for_any.hpp>
 
-// Adaptors
-#include <futures/adaptor/make_ready_future.hpp>
-#include <futures/adaptor/then.hpp>
-#include <futures/adaptor/when_all.hpp>
-#include <futures/adaptor/when_any.hpp>
+#include <futures/adaptor.hpp>
+#include <futures/algorithm.hpp>
+#include <futures/executor.hpp>
 
 #endif // FUTURES_FUTURES_HPP

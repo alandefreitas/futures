@@ -304,14 +304,12 @@ main(int argc, char **argv) {
         include_expression))
     {
         // Identify file
-        std::string_view as_sv(
-            include_match[2].first.base(),
-            include_match[2].second - include_match[2].first);
+        std::string as_str = include_match[2];
         double perc = static_cast<double>(search_begin - content.cbegin())
                       / static_cast<double>(content.size());
         if (c.show_progress) {
             if (c.verbose) {
-                std::cout << "- " << 100 * perc << "% - Patching <" << as_sv
+                std::cout << "- " << 100 * perc << "% - Patching <" << as_str
                           << ">\n";
             } else if (perc > next_perc) {
                 std::cout << "- " << 100 * perc << "% - "
@@ -322,7 +320,7 @@ main(int argc, char **argv) {
             }
         }
 
-        auto [file_path, exists_in_source] = find_file(c.include_paths, as_sv);
+        auto [file_path, exists_in_source] = find_file(c.include_paths, as_str);
 
         // Check if already included
         auto [lb, ub] = std::

@@ -8,8 +8,8 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_MAKE_CONTINUATION_STATE_HPP
 #define FUTURES_ADAPTOR_DETAIL_MAKE_CONTINUATION_STATE_HPP
 
-#include <futures/futures/detail/operation_state.hpp>
-#include <futures/futures/detail/shared_state.hpp>
+#include <futures/detail/operation_state.hpp>
+#include <futures/detail/shared_state.hpp>
 
 namespace futures::detail {
     template <

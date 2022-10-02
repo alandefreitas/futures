@@ -10,9 +10,9 @@
 
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
-#include <futures/futures/basic_future.hpp>
-#include <futures/futures/traits/future_value.hpp>
-#include <futures/futures/traits/is_future.hpp>
+#include <futures/basic_future.hpp>
+#include <futures/traits/future_value.hpp>
+#include <futures/traits/is_future.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
@@ -27,7 +27,7 @@
 #include <futures/detail/traits/tuple_type_transform.hpp>
 #include <futures/detail/traits/type_member_or.hpp>
 #include <futures/detail/traits/type_member_or_void.hpp>
-#include <futures/futures/detail/move_if_not_shared.hpp>
+#include <futures/detail/move_if_not_shared.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

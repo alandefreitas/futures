@@ -15,9 +15,9 @@
 
 #include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/futures/is_ready.hpp>
-#include <futures/futures/launch.hpp>
-#include <futures/futures/traits/to_future.hpp>
+#include <futures/is_ready.hpp>
+#include <futures/launch.hpp>
+#include <futures/traits/to_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
@@ -25,7 +25,7 @@
 #include <optional>
 #include <condition_variable>
 #include <shared_mutex>
-#include <futures/futures/wait_for_any.hpp>
+#include <futures/wait_for_any.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors

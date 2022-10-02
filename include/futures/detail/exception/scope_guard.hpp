@@ -10,6 +10,7 @@
 
 #include <futures/detail/exception/throw_exception.hpp>
 #include <functional>
+#include <ios>
 #include <iostream>
 #include <utility>
 

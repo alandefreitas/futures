@@ -39,7 +39,7 @@
  */
 
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/futures/traits/to_future.hpp>
+#include <futures/traits/to_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
