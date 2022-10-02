@@ -8,7 +8,7 @@
 #ifndef FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 
-#include <futures/detail/config.hpp>
+#include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>
 #include <futures/detail/deps/asio/thread_pool.hpp>

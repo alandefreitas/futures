@@ -8,7 +8,7 @@
 #ifndef FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 
-#include <futures/detail/config.hpp>
+#include <futures/config.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/deps/asio/execution.hpp>
@@ -52,6 +52,7 @@ namespace futures {
     };
 
     /// Make an new thread executor object
+    inline
     new_thread_executor
     make_new_thread_executor() {
         asio::execution_context &ctx = inline_execution_context();

@@ -8,7 +8,7 @@
 #ifndef FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP
 
-#include <futures/detail/config.hpp>
+#include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/deps/asio/execution.hpp>
 #include <futures/detail/deps/asio/execution_context.hpp>
