@@ -14,19 +14,11 @@
         The single-header version of the library is intended for immediate experimentation, and use cases like 
         [Compiler Explorer](https://godbolt.org/z/fbjEqjer1).
 
-        Make sure the headers for the dependencies are also available:
-        
-        - [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
-
     === "Header only"
     
         [=20% "Piece of Cake"]
 
         You can use the library by simply copying the contents from the `include` directory into your project.
-
-        Make sure the headers for the dependencies are also available:
-        
-        - [Asio](https://github.com/chriskohlhoff/asio/tree/master/asio) or [Boost.Asio](https://github.com/boostorg/asio). 
 
     === "CMake"
     
@@ -189,7 +181,6 @@
             cpack build
             ```
         
-
 
 ## Hello world 👋
 
