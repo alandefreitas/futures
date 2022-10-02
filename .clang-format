@@ -163,9 +163,11 @@ SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 IncludeBlocks: Merge
 IncludeCategories:
+  - Regex:           '^".*.hpp'                           # config
+    Priority:        1
   - Regex:           '^["<]futures/.*/detail/prologue.h'  # config
     Priority:        1
-  - Regex:           '^["<]futures/config/'               # config
+  - Regex:           '^["<]futures/config.hpp'            # config
     Priority:        2
   - Regex:           '^["<]futures/detail/config.hpp'     # config
     Priority:        2

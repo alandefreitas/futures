@@ -8,7 +8,7 @@
 #ifndef FUTURES_DETAIL_DEPS_ASIO_IS_EXECUTOR_HPP
 #define FUTURES_DETAIL_DEPS_ASIO_IS_EXECUTOR_HPP
 
-#include <futures/detail/config.hpp>
+#include <futures/config.hpp>
 
 // Include
 #if defined(FUTURES_USE_STANDALONE_ASIO)

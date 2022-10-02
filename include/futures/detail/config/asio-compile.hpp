@@ -45,7 +45,7 @@
 #    else
 #        define FUTURES_USE_BOOST_ASIO
 #        define BOOST_ASIO_SEPARATE_COMPILATION
-#        include <boost/asio/impl/src.hpp>
+#include <futures/detail/deps/boost/asio/impl/src.hpp>
 #    endif
 
 #endif // FUTURES_SEPARATE_COMPILATION
