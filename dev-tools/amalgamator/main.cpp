@@ -19,13 +19,26 @@
 
 namespace fs = std::filesystem;
 
-struct config
-{
+struct config {
+    // Files used as a starting point for the recursive process
     std::vector<fs::path> entry_points;
+
+    // Path where we can look for files
     std::vector<fs::path> include_paths;
+
+    // Output file
     fs::path output;
+
+    // Files we are allowed to include twice
     std::vector<fs::path> double_include;
+
+    // Remove leading comments from files
     bool remove_leading_comments{ true };
+
+    // Directory with bundled dependencies
+    // We CANNOT remove leading comments from these files
+    fs::path bundled_deps_path;
+
     bool show_progress{ false };
     bool verbose{ false };
 };
@@ -199,6 +212,19 @@ parse_config(config &c, const std::vector<std::string_view> &args) {
         return false;
     }
     c.output = *output_begin;
+
+    auto [bundled_deps_path_begin, bundled_deps_path_end] = get_values(
+        "bundled_deps_path");
+    if (bundled_deps_path_begin != bundled_deps_path_end) {
+        c.bundled_deps_path = *bundled_deps_path_begin;
+        if (c.bundled_deps_path.empty()) {
+            std::cerr << "Empty destination path for bundled dependencies\n";
+        }
+    } else {
+        std::cerr << "No destination path for bundled dependencies\n";
+        return false;
+    }
+
     return true;
 }
 
@@ -211,14 +237,14 @@ parse_config(config &c, int argc, char **argv) {
 std::pair<fs::path, bool>
 find_file(
     const std::vector<fs::path> &include_paths,
-    const std::ssub_match &filename) {
+    const std::string_view &filename) {
     for (const auto &path: include_paths) {
-        auto p = path / filename.str();
+        auto p = path / filename;
         if (fs::exists(p)) {
             return std::make_pair(p, true);
         }
     }
-    return std::make_pair(fs::path(filename.first, filename.second), false);
+    return std::make_pair(fs::path(filename), false);
 }
 
 bool
@@ -267,7 +293,7 @@ main(int argc, char **argv) {
     std::sort(patched_files.begin(), patched_files.end());
 
     std::regex include_expression(
-        "(^|\n) *# *include *< *([a-zA-Z_/\\. ]+) *>");
+        "(^|\n) *# *include *< *([a-zA-Z0-9_/\\. ]+) *>");
     auto search_begin(content.cbegin());
     std::smatch include_match;
     double next_perc = 0;
@@ -278,14 +304,15 @@ main(int argc, char **argv) {
         include_expression))
     {
         // Identify file
-        auto [file_path, exists_in_source]
-            = find_file(c.include_paths, include_match[2]);
+        std::string_view as_sv(
+            include_match[2].first.base(),
+            include_match[2].second - include_match[2].first);
         double perc = static_cast<double>(search_begin - content.cbegin())
                       / static_cast<double>(content.size());
         if (c.show_progress) {
             if (c.verbose) {
-                std::cout << "- " << 100 * perc << "% - Patching " << file_path
-                          << '\n';
+                std::cout << "- " << 100 * perc << "% - Patching <" << as_sv
+                          << ">\n";
             } else if (perc > next_perc) {
                 std::cout << "- " << 100 * perc << "% - "
                           << patched_files.size() << " files patched\n";
@@ -295,6 +322,8 @@ main(int argc, char **argv) {
             }
         }
 
+        auto [file_path, exists_in_source] = find_file(c.include_paths, as_sv);
+
         // Check if already included
         auto [lb, ub] = std::
             equal_range(patched_files.begin(), patched_files.end(), file_path);
@@ -303,7 +332,7 @@ main(int argc, char **argv) {
 
         // Patch comment
         std::string patch;
-        if (bool include_helper_comment = exists_in_source || already_patched;
+        if (bool include_helper_comment = exists_in_source && already_patched;
             include_helper_comment)
         {
             patch += include_match[1];
@@ -313,20 +342,22 @@ main(int argc, char **argv) {
         }
 
         // Patch contents
-        if (!already_patched) {
-            if (!exists_in_source) {
-                patch += include_match[0];
-            } else {
-                std::ifstream t(file_path);
-                if (c.remove_leading_comments) {
-                    std::string last_line = consume_leading_comments(t);
-                    last_line.push_back('\n');
-                    patch.append(last_line);
-                }
-                patch.append(
-                    std::istreambuf_iterator<char>(t),
-                    std::istreambuf_iterator<char>());
+        if (!exists_in_source) {
+            patch += include_match[0];
+        } else if (!already_patched) {
+            std::ifstream t(file_path);
+            if (c.remove_leading_comments
+                && !is_parent(c.bundled_deps_path, file_path))
+            {
+                std::string last_line = consume_leading_comments(t);
+                last_line.push_back('\n');
+                patch.append(last_line);
             }
+            patch.append("\n");
+            patch.append(
+                std::istreambuf_iterator<char>(t),
+                std::istreambuf_iterator<char>());
+            patch.append("\n");
         }
 
         // Apply patch
