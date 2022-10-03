@@ -1,10 +1,10 @@
 [data-md-color-scheme="futures"] {
-    --md-primary-fg-color: #4b366c;
-    --md-primary-fg-color--light: #874ef2;
-    --md-primary-fg-color--dark:  #2a1a44;
+    --md-primary-fg-color: #d56d13;
+    --md-primary-fg-color--light: #ff9600;
+    --md-primary-fg-color--dark: #3c2110;
     --md-typeset-a-color: var(--md-primary-fg-color--light);
-    --md-accent-fg-color: #9b78dc;
-    --md-accent-fg-color--transparent: rgba(156, 119, 225, 0.25);
+    --md-accent-fg-color: #00af80;
+    --md-accent-fg-color--transparent: rgb(9, 133, 148);
     --md-accent-bg-color:                hsla(0, 0%, 100%, 1);
     --md-accent-bg-color--light:         hsla(0, 0%, 100%, 0.7);
 }
