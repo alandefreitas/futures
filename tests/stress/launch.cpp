@@ -5,7 +5,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <futures/futures.hpp>
+#include <futures/launch.hpp>
 #include <iostream>
 #include "stress.hpp"
 

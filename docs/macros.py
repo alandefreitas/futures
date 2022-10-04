@@ -1,4 +1,6 @@
 import os
+import re
+import xml.etree.ElementTree as ET
 
 def declare_variables(variables, macro):
     @macro
@@ -180,3 +182,115 @@ def declare_variables(variables, macro):
                 contents += '\n'
 
             return contents
+
+    @macro
+    def doxygen_cpp_macros(filename: str):
+        """
+        Load C++ macros from a xml file generated with doxygen and document all macros.
+        """
+        docs_dir = variables.get("docs_dir", "docs")
+
+        # Look for file
+        xml_path = os.path.abspath(os.path.join(docs_dir, 'xml', filename))
+        if not os.path.exists(xml_path):
+            return f'{xml_path} does NOT exist'
+        def markdownify(node: ET.Element):
+            wrap_with = {
+                'ref': '`',
+                'computeroutput': '`',
+                'title': '**',
+            }
+            begin_with = {
+                'listitem': '* ',
+                'ulink': '[',
+            }
+            end_with = {
+                'title': '\n\n',
+                'ulink': ']',
+            }
+            text = ''
+            if node.tag in begin_with:
+                text = begin_with[node.tag]
+            if node.tag in wrap_with:
+                text += wrap_with[node.tag]
+            if node.text:
+                text += node.text
+            if node.tag in wrap_with:
+                text += wrap_with[node.tag]
+            if node.tag in end_with:
+                text += end_with[node.tag]
+            if node.get('url'):
+                text += '(' + node.get('url') + ')'
+            for c in node:
+                text += markdownify(c)
+            if node.tail:
+                text += node.tail
+            return text
+
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        defs = root[0]
+        brief = defs.find('briefdescription')
+        res = ''
+        for para in brief:
+            res += '>' + markdownify(para) + '\n>\n'
+        res += '\n\n'
+        details = defs.find('detaileddescription')
+        for para in details:
+            res += markdownify(para) + '\n\n'
+        res += '\n\n'
+        for section in defs.findall('sectiondef'):
+            for member in section.findall('memberdef'):
+                res += f'### {member.find("name").text}\n\n'
+                res += f'```cpp\n'
+                res += f'#define {member.find("name").text}\n\n'
+                res += f'```\n\n'
+                brief = member.find('briefdescription')
+                for para in brief:
+                    res += markdownify(para) + '\n\n'
+                res += f'**Description**\n\n'
+                details = member.find('detaileddescription')
+                for para in details:
+                    res += markdownify(para) + '\n\n'
+        return res
+
+    @macro
+    def cmake_options(filename: str):
+        """
+        Render options from a CMakelists file
+        """
+        docs_dir = variables.get("docs_dir", "docs")
+
+        # Look for file
+        abs_root_path = os.path.abspath(os.path.join(docs_dir, "..", filename))
+        abs_examples_path = os.path.abspath(os.path.join(docs_dir, "../examples/", filename))
+        abs_path = ''
+        if os.path.exists(abs_root_path):
+            abs_path = abs_root_path
+        elif os.path.exists(abs_examples_path):
+            abs_path = abs_examples_path
+
+        language = 'cmake'
+
+        # File not found
+        if not os.path.exists(abs_path):
+            return f"""<b>File not found: {filename}</b>"""
+
+        def sanitize_default_value(str):
+            if str == '${MASTER_PROJECT}':
+                return 'ON'
+            return str
+
+        # Read options from file
+        with open(abs_path, "r") as f:
+            contents = f.read()
+
+            res =  '| Option     | Description       | Default     |\n'
+            res += '|------------|-------------------|-------------|\n'
+
+            pattern = re.compile(" *option\\( *([^ ]+) *\"([^\"]+)\" *(.+) *\\).*")
+            for line in contents.splitlines():
+                result = pattern.search(line)
+                if result:
+                    res += f'|`{result.group(1)}`|{result.group(2)}|`{sanitize_default_value(result.group(3))}`|\n'
+            return res

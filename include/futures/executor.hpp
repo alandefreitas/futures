@@ -8,6 +8,7 @@
 #ifndef FUTURES_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_HPP
 
+// #glob <futures/executor/*.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>

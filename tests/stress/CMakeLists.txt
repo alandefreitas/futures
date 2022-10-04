@@ -36,9 +36,6 @@ macro(add_futures_stress_test TEST_NAME)
         if (N_PROCESSORS GREATER 1)
             list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
         endif ()
-        if (FUTURES_BUILD_SINGLE_HEADER)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_single_header)
-        endif ()
 
         # Create executables for each variant
         foreach (TEST_NAME_VARIANT ${TEST_NAME_VARIANTS})
@@ -56,10 +53,6 @@ macro(add_futures_stress_test TEST_NAME)
                 target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC futures)
                 target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
                 target_compile_definitions(stress_${TEST_NAME_VARIANT} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_link_libraries(stress_${TEST_NAME_VARIANT} PUBLIC single_header)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
-                target_compile_definitions(stress_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
             endif ()
 
             # Register with ctest

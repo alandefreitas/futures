@@ -8,6 +8,6 @@
 /// \file The user can compile and link this file to make the library not
 /// header-only
 
-#include <futures/detail/config/asio-compile.hpp>
+#include <futures/impl/src.hpp>
 
 #endif // FUTURES_COMPILED_SRC_COMPILE_H

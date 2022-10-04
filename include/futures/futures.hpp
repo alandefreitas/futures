@@ -9,7 +9,7 @@
 #define FUTURES_FUTURES_HPP
 
 /// @file
-/// Future types and functions to work with futures
+/// @brief Future types and functions to work with futures
 ///
 /// Many of the ideas for these functions are based on:
 /// - extensions for concurrency (ISO/IEC TS 19571:2016)
@@ -64,6 +64,7 @@
 
 #include <futures/config.hpp>
 
+// #glob <futures/*.hpp>
 #include <futures/await.hpp>
 #include <futures/basic_future.hpp>
 #include <futures/future_error.hpp>

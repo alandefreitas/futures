@@ -8,6 +8,7 @@
 #ifndef FUTURES_ADAPTOR_HPP
 #define FUTURES_ADAPTOR_HPP
 
+// #glob <futures/adaptor/*.hpp>
 #include <futures/adaptor/make_ready_future.hpp>
 #include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_all.hpp>

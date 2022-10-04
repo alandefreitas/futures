@@ -8,6 +8,7 @@
 #ifndef FUTURES_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_HPP
 
+// #glob <futures/algorithm/*.hpp>
 #include <futures/algorithm/all_of.hpp>
 #include <futures/algorithm/any_of.hpp>
 #include <futures/algorithm/count.hpp>

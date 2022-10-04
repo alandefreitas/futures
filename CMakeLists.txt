@@ -22,8 +22,8 @@ option(FUTURES_BUILD_INSTALLER "Build installer target" ${MASTER_PROJECT})
 option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 
 # How to build
-option(FUTURES_PREFER_STANDALONE_DEPENDENCIES "Prefer standalone dependencies if available (asio and small::vector)" OFF)
-option(FUTURES_PREFER_BOOST_DEPENDENCIES "Prefer boost dependencies if available (boost::asio and boost::small_vector)" OFF)
+option(FUTURES_PREFER_STANDALONE_DEPENDENCIES "Prefer standalone Asio if available" OFF)
+option(FUTURES_PREFER_BOOST_DEPENDENCIES "Prefer Boost.Asio if available" OFF)
 option(FUTURES_BUILD_WITH_EXCEPTIONS "Add compiler flags to use exceptions if needed." ON)
 
 # Development options

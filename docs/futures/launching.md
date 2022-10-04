@@ -1,6 +1,6 @@
 # Launching tasks
 
-## Futures tasks
+## Future tasks
 
 The easiest way to create futures is by launching tasks:
 
