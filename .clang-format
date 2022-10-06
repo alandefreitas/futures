@@ -163,27 +163,27 @@ SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 IncludeBlocks: Merge
 IncludeCategories:
-  - Regex:           '^".*.hpp'                           # config
+  - Regex:           '^".*.hpp'                           # config headers
     Priority:        1
-  - Regex:           '^["<]futures/.*/detail/prologue.h'  # config
+  - Regex:           '^["<]futures/.*/detail/prologue.h'  # config headers
     Priority:        1
-  - Regex:           '^["<]futures/config.hpp'            # config
+  - Regex:           '^["<]futures/config.hpp'            # config headers
     Priority:        2
-  - Regex:           '^["<]futures/detail/config.hpp'     # config
+  - Regex:           '^["<]futures/detail/config.hpp'     # config headers
     Priority:        2
-  - Regex:           '^["<]futures/.*/detail/'            # details
+  - Regex:           '^["<]futures/.*/detail/'            # details headers
     Priority:        4
-  - Regex:           '^["<]futures/detail/deps'           # external
+  - Regex:           '^["<]futures/detail/deps'           # external bundled headers
     Priority:        5
-  - Regex:           '^["<]futures/detail/'               # details
+  - Regex:           '^["<]futures/detail/'               # details headers
     Priority:        4
-  - Regex:           '^["<]futures/'                      # internal
+  - Regex:           '^["<]futures/'                      # internal headers
     Priority:        3
-  - Regex:           '^(["<](boost|small|asio)/)'         # external
+  - Regex:           '^(["<](boost|small|asio)/)'         # external headers
     Priority:        5
-  - Regex:           '<[[:alnum:].]+>'                    # C++
+  - Regex:           '<[[:alnum:].]+>'                    # C++ headers
     Priority:        6
-  - Regex:           '.*'                                 # any other
+  - Regex:           '.*'                                 # any other headers
     Priority:        7
 
 # Comments

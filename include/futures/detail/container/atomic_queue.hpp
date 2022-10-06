@@ -8,18 +8,15 @@
 #ifndef FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 #define FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 
-#include <futures/detail/allocator/allocator_construct.hpp>
-#include <futures/detail/allocator/allocator_destroy.hpp>
-#include <futures/detail/allocator/allocator_rebind.hpp>
 #include <futures/detail/allocator/maybe_empty_allocator.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/deps/boost/core/allocator_access.hpp>
 #include <atomic>
 #include <memory>
 
 namespace futures::detail {
     template <class T>
-    struct lock_free_queue_node
-    {
+    struct lock_free_queue_node {
         std::unique_ptr<T> data{ nullptr };
         std::atomic<lock_free_queue_node*> next{ nullptr };
         explicit lock_free_queue_node(T const& data_)
@@ -42,31 +39,33 @@ namespace futures::detail {
     template <class T, class Allocator = std::allocator<T>>
     class atomic_queue
         : private maybe_empty_node_allocator<
-              allocator_rebind_t<Allocator, lock_free_queue_node<T>>>
-        , private maybe_empty_allocator<allocator_rebind_t<Allocator, T>>
-    {
+              boost::allocator_rebind_t<Allocator, lock_free_queue_node<T>>>
+        , private maybe_empty_allocator<
+              boost::allocator_rebind_t<Allocator, T>> {
         using node = lock_free_queue_node<T>;
-        using node_allocator_type = allocator_rebind_t<Allocator, node>;
+        using node_allocator_type = boost::allocator_rebind_t<Allocator, node>;
 
     public:
-        using allocator_type = allocator_rebind_t<Allocator, T>;
+        using allocator_type = boost::allocator_rebind_t<Allocator, T>;
 
         ~atomic_queue() {
             node* old_head = head_.load(std::memory_order_relaxed);
             while (old_head) {
                 head_.store(old_head->next, std::memory_order_relaxed);
-                allocator_destroy(this->get_node_allocator(), old_head);
+                boost::allocator_destroy(this->get_node_allocator(), old_head);
                 this->get_node_allocator().deallocate(old_head, 1);
                 old_head = head_.load(std::memory_order_relaxed);
             }
         }
 
         explicit atomic_queue(const Allocator& alloc = std::allocator<T>{})
-            : maybe_empty_node_allocator<allocator_rebind_t<Allocator, node>>(
-                alloc),
-              maybe_empty_allocator<allocator_rebind_t<Allocator, T>>(alloc) {
+            : maybe_empty_node_allocator<
+                boost::allocator_rebind_t<Allocator, node>>(alloc),
+              maybe_empty_allocator<boost::allocator_rebind_t<Allocator, T>>(
+                  alloc) {
             node* dummy_node_ptr = this->get_node_allocator().allocate(1);
-            allocator_construct(this->get_node_allocator(), dummy_node_ptr);
+            boost::
+                allocator_construct(this->get_node_allocator(), dummy_node_ptr);
             head_.store(dummy_node_ptr);
             tail_.store(dummy_node_ptr);
         }
@@ -87,7 +86,10 @@ namespace futures::detail {
         push(const T& data) {
             // Construct node we should push
             node* new_node_ptr = this->get_node_allocator().allocate(1);
-            allocator_construct(this->get_node_allocator(), new_node_ptr, data);
+            boost::allocator_construct(
+                this->get_node_allocator(),
+                new_node_ptr,
+                data);
             push(new_node_ptr);
         }
 
@@ -95,7 +97,7 @@ namespace futures::detail {
         push(T&& data) {
             // Construct node we should push
             node* new_node_ptr = this->get_node_allocator().allocate(1);
-            allocator_construct(
+            boost::allocator_construct(
                 this->get_node_allocator(),
                 new_node_ptr,
                 std::move(data));
@@ -130,7 +132,7 @@ namespace futures::detail {
                         // Update head_
                         if (head_.compare_exchange_weak(old_head, old_head_next))
                         {
-                            allocator_destroy(
+                            boost::allocator_destroy(
                                 this->get_node_allocator(),
                                 old_head);
                             this->get_node_allocator().deallocate(old_head, 1);
@@ -160,7 +162,8 @@ namespace futures::detail {
                         // tail is last element -> update tail next
                         if (old_tail->next.compare_exchange_weak(
                                 old_tail_next,
-                                new_node_ptr)) {
+                                new_node_ptr))
+                        {
                             // update tail
                             tail_
                                 .compare_exchange_strong(old_tail, new_node_ptr);

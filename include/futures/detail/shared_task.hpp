@@ -8,11 +8,11 @@
 #ifndef FUTURES_DETAIL_SHARED_TASK_HPP
 #define FUTURES_DETAIL_SHARED_TASK_HPP
 
-#include <futures/detail/allocator/allocator_rebind.hpp>
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/detail/utility/to_address.hpp>
+#include <futures/detail/deps/boost/core/allocator_access.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -65,7 +65,7 @@ namespace futures::detail {
     template <class Fn, class Allocator, class Options, class R, class... Args>
     class shared_task : public shared_task_base<R, Options, Args...> {
         using function_type = Fn;
-        using allocator_type = allocator_rebind_t<Allocator, shared_task>;
+        using allocator_type = boost::allocator_rebind_t<Allocator, shared_task>;
         compressed_tuple<function_type, allocator_type> values_;
 
         function_type &
