@@ -9,9 +9,10 @@
 #define FUTURES_DETAIL_SHARED_TASK_HPP
 
 #include <futures/detail/allocator/allocator_rebind.hpp>
+#include <futures/detail/operation_state.hpp>
+#include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/detail/utility/to_address.hpp>
-#include <futures/detail/operation_state.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -28,8 +29,7 @@ namespace futures::detail {
     /// @tparam R Type returned by the task callable
     /// @tparam Args Argument types to run the task callable
     template <class R, class Options, class... Args>
-    class shared_task_base : public operation_state<R, Options>
-    {
+    class shared_task_base : public operation_state<R, Options> {
     public:
         /// Virtual task destructor
         virtual ~shared_task_base() = default;
@@ -62,22 +62,22 @@ namespace futures::detail {
     ///
     /// @tparam R Type returned by the task callable
     /// @tparam Args Argument types to run the task callable
-    template <
-        typename Fn,
-        typename Allocator,
-        class Options,
-        typename R,
-        typename... Args>
-    class shared_task
-        : public shared_task_base<R, Options, Args...>
-#ifndef FUTURES_DOXYGEN
-        , public maybe_empty_function<Fn>
-        , public maybe_empty_allocator<allocator_rebind_t<
-              Allocator,
-              shared_task<Fn, Allocator, Options, R, Args...>>>
-#endif
-    {
-    private:
+    template <class Fn, class Allocator, class Options, class R, class... Args>
+    class shared_task : public shared_task_base<R, Options, Args...> {
+        using function_type = Fn;
+        using allocator_type = allocator_rebind_t<Allocator, shared_task>;
+        compressed_tuple<function_type, allocator_type> values_;
+
+        function_type &
+        get_function() {
+            return values_.get(mp_size_t<0>{});
+        }
+
+        allocator_type &
+        get_allocator() {
+            return values_.get(mp_size_t<1>{});
+        }
+
         using stop_source_base = detail::maybe_empty<
             std::conditional_t<
                 Options::is_stoppable,
@@ -86,22 +86,16 @@ namespace futures::detail {
             0>;
 
     public:
-        /// Allocator used to allocate this task object type
-        using allocator_type = allocator_rebind_t<Allocator, shared_task>;
-
         /// Construct a task object for the specified allocator and
         /// function, copying the function
         shared_task(const allocator_type &alloc, const Fn &fn)
-            : shared_task_base<R, Options, Args...>{},
-              maybe_empty_function<Fn>{ fn },
-              maybe_empty_allocator<allocator_type>{ alloc } {}
+            : shared_task_base<R, Options, Args...>{}, values_{ fn, alloc } {}
 
         /// Construct a task object for the specified allocator and
         /// function, moving the function
         shared_task(const allocator_type &alloc, Fn &&fn)
             : shared_task_base<R, Options, Args...>{},
-              maybe_empty_function<Fn>{ std::move(fn) },
-              maybe_empty_allocator<allocator_type>{ alloc } {}
+              values_{ std::move(fn), alloc } {}
 
         /// No copy constructor
         shared_task(shared_task const &) = delete;

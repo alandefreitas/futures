@@ -67,7 +67,7 @@ jobs:
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_extra_args }} -D CMAKE_BUILD_TYPE=${{ matrix.config.config }} -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_SINGLE_HEADER=${{ matrix.config.build_single_header }} -D FUTURES_CATCH2_REPORTER=junit
+          cmake .. ${{ matrix.config.cmake_extra_args }} -D CMAKE_BUILD_TYPE=${{ matrix.config.config }} -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_SINGLE_HEADER=${{ matrix.config.build_single_header }} -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit
       - name: Build
         working-directory: ./build
         run: cmake --build . --parallel ${{ matrix.config.cores }} --config ${{ matrix.config.config }}
@@ -96,6 +96,7 @@ jobs:
         with:
           path: build/include/single_header/futures/futures.hpp
       - name: Deploy single_header to gist
+        continue-on-error: true
         if: ${{ matrix.config.build_single_header == 'ON' }}
         uses: exuanbo/actions-deploy-gist@v1.1.2
         with:

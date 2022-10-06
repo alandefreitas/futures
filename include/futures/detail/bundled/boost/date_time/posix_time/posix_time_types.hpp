@@ -7,17 +7,17 @@
 #ifndef POSIX_TIME_TYPES_HPP___
 #define POSIX_TIME_TYPES_HPP___
 
-#include "boost/date_time/time_clock.hpp"
-#include "boost/date_time/microsec_time_clock.hpp"
-#include "boost/date_time/posix_time/ptime.hpp"
+#include <futures/detail/bundled/boost/date_time/time_clock.hpp>
+#include <futures/detail/bundled/boost/date_time/microsec_time_clock.hpp>
+#include <futures/detail/bundled/boost/date_time/posix_time/ptime.hpp>
 #if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
-#include "boost/date_time/posix_time/date_duration_operators.hpp"
+#include <futures/detail/bundled/boost/date_time/posix_time/date_duration_operators.hpp>
 #endif
-#include "boost/date_time/posix_time/posix_time_duration.hpp"
-#include "boost/date_time/posix_time/posix_time_system.hpp"
-#include "boost/date_time/posix_time/time_period.hpp"
-#include "boost/date_time/time_iterator.hpp"
-#include "boost/date_time/dst_rules.hpp"
+#include <futures/detail/bundled/boost/date_time/posix_time/posix_time_duration.hpp>
+#include <futures/detail/bundled/boost/date_time/posix_time/posix_time_system.hpp>
+#include <futures/detail/bundled/boost/date_time/posix_time/time_period.hpp>
+#include <futures/detail/bundled/boost/date_time/time_iterator.hpp>
+#include <futures/detail/bundled/boost/date_time/dst_rules.hpp>
 
 namespace boost {
 

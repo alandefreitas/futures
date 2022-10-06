@@ -24,7 +24,7 @@ else ()
 endif ()
 
 # Create a common catch main for all tests
-add_library(catch_main detail/catch_main.cpp)
+add_library(catch_main catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_compile_features(catch_main PUBLIC cxx_std_17)
 
@@ -57,18 +57,16 @@ macro(add_futures_test TEST_NAME)
 
     if (LINK_LIBS_EXIST)
         # Define test target variants
+        string(REPLACE "/" "_" CMAKE_TEST_NAME ${TEST_NAME})
         set(TEST_NAME_VARIANTS "")
         if (asio_FOUND OR Asio_FOUND)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_asio)
+            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_asio)
         endif ()
         if (Boost_FOUND)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_boost)
+            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_boost)
         endif ()
         if (N_PROCESSORS GREATER 1)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_small_pool)
-        endif ()
-        if (FUTURES_BUILD_SINGLE_HEADER)
-            list(APPEND TEST_NAME_VARIANTS ${TEST_NAME}_single_header)
+            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_small_pool)
         endif ()
 
         # Create executables for each variant
@@ -81,20 +79,16 @@ macro(add_futures_test TEST_NAME)
             target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC ${LINK_LIBS} catch_main)
 
             # Link futures
-            if (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_asio)
+            if (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_asio)
                 target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_asio)
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Asio ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_boost)
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_boost)
                 target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_boost)
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_small_pool)
+            elseif (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_small_pool)
                 target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures)
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
                 target_compile_definitions(ut_${TEST_NAME_VARIANT} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${TEST_NAME}_single_header)
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC single_header)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC FUTURES_IS_SINGLE_HEADER=1)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Single header ")
             endif ()
 
             # Register with ctest
@@ -123,7 +117,10 @@ endmacro()
 ######################################################
 # Separate CMake tests                               #
 ######################################################
+
+
 # Detail
+add_futures_test(detail/utility/compressed_tuple)
 add_futures_test(asio_executors)
 add_futures_test(queue)
 add_futures_test(operation_state)
@@ -153,7 +150,7 @@ add_futures_test(algorithm)
 #####################################################
 if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
     file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
-    add_executable(ut_futures_all detail/catch_main.cpp ${FUTURES_TESTS_SOURCE})
+    add_executable(ut_futures_all catch_main.cpp ${FUTURES_TESTS_SOURCE})
     target_link_libraries(ut_futures_all PUBLIC futures::futures Catch2::Catch2)
     target_compile_features(ut_futures_all PUBLIC cxx_std_17)
     target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")

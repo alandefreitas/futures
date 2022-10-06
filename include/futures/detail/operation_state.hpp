@@ -8,19 +8,20 @@
 #ifndef FUTURES_DETAIL_OPERATION_STATE_HPP
 #define FUTURES_DETAIL_OPERATION_STATE_HPP
 
+#include <futures/config.hpp>
 #include <futures/future_error.hpp>
 #include <futures/future_options.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/container/small_vector.hpp>
-#include <futures/detail/thread/relocker.hpp>
-#include <futures/detail/utility/maybe_atomic.hpp>
-#include <futures/executor/detail/maybe_empty_executor.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/maybe_empty_continuations_source.hpp>
 #include <futures/detail/maybe_empty_function.hpp>
 #include <futures/detail/maybe_empty_stop_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
+#include <futures/detail/thread/relocker.hpp>
 #include <futures/detail/traits/is_in_args.hpp>
+#include <futures/detail/utility/maybe_atomic.hpp>
+#include <futures/executor/detail/maybe_empty_executor.hpp>
 #include <atomic>
 #include <future>
 #include <condition_variable>
@@ -48,8 +49,7 @@ namespace futures::detail {
      *
      * @tparam is_always_deferred Whether the state is always deferred
      */
-    class operation_state_base
-    {
+    class operation_state_base {
     private:
         /**
          * @name Private types
@@ -565,13 +565,13 @@ namespace futures::detail {
                     }
                 }
                 prev = op.status_;
-                if (prev != status::ready)
-                {
+                if (prev != status::ready) {
                     op.status_ = status::waiting;
                     if (timeout_time) {
                         if (op.waiter_.wait_until(lk, *timeout_time, [&op]() {
                                 return op.is_ready();
-                            })) {
+                            }))
+                        {
                             return std::future_status::ready;
                         } else {
                             op.status_ = status::launched;
@@ -695,8 +695,7 @@ namespace futures::detail {
               Options::is_continuable,
               continuations_source<Options::is_always_deferred>>
         // storage for the stop token
-        , public conditional_stop_source<Options::is_stoppable, stop_source>
-    {
+        , public conditional_stop_source<Options::is_stoppable, stop_source> {
     protected:
         static_assert(
             !Options::is_shared,
@@ -788,7 +787,8 @@ namespace futures::detail {
 
         /// Move assignment operator
         operation_state &
-        operator=(operation_state &&) noexcept = default;
+        operator=(operation_state &&) noexcept
+            = default;
 
         /// Constructor for state with reference to executor
         /**
@@ -970,8 +970,7 @@ namespace futures::detail {
      * @tparam Args Arguments
      */
     template <class Fn, class... Args>
-    struct bind_deferred_state_args
-    {
+    struct bind_deferred_state_args {
     public:
         template <class OtherFn, class... OtherArgs>
         explicit bind_deferred_state_args(OtherFn &&f, OtherArgs &&...args)
@@ -1004,8 +1003,7 @@ namespace futures::detail {
     template <class R, class Options>
     class deferred_operation_state
         : public operation_state<R, Options>
-        , private maybe_empty_function<typename Options::function_t>
-    {
+        , private maybe_empty_function<typename Options::function_t> {
     private:
         /**
          * @name Private types
@@ -1039,8 +1037,7 @@ namespace futures::detail {
         deferred_operation_state(const deferred_operation_state &) = default;
 
         /// Move Constructor
-        deferred_operation_state(
-            deferred_operation_state &&) noexcept = default;
+        deferred_operation_state(deferred_operation_state &&) noexcept = default;
 
         /// Copy Assignment
         deferred_operation_state &
@@ -1049,7 +1046,8 @@ namespace futures::detail {
 
         /// Move Assignment
         deferred_operation_state &
-        operator=(deferred_operation_state &&) noexcept = default;
+        operator=(deferred_operation_state &&) noexcept
+            = default;
 
         /// Constructor from the deferred function
         /**
@@ -1165,7 +1163,8 @@ namespace futures::detail {
         void
         wait_for_parent() override {
             if constexpr (is_unwrap_and_continue_task<
-                              deferred_function_type>::value) {
+                              deferred_function_type>::value)
+            {
                 this->get_function().before_.wait();
             }
         }
@@ -1188,34 +1187,28 @@ namespace futures::detail {
 
     /// Check if type is an operation state
     template <typename>
-    struct is_operation_state : std::false_type
-    {};
+    struct is_operation_state : std::false_type {};
 
     template <typename... Args>
-    struct is_operation_state<operation_state<Args...>> : std::true_type
-    {};
+    struct is_operation_state<operation_state<Args...>> : std::true_type {};
 
     template <typename... Args>
     struct is_operation_state<deferred_operation_state<Args...>>
-        : std::true_type
-    {};
+        : std::true_type {};
 
     template <class T>
     constexpr bool is_operation_state_v = is_operation_state<T>::value;
 
     template <class T>
-    struct operation_state_options
-    {};
+    struct operation_state_options {};
 
     template <class R, class Options>
-    struct operation_state_options<operation_state<R, Options>>
-    {
+    struct operation_state_options<operation_state<R, Options>> {
         using type = Options;
     };
 
     template <class R, class Options>
-    struct operation_state_options<deferred_operation_state<R, Options>>
-    {
+    struct operation_state_options<deferred_operation_state<R, Options>> {
         using type = Options;
     };
 

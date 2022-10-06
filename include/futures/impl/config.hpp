@@ -34,6 +34,13 @@
 #endif
 
 /*
+ * Set boost/user if there's no boost
+ */
+#if defined FUTURES_USE_BUNDLED_ASIO && !defined BOOST_USER_CONFIG
+#    define BOOST_USER_CONFIG <futures/detail/bundled/boost/config/user.hpp>
+#endif
+
+/*
  * Define namespaces
  *
  * We raise and create aliases for the asio or boost asio namespaces,
@@ -54,9 +61,9 @@ namespace boost {
 
 // Identify if the library is header-only
 #ifndef FUTURES_HEADER_ONLY
-# ifndef FUTURES_SEPARATE_COMPILATION
-#   define FUTURES_HEADER_ONLY
-# endif
+#    ifndef FUTURES_SEPARATE_COMPILATION
+#        define FUTURES_HEADER_ONLY
+#    endif
 #endif
 
 /*

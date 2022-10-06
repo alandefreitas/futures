@@ -207,7 +207,7 @@ application::bundle_includes(
 
     // Iterate file looking for includes
     std::regex include_expression(
-        "(^|\n) *# *include *< *([a-zA-Z0-9_/\\. ]+) *>");
+        "(^|\n) *# *include *[<\"] *([a-zA-Z0-9_/\\. ]+) *[>\"]");
     auto search_begin(content.cbegin());
     std::smatch include_match;
 

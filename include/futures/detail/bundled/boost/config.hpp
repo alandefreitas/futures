@@ -19,7 +19,7 @@
 
 // if we don't have a user config, then use the default location:
 #if !defined(BOOST_USER_CONFIG) && !defined(BOOST_NO_USER_CONFIG)
-#  define BOOST_USER_CONFIG <boost/config/user.hpp>
+#  define BOOST_USER_CONFIG <futures/detail/bundled/boost/config/user.hpp>
 #if 0
 // For dependency trackers:
 #include <futures/detail/bundled/boost/config/user.hpp>
