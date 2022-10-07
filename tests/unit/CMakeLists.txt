@@ -78,6 +78,11 @@ macro(add_futures_test TEST_NAME)
             # Link with catch-main
             target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC ${LINK_LIBS} catch_main)
 
+            if (GCC)
+                # A GCC bug on some tests that conflict with boost.container
+                target_compile_options(ut_${TEST_NAME_VARIANT} INTERFACE -Wno-error=uninitialized -Wno-error=maybe-uninitialized)
+            endif()
+
             # Link futures
             if (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_asio)
                 target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_asio)

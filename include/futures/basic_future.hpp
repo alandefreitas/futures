@@ -16,7 +16,7 @@
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/utility/maybe_copyable.hpp>
-#include <futures/detail/utility/maybe_empty.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/future_state.hpp>
 #include <futures/detail/share_if_not_shared.hpp>

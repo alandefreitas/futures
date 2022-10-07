@@ -13,7 +13,7 @@
 #include <futures/futures.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>
-#include <futures/executor/detail/maybe_empty_executor.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <execution>
 #include <variant>
 
@@ -27,8 +27,7 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref for_each function
     class for_each_functor
-        : public unary_invoke_algorithm_functor<for_each_functor>
-    {
+        : public unary_invoke_algorithm_functor<for_each_functor> {
         friend unary_invoke_algorithm_functor<for_each_functor>;
 
         /// Internal class that takes care of the sorting tasks and its
@@ -52,11 +51,10 @@ namespace futures {
          * compared to the cost of the whole procedure and .
          */
         template <class Executor>
-        class sort_graph : public detail::maybe_empty_executor<Executor>
-        {
+        class sort_graph : public boost::empty_value<Executor> {
         public:
             explicit sort_graph(const Executor &ex)
-                : detail::maybe_empty_executor<Executor>(ex) {}
+                : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             void
@@ -64,15 +62,14 @@ namespace futures {
                 auto middle = p(first, last);
                 const bool too_small = middle == last;
                 constexpr bool cannot_parallelize
-                    = std::is_same_v<
-                          Executor,
-                          inline_executor> || is_forward_iterator_v<I>;
+                    = std::is_same_v<Executor, inline_executor>
+                      || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     std::for_each(first, last, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
                     auto rhs_task = futures::
-                        async(this->get_executor(), [this, p, middle, last, f] {
+                        async(boost::empty_value<Executor>::get(), [this, p, middle, last, f] {
                             launch_sort_tasks(p, middle, last, f);
                         });
 
@@ -134,7 +131,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
 
             >
@@ -175,7 +173,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR void

@@ -3,6 +3,11 @@
 #include <string>
 #include <catch2/catch.hpp>
 
+#if defined(__GNUG__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
     using namespace futures;
     SECTION("Empty conjunction") {
@@ -401,3 +406,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
         REQUIRE(c.get() == (1 + 2 + 3 + 4) * 2);
     }
 }
+
+#if defined(__GNUG__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif

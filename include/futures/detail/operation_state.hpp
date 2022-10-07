@@ -14,14 +14,14 @@
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/continuations_source.hpp>
-#include <futures/detail/maybe_empty_continuations_source.hpp>
-#include <futures/detail/maybe_empty_function.hpp>
-#include <futures/detail/maybe_empty_stop_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/thread/relocker.hpp>
 #include <futures/detail/traits/is_in_args.hpp>
+#include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
-#include <futures/executor/detail/maybe_empty_executor.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
+#include <futures/detail/deps/boost/mp11/list.hpp>
 #include <atomic>
 #include <future>
 #include <condition_variable>
@@ -681,59 +681,47 @@ namespace futures::detail {
      * std::allocator.
      */
     template <class R, class Options>
-    class operation_state
-        // base state
-        : public operation_state_base
-        // storage for the results
-        , private operation_state_storage<R>
-        // storage for the executor
-        , public conditional_executor<
-              Options::has_executor,
-              typename Options::executor_t>
-        // storage for the continuations
-        , public conditional_continuations_source<
-              Options::is_continuable,
-              continuations_source<Options::is_always_deferred>>
-        // storage for the stop token
-        , public conditional_stop_source<Options::is_stoppable, stop_source> {
+    class operation_state : public operation_state_base {
     protected:
         static_assert(
             !Options::is_shared,
             "The underlying operation state cannot be shared");
 
-        /**
-         * @name Private types
-         * @{
-         */
+        // Get type T if B is true (as a type), F otherwise
+        template <class B, class T, class F>
+        using constant_conditional_fn = std::conditional_t<B::value, T, F>;
 
-        /// Executor storage
-        using executor_base = conditional_executor<
-            Options::has_executor,
-            typename Options::executor_t>;
+        // Values we should store in the tuple with the members
+        using tuple_value_types = mp_transform<
+            constant_conditional_fn,
+            mp_list<
+                mp_bool<Options::has_executor>,
+                mp_bool<Options::is_continuable>,
+                mp_bool<Options::is_stoppable>,
+                mp_bool<true>>,
+            mp_list<
+                typename Options::executor_t,
+                continuations_source<Options::is_always_deferred>,
+                stop_source,
+                operation_state_storage<R>>,
+            mp_repeat_c<mp_list<boost::empty_init_t>, 4>>;
 
-        using executor_type = typename executor_base::value_type;
+        using layout_tuple_type = compressed_tuple_for_t<tuple_value_types>;
 
-        /// Continuations storage
-        using continuations_base = conditional_continuations_source<
-            Options::is_continuable,
-            continuations_source<Options::is_always_deferred>>;
-
-        using continuations_type = typename continuations_base::value_type;
-
-        /// Stop source storage
-        using stop_source_base
-            = conditional_stop_source<Options::is_stoppable, stop_source>;
-
-        using stop_source_type = typename stop_source_base::value_type;
+        using executor_type = typename layout_tuple_type::template value_type<0>;
+        using continuations_type = typename layout_tuple_type::
+            template value_type<1>;
+        using stop_source_type = typename layout_tuple_type::
+            template value_type<2>;
+        using storage_type = typename layout_tuple_type::template value_type<3>;
 
         using stop_token_type = std::conditional_t<
             Options::is_stoppable,
             stop_token,
-            detail::empty_value_type>;
+            boost::empty_init_t>;
 
-        /**
-         * @}
-         */
+        // State member objects represented as a layout with no empty types
+        layout_tuple_type layout_;
 
     public:
         /**
@@ -748,7 +736,7 @@ namespace futures::detail {
          */
         ~operation_state() override {
             if constexpr (Options::is_stoppable) {
-                this->get_stop_source().request_stop();
+                layout_.template get<stop_source_type>().request_stop();
             }
         };
 
@@ -771,8 +759,7 @@ namespace futures::detail {
          *  allocating pointers.
          */
         explicit operation_state(bool is_deferred)
-            : operation_state_base(is_deferred), executor_base(),
-              continuations_base(), stop_source_base() {}
+            : operation_state_base(is_deferred), layout_() {}
 
         /// Copy constructor
         operation_state(operation_state const &) = default;
@@ -804,7 +791,12 @@ namespace futures::detail {
          * same executor by default.
          */
         explicit operation_state(bool is_deferred, const executor_type &ex)
-            : operation_state_base(is_deferred), executor_base(ex) {}
+            : operation_state_base(is_deferred),
+              layout_(
+                  ex,
+                  continuations_type{},
+                  stop_source_type{},
+                  storage_type{}) {}
 
         /**
          * @}
@@ -829,10 +821,10 @@ namespace futures::detail {
             if (this->is_ready()) {
                 detail::throw_exception<promise_already_satisfied>();
             }
-            operation_state_storage<R>::set_value(std::forward<Args>(args)...);
+            get_storage().set_value(std::forward<Args>(args)...);
             this->mark_ready();
             if constexpr (Options::is_continuable) {
-                this->get_continuations_source().request_run();
+                layout_.template get<continuations_type>().request_run();
             }
         }
 
@@ -848,7 +840,7 @@ namespace futures::detail {
         set_exception(std::exception_ptr except) {
             mark_exception(std::move(except));
             if constexpr (Options::is_continuable) {
-                this->get_continuations_source().request_run();
+                layout_.template get<continuations_type>().request_run();
             }
         }
 
@@ -885,13 +877,13 @@ namespace futures::detail {
                     if constexpr (std::is_void_v<R>) {
                         std::invoke(
                             std::forward<Fn>(fn),
-                            this->get_stop_source().get_token(),
+                            layout_.template get<stop_source_type>().get_token(),
                             std::forward<Args>(args)...);
                         this->set_value();
                     } else {
                         this->set_value(std::invoke(
                             std::forward<Fn>(fn),
-                            this->get_stop_source().get_token(),
+                            layout_.template get<stop_source_type>().get_token(),
                             std::forward<Args>(args)...));
                     }
                 }
@@ -942,7 +934,56 @@ namespace futures::detail {
             if (this->failed()) {
                 this->throw_internal_exception();
             }
-            return operation_state_storage<R>::get();
+            return get_storage().get();
+        }
+
+        /**
+         * @}
+         */
+
+        /**
+         * @name Observers
+         * @{
+         */
+
+        storage_type &
+        get_storage() {
+            return layout_.template get<storage_type>();
+        }
+
+        storage_type const &
+        get_storage() const {
+            return layout_.template get<storage_type>();
+        }
+
+        executor_type &
+        get_executor() {
+            return layout_.template get<executor_type>();
+        }
+
+        executor_type const &
+        get_executor() const {
+            return layout_.template get<executor_type>();
+        }
+
+        continuations_type &
+        get_continuations_source() {
+            return layout_.template get<continuations_type>();
+        }
+
+        continuations_type const &
+        get_continuations_source() const {
+            return layout_.template get<continuations_type>();
+        }
+
+        stop_source_type &
+        get_stop_source() {
+            return layout_.template get<stop_source_type>();
+        }
+
+        stop_source_type const &
+        get_stop_source() const {
+            return layout_.template get<stop_source_type>();
         }
 
         /**
@@ -1003,22 +1044,12 @@ namespace futures::detail {
     template <class R, class Options>
     class deferred_operation_state
         : public operation_state<R, Options>
-        , private maybe_empty_function<typename Options::function_t> {
-    private:
-        /**
-         * @name Private types
-         */
+        , private boost::empty_value<typename Options::function_t, 4> {
 
-        /// Storage for the deferred function
-        /**
-         * Deferred operation states need to store their tasks because
-         * it's not being launched immediately.
-         */
-        using deferred_function_base = maybe_empty_function<
-            typename Options::function_t>;
-
-        using deferred_function_type = typename deferred_function_base::
-            value_type;
+        // Storage for the deferred function
+        using deferred_function_base = boost::
+            empty_value<typename Options::function_t, 4>;
+        using deferred_function_type = typename deferred_function_base::type;
 
     public:
         /**
@@ -1066,7 +1097,7 @@ namespace futures::detail {
             const typename operation_state<R, Options>::executor_type &ex,
             Fn &&f)
             : operation_state<R, Options>(true, ex),
-              deferred_function_base(std::forward<Fn>(f)) {}
+              deferred_function_base(boost::empty_init, std::forward<Fn>(f)) {}
 
         /// Constructor from the deferred function
         /**
@@ -1095,9 +1126,11 @@ namespace futures::detail {
             Fn &&f,
             Args &&...args)
             : operation_state<R, Options>(true, ex),
-              deferred_function_base(bind_deferred_state_args<Fn, Args...>(
-                  std::forward<Fn>(f),
-                  std::forward<Args>(args)...)) {}
+              deferred_function_base(
+                  boost::empty_init,
+                  bind_deferred_state_args<Fn, Args...>(
+                      std::forward<Fn>(f),
+                      std::forward<Args>(args)...)) {}
 
         /**
          * @}
@@ -1178,6 +1211,25 @@ namespace futures::detail {
             std::swap(
                 static_cast<deferred_function_base &>(*this),
                 static_cast<deferred_function_base &>(other));
+        }
+
+        /**
+         * @}
+         */
+
+        /**
+         * @name Observers
+         * @{
+         */
+
+        deferred_function_type &
+        get_function() {
+            return deferred_function_base::get();
+        }
+
+        deferred_function_type const &
+        get_function() const {
+            return deferred_function_base::get();
         }
 
         /**

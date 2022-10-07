@@ -16,7 +16,7 @@
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/futures.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
-#include <futures/executor/detail/maybe_empty_executor.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <execution>
 #include <variant>
 
@@ -35,11 +35,11 @@ namespace futures {
         friend unary_invoke_algorithm_functor<all_of_functor>;
 
         template <class Executor>
-        class all_of_graph : public detail::maybe_empty_executor<Executor>
+        class all_of_graph : public boost::empty_value<Executor>
         {
         public:
             explicit all_of_graph(const Executor &ex)
-                : detail::maybe_empty_executor<Executor>(ex) {}
+                : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             bool
@@ -58,7 +58,7 @@ namespace futures {
                         bool,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            this->get_executor(),
+                            boost::empty_value<Executor>::get(),
                             [this, p, middle, last, f] {
                         return launch_all_of_tasks(p, middle, last, f);
                             });

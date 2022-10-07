@@ -8,9 +8,9 @@
 #ifndef FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 #define FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 
-#include <futures/detail/allocator/maybe_empty_allocator.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/deps/boost/core/allocator_access.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <atomic>
 #include <memory>
 
@@ -38,12 +38,41 @@ namespace futures::detail {
     /// @tparam Allocator Node allocator
     template <class T, class Allocator = std::allocator<T>>
     class atomic_queue
-        : private maybe_empty_node_allocator<
-              boost::allocator_rebind_t<Allocator, lock_free_queue_node<T>>>
-        , private maybe_empty_allocator<
-              boost::allocator_rebind_t<Allocator, T>> {
+        : private boost::empty_value<
+              boost::allocator_rebind_t<Allocator, lock_free_queue_node<T>>,
+              0>
+        , private boost::empty_value<boost::allocator_rebind_t<Allocator, T>, 1> {
+
         using node = lock_free_queue_node<T>;
         using node_allocator_type = boost::allocator_rebind_t<Allocator, node>;
+        using empty_node_allocator_type = boost::
+            empty_value<node_allocator_type, 0>;
+
+        using value_type = T;
+        using value_type_allocator_type = boost::
+            allocator_rebind_t<Allocator, value_type>;
+        using empty_value_type_allocator_type = boost::
+            empty_value<value_type_allocator_type, 1>;
+
+        node_allocator_type &
+        get_node_allocator() {
+            return empty_node_allocator_type::get();
+        }
+
+        node_allocator_type const &
+        get_node_allocator() const {
+            return empty_node_allocator_type::get();
+        }
+
+        value_type_allocator_type &
+        get_value_allocator() {
+            return value_type_allocator_type::get();
+        }
+
+        value_type_allocator_type const &
+        get_value_allocator() const {
+            return value_type_allocator_type::get();
+        }
 
     public:
         using allocator_type = boost::allocator_rebind_t<Allocator, T>;
@@ -59,10 +88,8 @@ namespace futures::detail {
         }
 
         explicit atomic_queue(const Allocator& alloc = std::allocator<T>{})
-            : maybe_empty_node_allocator<
-                boost::allocator_rebind_t<Allocator, node>>(alloc),
-              maybe_empty_allocator<boost::allocator_rebind_t<Allocator, T>>(
-                  alloc) {
+            : empty_node_allocator_type(boost::empty_init, alloc),
+              empty_value_type_allocator_type(boost::empty_init, alloc) {
             node* dummy_node_ptr = this->get_node_allocator().allocate(1);
             boost::
                 allocator_construct(this->get_node_allocator(), dummy_node_ptr);
@@ -177,7 +204,6 @@ namespace futures::detail {
                 }
             }
         }
-
 
         std::atomic<node*> head_;
         std::atomic<node*> tail_;

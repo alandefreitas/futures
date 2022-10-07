@@ -29,11 +29,11 @@ namespace futures {
         friend unary_invoke_algorithm_functor<any_of_functor>;
 
         template <class Executor>
-        class any_of_graph : public detail::maybe_empty_executor<Executor>
+        class any_of_graph : public boost::empty_value<Executor>
         {
         public:
             explicit any_of_graph(const Executor &ex)
-                : detail::maybe_empty_executor<Executor>(ex) {}
+                : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             bool
@@ -52,7 +52,7 @@ namespace futures {
                         bool,
                         future_options<executor_opt<Executor>, continuable_opt>>
                         rhs_task = futures::async(
-                            this->get_executor(),
+                            boost::empty_value<Executor>::get(),
                             [this, p, middle, last, f] {
                         return launch_any_of_tasks(p, middle, last, f);
                             });

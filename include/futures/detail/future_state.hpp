@@ -8,11 +8,11 @@
 #ifndef FUTURES_DETAIL_FUTURE_STATE_HPP
 #define FUTURES_DETAIL_FUTURE_STATE_HPP
 
-#include <futures/detail/utility/maybe_empty.hpp>
-#include <futures/detail/utility/byte.hpp>
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/shared_state.hpp>
+#include <futures/detail/utility/byte.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -24,8 +24,7 @@ namespace futures::detail {
 
     /// Disambiguation tags that can be passed to the constructors future_state
     template <class T>
-    struct in_place_type_t
-    {
+    struct in_place_type_t {
         explicit in_place_type_t() = default;
     };
     template <class T>
@@ -52,8 +51,7 @@ namespace futures::detail {
      *
      */
     template <class R, class OpState>
-    class future_state
-    {
+    class future_state {
     private:
         /**
          * @name Private types
@@ -62,7 +60,7 @@ namespace futures::detail {
 
         static_assert(is_operation_state_v<OpState>);
 
-        using empty_t = empty_value_type;
+        using empty_t = boost::empty_init_t;
         using operation_storage_t = operation_state_storage<R>;
         using shared_storage_t = std::shared_ptr<operation_storage_t>;
         using operation_state_t = OpState;
@@ -94,7 +92,7 @@ namespace futures::detail {
                 this->empty_ = empty_t{};
             }
 
-            ~aligned_storage_t() {
+            ~aligned_storage_t(){
                 // needs to know which member is active, only possible in
                 // the union-like class future_state
                 // the whole union occupies max({Ts}...)

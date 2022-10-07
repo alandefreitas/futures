@@ -8,7 +8,7 @@
 #ifndef FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 #define FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
-#include <futures/detail/utility/maybe_empty.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <type_traits>
 
 namespace futures::detail {

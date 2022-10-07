@@ -12,7 +12,7 @@
 #include <futures/executor/inline_executor.hpp>
 #include <futures/await.hpp>
 #include <futures/basic_future.hpp>
-#include <futures/detail/utility/maybe_empty.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/future_launcher.hpp>
 #include <futures/detail/traits/is_future_options.hpp>
 #include <futures/detail/traits/launch_result.hpp>

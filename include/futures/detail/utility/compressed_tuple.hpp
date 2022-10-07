@@ -50,30 +50,58 @@ namespace futures::detail {
     // a compressed tuple that needs no storage for empty type
     template <class... Types>
     class compressed_tuple : public tuple_base<Types...> {
-        // Types
-        using tuple_base = mp_list_inherit<empty_type_list<Types...>>;
+        // The empty tuple we actually store
         using empty_types = empty_type_list<Types...>;
-        using concrete_types = mp_list<Types...>;
+
+        // The value types the tuple represents
+        using value_types = mp_list<Types...>;
+
+        // Get the i-th empty type
+        template <std::size_t I>
+        using empty_type = mp_at_c<empty_types, I>;
 
     public:
+        // Get the i-th value type
+        template <std::size_t I>
+        using value_type = mp_at_c<value_types, I>;
+
+        // Get index of a given type
+        template <class T>
+        static constexpr std::size_t index_of = mp_find<value_types, T>::value;
+
+        // Check if this tuple holds the given alternative
+        template <class T>
+        static constexpr bool holds = index_of<T> != compressed_tuple::size();
+
         // Construct from one arg per param
         template <class... UTypes>
         constexpr compressed_tuple(UTypes&&... args)
-            : tuple_base(std::forward<UTypes>(args)...) {}
+            : tuple_base<Types...>(std::forward<UTypes>(args)...) {}
 
         // get i-th element
         template <std::size_t I>
-        constexpr mp_at_c<concrete_types, I>&
+        constexpr value_type<I>&
         get(mp_size_t<I> = {}) noexcept {
-            using empty_base = mp_at_c<empty_types, I>;
-            return this->empty_base::get();
+            return empty_type<I>::get();
         }
 
         template <std::size_t I>
-        constexpr const mp_at_c<concrete_types, I>&
+        constexpr const value_type<I>&
         get(mp_size_t<I> = {}) const noexcept {
-            using empty_base = mp_at_c<empty_types, I>;
-            return this->empty_base::get();
+            return empty_type<I>::get();
+        }
+
+        // get element of type T
+        template <class T>
+        constexpr T&
+        get(mp_identity<T> = {}) noexcept {
+            return empty_type<index_of<T>>::get();
+        }
+
+        template <class T>
+        constexpr const T&
+        get(mp_identity<T> = {}) const noexcept {
+            return empty_type<index_of<T>>::get();
         }
 
         // tuple size
@@ -83,6 +111,19 @@ namespace futures::detail {
         }
     };
 
+    // Create compressed tuple for a list of types
+    template <class L>
+    struct compressed_tuple_for {};
+
+    template <class... Types>
+    struct compressed_tuple_for<mp_list<Types...>> {
+        using type = compressed_tuple<Types...>;
+    };
+
+    template <class L>
+    using compressed_tuple_for_t = typename compressed_tuple_for<L>::type;
+
+    // Make tuple
     template <class T>
     struct unwrap_refwrapper {
         using type = T;

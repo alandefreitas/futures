@@ -3,6 +3,11 @@
 #include <string>
 #include <catch2/catch.hpp>
 
+#if defined(__GNUG__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
     using namespace futures;
 
@@ -462,3 +467,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
         }
     }
 }
+
+#if defined(__GNUG__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif

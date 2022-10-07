@@ -10,9 +10,9 @@
 
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
-#include <futures/detail/utility/maybe_empty.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/deps/boost/core/allocator_access.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -64,9 +64,14 @@ namespace futures::detail {
     /// @tparam Args Argument types to run the task callable
     template <class Fn, class Allocator, class Options, class R, class... Args>
     class shared_task : public shared_task_base<R, Options, Args...> {
+
         using function_type = Fn;
         using allocator_type = boost::allocator_rebind_t<Allocator, shared_task>;
+
         compressed_tuple<function_type, allocator_type> values_;
+
+        using stop_source_base =
+            typename shared_task_base<R, Options, Args...>::stop_source_type;
 
         function_type &
         get_function() {
@@ -78,12 +83,7 @@ namespace futures::detail {
             return values_.get(mp_size_t<1>{});
         }
 
-        using stop_source_base = detail::maybe_empty<
-            std::conditional_t<
-                Options::is_stoppable,
-                stop_source,
-                detail::empty_value_type>,
-            0>;
+
 
     public:
         /// Construct a task object for the specified allocator and
@@ -132,7 +132,7 @@ namespace futures::detail {
                 std::move(this->get_function()));
         }
 
-        typename stop_source_base::value_type
+        stop_source_base
         get_stop_source() {
             return stop_source_base::get();
         }
