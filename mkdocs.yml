@@ -53,7 +53,9 @@ theme:
 
 plugins:
   - search
-  - mermaid2
+  - mermaid2:
+      arguments:
+          theme: 'neutral'
   - macros:
       module_name: docs/macros
       include_dir: ..

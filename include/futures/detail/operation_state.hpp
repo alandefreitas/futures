@@ -708,13 +708,6 @@ namespace futures::detail {
 
         using layout_tuple_type = compressed_tuple_for_t<tuple_value_types>;
 
-        using executor_type = typename layout_tuple_type::template value_type<0>;
-        using continuations_type = typename layout_tuple_type::
-            template value_type<1>;
-        using stop_source_type = typename layout_tuple_type::
-            template value_type<2>;
-        using storage_type = typename layout_tuple_type::template value_type<3>;
-
         using stop_token_type = std::conditional_t<
             Options::is_stoppable,
             stop_token,
@@ -725,7 +718,25 @@ namespace futures::detail {
 
     public:
         /**
+         * @name Public types
+         * @{
+         */
+
+        using value_type = R;
+        using executor_type = typename layout_tuple_type::template value_type<0>;
+        using continuations_type = typename layout_tuple_type::
+            template value_type<1>;
+        using stop_source_type = typename layout_tuple_type::
+            template value_type<2>;
+        using storage_type = typename layout_tuple_type::template value_type<3>;
+
+        /**
+         * @}
+         */
+
+        /**
          * @name Constructors
+         * @{
          */
 
         /// Destructor

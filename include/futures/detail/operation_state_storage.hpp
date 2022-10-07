@@ -9,6 +9,7 @@
 #define FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <optional>
 #include <type_traits>
 
 namespace futures::detail {
@@ -22,8 +23,7 @@ namespace futures::detail {
      * When the shared state is a reference, we store pointers internally.
      */
     template <typename R, class Enable = void>
-    class operation_state_storage
-    {};
+    class operation_state_storage {};
 
     /// Operation state storage for void
     /**
@@ -33,8 +33,7 @@ namespace futures::detail {
      * @tparam R Operation state value type
      */
     template <typename R>
-    class operation_state_storage<R, std::enable_if_t<std::is_void_v<R>>>
-    {
+    class operation_state_storage<R, std::enable_if_t<std::is_void_v<R>>> {
     public:
         operation_state_storage() = default;
 
@@ -62,8 +61,7 @@ namespace futures::detail {
             !std::is_void_v<R> &&
             std::is_reference_v<R>
             // clang-format on
-            >>
-    {
+            >> {
     public:
         operation_state_storage() = default;
 
@@ -103,8 +101,7 @@ namespace futures::detail {
             !std::is_reference_v<R> &&
             std::is_trivial_v<R>
             // clang-format on
-            >>
-    {
+            >> {
     public:
         operation_state_storage() = default;
 
@@ -149,87 +146,30 @@ namespace futures::detail {
             !std::is_reference_v<R> &&
             !std::is_trivial_v<R>
             // clang-format on
-            >>
-    {
+            >> {
+        std::optional<R> data_{};
+
     public:
-        ~operation_state_storage() {
-            if (has_value_) {
-                get().~R();
-            }
-        }
-
         operation_state_storage() = default;
-
-        operation_state_storage(const operation_state_storage& other) {
-            if (other.has_value_) {
-                set_value(other.get());
-            }
-        }
-
-        operation_state_storage(operation_state_storage&& other) noexcept {
-            if (other.has_value_) {
-                set_value(std::move(other.get()));
-            }
-        }
 
         template <class... Args>
         explicit operation_state_storage(Args&&... args) {
             set_value(std::forward<Args>(args)...);
         }
 
-        operation_state_storage&
-        operator=(const operation_state_storage& other) {
-            destroy();
-            if (other.has_value_) {
-                set_value(other.get());
-            }
-        }
-
-        operation_state_storage&
-        operator=(operation_state_storage&& other) noexcept {
-            destroy();
-            if (other.has_value_) {
-                set_value(other.get());
-            }
-        }
-
         template <class... Args>
         void
         set_value(Args&&... args) {
-            if (has_value_) {
-                destroy();
-            }
-            ::new (&data_.value_) R(std::forward<Args>(args)...);
-            has_value_ = true;
+            data_.emplace(std::forward<Args>(args)...);
         }
 
         R&
         get() {
-            if (has_value_) {
-                return data_.value_;
+            if (data_) {
+                return *data_;
             }
             detail::throw_exception<promise_uninitialized>();
         }
-
-    private:
-        void
-        destroy() {
-            if (has_value_) {
-                get().~R();
-                has_value_ = false;
-            }
-        }
-
-        union aligned_storage
-        {
-            R value_;
-
-            aligned_storage() {}
-            ~aligned_storage() {}
-        };
-
-        aligned_storage data_{};
-        bool has_value_{ false };
     };
 
 } // namespace futures::detail

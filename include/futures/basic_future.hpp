@@ -14,16 +14,16 @@
 #include <futures/traits/is_future.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
-#include <futures/detail/exception/throw_exception.hpp>
-#include <futures/detail/utility/maybe_copyable.hpp>
-#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/continuations_source.hpp>
-#include <futures/detail/future_state.hpp>
+#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/is_executor_then_function.hpp>
 #include <futures/detail/traits/is_type_template_in_args.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
+#include <futures/detail/utility/maybe_copyable.hpp>
+#include <futures/detail/variant_state.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <functional>
 #include <utility>
 #include <shared_mutex>
@@ -138,7 +138,7 @@ namespace futures {
          * The most efficient alternative will be chosen according to how
          * the future is constructed.
          */
-        using future_state_type = detail::future_state<R, operation_state_type>;
+        using future_state_type = detail::variant_state<R, operation_state_type>;
 
 
         /// Determine the base operation state type
