@@ -1,8 +1,6 @@
-#include <array>
-
-#include <catch2/catch.hpp>
-
 #include <futures/futures.hpp>
+#include <array>
+#include <catch2/catch.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Make ready") {
     using namespace futures;
@@ -26,7 +24,8 @@ TEST_CASE(TEST_CASE_PREFIX "Make ready") {
     }
 
     SECTION("Exception ptr") {
-        auto f = make_exceptional_future<int>(std::make_exception_ptr(std::logic_error("error")));
+        auto f = make_exceptional_future<int>(
+            std::make_exception_ptr(std::logic_error("error")));
         REQUIRE(is_ready(f));
         REQUIRE_THROWS(f.get());
     }

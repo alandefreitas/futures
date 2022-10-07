@@ -30,8 +30,7 @@ namespace futures {
     using is_weakly_incrementable = __see_below__;
 #else
     template <class I, class = void>
-    struct is_weakly_incrementable : std::false_type
-    {};
+    struct is_weakly_incrementable : std::false_type {};
 
     template <class I>
     struct is_weakly_incrementable<
@@ -48,11 +47,10 @@ namespace futures {
               is_movable<I>,
               std::is_same<decltype(++std::declval<I>()), I&>
               // clang-format on
-              >
-    {};
+              > {};
 #endif
     template <class I>
-    bool constexpr is_weakly_incrementable_v = is_weakly_incrementable<I>::value;
+    constexpr bool is_weakly_incrementable_v = is_weakly_incrementable<I>::value;
 
     /** @}*/
     /** @}*/

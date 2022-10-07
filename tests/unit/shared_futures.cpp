@@ -15,7 +15,7 @@ TEST_CASE(TEST_CASE_PREFIX "Shared futures") {
         REQUIRE(f2.get() == 1);
     }
     SECTION("Shared stop token") {
-        shared_jcfuture<int> f1 = async([](const stop_token &st) {
+        shared_jcfuture<int> f1 = async([](stop_token const &st) {
                                       int i = 0;
                                       while (!st.stop_requested()) {
                                           ++i;
@@ -32,7 +32,7 @@ TEST_CASE(TEST_CASE_PREFIX "Shared futures") {
         REQUIRE(f2.get() > 0);
     }
     SECTION("Shared continuation") {
-        shared_jcfuture<int> f1 = async([](const stop_token &st) {
+        shared_jcfuture<int> f1 = async([](stop_token const &st) {
                                       int i = 0;
                                       while (!st.stop_requested()) {
                                           ++i;

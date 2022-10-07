@@ -31,8 +31,7 @@ namespace futures {
     using is_indirectly_unary_invocable = __see_below__;
 #else
     template <class F, class I, class = void>
-    struct is_indirectly_unary_invocable : std::false_type
-    {};
+    struct is_indirectly_unary_invocable : std::false_type {};
 
     template <class F, class I>
     struct is_indirectly_unary_invocable<
@@ -44,11 +43,10 @@ namespace futures {
             std::is_copy_constructible_v<F> &&
             std::is_invocable_v<F&, iter_value_t<I>&>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class F, class I>
-    bool constexpr is_indirectly_unary_invocable_v
+    constexpr bool is_indirectly_unary_invocable_v
         = is_indirectly_unary_invocable<F, I>::value;
     /** @}*/
     /** @}*/

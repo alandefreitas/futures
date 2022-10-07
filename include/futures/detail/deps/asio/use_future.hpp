@@ -12,11 +12,11 @@
 
 // Include
 #if defined(FUTURES_USE_STANDALONE_ASIO)
-#include <asio/use_future.hpp>
+#    include <asio/use_future.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)
-#include <boost/asio/use_future.hpp>
+#    include <boost/asio/use_future.hpp>
 #else
-#include <futures/detail/bundled/boost/asio/use_future.hpp>
+#    include <futures/detail/bundled/boost/asio/use_future.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_ASIO_USE_FUTURE_HPP

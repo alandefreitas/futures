@@ -14,14 +14,12 @@
 namespace futures::detail {
     /// Transform all types in a tuple
     template <class L, template <class...> class P>
-    struct tuple_type_transform
-    {
+    struct tuple_type_transform {
         using type = std::tuple<>;
     };
 
     template <class... Tn, template <class...> class P>
-    struct tuple_type_transform<std::tuple<Tn...>, P>
-    {
+    struct tuple_type_transform<std::tuple<Tn...>, P> {
         using type = std::tuple<typename P<Tn>::type...>;
     };
 

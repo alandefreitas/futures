@@ -29,8 +29,7 @@ namespace futures {
     using is_default_initializable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_default_initializable : std::false_type
-    {};
+    struct is_default_initializable : std::false_type {};
 
     template <class T>
     struct is_default_initializable<
@@ -40,11 +39,10 @@ namespace futures {
             std::enable_if_t<is_constructible_from_v<T>>,
             decltype(T{})
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_default_initializable_v = is_default_initializable<
+    constexpr bool is_default_initializable_v = is_default_initializable<
         T>::value;
     /** @}*/
     /** @}*/

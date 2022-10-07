@@ -8,12 +8,12 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <numeric>
 #include <variant>
@@ -35,8 +35,7 @@ namespace futures {
      * This includes algorithms such as reduce and accumulate.
      */
     template <class Derived>
-    class binary_invoke_algorithm_functor
-    {
+    class binary_invoke_algorithm_functor {
     public:
         /// Complete overload
         template <
@@ -59,11 +58,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+        operator()(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
@@ -74,13 +74,7 @@ namespace futures {
                     i,
                     std::move(f));
             } else {
-                return Derived().run(
-                    ex,
-                    p,
-                    first,
-                    last,
-                    i,
-                    std::move(f));
+                return Derived().run(ex, p, first, last, i, std::move(f));
             }
         }
 
@@ -103,11 +97,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, I first, S last, Fun f = std::plus<>())
+        operator()(E const &ex, P p, I first, S last, Fun f = std::plus<>())
             const {
             if (first == last) {
                 return iter_value_t<I>{};
@@ -122,13 +117,8 @@ namespace futures {
                     *first,
                     std::move(f));
             } else {
-                return Derived().run(
-                    ex,
-                    p,
-                    std::next(first),
-                    last,
-                    *first,
-                    std::move(f));
+                return Derived()
+                    .run(ex, p, std::next(first), last, *first, std::move(f));
             }
         }
 
@@ -154,11 +144,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &, P p, I first, S last, T i, Fun f = std::plus<>())
+        operator()(E const &, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -200,11 +191,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &, P p, I first, S last, Fun f = std::plus<>())
+        operator()(E const &, P p, I first, S last, Fun f = std::plus<>())
             const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -242,11 +234,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
+        operator()(E const &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -278,11 +271,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, R &&r, Fun f = std::plus<>()) const {
+        operator()(E const &ex, P p, R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -307,10 +301,11 @@ namespace futures {
             ,
             std::enable_if_t<
                 // clang-format on
-                is_partitioner_v<
-                    P,
-                    I,
-                    S> && is_input_iterator_v<I> && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T> && is_indirectly_binary_invocable_v<Fun, I, I> && std::is_copy_constructible_v<Fun>
+                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                    && is_sentinel_for_v<S, I>
+                    && std::is_same_v<iter_value_t<I>, T>
+                    && is_indirectly_binary_invocable_v<Fun, I, I>
+                    && std::is_copy_constructible_v<Fun>
                 // clang-format off
                 , int> = 0
 #endif
@@ -353,7 +348,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -392,7 +388,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -431,7 +428,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -472,11 +470,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, I first, S last, T i, Fun f = std::plus<>())
+        operator()(E const &ex, I first, S last, T i, Fun f = std::plus<>())
             const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -514,11 +513,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, I first, S last, Fun f = std::plus<>()) const {
+        operator()(E const &ex, I first, S last, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -553,11 +553,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, R &&r, T i, Fun f = std::plus<>()) const {
+        operator()(E const &ex, R &&r, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -592,11 +593,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, R &&r, Fun f = std::plus<>()) const {
+        operator()(E const &ex, R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -631,7 +633,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -671,7 +674,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -708,7 +712,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -745,7 +750,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)

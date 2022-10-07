@@ -12,16 +12,14 @@
 
 namespace futures::detail {
     template <class T, class U, class = void>
-    struct has_same_type_member : std::false_type
-    {};
+    struct has_same_type_member : std::false_type {};
 
     template <class T, class U>
     struct has_same_type_member<
         T,
         U,
         std::void_t<typename T::type, typename U::type>>
-        : std::is_same<typename T::type, typename U::type>
-    {};
+        : std::is_same<typename T::type, typename U::type> {};
 
     template <class T, class U>
     constexpr bool has_same_type_member_v = has_same_type_member<T, U>::value;

@@ -8,10 +8,10 @@
 #ifndef FUTURES_ALGORITHM_ANY_OF_HPP
 #define FUTURES_ALGORITHM_ANY_OF_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <variant>
 
@@ -24,26 +24,24 @@ namespace futures {
      */
 
     /// Functor representing the overloads for the @ref any_of function
-    class any_of_functor : public unary_invoke_algorithm_functor<any_of_functor>
-    {
+    class any_of_functor
+        : public unary_invoke_algorithm_functor<any_of_functor> {
         friend unary_invoke_algorithm_functor<any_of_functor>;
 
         template <class Executor>
-        class any_of_graph : public boost::empty_value<Executor>
-        {
+        class any_of_graph : public boost::empty_value<Executor> {
         public:
-            explicit any_of_graph(const Executor &ex)
+            explicit any_of_graph(Executor const &ex)
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             bool
             launch_any_of_tasks(P p, I first, S last, Fun f) {
                 auto middle = p(first, last);
-                const bool too_small = middle == last;
+                bool const too_small = middle == last;
                 constexpr bool cannot_parallelize
-                    = std::is_same_v<
-                          Executor,
-                          inline_executor> || is_forward_iterator_v<I>;
+                    = std::is_same_v<Executor, inline_executor>
+                      || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     return std::any_of(first, last, f);
                 } else {
@@ -119,7 +117,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
@@ -161,11 +160,12 @@ namespace futures {
                 is_indirectly_unary_invocable_v<Fun, I> &&
                 std::is_copy_constructible_v<Fun>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
-        run(const E &ex, P p, I first, S last, Fun f) const {
+        run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 return inline_any_of(first, last, f);
             } else {

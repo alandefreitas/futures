@@ -24,20 +24,17 @@ namespace futures {
 
     /// Customization point to determine if a type is a future type
     template <typename>
-    struct is_future : std::false_type
-    {};
+    struct is_future : std::false_type {};
 
     /// Customization point to determine if a type is a future type
     /// (specialization for std::future<T>)
     template <typename T>
-    struct is_future<std::future<T>> : std::true_type
-    {};
+    struct is_future<std::future<T>> : std::true_type {};
 
     /// Customization point to determine if a type is a future type
     /// (specialization for std::shared_future<T>)
     template <typename T>
-    struct is_future<std::shared_future<T>> : std::true_type
-    {};
+    struct is_future<std::shared_future<T>> : std::true_type {};
 
     /// Customization point to determine if a type is a future type as a
     /// bool value
@@ -46,8 +43,7 @@ namespace futures {
 
     /// Customization point to determine if a type is a shared future type
     template <typename>
-    struct has_ready_notifier : std::false_type
-    {};
+    struct has_ready_notifier : std::false_type {};
 
     /// Customization point to determine if a type is a shared future type
     template <class T>
@@ -55,14 +51,12 @@ namespace futures {
 
     /// Customization point to determine if a type is a shared future type
     template <typename>
-    struct is_shared_future : std::false_type
-    {};
+    struct is_shared_future : std::false_type {};
 
     /// Customization point to determine if a type is a shared future
     /// type (specialization for std::shared_future<T>)
     template <typename T>
-    struct is_shared_future<std::shared_future<T>> : std::true_type
-    {};
+    struct is_shared_future<std::shared_future<T>> : std::true_type {};
 
     /// Customization point to determine if a type is a shared future type
     template <class T>
@@ -71,8 +65,7 @@ namespace futures {
     /// Customization point to define future as supporting lazy
     /// continuations
     template <typename>
-    struct is_continuable : std::false_type
-    {};
+    struct is_continuable : std::false_type {};
 
     /// Customization point to define future as supporting lazy
     /// continuations
@@ -81,8 +74,7 @@ namespace futures {
 
     /// Customization point to define future as stoppable
     template <typename>
-    struct is_stoppable : std::false_type
-    {};
+    struct is_stoppable : std::false_type {};
 
     /// Customization point to define future as stoppable
     template <class T>
@@ -90,8 +82,7 @@ namespace futures {
 
     /// Customization point to define future having a common stop token
     template <typename>
-    struct has_stop_token : std::false_type
-    {};
+    struct has_stop_token : std::false_type {};
 
     /// Customization point to define future having a common stop token
     template <class T>
@@ -103,8 +94,7 @@ namespace futures {
      * at compile time whether they can be applied.
      */
     template <typename>
-    struct is_always_deferred : std::false_type
-    {};
+    struct is_always_deferred : std::false_type {};
 
     /// Customization point to define future as always deferred
     template <class T>
@@ -112,8 +102,7 @@ namespace futures {
 
     /// Determine if a future type has an executor
     template <typename>
-    struct has_executor : std::false_type
-    {};
+    struct has_executor : std::false_type {};
 
     /// Determine if a future type has an executor
     template <class T>

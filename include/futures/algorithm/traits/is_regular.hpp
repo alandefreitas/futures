@@ -30,8 +30,7 @@ namespace futures {
     using is_regular = __see_below__;
 #else
     template <class T, class = void>
-    struct is_regular : std::false_type
-    {};
+    struct is_regular : std::false_type {};
 
     template <class T>
     struct is_regular<
@@ -41,11 +40,10 @@ namespace futures {
             is_semiregular_v<T> &&
             is_equality_comparable_v<T>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_regular_v = is_regular<T>::value;
+    constexpr bool is_regular_v = is_regular<T>::value;
 
     /** @}*/
     /** @}*/

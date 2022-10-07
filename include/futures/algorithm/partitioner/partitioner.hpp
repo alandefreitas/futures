@@ -37,8 +37,7 @@ namespace futures {
     /// a very small grain size might be appropriate if the operation is very
     /// expensive. Some algorithms, such as a binary search, might naturally
     /// adjust this suggestion so that the result makes sense.
-    class halve_partitioner
-    {
+    class halve_partitioner {
         std::size_t min_grain_size_;
 
     public:
@@ -69,8 +68,7 @@ namespace futures {
     /// This partitioner splits the ranges until it identifies we are not moving
     /// to new threads. Apart from that, it behaves as a halve_partitioner,
     /// splitting the range up to a minimum grain size.
-    class thread_partitioner
-    {
+    class thread_partitioner {
         std::size_t min_grain_size_;
         std::size_t num_threads_{ hardware_concurrency() };
         std::thread::id last_thread_id_{};
@@ -86,7 +84,7 @@ namespace futures {
                 return last;
             }
             std::thread::id current_thread_id = std::this_thread::get_id();
-            const bool threads_changed = current_thread_id != last_thread_id_;
+            bool const threads_changed = current_thread_id != last_thread_id_;
             if (threads_changed) {
                 last_thread_id_ = current_thread_id;
                 num_threads_ += 1;
@@ -135,9 +133,8 @@ namespace futures {
     template <
         class I,
         class S,
-        std::enable_if_t<
-            is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
-            int> = 0>
+        std::enable_if_t<is_input_iterator_v<I> && is_sentinel_for_v<S, I>, int>
+        = 0>
     default_partitioner
     make_default_partitioner(I first, S last) {
         return make_default_partitioner(std::distance(first, last));
@@ -172,13 +169,11 @@ namespace futures {
 
     /// Determine if P is a valid partitioner for the range R
     template <class T, class R, typename = void>
-    struct is_range_partitioner : std::false_type
-    {};
+    struct is_range_partitioner : std::false_type {};
 
     template <class T, class R>
     struct is_range_partitioner<T, R, std::enable_if_t<is_range_v<R>>>
-        : is_partitioner<T, iterator_t<R>, iterator_t<R>>
-    {};
+        : is_partitioner<T, iterator_t<R>, iterator_t<R>> {};
 
     template <class T, class R>
     constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;

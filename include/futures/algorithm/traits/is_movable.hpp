@@ -31,8 +31,7 @@ namespace futures {
     using is_movable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_movable : std::false_type
-    {};
+    struct is_movable : std::false_type {};
 
     template <class T>
     struct is_movable<
@@ -44,11 +43,10 @@ namespace futures {
             is_assignable_from_v<T&, T> &&
             is_swappable_v<T>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_movable_v = is_movable<T>::value;
+    constexpr bool is_movable_v = is_movable<T>::value;
 
     /** @}*/
     /** @}*/

@@ -146,7 +146,7 @@ namespace futures::detail {
          *
          * @param other Other state
          */
-        variant_state(const variant_state& other) {
+        variant_state(variant_state const& other) {
             copy_impl(other);
         }
 
@@ -217,7 +217,7 @@ namespace futures::detail {
 
         /// Copy Assignment
         variant_state&
-        operator=(const variant_state& other) {
+        operator=(variant_state const& other) {
             copy_impl(other);
             return *this;
         }
@@ -327,7 +327,7 @@ namespace futures::detail {
         // clang-format on
 #endif
             >
-        constexpr const T&
+        constexpr T const&
         get_as() const {
             return boost::variant2::get<T>(s_);
         }
@@ -345,7 +345,7 @@ namespace futures::detail {
         }
 
         /// @copydoc get_as_empty()
-        [[nodiscard]] const empty_type&
+        [[nodiscard]] empty_type const&
         get_as_empty() const {
             return get_as<empty_type>();
         }
@@ -362,7 +362,7 @@ namespace futures::detail {
         }
 
         /// @copydoc get_as_storage()
-        [[nodiscard]] const operation_storage_type&
+        [[nodiscard]] operation_storage_type const&
         get_as_storage() const {
             return get_as<operation_storage_type>();
         }
@@ -379,7 +379,7 @@ namespace futures::detail {
         }
 
         /// @copydoc get_as_shared_storage()
-        [[nodiscard]] const shared_storage_type&
+        [[nodiscard]] shared_storage_type const&
         get_as_shared_storage() const {
             return get_as<shared_storage_type>();
         }
@@ -396,7 +396,7 @@ namespace futures::detail {
         }
 
         /// @copydoc get_as_operation_state()
-        [[nodiscard]] const OpState&
+        [[nodiscard]] OpState const&
         get_as_operation_state() const {
             return get_as<OpState>();
         }
@@ -413,7 +413,7 @@ namespace futures::detail {
         }
 
         /// @copydoc get_as_shared_state()
-        [[nodiscard]] const shared_state_type&
+        [[nodiscard]] shared_state_type const&
         get_as_shared_state() const {
             return get_as<shared_state_type>();
         }
@@ -576,14 +576,14 @@ namespace futures::detail {
         template <class Rep, class Period>
         std::future_status
         wait_for(
-            const std::chrono::duration<Rep, Period>& timeout_duration) const {
+            std::chrono::duration<Rep, Period> const& timeout_duration) const {
             return wait_for_impl<true>(*this, timeout_duration);
         }
 
         /// @copydoc wait_for()
         template <class Rep, class Period>
         std::future_status
-        wait_for(const std::chrono::duration<Rep, Period>& timeout_duration) {
+        wait_for(std::chrono::duration<Rep, Period> const& timeout_duration) {
             return wait_for_impl<false>(*this, timeout_duration);
         }
 
@@ -598,7 +598,7 @@ namespace futures::detail {
          */
         template <class Clock, class Duration>
         std::future_status
-        wait_until(const std::chrono::time_point<Clock, Duration>& timeout_time)
+        wait_until(std::chrono::time_point<Clock, Duration> const& timeout_time)
             const {
             return wait_until_impl<true>(*this, timeout_time);
         }
@@ -607,7 +607,7 @@ namespace futures::detail {
         template <class Clock, class Duration>
         std::future_status
         wait_until(
-            const std::chrono::time_point<Clock, Duration>& timeout_time) {
+            std::chrono::time_point<Clock, Duration> const& timeout_time) {
             return wait_until_impl<false>(*this, timeout_time);
         }
 
@@ -747,21 +747,21 @@ namespace futures::detail {
         // times out. However, if the state is const and the state is inline,
         // there's nothing we can do here, and we need to throw an exception
         // because this operation is never safe.
-        constexpr static void
+        static constexpr void
         share_inline(variant_state& s) {
             if (s.is_operation_state()) {
                 s.share();
             }
         }
 
-        constexpr static void
+        static constexpr void
         share_inline(std::add_const<variant_state>&) {}
 
         template <bool is_const, class Rep, class Period>
         static std::future_status
         wait_for_impl(
             add_const_if<is_const, variant_state>& s,
-            const std::chrono::duration<Rep, Period>& timeout_duration) {
+            std::chrono::duration<Rep, Period> const& timeout_duration) {
             share_inline(s);
             if (s.is_shared_state())
                 return s.get_as_shared_state()->wait_for(timeout_duration);
@@ -775,7 +775,7 @@ namespace futures::detail {
         static std::future_status
         wait_until_impl(
             add_const_if<is_const, variant_state>& s,
-            const std::chrono::time_point<Clock, Duration>& timeout_time) {
+            std::chrono::time_point<Clock, Duration> const& timeout_time) {
             // Ensure an inline state type becomes shared because we cannot
             // guarantee what happens to the address after this operation
             // times out
@@ -793,7 +793,7 @@ namespace futures::detail {
          */
         // Copy the value from the other state, adapting as needed
         void
-        copy_impl(const variant_state& other) {
+        copy_impl(variant_state const& other) {
             if (other.is_shared_state())
                 emplace_shared_state(other.get_as_shared_state());
             else if (other.is_shared_storage())

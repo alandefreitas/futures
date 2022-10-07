@@ -27,8 +27,7 @@ namespace futures {
     using is_swappable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_swappable : std::false_type
-    {};
+    struct is_swappable : std::false_type {};
 
     template <class T>
     struct is_swappable<
@@ -37,11 +36,10 @@ namespace futures {
             // clang-format off
             decltype(std::swap(std::declval<T&>(), std::declval<T&>()))
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_swappable_v = is_swappable<T>::value;
+    constexpr bool is_swappable_v = is_swappable<T>::value;
 
     /** @}*/
     /** @}*/

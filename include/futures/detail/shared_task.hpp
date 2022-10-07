@@ -64,7 +64,6 @@ namespace futures::detail {
     /// @tparam Args Argument types to run the task callable
     template <class Fn, class Allocator, class Options, class R, class... Args>
     class shared_task : public shared_task_base<R, Options, Args...> {
-
         using function_type = Fn;
         using allocator_type = boost::allocator_rebind_t<Allocator, shared_task>;
 
@@ -88,14 +87,15 @@ namespace futures::detail {
     public:
         /// Construct a task object for the specified allocator and
         /// function, copying the function
-        shared_task(const allocator_type &alloc, const Fn &fn)
-            : shared_task_base<R, Options, Args...>{}, values_{ fn, alloc } {}
+        shared_task(allocator_type const &alloc, Fn const &fn)
+            : shared_task_base<R, Options, Args...>{}
+            , values_{ fn, alloc } {}
 
         /// Construct a task object for the specified allocator and
         /// function, moving the function
-        shared_task(const allocator_type &alloc, Fn &&fn)
-            : shared_task_base<R, Options, Args...>{},
-              values_{ std::move(fn), alloc } {}
+        shared_task(allocator_type const &alloc, Fn &&fn)
+            : shared_task_base<R, Options, Args...>{}
+            , values_{ std::move(fn), alloc } {}
 
         /// No copy constructor
         shared_task(shared_task const &) = delete;

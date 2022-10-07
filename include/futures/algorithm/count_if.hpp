@@ -8,9 +8,9 @@
 #ifndef FUTURES_ALGORITHM_COUNT_IF_HPP
 #define FUTURES_ALGORITHM_COUNT_IF_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <variant>
 
@@ -27,27 +27,24 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref count_if function
     class count_if_functor
-        : public unary_invoke_algorithm_functor<count_if_functor>
-    {
+        : public unary_invoke_algorithm_functor<count_if_functor> {
         friend unary_invoke_algorithm_functor<count_if_functor>;
         friend count_functor;
 
         template <class Executor, class I>
-        class count_if_graph : public boost::empty_value<Executor>
-        {
+        class count_if_graph : public boost::empty_value<Executor> {
         public:
-            explicit count_if_graph(const Executor &ex)
+            explicit count_if_graph(Executor const &ex)
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class S, class Fun>
             iter_difference_t<I>
             launch_count_if_tasks(P p, I first, S last, Fun f) {
                 auto middle = p(first, last);
-                const iter_difference_t<I> too_small = middle == last;
+                iter_difference_t<I> const too_small = middle == last;
                 constexpr iter_difference_t<I> cannot_parallelize
-                    = std::is_same_v<
-                          Executor,
-                          inline_executor> || is_forward_iterator_v<I>;
+                    = std::is_same_v<Executor, inline_executor>
+                      || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     return std::count_if(first, last, f);
                 } else {
@@ -116,7 +113,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
@@ -161,11 +159,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        run(const E &ex, P p, I first, S last, Fun f) const {
+        run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 return inline_count_if(first, last, f);
             } else {

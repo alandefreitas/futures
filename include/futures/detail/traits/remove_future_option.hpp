@@ -13,32 +13,27 @@
 
 namespace futures::detail {
     template <class Opt, class Opts>
-    struct remove_future_option
-    {
+    struct remove_future_option {
         using type = Opts;
     };
 
     template <class Opt>
-    struct remove_future_option<Opt, future_options_list<>>
-    {
+    struct remove_future_option<Opt, future_options_list<>> {
         using type = future_options_list<>;
     };
 
     template <class Opt>
-    struct remove_future_option<Opt, future_options_list<Opt>>
-    {
+    struct remove_future_option<Opt, future_options_list<Opt>> {
         using type = future_options_list<>;
     };
 
     template <class Opt, class Arg0>
-    struct remove_future_option<Opt, future_options_list<Arg0>>
-    {
+    struct remove_future_option<Opt, future_options_list<Arg0>> {
         using type = future_options_list<Arg0>;
     };
 
     template <class Opt, class Arg0, class... Args>
-    struct remove_future_option<Opt, future_options_list<Arg0, Args...>>
-    {
+    struct remove_future_option<Opt, future_options_list<Arg0, Args...>> {
         using type = prepend_future_option_t<
             Arg0,
             typename remove_future_option<Opt, future_options_list<Args...>>::

@@ -123,7 +123,7 @@ namespace futures::detail {
          *  shared operation state, while a unique deferred future is not
          *  allowed to be copied.
          */
-        operation_state_base(const operation_state_base &) = delete;
+        operation_state_base(operation_state_base const &) = delete;
 
         /// Deleted copy assignment
         /**
@@ -131,7 +131,7 @@ namespace futures::detail {
          * class holds synchronization primitives.
          */
         operation_state_base &
-        operator=(const operation_state_base &)
+        operator=(operation_state_base const &)
             = delete;
 
         /// Move constructor
@@ -158,8 +158,9 @@ namespace futures::detail {
          *
          */
         operation_state_base(operation_state_base &&other) noexcept
-            : status_{ other.status_ }, except_{ std::move(other.except_) },
-              external_waiters_(std::move(other.external_waiters_)) {
+            : status_{ other.status_ }
+            , except_{ std::move(other.except_) }
+            , external_waiters_(std::move(other.external_waiters_)) {
             std::unique_lock lk(other.waiters_mutex_);
             assert(!is_running());
             other.status_ = status::ready;
@@ -544,7 +545,7 @@ namespace futures::detail {
         static std::future_status
         wait_impl(
             maybe_const_this<is_const> &op,
-            const std::chrono::time_point<Clock, Duration> *timeout_time
+            std::chrono::time_point<Clock, Duration> const *timeout_time
             = nullptr) {
             auto lk = op.make_wait_lock();
             if constexpr (is_const) {
@@ -770,7 +771,8 @@ namespace futures::detail {
          *  allocating pointers.
          */
         explicit operation_state(bool is_deferred)
-            : operation_state_base(is_deferred), layout_() {}
+            : operation_state_base(is_deferred)
+            , layout_() {}
 
         /// Copy constructor
         operation_state(operation_state const &) = default;
@@ -793,7 +795,7 @@ namespace futures::detail {
          * The executor allows us to emplace continuations on the
          * same executor by default.
          */
-        explicit operation_state(const executor_type &ex)
+        explicit operation_state(executor_type const &ex)
             : operation_state(false, ex) {}
 
         /// Constructor for potentially deferred state with executor
@@ -801,9 +803,9 @@ namespace futures::detail {
          * The executor allows us to emplace continuations on the
          * same executor by default.
          */
-        explicit operation_state(bool is_deferred, const executor_type &ex)
-            : operation_state_base(is_deferred),
-              layout_(
+        explicit operation_state(bool is_deferred, executor_type const &ex)
+            : operation_state_base(is_deferred)
+            , layout_(
                   ex,
                   continuations_type{},
                   stop_source_type{},
@@ -1026,8 +1028,8 @@ namespace futures::detail {
     public:
         template <class OtherFn, class... OtherArgs>
         explicit bind_deferred_state_args(OtherFn &&f, OtherArgs &&...args)
-            : fn_(std::forward<OtherFn>(f)),
-              args_(std::make_tuple(std::forward<OtherArgs>(args)...)) {}
+            : fn_(std::forward<OtherFn>(f))
+            , args_(std::make_tuple(std::forward<OtherArgs>(args)...)) {}
 
         decltype(auto)
         operator()() {
@@ -1056,7 +1058,6 @@ namespace futures::detail {
     class deferred_operation_state
         : public operation_state<R, Options>
         , private boost::empty_value<typename Options::function_t, 4> {
-
         // Storage for the deferred function
         using deferred_function_base = boost::
             empty_value<typename Options::function_t, 4>;
@@ -1073,17 +1074,18 @@ namespace futures::detail {
 
         /// Constructor
         deferred_operation_state()
-            : operation_state<R, Options>(true), deferred_function_base() {}
+            : operation_state<R, Options>(true)
+            , deferred_function_base() {}
 
         /// Copy Constructor
-        deferred_operation_state(const deferred_operation_state &) = default;
+        deferred_operation_state(deferred_operation_state const &) = default;
 
         /// Move Constructor
         deferred_operation_state(deferred_operation_state &&) noexcept = default;
 
         /// Copy Assignment
         deferred_operation_state &
-        operator=(const deferred_operation_state &)
+        operator=(deferred_operation_state const &)
             = default;
 
         /// Move Assignment
@@ -1107,8 +1109,8 @@ namespace futures::detail {
         explicit deferred_operation_state(
             const typename operation_state<R, Options>::executor_type &ex,
             Fn &&f)
-            : operation_state<R, Options>(true, ex),
-              deferred_function_base(boost::empty_init, std::forward<Fn>(f)) {}
+            : operation_state<R, Options>(true, ex)
+            , deferred_function_base(boost::empty_init, std::forward<Fn>(f)) {}
 
         /// Constructor from the deferred function
         /**
@@ -1136,8 +1138,8 @@ namespace futures::detail {
             const typename operation_state<R, Options>::executor_type &ex,
             Fn &&f,
             Args &&...args)
-            : operation_state<R, Options>(true, ex),
-              deferred_function_base(
+            : operation_state<R, Options>(true, ex)
+            , deferred_function_base(
                   boost::empty_init,
                   bind_deferred_state_args<Fn, Args...>(
                       std::forward<Fn>(f),

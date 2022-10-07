@@ -22,7 +22,7 @@ namespace futures {
         template <class Function, class... Args, std::size_t... Is>
         static void
         for_each_impl(
-            const std::tuple<Args...> &t,
+            std::tuple<Args...> const &t,
             Function &&fn,
             std::index_sequence<Is...>) {
             (fn(std::get<Is>(t)), ...);
@@ -41,7 +41,7 @@ namespace futures {
     /// tuple_for_each for tuples
     template <class Function, class... Args>
     static void
-    tuple_for_each(const std::tuple<Args...> &t, Function &&fn) {
+    tuple_for_each(std::tuple<Args...> const &t, Function &&fn) {
         detail::for_each_impl(
             t,
             std::forward<Function>(fn),
@@ -81,8 +81,8 @@ namespace futures {
         std::tuple<Args2...> &t2,
         Function &&fn) {
         static_assert(
-            std::tuple_size_v<std::tuple<
-                Args1...>> == std::tuple_size_v<std::tuple<Args2...>>);
+            std::tuple_size_v<std::tuple<Args1...>>
+            == std::tuple_size_v<std::tuple<Args2...>>);
         detail::for_each_paired_impl(
             t1,
             t2,
@@ -125,7 +125,7 @@ namespace futures {
     /// find_if for tuples
     template <class Function, size_t t_idx = 0, class... Args>
     static size_t
-    tuple_find_if(const std::tuple<Args...> &t, Function &&fn) {
+    tuple_find_if(std::tuple<Args...> const &t, Function &&fn) {
         if constexpr (t_idx == std::tuple_size_v<std::decay_t<decltype(t)>>) {
             return t_idx;
         } else {
@@ -142,7 +142,7 @@ namespace futures {
         template <class Function, class... Args, std::size_t... Is>
         static bool
         all_of_impl(
-            const std::tuple<Args...> &t,
+            std::tuple<Args...> const &t,
             Function &&fn,
             std::index_sequence<Is...>) {
             return (fn(std::get<Is>(t)) && ...);
@@ -152,7 +152,7 @@ namespace futures {
     /// all_of for tuples
     template <class Function, class... Args>
     static bool
-    tuple_all_of(const std::tuple<Args...> &t, Function &&fn) {
+    tuple_all_of(std::tuple<Args...> const &t, Function &&fn) {
         return detail::all_of_impl(
             t,
             std::forward<Function>(fn),
@@ -163,7 +163,7 @@ namespace futures {
         template <class Function, class... Args, std::size_t... Is>
         static bool
         any_of_impl(
-            const std::tuple<Args...> &t,
+            std::tuple<Args...> const &t,
             Function &&fn,
             std::index_sequence<Is...>) {
             return (fn(std::get<Is>(t)) || ...);
@@ -173,7 +173,7 @@ namespace futures {
     /// any_of for tuples
     template <class Function, class... Args>
     static bool
-    tuple_any_of(const std::tuple<Args...> &t, Function &&fn) {
+    tuple_any_of(std::tuple<Args...> const &t, Function &&fn) {
         return detail::any_of_impl(
             t,
             std::forward<Function>(fn),
@@ -187,11 +187,13 @@ namespace futures {
         class Tuple,
         size_t current_tuple_idx = 0,
         std::enable_if_t<
-            detail::is_callable_v<
-                Function> && detail::is_tuple_v<std::decay_t<Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
-            int> = 0>
+            detail::is_callable_v<Function>
+                && detail::is_tuple_v<std::decay_t<Tuple>>
+                && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int>
+        = 0>
 
-    constexpr static auto
+    static constexpr auto
     apply(Function &&fn, Tuple &&t, std::size_t idx) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
@@ -216,11 +218,12 @@ namespace futures {
         class Tuple,
         size_t current_tuple_idx = 0,
         std::enable_if_t<
-            detail::is_tuple_v<std::decay_t<
-                Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
-            int> = 0>
+            detail::is_tuple_v<std::decay_t<Tuple>>
+                && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int>
+        = 0>
 
-    constexpr static decltype(auto)
+    static constexpr decltype(auto)
     get(Tuple &&t, std::size_t idx) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
@@ -245,11 +248,12 @@ namespace futures {
         size_t current_tuple_idx = 0,
         class TransformFn,
         std::enable_if_t<
-            detail::is_tuple_v<std::decay_t<
-                Tuple>> && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
-            int> = 0>
+            detail::is_tuple_v<std::decay_t<Tuple>>
+                && (current_tuple_idx < std::tuple_size_v<std::decay_t<Tuple>>),
+            int>
+        = 0>
 
-    constexpr static decltype(auto)
+    static constexpr decltype(auto)
     get(Tuple &&t, std::size_t idx, TransformFn &&transform) {
         assert(idx < std::tuple_size_v<std::decay_t<Tuple>>);
         if (current_tuple_idx == idx) {
@@ -300,8 +304,7 @@ namespace futures {
         /// The tuple type after we filtered it with a template template
         /// predicate
         template <template <typename> typename UnaryPredicate, typename... Ts>
-        struct filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>
-        {
+        struct filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>> {
             /// If this element has to be kept, returns `std::tuple<Ts>`
             /// Otherwise returns `std::tuple<>`
             template <class E>
@@ -325,8 +328,7 @@ namespace futures {
         /// The tuple type after we filtered it with a template template
         /// predicate
         template <template <typename> typename UnaryPredicate, typename... Ts>
-        struct transformed_tuple<UnaryPredicate, std::tuple<Ts...>>
-        {
+        struct transformed_tuple<UnaryPredicate, std::tuple<Ts...>> {
             /// If this element has to be kept, returns `std::tuple<Ts>`
             /// Otherwise returns `std::tuple<>`
             template <class E>
@@ -345,7 +347,7 @@ namespace futures {
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
-        filter_if(const std::tuple<Ts...> &tup) {
+        filter_if(std::tuple<Ts...> const &tup) {
         return std::apply(
             [](auto... tuple_value) {
             return std::tuple_cat(
@@ -361,7 +363,7 @@ namespace futures {
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         filtered_tuple_type<UnaryPredicate, std::tuple<Ts...>>::type
-        remove_if(const std::tuple<Ts...> &tup) {
+        remove_if(std::tuple<Ts...> const &tup) {
         return std::apply(
             [](auto... tuple_value) {
             return std::tuple_cat(
@@ -377,7 +379,7 @@ namespace futures {
     template <template <typename> typename UnaryPredicate, typename... Ts>
     constexpr typename detail::
         transformed_tuple<UnaryPredicate, std::tuple<Ts...>>::type
-        transform(const std::tuple<Ts...> &tup) {
+        transform(std::tuple<Ts...> const &tup) {
         return std::apply(
             [](auto... tuple_value) {
             return std::tuple_cat(

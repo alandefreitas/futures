@@ -8,8 +8,8 @@
 #ifndef FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 #define FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 
-#include <futures/detail/thread/lock.hpp>
 #include <futures/detail/operation_state.hpp>
+#include <futures/detail/thread/lock.hpp>
 #include <utility>
 
 namespace futures::detail {
@@ -19,8 +19,7 @@ namespace futures::detail {
 
     /// Helper class to set signals and wait for any future in a sequence
     /// of futures to become ready
-    class waiter_for_any
-    {
+    class waiter_for_any {
     public:
         /// Construct a waiter_for_any watching zero futures
         waiter_for_any() = default;
@@ -45,10 +44,10 @@ namespace futures::detail {
             }
         }
 
-        waiter_for_any(const waiter_for_any &) = delete;
+        waiter_for_any(waiter_for_any const &) = delete;
         waiter_for_any(waiter_for_any &&) = delete;
         waiter_for_any &
-        operator=(const waiter_for_any &)
+        operator=(waiter_for_any const &)
             = delete;
         waiter_for_any &
         operator=(waiter_for_any &&)
@@ -110,7 +109,7 @@ namespace futures::detail {
         /// Wait for one of the futures to notify it got ready
         template <class Rep, class Period>
         std::size_t
-        wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) {
+        wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             registered_waiter_range_lock lk(waiters_);
             std::size_t ready_idx;
             if (cv.wait_for(lk, timeout_duration, [this, &ready_idx]() {
@@ -132,7 +131,7 @@ namespace futures::detail {
         template <class Clock, class Duration>
         std::size_t
         wait_until(
-            const std::chrono::time_point<Clock, Duration> &timeout_time) {
+            std::chrono::time_point<Clock, Duration> const &timeout_time) {
             registered_waiter_range_lock lk(waiters_);
             std::size_t ready_idx;
             if (cv.wait_until(lk, timeout_time, [this, &ready_idx]() {
@@ -162,8 +161,7 @@ namespace futures::detail {
         /// types, this class also nullifies the operations necessary to check
         /// the state of the future object.
         ///
-        struct registered_waiter
-        {
+        struct registered_waiter {
             /// Mutex associated with a future we are watching
             std::mutex *future_mutex_;
 
@@ -190,16 +188,17 @@ namespace futures::detail {
             template <class Future>
             registered_waiter(
                 Future &a_future,
-                const notify_when_ready_handle &handle_,
+                notify_when_ready_handle const &handle_,
                 std::size_t index_)
-                : future_mutex_(&a_future.waiters_mutex()),
-                  disable_notification_callback(
+                : future_mutex_(&a_future.waiters_mutex())
+                , disable_notification_callback(
                       [future_ = &a_future](notify_when_ready_handle h)
-                          -> void { future_->unnotify_when_ready(h); }),
-                  is_ready_callback([future_ = &a_future]() -> bool {
-                      return future_->is_ready();
-                  }),
-                  handle(handle_), index(index_) {}
+                          -> void { future_->unnotify_when_ready(h); })
+                , is_ready_callback([future_ = &a_future]() -> bool {
+                    return future_->is_ready();
+                })
+                , handle(handle_)
+                , index(index_) {}
 
             /// Get the mutex associated with the future we are watching
             [[nodiscard]] std::mutex &
@@ -221,8 +220,7 @@ namespace futures::detail {
         };
 
         /// Helper class to lock all futures
-        struct registered_waiter_range_lock
-        {
+        struct registered_waiter_range_lock {
             /// Type for a vector of locks
             using lock_vector = std::vector<std::unique_lock<std::mutex>>;
 
@@ -241,8 +239,8 @@ namespace futures::detail {
             explicit registered_waiter_range_lock(
                 WaiterIterator first_waiter,
                 WaiterIterator last_waiter)
-                : count(std::distance(first_waiter, last_waiter)),
-                  locks(std::make_shared<lock_vector>(count)) {
+                : count(std::distance(first_waiter, last_waiter))
+                , locks(std::make_shared<lock_vector>(count)) {
                 WaiterIterator waiter_it = first_waiter;
                 std::size_t lock_idx = 0;
                 while (waiter_it != last_waiter) {

@@ -27,8 +27,7 @@ namespace futures {
     using is_range = __see_below__;
 #else
     template <class T, class = void>
-    struct is_range : std::false_type
-    {};
+    struct is_range : std::false_type {};
 
     template <class T>
     struct is_range<
@@ -38,11 +37,10 @@ namespace futures {
             decltype(*std::begin(std::declval<T>())),
             decltype(*std::end(std::declval<T>()))
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_range_v = is_range<T>::value;
+    constexpr bool is_range_v = is_range<T>::value;
 
     /** @}*/
     /** @}*/

@@ -26,8 +26,7 @@ namespace futures {
     ///
     /// @note Not to be confused with continuation unwrapping
     template <typename T, class Enable = void>
-    struct future_value
-    {};
+    struct future_value {};
 
     /// Determine type a future object holds (specialization for types
     /// that implement `get()`)
@@ -38,8 +37,7 @@ namespace futures {
     template <typename Future>
     struct future_value<
         Future,
-        std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>>
-    {
+        std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>> {
         using type = std::decay_t<
             decltype(std::declval<std::decay_t<Future>>().get())>;
     };

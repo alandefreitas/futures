@@ -16,20 +16,19 @@ namespace futures::detail {
     /// Get the element type of a when any result object
     /// This is a very specific helper trait we need
     template <typename T, class Enable = void>
-    struct range_or_tuple_value
-    {};
+    struct range_or_tuple_value {};
 
     template <typename Sequence>
-    struct range_or_tuple_value<Sequence, std::enable_if_t<is_range_v<Sequence>>>
-    {
+    struct range_or_tuple_value<
+        Sequence,
+        std::enable_if_t<is_range_v<Sequence>>> {
         using type = range_value_t<Sequence>;
     };
 
     template <typename Sequence>
     struct range_or_tuple_value<
         Sequence,
-        std::enable_if_t<detail::is_tuple_v<Sequence>>>
-    {
+        std::enable_if_t<detail::is_tuple_v<Sequence>>> {
         using type = std::tuple_element_t<0, Sequence>;
     };
 

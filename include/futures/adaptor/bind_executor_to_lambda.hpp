@@ -19,12 +19,11 @@ namespace futures {
 
     namespace detail {
         template <class Executor, class Function, bool RValue>
-        struct executor_and_callable_reference
-        {
-            std::reference_wrapper<const Executor> ex;
+        struct executor_and_callable_reference {
+            std::reference_wrapper<Executor const> ex;
             std::reference_wrapper<Function> fn;
 
-            constexpr const Executor&
+            constexpr Executor const&
             get_executor() noexcept {
                 return ex;
             }
@@ -62,11 +61,12 @@ namespace futures {
             detail::is_callable_v<std::decay_t<Function>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
-    operator%(const Executor& ex, Function&& after) {
+    operator%(Executor const& ex, Function&& after) {
         return detail::executor_and_callable_reference<
             std::decay_t<Executor>,
             std::decay_t<Function>,

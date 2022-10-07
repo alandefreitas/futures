@@ -25,8 +25,7 @@ namespace futures {
         : std::conditional<
               detail::is_reference_wrapper_v<std::decay_t<T>>,
               T &,
-              std::decay_t<T>>
-    {};
+              std::decay_t<T>> {};
 
     /// Determine the type to be stored and returned by a future object
     template <class T>

@@ -33,11 +33,11 @@ namespace futures {
     struct is_derived_from
         : std::conjunction<
               std::is_base_of<Base, Derived>,
-              std::is_convertible<const volatile Derived*, const volatile Base*>>
-    {};
+              std::is_convertible<const volatile Derived*, const volatile Base*>> {
+    };
 #endif
     template <class Derived, class Base>
-    bool constexpr is_derived_from_v = is_derived_from<Derived, Base>::value;
+    constexpr bool is_derived_from_v = is_derived_from<Derived, Base>::value;
     /** @}*/
     /** @}*/
 

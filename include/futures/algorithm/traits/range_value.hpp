@@ -32,12 +32,10 @@ namespace futures {
     using range_value = __see_below__;
 #else
     template <class R, class = void>
-    struct range_value
-    {};
+    struct range_value {};
 
     template <class R>
-    struct range_value<R, std::enable_if_t<is_range_v<R>>>
-    {
+    struct range_value<R, std::enable_if_t<is_range_v<R>>> {
         using type = iter_value_t<iterator_t<R>>;
     };
 #endif

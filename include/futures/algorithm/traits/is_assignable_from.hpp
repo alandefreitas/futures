@@ -30,8 +30,7 @@ namespace futures {
     using is_assignable_from = __see_below__;
 #else
     template <class LHS, class RHS, class = void>
-    struct is_assignable_from : std::false_type
-    {};
+    struct is_assignable_from : std::false_type {};
 
     template <class LHS, class RHS>
     struct is_assignable_from<
@@ -42,11 +41,10 @@ namespace futures {
             std::is_lvalue_reference_v<LHS> &&
             std::is_same_v<decltype(std::declval<LHS>() = std::declval<RHS&&>()), LHS>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class LHS, class RHS>
-    bool constexpr is_assignable_from_v = is_assignable_from<LHS, RHS>::value;
+    constexpr bool is_assignable_from_v = is_assignable_from<LHS, RHS>::value;
     /** @}*/
     /** @}*/
 

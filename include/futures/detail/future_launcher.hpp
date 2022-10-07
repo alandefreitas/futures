@@ -21,8 +21,7 @@ namespace futures::detail {
      *  This function is defined as a functor to facilitate friendship in
      *  basic_future
      */
-    struct async_future_scheduler
-    {
+    struct async_future_scheduler {
         /// Schedule the function in the executor
         /// This is the internal function async uses to finally schedule the
         /// function after setting the default parameters and converting
@@ -40,11 +39,12 @@ namespace futures::detail {
                 (std::is_invocable_v<Function, Args...> || std::is_invocable_v<Function, stop_token, Args...>)
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
-        schedule(const Executor& ex, Function&& f, Args&&... args) const {
+        schedule(Executor const& ex, Function&& f, Args&&... args) const {
             // Future traits
             using value_type = launch_result_t<Function, Args...>;
             static constexpr bool is_eager = !FutureOptions::is_always_deferred;
@@ -101,7 +101,7 @@ namespace futures::detail {
             class Function,
             class... Args>
         std::enable_if_t<is_eager, shared_state<ValueType, FutureOptions>>
-        make_initial_state(const Executor& ex, Function&& f, Args&&... args)
+        make_initial_state(Executor const& ex, Function&& f, Args&&... args)
             const {
             using operation_state_t = operation_state<ValueType, FutureOptions>;
             (void) f;
@@ -119,7 +119,7 @@ namespace futures::detail {
         std::enable_if_t<
             !is_eager,
             deferred_operation_state<ValueType, FutureOptions>>
-        make_initial_state(const Executor& ex, Function&& f) const {
+        make_initial_state(Executor const& ex, Function&& f) const {
             return deferred_operation_state<ValueType, FutureOptions>{
                 ex,
                 std::forward<Function>(f)
@@ -136,7 +136,7 @@ namespace futures::detail {
         std::enable_if_t<
             !is_eager,
             deferred_operation_state<ValueType, FutureOptions>>
-        make_initial_state(const Executor& ex, Function&& f, Args&&... args)
+        make_initial_state(Executor const& ex, Function&& f, Args&&... args)
             const {
             return deferred_operation_state<ValueType, FutureOptions>{
                 ex,

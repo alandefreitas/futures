@@ -41,20 +41,16 @@ namespace futures {
      */
 
     /// Class representing a type for a sequenced_policy tag
-    class sequenced_policy
-    {};
+    class sequenced_policy {};
 
     /// Class representing a type for a parallel_policy tag
-    class parallel_policy
-    {};
+    class parallel_policy {};
 
     /// Class representing a type for a parallel_unsequenced_policy tag
-    class parallel_unsequenced_policy
-    {};
+    class parallel_unsequenced_policy {};
 
     /// Class representing a type for an unsequenced_policy tag
-    class unsequenced_policy
-    {};
+    class unsequenced_policy {};
 
     /// @name Instances of the execution policy types
 
@@ -78,8 +74,7 @@ namespace futures {
               std::is_same<T, sequenced_policy>,
               std::is_same<T, parallel_policy>,
               std::is_same<T, parallel_unsequenced_policy>,
-              std::is_same<T, unsequenced_policy>>
-    {};
+              std::is_same<T, unsequenced_policy>> {};
 
     /// Checks whether T is a standard or implementation-defined
     /// execution policy type.
@@ -96,9 +91,10 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
-            !is_executor_v<
-                E> && is_execution_policy_v<E> && is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
-            int> = 0
+            !is_executor_v<E> && is_execution_policy_v<E>
+                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
+            int>
+        = 0
 #endif
         >
     constexpr decltype(auto)

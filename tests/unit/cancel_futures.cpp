@@ -17,7 +17,7 @@ TEST_CASE(TEST_CASE_PREFIX "Cancellable future") {
     }
 
     SECTION("Cancel jfuture<int>") {
-        auto fn = [](const stop_token& s, std::chrono::milliseconds x) {
+        auto fn = [](stop_token const& s, std::chrono::milliseconds x) {
             int32_t i = 0;
             do {
                 std::this_thread::sleep_for(x);

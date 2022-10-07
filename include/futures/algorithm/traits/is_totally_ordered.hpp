@@ -29,24 +29,22 @@ namespace futures {
     using is_totally_ordered = __see_below__;
 #else
     template <class T, class = void>
-    struct is_totally_ordered : std::false_type
-    {};
+    struct is_totally_ordered : std::false_type {};
 
     template <class T>
     struct is_totally_ordered<
         T,
         std::void_t<
             // clang-format off
-            decltype(std::declval<const std::remove_reference_t<T>&>() < std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() > std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() <= std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() >= std::declval<const std::remove_reference_t<T>&>())
+            decltype(std::declval< std::remove_reference_t<T> const &>() < std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() > std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() <= std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() >= std::declval< std::remove_reference_t<T> const &>())
             // clang-format on
-            >> : is_equality_comparable<T>
-    {};
+            >> : is_equality_comparable<T> {};
 #endif
     template <class T>
-    bool constexpr is_totally_ordered_v = is_totally_ordered<T>::value;
+    constexpr bool is_totally_ordered_v = is_totally_ordered<T>::value;
 
     /** @}*/
     /** @}*/

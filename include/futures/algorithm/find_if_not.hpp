@@ -8,10 +8,10 @@
 #ifndef FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 #define FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <variant>
 
@@ -26,8 +26,7 @@ namespace futures {
     /// Functor representing the overloads for the @ref find_if_not
     /// function
     class find_if_not_functor
-        : public unary_invoke_algorithm_functor<find_if_not_functor>
-    {
+        : public unary_invoke_algorithm_functor<find_if_not_functor> {
         friend unary_invoke_algorithm_functor<find_if_not_functor>;
 
         template <
@@ -44,7 +43,8 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
@@ -87,11 +87,12 @@ namespace futures {
                 std::is_copy_constructible_v<Fun>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
-        run(const E& ex, P p, I first, S last, Fun f) const {
+        run(E const& ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 return inline_find_if_not(first, last, f);
             } else {
@@ -99,7 +100,7 @@ namespace futures {
                     return inline_find_if_not(first, last, f);
                 } else {
                     return find_if_functor::find_if_graph<E, I>(ex)
-                        .find_if(p, first, last, [f](const auto& el) {
+                        .find_if(p, first, last, [f](auto const& el) {
                             return !f(el);
                         });
                 }

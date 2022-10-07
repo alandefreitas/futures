@@ -23,8 +23,7 @@ namespace futures {
 
     /// Class for errors in the futures library
     /// All errors in the futures library derive from this class
-    class futures_error : public std::system_error
-    {
+    class futures_error : public std::system_error {
     public:
         /// Construct underlying system error with a specified error code
         /// @param ec Error code
@@ -33,7 +32,7 @@ namespace futures {
         /// Construct underlying system error with a specified error code
         /// and literal string message @param ec Error code @param what_arg
         /// Error string
-        futures_error(std::error_code ec, const char *what_arg)
+        futures_error(std::error_code ec, char const *what_arg)
             : std::system_error{ ec, what_arg } {}
 
         /// Construct underlying system error with a specified error code
@@ -67,11 +66,10 @@ namespace futures {
 
     /// Class representing the common error category properties for
     /// future errors
-    class future_error_category : public std::error_category
-    {
+    class future_error_category : public std::error_category {
     public:
         /// Name for future_error_category errors
-        [[nodiscard]] const char *
+        [[nodiscard]] char const *
         name() const noexcept override {
             return "future";
         }
@@ -162,8 +160,7 @@ namespace futures {
 
     /// Class for errors with specific future types or their
     /// dependencies, such as promises
-    class future_error : public futures_error
-    {
+    class future_error : public futures_error {
     public:
         /// Construct underlying futures error with a specified error
         /// code @param ec Error code
@@ -179,8 +176,7 @@ namespace futures {
     }
 
     /// Class for errors when a promise is not delivered properly
-    class broken_promise : public future_error
-    {
+    class broken_promise : public future_error {
     public:
         /// Construct underlying future error with a specified error code
         broken_promise()
@@ -188,45 +184,39 @@ namespace futures {
     };
 
     /// Class for errors when a promise is not delivered properly
-    class promise_already_satisfied : public future_error
-    {
+    class promise_already_satisfied : public future_error {
     public:
         promise_already_satisfied()
             : future_error{ make_error_code(
                 future_errc::promise_already_satisfied) } {}
     };
 
-    class future_already_retrieved : public future_error
-    {
+    class future_already_retrieved : public future_error {
     public:
         future_already_retrieved()
             : future_error{ make_error_code(
                 future_errc::future_already_retrieved) } {}
     };
 
-    class promise_uninitialized : public future_error
-    {
+    class promise_uninitialized : public future_error {
     public:
         promise_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    class packaged_task_uninitialized : public future_error
-    {
+    class packaged_task_uninitialized : public future_error {
     public:
         packaged_task_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    class future_uninitialized : public future_error
-    {
+    class future_uninitialized : public future_error {
     public:
         future_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    class future_deferred : public future_error
-    {
+    class future_deferred : public future_error {
     public:
         future_deferred()
             : future_error{ make_error_code(future_errc::future_deferred) } {}

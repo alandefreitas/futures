@@ -24,12 +24,12 @@ namespace futures {
         asio::execution_context *context_{ nullptr };
 
         constexpr bool
-        operator==(const new_thread_executor &other) const noexcept {
+        operator==(new_thread_executor const &other) const noexcept {
             return context_ == other.context_;
         }
 
         constexpr bool
-        operator!=(const new_thread_executor &other) const noexcept {
+        operator!=(new_thread_executor const &other) const noexcept {
             return !(*this == other);
         }
 
@@ -52,8 +52,7 @@ namespace futures {
     };
 
     /// Make an new thread executor object
-    inline
-    new_thread_executor
+    inline new_thread_executor
     make_new_thread_executor() {
         asio::execution_context &ctx = inline_execution_context();
         return new_thread_executor{ &ctx };

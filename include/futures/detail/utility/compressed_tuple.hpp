@@ -23,7 +23,7 @@ namespace futures::detail {
     class mp_list_inherit<mp_list<Types...>> : public Types... {
         using list_type = mp_list<Types...>;
         using size_type = mp_size<list_type>;
-        constexpr static std::size_t size_value = size_type::value;
+        static constexpr std::size_t size_value = size_type::value;
 
     public:
         mp_list_inherit() : Types(boost::empty_init)... {};
@@ -86,7 +86,7 @@ namespace futures::detail {
         }
 
         template <std::size_t I>
-        constexpr const value_type<I>&
+        constexpr value_type<I> const&
         get(mp_size_t<I> = {}) const noexcept {
             return empty_type<I>::get();
         }
@@ -99,13 +99,13 @@ namespace futures::detail {
         }
 
         template <class T>
-        constexpr const T&
+        constexpr T const&
         get(mp_identity<T> = {}) const noexcept {
             return empty_type<index_of<T>>::get();
         }
 
         // tuple size
-        constexpr static std::size_t
+        static constexpr std::size_t
         size() noexcept {
             return mp_size<empty_types>::value;
         }

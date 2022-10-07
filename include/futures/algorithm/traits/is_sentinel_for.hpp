@@ -30,8 +30,7 @@ namespace futures {
     using is_sentinel_for = __see_below__;
 #else
     template <class S, class I, class = void>
-    struct is_sentinel_for : std::false_type
-    {};
+    struct is_sentinel_for : std::false_type {};
 
     template <class S, class I>
     struct is_sentinel_for<
@@ -42,11 +41,10 @@ namespace futures {
             is_semiregular_v<S> &&
             is_input_or_output_iterator_v<I>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class S, class I>
-    bool constexpr is_sentinel_for_v = is_sentinel_for<S, I>::value;
+    constexpr bool is_sentinel_for_v = is_sentinel_for<S, I>::value;
 
     /** @}*/
     /** @}*/

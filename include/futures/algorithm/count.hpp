@@ -8,6 +8,7 @@
 #ifndef FUTURES_ALGORITHM_COUNT_HPP
 #define FUTURES_ALGORITHM_COUNT_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/count_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -15,7 +16,6 @@
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <variant>
 
@@ -30,8 +30,7 @@ namespace futures {
 
 
     /// Functor representing the overloads for the @ref count function
-    class count_functor : public value_cmp_algorithm_functor<count_functor>
-    {
+    class count_functor : public value_cmp_algorithm_functor<count_functor> {
         friend value_cmp_algorithm_functor<count_functor>;
 
         template <
@@ -47,11 +46,12 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, I>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        inline_count(I first, S last, const T &v) {
+        inline_count(I first, S last, T const &v) {
             iter_difference_t<I> ret = 0;
             for (; first != last; ++first) {
                 if (*first == v) {
@@ -92,11 +92,12 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, I>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        run(const E &ex, P p, I first, S last, const T &v) const {
+        run(E const &ex, P p, I first, S last, T const &v) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 return inline_count(first, last, v);
             } else {
@@ -104,7 +105,7 @@ namespace futures {
                     return inline_count(first, last, v);
                 } else {
                     return count_if_functor::count_if_graph<E, I>(ex)
-                        .count_if(p, first, last, [&v](const auto &el) {
+                        .count_if(p, first, last, [&v](auto const &el) {
                             return el == v;
                         });
                 }

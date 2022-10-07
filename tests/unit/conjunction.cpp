@@ -4,8 +4,8 @@
 #include <catch2/catch.hpp>
 
 #if defined(__GNUG__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
@@ -100,7 +100,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
         }
 
         SECTION("Unwrap to values") {
-            auto f4 = then(f, [](int r1, double r2, const std::string &r3) {
+            auto f4 = then(f, [](int r1, double r2, std::string const &r3) {
                 return r1 + static_cast<int>(r2) + r3.size();
             });
             REQUIRE(f4.get() == 2 + 3 + 4);
@@ -215,7 +215,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
 
             SECTION("Continue with const lvalue") {
                 auto continuation =
-                    [](const detail::small_vector<cfuture<int>> &) {
+                    [](detail::small_vector<cfuture<int>> const &) {
                     return 2 + 3 + 4; // <- cannot get from const future :P
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -288,7 +288,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
             }
 
             SECTION("Continue with const lvalue") {
-                auto continuation = [](const detail::small_vector<int> &rs) {
+                auto continuation = [](detail::small_vector<int> const &rs) {
                     return rs[0] + rs[1] + rs[2];
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
@@ -408,5 +408,5 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
 }
 
 #if defined(__GNUG__) && !defined(__clang__)
-#pragma GCC diagnostic pop
+#    pragma GCC diagnostic pop
 #endif

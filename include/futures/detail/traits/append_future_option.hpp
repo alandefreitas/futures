@@ -12,8 +12,7 @@
 
 namespace futures::detail {
     template <class Opt, class Opts, class = void>
-    struct append_future_option
-    {
+    struct append_future_option {
         using type = Opts;
     };
 
@@ -21,8 +20,7 @@ namespace futures::detail {
     struct append_future_option<
         Opt,
         future_options_list<Args...>,
-        std::enable_if_t<!detail::is_in_args_v<Opt, Args...>>>
-    {
+        std::enable_if_t<!detail::is_in_args_v<Opt, Args...>>> {
         using type = future_options_list<Args..., Opt>;
     };
 

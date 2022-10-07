@@ -10,8 +10,8 @@
 
 #include <futures/basic_future.hpp>
 #include <futures/future_options.hpp>
-#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/shared_task.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures {
     /** @addtogroup futures Futures
@@ -42,8 +42,7 @@ namespace futures {
 #else
     template <typename Signature, Options>
 #endif
-    class packaged_task<R(Args...), Options>
-    {
+    class packaged_task<R(Args...), Options> {
     public:
         /// Constructs a std::packaged_task object with no task and no
         /// shared state
@@ -100,7 +99,7 @@ namespace futures {
             >
         explicit packaged_task(
             std::allocator_arg_t,
-            const Allocator &alloc,
+            Allocator const &alloc,
             Fn &&fn) {
             using shared_task_t = detail::
                 shared_task<std::decay_t<Fn>, Allocator, Options, R, Args...>;
@@ -117,8 +116,8 @@ namespace futures {
         /// Constructs a std::packaged_task with the shared state and
         /// task formerly owned by other
         packaged_task(packaged_task &&other) noexcept
-            : future_retrieved_{ other.future_retrieved_ },
-              task_{ std::move(other.task_) } {
+            : future_retrieved_{ other.future_retrieved_ }
+            , task_{ std::move(other.task_) } {
             other.future_retrieved_ = false;
         }
 

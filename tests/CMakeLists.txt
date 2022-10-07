@@ -1,6 +1,6 @@
 if (CMAKE_CROSSCOMPILING)
     return()
-endif()
+endif ()
 
 add_subdirectory(unit)
 add_subdirectory(stress)

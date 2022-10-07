@@ -20,13 +20,11 @@ namespace futures::detail {
      * terms of the is_future concept
      */
     template <typename T, typename = void>
-    struct has_get : std::false_type
-    {};
+    struct has_get : std::false_type {};
 
     template <typename T>
     struct has_get<T, std::void_t<decltype(std::declval<T>().get())>>
-        : std::true_type
-    {};
+        : std::true_type {};
 
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures

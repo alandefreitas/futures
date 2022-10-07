@@ -10,9 +10,9 @@
 #define FUTURES_PROMISE_HPP
 
 #include <futures/basic_future.hpp>
-#include <futures/detail/deps/boost/core/empty_value.hpp>
-#include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/operation_state.hpp>
+#include <futures/detail/utility/to_address.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <memory>
 
 namespace futures {
@@ -35,8 +35,7 @@ namespace futures {
     /// functions.
     ///
     template <class R, class Options = future_options<continuable_opt>>
-    class promise_base
-    {
+    class promise_base {
     public:
         /// Create the base promise with std::allocator
         ///
@@ -54,7 +53,7 @@ namespace futures {
         /// allocator. This object is stored in the internal intrusive pointer
         /// as the future shared state.
         template <typename Allocator>
-        promise_base(std::allocator_arg_t, const Allocator &alloc)
+        promise_base(std::allocator_arg_t, Allocator const &alloc)
             : shared_state_(make_shared_state(alloc)) {}
 
         /// No copy constructor
@@ -62,8 +61,8 @@ namespace futures {
 
         /// Move constructor
         promise_base(promise_base &&other) noexcept
-            : obtained_{ other.obtained_ },
-              shared_state_{ std::move(other.shared_state_) } {
+            : obtained_{ other.obtained_ }
+            , shared_state_{ std::move(other.shared_state_) } {
             other.obtained_ = false;
         }
 
@@ -153,7 +152,7 @@ namespace futures {
     private:
         template <class Allocator>
         detail::shared_state<R, Options>
-        make_shared_state(const Allocator &alloc) {
+        make_shared_state(Allocator const &alloc) {
             if constexpr (Options::has_executor) {
                 return std::allocate_shared<detail::operation_state<R, Options>>(
                     alloc,
@@ -185,8 +184,7 @@ namespace futures {
         class R,
         class Options
         = future_options<executor_opt<default_executor_type>, continuable_opt>>
-    class promise : public promise_base<R, Options>
-    {
+    class promise : public promise_base<R, Options> {
     public:
         /// Create the promise for type R
         using promise_base<R, Options>::promise_base;

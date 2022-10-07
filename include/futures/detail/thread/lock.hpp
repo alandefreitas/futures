@@ -48,10 +48,11 @@ namespace futures::detail {
         using lock_type = typename std::iterator_traits<Iterator>::value_type;
 
         // Handle trivial cases
-        if (const bool empty_range = first == last; empty_range) {
+        if (bool const empty_range = first == last; empty_range) {
             return last;
-        } else if (const bool single_element = std::next(first) == last;
-                   single_element) {
+        } else if (bool const single_element = std::next(first) == last;
+                   single_element)
+        {
             if (first->try_lock()) {
                 return last;
             } else {
@@ -61,15 +62,16 @@ namespace futures::detail {
 
         // General cases: Try to lock first and already return if fails
         std::unique_lock<lock_type> guard_first(*first, std::try_to_lock);
-        if (const bool locking_failed = !guard_first.owns_lock();
-            locking_failed) {
+        if (bool const locking_failed = !guard_first.owns_lock();
+            locking_failed)
+        {
             return first;
         }
 
         // While first is locked by guard_first, try to lock the other elements
         // in the range
         const Iterator failed_mutex_it = try_lock(std::next(first), last);
-        if (const bool none_failed = failed_mutex_it == last; none_failed) {
+        if (bool const none_failed = failed_mutex_it == last; none_failed) {
             // Break the association of the associated mutex (i.e. don't unlock
             // at destruction)
             guard_first.release();
@@ -108,8 +110,7 @@ namespace futures::detail {
 
         /// Auxiliary lock guard for a range of mutexes recursively using
         /// this lock function
-        struct range_lock_guard
-        {
+        struct range_lock_guard {
             /// Iterator to first locked mutex in the range
             Iterator begin;
 
@@ -118,20 +119,21 @@ namespace futures::detail {
 
             /// Construct a lock guard for a range of mutexes
             range_lock_guard(Iterator first, Iterator last)
-                : begin(first), end(last) {
+                : begin(first)
+                , end(last) {
                 // The range lock guard recursively calls the same lock function
                 // we use here
                 futures::detail::lock(begin, end);
             }
 
-            range_lock_guard(const range_lock_guard &) = delete;
+            range_lock_guard(range_lock_guard const &) = delete;
             range_lock_guard &
-            operator=(const range_lock_guard &)
+            operator=(range_lock_guard const &)
                 = delete;
 
             range_lock_guard(range_lock_guard &&other) noexcept
-                : begin(std::exchange(other.begin, Iterator{})),
-                  end(std::exchange(other.end, Iterator{})) {}
+                : begin(std::exchange(other.begin, Iterator{}))
+                , end(std::exchange(other.end, Iterator{})) {}
 
             range_lock_guard &
             operator=(range_lock_guard &&other) noexcept {
@@ -159,10 +161,11 @@ namespace futures::detail {
         };
 
         // Handle trivial cases
-        if (const bool empty_range = first == last; empty_range) {
+        if (bool const empty_range = first == last; empty_range) {
             return;
-        } else if (const bool single_element = std::next(first) == last;
-                   single_element) {
+        } else if (bool const single_element = std::next(first) == last;
+                   single_element)
+        {
             first->lock();
             return;
         }
@@ -184,8 +187,9 @@ namespace futures::detail {
                 // First strategy: Lock first, then _try_ to lock the others
                 first_lock.lock();
                 const Iterator failed_lock_it = try_lock(next, last);
-                if (const bool no_lock_failed = failed_lock_it == last;
-                    no_lock_failed) {
+                if (bool const no_lock_failed = failed_lock_it == last;
+                    no_lock_failed)
+                {
                     // !SUCCESS!
                     // Breaks the association of the associated mutex (i.e.
                     // don't unlock first_lock)
@@ -205,7 +209,7 @@ namespace futures::detail {
                 if (first_lock.try_lock()) {
                     // Try to lock [second, next)
                     const Iterator failed_lock = try_lock(second, next);
-                    if (const bool all_locked = failed_lock == next; all_locked)
+                    if (bool const all_locked = failed_lock == next; all_locked)
                     {
                         // !SUCCESS!
                         // Don't let it unlock

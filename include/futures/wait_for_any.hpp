@@ -67,9 +67,9 @@ namespace futures {
         >
     Iterator
     wait_for_any(Iterator first, Iterator last) {
-        if (const bool is_empty = first == last; is_empty) {
+        if (bool const is_empty = first == last; is_empty) {
             return last;
-        } else if (const bool is_single = std::next(first) == last; is_single) {
+        } else if (bool const is_single = std::next(first) == last; is_single) {
             first->wait();
             return first;
         } else {
@@ -105,7 +105,8 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     iterator_t<Range>
@@ -130,17 +131,17 @@ namespace futures {
         typename... Fs
 #ifndef FUTURES_DOXYGEN
         ,
-        typename std::enable_if_t<
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>,
-            int> = 0
+        typename std::
+            enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all(std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -174,15 +175,16 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any(Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all(std::get<0>(std::forward<Tuple>(t)));
             return 0;
         } else {
@@ -215,12 +217,12 @@ namespace futures {
         >
     Iterator
     wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
         Iterator last) {
-        if (const bool is_empty = first == last; is_empty) {
+        if (bool const is_empty = first == last; is_empty) {
             return last;
-        } else if (const bool is_single = std::next(first) == last; is_single) {
+        } else if (bool const is_single = std::next(first) == last; is_single) {
             first->wait_for(timeout_duration);
             return first;
         } else {
@@ -251,12 +253,13 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     iterator_t<Range>
     wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Range &&r) {
         return wait_for_any_for(timeout_duration, std::begin(r), std::end(r));
     }
@@ -282,17 +285,18 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Fs>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all_for(timeout_duration, std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -322,17 +326,18 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all_for(
                 timeout_duration,
                 std::get<0>(std::forward<Tuple>(t)));
@@ -367,12 +372,12 @@ namespace futures {
         >
     Iterator
     wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
         Iterator last) {
-        if (const bool is_empty = first == last; is_empty) {
+        if (bool const is_empty = first == last; is_empty) {
             return last;
-        } else if (const bool is_single = std::next(first) == last; is_single) {
+        } else if (bool const is_single = std::next(first) == last; is_single) {
             first->wait_until(timeout_time);
             return first;
         } else {
@@ -404,12 +409,13 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     iterator_t<Range>
     wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Range &&r) {
         return wait_for_any_until(timeout_time, std::begin(r), std::end(r));
     }
@@ -435,17 +441,18 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Fs>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all_until(timeout_time, std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -475,17 +482,18 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::size_t
     wait_for_any_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (const bool is_empty = size == 0; is_empty) {
+        if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
-        } else if constexpr (const bool is_single = size == 1; is_single) {
+        } else if constexpr (bool const is_single = size == 1; is_single) {
             wait_for_all_until(
                 timeout_time,
                 std::get<0>(std::forward<Tuple>(t)));

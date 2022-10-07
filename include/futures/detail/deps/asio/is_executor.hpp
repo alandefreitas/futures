@@ -12,11 +12,11 @@
 
 // Include
 #if defined(FUTURES_USE_STANDALONE_ASIO)
-#include <asio/is_executor.hpp>
+#    include <asio/is_executor.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)
-#include <boost/asio/is_executor.hpp>
+#    include <boost/asio/is_executor.hpp>
 #else
-#include <futures/detail/bundled/boost/asio/is_executor.hpp>
+#    include <futures/detail/bundled/boost/asio/is_executor.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_ASIO_IS_EXECUTOR_HPP

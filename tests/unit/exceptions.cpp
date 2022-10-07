@@ -1,9 +1,7 @@
+#include <futures/futures.hpp>
 #include <array>
 #include <string>
-
 #include <catch2/catch.hpp>
-
-#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Exceptions") {
     using namespace futures;
@@ -13,7 +11,8 @@ TEST_CASE(TEST_CASE_PREFIX "Exceptions") {
         bool caught = false;
         try {
             f1.get();
-        } catch (...) {
+        }
+        catch (...) {
             caught = true;
         }
         REQUIRE(caught);
@@ -25,7 +24,8 @@ TEST_CASE(TEST_CASE_PREFIX "Exceptions") {
         bool caught = false;
         try {
             f2.get();
-        } catch (std::runtime_error&) {
+        }
+        catch (std::runtime_error&) {
             caught = true;
         }
         REQUIRE(caught);

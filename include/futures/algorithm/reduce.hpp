@@ -8,9 +8,9 @@
 #ifndef FUTURES_ALGORITHM_REDUCE_HPP
 #define FUTURES_ALGORITHM_REDUCE_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <numeric>
 #include <variant>
@@ -26,26 +26,23 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref reduce function
     class reduce_functor
-        : public binary_invoke_algorithm_functor<reduce_functor>
-    {
+        : public binary_invoke_algorithm_functor<reduce_functor> {
         friend binary_invoke_algorithm_functor<reduce_functor>;
 
         template <class Executor, class T>
-        class reduce_graph : public boost::empty_value<Executor>
-        {
+        class reduce_graph : public boost::empty_value<Executor> {
         public:
-            explicit reduce_graph(const Executor &ex)
+            explicit reduce_graph(Executor const &ex)
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             T
             launch_reduce_tasks(P p, I first, S last, T i, Fun f) {
                 auto middle = p(first, last);
-                const iter_difference_t<I> too_small = middle == last;
+                iter_difference_t<I> const too_small = middle == last;
                 constexpr iter_difference_t<I> cannot_parallelize
-                    = std::is_same_v<
-                          Executor,
-                          inline_executor> || is_forward_iterator_v<I>;
+                    = std::is_same_v<Executor, inline_executor>
+                      || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     return std::reduce(first, last, i, f);
                 } else {
@@ -107,7 +104,8 @@ namespace futures {
                 is_indirectly_binary_invocable_v<Fun, I, I> &&
                 std::is_copy_constructible_v<Fun>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
@@ -150,11 +148,12 @@ namespace futures {
                 is_indirectly_binary_invocable_v<Fun, I, I> &&
                 std::is_copy_constructible_v<Fun>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
-        run(const E &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+        run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 return inline_accumulate(first, last, i, f);

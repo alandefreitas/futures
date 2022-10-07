@@ -17,15 +17,13 @@ namespace futures::detail {
      */
 
     template <class Function, class = void, class... Args>
-    struct launch_result_impl
-    {};
+    struct launch_result_impl {};
 
     template <class Function, class... Args>
     struct launch_result_impl<
         Function,
         std::enable_if_t<std::is_invocable_v<std::decay_t<Function>, Args...>>,
-        Args...>
-    {
+        Args...> {
         using type = std::invoke_result_t<std::decay_t<Function>, Args...>;
     };
 
@@ -34,8 +32,7 @@ namespace futures::detail {
         Function,
         std::enable_if_t<
             std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>>,
-        Args...>
-    {
+        Args...> {
         using type = std::
             invoke_result_t<std::decay_t<Function>, stop_token, Args...>;
     };

@@ -10,16 +10,14 @@
 
 namespace futures::detail {
     template <bool allow_copy>
-    struct maybe_copyable
-    {
+    struct maybe_copyable {
     protected:
         maybe_copyable() = default;
         ~maybe_copyable() = default;
     };
 
     template <>
-    struct maybe_copyable<false>
-    {
+    struct maybe_copyable<false> {
         maybe_copyable() = default;
         maybe_copyable(maybe_copyable const&) = delete;
         maybe_copyable&

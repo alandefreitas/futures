@@ -40,12 +40,16 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
                 }
                 SECTION("Non-trivial return") {
                     SECTION("No args") {
-                        auto r = async_fn([]() { return std::string("Hello"); });
+                        auto r = async_fn([]() {
+                            return std::string("Hello");
+                        });
                         REQUIRE(r.get() == "Hello");
                     }
 
                     SECTION("With args") {
-                        auto r = async_fn([](int c) { return std::string(5, c); }, '_');
+                        auto r = async_fn(
+                            [](int c) { return std::string(5, c); },
+                            '_');
                         REQUIRE(r.get() == "_____");
                     }
                 }
@@ -90,8 +94,8 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
             }
         }
     };
-    using deferred_options = future_options<
-        continuable_opt, always_deferred_opt>;
+    using deferred_options
+        = future_options<continuable_opt, always_deferred_opt>;
     STATIC_REQUIRE(
         std::is_same_v<
             deferred_options,
@@ -105,4 +109,3 @@ TEST_CASE(TEST_CASE_PREFIX "Launch") {
         return schedule(std::forward<decltype(args)>(args)...);
     });
 }
-

@@ -31,12 +31,12 @@ namespace futures {
         asio::execution_context *context_{ nullptr };
 
         constexpr bool
-        operator==(const inline_executor &other) const noexcept {
+        operator==(inline_executor const &other) const noexcept {
             return context_ == other.context_;
         }
 
         constexpr bool
-        operator!=(const inline_executor &other) const noexcept {
+        operator!=(inline_executor const &other) const noexcept {
             return !(*this == other);
         }
 

@@ -97,17 +97,13 @@ TEST_CASE(TEST_CASE_PREFIX "Shared state") {
                 REQUIRE(f.get() == 2);
             }
             SECTION("Thread") {
-                std::thread t([&p]() {
-                    p.set_value(2);
-                });
+                std::thread t([&p]() { p.set_value(2); });
                 REQUIRE(f.get() == 2);
                 t.join();
             }
             SECTION("Executor") {
                 asio::thread_pool t(1);
-                asio::post(t, [&p]() {
-                    p.set_value(2);
-                });
+                asio::post(t, [&p]() { p.set_value(2); });
                 REQUIRE(f.get() == 2);
             }
         }

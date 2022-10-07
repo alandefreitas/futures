@@ -26,8 +26,7 @@ namespace futures {
     using remove_cvref = __see_below__;
 #else
     template <class T>
-    struct remove_cvref
-    {
+    struct remove_cvref {
         using type = std::remove_cv_t<std::remove_reference_t<T>>;
     };
 #endif

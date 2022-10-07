@@ -44,8 +44,7 @@ namespace futures {
      * algorithms such as for_each, any_of, all_of, ...
      */
     template <class Derived>
-    class value_cmp_algorithm_functor
-    {
+    class value_cmp_algorithm_functor {
     public:
         /// Complete overload
         template <
@@ -64,11 +63,12 @@ namespace futures {
                 is_sentinel_for_v<S, I> &&
                 is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, I first, S last, T f) const {
+        operator()(E const &ex, P p, I first, S last, T f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
                     make_inline_executor(),
@@ -77,12 +77,7 @@ namespace futures {
                     last,
                     std::move(f));
             } else {
-                return Derived().run(
-                    ex,
-                    p,
-                    first,
-                    last,
-                    std::move(f));
+                return Derived().run(ex, p, first, last, std::move(f));
             }
         }
 
@@ -104,11 +99,12 @@ namespace futures {
                 is_sentinel_for_v<S, I> &&
                 is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &, P p, I first, S last, T f) const {
+        operator()(E const &, P p, I first, S last, T f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
                     make_inline_executor(),
@@ -142,11 +138,12 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
                 std::is_copy_constructible_v<T>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, P p, R &&r, T f) const {
+        operator()(E const &ex, P p, R &&r, T f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
                     make_inline_executor(),
@@ -155,12 +152,8 @@ namespace futures {
                     std::end(r),
                     std::move(f));
             } else {
-                return Derived().run(
-                    ex,
-                    p,
-                    std::begin(r),
-                    std::end(r),
-                    std::move(f));
+                return Derived()
+                    .run(ex, p, std::begin(r), std::end(r), std::move(f));
             }
         }
 
@@ -180,7 +173,8 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, I> &&
                 std::is_copy_constructible_v<T>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -193,12 +187,8 @@ namespace futures {
                     last,
                     std::move(f));
             } else {
-                return Derived().run(
-                    make_default_executor(),
-                    p,
-                    first,
-                    last,
-                    std::move(f));
+                return Derived()
+                    .run(make_default_executor(), p, first, last, std::move(f));
             }
         }
 
@@ -216,7 +206,8 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
                 std::is_copy_constructible_v<T>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -253,11 +244,12 @@ namespace futures {
                 is_sentinel_for_v<S, I> &&
                 is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, I first, S last, T f) const {
+        operator()(E const &ex, I first, S last, T f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -289,11 +281,12 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
                 std::is_copy_constructible_v<T>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
-        operator()(const E &ex, R &&r, T f) const {
+        operator()(E const &ex, R &&r, T f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -325,7 +318,8 @@ namespace futures {
                 is_sentinel_for_v<S, I> &&
                 is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
@@ -359,7 +353,8 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>> &&
                 std::is_copy_constructible_v<T>,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)

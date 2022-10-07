@@ -30,12 +30,10 @@ namespace futures {
     using iter_rvalue_reference = __see_below__;
 #else
     template <class T, class = void>
-    struct iter_rvalue_reference
-    {};
+    struct iter_rvalue_reference {};
 
     template <class T>
-    struct iter_rvalue_reference<T, std::void_t<iter_value_t<T>>>
-    {
+    struct iter_rvalue_reference<T, std::void_t<iter_value_t<T>>> {
         using type = std::add_rvalue_reference<iter_value_t<T>>;
     };
 #endif

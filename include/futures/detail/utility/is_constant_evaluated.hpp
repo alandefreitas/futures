@@ -27,7 +27,7 @@ namespace futures::detail {
         unsigned char v{};
         // https://gist.github.com/schaumb/1dec6415d9ae18e94195c03964a662e9
         constexpr bool
-        gcc6_is_constant_evaluated(const unsigned char* e = &v) {
+        gcc6_is_constant_evaluated(unsigned char const* e = &v) {
             (void) v;
             return e - 0x6017d2; // memory dependent constant value
         }

@@ -8,11 +8,13 @@
 #ifndef FUTURES_STRESS_HPP
 #define FUTURES_STRESS_HPP
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
+#include <vector>
 
 template <class D>
 std::string

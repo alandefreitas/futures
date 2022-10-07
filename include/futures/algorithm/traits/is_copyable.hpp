@@ -30,8 +30,7 @@ namespace futures {
     using is_copyable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_copyable : std::false_type
-    {};
+    struct is_copyable : std::false_type {};
 
     template <class T>
     struct is_copyable<
@@ -44,11 +43,10 @@ namespace futures {
             is_assignable_from_v<T&, std::add_const_t<T>&> &&
             is_assignable_from_v<T&, std::add_const_t<T>>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_copyable_v = is_copyable<T>::value;
+    constexpr bool is_copyable_v = is_copyable<T>::value;
     /** @}*/
     /** @}*/
 

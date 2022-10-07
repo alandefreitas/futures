@@ -46,7 +46,8 @@ namespace futures {
             is_future_v<iter_value_t<Iterator>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     void
@@ -79,7 +80,8 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     void
@@ -113,7 +115,8 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Fs>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     void
@@ -131,7 +134,8 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     void
@@ -161,12 +165,13 @@ namespace futures {
             is_future_v<iter_value_t<Iterator>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
         Iterator last) {
         auto until_tp = std::chrono::system_clock::now() + timeout_duration;
@@ -202,12 +207,13 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Range &&r) {
         using std::begin;
         return wait_for_all_for(begin(r), end(r), timeout_duration);
@@ -234,12 +240,13 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Fs>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Fs &&...fs) {
         auto until_tp = std::chrono::system_clock::now() + timeout_duration;
         (fs.wait_until(until_tp), ...);
@@ -273,12 +280,13 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_for(
-        const std::chrono::duration<Rep, Period> &timeout_duration,
+        std::chrono::duration<Rep, Period> const &timeout_duration,
         Tuple &&t) {
         auto until_tp = std::chrono::system_clock::now() + timeout_duration;
         tuple_for_each(std::forward<Tuple>(t), [&until_tp](auto &f) {
@@ -317,12 +325,13 @@ namespace futures {
             is_future_v<iter_value_t<Iterator>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
         Iterator last) {
         for (Iterator it = first; it != last; ++it) {
@@ -357,12 +366,13 @@ namespace futures {
             is_future_v<range_value_t<Range>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Range &&r) {
         using std::begin;
         return wait_for_all_until(begin(r), end(r), timeout_time);
@@ -389,12 +399,13 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Fs>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Fs &&...fs) {
         (fs.wait_until(timeout_time), ...);
         bool all_ready = (is_ready(fs) && ...);
@@ -427,12 +438,13 @@ namespace futures {
             detail::is_tuple_v<std::decay_t<Tuple>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     std::future_status
     wait_for_all_until(
-        const std::chrono::time_point<Clock, Duration> &timeout_time,
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
         Tuple &&t) {
         tuple_for_each(std::forward<Tuple>(t), [&timeout_time](auto &f) {
             f.wait_until(timeout_time);

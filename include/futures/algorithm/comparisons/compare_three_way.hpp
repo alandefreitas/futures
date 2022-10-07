@@ -15,8 +15,7 @@
 namespace futures {
     /** A C++17 functor equivalent to the C++20 std::ranges::compare_three_way
      */
-    struct compare_three_way
-    {
+    struct compare_three_way {
         template <
             typename T,
             typename U

@@ -105,7 +105,7 @@ namespace futures::detail {
     public:
         operation_state_storage() = default;
 
-        explicit operation_state_storage(const R& value) {
+        explicit operation_state_storage(R const& value) {
             set_value(value);
         }
 
@@ -114,7 +114,7 @@ namespace futures::detail {
         }
 
         void
-        set_value(const R& value) {
+        set_value(R const& value) {
             value_ = value;
         }
 

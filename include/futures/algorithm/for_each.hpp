@@ -8,9 +8,9 @@
 #ifndef FUTURES_ALGORITHM_FOR_EACH_HPP
 #define FUTURES_ALGORITHM_FOR_EACH_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
@@ -53,14 +53,14 @@ namespace futures {
         template <class Executor>
         class sort_graph : public boost::empty_value<Executor> {
         public:
-            explicit sort_graph(const Executor &ex)
+            explicit sort_graph(Executor const &ex)
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class I, class S, class Fun>
             void
             launch_sort_tasks(P p, I first, S last, Fun f) {
                 auto middle = p(first, last);
-                const bool too_small = middle == last;
+                bool const too_small = middle == last;
                 constexpr bool cannot_parallelize
                     = std::is_same_v<Executor, inline_executor>
                       || is_forward_iterator_v<I>;
@@ -68,9 +68,10 @@ namespace futures {
                     std::for_each(first, last, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
-                    auto rhs_task = futures::
-                        async(boost::empty_value<Executor>::get(), [this, p, middle, last, f] {
-                            launch_sort_tasks(p, middle, last, f);
+                    auto rhs_task = futures::async(
+                        boost::empty_value<Executor>::get(),
+                        [this, p, middle, last, f] {
+                        launch_sort_tasks(p, middle, last, f);
                         });
 
                     // Launch tasks for lhs: [first, middle]
@@ -178,7 +179,7 @@ namespace futures {
 #endif
             >
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR void
-        run(const E &ex, P p, I first, S last, Fun f) const {
+        run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 inline_for_each(first, last, f);
             } else {

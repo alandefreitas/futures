@@ -15,8 +15,7 @@
 namespace futures {
     /** A C++17 functor equivalent to the C++20 std::ranges::less
      */
-    struct less
-    {
+    struct less {
         template <
             typename T,
             typename U

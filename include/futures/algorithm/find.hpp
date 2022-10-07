@@ -8,12 +8,12 @@
 #ifndef FUTURES_ALGORITHM_FIND_HPP
 #define FUTURES_ALGORITHM_FIND_HPP
 
+#include <futures/futures.hpp>
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
-#include <futures/futures.hpp>
 #include <execution>
 #include <variant>
 
@@ -27,8 +27,7 @@ namespace futures {
      */
 
     /// Functor representing the overloads for the @ref find function
-    class find_functor : public value_cmp_algorithm_functor<find_functor>
-    {
+    class find_functor : public value_cmp_algorithm_functor<find_functor> {
         friend value_cmp_algorithm_functor<find_functor>;
 
         /// Complete overload of the find algorithm
@@ -60,13 +59,14 @@ namespace futures {
                 is_indirectly_binary_invocable_v<equal_to, T *, I>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         I
-        run(const E &ex, P p, I first, S last, const T &v) const {
+        run(E const &ex, P p, I first, S last, T const &v) const {
             return find_if_functor::find_if_graph<E, I>(ex)
-                .find_if(p, first, last, [&](const auto &el) {
+                .find_if(p, first, last, [&](auto const &el) {
                     return el == v;
                 });
         }

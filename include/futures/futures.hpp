@@ -65,8 +65,11 @@
 #include <futures/config.hpp>
 
 // #glob <futures/*.hpp>
+#include <futures/adaptor.hpp>
+#include <futures/algorithm.hpp>
 #include <futures/await.hpp>
 #include <futures/basic_future.hpp>
+#include <futures/executor.hpp>
 #include <futures/future_error.hpp>
 #include <futures/future_options.hpp>
 #include <futures/future_options_args.hpp>
@@ -77,9 +80,5 @@
 #include <futures/stop_token.hpp>
 #include <futures/wait_for_all.hpp>
 #include <futures/wait_for_any.hpp>
-
-#include <futures/adaptor.hpp>
-#include <futures/algorithm.hpp>
-#include <futures/executor.hpp>
 
 #endif // FUTURES_FUTURES_HPP

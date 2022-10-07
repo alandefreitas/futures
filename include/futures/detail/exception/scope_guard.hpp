@@ -18,8 +18,7 @@ namespace futures {
     namespace detail {
         /// The common functions in a scope guard
         /// @note Adapted from folly / abseil
-        class scope_guard_impl_base
-        {
+        class scope_guard_impl_base {
         public:
             /// Tell the scope guard not to run the function
             void
@@ -55,8 +54,8 @@ namespace futures {
             }
 
             template <typename T>
-            static const T &
-            as_const(const T &t) noexcept {
+            static T const &
+            as_const(T const &t) noexcept {
                 return t;
             }
 
@@ -66,8 +65,7 @@ namespace futures {
         /// A scope guard that calls a function when being destructed
         /// unless told otherwise
         template <typename FunctionType, bool InvokeNoexcept>
-        class scope_guard_impl : public scope_guard_impl_base
-        {
+        class scope_guard_impl : public scope_guard_impl_base {
         public:
             explicit scope_guard_impl(FunctionType &fn) noexcept(
                 std::is_nothrow_copy_constructible<FunctionType>::value)
@@ -77,7 +75,7 @@ namespace futures {
                         std::is_nothrow_copy_constructible<FunctionType>{},
                         &fn)) {}
 
-            explicit scope_guard_impl(const FunctionType &fn) noexcept(
+            explicit scope_guard_impl(FunctionType const &fn) noexcept(
                 std::is_nothrow_copy_constructible<FunctionType>::value)
                 : scope_guard_impl(
                     fn,
@@ -94,8 +92,7 @@ namespace futures {
                         &fn)) {}
 
             /// A tag for a dismissed scope guard
-            struct scope_guard_dismissed
-            {};
+            struct scope_guard_dismissed {};
 
             explicit scope_guard_impl(
                 FunctionType &&fn,
@@ -103,8 +100,8 @@ namespace futures {
                                                     is_nothrow_move_constructible<
                                                         FunctionType>::value)
                 // No need for failsafe in this case, as the guard is dismissed.
-                : scope_guard_impl_base{ true },
-                  function_(std::forward<FunctionType>(fn)) {}
+                : scope_guard_impl_base{ true }
+                , function_(std::forward<FunctionType>(fn)) {}
 
             scope_guard_impl(scope_guard_impl &&other) noexcept(
                 std::is_nothrow_move_constructible<FunctionType>::value)
@@ -126,7 +123,7 @@ namespace futures {
 
         private:
             static scope_guard_impl_base
-            make_fail_safe(std::true_type, const void *) noexcept {
+            make_fail_safe(std::true_type, void const *) noexcept {
                 return make_empty_scope_guard();
             }
 
@@ -141,7 +138,8 @@ namespace futures {
 
             template <typename Fn>
             explicit scope_guard_impl(Fn &&fn, scope_guard_impl_base &&failsafe)
-                : scope_guard_impl_base{}, function_(std::forward<Fn>(fn)) {
+                : scope_guard_impl_base{}
+                , function_(std::forward<Fn>(fn)) {
                 failsafe.dismiss();
             }
 

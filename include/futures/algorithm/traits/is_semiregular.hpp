@@ -30,8 +30,7 @@ namespace futures {
     using is_semiregular = __see_below__;
 #else
     template <class T, class = void>
-    struct is_semiregular : std::false_type
-    {};
+    struct is_semiregular : std::false_type {};
 
     template <class T>
     struct is_semiregular<
@@ -41,11 +40,10 @@ namespace futures {
             is_copyable_v<T> &&
             is_default_initializable_v<T>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_semiregular_v = is_semiregular<T>::value;
+    constexpr bool is_semiregular_v = is_semiregular<T>::value;
 
     /** @}*/
     /** @}*/

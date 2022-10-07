@@ -33,8 +33,7 @@ namespace futures {
     using iter_difference = __see_below__;
 #else
     template <class T, class = void>
-    struct iter_difference
-    {};
+    struct iter_difference {};
 
     template <class T>
     struct iter_difference<
@@ -43,8 +42,7 @@ namespace futures {
             // clang-format off
             has_iterator_traits_difference_type_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::difference_type;
     };
@@ -57,8 +55,7 @@ namespace futures {
             !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
             std::is_pointer_v<T>
             // clang-format on
-            >>
-    {
+            >> {
         using type = std::ptrdiff_t;
     };
 
@@ -71,8 +68,7 @@ namespace futures {
             !std::is_pointer_v<T> &&
             std::is_const_v<T>
             // clang-format on
-            >>
-    {
+            >> {
         using type = typename iter_difference<std::remove_const_t<T>>::type;
     };
 
@@ -86,8 +82,7 @@ namespace futures {
             !std::is_const_v<T> &&
             has_iterator_traits_difference_type_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = typename T::difference_type;
     };
 
@@ -102,8 +97,7 @@ namespace futures {
             !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
             is_subtractable_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = std::make_signed_t<
             decltype(std::declval<T>() - std::declval<T>())>;
     };

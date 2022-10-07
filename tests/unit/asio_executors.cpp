@@ -1,9 +1,7 @@
+#include <futures/futures.hpp>
 #include <array>
 #include <string>
-
 #include <catch2/catch.hpp>
-
-#include <futures/futures.hpp>
 
 TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
     using namespace futures;
@@ -52,8 +50,12 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
                 std::future<void> f1;
                 std::future<void> f2;
                 asio::post(ex, asio::use_future([&] {
-                               f1 = asio::dispatch(ex, asio::use_future([&] { a = true; }));
-                               f2 = asio::dispatch(ex, asio::use_future([&] { b = true; }));
+                               f1 = asio::dispatch(ex, asio::use_future([&] {
+                                                       a = true;
+                                                   }));
+                               f2 = asio::dispatch(ex, asio::use_future([&] {
+                                                       b = true;
+                                                   }));
                                REQUIRE(a);
                                REQUIRE(b);
                            }))
@@ -71,8 +73,12 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
                 std::future<void> f1;
                 std::future<void> f2;
                 asio::post(ex, asio::use_future([&] {
-                               f1 = asio::defer(ex, asio::use_future([&] { a = true; }));
-                               f2 = asio::defer(ex, asio::use_future([&] { b = true; }));
+                               f1 = asio::defer(ex, asio::use_future([&] {
+                                                    a = true;
+                                                }));
+                               f2 = asio::defer(ex, asio::use_future([&] {
+                                                    b = true;
+                                                }));
                                REQUIRE_FALSE(a);
                                REQUIRE_FALSE(b);
                            }))

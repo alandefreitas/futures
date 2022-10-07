@@ -19,13 +19,11 @@ namespace futures::detail {
     /// Check if a function can be invoked with the elements of a tuple
     /// as arguments, as in std::apply
     template <typename Function, typename Tuple>
-    struct is_tuple_invocable : std::false_type
-    {};
+    struct is_tuple_invocable : std::false_type {};
 
     template <typename Function, class... Args>
     struct is_tuple_invocable<Function, std::tuple<Args...>>
-        : std::is_invocable<Function, Args...>
-    {};
+        : std::is_invocable<Function, Args...> {};
 
     template <typename Function, typename Tuple>
     constexpr bool is_tuple_invocable_v = is_tuple_invocable<Function, Tuple>::

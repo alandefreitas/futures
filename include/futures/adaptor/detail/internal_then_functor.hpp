@@ -8,15 +8,16 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
 #define FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
 
-#include <futures/algorithm/traits/is_range.hpp>
-#include <futures/algorithm/traits/range_value.hpp>
 #include <futures/basic_future.hpp>
-#include <futures/traits/future_value.hpp>
-#include <futures/traits/is_future.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
+#include <futures/algorithm/traits/is_range.hpp>
+#include <futures/algorithm/traits/range_value.hpp>
+#include <futures/traits/future_value.hpp>
+#include <futures/traits/is_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
@@ -27,7 +28,6 @@
 #include <futures/detail/traits/tuple_type_transform.hpp>
 #include <futures/detail/traits/type_member_or.hpp>
 #include <futures/detail/traits/type_member_or_void.hpp>
-#include <futures/detail/move_if_not_shared.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -35,12 +35,11 @@ namespace futures::detail {
      */
 
     // Wrap implementation in empty struct to facilitate friends
-    struct internal_then_functor
-    {
+    struct internal_then_functor {
         /// Maybe copy the previous continuations source
         template <class Future>
         static continuations_source<is_always_deferred_v<Future>>
-        copy_continuations_source(const Future &before) {
+        copy_continuations_source(Future const &before) {
             if constexpr (is_continuable_v<std::decay_t<Future>>) {
                 return before.state_->get_continuations_source();
             } else {
@@ -64,11 +63,12 @@ namespace futures::detail {
                 is_future_v<std::decay_t<Future>> &&
                 continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
                 // clang-format on
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
-        operator()(const Executor &ex, Future &&before, Function &&after)
+        operator()(Executor const &ex, Future &&before, Function &&after)
             const {
             // Determine next future options
             using traits

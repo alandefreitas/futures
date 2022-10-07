@@ -18,7 +18,7 @@ namespace futures::detail {
         class Executor,
         class Function>
     shared_state<value_type, future_options>
-    make_continuation_shared_state(const Executor &ex, Function &&f) {
+    make_continuation_shared_state(Executor const &ex, Function &&f) {
         using shared_state_t = operation_state<value_type, future_options>;
         if constexpr (!future_options::is_always_deferred) {
             (void) f;

@@ -33,14 +33,12 @@ namespace futures {
     using iter_value = __see_below__;
 #else
     template <class T, class = void>
-    struct iter_value
-    {};
+    struct iter_value {};
 
     template <class T>
     struct iter_value<
         T,
-        std::enable_if_t<has_iterator_traits_value_type_v<remove_cvref_t<T>>>>
-    {
+        std::enable_if_t<has_iterator_traits_value_type_v<remove_cvref_t<T>>>> {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::value_type;
     };
@@ -49,9 +47,8 @@ namespace futures {
     struct iter_value<
         T,
         std::enable_if_t<
-            !has_iterator_traits_value_type_v<
-                remove_cvref_t<T>> && std::is_pointer_v<T>>>
-    {
+            !has_iterator_traits_value_type_v<remove_cvref_t<T>>
+            && std::is_pointer_v<T>>> {
         using type = decltype(*std::declval<std::remove_cv_t<T>>());
     };
 
@@ -59,9 +56,8 @@ namespace futures {
     struct iter_value<
         T,
         std::enable_if_t<
-            !has_iterator_traits_value_type_v<remove_cvref_t<
-                T>> && !std::is_pointer_v<T> && std::is_array_v<T>>>
-    {
+            !has_iterator_traits_value_type_v<remove_cvref_t<T>>
+            && !std::is_pointer_v<T> && std::is_array_v<T>>> {
         using type = std::remove_cv_t<std::remove_extent_t<T>>;
     };
 
@@ -69,9 +65,9 @@ namespace futures {
     struct iter_value<
         T,
         std::enable_if_t<
-            !has_iterator_traits_value_type_v<remove_cvref_t<
-                T>> && !std::is_pointer_v<T> && !std::is_array_v<T> && std::is_const_v<T>>>
-    {
+            !has_iterator_traits_value_type_v<remove_cvref_t<T>>
+            && !std::is_pointer_v<T> && !std::is_array_v<T>
+            && std::is_const_v<T>>> {
         using type = typename iter_value<std::remove_const_t<T>>::type;
     };
 
@@ -79,9 +75,9 @@ namespace futures {
     struct iter_value<
         T,
         std::enable_if_t<
-            !has_iterator_traits_value_type_v<remove_cvref_t<
-                T>> && !std::is_pointer_v<T> && !std::is_array_v<T> && !std::is_const_v<T> && has_value_type_v<T>>>
-    {
+            !has_iterator_traits_value_type_v<remove_cvref_t<T>>
+            && !std::is_pointer_v<T> && !std::is_array_v<T>
+            && !std::is_const_v<T> && has_value_type_v<T>>> {
         using type = typename T::value_type;
     };
 
@@ -89,9 +85,10 @@ namespace futures {
     struct iter_value<
         T,
         std::enable_if_t<
-            !has_iterator_traits_value_type_v<remove_cvref_t<
-                T>> && !std::is_pointer_v<T> && !std::is_array_v<T> && !std::is_const_v<T> && !has_value_type_v<T> && has_element_type_v<T>>>
-    {
+            !has_iterator_traits_value_type_v<remove_cvref_t<T>>
+            && !std::is_pointer_v<T> && !std::is_array_v<T>
+            && !std::is_const_v<T> && !has_value_type_v<T>
+            && has_element_type_v<T>>> {
         using type = typename T::element_type;
     };
 

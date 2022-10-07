@@ -25,8 +25,7 @@ namespace futures {
      * @tparam Executor Executor type
      */
     template <class Executor>
-    struct executor_opt
-    {
+    struct executor_opt {
         using type = Executor;
     };
 
@@ -36,16 +35,14 @@ namespace futures {
      * continuations to the task related to that future. The continuations
      * are executed as soon as the future main task is ready.
      */
-    struct continuable_opt
-    {};
+    struct continuable_opt {};
 
     /// Future option to determine the future is stoppable
     /**
      * The operation state of a stoppable future holds a stop token we can
      * use to request the main operation to stop.
      */
-    struct stoppable_opt
-    {};
+    struct stoppable_opt {};
 
     /// Future option to determine the future is always_detached
     /**
@@ -53,8 +50,7 @@ namespace futures {
      * The detach() function does nothing and the future will not wait
      * for the promise to be set at destruction.
      */
-    struct always_detached_opt
-    {};
+    struct always_detached_opt {};
 
     /// Future option to determine the future is always_deferred
     /**
@@ -70,13 +66,11 @@ namespace futures {
      *   when waiting for the future so the address of the operation state
      *   cannot change.
      */
-    struct always_deferred_opt
-    {};
+    struct always_deferred_opt {};
 
     /// Type of the deferred function
     template <class Function>
-    struct deferred_function_opt
-    {
+    struct deferred_function_opt {
         using type = Function;
     };
 
@@ -86,8 +80,7 @@ namespace futures {
      * future operation is not moved from the future so that other tasks
      * can depend on it.
      */
-    struct shared_opt
-    {};
+    struct shared_opt {};
 
     /** @} */
     /** @} */

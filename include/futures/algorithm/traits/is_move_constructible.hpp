@@ -30,8 +30,7 @@ namespace futures {
     using is_move_constructible = __see_below__;
 #else
     template <class T, class = void>
-    struct is_move_constructible : std::false_type
-    {};
+    struct is_move_constructible : std::false_type {};
 
     template <class T>
     struct is_move_constructible<
@@ -41,11 +40,10 @@ namespace futures {
             is_constructible_from_v<T, T> &&
             is_convertible_to_v<T, T>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_move_constructible_v = is_move_constructible<T>::value;
+    constexpr bool is_move_constructible_v = is_move_constructible<T>::value;
 
     /** @}*/
     /** @}*/

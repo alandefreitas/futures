@@ -18,14 +18,12 @@ namespace futures::detail {
     /// Return T::type or a second type as a placeholder if T::type
     /// doesn't exist This class is meant to avoid errors in std::conditional
     template <class, class Placeholder = void, class = void>
-    struct type_member_or
-    {
+    struct type_member_or {
         using type = Placeholder;
     };
 
     template <class T, class Placeholder>
-    struct type_member_or<T, Placeholder, std::void_t<typename T::type>>
-    {
+    struct type_member_or<T, Placeholder, std::void_t<typename T::type>> {
         using type = typename T::type;
     };
 

@@ -76,7 +76,7 @@ test_void_unary_invoke(Fn fn, R&& r, Cb&& cb, CheckCb&& check) {
 
 template <class Fn, class R, class Cb, class Result>
 void
-test_unary_invoke(Fn fn, R&& r, Cb&& cb, const Result& exp) {
+test_unary_invoke(Fn fn, R&& r, Cb&& cb, Result const& exp) {
     SECTION("Basic") {
         SECTION("Ranges") {
             auto res = fn(r, cb);
@@ -145,7 +145,7 @@ test_unary_invoke(Fn fn, R&& r, Cb&& cb, const Result& exp) {
 
 template <class Fn, class R, class Cb, class Result>
 void
-test_binary_invoke(Fn fn, R&& r, Cb&& cb, const Result& exp) {
+test_binary_invoke(Fn fn, R&& r, Cb&& cb, Result const& exp) {
     SECTION("Basic") {
         SECTION("Ranges") {
             auto res = fn(r, cb);
@@ -214,7 +214,7 @@ test_binary_invoke(Fn fn, R&& r, Cb&& cb, const Result& exp) {
 
 template <class Fn, class R, class T, class Result>
 void
-test_value_cmp(Fn fn, R&& r, T&& t, const Result& exp) {
+test_value_cmp(Fn fn, R&& r, T&& t, Result const& exp) {
     SECTION("Basic") {
         SECTION("Ranges") {
             auto res = fn(r, t);
@@ -296,7 +296,7 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
         };
 
         // check
-        const int v_sum = std::accumulate(v.begin(), v.end(), 0, std::plus<>());
+        int const v_sum = std::accumulate(v.begin(), v.end(), 0, std::plus<>());
         auto check = [&c, v_sum] {
             int r = c.load(std::memory_order_acquire);
             REQUIRE(r == v_sum);
@@ -378,7 +378,7 @@ TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
         auto custom_plus = [](int a, int b) {
             return a + b;
         };
-        const int v_sum = std::accumulate(v.begin(), v.end(), 0, std::plus<>());
+        int const v_sum = std::accumulate(v.begin(), v.end(), 0, std::plus<>());
         test_binary_invoke(reduce, v, custom_plus, v_sum);
     }
 }

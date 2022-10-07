@@ -10,7 +10,8 @@
 
 namespace futures::detail {
     enum class byte : unsigned char
-    {};
+    {
+    };
 
     template <
         class IntegerType,

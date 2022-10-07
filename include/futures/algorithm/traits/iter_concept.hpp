@@ -32,8 +32,7 @@ namespace futures {
     using iter_concept = __see_below__;
 #else
     template <class T, class = void>
-    struct iter_concept
-    {};
+    struct iter_concept {};
 
     template <class T>
     struct iter_concept<
@@ -42,8 +41,7 @@ namespace futures {
             // clang-format off
             has_iterator_traits_iterator_concept_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::iterator_concept;
     };
@@ -56,8 +54,7 @@ namespace futures {
             !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
             has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = typename std::iterator_traits<
             remove_cvref_t<T>>::iterator_category;
     };
@@ -70,8 +67,7 @@ namespace futures {
             !has_iterator_traits_iterator_concept_v<remove_cvref_t<T>> &&
             !has_iterator_traits_iterator_category_v<remove_cvref_t<T>>
             // clang-format on
-            >>
-    {
+            >> {
         using type = std::random_access_iterator_tag;
     };
 #endif

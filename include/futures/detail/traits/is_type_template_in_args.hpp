@@ -13,21 +13,18 @@
 
 namespace futures::detail {
     template <template <class> class T, class... Args>
-    struct is_type_template_in_args : std::false_type
-    {};
+    struct is_type_template_in_args : std::false_type {};
 
     template <template <class> class T, class Arg>
     struct is_type_template_in_args<T, Arg>
-        : std::is_same<T<type_member_or_void_t<Arg>>, Arg>
-    {};
+        : std::is_same<T<type_member_or_void_t<Arg>>, Arg> {};
 
     template <template <class> class T, class Arg1, class... Args>
     struct is_type_template_in_args<T, Arg1, Args...>
         : std::conditional_t<
               std::is_same_v<T<type_member_or_void_t<Arg1>>, Arg1>,
               std::true_type,
-              is_type_template_in_args<T, Args...>>
-    {};
+              is_type_template_in_args<T, Args...>> {};
 
     template <template <class> class T, class... Args>
     inline constexpr bool is_type_template_in_args_v

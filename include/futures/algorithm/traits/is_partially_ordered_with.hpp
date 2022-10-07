@@ -28,8 +28,7 @@ namespace futures {
     using is_partially_ordered_with = __see_below__;
 #else
     template <class T, class U, class = void>
-    struct is_partially_ordered_with : std::false_type
-    {};
+    struct is_partially_ordered_with : std::false_type {};
 
     template <class T, class U>
     struct is_partially_ordered_with<
@@ -37,20 +36,19 @@ namespace futures {
         U,
         std::void_t<
             // clang-format off
-            decltype(std::declval<const std::remove_reference_t<T>&>() < std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() > std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() <= std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() >= std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() < std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() > std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() <= std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() >= std::declval<const std::remove_reference_t<T>&>())
+            decltype(std::declval< std::remove_reference_t<T> const &>() < std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() > std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() <= std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() >= std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() < std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() > std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() <= std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() >= std::declval< std::remove_reference_t<T> const &>())
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T, class U>
-    bool constexpr is_partially_ordered_with_v
+    constexpr bool is_partially_ordered_with_v
         = is_partially_ordered_with<T, U>::value;
 
     /** @}*/

@@ -31,8 +31,7 @@ namespace futures {
     using is_indirectly_readable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_indirectly_readable : std::false_type
-    {};
+    struct is_indirectly_readable : std::false_type {};
 
     template <class T>
     struct is_indirectly_readable<
@@ -41,11 +40,10 @@ namespace futures {
             iter_value_t<T>,
             iter_reference_t<T>,
             iter_rvalue_reference_t<T>,
-            decltype(*std::declval<T>())>> : std::true_type
-    {};
+            decltype(*std::declval<T>())>> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_indirectly_readable_v = is_indirectly_readable<T>::value;
+    constexpr bool is_indirectly_readable_v = is_indirectly_readable<T>::value;
     /** @}*/
     /** @}*/
 

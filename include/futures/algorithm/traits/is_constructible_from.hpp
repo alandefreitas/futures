@@ -31,11 +31,10 @@ namespace futures {
     struct is_constructible_from
         : std::conjunction<
               std::is_destructible<T>,
-              std::is_constructible<T, Args...>>
-    {};
+              std::is_constructible<T, Args...>> {};
 #endif
     template <class T, class... Args>
-    bool constexpr is_constructible_from_v = is_constructible_from<T>::value;
+    constexpr bool is_constructible_from_v = is_constructible_from<T>::value;
     /** @}*/
     /** @}*/
 

@@ -49,8 +49,7 @@ namespace futures {
 
     /// Empty struct to initialize a @ref stop_source without a shared
     /// stop state
-    struct nostopstate_t
-    {
+    struct nostopstate_t {
         explicit nostopstate_t() = default;
     };
 
@@ -63,8 +62,7 @@ namespace futures {
     /// The stop_token class provides the means to check if a stop request has
     /// been made or can be made, for its associated std::stop_source object. It
     /// is essentially a thread-safe "view" of the associated stop-state.
-    class stop_token
-    {
+    class stop_token {
     public:
         /// @name Constructors
         /// @{
@@ -85,7 +83,7 @@ namespace futures {
         ///
         /// @param other another stop_token object to construct this stop_token
         /// object
-        stop_token(const stop_token &other) noexcept = default;
+        stop_token(stop_token const &other) noexcept = default;
 
         /// Move constructor.
         ///
@@ -114,7 +112,7 @@ namespace futures {
         /// @param other Another stop_token object to share the stop-state with
         /// to or acquire the stop-state from
         stop_token &
-        operator=(const stop_token &other) noexcept {
+        operator=(stop_token const &other) noexcept {
             if (shared_state_ != other.shared_state_) {
                 stop_token tmp{ other };
                 swap(tmp);
@@ -215,7 +213,7 @@ namespace futures {
         /// @return true if lhs and rhs have the same associated stop-state, or
         /// both have no associated stop-state, otherwise false
         [[nodiscard]] friend bool
-        operator==(const stop_token &a, const stop_token &b) noexcept {
+        operator==(stop_token const &a, stop_token const &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
 
@@ -228,7 +226,7 @@ namespace futures {
         ///
         /// @return true if lhs and rhs have different associated stop-states
         [[nodiscard]] friend bool
-        operator!=(const stop_token &a, const stop_token &b) noexcept {
+        operator!=(stop_token const &a, stop_token const &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }
 
@@ -258,8 +256,7 @@ namespace futures {
     /// for associated std::stop_token(s) will be invoked, and any
     /// std::condition_variable_any objects waiting on associated
     /// std::stop_token(s) will be awoken.
-    class stop_source
-    {
+    class stop_source {
     public:
         /// @name Constructors
         /// @{
@@ -285,7 +282,7 @@ namespace futures {
         ///
         /// @param other another stop_source object to construct this
         /// stop_source object with
-        stop_source(const stop_source &other) noexcept = default;
+        stop_source(stop_source const &other) noexcept = default;
 
         /// Move constructor
         ///
@@ -326,7 +323,7 @@ namespace futures {
         ///
         /// @param other another stop_source object to share the stop-state with
         stop_source &
-        operator=(const stop_source &other) noexcept {
+        operator=(stop_source const &other) noexcept {
             if (shared_state_ != other.shared_state_) {
                 stop_source tmp{ other };
                 swap(tmp);
@@ -427,11 +424,11 @@ namespace futures {
         /// @{
 
         [[nodiscard]] friend bool
-        operator==(const stop_source &a, const stop_source &b) noexcept {
+        operator==(stop_source const &a, stop_source const &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
         [[nodiscard]] friend bool
-        operator!=(const stop_source &a, const stop_source &b) noexcept {
+        operator!=(stop_source const &a, stop_source const &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }
 

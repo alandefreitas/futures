@@ -15,26 +15,22 @@ namespace futures::detail {
     /// The detail functions related to type lists assume we use std::tuple for
     /// all type lists
     template <class...>
-    struct tuple_type_concat
-    {
+    struct tuple_type_concat {
         using type = std::tuple<>;
     };
 
     template <class T1>
-    struct tuple_type_concat<T1>
-    {
+    struct tuple_type_concat<T1> {
         using type = T1;
     };
 
     template <class... First, class... Second>
-    struct tuple_type_concat<std::tuple<First...>, std::tuple<Second...>>
-    {
+    struct tuple_type_concat<std::tuple<First...>, std::tuple<Second...>> {
         using type = std::tuple<First..., Second...>;
     };
 
     template <class T1, class... Tn>
-    struct tuple_type_concat<T1, Tn...>
-    {
+    struct tuple_type_concat<T1, Tn...> {
         using type = typename tuple_type_concat<
             T1,
             typename tuple_type_concat<Tn...>::type>::type;

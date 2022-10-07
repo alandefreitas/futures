@@ -21,8 +21,7 @@ namespace futures::detail {
 
     /// Future options list as a sorted set
     template <class... Args>
-    struct future_options_flat
-    {
+    struct future_options_flat {
     private:
         using empty_opts_type = future_options_list<>;
         using maybe_executor_list_t = conditional_append_future_option_t<

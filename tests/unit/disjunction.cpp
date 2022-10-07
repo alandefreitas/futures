@@ -4,8 +4,8 @@
 #include <catch2/catch.hpp>
 
 #if defined(__GNUG__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
 TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
@@ -469,5 +469,5 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
 }
 
 #if defined(__GNUG__) && !defined(__clang__)
-#pragma GCC diagnostic pop
+#    pragma GCC diagnostic pop
 #endif

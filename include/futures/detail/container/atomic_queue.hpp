@@ -42,7 +42,6 @@ namespace futures::detail {
               boost::allocator_rebind_t<Allocator, lock_free_queue_node<T>>,
               0>
         , private boost::empty_value<boost::allocator_rebind_t<Allocator, T>, 1> {
-
         using node = lock_free_queue_node<T>;
         using node_allocator_type = boost::allocator_rebind_t<Allocator, node>;
         using empty_node_allocator_type = boost::
@@ -54,22 +53,22 @@ namespace futures::detail {
         using empty_value_type_allocator_type = boost::
             empty_value<value_type_allocator_type, 1>;
 
-        node_allocator_type &
+        node_allocator_type&
         get_node_allocator() {
             return empty_node_allocator_type::get();
         }
 
-        node_allocator_type const &
+        node_allocator_type const&
         get_node_allocator() const {
             return empty_node_allocator_type::get();
         }
 
-        value_type_allocator_type &
+        value_type_allocator_type&
         get_value_allocator() {
             return value_type_allocator_type::get();
         }
 
-        value_type_allocator_type const &
+        value_type_allocator_type const&
         get_value_allocator() const {
             return value_type_allocator_type::get();
         }
@@ -87,9 +86,9 @@ namespace futures::detail {
             }
         }
 
-        explicit atomic_queue(const Allocator& alloc = std::allocator<T>{})
-            : empty_node_allocator_type(boost::empty_init, alloc),
-              empty_value_type_allocator_type(boost::empty_init, alloc) {
+        explicit atomic_queue(Allocator const& alloc = std::allocator<T>{})
+            : empty_node_allocator_type(boost::empty_init, alloc)
+            , empty_value_type_allocator_type(boost::empty_init, alloc) {
             node* dummy_node_ptr = this->get_node_allocator().allocate(1);
             boost::
                 allocator_construct(this->get_node_allocator(), dummy_node_ptr);
@@ -97,10 +96,10 @@ namespace futures::detail {
             tail_.store(dummy_node_ptr);
         }
 
-        atomic_queue(const atomic_queue&) = delete;
+        atomic_queue(atomic_queue const&) = delete;
 
         atomic_queue&
-        operator=(const atomic_queue&)
+        operator=(atomic_queue const&)
             = delete;
 
         [[nodiscard]] bool
@@ -110,7 +109,7 @@ namespace futures::detail {
         }
 
         void
-        push(const T& data) {
+        push(T const& data) {
             // Construct node we should push
             node* new_node_ptr = this->get_node_allocator().allocate(1);
             boost::allocator_construct(

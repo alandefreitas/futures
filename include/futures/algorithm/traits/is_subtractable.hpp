@@ -28,23 +28,22 @@ namespace futures {
     using is_subtractable = __see_below__;
 #else
     template <class T, class = void>
-    struct is_subtractable : std::false_type
-    {};
+    struct is_subtractable : std::false_type {};
 
     template <class T>
     struct is_subtractable<
         T,
         std::void_t<
             // clang-format off
-            decltype(std::declval<const std::remove_reference_t<T>&>() - std::declval<const std::remove_reference_t<T>&>())
+            decltype(std::declval< std::remove_reference_t<T> const &>() - std::declval< std::remove_reference_t<T> const &>())
             // clang-format on
             >>
         : std::is_integral<
-              decltype(std::declval<const std::remove_reference_t<T>&>() - std::declval<const std::remove_reference_t<T>&>())>
-    {};
+              decltype(std::declval<std::remove_reference_t<T> const &>() - std::declval<std::remove_reference_t<T> const &>())> {
+    };
 #endif
     template <class T>
-    bool constexpr is_subtractable_v = is_subtractable<T>::value;
+    constexpr bool is_subtractable_v = is_subtractable<T>::value;
 
     /** @}*/
     /** @}*/

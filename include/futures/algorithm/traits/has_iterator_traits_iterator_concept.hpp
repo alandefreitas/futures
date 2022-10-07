@@ -29,18 +29,16 @@ namespace futures {
     using has_iterator_traits_iterator_concept = __see_below__;
 #else
     template <class T, class = void>
-    struct has_iterator_traits_iterator_concept : std::false_type
-    {};
+    struct has_iterator_traits_iterator_concept : std::false_type {};
 
     template <class T>
     struct has_iterator_traits_iterator_concept<
         T,
         std::void_t<typename std::iterator_traits<T>::iterator_concept>>
-        : std::true_type
-    {};
+        : std::true_type {};
 #endif
     template <class T>
-    bool constexpr has_iterator_traits_iterator_concept_v
+    constexpr bool has_iterator_traits_iterator_concept_v
         = has_iterator_traits_iterator_concept<T>::value;
     /** @}*/
     /** @}*/

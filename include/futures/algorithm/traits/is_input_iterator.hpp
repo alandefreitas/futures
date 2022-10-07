@@ -33,11 +33,10 @@ namespace futures {
     struct is_input_iterator
         : std::conjunction<
               is_input_or_output_iterator<T>,
-              is_indirectly_readable<T>>
-    {};
+              is_indirectly_readable<T>> {};
 #endif
     template <class T>
-    bool constexpr is_input_iterator_v = is_input_iterator<T>::value;
+    constexpr bool is_input_iterator_v = is_input_iterator<T>::value;
     /** @}*/
     /** @}*/
 

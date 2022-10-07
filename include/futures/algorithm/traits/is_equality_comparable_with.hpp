@@ -30,8 +30,7 @@ namespace futures {
     using is_equality_comparable_with = __see_below__;
 #else
     template <class T, class U, class = void>
-    struct is_equality_comparable_with : std::false_type
-    {};
+    struct is_equality_comparable_with : std::false_type {};
 
     template <class T, class U>
     struct is_equality_comparable_with<
@@ -43,11 +42,10 @@ namespace futures {
             is_equality_comparable_v<U> &&
             is_weakly_equality_comparable_v<T,U>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T, class U>
-    bool constexpr is_equality_comparable_with_v
+    constexpr bool is_equality_comparable_with_v
         = is_equality_comparable_with<T, U>::value;
     /** @}*/
     /** @}*/

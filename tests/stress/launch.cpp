@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
+#include "stress.hpp"
 #include <futures/launch.hpp>
 #include <iostream>
-#include "stress.hpp"
 
 int
 main(int argc, char** argv) {
     std::cout << TEST_CASE_PREFIX << "launch\n";
-    return STRESS(argc, argv, []{
+    return STRESS(argc, argv, [] {
         using namespace futures;
         auto f = schedule([]() { return 2; });
         assert(f.get() == 2);

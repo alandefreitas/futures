@@ -28,8 +28,7 @@ namespace futures {
     using is_convertible_to = __see_below__;
 #else
     template <class From, class To, class = void>
-    struct is_convertible_to : std::false_type
-    {};
+    struct is_convertible_to : std::false_type {};
 
     template <class From, class To>
     struct is_convertible_to<
@@ -40,11 +39,10 @@ namespace futures {
             std::enable_if_t<std::is_convertible_v<From, To>>,
             decltype(static_cast<To>(std::declval<From>()))
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class From, class To>
-    bool constexpr is_convertible_to_v = is_convertible_to<From, To>::value;
+    constexpr bool is_convertible_to_v = is_convertible_to<From, To>::value;
     /** @}*/
     /** @}*/
 

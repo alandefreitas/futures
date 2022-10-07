@@ -29,8 +29,7 @@ namespace futures::detail {
     class maybe_atomic;
 
     template <class T>
-    class maybe_atomic<T, true>
-    {
+    class maybe_atomic<T, true> {
     public:
         /// Initializes the underlying object with desired.
         /**
@@ -123,8 +122,7 @@ namespace futures::detail {
     };
 
     template <class T>
-    class maybe_atomic<T, false>
-    {
+    class maybe_atomic<T, false> {
     public:
         /// Initializes the underlying object with desired.
         /**

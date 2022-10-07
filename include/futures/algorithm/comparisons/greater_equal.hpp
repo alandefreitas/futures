@@ -15,8 +15,7 @@
 namespace futures {
     /** A C++17 functor equivalent to the C++20 std::ranges::greater_equal
      */
-    struct greater_equal
-    {
+    struct greater_equal {
         template <
             typename T,
             typename U

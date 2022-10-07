@@ -28,17 +28,15 @@ namespace futures {
     using is_input_or_output_iterator = __see_below__;
 #else
     template <class T, class = void>
-    struct is_input_or_output_iterator : std::false_type
-    {};
+    struct is_input_or_output_iterator : std::false_type {};
 
     template <class T>
     struct is_input_or_output_iterator<
         T,
-        std::void_t<decltype(*std::declval<T>())>> : std::true_type
-    {};
+        std::void_t<decltype(*std::declval<T>())>> : std::true_type {};
 #endif
     template <class T>
-    bool constexpr is_input_or_output_iterator_v = is_input_or_output_iterator<
+    constexpr bool is_input_or_output_iterator_v = is_input_or_output_iterator<
         T>::value;
 
     /** @}*/

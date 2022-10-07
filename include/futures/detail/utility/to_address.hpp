@@ -33,7 +33,7 @@ namespace futures::detail {
     /// address
     template <class T>
     inline typename std::pointer_traits<T>::element_type *
-    to_address(const T &v) noexcept {
+    to_address(T const &v) noexcept {
         return to_address(v.operator->());
     }
 } // namespace futures::detail

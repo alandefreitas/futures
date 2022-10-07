@@ -30,8 +30,7 @@ namespace futures {
     using is_input_range = __see_below__;
 #else
     template <class T, class = void>
-    struct is_input_range : std::false_type
-    {};
+    struct is_input_range : std::false_type {};
 
     template <class T>
     struct is_input_range<T, std::void_t<iterator_t<T>>>

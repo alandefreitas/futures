@@ -12,6 +12,8 @@
 #include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/move_if_not_shared.hpp>
+#include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple_invocable.hpp>
 #include <futures/detail/traits/is_when_any_result.hpp>
@@ -19,15 +21,11 @@
 #include <futures/detail/traits/tuple_type_all_of.hpp>
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
-#include <futures/detail/move_if_not_shared.hpp>
-#include <futures/detail/traits/append_future_option.hpp>
 
 namespace futures::detail {
-    struct unwrapping_failure_t
-    {};
+    struct unwrapping_failure_t {};
 
-    struct unwrap_and_continue_functor
-    {
+    struct unwrap_and_continue_functor {
         /// Unwrap the results from `before` future object and give them
         /// to `continuation`
         ///
@@ -50,7 +48,8 @@ namespace futures::detail {
                 is_no_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -70,7 +69,8 @@ namespace futures::detail {
                 is_no_input_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -89,7 +89,8 @@ namespace futures::detail {
                 is_value_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -110,7 +111,8 @@ namespace futures::detail {
                 is_lvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -131,7 +133,8 @@ namespace futures::detail {
                 is_rvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -152,7 +155,8 @@ namespace futures::detail {
                 is_double_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -172,7 +176,8 @@ namespace futures::detail {
                 is_tuple_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -246,7 +251,8 @@ namespace futures::detail {
                 is_range_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -267,7 +273,11 @@ namespace futures::detail {
                       && (std::is_invocable_v<
                               Function,
                               PrefixArgs...,
-                              continuation_vector> || std::is_invocable_v<Function, PrefixArgs..., lvalue_continuation_vector>);
+                              continuation_vector>
+                          || std::is_invocable_v<
+                              Function,
+                              PrefixArgs...,
+                              lvalue_continuation_vector>);
                 if constexpr (vector_unwrap) {
                     future_value_t<Future> futures_vector = before_future.get();
                     using future_vector_value_type = typename future_value_t<
@@ -306,7 +316,8 @@ namespace futures::detail {
                 is_when_any_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(
             Future &&before_future,
@@ -343,8 +354,8 @@ namespace futures::detail {
             // when_any_result<tuple<future<T>, future<T>, ...>> ->
             // continuation(future<T>)
             constexpr bool when_any_same_type
-                = is_range_v<
-                      when_any_sequence> || is_single_type_tuple_v<when_any_sequence>;
+                = is_range_v<when_any_sequence>
+                  || is_single_type_tuple_v<when_any_sequence>;
             using when_any_element_type = range_or_tuple_value_t<
                 when_any_sequence>;
             constexpr bool when_any_element
@@ -421,7 +432,8 @@ namespace futures::detail {
                 !is_valid_unwrap_continuation_v<Future, Function, PrefixArgs...>
                 // clang-format on
                 ,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         operator()(Future &&, Function &&, PrefixArgs &&...) const {
             // Could not unwrap, return unwrapping_failure_t to indicate we
@@ -437,8 +449,7 @@ namespace futures::detail {
 
 
     template <class Future, class Function>
-    struct unwrap_and_continue_task
-    {
+    struct unwrap_and_continue_task {
         Future before_;
         Function after_;
 
@@ -457,19 +468,16 @@ namespace futures::detail {
     };
 
     template <class Function>
-    struct is_unwrap_and_continue_task : std::false_type
-    {};
+    struct is_unwrap_and_continue_task : std::false_type {};
 
     template <class Future, class Function>
     struct is_unwrap_and_continue_task<
-        unwrap_and_continue_task<Future, Function>> : std::true_type
-    {};
+        unwrap_and_continue_task<Future, Function>> : std::true_type {};
 
     /// Find the result of unwrap and continue or return
     /// unwrapping_failure_t if expression is not well-formed
     template <class Future, class Function, class = void>
-    struct result_of_unwrap
-    {
+    struct result_of_unwrap {
         using type = unwrapping_failure_t;
     };
 
@@ -479,8 +487,7 @@ namespace futures::detail {
         Function,
         std::void_t<decltype(unwrap_and_continue_functor{}(
             std::declval<Future>(),
-            std::declval<Function>()))>>
-    {
+            std::declval<Function>()))>> {
         using type = decltype(unwrap_and_continue_functor{}(
             std::declval<Future>(),
             std::declval<Function>()));
@@ -493,8 +500,7 @@ namespace futures::detail {
     /// unwrapping_failure_t otherwise. The implementation avoids even trying
     /// if the previous future has no stop token
     template <bool Enable, class Future, class Function, class = void>
-    struct result_of_unwrap_with_token_impl
-    {
+    struct result_of_unwrap_with_token_impl {
         using type = unwrapping_failure_t;
     };
 
@@ -508,8 +514,7 @@ namespace futures::detail {
             decltype(unwrap_and_continue_functor{}(
                 std::declval<Future>(),
                 std::declval<Function>(),
-                std::declval<stop_token>()))>>
-    {
+                std::declval<stop_token>()))>> {
         using type = decltype(unwrap_and_continue_functor{}(
             std::declval<Future>(),
             std::declval<Function>(),
@@ -519,8 +524,7 @@ namespace futures::detail {
     /// Find the result of unwrap and continue with token or return
     /// unwrapping_failure_t otherwise
     template <class Future, class Function>
-    struct result_of_unwrap_with_token
-    {
+    struct result_of_unwrap_with_token {
         using type = typename result_of_unwrap_with_token_impl<
             // clang-format off
             // only attempt to invoke the function if:
@@ -539,8 +543,7 @@ namespace futures::detail {
         typename result_of_unwrap_with_token<Future, Function>::type;
 
     template <class Executor, class Function, class Future>
-    struct continuation_traits_helper
-    {
+    struct continuation_traits_helper {
         // The possible return types of unwrap and continue function
         using unwrap_result = result_of_unwrap_t<Future, Function>;
         using unwrap_result_with_token_prefix
@@ -565,21 +568,21 @@ namespace futures::detail {
             unwrap_result>;
 
         // Stop token for the continuation function
-        constexpr static bool expects_stop_token = is_valid_with_stop_token;
+        static constexpr bool expects_stop_token = is_valid_with_stop_token;
 
         // Check if the stop token can be inherited from to next future
-        constexpr static bool previous_future_has_stop_token = has_stop_token_v<
+        static constexpr bool previous_future_has_stop_token = has_stop_token_v<
             Future>;
-        constexpr static bool previous_future_is_shared = is_shared_future_v<
+        static constexpr bool previous_future_is_shared = is_shared_future_v<
             Future>;
-        constexpr static bool can_inherit_stop_token
+        static constexpr bool can_inherit_stop_token
             = previous_future_has_stop_token && (!previous_future_is_shared);
 
         // Continuation future should have stop token
         // note: this is separate from `expects_stop_token` because (in the
         // future), the continuation might reuse the stop source without
         // actually containing a function that expects the token.
-        constexpr static bool after_has_stop_token = expects_stop_token;
+        static constexpr bool after_has_stop_token = expects_stop_token;
 
         // The result type of unwrap and continue for the valid unwrap overload
         // (with or without token)
@@ -618,8 +621,7 @@ namespace futures::detail {
     };
 
     template <class Executor, class Function, class Future>
-    struct continuation_traits
-    {
+    struct continuation_traits {
         using helper = continuation_traits_helper<Executor, Function, Future>;
 
         static constexpr bool is_valid = helper::is_valid;

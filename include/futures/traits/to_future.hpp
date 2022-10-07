@@ -16,8 +16,7 @@ namespace futures {
     ///
     /// The primary template handles non-future types
     template <typename T, class Enable = void>
-    struct to_future
-    {
+    struct to_future {
         using type = void;
     };
 
@@ -29,8 +28,9 @@ namespace futures {
     ///
     /// The primary template handles non-future types
     template <typename Future>
-    struct to_future<Future, std::enable_if_t<is_future_v<std::decay_t<Future>>>>
-    {
+    struct to_future<
+        Future,
+        std::enable_if_t<is_future_v<std::decay_t<Future>>>> {
         using type = std::decay_t<Future>;
     };
 
@@ -44,8 +44,7 @@ namespace futures {
     template <typename Lambda>
     struct to_future<
         Lambda,
-        std::enable_if_t<std::is_invocable_v<std::decay_t<Lambda>>>>
-    {
+        std::enable_if_t<std::is_invocable_v<std::decay_t<Lambda>>>> {
         using type = futures::cfuture<
             std::invoke_result_t<std::decay_t<Lambda>>>;
     };

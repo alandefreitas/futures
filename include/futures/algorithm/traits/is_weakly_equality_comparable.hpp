@@ -28,8 +28,7 @@ namespace futures {
     using is_weakly_equality_comparable = __see_below__;
 #else
     template <class T, class U, class = void>
-    struct is_weakly_equality_comparable : std::false_type
-    {};
+    struct is_weakly_equality_comparable : std::false_type {};
 
     template <class T, class U>
     struct is_weakly_equality_comparable<
@@ -37,16 +36,15 @@ namespace futures {
         U,
         std::void_t<
             // clang-format off
-            decltype(std::declval<const std::remove_reference_t<T>&>() == std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<T>&>() != std::declval<const std::remove_reference_t<U>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() == std::declval<const std::remove_reference_t<T>&>()),
-            decltype(std::declval<const std::remove_reference_t<U>&>() != std::declval<const std::remove_reference_t<T>&>())
+            decltype(std::declval< std::remove_reference_t<T> const &>() == std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<T> const &>() != std::declval< std::remove_reference_t<U> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() == std::declval< std::remove_reference_t<T> const &>()),
+            decltype(std::declval< std::remove_reference_t<U> const &>() != std::declval< std::remove_reference_t<T> const &>())
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class T, class U>
-    bool constexpr is_weakly_equality_comparable_v
+    constexpr bool is_weakly_equality_comparable_v
         = is_weakly_equality_comparable<T, U>::value;
 
     /** @}*/

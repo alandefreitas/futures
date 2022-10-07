@@ -53,7 +53,7 @@ MaxEmptyLinesToKeep: 2
 AlwaysBreakBeforeMultilineStrings: false
 BreakStringLiterals: true
 #     Expressions
-BreakConstructorInitializers: BeforeColon
+BreakConstructorInitializers: BeforeComma
 BreakBeforeBinaryOperators: All
 BreakBeforeTernaryOperators: false
 
@@ -106,6 +106,8 @@ PointerAlignment: Left
 ReferenceAlignment: Pointer
 DerivePointerAlignment: true
 AlignConsecutiveDeclarations: None
+QualifierAlignment: Custom
+QualifierOrder: ['inline', 'static', 'constexpr', 'type', 'const']
 #    Namespace
 ShortNamespaceLines: 0
 #    Brackets
@@ -146,6 +148,7 @@ BinPackArguments: false
 BinPackParameters: false
 BitFieldColonSpacing: After
 ExperimentalAutoDetectBinPacking: true
+PackConstructorInitializers: CurrentLine
 
 # Penalties
 PenaltyBreakAssignment: 512
@@ -174,17 +177,19 @@ IncludeCategories:
   - Regex:           '^["<]futures/.*/detail/'            # details headers
     Priority:        4
   - Regex:           '^["<]futures/detail/deps'           # external bundled headers
-    Priority:        5
-  - Regex:           '^["<]futures/detail/'               # details headers
-    Priority:        4
-  - Regex:           '^["<]futures/'                      # internal headers
-    Priority:        3
-  - Regex:           '^(["<](boost|small|asio)/)'         # external headers
-    Priority:        5
-  - Regex:           '<[[:alnum:].]+>'                    # C++ headers
     Priority:        6
-  - Regex:           '.*'                                 # any other headers
+  - Regex:           '^["<]futures/detail/'               # details headers
+    Priority:        5
+  - Regex:           '^["<]futures/[^/]+.hpp>'            # root internal headers
+    Priority:        3
+  - Regex:           '^["<]futures/'                      # internal headers
+    Priority:        4
+  - Regex:           '^(["<](boost|small|asio)/)'         # external headers
+    Priority:        6
+  - Regex:           '<[[:alnum:].]+>'                    # C++ headers
     Priority:        7
+  - Regex:           '.*'                                 # any other headers
+    Priority:        8
 
 # Comments
 FixNamespaceComments: true

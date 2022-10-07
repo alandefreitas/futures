@@ -31,21 +31,18 @@ namespace futures::detail {
      * @tparam T Callable type
      */
     template <typename T>
-    struct is_callable
-    {
+    struct is_callable {
     private:
         typedef char (&yes)[1];
         typedef char (&no)[2];
 
-        struct Fallback
-        {
+        struct Fallback {
             void
             operator()();
         };
         struct Derived
             : T
-            , Fallback
-        {};
+            , Fallback {};
 
         template <typename U, U>
         struct Check;
@@ -59,7 +56,7 @@ namespace futures::detail {
         test(Check<void (Fallback::*)(), &C::operator()> *);
 
     public:
-        static const bool value = sizeof(test<Derived>(0)) == sizeof(yes);
+        static bool const value = sizeof(test<Derived>(0)) == sizeof(yes);
     };
 
     template <typename T>

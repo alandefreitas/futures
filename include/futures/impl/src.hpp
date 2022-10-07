@@ -11,7 +11,7 @@
 #include <futures/config.hpp>
 
 #if defined(BOOST_ASIO_HEADER_ONLY)
-# error Do not compile Futures library source with BOOST_ASIO_HEADER_ONLY defined
+#    error Do not compile Futures library source with BOOST_ASIO_HEADER_ONLY defined
 #endif
 
 #if FUTURES_USE_BUNDLED_ASIO && FUTURES_SEPARATE_COMPILATION

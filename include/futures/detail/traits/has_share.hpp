@@ -21,13 +21,11 @@ namespace futures {
         /// candidate However, this doesn't mean the type is a future in the
         /// terms of the is_future concept
         template <typename T, typename = void>
-        struct has_share : std::false_type
-        {};
+        struct has_share : std::false_type {};
 
         template <typename T>
         struct has_share<T, std::void_t<decltype(std::declval<T>().share())>>
-            : std::true_type
-        {};
+            : std::true_type {};
     }         // namespace detail
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures

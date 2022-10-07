@@ -19,8 +19,7 @@ namespace futures {
     /// this definition, especially the inferences for unwrapping `then`
     /// continuations, regardless of the when_any algorithm.
     template <typename Sequence>
-    struct when_any_result
-    {
+    struct when_any_result {
         using size_type = std::size_t;
         using sequence_type = Sequence;
 

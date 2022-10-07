@@ -70,7 +70,7 @@ namespace futures::detail {
         continuations_state() = default;
 
         /// Copy constructor
-        continuations_state(const continuations_state &) = delete;
+        continuations_state(continuations_state const &) = delete;
 
         /// Destructor - Run continuations if they have not run yet
         ~continuations_state() {
@@ -79,7 +79,7 @@ namespace futures::detail {
 
         /// Copy assignment
         continuations_state &
-        operator=(const continuations_state &)
+        operator=(continuations_state const &)
             = delete;
 
         /// @}
@@ -109,7 +109,7 @@ namespace futures::detail {
         /// Use executor ex if more continuations are not possible
         template <class Executor, class Fn>
         bool
-        push(const Executor &ex, Fn &&fn) {
+        push(Executor const &ex, Fn &&fn) {
             // Although this is a write operation, this is a shared lock
             // because many threads are allowed to emplace continuations
             // at the same time in the atomic queue.
@@ -205,8 +205,7 @@ namespace futures::detail {
 
         /// Constructs a continuations_token whose associated
         /// continuations-state is the same as that of other
-        continuations_token(
-            const continuations_token &other) noexcept = default;
+        continuations_token(continuations_token const &other) noexcept = default;
 
         /// Constructs a continuations_token whose associated
         /// continuations-state is the same as that of other; other is left empty
@@ -215,12 +214,14 @@ namespace futures::detail {
         /// Copy-assigns the associated continuations-state of other to
         /// that of *this
         continuations_token &
-        operator=(const continuations_token &other) noexcept = default;
+        operator=(continuations_token const &other) noexcept
+            = default;
 
         /// Move-assigns the associated continuations-state of other to
         /// that of *this
         continuations_token &
-        operator=(continuations_token &&other) noexcept = default;
+        operator=(continuations_token &&other) noexcept
+            = default;
 
         /// Exchanges the associated continuations-state of *this and
         /// other.
@@ -247,15 +248,15 @@ namespace futures::detail {
         /// compares two std::run_token objects
         [[nodiscard]] friend bool
         operator==(
-            const continuations_token &lhs,
-            const continuations_token &rhs) noexcept {
+            continuations_token const &lhs,
+            continuations_token const &rhs) noexcept {
             return lhs.state_ == rhs.state_;
         }
 
         [[nodiscard]] friend bool
         operator!=(
-            const continuations_token &lhs,
-            const continuations_token &rhs) noexcept {
+            continuations_token const &lhs,
+            continuations_token const &rhs) noexcept {
             return lhs.state_ != rhs.state_;
         }
 
@@ -291,8 +292,8 @@ namespace futures::detail {
         /// Copy constructor.
         /// Constructs a continuations_source whose associated
         /// continuations-state is the same as that of other.
-        continuations_source(
-            const continuations_source &other) noexcept = default;
+        continuations_source(continuations_source const &other) noexcept
+            = default;
 
         /// Move constructor.
         /// Constructs a continuations_source whose associated
@@ -302,11 +303,13 @@ namespace futures::detail {
 
         /// Copy-assigns the continuations-state of other to that of *this
         continuations_source &
-        operator=(const continuations_source &other) noexcept = default;
+        operator=(continuations_source const &other) noexcept
+            = default;
 
         /// Move-assigns the continuations-state of other to that of *this
         continuations_source &
-        operator=(continuations_source &&other) noexcept = default;
+        operator=(continuations_source &&other) noexcept
+            = default;
 
         /// Run all continuations
         /// The return reference is safe because the continuation vector has
@@ -324,7 +327,7 @@ namespace futures::detail {
         /// stability
         template <class Executor, class Fn>
         bool
-        push(const Executor &ex, Fn &&fn) {
+        push(Executor const &ex, Fn &&fn) {
             if (state_ != nullptr) {
                 return state_->push(ex, std::forward<Fn>(fn));
             }
@@ -365,16 +368,16 @@ namespace futures::detail {
         /// Compares two continuations_source values
         [[nodiscard]] friend bool
         operator==(
-            const continuations_source &a,
-            const continuations_source &b) noexcept {
+            continuations_source const &a,
+            continuations_source const &b) noexcept {
             return a.state_ == b.state_;
         }
 
         /// Compares two continuations_source values
         [[nodiscard]] friend bool
         operator!=(
-            const continuations_source &a,
-            const continuations_source &b) noexcept {
+            continuations_source const &a,
+            continuations_source const &b) noexcept {
             return a.state_ != b.state_;
         }
 

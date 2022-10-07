@@ -11,15 +11,14 @@
 
 namespace futures::detail {
     template <class... Ts>
-    struct aligned_storage_for
-    {
+    struct aligned_storage_for {
     public:
         constexpr byte*
         data() {
             return data_;
         }
 
-        [[nodiscard]] constexpr const byte*
+        [[nodiscard]] constexpr byte const*
         data() const {
             return data_;
         }

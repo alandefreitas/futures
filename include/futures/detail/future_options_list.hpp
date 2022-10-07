@@ -25,8 +25,7 @@ namespace futures::detail {
 
     /// Class used to define future extension at compile-time
     template <class... Args>
-    struct future_options_list
-    {
+    struct future_options_list {
         /// Whether the future has an associated executor
         static constexpr bool has_executor = detail::
             is_type_template_in_args_v<executor_opt, Args...>;

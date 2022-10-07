@@ -38,6 +38,7 @@
  *  and are invalidated, as usual. The `when_all_future` cannot be shared.
  */
 
+#include <futures/launch.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/traits/to_future.hpp>
 #include <futures/detail/algorithm/tuple_algorithm.hpp>
@@ -65,8 +66,7 @@ namespace futures {
      *  future.
      */
     template <class Sequence>
-    class when_all_future
-    {
+    class when_all_future {
     private:
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
@@ -100,7 +100,7 @@ namespace futures {
             : v(std::move(other.v)) {}
 
         /// when_all_future is not CopyConstructible
-        when_all_future(const when_all_future &other) = delete;
+        when_all_future(when_all_future const &other) = delete;
 
         /// Releases any shared state.
         /**
@@ -126,7 +126,7 @@ namespace futures {
 
         /// when_all_future is not CopyAssignable.
         when_all_future &
-        operator=(const when_all_future &other)
+        operator=(when_all_future const &other)
             = delete;
 
         /// Wait until all futures have a valid result and retrieves it
@@ -190,7 +190,7 @@ namespace futures {
         template <class Rep, class Period>
         [[nodiscard]] std::future_status
         wait_for(
-            const std::chrono::duration<Rep, Period> &timeout_duration) const {
+            std::chrono::duration<Rep, Period> const &timeout_duration) const {
             constexpr bool is_compile_time_empty = []() {
                 if constexpr (sequence_is_tuple) {
                     return std::tuple_size_v<sequence_type> == 0;
@@ -257,7 +257,7 @@ namespace futures {
          */
         template <class Clock, class Duration>
         std::future_status
-        wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time)
+        wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
             const {
             auto now_time = std::chrono::system_clock::now();
             return now_time > timeout_time ?
@@ -302,8 +302,7 @@ namespace futures {
     /// Specialization explicitly setting when_all_future<T> as a type of
     /// future
     template <typename T>
-    struct is_future<when_all_future<T>> : std::true_type
-    {};
+    struct is_future<when_all_future<T>> : std::true_type {};
 #endif
 
     namespace detail {
@@ -315,11 +314,10 @@ namespace futures {
 
         /// Check if type is a when_all_future as a type
         template <typename>
-        struct is_when_all_future : std::false_type
-        {};
+        struct is_when_all_future : std::false_type {};
         template <typename Sequence>
-        struct is_when_all_future<when_all_future<Sequence>> : std::true_type
-        {};
+        struct is_when_all_future<when_all_future<Sequence>>
+            : std::true_type {};
 
         /// Check if type is a when_all_future as constant bool
         template <class T>
@@ -337,18 +335,16 @@ namespace futures {
 
         /// Trait to identify valid when_all inputs
         template <class...>
-        struct are_valid_when_all_arguments : std::true_type
-        {};
+        struct are_valid_when_all_arguments : std::true_type {};
         template <class B1>
-        struct are_valid_when_all_arguments<B1> : is_valid_when_all_argument<B1>
-        {};
+        struct are_valid_when_all_arguments<B1>
+            : is_valid_when_all_argument<B1> {};
         template <class B1, class... Bn>
         struct are_valid_when_all_arguments<B1, Bn...>
             : std::conditional_t<
                   is_valid_when_all_argument_v<B1>,
                   are_valid_when_all_arguments<Bn...>,
-                  std::false_type>
-        {};
+                  std::false_type> {};
         template <class... Args>
         constexpr bool are_valid_when_all_arguments_v
             = are_valid_when_all_arguments<Args...>::value;
@@ -364,13 +360,11 @@ namespace futures {
 
         /// Check if type is a when_all_future with tuples as a sequence type
         template <typename T, class Enable = void>
-        struct is_when_all_tuple_future : std::false_type
-        {};
+        struct is_when_all_tuple_future : std::false_type {};
         template <typename Sequence>
         struct is_when_all_tuple_future<
             when_all_future<Sequence>,
-            std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type
-        {};
+            std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type {};
         template <class T>
         constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<
             T>::value;
@@ -378,19 +372,16 @@ namespace futures {
         /// Check if all template parameters are when_all_future with
         /// tuples as a sequence type
         template <class...>
-        struct are_when_all_tuple_futures : std::true_type
-        {};
+        struct are_when_all_tuple_futures : std::true_type {};
         template <class B1>
         struct are_when_all_tuple_futures<B1>
-            : is_when_all_tuple_future<std::decay_t<B1>>
-        {};
+            : is_when_all_tuple_future<std::decay_t<B1>> {};
         template <class B1, class... Bn>
         struct are_when_all_tuple_futures<B1, Bn...>
             : std::conditional_t<
                   is_when_all_tuple_future_v<std::decay_t<B1>>,
                   are_when_all_tuple_futures<Bn...>,
-                  std::false_type>
-        {};
+                  std::false_type> {};
         template <class... Args>
         constexpr bool are_when_all_tuple_futures_v
             = are_when_all_tuple_futures<Args...>::value;
@@ -398,13 +389,11 @@ namespace futures {
         /// Check if type is a when_all_future with a range as a sequence
         /// type
         template <typename T, class Enable = void>
-        struct is_when_all_range_future : std::false_type
-        {};
+        struct is_when_all_range_future : std::false_type {};
         template <typename Sequence>
         struct is_when_all_range_future<
             when_all_future<Sequence>,
-            std::enable_if_t<is_range_v<Sequence>>> : std::true_type
-        {};
+            std::enable_if_t<is_range_v<Sequence>>> : std::true_type {};
         template <class T>
         constexpr bool is_when_all_range_future_v = is_when_all_range_future<
             T>::value;
@@ -412,18 +401,15 @@ namespace futures {
         /// Check if all template parameters are when_all_future with
         /// tuples as a sequence type
         template <class...>
-        struct are_when_all_range_futures : std::true_type
-        {};
+        struct are_when_all_range_futures : std::true_type {};
         template <class B1>
-        struct are_when_all_range_futures<B1> : is_when_all_range_future<B1>
-        {};
+        struct are_when_all_range_futures<B1> : is_when_all_range_future<B1> {};
         template <class B1, class... Bn>
         struct are_when_all_range_futures<B1, Bn...>
             : std::conditional_t<
                   is_when_all_range_future_v<B1>,
                   are_when_all_range_futures<Bn...>,
-                  std::false_type>
-        {};
+                  std::false_type> {};
         template <class... Args>
         constexpr bool are_when_all_range_futures_v
             = are_when_all_range_futures<Args...>::value;
@@ -457,7 +443,8 @@ namespace futures {
             class WhenAllFuture2,
             std::enable_if_t<
                 are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
@@ -472,7 +459,8 @@ namespace futures {
             class... WhenAllFutures,
             std::enable_if_t<
                 are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>,
-                int> = 0>
+                int>
+            = 0>
         decltype(auto)
         when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
@@ -523,7 +511,8 @@ namespace futures {
         std::enable_if_t<
             detail::is_valid_when_all_argument_v<
                 typename std::iterator_traits<InputIt>::value_type>,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     when_all_future<detail::small_vector<
@@ -599,9 +588,8 @@ namespace futures {
         class... Futures
 #ifndef FUTURES_DOXYGEN
         ,
-        std::enable_if_t<
-            detail::are_valid_when_all_arguments_v<Futures...>,
-            int> = 0
+        std::enable_if_t<detail::are_valid_when_all_arguments_v<Futures...>, int>
+        = 0
 #endif
         >
     when_all_future<std::tuple<to_future_t<Futures>...>>
@@ -645,9 +633,10 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
-            detail::is_valid_when_all_argument_v<T1> &&
-            detail::is_valid_when_all_argument_v<T2>,
-            int> = 0
+            detail::is_valid_when_all_argument_v<T1>
+                && detail::is_valid_when_all_argument_v<T2>,
+            int>
+        = 0
 #endif
         >
     auto
@@ -668,8 +657,9 @@ namespace futures {
             // convert these functions to futures.
             auto maybe_make_future = [](auto &&f) {
                 if constexpr (
-                    std::is_invocable_v<
-                        decltype(f)> && !is_future_v<decltype(f)>) {
+                    std::is_invocable_v<decltype(f)>
+                    && !is_future_v<decltype(f)>)
+                {
                     // Convert to future with the default executor if not a
                     // future yet
                     return futures::async(

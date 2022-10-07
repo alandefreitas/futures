@@ -33,12 +33,10 @@ namespace futures {
     using iterator = __see_below__;
 #else
     template <class T, class = void>
-    struct iterator
-    {};
+    struct iterator {};
 
     template <class T>
-    struct iterator<T, std::void_t<decltype(begin(std::declval<T&>()))>>
-    {
+    struct iterator<T, std::void_t<decltype(begin(std::declval<T&>()))>> {
         using type = decltype(begin(std::declval<T&>()));
     };
 #endif

@@ -66,11 +66,12 @@ namespace futures {
             is_future_v<std::decay_t<Future>> &&
             detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
             // clang-format on
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
-    then(const Executor &ex, Future &&before, Function &&after) {
+    then(Executor const &ex, Future &&before, Function &&after) {
         return detail::internal_then(
             ex,
             std::forward<Future>(before),
@@ -96,7 +97,8 @@ namespace futures {
             detail::continuation_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
@@ -130,7 +132,8 @@ namespace futures {
             detail::continuation_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
@@ -157,7 +160,8 @@ namespace futures {
             detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)

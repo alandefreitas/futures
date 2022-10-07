@@ -14,8 +14,7 @@
 #include <future>
 
 namespace futures::detail {
-    struct make_ready_future_impl
-    {
+    struct make_ready_future_impl {
         template <typename T>
         basic_future<typename std::decay_t<T>, future_options<>>
         make_ready_future(T &&value) {

@@ -9,15 +9,15 @@
 #define FUTURES_LAUNCH_HPP
 
 #include <futures/config.hpp>
-#include <futures/executor/inline_executor.hpp>
 #include <futures/await.hpp>
 #include <futures/basic_future.hpp>
-#include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/executor/inline_executor.hpp>
 #include <futures/detail/future_launcher.hpp>
 #include <futures/detail/traits/is_future_options.hpp>
 #include <futures/detail/traits/launch_result.hpp>
 #include <futures/detail/deps/asio/defer.hpp>
 #include <futures/detail/deps/asio/post.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures {
     /** @addtogroup futures Futures
@@ -145,11 +145,12 @@ namespace futures {
             (std::is_invocable_v<Function, Args...> ||
              std::is_invocable_v<Function, stop_token, Args...>),
             // clang-format on
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
-    async(const Executor &ex, Function &&f, Args &&...args) {
+    async(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<
                 detail::async_future_options_t<Executor, Function, Args...>>(
@@ -180,7 +181,8 @@ namespace futures {
             (std::is_invocable_v<Function, Args...> ||
              std::is_invocable_v<Function, stop_token, Args...>),
             // clang-format on
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
@@ -229,11 +231,12 @@ namespace futures {
             (std::is_invocable_v<Function, Args...> ||
              std::is_invocable_v<Function, stop_token, Args...>),
             // clang-format on
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
-    schedule(const Executor &ex, Function &&f, Args &&...args) {
+    schedule(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<
                 detail::schedule_future_options_t<Executor, Function, Args...>>(
@@ -264,7 +267,8 @@ namespace futures {
             (std::is_invocable_v<Function, Args...> ||
              std::is_invocable_v<Function, stop_token, Args...>),
             // clang-format on
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)

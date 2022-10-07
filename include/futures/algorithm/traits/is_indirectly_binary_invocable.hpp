@@ -31,8 +31,7 @@ namespace futures {
     using is_indirectly_binary_invocable = __see_below__;
 #else
     template <class F, class I1, class I2, class = void>
-    struct is_indirectly_binary_invocable : std::false_type
-    {};
+    struct is_indirectly_binary_invocable : std::false_type {};
 
     template <class F, class I1, class I2>
     struct is_indirectly_binary_invocable<
@@ -46,11 +45,10 @@ namespace futures {
             std::is_copy_constructible_v<F> &&
             std::is_invocable_v<F&, iter_value_t<I1>&, iter_value_t<I2>&>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class F, class I1, class I2>
-    bool constexpr is_indirectly_binary_invocable_v
+    constexpr bool is_indirectly_binary_invocable_v
         = is_indirectly_binary_invocable<F, I1, I2>::value;
     /** @}*/
     /** @}*/

@@ -33,8 +33,7 @@ namespace futures {
     using is_forward_iterator = __see_below__;
 #else
     template <class I, class = void>
-    struct is_forward_iterator : std::false_type
-    {};
+    struct is_forward_iterator : std::false_type {};
 
     template <class I>
     struct is_forward_iterator<
@@ -46,11 +45,10 @@ namespace futures {
             is_incrementable_v<I> &&
             is_sentinel_for_v<I, I>
             // clang-format on
-            >> : std::true_type
-    {};
+            >> : std::true_type {};
 #endif
     template <class I>
-    bool constexpr is_forward_iterator_v = is_forward_iterator<I>::value;
+    constexpr bool is_forward_iterator_v = is_forward_iterator<I>::value;
     /** @}*/
     /** @}*/
 

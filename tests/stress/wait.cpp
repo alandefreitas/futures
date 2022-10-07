@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
+#include "stress.hpp"
 #include <futures/futures.hpp>
 #include <iostream>
-#include "stress.hpp"
 
 int
 main(int argc, char** argv) {
     std::cout << TEST_CASE_PREFIX << "wait\n";
-    return STRESS(argc, argv, []{
+    return STRESS(argc, argv, [] {
         using namespace futures;
         constexpr auto enough_time_for_deadlock = std::chrono::milliseconds(20);
         auto f1 = async([t = enough_time_for_deadlock]() {

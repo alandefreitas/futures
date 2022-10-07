@@ -8,12 +8,12 @@
 #ifndef FUTURES_BASIC_FUTURE_HPP
 #define FUTURES_BASIC_FUTURE_HPP
 
-#include <futures/executor/default_executor.hpp>
 #include <futures/future_options.hpp>
 #include <futures/stop_token.hpp>
-#include <futures/traits/is_future.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
+#include <futures/executor/default_executor.hpp>
+#include <futures/traits/is_future.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
@@ -81,8 +81,7 @@ namespace futures {
      *
      */
     template <class R, class Options = future_options<>>
-    class basic_future : private detail::maybe_copyable<Options::is_shared>
-    {
+    class basic_future : private detail::maybe_copyable<Options::is_shared> {
     private:
         /**
          * Private types
@@ -111,8 +110,7 @@ namespace futures {
          * @tparam is_always_deferred whether the future is always deferred
          */
         template <bool is_always_deferred>
-        struct operation_state_type_impl
-        {
+        struct operation_state_type_impl {
             using type = std::conditional_t<
                 is_always_deferred,
                 // Type with complete information about the task
@@ -233,8 +231,9 @@ namespace futures {
          *
          * @param s Future shared state
          */
-        explicit basic_future(const shared_state_type &s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}, state_{ s } {}
+        explicit basic_future(shared_state_type const &s) noexcept
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ s } {}
 
         /// Construct future from an rvalue shared operation state
         /**
@@ -255,8 +254,8 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(shared_state_type &&s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{},
-              state_{ std::move(s) } {}
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ std::move(s) } {}
 
         /// Construct from an inline operation state
         /**
@@ -285,8 +284,8 @@ namespace futures {
          * @param op Future inline operation state
          */
         explicit basic_future(operation_state_type &&op) noexcept
-            : detail::maybe_copyable<Options::is_shared>{},
-              state_{ std::move(op) } {}
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ std::move(op) } {}
 
         /// Construct from an direct operation state storage
         /**
@@ -303,8 +302,8 @@ namespace futures {
          * @param op Future inline operation state
          */
         explicit basic_future(detail::operation_state_storage<R> &&op) noexcept
-            : detail::maybe_copyable<Options::is_shared>{},
-              state_{ std::move(op) } {}
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ std::move(op) } {}
 
         /// Construct future from a variant future operation state
         /**
@@ -315,8 +314,9 @@ namespace futures {
          *
          * @param s Future shared state
          */
-        explicit basic_future(const future_state_type &s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}, state_{ s } {}
+        explicit basic_future(future_state_type const &s) noexcept
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ s } {}
 
         /// Construct future from an rvalue variant future operation state
         /**
@@ -328,8 +328,8 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(future_state_type &&s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{},
-              state_{ std::move(s) } {}
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ std::move(s) } {}
 
         /// Construct a ready future from a value_type
         /**
@@ -348,10 +348,11 @@ namespace futures {
 #endif
             >
         explicit basic_future(T &&v) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}, state_{
-                  detail::in_place_type_t<detail::operation_state_storage<R>>{},
-                  std::forward<T>(v)
-              } {
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{
+                detail::in_place_type_t<detail::operation_state_storage<R>>{},
+                std::forward<T>(v)
+            } {
         }
 
         /**
@@ -395,7 +396,7 @@ namespace futures {
          * @note The copy constructor only participates in overload resolution
          * if `basic_future` is shared.
          */
-        basic_future(const basic_future &other) = default;
+        basic_future(basic_future const &other) = default;
 
         /// Copy assignment
         /**
@@ -406,7 +407,7 @@ namespace futures {
          * if `basic_future` is shared.
          */
         basic_future &
-        operator=(const basic_future &other)
+        operator=(basic_future const &other)
             = default;
 
         /// Move constructor.
@@ -417,9 +418,9 @@ namespace futures {
          * After construction, other.valid() == false.
          */
         basic_future(basic_future &&other) noexcept
-            : detail::maybe_copyable<Options::is_shared>{},
-              state_{ std::move(other.state_) },
-              join_{ std::exchange(other.join_, false) } {}
+            : detail::maybe_copyable<Options::is_shared>{}
+            , state_{ std::move(other.state_) }
+            , join_{ std::exchange(other.join_, false) } {}
 
         /// Move assignment.
         /**
@@ -641,7 +642,7 @@ namespace futures {
         template <class Rep, class Period>
         std::future_status
         wait_for(
-            const std::chrono::duration<Rep, Period> &timeout_duration) const {
+            std::chrono::duration<Rep, Period> const &timeout_duration) const {
             if (!valid()) {
                 detail::throw_exception<future_uninitialized>();
             }
@@ -654,7 +655,7 @@ namespace futures {
         /// Waits for the result, returns if it is unavailable for duration
         template <class Rep, class Period>
         std::future_status
-        wait_for(const std::chrono::duration<Rep, Period> &timeout_duration) {
+        wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             if (!valid()) {
                 detail::throw_exception<future_uninitialized>();
             }
@@ -685,7 +686,7 @@ namespace futures {
          */
         template <class Clock, class Duration>
         std::future_status
-        wait_until(const std::chrono::time_point<Clock, Duration> &timeout_time)
+        wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
             const {
             if (!valid()) {
                 detail::throw_exception<future_uninitialized>();
@@ -697,7 +698,7 @@ namespace futures {
         template <class Clock, class Duration>
         std::future_status
         wait_until(
-            const std::chrono::time_point<Clock, Duration> &timeout_time) {
+            std::chrono::time_point<Clock, Duration> const &timeout_time) {
             if (!valid()) {
                 detail::throw_exception<future_uninitialized>();
             }
@@ -802,11 +803,12 @@ namespace futures {
             bool U = (Options::is_continuable || Options::is_always_deferred),
             std::enable_if_t<
                 U && U == (Options::is_continuable || Options::is_always_deferred),
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
-        then(const Executor &ex, Fn &&fn) {
+        then(Executor const &ex, Fn &&fn) {
             // Throw if invalid
             if (!valid()) {
                 detail::throw_exception<std::future_error>(
@@ -946,7 +948,8 @@ namespace futures {
             bool U = Options::is_continuable || Options::is_always_deferred,
             std::enable_if_t<
                 U && U == (Options::is_continuable || Options::is_always_deferred),
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
@@ -1138,32 +1141,27 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
     /// Define all basic_futures as a kind of future
     template <typename... Args>
-    struct is_future<basic_future<Args...>> : std::true_type
-    {};
+    struct is_future<basic_future<Args...>> : std::true_type {};
 
     /// Define all basic_futures as a future with a ready notifier
     template <typename... Args>
-    struct has_ready_notifier<basic_future<Args...>> : std::true_type
-    {};
+    struct has_ready_notifier<basic_future<Args...>> : std::true_type {};
 
     /// Define shared basic_futures as supporting shared values
     template <class T, class... Args>
     struct is_shared_future<
         basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<shared_opt, Args...>
-    {};
+        : detail::is_in_args<shared_opt, Args...> {};
 
     /// Define continuable basic_futures as supporting lazy continuations
     template <class T, class... Args>
     struct is_continuable<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<continuable_opt, Args...>
-    {};
+        : detail::is_in_args<continuable_opt, Args...> {};
 
     /// Define stoppable basic_futures as being stoppable
     template <class T, class... Args>
     struct is_stoppable<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<stoppable_opt, Args...>
-    {};
+        : detail::is_in_args<stoppable_opt, Args...> {};
 
     /// Define stoppable basic_futures as having a stop token
     /**
@@ -1171,21 +1169,18 @@ namespace futures {
      */
     template <class T, class... Args>
     struct has_stop_token<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<stoppable_opt, Args...>
-    {};
+        : detail::is_in_args<stoppable_opt, Args...> {};
 
     /// Define deferred basic_futures as being deferred
     template <class T, class... Args>
     struct is_always_deferred<
         basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<always_deferred_opt, Args...>
-    {};
+        : detail::is_in_args<always_deferred_opt, Args...> {};
 
     /// Define deferred basic_futures as having an executor
     template <class T, class... Args>
     struct has_executor<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_type_template_in_args<executor_opt, Args...>
-    {};
+        : detail::is_type_template_in_args<executor_opt, Args...> {};
 #endif
 
     /// A simple future type similar to `std::future`

@@ -12,9 +12,9 @@
 
 // Include
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/mp11/tuple.hpp>
+#    include <boost/mp11/tuple.hpp>
 #else
-#include <futures/detail/bundled/boost/mp11/tuple.hpp>
+#    include <futures/detail/bundled/boost/mp11/tuple.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_MP11_TUPLE_HPP

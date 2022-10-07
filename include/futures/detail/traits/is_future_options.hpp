@@ -21,26 +21,22 @@ namespace futures::detail {
 
     /// Check if type is a tuple
     template <typename>
-    struct is_future_options : std::false_type
-    {};
+    struct is_future_options : std::false_type {};
 
     template <typename... Args>
-    struct is_future_options<future_options_list<Args...>> : std::true_type
-    {};
+    struct is_future_options<future_options_list<Args...>> : std::true_type {};
     template <typename... Args>
-    struct is_future_options<const future_options_list<Args...>>
-        : std::true_type
-    {};
+    struct is_future_options<future_options_list<Args...> const>
+        : std::true_type {};
     template <typename... Args>
-    struct is_future_options<future_options_list<Args...> &> : std::true_type
-    {};
+    struct is_future_options<future_options_list<Args...> &>
+        : std::true_type {};
     template <typename... Args>
-    struct is_future_options<future_options_list<Args...> &&> : std::true_type
-    {};
+    struct is_future_options<future_options_list<Args...> &&>
+        : std::true_type {};
     template <typename... Args>
-    struct is_future_options<const future_options_list<Args...> &>
-        : std::true_type
-    {};
+    struct is_future_options<future_options_list<Args...> const &>
+        : std::true_type {};
 
     template <class T>
     constexpr bool is_future_options_v = is_future_options<T>::value;

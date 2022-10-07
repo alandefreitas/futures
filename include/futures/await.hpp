@@ -50,7 +50,8 @@ namespace futures {
             is_future_v<std::decay_t<Future>>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)
@@ -68,7 +69,8 @@ namespace futures {
                 is_future_v<std::decay_t<Future>>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
@@ -93,7 +95,8 @@ namespace futures {
                 std::conjunction_v<is_future<std::decay_t<Futures>>...>
                 // clang-format on
                 ,
-                int> = 0
+                int>
+            = 0
 #endif
             >
         decltype(auto)
@@ -124,7 +127,8 @@ namespace futures {
             std::conjunction_v<is_future<std::decay_t<Futures>>...>
             // clang-format on
             ,
-            int> = 0
+            int>
+        = 0
 #endif
         >
     decltype(auto)

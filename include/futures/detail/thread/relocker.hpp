@@ -16,8 +16,7 @@ namespace futures::detail {
      */
 
     /// An object that temporarily unlocks a lock
-    struct relocker
-    {
+    struct relocker {
         /// The underlying lock
         std::unique_lock<std::mutex> &lock_;
 
@@ -32,15 +31,16 @@ namespace futures::detail {
         }
 
         /// Copy constructor is deleted
-        relocker(const relocker &) = delete;
+        relocker(relocker const &) = delete;
         relocker(relocker &&other) noexcept = delete;
 
         /// Copy assignment is deleted
         relocker &
-        operator=(const relocker &)
+        operator=(relocker const &)
             = delete;
         relocker &
-        operator=(relocker &&other) noexcept = delete;
+        operator=(relocker &&other) noexcept
+            = delete;
 
         /// Destroy the relocker
         ///
