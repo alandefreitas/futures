@@ -157,14 +157,6 @@
 #    define FUTURES_PREFER_BOOST
 #endif
 
-/// To make the library *not* header-only, the user can:
-/// - create a source file,
-/// - include this header in it,
-/// - compile it,
-/// - link it with the binary, and
-/// - include the ASIO_SEPARATE_COMPILATION compile definition
-///
-
 /// @def FUTURES_SEPARATE_COMPILATION
 /// Use separately compiled source code for implementation
 /**

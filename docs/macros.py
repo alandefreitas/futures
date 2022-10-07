@@ -183,6 +183,69 @@ def declare_variables(variables, macro):
 
             return contents
 
+    def markdownify(node: ET.Element):
+        wrap_with = {
+            'ref': '`',
+            'computeroutput': '`',
+            'title': '**',
+        }
+        begin_with = {
+            'listitem': '* ',
+            'ulink': '[',
+        }
+        end_with = {
+            'title': '\n\n',
+            'ulink': ']',
+        }
+        text = ''
+        if node.tag in begin_with:
+            text = begin_with[node.tag]
+        if node.tag in wrap_with:
+            text += wrap_with[node.tag]
+        if node.text:
+            text += node.text
+        if node.tag in wrap_with:
+            text += wrap_with[node.tag]
+        if node.tag in end_with:
+            text += end_with[node.tag]
+        if node.get('url'):
+            text += '(' + node.get('url') + ')'
+        for c in node:
+            text += markdownify(c)
+        if node.tail:
+            text += node.tail
+        return text
+
+    @macro
+    def doxygen_cpp_macros_table(filename: str):
+        """
+        Load C++ macros from a xml file generated with doxygen and document all macros.
+        """
+        docs_dir = variables.get("docs_dir", "docs")
+
+        # Look for file
+        xml_path = os.path.abspath(os.path.join(docs_dir, 'xml', filename))
+        if not os.path.exists(xml_path):
+            return f'{xml_path} does NOT exist'
+
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        defs = root[0]
+        brief = defs.find('briefdescription')
+
+        # Generate table
+        res = '| Option     | Description       |\n'
+        res += '|------------|-------------------|\n'
+        for section in defs.findall('sectiondef'):
+            for member in section.findall('memberdef'):
+                res += f'|[`{member.find("name").text}`](#{member.find("name").text.lower()})|'
+                brief = member.find('briefdescription')
+                for para in brief:
+                    res += markdownify(para).replace("\n", "")
+                res += f'|\n'
+        res += f'\n\n'
+        return res
+
     @macro
     def doxygen_cpp_macros(filename: str):
         """
@@ -194,43 +257,12 @@ def declare_variables(variables, macro):
         xml_path = os.path.abspath(os.path.join(docs_dir, 'xml', filename))
         if not os.path.exists(xml_path):
             return f'{xml_path} does NOT exist'
-        def markdownify(node: ET.Element):
-            wrap_with = {
-                'ref': '`',
-                'computeroutput': '`',
-                'title': '**',
-            }
-            begin_with = {
-                'listitem': '* ',
-                'ulink': '[',
-            }
-            end_with = {
-                'title': '\n\n',
-                'ulink': ']',
-            }
-            text = ''
-            if node.tag in begin_with:
-                text = begin_with[node.tag]
-            if node.tag in wrap_with:
-                text += wrap_with[node.tag]
-            if node.text:
-                text += node.text
-            if node.tag in wrap_with:
-                text += wrap_with[node.tag]
-            if node.tag in end_with:
-                text += end_with[node.tag]
-            if node.get('url'):
-                text += '(' + node.get('url') + ')'
-            for c in node:
-                text += markdownify(c)
-            if node.tail:
-                text += node.tail
-            return text
 
         tree = ET.parse(xml_path)
         root = tree.getroot()
         defs = root[0]
         brief = defs.find('briefdescription')
+
         res = ''
         for para in brief:
             res += '>' + markdownify(para) + '\n>\n'
