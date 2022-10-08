@@ -38,12 +38,13 @@
  *  and are invalidated, as usual. The `when_all_future` cannot be shared.
  */
 
+#include <futures/config.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/traits/to_future.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
+#include <futures/detail/deps/boost/mp11/tuple.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -158,7 +159,11 @@ namespace futures {
                     return f.valid();
                 });
             } else {
-                return tuple_all_of(v, [](auto &&f) { return f.valid(); });
+                bool r = true;
+                detail::tuple_for_each(v, [&r](auto &&f) {
+                    r = r && f.valid();
+                });
+                return r;
             }
         }
 
@@ -178,7 +183,7 @@ namespace futures {
             if constexpr (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
             } else {
-                tuple_for_each(v, [](auto &&f) { f.wait(); });
+                detail::tuple_for_each(v, [](auto &&f) { f.wait(); });
             }
         }
 
@@ -234,17 +239,18 @@ namespace futures {
                                std::future_status::ready :
                                it->wait_for(seconds(0));
                 } else {
-                    auto idx = tuple_find_if(v, equal_fn);
-                    if (idx == std::tuple_size<sequence_type>()) {
+                    constexpr auto n = std::tuple_size<sequence_type>::value;
+                    auto idx = n;
+                    detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
+                        if (idx == n && equal_fn(std::get<I>(v)))
+                            idx = decltype(I)::value;
+                    });
+                    if (idx == n) {
                         return std::future_status::ready;
                     } else {
-                        std::future_status s = apply(
-                            [](auto &&el) -> std::future_status {
-                                return el.wait_for(seconds(0));
-                            },
-                            v,
-                            idx);
-                        return s;
+                        return detail::mp_with_index<n>(idx, [&](auto I) {
+                            return std::get<I>(v).wait_for(seconds(0));
+                        });
                     }
                 }
             }

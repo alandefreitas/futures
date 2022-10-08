@@ -10,7 +10,6 @@
 
 #include <futures/future_options.hpp>
 #include <futures/traits/future_value.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>

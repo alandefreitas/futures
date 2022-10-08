@@ -189,7 +189,7 @@ namespace futures {
             return 0;
         } else {
             detail::waiter_for_any waiter;
-            tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
+            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait();
@@ -344,7 +344,7 @@ namespace futures {
             return 0;
         } else {
             detail::waiter_for_any waiter;
-            tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
+            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait_for(timeout_duration);
@@ -500,7 +500,7 @@ namespace futures {
             return 0;
         } else {
             detail::waiter_for_any waiter;
-            tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
+            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait_until(timeout_time);

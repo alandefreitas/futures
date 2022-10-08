@@ -15,7 +15,6 @@
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/traits/future_value.hpp>
 #include <futures/traits/is_future.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>

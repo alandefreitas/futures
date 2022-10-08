@@ -19,7 +19,6 @@
 #include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/traits/to_future.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
 #include <array>
@@ -181,7 +180,11 @@ namespace futures {
                 if constexpr (std::tuple_size_v<sequence_type> == 0) {
                     return true;
                 } else {
-                    return tuple_any_of(v, [](auto &&f) { return f.valid(); });
+                    bool r = true;
+                    detail::tuple_for_each(v, [&r](auto &&f) {
+                        r = r && f.valid();
+                    });
+                    return r;
                 }
             }
         }
@@ -282,7 +285,12 @@ namespace futures {
                 auto it = std::find_if(v.begin(), v.end(), eq_comp);
                 ready_index = it - v.begin();
             } else {
-                ready_index = tuple_find_if(v, eq_comp);
+                constexpr auto n = std::tuple_size<sequence_type>();
+                ready_index = n;
+                detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
+                    if (ready_index == n && eq_comp(std::get<I>(v)))
+                        ready_index = I;
+                });
             }
             if (ready_index == size()) {
                 return static_cast<size_t>(-1);

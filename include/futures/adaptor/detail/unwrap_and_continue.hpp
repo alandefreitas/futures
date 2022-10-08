@@ -8,10 +8,11 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 #define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_HPP
 
+#include <futures/config.hpp>
 #include <futures/future_options.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
-#include <futures/detail/algorithm/tuple_algorithm.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/is_single_type_tuple.hpp>
@@ -21,6 +22,8 @@
 #include <futures/detail/traits/tuple_type_all_of.hpp>
 #include <futures/detail/traits/tuple_type_concat.hpp>
 #include <futures/detail/traits/tuple_type_transform.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
+#include <futures/detail/deps/boost/mp11/tuple.hpp>
 
 namespace futures::detail {
     struct unwrapping_failure_t {};
@@ -224,12 +227,13 @@ namespace futures::detail {
                         std::forward<PrefixArgs>(prefix_args)...);
                     auto futures_tuple = before_future.get();
                     // transform each tuple with future_to_value
-                    return transform_and_apply(
+                    return std::apply(
                         continuation,
-                        future_to_value,
-                        std::tuple_cat(
-                            prefix_as_tuple,
-                            std::move(futures_tuple)));
+                        tuple_transform(
+                            future_to_value,
+                            std::tuple_cat(
+                                prefix_as_tuple,
+                                std::move(futures_tuple))));
                 } else {
                     detail::throw_exception<std::logic_error>(
                         "Continuation unwrapping not possible");
@@ -395,9 +399,15 @@ namespace futures::detail {
             } else if constexpr (when_any_element || when_any_unwrap_element) {
                 constexpr auto get_nth_future = [](auto &when_any_f) {
                     if constexpr (detail::is_tuple_v<when_any_sequence>) {
-                        return std::move(futures::get(
-                            std::move(when_any_f.tasks),
-                            when_any_f.index));
+                        constexpr std::size_t N = std::tuple_size<
+                            std::decay_t<decltype(when_any_f.tasks)>>::value;
+                        return std::move(
+                            // get when_any_f.index-th element of
+                            // when_any_f.tasks
+                            mp_with_index<N>(when_any_f.index, [&](auto I) {
+                                // I is mp_size_t<v.index()>{} here
+                                return std::move(std::get<I>(when_any_f.tasks));
+                            }));
                     } else {
                         return std::move(when_any_f.tasks[when_any_f.index]);
                     }
