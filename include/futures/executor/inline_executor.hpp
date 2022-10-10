@@ -94,7 +94,7 @@ namespace boost {
 
         namespace traits {
 #if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
-            template <typename F>
+            template <class F>
             struct execute_member<futures::inline_executor, F> {
                 static constexpr bool is_valid = true;
                 static constexpr bool is_noexcept = true;
@@ -122,7 +122,7 @@ namespace boost {
 
 #endif // !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
 #if !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
-            template <typename Property>
+            template <class Property>
             struct query_static_constexpr_member<
                 futures::inline_executor,
                 Property,

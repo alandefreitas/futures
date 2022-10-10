@@ -53,7 +53,7 @@ namespace futures {
                 return scope_guard_impl_base{};
             }
 
-            template <typename T>
+            template <class T>
             static T const &
             as_const(T const &t) noexcept {
                 return t;
@@ -64,7 +64,7 @@ namespace futures {
 
         /// A scope guard that calls a function when being destructed
         /// unless told otherwise
-        template <typename FunctionType, bool InvokeNoexcept>
+        template <class FunctionType, bool InvokeNoexcept>
         class scope_guard_impl : public scope_guard_impl_base {
         public:
             explicit scope_guard_impl(FunctionType &fn) noexcept(
@@ -127,7 +127,7 @@ namespace futures {
                 return make_empty_scope_guard();
             }
 
-            template <typename Fn>
+            template <class Fn>
             static auto
             make_fail_safe(std::false_type, Fn *fn) noexcept
                 -> scope_guard_impl<decltype(std::ref(*fn)), InvokeNoexcept> {
@@ -136,7 +136,7 @@ namespace futures {
                 };
             }
 
-            template <typename Fn>
+            template <class Fn>
             explicit scope_guard_impl(Fn &&fn, scope_guard_impl_base &&failsafe)
                 : scope_guard_impl_base{}
                 , function_(std::forward<Fn>(fn)) {
@@ -161,9 +161,9 @@ namespace futures {
         };
 
         /// A decayed type scope guard
-        template <typename F, bool InvokeNoExcept>
+        template <class F, bool InvokeNoExcept>
         using scope_guard_impl_decay
-            = scope_guard_impl<typename std::decay<F>::type, InvokeNoExcept>;
+            = scope_guard_impl<class std::decay<F>::type, InvokeNoExcept>;
 
     } // namespace detail
 
@@ -172,7 +172,7 @@ namespace futures {
     using scope_guard = detail::scope_guard_impl_decay<F, true>;
 
     /// Make a scope guard with a function
-    template <typename F>
+    template <class F>
     [[nodiscard]] scope_guard<F>
     make_guard(F &&f) noexcept(noexcept(scope_guard<F>(static_cast<F &&>(f)))) {
         return scope_guard<F>(static_cast<F &&>(f));

@@ -15,7 +15,7 @@
 
 namespace futures::detail {
     struct make_ready_future_impl {
-        template <typename T>
+        template <class T>
         basic_future<typename std::decay_t<T>, future_options<>>
         make_ready_future(T &&value) {
             basic_future<std::decay_t<T>, future_options<>> result(
@@ -23,7 +23,7 @@ namespace futures::detail {
             return result;
         }
 
-        template <typename T>
+        template <class T>
         basic_future<T &, future_options<>>
         make_ready_future(std::reference_wrapper<T> value) {
             promise<T &, future_options<>> p;
@@ -40,7 +40,7 @@ namespace futures::detail {
             return result;
         }
 
-        template <typename T = void>
+        template <class T = void>
         basic_future<T, future_options<>>
         make_exceptional_future(std::exception_ptr ex) {
             promise<T, future_options<>> p;

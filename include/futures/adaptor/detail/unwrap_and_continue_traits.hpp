@@ -19,17 +19,17 @@
 namespace futures::detail {
     /// Get the element type of a when any result object
     /// This is a very specific helper trait we need
-    template <typename T, class Enable = void>
+    template <class T, class Enable = void>
     struct range_or_tuple_value {};
 
-    template <typename Sequence>
+    template <class Sequence>
     struct range_or_tuple_value<
         Sequence,
         std::enable_if_t<is_range_v<Sequence>>> {
         using type = range_value_t<Sequence>;
     };
 
-    template <typename Sequence>
+    template <class Sequence>
     struct range_or_tuple_value<
         Sequence,
         std::enable_if_t<detail::is_tuple_v<Sequence>>> {
@@ -39,7 +39,7 @@ namespace futures::detail {
     template <class T>
     using range_or_tuple_value_t = typename range_or_tuple_value<T>::type;
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_no_unwrap_continuation
         : std::integral_constant<
               bool,
@@ -48,7 +48,7 @@ namespace futures::detail {
               // clang-format on
               > {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_no_unwrap_continuation_v
         = is_no_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -61,18 +61,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_no_input_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_no_input_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_no_input_continuation_impl<true, Future, Function, PrefixArgs...>
             : std::integral_constant<
                   bool,
@@ -82,7 +82,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_no_input_continuation
         : is_no_input_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -94,7 +94,7 @@ namespace futures::detail {
               Function,
               PrefixArgs...> {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_no_input_continuation_v
         = is_no_input_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -107,18 +107,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_value_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_value_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_value_unwrap_continuation_impl<
             true,
             Future,
@@ -132,7 +132,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_value_unwrap_continuation
         : is_value_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -145,7 +145,7 @@ namespace futures::detail {
               Function,
               PrefixArgs...> {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_value_unwrap_continuation_v
         = is_value_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -158,18 +158,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_lvalue_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_lvalue_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_lvalue_unwrap_continuation_impl<
             true,
             Future,
@@ -183,7 +183,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_lvalue_unwrap_continuation
         : is_lvalue_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -199,7 +199,7 @@ namespace futures::detail {
 
     {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_lvalue_unwrap_continuation_v
         = is_lvalue_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -212,18 +212,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_rvalue_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_rvalue_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_rvalue_unwrap_continuation_impl<
             true,
             Future,
@@ -237,7 +237,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_rvalue_unwrap_continuation
         : is_rvalue_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -252,7 +252,7 @@ namespace futures::detail {
               Function,
               PrefixArgs...> {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_rvalue_unwrap_continuation_v
         = is_rvalue_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -265,11 +265,11 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_double_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_double_unwrap_continuation_impl<
             false,
             Future,
@@ -279,7 +279,7 @@ namespace futures::detail {
         template <class T>
         using get_nested_type = typename T::type;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_double_unwrap_continuation_impl<
             true,
             Future,
@@ -294,7 +294,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_double_unwrap_continuation
         : is_double_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -310,7 +310,7 @@ namespace futures::detail {
               Function,
               PrefixArgs...> {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_double_unwrap_continuation_v
         = is_double_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -323,18 +323,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_tuple_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_tuple_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_tuple_unwrap_continuation_impl<
             true,
             Future,
@@ -348,7 +348,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_tuple_unwrap_continuation
         : is_tuple_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -367,7 +367,7 @@ namespace futures::detail {
     // clang-format on
     {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_tuple_unwrap_continuation_v
         = is_tuple_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -380,18 +380,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_range_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_range_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_range_unwrap_continuation_impl<
             true,
             Future,
@@ -405,7 +405,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_range_unwrap_continuation
         : is_range_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -425,7 +425,7 @@ namespace futures::detail {
     // clang-format on
     {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_range_unwrap_continuation_v
         = is_range_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 
@@ -438,18 +438,18 @@ namespace futures::detail {
         template <
             bool Enable,
             class Future,
-            typename Function,
-            typename... PrefixArgs>
+            class Function,
+            class... PrefixArgs>
         struct is_when_any_unwrap_continuation_impl;
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_when_any_unwrap_continuation_impl<
             false,
             Future,
             Function,
             PrefixArgs...> : std::false_type {};
 
-        template <class Future, typename Function, typename... PrefixArgs>
+        template <class Future, class Function, class... PrefixArgs>
         struct is_when_any_unwrap_continuation_impl<
             true,
             Future,
@@ -463,7 +463,7 @@ namespace futures::detail {
                   > {};
     } // namespace
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_when_any_unwrap_continuation
         : is_when_any_unwrap_continuation_impl<
               // previous unwrap should be false and Future should be a future
@@ -484,7 +484,7 @@ namespace futures::detail {
     // clang-format on
     {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_when_any_unwrap_continuation_v
         = is_when_any_unwrap_continuation<Future, Function, PrefixArgs...>::
             value;
@@ -494,7 +494,7 @@ namespace futures::detail {
     // is_valid_unwrap_continuation
     //
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     struct is_valid_unwrap_continuation
         : std::integral_constant<
               bool,
@@ -512,7 +512,7 @@ namespace futures::detail {
               // clang-format on
               > {};
 
-    template <class Future, typename Function, typename... PrefixArgs>
+    template <class Future, class Function, class... PrefixArgs>
     constexpr bool is_valid_unwrap_continuation_v
         = is_valid_unwrap_continuation<Future, Function, PrefixArgs...>::value;
 

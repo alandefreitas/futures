@@ -13,10 +13,10 @@
 
 namespace futures::detail {
     // Check if type is a tuple
-    template <typename>
+    template <class>
     struct is_tuple : std::false_type {};
 
-    template <typename... Args>
+    template <class... Args>
     struct is_tuple<std::tuple<Args...>> : std::true_type {};
 
     template <class T>

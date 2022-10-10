@@ -52,7 +52,7 @@ namespace futures {
         /// @param first First element in range
         /// @param last Last element in range
         /// @return Iterator to point where sequence should be split
-        template <typename I, typename S>
+        template <class I, class S>
         auto
         operator()(I first, S last) {
             std::size_t size = std::distance(first, last);
@@ -77,7 +77,7 @@ namespace futures {
         explicit thread_partitioner(std::size_t min_grain_size)
             : min_grain_size_(min_grain_size) {}
 
-        template <typename I, typename S>
+        template <class I, class S>
         auto
         operator()(I first, S last) {
             if (num_threads_ <= 1) {
@@ -168,7 +168,7 @@ namespace futures {
     constexpr bool is_partitioner_v = is_partitioner<T, I, S>::value;
 
     /// Determine if P is a valid partitioner for the range R
-    template <class T, class R, typename = void>
+    template <class T, class R, class = void>
     struct is_range_partitioner : std::false_type {};
 
     template <class T, class R>

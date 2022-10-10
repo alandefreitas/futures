@@ -53,8 +53,8 @@ namespace futures {
     ///
     /// @return A continuation to the before future
     template <
-        typename Executor,
-        typename Function,
+        class Executor,
+        class Function,
         class Future
 #ifndef FUTURES_DOXYGEN
         ,
@@ -86,7 +86,7 @@ namespace futures {
     /// @see @ref then
     template <
         class Future,
-        typename Function
+        class Function
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<
@@ -121,7 +121,7 @@ namespace futures {
     /// @return A continuation to the before future
     template <
         class Future,
-        typename Function
+        class Function
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<

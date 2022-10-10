@@ -23,7 +23,7 @@ namespace futures::detail {
      *
      * @tparam T Callable type
      */
-    template <typename T>
+    template <class T>
     struct is_callable {
     private:
         typedef char (&yes)[1];
@@ -37,14 +37,14 @@ namespace futures::detail {
             : T
             , Fallback {};
 
-        template <typename U, U>
+        template <class U, U>
         struct Check;
 
-        template <typename>
+        template <class>
         static yes
         test(...);
 
-        template <typename C>
+        template <class C>
         static no
         test(Check<void (Fallback::*)(), &C::operator()> *);
 
@@ -52,7 +52,7 @@ namespace futures::detail {
         static bool const value = sizeof(test<Derived>(0)) == sizeof(yes);
     };
 
-    template <typename T>
+    template <class T>
     constexpr bool is_callable_v = is_callable<T>::value;
 
     /** @} */ // @addtogroup future-traits Future Traits

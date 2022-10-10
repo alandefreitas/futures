@@ -26,7 +26,7 @@ namespace futures {
      *
      *  This trait might be adjusted to allow other executor types.
      **/
-    template <typename T>
+    template <class T>
     using is_executor
 #ifndef FUTURES_DOXYGEN
         = asio::is_executor<T>
@@ -34,7 +34,7 @@ namespace futures {
         ;
 
     /// Determine if type is an executor
-    template <typename T>
+    template <class T>
     constexpr bool is_executor_v = is_executor<T>::value;
 
     /** @} */ // @addtogroup executors Executors

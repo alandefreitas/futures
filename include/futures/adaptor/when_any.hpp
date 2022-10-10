@@ -36,7 +36,7 @@ namespace futures {
      *  this definition, especially the inferences for unwrapping `then`
      *  continuations, regardless of the when_any algorithm.
      */
-    template <typename Sequence>
+    template <class Sequence>
     struct when_any_result {
         using size_type = std::size_t;
         using sequence_type = Sequence;
@@ -383,7 +383,7 @@ namespace futures {
     /// @name Define when_any_future as a kind of future
     /// @{
     /// Specialization explicitly setting when_any_future<T> as a type of future
-    template <typename T>
+    template <class T>
     struct is_future<when_any_future<T>> : std::true_type {};
 #endif
 
@@ -392,9 +392,9 @@ namespace futures {
         /// @{
 
         /// Check if type is a when_any_future as a type
-        template <typename>
+        template <class>
         struct is_when_any_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_any_future<when_any_future<Sequence>>
             : std::true_type {};
 
@@ -433,9 +433,9 @@ namespace futures {
 
         /// Check if type is a when_any_future with tuples as a sequence
         /// type
-        template <typename T, class Enable = void>
+        template <class T, class Enable = void>
         struct is_when_any_tuple_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_any_tuple_future<
             when_any_future<Sequence>,
             std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type {};
@@ -462,9 +462,9 @@ namespace futures {
 
         /// Check if type is a when_any_future with a range as a sequence
         /// type
-        template <typename T, class Enable = void>
+        template <class T, class Enable = void>
         struct is_when_any_range_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_any_range_future<
             when_any_future<Sequence>,
             std::enable_if_t<is_range_v<Sequence>>> : std::true_type {};

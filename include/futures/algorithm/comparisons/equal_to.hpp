@@ -17,8 +17,8 @@ namespace futures {
      */
     struct equal_to {
         template <
-            typename T,
-            typename U
+            class T,
+            class U
 #ifndef FUTURES_DOXYGEN
             ,
             std::enable_if_t<is_equality_comparable_with_v<T, U>, int> = 0

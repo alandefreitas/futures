@@ -25,7 +25,7 @@ namespace futures {
     /// Primary template handles non-future types
     ///
     /// @note Not to be confused with continuation unwrapping
-    template <typename T, class Enable = void>
+    template <class T, class Enable = void>
     struct future_value_type {};
 
     /// Determine type a future object holds (specialization for types

@@ -41,8 +41,8 @@ namespace futures::detail {
 
 
         template <
-            typename Executor,
-            typename Function,
+            class Executor,
+            class Function,
             class Future
 #ifndef FUTURES_DOXYGEN
             ,

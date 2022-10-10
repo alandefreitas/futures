@@ -23,10 +23,10 @@ namespace futures::detail {
     /// This is what we use to identify the return type of a future type
     /// candidate However, this doesn't mean the type is a future in the
     /// terms of the is_future concept
-    template <typename T, typename = void>
+    template <class T, typename = void>
     struct has_share : std::false_type {};
 
-    template <typename T>
+    template <class T>
     struct has_share<T, std::void_t<decltype(std::declval<T>().share())>>
         : std::true_type {};
 

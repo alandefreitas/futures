@@ -16,7 +16,7 @@ namespace futures::detail {
      *
      * The primary template handles non-future types
      */
-    template <typename T, class Enable = void>
+    template <class T, class Enable = void>
     struct lambda_to_future {
         using type = void;
     };

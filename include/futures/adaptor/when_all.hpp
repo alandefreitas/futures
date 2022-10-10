@@ -307,7 +307,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
     /// Specialization explicitly setting when_all_future<T> as a type of
     /// future
-    template <typename T>
+    template <class T>
     struct is_future<when_all_future<T>> : std::true_type {};
 #endif
 
@@ -319,9 +319,9 @@ namespace futures {
          */
 
         /// Check if type is a when_all_future as a type
-        template <typename>
+        template <class>
         struct is_when_all_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_all_future<when_all_future<Sequence>>
             : std::true_type {};
 
@@ -365,9 +365,9 @@ namespace futures {
          */
 
         /// Check if type is a when_all_future with tuples as a sequence type
-        template <typename T, class Enable = void>
+        template <class T, class Enable = void>
         struct is_when_all_tuple_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_all_tuple_future<
             when_all_future<Sequence>,
             std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type {};
@@ -394,9 +394,9 @@ namespace futures {
 
         /// Check if type is a when_all_future with a range as a sequence
         /// type
-        template <typename T, class Enable = void>
+        template <class T, class Enable = void>
         struct is_when_all_range_future : std::false_type {};
-        template <typename Sequence>
+        template <class Sequence>
         struct is_when_all_range_future<
             when_all_future<Sequence>,
             std::enable_if_t<is_range_v<Sequence>>> : std::true_type {};
@@ -481,7 +481,7 @@ namespace futures {
         // - futures need to be moved
         // - shared futures need to be copied
         // - lambdas need to be posted
-        template <typename F>
+        template <class F>
         constexpr decltype(auto)
         move_share_or_post(F &&f) {
             if constexpr (is_shared_future_v<std::decay_t<F>>) {

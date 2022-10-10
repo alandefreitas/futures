@@ -41,7 +41,7 @@ namespace futures::detail {
     /// @return Iterator to first element that could *not* be locked, or `end`
     /// if all the supplied Lockable objects are now locked
     template <
-        typename Iterator,
+        class Iterator,
         std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     Iterator
     try_lock(Iterator first, Iterator last) {
@@ -102,7 +102,7 @@ namespace futures::detail {
     /// @param first Iterator to first mutex in the range
     /// @param last Iterator to one past the last mutex in the range
     template <
-        typename Iterator,
+        class Iterator,
         std::enable_if_t<is_input_iterator_v<Iterator>, int> = 0>
     void
     lock(Iterator first, Iterator last) {

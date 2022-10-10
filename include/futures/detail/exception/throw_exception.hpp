@@ -14,7 +14,7 @@ namespace futures::detail {
      */
 
     /// Throw an exception but terminate if we can't throw
-    template <typename Ex>
+    template <class Ex>
     [[noreturn]] void
     throw_exception(Ex &&ex) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS
@@ -26,14 +26,14 @@ namespace futures::detail {
     }
 
     /// Construct and throw an exception but terminate otherwise
-    template <typename Ex, typename... Args>
+    template <class Ex, class... Args>
     [[noreturn]] void
     throw_exception(Args &&...args) {
         throw_exception(Ex(std::forward<Args>(args)...));
     }
 
     /// Throw an exception but terminate if we can't throw
-    template <typename ThrowFn, typename CatchFn>
+    template <class ThrowFn, class CatchFn>
     void
     catch_exception(ThrowFn &&thrower, CatchFn &&catcher) {
 #ifndef FUTURES_DISABLE_EXCEPTIONS

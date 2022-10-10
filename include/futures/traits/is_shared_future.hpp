@@ -28,7 +28,7 @@ namespace futures {
 
     /// Customization point to determine if a type is a shared future
     /// type (specialization for std::shared_future<T>)
-    template <typename T>
+    template <class T>
     struct is_shared_future<std::shared_future<T>> : std::true_type {};
 
     /// Customization point to determine if a type is a shared future type

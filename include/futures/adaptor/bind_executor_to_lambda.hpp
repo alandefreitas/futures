@@ -51,8 +51,8 @@ namespace futures {
      */
     template <
         class Executor,
-        typename Function,
-        typename... Args
+        class Function,
+        class... Args
 #ifndef FUTURES_DOXYGEN
         ,
         std::enable_if_t<

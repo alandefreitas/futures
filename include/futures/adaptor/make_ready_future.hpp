@@ -20,7 +20,7 @@ namespace futures {
     /// @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// @return A future associated with the shared state that is created.
-    template <typename T>
+    template <class T>
     basic_future<typename std::decay_t<T>, future_options<>>
     make_ready_future(T &&value) {
         return detail::make_ready_future_impl{}.template make_ready_future<T>(
@@ -32,7 +32,7 @@ namespace futures {
     /// @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
     ///
     /// @return A future associated with the shared state that is created.
-    template <typename T>
+    template <class T>
     basic_future<T &, future_options<>>
     make_ready_future(std::reference_wrapper<T> value) {
         return detail::make_ready_future_impl{}.template make_ready_future<T>(
@@ -56,7 +56,7 @@ namespace futures {
     /// https://en.cppreference.com/w/cpp/experimental/make_exceptional_future
     ///
     /// @return A future associated with the shared state that is created.
-    template <typename T = void>
+    template <class T = void>
     basic_future<T, future_options<>>
     make_exceptional_future(std::exception_ptr ex) {
         return detail::make_ready_future_impl{}

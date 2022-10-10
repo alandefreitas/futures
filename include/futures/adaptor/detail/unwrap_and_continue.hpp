@@ -42,8 +42,8 @@ namespace futures::detail {
         /// @return The continuation result
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_no_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -63,8 +63,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_no_input_continuation_v<Future, Function, PrefixArgs...>
@@ -83,8 +83,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_value_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -105,8 +105,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_lvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -127,8 +127,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_rvalue_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -149,8 +149,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_double_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -170,8 +170,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_tuple_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -248,8 +248,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_range_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -314,8 +314,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 is_when_any_unwrap_continuation_v<Future, Function, PrefixArgs...>
@@ -444,8 +444,8 @@ namespace futures::detail {
 
         template <
             class Future,
-            typename Function,
-            typename... PrefixArgs,
+            class Function,
+            class... PrefixArgs,
             std::enable_if_t<
                 // clang-format off
                 !is_valid_unwrap_continuation_v<Future, Function, PrefixArgs...>
