@@ -180,7 +180,9 @@
             ```bash
             cpack build
             ```
-        
+
+    Requirements: C++17
+    
 
 ## Hello world 👋
 

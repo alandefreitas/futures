@@ -53,9 +53,6 @@ theme:
 
 plugins:
   - search
-  - mermaid2:
-      arguments:
-          theme: 'neutral'
   - macros:
       module_name: docs/macros
       include_dir: ..
@@ -88,6 +85,7 @@ extra_javascript:
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://media.ethicalads.io/media/client/ethicalads.min.js
+  - https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
   - javascripts/extra.js
 
 extra_css:
