@@ -131,7 +131,7 @@
 
             ```bash
             cmake --install build
-            `````
+            ```
 
             Create packages:
 
