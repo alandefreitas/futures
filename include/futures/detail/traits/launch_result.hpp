@@ -8,8 +8,7 @@
 #ifndef FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_HPP
 #define FUTURES_DETAIL_TRAITS_LAUNCH_RESULT_HPP
 
-#include <futures/basic_future.hpp>
-#include <futures/detail/traits/launch_result_value_type.hpp>
+#include <futures/future.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

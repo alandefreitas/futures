@@ -9,18 +9,36 @@
 #define FUTURES_ADAPTOR_DETAIL_UNWRAP_AND_CONTINUE_TRAITS_HPP
 
 #include <futures/future_options.hpp>
+#include <futures/algorithm/traits/is_range.hpp>
 #include <futures/traits/future_value.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
-#include <futures/detail/traits/is_single_type_tuple.hpp>
-#include <futures/detail/traits/is_tuple_invocable.hpp>
-#include <futures/detail/traits/is_when_any_result.hpp>
-#include <futures/detail/traits/range_or_tuple_value.hpp>
-#include <futures/detail/traits/tuple_type_all_of.hpp>
-#include <futures/detail/traits/tuple_type_concat.hpp>
-#include <futures/detail/traits/tuple_type_transform.hpp>
+#include <futures/detail/traits/is_tuple.hpp>
+#include <futures/adaptor/detail/when_any.hpp>
 
 namespace futures::detail {
+    /// Get the element type of a when any result object
+    /// This is a very specific helper trait we need
+    template <typename T, class Enable = void>
+    struct range_or_tuple_value {};
+
+    template <typename Sequence>
+    struct range_or_tuple_value<
+        Sequence,
+        std::enable_if_t<is_range_v<Sequence>>> {
+        using type = range_value_t<Sequence>;
+    };
+
+    template <typename Sequence>
+    struct range_or_tuple_value<
+        Sequence,
+        std::enable_if_t<detail::is_tuple_v<Sequence>>> {
+        using type = std::tuple_element_t<0, Sequence>;
+    };
+
+    template <class T>
+    using range_or_tuple_value_t = typename range_or_tuple_value<T>::type;
+
     template <class Future, typename Function, typename... PrefixArgs>
     struct is_no_unwrap_continuation
         : std::integral_constant<
@@ -109,7 +127,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              std::is_invocable_v<Function, PrefixArgs..., future_value_t<Future>>
+              std::is_invocable_v<Function, PrefixArgs..., future_value_type_t<Future>>
                   // clang-format on
                   > {};
     } // namespace
@@ -160,7 +178,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_t<Future>>>
+              std::is_invocable_v<Function, PrefixArgs..., std::add_lvalue_reference_t<future_value_type_t<Future>>>
                   // clang-format on
                   > {};
     } // namespace
@@ -214,7 +232,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_t<Future>>>
+              std::is_invocable_v<Function, PrefixArgs..., std::add_rvalue_reference_t<future_value_type_t<Future>>>
                   // clang-format on
                   > {};
     } // namespace
@@ -258,6 +276,9 @@ namespace futures::detail {
             Function,
             PrefixArgs...> : std::false_type {};
 
+        template <class T>
+        using get_nested_type = typename T::type;
+
         template <class Future, typename Function, typename... PrefixArgs>
         struct is_double_unwrap_continuation_impl<
             true,
@@ -267,8 +288,8 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              is_future_v<std::decay_t<future_value_t<Future>>> &&
-              std::is_invocable_v<Function, PrefixArgs..., type_member_or_void_t<future_value<future_value_t<Future>>>>
+                  is_future_v<std::decay_t<future_value_type_t<Future>>> &&
+                  std::is_invocable_v<Function, PrefixArgs..., mp_eval_or<void, get_nested_type, future_value_type<future_value_type_t<Future>>>>
                   // clang-format on
                   > {};
     } // namespace
@@ -322,7 +343,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              detail::is_tuple_v<future_value_t<Future>>
+              detail::is_tuple_v<future_value_type_t<Future>>
                   // clang-format on
                   > {};
     } // namespace
@@ -379,7 +400,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              is_range_v<future_value_t<Future>>
+                  is_range_v<future_value_type_t<Future>>
                   // clang-format on
                   > {};
     } // namespace
@@ -437,7 +458,7 @@ namespace futures::detail {
             : std::integral_constant<
                   bool,
                   // clang-format off
-              is_when_any_result_v<future_value_t<Future>>
+                  is_when_any_result_v<future_value_type_t<Future>>
                   // clang-format on
                   > {};
     } // namespace

@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 #include <futures/await.hpp>
-#include <futures/basic_future.hpp>
+#include <futures/future.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/detail/future_launcher.hpp>
 #include <futures/detail/traits/is_future_options.hpp>

@@ -8,7 +8,7 @@
 #ifndef FUTURES_DETAIL_MOVE_IF_NOT_SHARED_HPP
 #define FUTURES_DETAIL_MOVE_IF_NOT_SHARED_HPP
 
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_shared_future.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

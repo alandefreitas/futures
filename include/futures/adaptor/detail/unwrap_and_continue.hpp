@@ -10,18 +10,16 @@
 
 #include <futures/config.hpp>
 #include <futures/future_options.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
+#include <futures/algorithm/traits/is_range.hpp>
+#include <futures/algorithm/traits/range_value.hpp>
+#include <futures/traits/has_stop_token.hpp>
+#include <futures/traits/is_always_deferred.hpp>
+#include <futures/traits/is_stoppable.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
-#include <futures/detail/traits/is_single_type_tuple.hpp>
-#include <futures/detail/traits/is_tuple_invocable.hpp>
-#include <futures/detail/traits/is_when_any_result.hpp>
-#include <futures/detail/traits/range_or_tuple_value.hpp>
-#include <futures/detail/traits/tuple_type_all_of.hpp>
-#include <futures/detail/traits/tuple_type_concat.hpp>
-#include <futures/detail/traits/tuple_type_transform.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue_traits.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
 
@@ -99,7 +97,7 @@ namespace futures::detail {
             Future &&before_future,
             Function &&continuation,
             PrefixArgs &&...prefix_args) const {
-            future_value_t<Future> prev_state = before_future.get();
+            future_value_type_t<Future> prev_state = before_future.get();
             return continuation(
                 std::forward<PrefixArgs>(prefix_args)...,
                 std::move(prev_state));
@@ -121,7 +119,7 @@ namespace futures::detail {
             Future &&before_future,
             Function &&continuation,
             PrefixArgs &&...prefix_args) const {
-            future_value_t<Future> prev_state = before_future.get();
+            future_value_type_t<Future> prev_state = before_future.get();
             return continuation(
                 std::forward<PrefixArgs>(prefix_args)...,
                 prev_state);
@@ -143,7 +141,7 @@ namespace futures::detail {
             Future &&before_future,
             Function &&continuation,
             PrefixArgs &&...prefix_args) const {
-            future_value_t<Future> prev_state = before_future.get();
+            future_value_type_t<Future> prev_state = before_future.get();
             return continuation(
                 std::forward<PrefixArgs>(prefix_args)...,
                 std::move(prev_state));
@@ -186,14 +184,15 @@ namespace futures::detail {
             Future &&before_future,
             Function &&continuation,
             PrefixArgs &&...prefix_args) const {
-            constexpr bool tuple_explode = is_tuple_invocable_v<
-                Function,
-                tuple_type_concat_t<
+            constexpr bool tuple_explode = mp_apply<
+                std::is_invocable,
+                mp_append<
+                    std::tuple<Function>,
                     std::tuple<PrefixArgs...>,
-                    future_value_t<Future>>>;
-            constexpr bool is_future_tuple = tuple_type_all_of_v<
-                std::decay_t<future_value_t<Future>>,
-                is_future>;
+                    future_value_type_t<Future>>>::value;
+            constexpr bool is_future_tuple = mp_all_of<
+                std::decay_t<future_value_type_t<Future>>,
+                is_future>::value;
             if constexpr (tuple_explode) {
                 // future<tuple<future<T1>, future<T2>, ...>> ->
                 // function(future<T1>, future<T2>, ...)
@@ -206,14 +205,15 @@ namespace futures::detail {
             } else if constexpr (is_future_tuple) {
                 // future<tuple<future<T1>, future<T2>, ...>> ->
                 // function(T1, T2, ...)
-                using unwrapped_elements = tuple_type_transform_t<
-                    future_value_t<Future>,
-                    future_value>;
-                constexpr bool tuple_explode_unwrap = is_tuple_invocable_v<
-                    Function,
-                    tuple_type_concat_t<
+                using unwrapped_elements = mp_transform<
+                    future_value_type_t,
+                    future_value_type_t<Future>>;
+                constexpr bool tuple_explode_unwrap = mp_apply<
+                    std::is_invocable,
+                    mp_append<
+                        std::tuple<Function>,
                         std::tuple<PrefixArgs...>,
-                        unwrapped_elements>>;
+                        unwrapped_elements>>::value;
                 if constexpr (tuple_explode_unwrap) {
                     auto future_to_value = [](auto &&el) {
                         if constexpr (!is_future_v<std::decay_t<decltype(el)>>)
@@ -264,12 +264,12 @@ namespace futures::detail {
             PrefixArgs &&...prefix_args) const {
             // when_all vector<future<T>> ->
             // function(futures::small_vector<T>)
-            using range_value_t = range_value_t<future_value_t<Future>>;
+            using range_value_t = range_value_t<future_value_type_t<Future>>;
             constexpr bool is_range_of_futures = is_future_v<
                 std::decay_t<range_value_t>>;
             if constexpr (is_range_of_futures) {
                 using continuation_vector = detail::small_vector<
-                    future_value_t<range_value_t>>;
+                    future_value_type_t<range_value_t>>;
                 using lvalue_continuation_vector = std::add_lvalue_reference_t<
                     continuation_vector>;
                 constexpr bool vector_unwrap
@@ -283,10 +283,11 @@ namespace futures::detail {
                               PrefixArgs...,
                               lvalue_continuation_vector>);
                 if constexpr (vector_unwrap) {
-                    future_value_t<Future> futures_vector = before_future.get();
-                    using future_vector_value_type = typename future_value_t<
-                        Future>::value_type;
-                    using unwrap_vector_value_type = future_value_t<
+                    future_value_type_t<Future>
+                        futures_vector = before_future.get();
+                    using future_vector_value_type =
+                        typename future_value_type_t<Future>::value_type;
+                    using unwrap_vector_value_type = future_value_type_t<
                         future_vector_value_type>;
                     using unwrap_vector_type = detail::small_vector<
                         unwrap_vector_value_type>;
@@ -331,25 +332,30 @@ namespace futures::detail {
             // Common continuations for when_any futures
             // when_any<tuple<future<T1>, future<T2>, ...>> ->
             // function(size_t, tuple<future<T1>, future<T2>, ...>)
-            using when_any_index = typename future_value_t<Future>::size_type;
-            using when_any_sequence = typename future_value_t<
+            using when_any_index = typename future_value_type_t<
+                Future>::size_type;
+            using when_any_sequence = typename future_value_type_t<
                 Future>::sequence_type;
             using when_any_members_as_tuple = std::
                 tuple<when_any_index, when_any_sequence>;
-            constexpr bool when_any_split = is_tuple_invocable_v<
-                Function,
-                tuple_type_concat_t<prefix_as_tuple, when_any_members_as_tuple>>;
+            constexpr bool when_any_split = mp_apply<
+                std::is_invocable,
+                mp_append<
+                    std::tuple<Function>,
+                    prefix_as_tuple,
+                    when_any_members_as_tuple>>::value;
 
             // when_any<tuple<future<>,...>> -> function(size_t,
             // future<T1>, future<T2>, ...)
             constexpr bool when_any_explode = []() {
                 if constexpr (detail::is_tuple_v<when_any_sequence>) {
-                    return is_tuple_invocable_v<
-                        Function,
-                        tuple_type_concat_t<
+                    return mp_apply<
+                        std::is_invocable,
+                        mp_append<
+                            std::tuple<Function>,
                             prefix_as_tuple,
                             std::tuple<when_any_index>,
-                            when_any_sequence>>;
+                            when_any_sequence>>::value;
                 } else {
                     return false;
                 }
@@ -359,26 +365,29 @@ namespace futures::detail {
             // continuation(future<T>)
             constexpr bool when_any_same_type
                 = is_range_v<when_any_sequence>
-                  || is_single_type_tuple_v<when_any_sequence>;
+                  || mp_same<when_any_sequence>::value;
             using when_any_element_type = range_or_tuple_value_t<
                 when_any_sequence>;
             constexpr bool when_any_element
                 = when_any_same_type
-                  && is_tuple_invocable_v<
-                      Function,
-                      tuple_type_concat_t<
+                  && mp_apply<
+                      std::is_invocable,
+                      mp_append<
+                          std::tuple<Function>,
                           prefix_as_tuple,
-                          std::tuple<when_any_element_type>>>;
+                          std::tuple<when_any_element_type>>>::value;
 
             // when_any_result<tuple<future<T>, future<T>, ...>> ->
             // continuation(T)
             constexpr bool when_any_unwrap_element
                 = when_any_same_type
-                  && is_tuple_invocable_v<
-                      Function,
-                      tuple_type_concat_t<
+                  && mp_apply<
+                      std::is_invocable,
+                      mp_append<
+                          std::tuple<Function>,
                           prefix_as_tuple,
-                          std::tuple<future_value_t<when_any_element_type>>>>;
+                          std::tuple<future_value_type_t<
+                              when_any_element_type>>>>::value;
 
             auto w = before_future.get();
             if constexpr (when_any_split) {

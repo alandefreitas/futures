@@ -9,10 +9,7 @@
 #define FUTURES_DETAIL_FUTURE_OPTIONS_LIST_HPP
 
 #include <futures/executor/default_executor.hpp>
-#include <futures/detail/traits/get_type_template_in_args.hpp>
-#include <futures/detail/traits/index_in_args.hpp>
-#include <futures/detail/traits/is_in_args.hpp>
-#include <futures/detail/traits/is_type_template_in_args.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <type_traits>
 
 namespace futures::detail {
@@ -23,12 +20,46 @@ namespace futures::detail {
      *  @{
      */
 
-    /// Class used to define future extension at compile-time
+    // Class used to define future extension at compile-time
     template <class... Args>
     struct future_options_list {
+    private:
+        static constexpr std::size_t N = sizeof...(Args);
+
+        template <class T>
+        struct is_executor_opt {
+            static constexpr bool value = false;
+        };
+
+        template <class T>
+        struct is_executor_opt<executor_opt<T>> {
+            static constexpr bool value = true;
+        };
+
+        template <class TypeList>
+        using get_executor_opt_type = typename mp_at<
+            TypeList,
+            mp_find_if<TypeList, is_executor_opt>>::type;
+
+        template <class T>
+        struct is_deferred_function_opt {
+            static constexpr bool value = false;
+        };
+
+        template <class T>
+        struct is_deferred_function_opt<deferred_function_opt<T>> {
+            static constexpr bool value = true;
+        };
+
+        template <class TypeList>
+        using get_deferred_function_opt_type = typename mp_at<
+            TypeList,
+            mp_find_if<TypeList, is_deferred_function_opt>>::type;
+
+    public:
         /// Whether the future has an associated executor
-        static constexpr bool has_executor = detail::
-            is_type_template_in_args_v<executor_opt, Args...>;
+        static constexpr bool has_executor =
+            mp_find_if<mp_list<Args...>, is_executor_opt>::value != sizeof...(Args);
 
         /// Executor used by the shared state
         /**
@@ -36,22 +67,22 @@ namespace futures::detail {
          *  current task and the default executor it uses for
          *  potential continuations
          */
-        using executor_t = detail::get_type_template_in_args_t<
+        using executor_t = mp_eval_or<
             default_executor_type,
-            executor_opt,
-            Args...>;
+            get_executor_opt_type,
+            mp_list<Args...>>;
 
         /// Whether the future supports deferred continuations
-        static constexpr bool is_continuable = detail::
-            is_in_args_v<continuable_opt, Args...>;
+        static constexpr bool is_continuable
+            = mp_contains<mp_list<Args...>, continuable_opt>::value;
 
         /// Whether the future supports stop requests
-        static constexpr bool is_stoppable = detail::
-            is_in_args_v<stoppable_opt, Args...>;
+        static constexpr bool is_stoppable
+            = mp_contains<mp_list<Args...>, stoppable_opt>::value;
 
         /// Whether the future is always detached
-        static constexpr bool is_always_detached = detail::
-            is_in_args_v<always_detached_opt, Args...>;
+        static constexpr bool is_always_detached
+            = mp_contains<mp_list<Args...>, always_detached_opt>::value;
 
         /// Whether the future is always deferred
         /**
@@ -59,23 +90,23 @@ namespace futures::detail {
          *  sent to the executor when we request or wait for the
          *  future value
          */
-        static constexpr bool is_always_deferred = detail::
-            is_in_args_v<always_deferred_opt, Args...>;
+        static constexpr bool is_always_deferred
+            = mp_contains<mp_list<Args...>, always_deferred_opt>::value;
 
         /// Whether the future holds an associated function with the task
-        static constexpr bool has_deferred_function = detail::
-            is_type_template_in_args_v<deferred_function_opt, Args...>;
+        static constexpr bool has_deferred_function
+            = mp_find_if<mp_list<Args...>, is_deferred_function_opt>::value
+              != N;
 
         /// Function used by the deferred shared state
         /**
          *  This is the function the deferred state will use when the task
          *  is launched
          */
-        using function_t = detail::get_type_template_in_args_t<
+        using function_t = mp_eval_or<
             std::function<void()>,
-            deferred_function_opt,
-            Args...>;
-        static_assert(std::is_invocable_v<function_t>);
+            get_deferred_function_opt_type,
+            mp_list<Args...>>;
 
         /// Whether the future is shared
         /**
@@ -84,63 +115,63 @@ namespace futures::detail {
          *  hand, simple unique future move their result from the
          *  shared state when their value is requested.
          */
-        static constexpr bool is_shared = detail::
-            is_in_args_v<shared_opt, Args...>;
+        static constexpr bool is_shared
+            = mp_contains<mp_list<Args...>, shared_opt>::value;
 
     private:
+        static_assert(std::is_invocable_v<function_t>);
+
         // Identify args positions and ensure they are sorted
         // executor_opt < continuable_opt
         static constexpr std::size_t executor_idx
-            = index_in_args_v<executor_opt<executor_t>, Args...>;
+            = mp_find<mp_list<Args...>, executor_opt<executor_t>>::value;
         static constexpr std::size_t continuable_idx
-            = index_in_args_v<continuable_opt, Args...>;
+            = mp_find<mp_list<Args...>, continuable_opt>::value;
         static_assert(
-            executor_idx == std::size_t(-1) || executor_idx < continuable_idx,
+            executor_idx == N || executor_idx < continuable_idx,
             "The executor_opt tag should be defined before the continuable_opt "
             "tag");
 
         // continuable_opt < stoppable_opt
         static constexpr std::size_t stoppable_idx
-            = index_in_args_v<stoppable_opt, Args...>;
+            = mp_find<mp_list<Args...>, stoppable_opt>::value;
         static_assert(
-            continuable_idx == std::size_t(-1)
-                || continuable_idx < stoppable_idx,
+            continuable_idx == N || continuable_idx < stoppable_idx,
             "The continuable_opt tag should be defined before the "
             "stoppable_opt tag");
 
         // stoppable_opt < always_detached_opt
         static constexpr std::size_t always_detached_idx
-            = index_in_args_v<always_detached_opt, Args...>;
+            = mp_find<mp_list<Args...>, always_detached_opt>::value;
         static_assert(
-            stoppable_idx == std::size_t(-1)
-                || stoppable_idx < always_detached_idx,
+            stoppable_idx == N || stoppable_idx < always_detached_idx,
             "The stoppable_opt tag should be defined before the "
             "always_detached_opt tag");
 
         // always_detached_opt < always_deferred_opt
         static constexpr std::size_t always_deferred_idx
-            = index_in_args_v<always_deferred_opt, Args...>;
+            = mp_find<mp_list<Args...>, always_deferred_opt>::value;
         static_assert(
-            always_detached_idx == std::size_t(-1)
+            always_detached_idx == N
                 || always_detached_idx < always_deferred_idx,
             "The always_detached_opt tag should be defined before the "
             "always_deferred_opt tag");
 
         // always_deferred_opt < deferred_function_opt
-        static constexpr std::size_t deferred_function_idx
-            = index_in_args_v<deferred_function_opt<function_t>, Args...>;
+        static constexpr std::size_t deferred_function_idx = mp_find<
+            mp_list<Args...>,
+            deferred_function_opt<function_t>>::value;
         static_assert(
-            always_deferred_idx == std::size_t(-1)
+            always_deferred_idx == N
                 || always_deferred_idx < deferred_function_idx,
             "The always_deferred_opt tag should be defined before the "
             "deferred_function_opt tag");
 
         // always_deferred_opt < shared_opt
         static constexpr std::size_t shared_idx
-            = index_in_args_v<shared_opt, Args...>;
+            = mp_find<mp_list<Args...>, shared_opt>::value;
         static_assert(
-            always_deferred_idx == std::size_t(-1)
-                || always_deferred_idx < shared_idx,
+            always_deferred_idx == N || always_deferred_idx < shared_idx,
             "The always_deferred_opt tag should be defined before the "
             "shared_opt tag");
     };

@@ -5,18 +5,18 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_DETAIL_TRAITS_IS_WHEN_ANY_RESULT_HPP
-#define FUTURES_DETAIL_TRAITS_IS_WHEN_ANY_RESULT_HPP
+#ifndef FUTURES_ADAPTOR_DETAIL_WHEN_ANY_HPP
+#define FUTURES_ADAPTOR_DETAIL_WHEN_ANY_HPP
 
-#include <futures/adaptor/when_any_result.hpp>
 #include <type_traits>
 
-namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
+namespace futures {
+    template <typename Sequence>
+    struct when_any_result;
+} // namespace futures
 
-    /// Check if type is a when_any_result
+namespace futures::detail {
+    // Check if type is a when_any_result
     template <typename>
     struct is_when_any_result : std::false_type {};
     template <typename Sequence>
@@ -33,9 +33,7 @@ namespace futures::detail {
         : std::true_type {};
     template <class T>
     constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
-
-    /** @} */
 } // namespace futures::detail
 
 
-#endif // FUTURES_DETAIL_TRAITS_IS_WHEN_ANY_RESULT_HPP
+#endif // FUTURES_ADAPTOR_DETAIL_WHEN_ANY_HPP

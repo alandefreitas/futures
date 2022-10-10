@@ -5,24 +5,26 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_BASIC_FUTURE_HPP
-#define FUTURES_BASIC_FUTURE_HPP
+#ifndef FUTURES_FUTURE_HPP
+#define FUTURES_FUTURE_HPP
 
 #include <futures/future_options.hpp>
 #include <futures/stop_token.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/executor/default_executor.hpp>
+#include <futures/traits/has_ready_notifier.hpp>
 #include <futures/traits/is_future.hpp>
+#include <futures/traits/has_executor.hpp>
+#include <futures/traits/is_continuable.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
+#include <futures/detail/future.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
-#include <futures/detail/traits/is_executor_then_function.hpp>
-#include <futures/detail/traits/is_type_template_in_args.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
-#include <futures/detail/utility/maybe_copyable.hpp>
 #include <futures/detail/variant_state.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <functional>
 #include <utility>
@@ -1151,17 +1153,17 @@ namespace futures {
     template <class T, class... Args>
     struct is_shared_future<
         basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<shared_opt, Args...> {};
+        : detail::mp_contains<detail::mp_list<Args...>, shared_opt> {};
 
     /// Define continuable basic_futures as supporting lazy continuations
     template <class T, class... Args>
     struct is_continuable<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<continuable_opt, Args...> {};
+        : detail::mp_contains<detail::mp_list<Args...>, continuable_opt> {};
 
     /// Define stoppable basic_futures as being stoppable
     template <class T, class... Args>
     struct is_stoppable<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<stoppable_opt, Args...> {};
+        : detail::mp_contains<detail::mp_list<Args...>, stoppable_opt> {};
 
     /// Define stoppable basic_futures as having a stop token
     /**
@@ -1169,18 +1171,22 @@ namespace futures {
      */
     template <class T, class... Args>
     struct has_stop_token<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<stoppable_opt, Args...> {};
+        : detail::mp_contains<detail::mp_list<Args...>, stoppable_opt> {};
 
     /// Define deferred basic_futures as being deferred
     template <class T, class... Args>
     struct is_always_deferred<
         basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_in_args<always_deferred_opt, Args...> {};
+        : detail::mp_contains<detail::mp_list<Args...>, always_deferred_opt> {};
 
     /// Define deferred basic_futures as having an executor
     template <class T, class... Args>
     struct has_executor<basic_future<T, detail::future_options_list<Args...>>>
-        : detail::is_type_template_in_args<executor_opt, Args...> {};
+        : detail::mp_bool<
+              detail::mp_find_if<
+                  detail::mp_list<Args...>,
+                  detail::is_executor_opt>::value
+              != sizeof...(Args)> {};
 #endif
 
     /// A simple future type similar to `std::future`
@@ -1327,4 +1333,4 @@ namespace futures {
     /** @} */
 } // namespace futures
 
-#endif // FUTURES_BASIC_FUTURE_HPP
+#endif // FUTURES_FUTURE_HPP

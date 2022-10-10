@@ -165,7 +165,7 @@ PenaltyReturnTypeOnItsOwnLine: 2
 SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 IncludeBlocks: Merge
-IncludeCategories:
+IncludeCategories: # config < internal < detail < external < C++
   - Regex:           '^".*.hpp'                           # config headers
     Priority:        1
   - Regex:           '^["<]futures/.*/detail/prologue.h'  # config headers
@@ -175,9 +175,9 @@ IncludeCategories:
   - Regex:           '^["<]futures/detail/config.hpp'     # config headers
     Priority:        2
   - Regex:           '^["<]futures/.*/detail/'            # details headers
-    Priority:        4
-  - Regex:           '^["<]futures/detail/deps'           # external bundled headers
     Priority:        6
+  - Regex:           '^["<]futures/detail/deps'           # external bundled headers
+    Priority:        7
   - Regex:           '^["<]futures/detail/'               # details headers
     Priority:        5
   - Regex:           '^["<]futures/[^/]+.hpp>'            # root internal headers
@@ -185,11 +185,11 @@ IncludeCategories:
   - Regex:           '^["<]futures/'                      # internal headers
     Priority:        4
   - Regex:           '^(["<](boost|small|asio)/)'         # external headers
-    Priority:        6
-  - Regex:           '<[[:alnum:].]+>'                    # C++ headers
-    Priority:        7
-  - Regex:           '.*'                                 # any other headers
     Priority:        8
+  - Regex:           '<[[:alnum:].]+>'                    # C++ headers
+    Priority:        9
+  - Regex:           '.*'                                 # any other headers
+    Priority:        10
 
 # Comments
 FixNamespaceComments: true

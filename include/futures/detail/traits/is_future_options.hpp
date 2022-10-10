@@ -12,14 +12,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
-    /** @addtogroup future-traits Future Traits
-     *  @{
-     */
-
-    /// Check if type is a tuple
+    // Check if type is an instantiation of future options
     template <typename>
     struct is_future_options : std::false_type {};
 

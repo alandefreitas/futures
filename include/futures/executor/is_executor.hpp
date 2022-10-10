@@ -18,13 +18,20 @@ namespace futures {
 
     /// Determine if type is an executor
     /**
-     *  We only consider asio executors to be executors for now
+     *  We only consider asio executors to be executors for now.
+     *
      *  Future and previous executor models can be considered here, as long as
      *  their interface is the same as asio or we implement their respective
      *  traits to make @ref async work properly.
+     *
+     *  This trait might be adjusted to allow other executor types.
      **/
     template <typename T>
-    using is_executor = asio::is_executor<T>;
+    using is_executor
+#ifndef FUTURES_DOXYGEN
+        = asio::is_executor<T>
+#endif
+        ;
 
     /// Determine if type is an executor
     template <typename T>

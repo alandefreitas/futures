@@ -174,7 +174,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 STATIC_REQUIRE(!is_executor_v<Function>);
                 STATIC_REQUIRE(!is_executor_v<Future>);
                 STATIC_REQUIRE(is_future_v<Future>);
-                using value_type = future_value_t<Future>;
+                using value_type = future_value_type_t<Future>;
                 using lvalue_type = std::add_lvalue_reference_t<value_type>;
                 using rvalue_type = std::add_rvalue_reference_t<value_type>;
                 STATIC_REQUIRE(

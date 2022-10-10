@@ -13,6 +13,5 @@
 #include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_all.hpp>
 #include <futures/adaptor/when_any.hpp>
-#include <futures/adaptor/when_any_result.hpp>
 
 #endif // FUTURES_ADAPTOR_HPP

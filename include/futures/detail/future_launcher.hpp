@@ -12,7 +12,6 @@
 #include <futures/traits/future_value.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/shared_state.hpp>
-#include <futures/detail/traits/is_executor_then_function.hpp>
 #include <futures/detail/traits/launch_result.hpp>
 
 namespace futures::detail {

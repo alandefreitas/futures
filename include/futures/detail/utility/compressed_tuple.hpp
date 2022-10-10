@@ -111,18 +111,6 @@ namespace futures::detail {
         }
     };
 
-    // Create compressed tuple for a list of types
-    template <class L>
-    struct compressed_tuple_for {};
-
-    template <class... Types>
-    struct compressed_tuple_for<mp_list<Types...>> {
-        using type = compressed_tuple<Types...>;
-    };
-
-    template <class L>
-    using compressed_tuple_for_t = typename compressed_tuple_for<L>::type;
-
     // Make tuple
     template <class T>
     struct unwrap_refwrapper {

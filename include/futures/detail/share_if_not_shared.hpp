@@ -9,7 +9,7 @@
 #define FUTURES_DETAIL_SHARE_IF_NOT_SHARED_HPP
 
 #include <futures/traits/is_future.hpp>
-#include <futures/detail/traits/has_share.hpp>
+#include <futures/detail/share_if_not_shared.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -18,6 +18,17 @@ namespace futures::detail {
     /** @addtogroup future-traits Future Traits
      *  @{
      */
+
+    /// Check if a type implements the share function
+    /// This is what we use to identify the return type of a future type
+    /// candidate However, this doesn't mean the type is a future in the
+    /// terms of the is_future concept
+    template <typename T, typename = void>
+    struct has_share : std::false_type {};
+
+    template <typename T>
+    struct has_share<T, std::void_t<decltype(std::declval<T>().share())>>
+        : std::true_type {};
 
     template <class Future>
     constexpr decltype(auto)

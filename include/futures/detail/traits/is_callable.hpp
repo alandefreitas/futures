@@ -9,17 +9,10 @@
 #define FUTURES_DETAIL_TRAITS_IS_CALLABLE_HPP
 
 namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
-    /** @addtogroup future-traits Future Traits
-     *  @{
-     */
-
-    /// Check if something is callable, regardless of its arguments
-    /**
+    // Check if something is callable, regardless of its arguments
+    /*
      * We have to recur to this trait because we need to attach callables to
-     * executables before attaching them as continuations. This is part of the
+     * executors before attaching them as continuations. This is part of the
      * expression template that will later join the antecedent future.
      *
      * We can only check if this is a valid continuation after the expression

@@ -8,9 +8,7 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
 #define FUTURES_ADAPTOR_DETAIL_INTERNAL_THEN_FUNCTOR_HPP
 
-#include <futures/basic_future.hpp>
-#include <futures/adaptor/detail/make_continuation_state.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue.hpp>
+#include <futures/future.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/traits/future_value.hpp>
@@ -18,15 +16,9 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>
-#include <futures/detail/traits/is_single_type_tuple.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
-#include <futures/detail/traits/is_tuple_invocable.hpp>
-#include <futures/detail/traits/is_when_any_result.hpp>
-#include <futures/detail/traits/tuple_type_all_of.hpp>
-#include <futures/detail/traits/tuple_type_concat.hpp>
-#include <futures/detail/traits/tuple_type_transform.hpp>
-#include <futures/detail/traits/type_member_or.hpp>
-#include <futures/detail/traits/type_member_or_void.hpp>
+#include <futures/adaptor/detail/make_continuation_state.hpp>
+#include <futures/adaptor/detail/unwrap_and_continue.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

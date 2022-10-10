@@ -41,9 +41,9 @@
 #include <futures/config.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/traits/to_future.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
+#include <futures/adaptor/detail/lambda_to_future.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
 
 namespace futures {
@@ -521,8 +521,8 @@ namespace futures {
         = 0
 #endif
         >
-    when_all_future<detail::small_vector<
-        to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+    when_all_future<detail::small_vector<detail::lambda_to_future_t<
+        typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
@@ -530,7 +530,7 @@ namespace futures {
         constexpr bool input_is_future = is_future_v<input_type>;
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
-        using output_future_type = to_future_t<input_type>;
+        using output_future_type = detail::lambda_to_future_t<input_type>;
         using sequence_type = detail::small_vector<output_future_type>;
         constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
 
@@ -571,7 +571,7 @@ namespace futures {
 #endif
         >
     when_all_future<
-        detail::small_vector<to_future_t<typename std::iterator_traits<
+        detail::small_vector<detail::lambda_to_future_t<typename std::iterator_traits<
             typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
         using std::begin;
@@ -598,10 +598,10 @@ namespace futures {
         = 0
 #endif
         >
-    when_all_future<std::tuple<to_future_t<Futures>...>>
+    when_all_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
     when_all(Futures &&...futures) {
         // Infer sequence type
-        using sequence_type = std::tuple<to_future_t<Futures>...>;
+        using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
         // Create sequence (and infer types as we go)
         sequence_type v = std::make_tuple(

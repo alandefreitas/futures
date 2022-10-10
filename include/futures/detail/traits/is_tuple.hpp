@@ -12,14 +12,7 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
-    /** @addtogroup future-traits Future Traits
-     *  @{
-     */
-
-    /// Check if type is a tuple
+    // Check if type is a tuple
     template <typename>
     struct is_tuple : std::false_type {};
 
@@ -28,8 +21,6 @@ namespace futures::detail {
 
     template <class T>
     constexpr bool is_tuple_v = is_tuple<T>::value;
-    /** @} */ // @addtogroup future-traits Future Traits
-    /** @} */ // @addtogroup futures Futures
 } // namespace futures::detail
 
 #endif // FUTURES_DETAIL_TRAITS_IS_TUPLE_HPP

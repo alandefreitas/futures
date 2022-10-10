@@ -16,11 +16,10 @@
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/wait_for_any.hpp>
-#include <futures/adaptor/when_any_result.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
-#include <futures/traits/to_future.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/is_tuple.hpp>
+#include <futures/adaptor/detail/lambda_to_future.hpp>
 #include <array>
 #include <optional>
 #include <condition_variable>
@@ -31,20 +30,36 @@ namespace futures {
      *  @{
      */
 
+    /// Result type for when_any_future objects
+    /**
+     *  This is defined in a separate file because many other concepts depend on
+     *  this definition, especially the inferences for unwrapping `then`
+     *  continuations, regardless of the when_any algorithm.
+     */
+    template <typename Sequence>
+    struct when_any_result {
+        using size_type = std::size_t;
+        using sequence_type = Sequence;
+
+        size_type index{ static_cast<size_type>(-1) };
+        sequence_type tasks;
+    };
+
+
     /// Proxy future class referring to the result of a disjunction of
     /// futures from @ref when_any
-    ///
-    /// This class implements another future type to identify when one of the
-    /// tasks is over.
-    ///
-    /// As with `when_all`, this class acts as a future that checks the results
-    /// of other futures to avoid creating a real disjunction of futures that
-    /// would need another thread for polling.
-    ///
-    /// Not-polling is easier to emulate for future conjunctions (when_all)
-    /// because we can sleep on each task until they are all done, since we need
-    /// all of them anyway.
-    ///
+    /**
+     *  This class implements another future type to identify when one of the
+     *  tasks is over.
+     *
+     *  As with `when_all`, this class acts as a future that checks the results
+     *  of other futures to avoid creating a real disjunction of futures that
+     *  would need another thread for polling.
+     *
+     *  Not-polling is easier to emulate for future conjunctions (when_all)
+     *  because we can sleep on each task until they are all done, since we need
+     *  all of them anyway.
+     */
     template <class Sequence>
     class when_any_future {
     private:
@@ -554,8 +569,8 @@ namespace futures {
         = 0
 #endif
         >
-    when_any_future<detail::small_vector<
-        to_future_t<typename std::iterator_traits<InputIt>::value_type>>>
+    when_any_future<detail::small_vector<detail::lambda_to_future_t<
+        typename std::iterator_traits<InputIt>::value_type>>>
     when_any(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
@@ -563,7 +578,7 @@ namespace futures {
         constexpr bool input_is_future = is_future_v<input_type>;
         constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
         static_assert(input_is_future || input_is_invocable);
-        using output_future_type = to_future_t<input_type>;
+        using output_future_type = detail::lambda_to_future_t<input_type>;
         using sequence_type = detail::small_vector<output_future_type>;
         constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
 
@@ -604,7 +619,7 @@ namespace futures {
 #endif
         >
     when_any_future<
-        detail::small_vector<to_future_t<typename std::iterator_traits<
+        detail::small_vector<detail::lambda_to_future_t<typename std::iterator_traits<
             typename std::decay_t<Range>::iterator>::value_type>>>
     when_any(Range &&r) {
         return when_any(
@@ -632,10 +647,10 @@ namespace futures {
         = 0
 #endif
         >
-    when_any_future<std::tuple<to_future_t<Futures>...>>
+    when_any_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
     when_any(Futures &&...futures) {
         // Infer sequence type
-        using sequence_type = std::tuple<to_future_t<Futures>...>;
+        using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
         // When making the tuple for when_any_future:
         // - futures need to be moved

@@ -75,7 +75,7 @@ namespace futures {
             >
         decltype(auto)
         await_tuple(Future &&f1) {
-            if constexpr (std::is_void_v<future_value_t<std::decay_t<Future>>>)
+            if constexpr (std::is_void_v<future_value_type_t<std::decay_t<Future>>>)
             {
                 std::forward<Future>(f1).get();
                 return std::make_tuple();

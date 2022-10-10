@@ -20,7 +20,7 @@ namespace futures::detail {
     struct prepend_future_option<
         Opt,
         future_options_list<Args...>,
-        std::enable_if_t<!detail::is_in_args_v<Opt>>> {
+        std::enable_if_t<!mp_contains<mp_list<Args...>, Opt>::value>> {
         using type = future_options_list<Opt, Args...>;
     };
 

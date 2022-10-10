@@ -23,34 +23,58 @@ namespace futures::detail {
     template <class... Args>
     struct future_options_flat {
     private:
+        static constexpr std::size_t N = sizeof...(Args);
+
+        template <class T>
+        struct is_executor_opt {
+            static constexpr bool value = false;
+        };
+
+        template <class T>
+        struct is_executor_opt<executor_opt<T>> {
+            static constexpr bool value = true;
+        };
+
+        template <class TypeList>
+        using get_executor_opt_type = typename mp_at<
+            TypeList,
+            mp_find_if<TypeList, is_executor_opt>>::type;
+
         using empty_opts_type = future_options_list<>;
+
         using maybe_executor_list_t = conditional_append_future_option_t<
-            is_type_template_in_args_v<executor_opt, Args...>,
-            executor_opt<get_type_template_in_args_t<
+            mp_find_if<mp_list<Args...>, is_executor_opt>::value != N,
+            executor_opt<mp_eval_or<
                 default_executor_type,
-                executor_opt,
-                Args...>>,
+                get_executor_opt_type,
+                mp_list<Args...>>>,
             empty_opts_type>;
+
         using maybe_continuable_list_t = conditional_append_future_option_t<
-            is_in_args_v<continuable_opt, Args...>,
+            mp_contains<mp_list<Args...>, continuable_opt>::value,
             continuable_opt,
             maybe_executor_list_t>;
+
         using maybe_stoppable_list_t = conditional_append_future_option_t<
-            is_in_args_v<stoppable_opt, Args...>,
+            mp_contains<mp_list<Args...>, stoppable_opt>::value,
             stoppable_opt,
             maybe_continuable_list_t>;
+
         using maybe_detached_list_t = conditional_append_future_option_t<
-            is_in_args_v<always_detached_opt, Args...>,
+            mp_contains<mp_list<Args...>, always_detached_opt>::value,
             always_detached_opt,
             maybe_stoppable_list_t>;
+
         using maybe_deferred_list_t = conditional_append_future_option_t<
-            is_in_args_v<always_deferred_opt, Args...>,
+            mp_contains<mp_list<Args...>, always_deferred_opt>::value,
             always_deferred_opt,
             maybe_detached_list_t>;
+
         using maybe_shared_list_t = conditional_append_future_option_t<
-            is_in_args_v<shared_opt, Args...>,
+            mp_contains<mp_list<Args...>, shared_opt>::value,
             shared_opt,
             maybe_deferred_list_t>;
+
     public:
         using type = maybe_shared_list_t;
     };

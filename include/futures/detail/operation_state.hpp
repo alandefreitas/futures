@@ -16,7 +16,6 @@
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/thread/relocker.hpp>
-#include <futures/detail/traits/is_in_args.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
@@ -707,7 +706,7 @@ namespace futures::detail {
                 operation_state_storage<R>>,
             mp_repeat_c<mp_list<boost::empty_init_t>, 4>>;
 
-        using layout_tuple_type = compressed_tuple_for_t<tuple_value_types>;
+        using layout_tuple_type = mp_apply<compressed_tuple, tuple_value_types>;
 
         using stop_token_type = std::conditional_t<
             Options::is_stoppable,

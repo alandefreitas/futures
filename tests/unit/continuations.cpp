@@ -1,4 +1,5 @@
 #include <futures/futures.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <array>
 #include <string>
 #include <catch2/catch.hpp>
@@ -350,21 +351,22 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             using Future = decltype(f1);
             using Function = decltype(continue_fn);
 
-            using value_type = future_value_t<Future>;
-            constexpr bool tuple_explode = detail::is_tuple_invocable_v<
-                Function,
-                detail::tuple_type_concat_t<std::tuple<>, value_type>>;
+            using value_type = future_value_type_t<Future>;
+            constexpr bool tuple_explode = boost::mp11::mp_apply<
+                std::is_invocable,
+                boost::mp11::mp_append<std::tuple<Function>, value_type>>::value;
             STATIC_REQUIRE(!tuple_explode);
-            constexpr bool is_future_tuple = detail::
-                tuple_type_all_of_v<value_type, is_future>;
+            constexpr bool is_future_tuple = boost::mp11::
+                mp_all_of<value_type, is_future>::value;
             STATIC_REQUIRE(is_future_tuple);
-            using unwrapped_elements = detail::
-                tuple_type_transform_t<value_type, future_value>;
+            using unwrapped_elements = boost::mp11::
+                mp_transform<future_value_type_t, value_type>;
             STATIC_REQUIRE(
                 std::is_same_v<unwrapped_elements, std::tuple<int, int, int>>);
-            constexpr bool tuple_explode_unwrap = detail::is_tuple_invocable_v<
-                Function,
-                detail::tuple_type_concat_t<std::tuple<>, unwrapped_elements>>;
+            constexpr bool tuple_explode_unwrap = boost::mp11::mp_apply<
+                std::is_invocable,
+                boost::mp11::
+                    mp_append<std::tuple<Function>, unwrapped_elements>>::value;
             STATIC_REQUIRE(tuple_explode_unwrap);
 
             cfuture<int> f2 = f1 >> [](int a, int b, int c) {

@@ -11,10 +11,6 @@
 #include <futures/future_options_args.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/detail/future_options_set.hpp>
-#include <futures/detail/traits/get_type_template_in_args.hpp>
-#include <futures/detail/traits/index_in_args.hpp>
-#include <futures/detail/traits/is_in_args.hpp>
-#include <futures/detail/traits/is_type_template_in_args.hpp>
 #include <type_traits>
 
 namespace futures {

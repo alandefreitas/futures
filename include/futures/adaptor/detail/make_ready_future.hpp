@@ -8,7 +8,7 @@
 #ifndef FUTURES_ADAPTOR_DETAIL_MAKE_READY_FUTURE_HPP
 #define FUTURES_ADAPTOR_DETAIL_MAKE_READY_FUTURE_HPP
 
-#include <futures/basic_future.hpp>
+#include <futures/future.hpp>
 #include <futures/promise.hpp>
 #include <futures/traits/is_future.hpp>
 #include <future>

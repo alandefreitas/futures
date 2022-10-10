@@ -9,7 +9,7 @@
 #ifndef FUTURES_PROMISE_HPP
 #define FUTURES_PROMISE_HPP
 
-#include <futures/basic_future.hpp>
+#include <futures/future.hpp>
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>

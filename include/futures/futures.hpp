@@ -68,8 +68,8 @@
 #include <futures/adaptor.hpp>
 #include <futures/algorithm.hpp>
 #include <futures/await.hpp>
-#include <futures/basic_future.hpp>
 #include <futures/executor.hpp>
+#include <futures/future.hpp>
 #include <futures/future_error.hpp>
 #include <futures/future_options.hpp>
 #include <futures/future_options_args.hpp>

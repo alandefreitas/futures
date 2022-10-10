@@ -8,10 +8,10 @@
 #ifndef FUTURES_IS_READY_HPP
 #define FUTURES_IS_READY_HPP
 
-#include <futures/basic_future.hpp>
+#include <futures/future.hpp>
 #include <futures/promise.hpp>
 #include <futures/traits/is_future.hpp>
-#include <futures/detail/traits/has_is_ready.hpp>
+#include <futures/detail/is_ready.hpp>
 #include <future>
 
 namespace futures {

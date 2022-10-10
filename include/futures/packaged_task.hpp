@@ -8,7 +8,7 @@
 #ifndef FUTURES_PACKAGED_TASK_HPP
 #define FUTURES_PACKAGED_TASK_HPP
 
-#include <futures/basic_future.hpp>
+#include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/detail/shared_task.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>

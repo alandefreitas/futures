@@ -9,7 +9,7 @@
 #define FUTURES_TRAITS_FUTURE_VALUE_HPP
 
 #include <futures/traits/is_future.hpp>
-#include <futures/detail/traits/has_get.hpp>
+#include <futures/detail/traits/future_value_type.hpp>
 
 namespace futures {
     /** @addtogroup futures Futures
@@ -26,7 +26,7 @@ namespace futures {
     ///
     /// @note Not to be confused with continuation unwrapping
     template <typename T, class Enable = void>
-    struct future_value {};
+    struct future_value_type {};
 
     /// Determine type a future object holds (specialization for types
     /// that implement `get()`)
@@ -35,7 +35,7 @@ namespace futures {
     ///
     /// @note Not to be confused with continuation unwrapping
     template <typename Future>
-    struct future_value<
+    struct future_value_type<
         Future,
         std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>> {
         using type = std::decay_t<
@@ -46,7 +46,7 @@ namespace futures {
     ///
     /// @note Not to be confused with continuation unwrapping
     template <class T>
-    using future_value_t = typename future_value<T>::type;
+    using future_value_type_t = typename future_value_type<T>::type;
 
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures
