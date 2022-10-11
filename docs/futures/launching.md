@@ -14,14 +14,15 @@ M[[Main Thread]] ==> |store|F[Future Value]
 E[[Executor]] --> |run|T[Task]
 M -.-> |launch|T
 subgraph Futures and Promises
-F --> |read|S[(Shared State)]
+F --> |read|S[(Operation State)]
 T[Promised Task] --> |write|S
 end
 </div>
 
-1. While an executor handles a task, the main thread holds a future value.
-2. When the task is completed, it fulfills its promise by setting the shared state with its result.
-3. The future is considered ready and the main thread can obtain its value.
+1. An executor handles a task. Any data is stored in a private operation state.
+2. While the executor handles a task, the main thread holds a future value.
+3. When the task is completed, it fulfills its promise by setting the operation state with its result.
+4. The future is considered ready and the main thread can obtain its value.
 
 This is how these three steps might happen:
 
@@ -48,15 +49,24 @@ sequenceDiagram
     end
 </div>
 
-!!! hint "The shared state"
+!!! hint "The Operation State"
 
-    The shared state is a private implementation detail with which the user does not interact. 
+    The operation state is a private implementation detail with 
+    which the user does not interact. 
 
-    This encapsulation ensures all write operations will happen through the promised task and all read operations 
-    will happen through the future.
+    This encapsulation ensures all write operations will happen
+    through the promised task and all read operations will happen
+    through the future.
 
-    It also enables optimizations based on assumptions about how specific future and promise types can access the 
-    shared state. In some circumstances, the shared state might not even need to be [allocated](#allocations). 
+    It also enables optimizations based on assumptions about how
+    specific future and promise types can access the operation 
+    state.
+
+!!! hint "Inline Operation States"
+
+    If these future and promise objects are stable during the execution
+    of the task, the operation state can be stored inline. This is 
+    an optimization that avoids dynamic memory allocations.    
 
 ## Eager tasks
 
@@ -124,7 +134,7 @@ futures are applicable, a few criteria might be considered.
   assembling the complete execution graph. This is especially useful when not all tasks are available at the same time.
 - Deferred futures ✅: On the other hand, lazy futures permit a few optimizations for functions operating on the shared
   state, since we can assume there is nothing else we need to synchronize when a task is launched. This means:
-    1. We can make extra assumptions about the condition of the shared state before waiting, and
+    1. We can make extra assumptions about the condition of the operation state before waiting, and
     2. We don't have to handle a potential race with the task and its own continuations
 - Eager futures ✅: The library implements the synchronization of eager futures using atomic operations to reduce this
   synchronization cost.
@@ -150,7 +160,7 @@ behave like a future type. This can be achieved through [make_ready_future]:
 
 {{ code_snippet("future_types/launching.cpp", "ready_future") }}
 
-The function returns a [vfuture], which represents a [basic_future] with no associated shared state extensions.
+The function returns a [vfuture], which represents a [basic_future] with no associated operation state extensions.
 
 ## Executors
 
@@ -174,8 +184,9 @@ attempting to get its value.
 
 ## Allocations
 
-The shared state is a private implementation detail with which the user does not interact. It is usually implemented as
-a shared pointer to the concrete Operation State, which is where the task will store its result.
+The operation state is a private implementation detail with which the user does not interact. To ensure stability,
+it is usually implemented as a shared pointer to the concrete Operation State, which is where the task will store its
+result.
 
 <div class="mermaid">
 graph LR

@@ -166,7 +166,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
             }
 
             SECTION("Continue with lvalue") {
-                auto continuation = [](detail::small_vector<cfuture<int>> &rs) {
+                auto continuation = [](detail::small_vector<cfuture<int>> rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
                 using Future = decltype(f);
@@ -174,7 +174,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 STATIC_REQUIRE(!is_executor_v<Function>);
                 STATIC_REQUIRE(!is_executor_v<Future>);
                 STATIC_REQUIRE(is_future_v<Future>);
-                using value_type = future_value_type_t<Future>;
+                using value_type = future_value_t<Future>;
                 using lvalue_type = std::add_lvalue_reference_t<value_type>;
                 using rvalue_type = std::add_rvalue_reference_t<value_type>;
                 STATIC_REQUIRE(
@@ -258,7 +258,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
                 SECTION("Sync unwrap") {
-                    auto f4 = detail::unwrap_and_continue(f, continuation);
+                    auto f4 = detail::future_continue(f, continuation);
                     REQUIRE(f4 == 2 + 3 + 4);
                 }
                 SECTION("Async continue") {
@@ -268,23 +268,22 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
             }
 
             SECTION("Continue with lvalue") {
+                STATIC_REQUIRE(is_future_v<decltype(f)>);
                 auto continuation = [](detail::small_vector<int> &rs) {
                     return rs[0] + rs[1] + rs[2];
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
+                static constexpr bool is_msvc =
+#ifdef BOOST_MSVC
+                    true;
+#else
+                    false;
+#endif
+                const constexpr bool v = detail::continuation_traits<
+                    default_executor_type,
+                    std::decay_t<decltype(continuation)>,
+                    std::decay_t<decltype(f)>>::is_valid;
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
-                        default_executor_type,
-                        std::decay_t<decltype(continuation)>,
-                        std::decay_t<decltype(f)>>::is_valid);
-                SECTION("Sync unwrap") {
-                    auto f4 = detail::unwrap_and_continue(f, continuation);
-                    REQUIRE(f4 == 2 + 3 + 4);
-                }
-                SECTION("Async continue") {
-                    auto f4 = then(f, continuation);
-                    REQUIRE(f4.get() == 2 + 3 + 4);
-                }
+                    (!is_msvc && !v) || (is_msvc && v));
             }
 
             SECTION("Continue with const lvalue") {
@@ -298,7 +297,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
                 SECTION("Sync unwrap") {
-                    auto f4 = detail::unwrap_and_continue(f, continuation);
+                    auto f4 = detail::future_continue(f, continuation);
                     REQUIRE(f4 == 2 + 3 + 4);
                 }
                 SECTION("Async continue") {

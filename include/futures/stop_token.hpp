@@ -26,6 +26,7 @@
 /// an alias to a C++20 std::stop_token.
 
 #include <atomic>
+#include <memory>
 #include <thread>
 #include <utility>
 #include <type_traits>

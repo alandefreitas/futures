@@ -17,7 +17,9 @@ T[Task] --> |set and continue|S
 end
 </div>
 
-## Non-continuable tasks
+## Historical Background
+
+### Non-continuable tasks
 
 Consider what happens when we launch a task with C++11 [std::async]:
 
@@ -38,10 +40,10 @@ sequenceDiagram
 </div>
 
 In this example, the main thread spent some time waiting but this is often OK, as long as it had nothing better to do
-but to wait for the asynchronous task. This is common in user interfaces that need to be refreshed while a longer task
-is running.
+but to wait for the asynchronous task. This is common in user interfaces that need to be refreshed while a longer
+background task is running.
 
-Now say we want to execute a sequence of asynchronous tasks as simple as:
+Now let's say we want to execute a sequence of asynchronous tasks as simple as:
 
 <div class="mermaid">
 graph LR
@@ -58,7 +60,7 @@ usually comes to mind is waiting for one task after launching the next.
 
 {{ code_snippet("future_types/continuable.cpp", "wait_for_next") }}
 
-The code looks reasonable but, in that case, we would have:
+The code might look reasonable but, in that case, we would have:
 
 <div class="mermaid">
 sequenceDiagram
@@ -80,10 +82,11 @@ sequenceDiagram
 </div>
 
 We have a number of problems here. The more tasks we have, and the shorter the tasks, the less time the main thread has
-to do any useful work before waiting and the more time it spends waiting for tasks. Even worse, it's waiting for tasks
-we already know how they should continue. At a certain point, it might not even be worth using asynchronous code at all.
+to do any useful work before waiting and the more time it spends waiting for tasks. Even worse, we already know how
+these tasks should continue: we are just waiting to attach this continuation. At a certain point, it might not even be
+worth using asynchronous code at all.
 
-## Polling
+### Polling
 
 The second alternative to solve this problem is polling. In this case, we would make task B wait for A before doing its
 work. The same for task B and C.
@@ -112,7 +115,7 @@ the initial task is not ready. Note for how long the tasks A, B, and C are activ
 
 Thus, the biggest problem with this strategy is it cannot scale properly. For every task in our application, we would
 need one idle thread waiting for the previous task. In an application with 2000 tasks, we would need 1999 threads for
-polling the previous task and only one thread would to execute real work.
+polling antecedent tasks and only one thread would to execute real work.
 
 ## Continuable futures
 
@@ -121,12 +124,17 @@ task.
 
 {{ code_snippet("future_types/continuable.cpp", "continuables") }}
 
-Note we can use both the member function [basic_future::then] or the free function [then]. In this example,
+Note we can use both the member function [basic_future::then] or the free function [then]. [basic_future::then] allows
+chaining while the free function [then] allows interoperability between future types.
 
-- it's to up to the continuation to wait for the previous task, and
-- it's up to the previous task to launch its own continuations.
+{{ code_snippet("future_types/continuable.cpp", "chaining") }}
 
-In other words, task B does not have to pool task A because task A is launching task B. Task B know A is ready and can
+In these examples,
+
+- it's up to the continuation to wait for the previous task, and
+- it's up to the previous task to launch its own continuations
+
+In other words, task B does not have to pool task A because task A is launching task B. Task B knows A is ready and can
 just take it from there.
 
 <div class="mermaid">
@@ -152,6 +160,12 @@ sequenceDiagram
 In this solution, the main thread has more time to do useful work, such as scheduling other tasks, and the processing
 time we spend on waiting is minimized.
 
+!!! hint "Continuation Unwrapping"
+
+    You might notice that continuation functions also unwrap the previous future value. A continuation function for
+    `future<A>` might have a parameter `future<A>` or `A`. More patterns of continuation unwrapping are described in
+    Section [adaptors/continuations](/futures/adaptors/continuations). 
+
 For this reason, continuations are one of the most common proposed extensions for [std::future], including the original
 model presented by
 the [Microsoft PPL Library](https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?redirectedfrom=MSDN&view=msvc-160)
@@ -164,7 +178,7 @@ When attaching a continuation, we need to check if the future is not currently a
 vice-versa. This synchronization cost was identified
 in [N3747](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf).
 
-The library implements this procedure with [atomic](https://en.cppreference.com/w/cpp/atomic/atomic) queues to avoid
+The library implements this procedure with [atomic](https://en.cppreference.com/w/cpp/atomic/atomic) operations to avoid
 this cost. However, in some contexts, the cost of continuations can be further minimized
 by [launching deferred futures](/futures/launching/).
 
@@ -261,5 +275,6 @@ sequenceDiagram
 </div>
 
 For this reason, by default, [then] attaches the previous future to its deferred continuation instead of attaching the
+continuation to the antecedent future.
 
 --8<-- "docs/references.md"

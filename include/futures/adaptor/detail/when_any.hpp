@@ -10,10 +10,12 @@
 
 #include <type_traits>
 
+#ifndef FUTURES_DOXYGEN
 namespace futures {
     template <typename Sequence>
     struct when_any_result;
 } // namespace futures
+#endif
 
 namespace futures::detail {
     // Check if type is a when_any_result

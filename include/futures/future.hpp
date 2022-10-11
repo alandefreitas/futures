@@ -10,22 +10,23 @@
 
 #include <futures/future_options.hpp>
 #include <futures/stop_token.hpp>
-#include <futures/adaptor/detail/make_continuation_state.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/executor/default_executor.hpp>
-#include <futures/traits/has_ready_notifier.hpp>
-#include <futures/traits/is_future.hpp>
 #include <futures/traits/has_executor.hpp>
+#include <futures/traits/has_ready_notifier.hpp>
 #include <futures/traits/is_continuable.hpp>
+#include <futures/traits/is_future.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/future.hpp>
+#include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
 #include <futures/detail/variant_state.hpp>
-#include <futures/detail/deps/boost/mp11/algorithm.hpp>
+#include <futures/adaptor/detail/continue.hpp>
+#include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <functional>
 #include <utility>
 #include <shared_mutex>
@@ -839,7 +840,7 @@ namespace futures {
                 // note: this future is moved into this task
                 // note: this future being shared allows this to be copy
                 // constructible
-                detail::unwrap_and_continue_task<
+                detail::future_continue_task<
                     std::decay_t<basic_future>,
                     std::decay_t<Fn>>
                     task{ detail::move_if_not_shared(*this),
@@ -899,7 +900,7 @@ namespace futures {
                 // note: this future is not always shared, in which case
                 // the operation state is still inline in another address,
                 // which is OK because the value hasn't been requested
-                detail::unwrap_and_continue_task<
+                detail::future_continue_task<
                     std::decay_t<basic_future>,
                     std::decay_t<Fn>>
                     task{ detail::move_if_not_shared(*this),

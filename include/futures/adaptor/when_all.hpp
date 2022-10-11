@@ -42,9 +42,9 @@
 #include <futures/launch.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/detail/container/small_vector.hpp>
-#include <futures/detail/traits/is_tuple.hpp>
 #include <futures/adaptor/detail/lambda_to_future.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
+#include <futures/detail/deps/boost/mp11/function.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -72,8 +72,8 @@ namespace futures {
         using sequence_type = Sequence;
         using corresponding_future_type = std::future<sequence_type>;
         static constexpr bool sequence_is_range = is_range_v<sequence_type>;
-        static constexpr bool sequence_is_tuple = detail::is_tuple_v<
-            sequence_type>;
+        static constexpr bool sequence_is_tuple = detail::
+            mp_similar<std::tuple<>, sequence_type>::value;
         static_assert(sequence_is_range || sequence_is_tuple);
 
     public:
@@ -370,7 +370,8 @@ namespace futures {
         template <class Sequence>
         struct is_when_all_tuple_future<
             when_all_future<Sequence>,
-            std::enable_if_t<detail::is_tuple_v<Sequence>>> : std::true_type {};
+            std::enable_if_t<detail::mp_similar<Sequence>::value>>
+            : std::true_type {};
         template <class T>
         constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<
             T>::value;
@@ -570,8 +571,8 @@ namespace futures {
         std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
 #endif
         >
-    when_all_future<
-        detail::small_vector<detail::lambda_to_future_t<typename std::iterator_traits<
+    when_all_future<detail::small_vector<
+        detail::lambda_to_future_t<typename std::iterator_traits<
             typename std::decay_t<Range>::iterator>::value_type>>>
     when_all(Range &&r) {
         using std::begin;

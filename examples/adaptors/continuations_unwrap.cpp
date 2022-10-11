@@ -39,10 +39,9 @@ main() {
         //[verbose_continue Verbose continuations
         cfuture<void> f2 = then(
             f1,
-            [](cfuture<std::tuple<
-                   vfuture<int>,
-                   vfuture<double>,
-                   vfuture<std::string>>> f) {
+            [](cfuture<
+                std::tuple<vfuture<int>, vfuture<double>, vfuture<std::string>>>
+                   f) {
             // retrieve futures
             auto t = f.get();
             vfuture<int> fa = std::move(std::get<0>(t));
@@ -167,9 +166,8 @@ main() {
         cfuture<int> f2 = async([]() { return 2; });
         when_any_future<std::tuple<cfuture<int>, cfuture<int>>>
             f3 = when_any(f1, f2);
-        auto f4 = f3 >>
-                  [](std::size_t idx,
-                     std::tuple<cfuture<int>, cfuture<int>> prev) {
+        auto f4 = f3 >> [](std::size_t idx,
+                           std::tuple<cfuture<int>, cfuture<int>> prev) {
             if (idx == 0) {
                 return std::get<0>(prev).get();
             } else {
@@ -185,9 +183,7 @@ main() {
         auto f1 = async([]() { return 1; });
         auto f2 = async([]() { return 2; });
         auto f3 = when_any(f1, f2);
-        auto f4 = f3 >> [](std::size_t idx,
-                           cfuture<int> f1,
-                           cfuture<int> f2) {
+        auto f4 = f3 >> [](std::size_t idx, cfuture<int> f1, cfuture<int> f2) {
             if (idx == 0) {
                 return f1.get();
             } else {
@@ -224,11 +220,11 @@ main() {
 
     {
         //[ambiguous Ambiguous unwrapping
-        auto f1 = async([]() { return 1; });
-        auto f2 = f1 >> [](auto f) {
-             // Is `f` a `cfuture<int>` or `int`?
-             // `cfuture<int>` has the highest priority
-             return f.get();
+        cfuture<int> f1 = async([]() { return 1; });
+        auto f2 = f1 >> [](auto f) -> int {
+            // Is `f` a `cfuture<int>` or `int`?
+            // `cfuture<int>` has highest priority
+            return f.get();
         };
         std::cout << f2.get() << '\n';
         //]
@@ -237,9 +233,7 @@ main() {
     {
         //[return_future Getting a future from a future
         cfuture<cfuture<int>> f = async([]() {
-            return async([]() {
-                return 1;
-            });
+            return async([]() { return 1; });
         });
         std::cout << f.get().get() << '\n';
         //]

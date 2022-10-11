@@ -12,11 +12,11 @@ nav:
   - Futures:
     - Basic Types: futures/future_types.md
     - Launching Tasks: futures/launching.md
-    - Promises and Tasks: futures/promises.md
     - Continuable Futures: futures/continuable_futures.md
     - Stoppable Futures: futures/stoppable_futures.md
     - Shared Futures: futures/shared_futures.md
     - Waiting for Futures: futures/waiting.md
+    - Promises and Tasks: futures/promises.md
   - Future Adaptors:
     - Continuations: adaptors/continuations.md
     - Conjunctions: adaptors/conjunctions.md

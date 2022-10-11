@@ -16,9 +16,9 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>
-#include <futures/detail/traits/is_tuple.hpp>
+#include <futures/detail/deps/boost/mp11/function.hpp>
+#include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -76,7 +76,7 @@ namespace futures::detail {
                 // Previous is not continuable or both are deferred, so we don't
                 // need the continuations because next will wait for prev in
                 // a task graph.
-                unwrap_and_continue_task<
+                future_continue_task<
                     std::decay_t<Future>,
                     std::decay_t<Function>>
                     task{ move_if_not_shared(before),
@@ -92,7 +92,7 @@ namespace futures::detail {
                 // Create a shared version of the previous future, because
                 // multiple handles will need to access this shared state
                 // now Create task for the continuation future
-                unwrap_and_continue_task<
+                future_continue_task<
                     std::decay_t<Future>,
                     std::decay_t<Function>>
                     task{ move_if_not_shared(before),

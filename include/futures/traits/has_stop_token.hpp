@@ -22,11 +22,20 @@ namespace futures {
      *  @{
      */
 
-    /// Customization point to define future having a common stop token
+    /// Customization point to define future as having a common stop token
+    /**
+     * Besides being stoppable, this trait identifies whether the future
+     * has a stop token, which means this token can be shared with other
+     * futures to create a common thread of futures that can be stopped
+     * with the same token.
+     *
+     * @see
+     *      @li @ref is_stoppable
+     */
     template <typename>
     struct has_stop_token : std::false_type {};
 
-    /// Customization point to define future having a common stop token
+    /// @copydoc has_stop_token
     template <class T>
     constexpr bool has_stop_token_v = has_stop_token<T>::value;
 

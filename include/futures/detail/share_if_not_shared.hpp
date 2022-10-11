@@ -9,7 +9,7 @@
 #define FUTURES_DETAIL_SHARE_IF_NOT_SHARED_HPP
 
 #include <futures/traits/is_future.hpp>
-#include <futures/detail/share_if_not_shared.hpp>
+#include <futures/traits/is_shared_future.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

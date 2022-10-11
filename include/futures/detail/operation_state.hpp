@@ -11,13 +11,13 @@
 #include <futures/config.hpp>
 #include <futures/future_error.hpp>
 #include <futures/future_options.hpp>
-#include <futures/adaptor/detail/unwrap_and_continue.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/thread/relocker.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
+#include <futures/adaptor/detail/continue.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
@@ -1194,8 +1194,8 @@ namespace futures::detail {
          * for the parent task to finish.
          *
          * This function can be used to ensure this happens by checking if the
-         * task it encapsulates is `is_unwrap_and_continue_task`. This
-         * `is_unwrap_and_continue_task` class is the class we always use
+         * task it encapsulates is `is_future_continue_task`. This
+         * `is_future_continue_task` class is the class we always use
          * to represent a callable with the logic for continuations. Since
          * we always use this class, it also indicates this is a deferred
          * continuation and there's a parent operation we should wait for.
@@ -1207,8 +1207,7 @@ namespace futures::detail {
          */
         void
         wait_for_parent() override {
-            if constexpr (is_unwrap_and_continue_task<
-                              deferred_function_type>::value)
+            if constexpr (is_future_continue_task<deferred_function_type>::value)
             {
                 this->get_function().before_.wait();
             }

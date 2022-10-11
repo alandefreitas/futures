@@ -123,7 +123,6 @@ endmacro()
 # Separate CMake tests                               #
 ######################################################
 
-
 # Detail
 add_futures_test(detail/utility/compressed_tuple)
 add_futures_test(asio_executors)
@@ -143,6 +142,7 @@ add_futures_test(cancel_futures)
 add_futures_test(continuation_stop)
 
 # Adaptors
+add_futures_test(adaptor/detail/continue)
 add_futures_test(continuations)
 add_futures_test(conjunction)
 add_futures_test(disjunction)

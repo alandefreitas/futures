@@ -6,7 +6,7 @@
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/executor/default_executor.hpp>
-#include <futures/detail/traits/future_value_type.hpp>
+#include <futures/detail/traits/future_value.hpp>
 #include <algorithm>
 #include <thread>
 

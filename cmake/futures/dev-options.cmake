@@ -28,6 +28,7 @@ option(FUTURES_BUILD_DOCS "Build documentation" OFF)
 option(FUTURES_BUILD_COVERAGE_REPORT "Enable coverage support" OFF)
 option(FUTURES_BUILD_LINT "Enable linting" OFF)
 option(FUTURES_BUILD_LINTER "Build C++ project linter" ON)
+option(FUTURES_ALWAYS_LINT "Run the linter before running unit tests" ON)
 
 
 #######################################################

@@ -44,4 +44,6 @@ add_custom_target(
         COMMENT "Run linter"
         VERBATIM
 )
-add_dependencies(futures lint_futures)
+if (FUTURES_ALWAYS_LINT)
+    add_dependencies(futures lint_futures)
+endif()

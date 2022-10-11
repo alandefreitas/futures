@@ -131,7 +131,7 @@ namespace futures {
         ,
         typename std::enable_if_t<
             // clang-format off
-            detail::is_tuple_v<std::decay_t<Tuple>>
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
             // clang-format on
             ,
             int>
@@ -277,7 +277,7 @@ namespace futures {
         ,
         typename std::enable_if_t<
             // clang-format off
-            detail::is_tuple_v<std::decay_t<Tuple>>
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
             // clang-format on
             ,
             int>
@@ -435,7 +435,7 @@ namespace futures {
         ,
         typename std::enable_if_t<
             // clang-format off
-            detail::is_tuple_v<std::decay_t<Tuple>>
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
             // clang-format on
             ,
             int>

@@ -1,4 +1,7 @@
+#include <futures/adaptor/when_any.hpp>
+//
 #include <futures/futures.hpp>
+#include <futures/adaptor/detail/range_or_tuple_value.hpp>
 #include <array>
 #include <string>
 #include <catch2/catch.hpp>
@@ -123,7 +126,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             using result_type = when_any_result<tuple_type>;
             STATIC_REQUIRE(detail::is_when_any_result_v<result_type>);
             SECTION("Sync unwrapping") {
-                int r = detail::unwrap_and_continue(f, continuation);
+                int r = detail::future_continue(f, continuation);
                 REQUIRE_FALSE(r == 0);
                 REQUIRE((r == 2 || r == 3 || r == 4));
             }
@@ -194,7 +197,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             using Function = decltype(continuation);
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             // when_any_result -> int
-            using value_type = future_value_type_t<Future>;
+            using value_type = future_value_t<Future>;
             using when_any_sequence = typename value_type::sequence_type;
             using when_any_element_type = detail::range_or_tuple_value_t<
                 when_any_sequence>;
@@ -203,7 +206,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
                     std::is_invocable,
                     boost::mp11::mp_append<
                         std::tuple<Function>,
-                        std::tuple<future_value_type_t<when_any_element_type>>>>::
+                        std::tuple<future_value_t<when_any_element_type>>>>::
                     value);
             STATIC_REQUIRE(
                 detail::continuation_traits<
@@ -452,9 +455,9 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             return 4;
         };
         STATIC_REQUIRE(
-            std::is_same_v<future_value_type_t<Future>, when_any_result<Tuple>>);
+            std::is_same_v<future_value_t<Future>, when_any_result<Tuple>>);
         SECTION("Sync unwrap") {
-            detail::unwrap_and_continue(f, [](int a) { return a * 5; });
+            detail::future_continue(f, [](int a) { return a * 5; });
         }
         SECTION("Async continue") {
             auto c = f >> [](int a) {

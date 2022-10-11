@@ -18,16 +18,14 @@ main() {
     }
 
     {
-        //[wait_for_next Always waiting for next task
+        //[wait_for_next Always waiting for the next task
         std::future<int> A = std::async([]() { return 65; });
 
-        std::future<char> B = std::async(
-            [](int v) { return static_cast<char>(v); },
-            A.get());
+        std::future<char>
+            B = std::async([](int v) { return static_cast<char>(v); }, A.get());
 
-        std::future<void> C = std::async(
-            [](char c) { std::cout << "Result " << c << '\n'; },
-            B.get());
+        std::future<void> C = std::
+            async([](char c) { std::cout << "Result " << c << '\n'; }, B.get());
 
         C.wait();
         //]
@@ -38,7 +36,10 @@ main() {
         std::future<int> A = std::async([]() { return 65; });
 
         std::future<char> B = std::async([&A]() {
-            return static_cast<char>(A.get());
+            // B waits for A in its turn
+            int v = A.get();
+            // Use the value
+            return static_cast<char>(v);
         });
 
         std::future<void> C = std::async([&B]() {
@@ -52,11 +53,7 @@ main() {
     {
         //[continuables Continuable futures
         cfuture<int> A = async([]() { return 65; });
-
-        cfuture<char> B = A.then([](int v) {
-            return static_cast<char>(v);
-        });
-
+        cfuture<char> B = A.then([](int v) { return static_cast<char>(v); });
         cfuture<void> C = then(B, [](char c) {
             std::cout << "Result " << c << '\n';
         });
@@ -66,14 +63,27 @@ main() {
     }
 
     {
+        // clang-format off
+        //[chaining Chaining continuations
+        cfuture<void> C = async([]() {
+            return 65;
+        }).then([](int v) {
+            return static_cast<char>(v);
+        }).then([](char c) {
+            std::cout << "Result " << c << '\n';
+        });
+        C.wait();
+        //]
+        // clang-format on
+    }
+
+    {
         //[deferred_continuables Continuable futures
         auto A = schedule([]() { return 65; });
 
         auto B = then(A, [](int v) { return static_cast<char>(v); });
 
-        auto C = then(B, [](char c) {
-            std::cout << "Result " << c << '\n';
-        });
+        auto C = then(B, [](char c) { std::cout << "Result " << c << '\n'; });
 
         C.wait(); // launch A now!
         //]

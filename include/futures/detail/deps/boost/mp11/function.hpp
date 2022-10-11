@@ -5,16 +5,16 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_DETAIL_DEPS_BOOST_MP11_TUPLE_HPP
-#define FUTURES_DETAIL_DEPS_BOOST_MP11_TUPLE_HPP
+#ifndef FUTURES_DETAIL_DEPS_BOOST_MP11_FUNCTION_HPP
+#define FUTURES_DETAIL_DEPS_BOOST_MP11_FUNCTION_HPP
 
 #include <futures/config.hpp>
 
 // Include
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/mp11/tuple.hpp>
+#include <boost/mp11/function.hpp>
 #else
-#include <futures/detail/bundled/boost/mp11/tuple.hpp>
+#include <futures/detail/bundled/boost/mp11/function.hpp>
 #endif
 
-#endif // FUTURES_DETAIL_DEPS_BOOST_MP11_TUPLE_HPP
+#endif // FUTURES_DETAIL_DEPS_BOOST_MP11_FUNCTION_HPP

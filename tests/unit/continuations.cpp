@@ -29,7 +29,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             STATIC_REQUIRE(std::is_same_v<unwrap_result_no_token_type, int>);
             static constexpr bool is_valid_without_stop_token = !std::is_same_v<
                 unwrap_result_no_token_type,
-                detail::unwrapping_failure_t>;
+                detail::continue_tags::failure>;
             STATIC_REQUIRE(is_valid_without_stop_token);
 
             STATIC_REQUIRE(
@@ -351,7 +351,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             using Future = decltype(f1);
             using Function = decltype(continue_fn);
 
-            using value_type = future_value_type_t<Future>;
+            using value_type = future_value_t<Future>;
             constexpr bool tuple_explode = boost::mp11::mp_apply<
                 std::is_invocable,
                 boost::mp11::mp_append<std::tuple<Function>, value_type>>::value;
@@ -360,7 +360,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
                 mp_all_of<value_type, is_future>::value;
             STATIC_REQUIRE(is_future_tuple);
             using unwrapped_elements = boost::mp11::
-                mp_transform<future_value_type_t, value_type>;
+                mp_transform<future_value_t, value_type>;
             STATIC_REQUIRE(
                 std::is_same_v<unwrapped_elements, std::tuple<int, int, int>>);
             constexpr bool tuple_explode_unwrap = boost::mp11::mp_apply<
