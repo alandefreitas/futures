@@ -58,7 +58,7 @@ namespace futures::detail {
         class = void>
     struct continue_invoke_traits {
         using valid = std::false_type;
-        using result = continue_tags::failure;
+        using result = mp_identity<continue_tags::failure>;
     };
 
     // values are generally moved to continuation functions
@@ -708,7 +708,7 @@ namespace futures::detail {
         Function>::valid;
 
     template <class Tag, class Future, class Function, class... PrefixArgs>
-    static constexpr bool continue_is_invocable_for_t
+    static constexpr bool continue_is_invocable_for_v
         = continue_is_invocable_for<Tag, Future, Function, PrefixArgs...>::value;
 
     template <class Future, class Function, class... PrefixArgs>
@@ -719,7 +719,7 @@ namespace futures::detail {
         PrefixArgs...>;
 
     template <class Future, class Function, class... PrefixArgs>
-    static constexpr bool continue_is_invocable_t
+    static constexpr bool continue_is_invocable_v
         = continue_is_invocable<Future, Function, PrefixArgs...>::value;
 
 } // namespace futures::detail

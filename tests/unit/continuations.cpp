@@ -24,7 +24,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             };
 
             using unwrap_result_no_token_type = detail::
-                result_of_unwrap_t<Future, Function>;
+                continue_invoke_result_t<Future, Function>;
 
             STATIC_REQUIRE(std::is_same_v<unwrap_result_no_token_type, int>);
             static constexpr bool is_valid_without_stop_token = !std::is_same_v<
@@ -33,7 +33,7 @@ TEST_CASE(TEST_CASE_PREFIX "Continuation") {
             STATIC_REQUIRE(is_valid_without_stop_token);
 
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(after_fn)>,
                     std::decay_t<cfuture<int>>>::is_valid);

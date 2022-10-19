@@ -97,7 +97,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(detail::is_when_any_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
@@ -179,7 +179,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
@@ -209,7 +209,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
                         std::tuple<future_value_t<when_any_element_type>>>>::
                     value);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
@@ -284,7 +284,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
@@ -332,7 +332,7 @@ TEST_CASE(TEST_CASE_PREFIX "Disjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);

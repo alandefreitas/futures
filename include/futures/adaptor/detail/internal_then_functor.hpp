@@ -52,7 +52,7 @@ namespace futures::detail {
                 !is_executor_v<std::decay_t<Function>> &&
                 !is_executor_v<std::decay_t<Future>> &&
                 is_future_v<std::decay_t<Future>> &&
-                continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
+                next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
                 // clang-format on
                 int>
             = 0
@@ -63,7 +63,7 @@ namespace futures::detail {
             const {
             // Determine next future options
             using traits
-                = continuation_traits<Executor, Function, std::decay_t<Future>>;
+                = next_future_traits<Executor, Function, std::decay_t<Future>>;
             using next_value_type = typename traits::next_value_type;
             using next_future_options = typename traits::next_future_options;
             using next_future_type

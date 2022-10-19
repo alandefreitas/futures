@@ -62,7 +62,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
             };
             STATIC_REQUIRE(is_future_v<decltype(f)>);
             STATIC_REQUIRE(
-                detail::continuation_traits<
+                detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
@@ -157,7 +157,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
@@ -193,19 +193,19 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                             detail::small_vector<cfuture<int>>>>);
                 STATIC_REQUIRE(std::is_invocable_v<Function, lvalue_type>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
                 STATIC_REQUIRE(is_future_v<Future>);
                 STATIC_REQUIRE(!is_future_v<Function>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
@@ -221,7 +221,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(!is_future_v<decltype(continuation)>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
@@ -237,7 +237,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(!is_future_v<decltype(continuation)>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
@@ -253,7 +253,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
@@ -278,7 +278,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
 #else
                     false;
 #endif
-                const constexpr bool v = detail::continuation_traits<
+                const constexpr bool v = detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid;
@@ -292,7 +292,7 @@ TEST_CASE(TEST_CASE_PREFIX "Conjunction") {
                 };
                 STATIC_REQUIRE(is_future_v<decltype(f)>);
                 STATIC_REQUIRE(
-                    detail::continuation_traits<
+                    detail::next_future_traits<
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);

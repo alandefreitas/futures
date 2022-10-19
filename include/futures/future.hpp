@@ -25,6 +25,7 @@
 #include <futures/detail/variant_state.hpp>
 #include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
+#include <futures/adaptor/detail/next_future_traits.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <functional>
@@ -821,7 +822,7 @@ namespace futures {
             if constexpr (Options::is_continuable) {
                 // Determine traits for the next future
                 using traits = detail::
-                    continuation_traits<Executor, Fn, basic_future>;
+                    next_future_traits<Executor, Fn, basic_future>;
                 using next_value_type = typename traits::next_value_type;
                 using next_future_options = typename traits::next_future_options;
                 using next_future_type
@@ -885,7 +886,7 @@ namespace futures {
             } else if constexpr (Options::is_always_deferred) {
                 // Determine traits for the next future
                 using traits = detail::
-                    continuation_traits<Executor, Fn, basic_future>;
+                    next_future_traits<Executor, Fn, basic_future>;
                 using next_value_type = typename traits::next_value_type;
                 using next_future_options = typename traits::next_future_options;
                 using next_future_type

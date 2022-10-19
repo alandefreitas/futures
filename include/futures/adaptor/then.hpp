@@ -64,7 +64,7 @@ namespace futures {
             !is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
+            detail::next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
             // clang-format on
             int>
         = 0
@@ -94,7 +94,7 @@ namespace futures {
             !is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
+            detail::next_future_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
             int>
@@ -129,7 +129,7 @@ namespace futures {
             !is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
+            detail::next_future_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
             int>
@@ -157,7 +157,7 @@ namespace futures {
             !is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::continuation_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid
+            detail::next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid
             // clang-format on
             ,
             int>

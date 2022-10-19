@@ -18,6 +18,7 @@
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
 #include <futures/adaptor/detail/continue.hpp>
+#include <futures/adaptor/detail/future_continue_task.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
