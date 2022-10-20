@@ -8,10 +8,10 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITERATOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITERATOR_HPP
 
-#include <futures/algorithm/traits/has_element_type.hpp>
-#include <futures/algorithm/traits/has_iterator_traits_value_type.hpp>
-#include <futures/algorithm/traits/has_value_type.hpp>
 #include <futures/algorithm/traits/remove_cvref.hpp>
+#include <futures/algorithm/traits/detail/has_element_type.hpp>
+#include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
+#include <futures/algorithm/traits/detail/has_value_type.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -40,12 +40,13 @@ namespace futures {
         using type = decltype(begin(std::declval<T&>()));
     };
 #endif
+
+    /// @copydoc iterator
     template <class T>
     using iterator_t = typename iterator<T>::type;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITERATOR_HPP

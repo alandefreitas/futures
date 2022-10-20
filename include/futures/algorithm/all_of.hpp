@@ -188,8 +188,8 @@ namespace futures {
     /// Checks if a predicate is true for all the elements in a range
     inline constexpr all_of_functor all_of;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_ALL_OF_HPP

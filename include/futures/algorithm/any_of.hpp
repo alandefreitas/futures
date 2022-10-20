@@ -181,8 +181,8 @@ namespace futures {
     /// Checks if a predicate is true for any of the elements in a range
     inline constexpr any_of_functor any_of;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_ANY_OF_HPP

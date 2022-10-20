@@ -25,28 +25,16 @@ namespace futures {
     /** \brief A C++17 type trait equivalent to the C++20 move_constructible
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_move_constructible = __see_below__;
-#else
-    template <class T, class = void>
-    struct is_move_constructible : std::false_type {};
+    using is_move_constructible = std::
+        conjunction<is_constructible_from<T, T>, is_convertible_to<T, T>>;
 
-    template <class T>
-    struct is_move_constructible<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            is_constructible_from_v<T, T> &&
-            is_convertible_to_v<T, T>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_move_constructible
     template <class T>
     constexpr bool is_move_constructible_v = is_move_constructible<T>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

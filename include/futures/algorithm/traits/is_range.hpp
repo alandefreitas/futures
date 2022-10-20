@@ -19,7 +19,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 range concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -39,12 +38,13 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_range
     template <class T>
     constexpr bool is_range_v = is_range<T>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_RANGE_HPP

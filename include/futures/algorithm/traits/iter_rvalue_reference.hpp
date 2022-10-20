@@ -21,7 +21,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 iter_rvalue_reference
      * concept
      */
@@ -37,12 +36,13 @@ namespace futures {
         using type = std::add_rvalue_reference<iter_value_t<T>>;
     };
 #endif
+
+    /// @copydoc iter_rvalue_reference
     template <class T>
     using iter_rvalue_reference_t = typename iter_rvalue_reference<T>::type;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_HPP

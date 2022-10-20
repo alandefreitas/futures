@@ -385,8 +385,8 @@ namespace futures {
         }
     };
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP

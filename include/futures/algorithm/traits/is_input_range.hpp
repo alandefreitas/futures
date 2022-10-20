@@ -42,11 +42,13 @@ namespace futures {
             >
     {};
 #endif
+
+    /// @copydoc is_input_range
     template <class T>
     bool constexpr is_input_range_v = is_input_range<T>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_RANGE_HPP

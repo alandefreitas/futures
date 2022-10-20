@@ -21,32 +21,20 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 semiregular
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_semiregular = __see_below__;
-#else
-    template <class T, class = void>
-    struct is_semiregular : std::false_type {};
+    using is_semiregular = std::
+        conjunction<is_copyable<T>, is_default_initializable<T>>;
 
-    template <class T>
-    struct is_semiregular<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            is_copyable_v<T> &&
-            is_default_initializable_v<T>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+
+    /// @copydoc is_semiregular
     template <class T>
     constexpr bool is_semiregular_v = is_semiregular<T>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

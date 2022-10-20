@@ -8,10 +8,12 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP
 
-#include <futures/algorithm/traits/has_difference_type.hpp>
-#include <futures/algorithm/traits/has_iterator_traits_difference_type.hpp>
-#include <futures/algorithm/traits/is_subtractable.hpp>
 #include <futures/algorithm/traits/remove_cvref.hpp>
+#include <futures/algorithm/traits/detail/has_difference_type.hpp>
+#include <futures/algorithm/traits/detail/has_iterator_traits_difference_type.hpp>
+#include <futures/algorithm/traits/detail/is_subtractable.hpp>
+#include <futures/algorithm/traits/detail/nested_iterator_traits_difference_type.hpp>
+#include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -32,81 +34,32 @@ namespace futures {
     template <class T>
     using iter_difference = __see_below__;
 #else
-    template <class T, class = void>
-    struct iter_difference {};
-
-    template <class T>
-    struct iter_difference<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            has_iterator_traits_difference_type_v<remove_cvref_t<T>>
-            // clang-format on
-            >> {
-        using type = typename std::iterator_traits<
-            remove_cvref_t<T>>::difference_type;
-    };
-
-    template <class T>
-    struct iter_difference<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
-            std::is_pointer_v<T>
-            // clang-format on
-            >> {
-        using type = std::ptrdiff_t;
-    };
-
-    template <class T>
-    struct iter_difference<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
-            !std::is_pointer_v<T> &&
-            std::is_const_v<T>
-            // clang-format on
-            >> {
-        using type = typename iter_difference<std::remove_const_t<T>>::type;
-    };
-
-    template <class T>
-    struct iter_difference<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
-            !std::is_pointer_v<T> &&
-            !std::is_const_v<T> &&
-            has_iterator_traits_difference_type_v<remove_cvref_t<T>>
-            // clang-format on
-            >> {
-        using type = typename T::difference_type;
-    };
-
-    template <class T>
-    struct iter_difference<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
-            !std::is_pointer_v<T> &&
-            !std::is_const_v<T> &&
-            !has_iterator_traits_difference_type_v<remove_cvref_t<T>> &&
-            is_subtractable_v<remove_cvref_t<T>>
-            // clang-format on
-            >> {
-        using type = std::make_signed_t<
+    namespace detail {
+        template <class T>
+        using signed_subtract_invoke_result_t = std::make_signed_t<
             decltype(std::declval<T>() - std::declval<T>())>;
-    };
+    } // namespace detail
+
+    template <class T>
+    using iter_difference = detail::mp_cond<
+        detail::has_iterator_traits_difference_type<remove_cvref_t<T>>,
+        detail::mp_defer<
+            detail::nested_iterator_traits_difference_type_t,
+            remove_cvref_t<T>>,
+        std::is_pointer<T>,
+        detail::mp_identity<std::ptrdiff_t>,
+        std::is_pointer<std::remove_const_t<T>>,
+        detail::mp_identity<std::ptrdiff_t>,
+        detail::is_subtractable<remove_cvref_t<T>>,
+        detail::mp_defer<detail::signed_subtract_invoke_result_t, T>>;
 #endif
+
+    /// @copydoc iter_difference
     template <class T>
     using iter_difference_t = typename iter_difference<T>::type;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_DIFFERENCE_HPP

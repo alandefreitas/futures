@@ -8,6 +8,7 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
 #define FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
 
+#include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -18,6 +19,7 @@ namespace futures {
     /** @addtogroup traits Traits
      *  @{
      */
+
     /** \brief A C++17 type trait equivalent to the C++20 remove_cvref
      * concept
      */
@@ -26,17 +28,16 @@ namespace futures {
     using remove_cvref = __see_below__;
 #else
     template <class T>
-    struct remove_cvref {
-        using type = std::remove_cv_t<std::remove_reference_t<T>>;
-    };
+    using remove_cvref = detail::mp_identity<
+        std::remove_cv_t<std::remove_reference_t<T>>>;
 #endif
 
+    /// @copydoc remove_cvref
     template <class T>
     using remove_cvref_t = typename remove_cvref<T>::type;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP

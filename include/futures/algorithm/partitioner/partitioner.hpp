@@ -178,8 +178,8 @@ namespace futures {
     template <class T, class R>
     constexpr bool is_range_partitioner_v = is_range_partitioner<T, R>::value;
 
-    /** @}*/ // @addtogroup partitioners Partitioners
-    /** @}*/ // @addtogroup algorithms Algorithms
+    /** @} */ // @addtogroup partitioners Partitioners
+    /** @} */ // @addtogroup algorithms Algorithms
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_PARTITIONER_PARTITIONER_HPP

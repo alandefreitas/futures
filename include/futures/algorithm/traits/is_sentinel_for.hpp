@@ -21,34 +21,19 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 sentinel_for
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class S, class I>
-    using is_sentinel_for = __see_below__;
-#else
-    template <class S, class I, class = void>
-    struct is_sentinel_for : std::false_type {};
+    using is_sentinel_for = std::
+        conjunction<is_semiregular<S>, is_input_or_output_iterator<I>>;
 
-    template <class S, class I>
-    struct is_sentinel_for<
-        S,
-        I,
-        std::enable_if_t<
-            // clang-format off
-            is_semiregular_v<S> &&
-            is_input_or_output_iterator_v<I>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_sentinel_for
     template <class S, class I>
     constexpr bool is_sentinel_for_v = is_sentinel_for<S, I>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP

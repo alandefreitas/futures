@@ -24,37 +24,23 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 totally_ordered_with
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T, class U>
-    using is_totally_ordered_with = __see_below__;
-#else
-    template <class T, class U, class = void>
-    struct is_totally_ordered_with : std::false_type {};
+    using is_totally_ordered_with = std::conjunction<
+        is_totally_ordered<T>,
+        is_totally_ordered<U>,
+        is_equality_comparable_with<T, U>,
+        is_partially_ordered_with<T, U>>;
 
-    template <class T, class U>
-    struct is_totally_ordered_with<
-        T,
-        U,
-        std::enable_if_t<
-            // clang-format off
-            is_totally_ordered_v<T> &&
-            is_totally_ordered_v<U> &&
-            is_equality_comparable_with_v<T,U> &&
-            is_partially_ordered_with_v<T,U>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_totally_ordered_with
     template <class T, class U>
     constexpr bool is_totally_ordered_with_v = is_totally_ordered_with<T, U>::
         value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP

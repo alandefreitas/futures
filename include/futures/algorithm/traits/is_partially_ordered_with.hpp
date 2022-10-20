@@ -19,7 +19,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 partially_ordered_with
      * concept
      */
@@ -47,13 +46,14 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_partially_ordered_with
     template <class T, class U>
     constexpr bool is_partially_ordered_with_v
         = is_partially_ordered_with<T, U>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP

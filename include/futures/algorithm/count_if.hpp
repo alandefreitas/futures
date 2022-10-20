@@ -180,8 +180,8 @@ namespace futures {
     /// Returns the number of elements satisfying specific criteria
     inline constexpr count_if_functor count_if;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_COUNT_IF_HPP

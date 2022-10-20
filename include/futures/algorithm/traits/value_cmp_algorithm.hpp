@@ -376,8 +376,8 @@ namespace futures {
             }
         }
     };
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_VALUE_CMP_ALGORITHM_HPP

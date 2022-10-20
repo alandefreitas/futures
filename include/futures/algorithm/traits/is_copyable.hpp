@@ -25,31 +25,20 @@ namespace futures {
     /** \brief A C++17 type trait equivalent to the C++20 copyable
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_copyable = __see_below__;
-#else
-    template <class T, class = void>
-    struct is_copyable : std::false_type {};
+    using is_copyable = std::conjunction<
+        std::is_copy_constructible<T>,
+        is_movable<T>,
+        is_assignable_from<T&, T&>,
+        is_assignable_from<T&, std::add_const_t<T>&>,
+        is_assignable_from<T&, std::add_const_t<T>>>;
 
-    template <class T>
-    struct is_copyable<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            std::is_copy_constructible_v<T> &&
-            is_movable_v<T> &&
-            is_assignable_from_v<T&, T&> &&
-            is_assignable_from_v<T&, std::add_const_t<T>&> &&
-            is_assignable_from_v<T&, std::add_const_t<T>>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_copyable
     template <class T>
     constexpr bool is_copyable_v = is_copyable<T>::value;
-    /** @}*/
-    /** @}*/
 
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_HPP

@@ -195,8 +195,8 @@ namespace futures {
     /// Applies a function to a range of elements
     inline constexpr for_each_functor for_each;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_FOR_EACH_HPP

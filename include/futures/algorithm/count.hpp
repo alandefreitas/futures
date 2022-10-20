@@ -116,8 +116,8 @@ namespace futures {
     /// Returns the number of elements matching an element
     inline constexpr count_functor count;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_COUNT_HPP

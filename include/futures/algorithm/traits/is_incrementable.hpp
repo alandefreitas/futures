@@ -21,7 +21,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 incrementable concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -47,10 +46,13 @@ namespace futures {
               // clang-format on
               > {};
 #endif
+
+    /// @copydoc is_incrementable
     template <class I>
     constexpr bool is_incrementable_v = is_incrementable<I>::value;
-    /** @}*/
-    /** @}*/
+
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

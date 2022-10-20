@@ -235,8 +235,8 @@ namespace futures {
     /// Finds the first element satisfying specific criteria
     inline constexpr find_if_functor find_if;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_FIND_IF_HPP

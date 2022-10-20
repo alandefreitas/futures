@@ -11,6 +11,8 @@
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/iterator.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -23,7 +25,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 range_value
      * concept
      */
@@ -35,15 +36,21 @@ namespace futures {
     struct range_value {};
 
     template <class R>
-    struct range_value<R, std::enable_if_t<is_range_v<R>>> {
-        using type = iter_value_t<iterator_t<R>>;
-    };
+    struct range_value<R, std::enable_if_t<is_range_v<R>>>
+        : detail::mp_cond<
+              is_range<R>,
+              detail::mp_defer<
+                  detail::mp_invoke_q,
+                  detail::mp_compose<iterator_t, iter_value_t>,
+                  R>> {};
 #endif
+
+    /// @copydoc range_value
     template <class R>
     using range_value_t = typename range_value<R>::type;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

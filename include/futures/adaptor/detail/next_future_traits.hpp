@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_NEXT_FUTURE_TRAITS_HPP
-#define FUTURES_NEXT_FUTURE_TRAITS_HPP
+#ifndef FUTURES_ADAPTOR_DETAIL_NEXT_FUTURE_TRAITS_HPP
+#define FUTURES_ADAPTOR_DETAIL_NEXT_FUTURE_TRAITS_HPP
 
 #include <futures/config.hpp>
 #include <futures/adaptor/detail/future_continue_task.hpp>
@@ -89,4 +89,4 @@ namespace futures {
 } // namespace futures
 
 
-#endif // FUTURES_NEXT_FUTURE_TRAITS_HPP
+#endif // FUTURES_ADAPTOR_DETAIL_NEXT_FUTURE_TRAITS_HPP

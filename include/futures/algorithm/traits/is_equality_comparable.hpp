@@ -40,11 +40,13 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_equality_comparable
     template <class T>
     constexpr bool is_equality_comparable_v = is_equality_comparable<T>::value;
-    /** @}*/
-    /** @}*/
 
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_HPP

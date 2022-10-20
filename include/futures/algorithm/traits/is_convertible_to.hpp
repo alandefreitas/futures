@@ -41,10 +41,12 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_convertible_to
     template <class From, class To>
     constexpr bool is_convertible_to_v = is_convertible_to<From, To>::value;
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

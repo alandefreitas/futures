@@ -111,8 +111,8 @@ namespace futures {
     /// Finds the first element not satisfying specific criteria
     inline constexpr find_if_not_functor find_if_not;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_FIND_IF_NOT_HPP

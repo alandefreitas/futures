@@ -25,21 +25,17 @@ namespace futures {
 
     /** \brief A C++17 type trait equivalent to the C++20 derived_from concept
      */
-#ifdef FUTURES_DOXYGEN
-    template <class T>
-    using is_derived_from = __see_below__;
-#else
     template <class Derived, class Base>
-    struct is_derived_from
-        : std::conjunction<
-              std::is_base_of<Base, Derived>,
-              std::is_convertible<const volatile Derived*, const volatile Base*>> {
-    };
-#endif
+    using is_derived_from = std::conjunction<
+        std::is_base_of<Base, Derived>,
+        std::is_convertible<const volatile Derived*, const volatile Base*>>;
+
+    /// @copydoc is_derived_from
     template <class Derived, class Base>
     constexpr bool is_derived_from_v = is_derived_from<Derived, Base>::value;
-    /** @}*/
-    /** @}*/
+
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

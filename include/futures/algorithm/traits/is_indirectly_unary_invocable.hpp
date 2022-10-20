@@ -22,7 +22,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20
      * indirectly_unary_invocable concept
      */
@@ -45,12 +44,14 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_indirectly_unary_invocable
     template <class F, class I>
     constexpr bool is_indirectly_unary_invocable_v
         = is_indirectly_unary_invocable<F, I>::value;
-    /** @}*/
-    /** @}*/
 
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_UNARY_INVOCABLE_HPP

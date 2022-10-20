@@ -43,10 +43,12 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_assignable_from
     template <class LHS, class RHS>
     constexpr bool is_assignable_from_v = is_assignable_from<LHS, RHS>::value;
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

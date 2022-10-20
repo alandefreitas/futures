@@ -47,11 +47,14 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_indirectly_binary_invocable
     template <class F, class I1, class I2>
     constexpr bool is_indirectly_binary_invocable_v
         = is_indirectly_binary_invocable<F, I1, I2>::value;
-    /** @}*/
-    /** @}*/
+
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

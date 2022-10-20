@@ -221,13 +221,15 @@ main() {
     {
         //[ambiguous Ambiguous unwrapping
         cfuture<int> f1 = async([]() { return 1; });
-        auto f2 = f1 >> [](auto f) -> int {
+        auto f2 = f1 >> [](auto f) -> decltype(f.get()) {
             // Is `f` a `cfuture<int>` or `int`?
             // `cfuture<int>` has highest priority
             return f.get();
         };
         std::cout << f2.get() << '\n';
         //]
+        // see:
+        // https://stackoverflow.com/questions/64186621/why-doesnt-stdis-invocable-work-with-templated-operator-which-return-type-i
     }
 
     {

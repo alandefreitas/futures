@@ -19,7 +19,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20
      * input_or_output_iterator concept
      */
@@ -35,13 +34,14 @@ namespace futures {
         T,
         std::void_t<decltype(*std::declval<T>())>> : std::true_type {};
 #endif
+
+    /// @copydoc is_input_or_output_iterator
     template <class T>
     constexpr bool is_input_or_output_iterator_v = is_input_or_output_iterator<
         T>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_INPUT_OR_OUTPUT_ITERATOR_HPP

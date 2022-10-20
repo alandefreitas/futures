@@ -22,35 +22,22 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 movable
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_movable = __see_below__;
-#else
-    template <class T, class = void>
-    struct is_movable : std::false_type {};
+    using is_movable = std::conjunction<
+        std::is_object<T>,
+        is_move_constructible<T>,
+        is_assignable_from<T&, T>,
+        is_swappable<T>>;
 
-    template <class T>
-    struct is_movable<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            std::is_object_v<T> &&
-            is_move_constructible_v<T> &&
-            is_assignable_from_v<T&, T> &&
-            is_swappable_v<T>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_movable
     template <class T>
     constexpr bool is_movable_v = is_movable<T>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_MOVABLE_HPP

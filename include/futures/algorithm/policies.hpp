@@ -106,8 +106,8 @@ namespace futures {
         }
     }
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_POLICIES_HPP

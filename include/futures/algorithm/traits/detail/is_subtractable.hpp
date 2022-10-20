@@ -5,28 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_HPP
-#define FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_HPP
+#ifndef FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP
+#define FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP
 
 #include <type_traits>
 
-namespace futures {
-    /** @addtogroup algorithms Algorithms
-     *  @{
-     */
-
-    /** @addtogroup traits Traits
-     *  @{
-     */
-
-
-    /** \brief A C++17 type trait equivalent to the C++20 subtractable
-     * concept
-     */
-#ifdef FUTURES_DOXYGEN
-    template <class T>
-    using is_subtractable = __see_below__;
-#else
+namespace futures::detail {
     template <class T, class = void>
     struct is_subtractable : std::false_type {};
 
@@ -41,13 +25,9 @@ namespace futures {
         : std::is_integral<
               decltype(std::declval<std::remove_reference_t<T> const &>() - std::declval<std::remove_reference_t<T> const &>())> {
     };
-#endif
+
     template <class T>
     constexpr bool is_subtractable_v = is_subtractable<T>::value;
+} // namespace futures::detail
 
-    /** @}*/
-    /** @}*/
-
-} // namespace futures
-
-#endif // FUTURES_ALGORITHM_TRAITS_IS_SUBTRACTABLE_HPP
+#endif // FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP

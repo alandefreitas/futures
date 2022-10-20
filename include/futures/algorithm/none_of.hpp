@@ -182,8 +182,8 @@ namespace futures {
     /// Checks if a predicate is true for none of the elements in a range
     inline constexpr none_of_functor none_of;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_NONE_OF_HPP

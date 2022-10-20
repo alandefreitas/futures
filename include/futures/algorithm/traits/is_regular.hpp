@@ -21,33 +21,19 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 regular
      * concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_regular = __see_below__;
-#else
-    template <class T, class = void>
-    struct is_regular : std::false_type {};
+    using is_regular = std::
+        conjunction<is_semiregular<T>, is_equality_comparable<T>>;
 
-    template <class T>
-    struct is_regular<
-        T,
-        std::enable_if_t<
-            // clang-format off
-            is_semiregular_v<T> &&
-            is_equality_comparable_v<T>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_regular
     template <class T>
     constexpr bool is_regular_v = is_regular<T>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_REGULAR_HPP

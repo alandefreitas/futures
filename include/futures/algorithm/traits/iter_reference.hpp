@@ -36,14 +36,14 @@ namespace futures {
     struct iter_reference<T, std::void_t<iter_value_t<T>>> {
         using type = std::add_lvalue_reference<iter_value_t<T>>;
     };
-
 #endif
+
+    /// @copydoc iter_reference
     template <class T>
     using iter_reference_t = typename iter_reference<T>::type;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_ITER_REFERENCE_HPP

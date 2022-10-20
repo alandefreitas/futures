@@ -75,8 +75,8 @@ namespace futures {
     /// Finds the first element equal to another element
     inline constexpr find_functor find;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_FIND_HPP

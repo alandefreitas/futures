@@ -43,12 +43,13 @@ namespace futures {
             // clang-format on
             >> : is_equality_comparable<T> {};
 #endif
+
+    /// @copydoc is_totally_ordered
     template <class T>
     constexpr bool is_totally_ordered_v = is_totally_ordered<T>::value;
 
-    /** @}*/
-    /** @}*/
-
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_HPP

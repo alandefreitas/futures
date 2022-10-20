@@ -21,7 +21,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 weakly_incrementable
      * concept
      */
@@ -49,11 +48,13 @@ namespace futures {
               // clang-format on
               > {};
 #endif
+
+    /// @copydoc is_weakly_incrementable
     template <class I>
     constexpr bool is_weakly_incrementable_v = is_weakly_incrementable<I>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

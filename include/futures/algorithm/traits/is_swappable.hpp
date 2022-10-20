@@ -19,7 +19,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20 swappable concept
      */
 #ifdef FUTURES_DOXYGEN
@@ -38,11 +37,13 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_swappable
     template <class T>
     constexpr bool is_swappable_v = is_swappable<T>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

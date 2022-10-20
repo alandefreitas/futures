@@ -171,8 +171,8 @@ namespace futures {
     /// elements, except out of order
     inline constexpr reduce_functor reduce;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_REDUCE_HPP

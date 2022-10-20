@@ -19,7 +19,6 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20
      * weakly_equality_comparable concept
      */
@@ -43,12 +42,14 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_weakly_equality_comparable
     template <class T, class U>
     constexpr bool is_weakly_equality_comparable_v
         = is_weakly_equality_comparable<T, U>::value;
 
-    /** @}*/
-    /** @}*/
+    /** @} */
+    /** @} */
 
 } // namespace futures
 

@@ -21,35 +21,22 @@ namespace futures {
      *  @{
      */
 
-
     /** \brief A C++17 type trait equivalent to the C++20
      * equality_comparable_with concept
      */
-#ifdef FUTURES_DOXYGEN
     template <class T, class U>
-    using is_equality_comparable_with = __see_below__;
-#else
-    template <class T, class U, class = void>
-    struct is_equality_comparable_with : std::false_type {};
+    using is_equality_comparable_with = std::conjunction<
+        is_equality_comparable<T>,
+        is_equality_comparable<U>,
+        is_weakly_equality_comparable<T, U>>;
 
-    template <class T, class U>
-    struct is_equality_comparable_with<
-        T,
-        U,
-        std::enable_if_t<
-            // clang-format off
-            is_equality_comparable_v<T> &&
-            is_equality_comparable_v<U> &&
-            is_weakly_equality_comparable_v<T,U>
-            // clang-format on
-            >> : std::true_type {};
-#endif
+    /// @copydoc is_equality_comparable_with
     template <class T, class U>
     constexpr bool is_equality_comparable_with_v
         = is_equality_comparable_with<T, U>::value;
-    /** @}*/
-    /** @}*/
 
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP

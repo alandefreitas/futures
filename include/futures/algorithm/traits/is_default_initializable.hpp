@@ -41,12 +41,14 @@ namespace futures {
             // clang-format on
             >> : std::true_type {};
 #endif
+
+    /// @copydoc is_default_initializable
     template <class T>
     constexpr bool is_default_initializable_v = is_default_initializable<
         T>::value;
-    /** @}*/
-    /** @}*/
 
+    /** @} */
+    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_HPP
