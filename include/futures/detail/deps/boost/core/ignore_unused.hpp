@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include boost/core/ignore_unused.hpp from external or bundled boost 
 #if defined(FUTURES_HAS_BOOST)
 #include <boost/core/ignore_unused.hpp>
 #else

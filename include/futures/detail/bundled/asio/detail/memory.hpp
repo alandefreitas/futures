@@ -23,19 +23,19 @@
 #include <futures/detail/bundled/asio/detail/throw_exception.hpp>
 
 #if !defined(ASIO_HAS_STD_SHARED_PTR)
-#include <futures/detail/bundled/boost/make_shared.hpp>
-#include <futures/detail/bundled/boost/shared_ptr.hpp>
-#include <futures/detail/bundled/boost/weak_ptr.hpp>
+# include <boost/make_shared.hpp>
+# include <boost/shared_ptr.hpp>
+# include <boost/weak_ptr.hpp>
 #endif // !defined(ASIO_HAS_STD_SHARED_PTR)
 
 #if !defined(ASIO_HAS_STD_ADDRESSOF)
-#include <futures/detail/bundled/boost/utility/addressof.hpp>
+# include <boost/utility/addressof.hpp>
 #endif // !defined(ASIO_HAS_STD_ADDRESSOF)
 
 #if !defined(ASIO_HAS_STD_ALIGNED_ALLOC) \
   && defined(ASIO_HAS_BOOST_ALIGN) \
   && defined(ASIO_HAS_ALIGNOF)
-#include <futures/detail/bundled/boost/align/aligned_alloc.hpp>
+# include <boost/align/aligned_alloc.hpp>
 #endif // !defined(ASIO_HAS_STD_ALIGNED_ALLOC)
        //   && defined(ASIO_HAS_BOOST_ALIGN)
        //   && defined(ASIO_HAS_ALIGNOF)

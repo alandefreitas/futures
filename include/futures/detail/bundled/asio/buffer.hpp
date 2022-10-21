@@ -49,7 +49,7 @@
 #endif // ASIO_ENABLE_BUFFER_DEBUGGING
 
 #if defined(ASIO_HAS_BOOST_WORKAROUND)
-#include <futures/detail/bundled/boost/detail/workaround.hpp>
+# include <boost/detail/workaround.hpp>
 # if !defined(__clang__)
 #  if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #   define ASIO_ENABLE_ARRAY_BUFFER_WORKAROUND

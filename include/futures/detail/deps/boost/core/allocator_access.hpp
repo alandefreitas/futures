@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include boost/core/allocator_access.hpp from external or bundled boost 
 #if defined(FUTURES_HAS_BOOST)
 #include <boost/core/allocator_access.hpp>
 #else

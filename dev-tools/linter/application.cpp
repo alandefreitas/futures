@@ -53,7 +53,7 @@ application::setup() {
 
 void
 application::find_project_files() {
-    for (const auto &include_path: config_.include_paths) {
+    for (auto const &include_path: config_.include_paths) {
         fs::recursive_directory_iterator dir_paths{ include_path };
         for (auto &p: dir_paths) {
             if (is_cpp_file(p.path())) {
@@ -206,223 +206,306 @@ application::bundle_includes(
     }
 
     // Iterate file looking for includes
-    std::regex include_expression(
-        "(^|\n) *# *include *[<\"] *([a-zA-Z0-9_/\\. ]+) *[>\"]");
-    auto search_begin(content.cbegin());
-    std::smatch include_match;
+    // We consider these patterns to be includes:
+    // - #include <xxxx>
+    // - #define BOOST_XXXXXXX_CONFIG "xxxx"
+    // where the second case is a special exception for boost config
+    struct replace_opts {
+        std::regex expression;
+        std::size_t path_group_id;
+        std::function<std::string(std::smatch &, std::string &)> transform;
+    };
+    // clang-format off
+    std::vector<replace_opts> replace_options = {
+        {std::regex("(^|\n) *# *include *[<\"] *([a-zA-Z0-9_/\\. ]+) *[>\"]"),
+         2,
+         [is_bundled, this](std::smatch &include_match, std::string& as_str) {
+             std::string patch;
+             patch = include_match[1];
+             patch += "#include <";
+             if (!is_bundled) {
+                 patch += rel_deps_dir.u8string();
+             } else {
+                 patch += rel_bundle_dir.u8string();
+             }
+             if (patch.back() != '/')
+                patch += '/';
+             patch += as_str;
+             patch += ">";
+             return patch;
+        }},
+        {std::regex("(^|\n) *# *define (BOOST_[A-Z]+_CONFIG) *([\"<]) *([a-zA-Z0-9_/\\. ]+.hpp) *([\">])"),
+         4,
+         [is_bundled, this](std::smatch &include_match, std::string& as_str) {
+             std::string patch;
+             patch = include_match[1];
+             patch += "#  define ";
+             patch += include_match[2];
+             patch += " ";
+             patch += include_match[3];
+             if (!is_bundled) {
+                patch += rel_deps_dir.u8string();
+             } else {
+                patch += rel_bundle_dir.u8string();
+             }
+             if (patch.back() != '/')
+                patch += '/';
+             patch += as_str;
+             patch += include_match[5];
+             patch += " // redirect boost include";
+             return patch;
+         }}
+    };
+    // clang-format on
+    for (auto &include_opt: replace_options) {
+        auto search_begin(content.cbegin());
+        std::smatch include_match;
 
-    while (std::regex_search(
-        search_begin,
-        content.cend(),
-        include_match,
-        include_expression))
-    {
-        // Identify file included
-        std::string as_str = include_match[2];
+        while (std::regex_search(
+            search_begin,
+            content.cend(),
+            include_match,
+            include_opt.expression))
+        {
+            // Identify file included
+            std::string as_str = include_match[include_opt.path_group_id];
 
-        // We don't touch files in details/deps and files in
-        auto as_path = static_cast<const fs::path>(as_str);
-        auto [file_path, exists_in_source]
-            = find_file(config_.include_paths, as_path);
-        if (exists_in_source) {
-            std::string rel_deps_dir_str = rel_deps_dir.u8string();
-            std::string rel_bundle_dir_str = rel_bundle_dir.u8string();
-            if (as_str.substr(0, rel_deps_dir_str.size()) == rel_deps_dir_str) {
-                trace(
-                    "Source file",
-                    as_str,
-                    "points to dependency ( pos ",
-                    include_match[0].first - content.cbegin(),
-                    ")");
-                as_str.erase(as_str.begin(), as_str.begin() + rel_deps_dir_str.size());
-                if (as_str.front() == '/') {
-                    as_str.erase(as_str.begin(), as_str.begin() + 1);
+            // We don't touch files in details/deps and files in
+            auto as_path = static_cast<const fs::path>(as_str);
+            auto [file_path, exists_in_source]
+                = find_file(config_.include_paths, as_path);
+            bool should_exist_in_bundled = is_parent(rel_deps_dir, as_path)
+                                           || is_parent(rel_bundle_dir, as_path);
+            if (exists_in_source || should_exist_in_bundled) {
+                std::string rel_deps_dir_str = rel_deps_dir.u8string();
+                std::string rel_bundle_dir_str = rel_bundle_dir.u8string();
+                if (as_str.substr(0, rel_deps_dir_str.size())
+                    == rel_deps_dir_str)
+                {
+                    trace(
+                        "Source file",
+                        as_str,
+                        "points to dependency ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
+                    as_str.erase(
+                        as_str.begin(),
+                        as_str.begin() + rel_deps_dir_str.size());
+                    if (as_str.front() == '/') {
+                        as_str.erase(as_str.begin(), as_str.begin() + 1);
+                    }
+                    as_path = static_cast<const fs::path>(as_str);
+                    trace("Looking for ", as_str, "in deps redirects");
+                } else if (
+                    as_str.substr(0, rel_bundle_dir_str.size())
+                    == rel_bundle_dir_str)
+                {
+                    trace(
+                        "Source file",
+                        as_str,
+                        "is already a bundled dependency ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
+                    as_str.erase(
+                        as_str.begin(),
+                        as_str.begin() + rel_bundle_dir_str.size());
+                    if (as_str.front() == '/') {
+                        as_str.erase(as_str.begin(), as_str.begin() + 1);
+                    }
+                    as_path = static_cast<const fs::path>(as_str);
+                    trace("Looking for ", as_str, "in bundled headers");
+                } else {
+                    trace(
+                        as_str,
+                        "is in source ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
+                    search_begin = include_match[0].second;
+                    continue;
                 }
-                as_path = static_cast<const fs::path>(as_str);
-                trace("Looking for ", as_str, "in deps redirects");
-            } else if (
-                as_str.substr(0, rel_bundle_dir_str.size()) == rel_bundle_dir_str)
+            }
+
+            // Check if it's a standard C++ file
+            if (std::next(as_path.begin()) == as_path.end()
+                || as_str.find('.') == std::string_view::npos)
             {
                 trace(
-                    "Source file",
-                    as_str,
-                    "is already a bundled dependency ( pos ",
-                    include_match[0].first - content.cbegin(),
-                    ")");
-                as_str.erase(as_str.begin(), as_str.begin() + rel_bundle_dir_str.size());
-                if (as_str.front() == '/') {
-                    as_str.erase(as_str.begin(), as_str.begin() + 1);
-                }
-                as_path = static_cast<const fs::path>(as_str);
-                trace("Looking for ", as_str, "in bundled headers");
-            } else {
-                trace(
-                    as_str,
-                    "is in source ( pos ",
+                    as_path,
+                    "is a C++ header ( pos ",
                     include_match[0].first - content.cbegin(),
                     ")");
                 search_begin = include_match[0].second;
                 continue;
             }
-        }
 
-        // Check if it's a standard C++ file
-        if (std::next(as_path.begin()) == as_path.end()
-            || as_str.find('.') == std::string_view::npos)
-        {
-            trace(
-                as_path,
-                "is a C++ header ( pos ",
-                include_match[0].first - content.cbegin(),
-                ")");
-            search_begin = include_match[0].second;
-            continue;
-        }
-
-        // Look for this header in our dependency paths
-        auto [abs_file_path, exists_in_deps]
-            = find_file(config_.dep_include_paths, as_path);
-        if (!exists_in_deps) {
-            fs::path dest = config_.bundled_deps_path / as_path;
-            if (fs::exists(dest)) {
-                trace(
-                    as_path,
-                    "is not available but it's already bundled ( pos ",
-                    include_match[0].first - content.cbegin(),
-                    ")");
-                if (std::find(bundled_headers.begin(), bundled_headers.end(), as_path)
-                    == bundled_headers.end())
-                {
-                    bundled_headers.emplace_back(as_path);
-                    std::ifstream t(dest);
-                    if (!t) {
-                        log("Failed to open file", dest);
-                        continue;
+            // Look for this header in our dependency paths
+            auto [abs_file_path, exists_in_deps]
+                = find_file(config_.dep_include_paths, as_path);
+            if (!exists_in_deps) {
+                fs::path dest = config_.bundled_deps_path / as_path;
+                if (fs::exists(dest)) {
+                    trace(
+                        as_path,
+                        "is not available but it's already bundled ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
+                    if (std::find(
+                            bundled_headers.begin(),
+                            bundled_headers.end(),
+                            as_path)
+                        == bundled_headers.end())
+                    {
+                        bundled_headers.emplace_back(as_path);
+                        std::ifstream t(dest);
+                        if (!t) {
+                            log("Failed to open file", dest);
+                            search_begin = include_match[0].second;
+                            continue;
+                        }
+                        std::string indirect_content{
+                            std::istreambuf_iterator<char>(t),
+                            std::istreambuf_iterator<char>()
+                        };
+                        t.close();
+                        bundle_includes(
+                            dest,
+                            bundle_parent,
+                            indirect_content,
+                            true);
+                        std::ofstream fout(dest);
+                        fout << indirect_content;
+                        fout.close();
                     }
-                    std::string indirect_content{
-                        std::istreambuf_iterator<char>(t),
-                        std::istreambuf_iterator<char>()
-                    };
-                    t.close();
-                    bundle_includes(dest, bundle_parent, indirect_content, true);
-                    std::ofstream fout(dest);
-                    fout << indirect_content;
-                    fout.close();
+                } else {
+                    trace(
+                        as_path,
+                        "is an external header outside our bundled "
+                        "dependencies ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
                 }
-            } else {
+                search_begin = include_match[0].second;
+                continue;
+            }
+
+            // Check if this is an interdependency include
+            if (is_parent(config_.bundled_deps_path, p))
+            {
+                fs::path rel_this = fs::relative(p, config_.bundled_deps_path);
+                auto [this_file_path, exists_in_deps2]
+                    = find_file(config_.dep_include_paths, rel_this);
+                auto it0 = find_parent_path(config_.dep_include_paths, this_file_path);
+                auto it1 = find_parent_path(config_.dep_include_paths, abs_file_path);
+                if (it0 != it1)
+                {
+                    trace(
+                        as_path,
+                        "is doesn't belong to the same dependency as",
+                        rel_this,
+                        " ( pos ",
+                        include_match[0].first - content.cbegin(),
+                        ")");
+                    search_begin = include_match[0].second;
+                    continue;
+                }
+            }
+
+            // Check if we should ignore includes with this prefix
+            bool ignore = false;
+            std::string ig_str;
+            for (auto const &ig: config_.bundle_ignore_prefix) {
+                ig_str = ig.u8string();
+                if (as_str.substr(0, ig_str.size()) == ig_str) {
+                    ignore = true;
+                    break;
+                }
+            }
+            if (ignore) {
                 trace(
                     as_path,
-                    "is an external header outside our bundled dependencies ( pos ",
+                    "is an external header whose prefix",
+                    ig_str,
+                    "is ignored ( pos ",
                     include_match[0].first - content.cbegin(),
                     ")");
+                search_begin = include_match[0].second;
+                continue;
             }
-            search_begin = include_match[0].second;
-            continue;
-        }
 
-        // Check if we should ignore the prefix
-        bool ignore = false;
-        std::string ig_str;
-        for (const auto &ig: config_.bundle_ignore_prefix) {
-            ig_str = ig.u8string();
-            if (as_str.substr(0, ig_str.size()) == ig_str) {
-                ignore = true;
-                break;
-            }
-        }
-        if (ignore) {
-            trace(
-                as_path,
-                "is an external header whose prefix",
-                ig_str,
-                "is ignored ( pos ",
-                include_match[0].first - content.cbegin(),
-                ")");
-            search_begin = include_match[0].second;
-            continue;
-        }
+            // This included file is an external header
+            trace("External header include:", as_path);
 
-        // This included file is an external header
-        trace("External header include:", as_path);
-
-        // Patch #include
-        std::string patch;
-        if (config_.redirect_dep_includes) {
-            patch = include_match[1];
-            patch += "#include <";
-            if (!is_bundled) {
-                patch += rel_deps_dir.u8string();
+            // Patch #include
+            std::string patch;
+            if (config_.redirect_dep_includes) {
+                patch = include_opt.transform(include_match, as_str);
             } else {
-                patch += rel_bundle_dir.u8string();
+                patch = include_match[0];
             }
-            if (patch.back() != '/')
-                patch += '/';
-            patch += as_str;
-            patch += ">";
-        } else {
-            patch = include_match[0];
-        }
 
-        // Patch contents
-        trace("Replacing", as_str, "with", std::string_view(patch).substr(1));
-        auto begin_offset = include_match[0].first - content.cbegin();
-        if (config_.dry_run) {
-            ok_ = false;
-        } else {
-            content
-                .replace(include_match[0].first, include_match[0].second, patch);
-        }
+            // Patch contents
+            trace("Replacing", as_str, "with", std::string_view(patch).substr(1));
+            auto begin_offset = include_match[0].first - content.cbegin();
+            if (config_.dry_run) {
+                ok_ = false;
+            } else {
+                content.replace(
+                    include_match[0].first,
+                    include_match[0].second,
+                    patch);
+            }
 
-        if (std::find(bundled_headers.begin(), bundled_headers.end(), as_path)
-            == bundled_headers.end())
-        {
-            bundled_headers.emplace_back(as_path);
-            fs::path dest = config_.bundled_deps_path / as_path;
-            trace("Copy", abs_file_path, "to", dest);
-            if (!config_.dry_run && config_.bundle_dependencies
-                && !fs::exists(dest))
+            if (std::find(bundled_headers.begin(), bundled_headers.end(), as_path)
+                == bundled_headers.end())
             {
-                fs::create_directories(dest.parent_path());
-                fs::copy_file(
-                    abs_file_path,
-                    dest,
-                    fs::copy_options::overwrite_existing);
+                bundled_headers.emplace_back(as_path);
+                fs::path dest = config_.bundled_deps_path / as_path;
+                trace("Copy", abs_file_path, "to", dest);
+                if (!config_.dry_run && config_.bundle_dependencies
+                    && !fs::exists(dest))
+                {
+                    fs::create_directories(dest.parent_path());
+                    fs::copy_file(
+                        abs_file_path,
+                        dest,
+                        fs::copy_options::overwrite_existing);
+                }
+
+                // Recursively bundle indirect include headers
+                std::ifstream t(dest);
+                if (!t) {
+                    log("Failed to open file", dest);
+                    continue;
+                }
+                std::string indirect_content{
+                    std::istreambuf_iterator<char>(t),
+                    std::istreambuf_iterator<char>()
+                };
+                t.close();
+                bundle_includes(dest, bundle_parent, indirect_content, true);
+                std::ofstream fout(dest);
+                fout << indirect_content;
+                fout.close();
+            } else {
+                trace(as_path, "has already been bundled");
             }
 
             if (!is_bundled && config_.redirect_dep_includes) {
                 create_redirect_header(as_path);
             }
 
-            // Recursively bundle indirect include headers
-            std::ifstream t(dest);
-            if (!t) {
-                log("Failed to open file", dest);
-                continue;
-            }
-            std::string indirect_content{
-                std::istreambuf_iterator<char>(t),
-                std::istreambuf_iterator<char>()
-            };
-            t.close();
-            bundle_includes(dest, bundle_parent, indirect_content, true);
-            std::ofstream fout(dest);
-            fout << indirect_content;
-            fout.close();
-        } else {
-            trace(as_path, "has already been bundled");
+            // Update search range
+            search_begin = content.cbegin() + begin_offset
+                           + (config_.dry_run ? include_match[0].length() :
+                                                patch.size());
         }
-
-        // Update search range
-        search_begin = content.cbegin() + begin_offset
-                       + (config_.dry_run ? include_match[0].length() :
-                                            patch.size());
     }
 
     return true;
 }
 
 std::string
-application::generate_include_guard(const fs::path &p, const fs::path &parent) {
+application::generate_include_guard(fs::path const &p, fs::path const &parent) {
     fs::path relative_p = fs::relative(p, parent);
     std::string expected_guard = relative_p.string();
     std::transform(
@@ -455,33 +538,37 @@ application::create_redirect_header(fs::path const &as_path) {
 
     // Create a file redirect file in deps
     fs::path redirect_header_p = deps_parent / rel_deps_dir / as_path;
+    if (fs::exists(redirect_header_p)) {
+        return;
+    }
+
     auto guard = generate_include_guard(redirect_header_p, deps_parent);
     std::string bundle_include_name = rel_bundle_dir.u8string();
     if (bundle_include_name.back() != '/')
         bundle_include_name += '/';
     bundle_include_name += as_path.string();
     // clang-format off
-        std::string redirect_content
-            = "//\n"
-              "// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)\n"
-              "//\n"
-              "// Distributed under the Boost Software License, Version 1.0.\n"
-              "// https://www.boost.org/LICENSE_1_0.txt\n"
-              "//\n"
-              "\n"
-              "#ifndef " + guard + "\n"
-              "#define " + guard + "\n"
-              "\n"
-              "#include <futures/config.hpp>\n"
-              "\n"
-              "// Include\n"
-              "#if defined(FUTURES_HAS_BOOST)\n"
-              "#include <" + as_path.string() + ">\n"
-              "#else\n"
-              "#include <" + bundle_include_name + ">\n"
-              "#endif\n"
-              "\n"
-              "#endif // " + guard;
+    std::string redirect_content
+        = "//\n"
+          "// Copyright (c) 2022 alandefreitas (alandefreitas@gmail.com)\n"
+          "//\n"
+          "// Distributed under the Boost Software License, Version 1.0.\n"
+          "// https://www.boost.org/LICENSE_1_0.txt\n"
+          "//\n"
+          "\n"
+          "#ifndef " + guard + "\n"
+          "#define " + guard + "\n"
+          "\n"
+          "#include <futures/config.hpp>\n"
+          "\n"
+          "// Include " + as_path.string() + " from external or bundled " + as_path.begin()->u8string() + " \n"
+          "#if defined(FUTURES_HAS_BOOST)\n"
+          "#include <" + as_path.string() + ">\n"
+          "#else\n"
+          "#include <" + bundle_include_name + ">\n"
+          "#endif\n"
+          "\n"
+          "#endif // " + guard;
     // clang-format on
     trace(redirect_content);
     redirect_headers.emplace_back(redirect_header_p);

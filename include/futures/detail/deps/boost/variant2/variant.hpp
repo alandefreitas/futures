@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include boost/variant2/variant.hpp from external or bundled boost 
 #if defined(FUTURES_HAS_BOOST)
 #include <boost/variant2/variant.hpp>
 #else

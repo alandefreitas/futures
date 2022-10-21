@@ -18,7 +18,7 @@
 #include <futures/detail/bundled/asio/detail/config.hpp>
 
 #if defined(ASIO_HAS_BOOST_ASSERT)
-#include <futures/detail/bundled/boost/assert.hpp>
+# include <boost/assert.hpp>
 #else // defined(ASIO_HAS_BOOST_ASSERT)
 # include <cassert>
 #endif // defined(ASIO_HAS_BOOST_ASSERT)

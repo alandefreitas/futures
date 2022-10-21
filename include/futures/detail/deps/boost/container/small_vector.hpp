@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include boost/container/small_vector.hpp from external or bundled boost 
 #if defined(FUTURES_HAS_BOOST)
 #include <boost/container/small_vector.hpp>
 #else

@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include asio/is_executor.hpp from external or bundled asio 
 #if defined(FUTURES_USE_STANDALONE_ASIO)
 #include <asio/is_executor.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)

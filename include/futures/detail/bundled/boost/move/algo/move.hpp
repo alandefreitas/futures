@@ -27,7 +27,11 @@
 #include <futures/detail/bundled/boost/move/utility_core.hpp>
 #include <futures/detail/bundled/boost/move/detail/iterator_traits.hpp>
 #include <futures/detail/bundled/boost/move/detail/iterator_to_raw_pointer.hpp>
+#include <futures/detail/bundled/boost/move/detail/addressof.hpp>
 #include <futures/detail/bundled/boost/core/no_exceptions_support.hpp>
+#if defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
+#include <algorithm>
+#endif
 
 namespace boost {
 

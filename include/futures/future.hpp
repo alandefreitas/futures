@@ -16,7 +16,6 @@
 #include <futures/traits/is_continuable.hpp>
 #include <futures/traits/is_future.hpp>
 #include <futures/detail/continuations_source.hpp>
-#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/future.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
@@ -29,6 +28,7 @@
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/noncopyable.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
+#include <futures/detail/deps/boost/throw_exception.hpp>
 #include <functional>
 #include <utility>
 #include <shared_mutex>
@@ -458,7 +458,7 @@ namespace futures {
         basic_future<R, detail::append_future_option_t<shared_opt, Options>>
         share() {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
 
             // Determine type of corresponding shared future
@@ -513,7 +513,7 @@ namespace futures {
         decltype(auto)
         get() {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             state_.wait();
             if constexpr (Options::is_shared) {
@@ -542,7 +542,7 @@ namespace futures {
         std::exception_ptr
         get_exception_ptr() {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             state_.wait();
             return state_.get_exception_ptr();
@@ -593,10 +593,10 @@ namespace futures {
         void
         wait() const {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             if constexpr (Options::is_always_deferred) {
-                detail::throw_exception<future_deferred>();
+                boost::throw_with_location(future_deferred{});
             }
             state_.wait();
         }
@@ -613,7 +613,7 @@ namespace futures {
         void
         wait() {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             state_.wait();
         }
@@ -645,7 +645,7 @@ namespace futures {
         wait_for(
             std::chrono::duration<Rep, Period> const &timeout_duration) const {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             if constexpr (Options::is_always_deferred) {
                 return std::future_status::deferred;
@@ -658,7 +658,7 @@ namespace futures {
         std::future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             return state_.wait_for(timeout_duration);
         }
@@ -690,7 +690,7 @@ namespace futures {
         wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
             const {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             return state_.wait_until(timeout_time);
         }
@@ -701,10 +701,10 @@ namespace futures {
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             if constexpr (Options::is_always_deferred) {
-                detail::throw_exception<future_deferred>();
+                boost::throw_with_location(future_deferred{});
             }
             return state_.wait_until(timeout_time);
         }
@@ -720,8 +720,8 @@ namespace futures {
         [[nodiscard]] bool
         is_ready() const {
             if (!valid()) {
-                detail::throw_exception<std::future_error>(
-                    std::future_errc::no_state);
+                boost::throw_with_location(
+                    std::future_error{ std::future_errc::no_state });
             }
             return state_.is_ready();
         }
@@ -812,8 +812,8 @@ namespace futures {
         then(Executor const &ex, Fn &&fn) {
             // Throw if invalid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(
-                    std::future_errc::no_state);
+                boost::throw_with_location(
+                    std::future_error{ std::future_errc::no_state });
             }
 
             if constexpr (Options::is_continuable) {
@@ -1088,7 +1088,7 @@ namespace futures {
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             return state_.notify_when_ready(cv);
         }
@@ -1098,7 +1098,7 @@ namespace futures {
         void
         unnotify_when_ready(notify_when_ready_handle h) {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             return state_.unnotify_when_ready(h);
         }
@@ -1107,7 +1107,7 @@ namespace futures {
         std::mutex &
         waiters_mutex() {
             if (!valid()) {
-                detail::throw_exception<future_uninitialized>();
+                boost::throw_with_location(future_uninitialized{});
             }
             return state_.waiters_mutex();
         }

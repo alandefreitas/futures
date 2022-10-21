@@ -10,9 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include
-#if defined(FUTURES_HAS_BOOST)
+// Include asio/impl/src.hpp from external or bundled asio 
+#if defined(FUTURES_USE_STANDALONE_ASIO)
 #include <asio/impl/src.hpp>
+#elif defined(FUTURES_USE_BOOST_ASIO)
+#include <boost/asio/impl/src.hpp>
 #else
 #include <futures/detail/bundled/asio/impl/src.hpp>
 #endif

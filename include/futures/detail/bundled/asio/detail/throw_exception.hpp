@@ -18,7 +18,7 @@
 #include <futures/detail/bundled/asio/detail/config.hpp>
 
 #if defined(ASIO_HAS_BOOST_THROW_EXCEPTION)
-#include <futures/detail/bundled/boost/throw_exception.hpp>
+# include <boost/throw_exception.hpp>
 #endif // defined(ASIO_BOOST_THROW_EXCEPTION)
 
 namespace asio {

@@ -24,6 +24,5 @@ http://www.boost.org/LICENSE_1_0.txt)
 #include <futures/detail/bundled/boost/predef/platform/windows_system.h>
 #include <futures/detail/bundled/boost/predef/platform/windows_runtime.h> // deprecated
 #include <futures/detail/bundled/boost/predef/platform/ios.h>
-/*#include <boost/predef/platform/.h>*/
 
 #endif

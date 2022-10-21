@@ -1,6 +1,6 @@
 /*
 Copyright (C) 2002 Brad King (brad.king@kitware.com)
-Copyright (C) 2002 Douglas Gregor (gregod@cs.rpi.edu)
+                   Douglas Gregor (gregod@cs.rpi.edu)
 
 Copyright (C) 2002, 2008, 2013 Peter Dimov
 

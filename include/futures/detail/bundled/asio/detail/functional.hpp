@@ -20,7 +20,7 @@
 #include <functional>
 
 #if !defined(ASIO_HAS_STD_FUNCTION)
-#include <futures/detail/bundled/boost/function.hpp>
+# include <boost/function.hpp>
 #endif // !defined(ASIO_HAS_STD_FUNCTION)
 
 namespace asio {

@@ -18,7 +18,7 @@
 #include <futures/detail/bundled/asio/detail/config.hpp>
 
 #if defined(ASIO_HAS_BOOST_LIMITS)
-#include <futures/detail/bundled/boost/limits.hpp>
+# include <boost/limits.hpp>
 #else // defined(ASIO_HAS_BOOST_LIMITS)
 # include <limits>
 #endif // defined(ASIO_HAS_BOOST_LIMITS)

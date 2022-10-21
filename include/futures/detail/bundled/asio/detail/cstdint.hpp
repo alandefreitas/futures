@@ -20,7 +20,7 @@
 #if defined(ASIO_HAS_CSTDINT)
 # include <cstdint>
 #else // defined(ASIO_HAS_CSTDINT)
-#include <futures/detail/bundled/boost/cstdint.hpp>
+# include <boost/cstdint.hpp>
 #endif // defined(ASIO_HAS_CSTDINT)
 
 namespace asio {

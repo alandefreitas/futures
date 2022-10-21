@@ -43,8 +43,9 @@
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/adaptor/detail/lambda_to_future.hpp>
-#include <futures/detail/deps/boost/mp11/tuple.hpp>
 #include <futures/detail/deps/boost/mp11/function.hpp>
+#include <futures/detail/deps/boost/mp11/tuple.hpp>
+#include <futures/detail/deps/boost/throw_exception.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -142,8 +143,8 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(
-                    std::future_errc::no_state);
+                boost::throw_with_location(
+                    std::future_error{ std::future_errc::no_state });
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -177,8 +178,8 @@ namespace futures {
         wait() const {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception<std::future_error>(
-                    std::future_errc::no_state);
+                boost::throw_with_location(
+                    std::future_error{ std::future_errc::no_state });
             }
             if constexpr (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
@@ -214,8 +215,8 @@ namespace futures {
 
                 // Check if the sequence is valid
                 if (!valid()) {
-                    detail::throw_exception<std::future_error>(
-                        std::future_errc::no_state);
+                    boost::throw_with_location(
+                        std::future_error{ std::future_errc::no_state });
                 }
                 using duration_type = std::chrono::duration<Rep, Period>;
                 using namespace std::chrono;

@@ -10,7 +10,7 @@
 
 #include <futures/config.hpp>
 
-// Include
+// Include boost/mp11/algorithm.hpp from external or bundled boost 
 #if defined(FUTURES_HAS_BOOST)
 #include <boost/mp11/algorithm.hpp>
 #else

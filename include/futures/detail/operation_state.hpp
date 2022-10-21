@@ -22,6 +22,7 @@
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
+#include <futures/detail/deps/boost/throw_exception.hpp>
 #include <atomic>
 #include <future>
 #include <condition_variable>
@@ -311,7 +312,7 @@ namespace futures::detail {
         get_exception_ptr() const {
             auto lk = make_wait_lock();
             if (!is_ready()) {
-                detail::throw_exception<promise_uninitialized>();
+                boost::throw_with_location(promise_uninitialized{});
             }
             return except_;
         }
@@ -525,7 +526,7 @@ namespace futures::detail {
         void
         mark_exception_unsafe(std::exception_ptr except) {
             if (is_ready()) {
-                detail::throw_exception<promise_already_satisfied>();
+                boost::throw_with_location(promise_already_satisfied{});
             }
             except_ = std::move(except);
             mark_ready_unsafe();
@@ -832,7 +833,7 @@ namespace futures::detail {
         void
         set_value(Args &&...args) {
             if (this->is_ready()) {
-                detail::throw_exception<promise_already_satisfied>();
+                boost::throw_with_location(promise_already_satisfied{});
             }
             get_storage().set_value(std::forward<Args>(args)...);
             this->mark_ready();

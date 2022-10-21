@@ -8,9 +8,9 @@
 #ifndef FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 #define FUTURES_DETAIL_CONTAINER_ATOMIC_QUEUE_HPP
 
-#include <futures/detail/exception/throw_exception.hpp>
 #include <futures/detail/deps/boost/core/allocator_access.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/throw_exception.hpp>
 #include <atomic>
 #include <memory>
 
@@ -142,8 +142,8 @@ namespace futures::detail {
                     if (old_head == old_tail) {
                         if (!old_head_next) {
                             // both are dummy -> empty queue
-                            throw_exception<std::runtime_error>(
-                                "Attempting to pop from an empty queue");
+                            boost::throw_with_location(std::runtime_error{
+                                "Attempting to pop from an empty queue" });
                         }
                         // head == tail and not dummy -> race -> update tail
                         tail_.compare_exchange_strong(old_tail, old_head_next);

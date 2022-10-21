@@ -9,6 +9,7 @@
 #define FUTURES_DETAIL_OPERATION_STATE_STORAGE_HPP
 
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/throw_exception.hpp>
 #include <optional>
 #include <type_traits>
 
@@ -168,7 +169,7 @@ namespace futures::detail {
             if (data_) {
                 return *data_;
             }
-            detail::throw_exception<promise_uninitialized>();
+            boost::throw_with_location(promise_uninitialized{});
         }
     };
 

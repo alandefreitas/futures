@@ -20,7 +20,7 @@
 #if defined(ASIO_HAS_STD_CHRONO)
 # include <chrono>
 #elif defined(ASIO_HAS_BOOST_CHRONO)
-#include <futures/detail/bundled/boost/chrono/system_clocks.hpp>
+# include <boost/chrono/system_clocks.hpp>
 #endif // defined(ASIO_HAS_BOOST_CHRONO)
 
 namespace asio {
