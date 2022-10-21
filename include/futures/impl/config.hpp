@@ -46,12 +46,12 @@
  * We raise and create aliases for the asio or boost asio namespaces,
  * depending on what library we should use.
  */
-#ifdef FUTURES_USE_STANDALONE_ASIO
-namespace asio {}
-#else
+#ifdef FUTURES_USE_BOOST_ASIO
 namespace boost {
     namespace asio {}
 } // namespace boost
+#else
+namespace asio {}
 #endif
 
 // Include OS headers
@@ -60,10 +60,8 @@ namespace boost {
 #endif
 
 // Identify if the library is header-only
-#ifndef FUTURES_HEADER_ONLY
-#    ifndef FUTURES_SEPARATE_COMPILATION
-#        define FUTURES_HEADER_ONLY
-#    endif
+#if !defined(FUTURES_HEADER_ONLY) && !defined(FUTURES_SEPARATE_COMPILATION)
+#    define FUTURES_HEADER_ONLY
 #endif
 
 /*
@@ -79,10 +77,10 @@ namespace futures {
      */
 #if defined(FUTURES_DOXYGEN)
     namespace asio = __see_below__;
-#elif defined(FUTURES_USE_STANDALONE_ASIO)
-    namespace asio = ::asio;
-#else
+#elif defined(FUTURES_USE_BOOST_ASIO)
     namespace asio = ::boost::asio;
+#else
+    namespace asio = ::asio;
 #endif
 
     namespace detail {

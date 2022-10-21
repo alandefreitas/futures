@@ -15,7 +15,7 @@
 
 #if defined __CUDACC__
 //  NVIDIA CUDA C++ compiler for GPU
-#   include "futures/detail/bundled/boost/config/compiler/nvcc.hpp"
+#include <futures/detail/bundled/boost/config/compiler/nvcc.hpp>
 
 #endif
 

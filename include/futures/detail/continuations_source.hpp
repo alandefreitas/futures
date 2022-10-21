@@ -12,7 +12,6 @@
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/deps/asio/post.hpp>
-#include <futures/detail/deps/asio/use_future.hpp>
 #include <memory>
 #include <shared_mutex>
 

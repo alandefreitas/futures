@@ -2,6 +2,21 @@
 #include <array>
 #include <catch2/catch.hpp>
 
+#if defined(FUTURES_USE_STANDALONE_ASIO)
+#    include <asio/use_future.hpp>
+#elif defined(FUTURES_USE_BOOST_ASIO)
+#    include <boost/asio/use_future.hpp>
+#else
+#    define FUTURES_IGNORE_USE_FUTURE_TESTS
+#endif
+
+
+#if defined(FUTURES_USE_BOOST_ASIO)
+#    include <boost/asio/use_future.hpp>
+#elif defined(FUTURES_USE_STANDALONE_ASIO)
+#    include <asio/use_future.hpp>
+#endif
+
 TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
     using namespace futures;
 
@@ -23,11 +38,14 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
 
     constexpr int thread_pool_replicates = 100;
 
+#ifndef FUTURES_IGNORE_USE_FUTURE_TESTS
     SECTION("Default thread pool") {
         asio::thread_pool &pool = default_execution_context();
         asio::thread_pool::executor_type ex = pool.executor();
         for (int i = 0; i < thread_pool_replicates; ++i) {
-            auto f = asio::post(ex, asio::use_future([&i]() { return i * 2; }));
+            auto f = asio::post(ex, ::futures::asio::use_future([&i]() {
+                                    return i * 2;
+                                }));
             REQUIRE(await(f) == i * 2);
         }
     }
@@ -35,7 +53,9 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
     SECTION("Default executor") {
         asio::thread_pool::executor_type ex = make_default_executor();
         for (int i = 0; i < thread_pool_replicates; ++i) {
-            auto f = asio::post(ex, asio::use_future([&i]() { return i * 3; }));
+            auto f = asio::post(ex, ::futures::asio::use_future([&i]() {
+                                    return i * 3;
+                                }));
             REQUIRE(f.get() == i * 3);
         }
     }
@@ -48,16 +68,19 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
                 bool b = false;
                 std::future<void> f1;
                 std::future<void> f2;
-                asio::post(ex, asio::use_future([&] {
-                               f1 = asio::dispatch(ex, asio::use_future([&] {
-                                                       a = true;
-                                                   }));
-                               f2 = asio::dispatch(ex, asio::use_future([&] {
-                                                       b = true;
-                                                   }));
-                               REQUIRE(a);
-                               REQUIRE(b);
-                           }))
+                asio::post(
+                    ex,
+                    ::futures::asio::use_future(
+                        [&] {
+                    f1 = asio::dispatch(ex, ::futures::asio::use_future([&] {
+                                            a = true;
+                                        }));
+                    f2 = asio::dispatch(ex, ::futures::asio::use_future([&] {
+                                            b = true;
+                                        }));
+                    REQUIRE(a);
+                    REQUIRE(b);
+                    }))
                     .wait();
                 f1.wait();
                 f2.wait();
@@ -71,20 +94,23 @@ TEST_CASE(TEST_CASE_PREFIX "Asio default executors") {
                 bool b = false;
                 std::future<void> f1;
                 std::future<void> f2;
-                asio::post(ex, asio::use_future([&] {
-                               f1 = asio::defer(ex, asio::use_future([&] {
-                                                    a = true;
-                                                }));
-                               f2 = asio::defer(ex, asio::use_future([&] {
-                                                    b = true;
-                                                }));
-                               REQUIRE_FALSE(a);
-                               REQUIRE_FALSE(b);
-                           }))
+                asio::post(
+                    ex,
+                    ::futures::asio::use_future([&] {
+                        f1 = asio::defer(ex, ::futures::asio::use_future([&] {
+                                             a = true;
+                                         }));
+                        f2 = asio::defer(ex, ::futures::asio::use_future([&] {
+                                             b = true;
+                                         }));
+                        REQUIRE_FALSE(a);
+                        REQUIRE_FALSE(b);
+                    }))
                     .wait();
                 f1.wait();
                 f2.wait();
             }
         }
     }
+#endif
 }

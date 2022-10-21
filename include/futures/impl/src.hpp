@@ -14,11 +14,11 @@
 #    error Do not compile Futures library source with BOOST_ASIO_HEADER_ONLY defined
 #endif
 
-#if FUTURES_USE_BUNDLED_ASIO && FUTURES_SEPARATE_COMPILATION
+#if defined(FUTURES_USE_BUNDLED_ASIO) && defined(FUTURES_SEPARATE_COMPILATION)
 #    ifdef _WIN32
 #        include <SDKDDKVer.h>
 #    endif
-#include <futures/detail/deps/boost/asio/impl/src.hpp>
+#include <futures/detail/deps/asio/impl/src.hpp>
 #endif
 
 // #glob <futures/**/**.ipp>

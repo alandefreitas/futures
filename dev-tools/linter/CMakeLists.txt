@@ -19,8 +19,9 @@ target_compile_features(linter PUBLIC cxx_std_17)
 set(DEP_INCLUDE_DIRS)
 if (Boost_FOUND)
     set(DEP_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
-    # We don't include standalone asio here because we always bundle from
-    # boost if we have to.
+endif()
+if (Asio_FOUND AND asio_SOURCE_DIR)
+    set(DEP_INCLUDE_DIRS ${DEP_INCLUDE_DIRS} ${asio_SOURCE_DIR}/asio/include)
 endif()
 
 # Generate a single-header version of futures
@@ -36,7 +37,7 @@ add_custom_target(
         # Directory for a our bundled dependencies
         --bundled_deps_path "${FUTURES_ROOT_DIR}/include/futures/detail/bundled"
         # Directory prefixes we sould ignore when bundling external headers
-        --bundle_ignore_prefix "arpa" "linux" "net" "netinet" "windows.h" "android" "winerror" "netdb"
+        --bundle_ignore_prefix "arpa" "linux" "net" "netinet" "windows.h" "android" "winerror" "netdb" "valgrind"
         # Linter options
         --show_progress
         # CMake command options
