@@ -27,6 +27,7 @@
 #include <futures/adaptor/detail/make_continuation_state.hpp>
 #include <futures/adaptor/detail/next_future_traits.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/core/noncopyable.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <functional>
 #include <utility>
@@ -85,7 +86,11 @@ namespace futures {
      *
      */
     template <class R, class Options = future_options<>>
-    class basic_future : private detail::maybe_copyable<Options::is_shared> {
+    class basic_future
+        : private std::conditional_t<
+              !Options::is_shared,
+              boost::noncopyable,
+              boost::empty_init_t> {
     private:
         /**
          * Private types
@@ -236,8 +241,7 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(shared_state_type const &s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ s } {}
+            : state_{ s } {}
 
         /// Construct future from an rvalue shared operation state
         /**
@@ -258,8 +262,7 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(shared_state_type &&s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ std::move(s) } {}
+            : state_{ std::move(s) } {}
 
         /// Construct from an inline operation state
         /**
@@ -288,8 +291,7 @@ namespace futures {
          * @param op Future inline operation state
          */
         explicit basic_future(operation_state_type &&op) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ std::move(op) } {}
+            : state_{ std::move(op) } {}
 
         /// Construct from an direct operation state storage
         /**
@@ -306,8 +308,7 @@ namespace futures {
          * @param op Future inline operation state
          */
         explicit basic_future(detail::operation_state_storage<R> &&op) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ std::move(op) } {}
+            : state_{ std::move(op) } {}
 
         /// Construct future from a variant future operation state
         /**
@@ -319,8 +320,7 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(future_state_type const &s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ s } {}
+            : state_{ s } {}
 
         /// Construct future from an rvalue variant future operation state
         /**
@@ -332,8 +332,7 @@ namespace futures {
          * @param s Future shared state
          */
         explicit basic_future(future_state_type &&s) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ std::move(s) } {}
+            : state_{ std::move(s) } {}
 
         /// Construct a ready future from a value_type
         /**
@@ -352,8 +351,7 @@ namespace futures {
 #endif
             >
         explicit basic_future(T &&v) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{
+            : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)
             } {
@@ -422,8 +420,7 @@ namespace futures {
          * After construction, other.valid() == false.
          */
         basic_future(basic_future &&other) noexcept
-            : detail::maybe_copyable<Options::is_shared>{}
-            , state_{ std::move(other.state_) }
+            : state_{ std::move(other.state_) }
             , join_{ std::exchange(other.join_, false) } {}
 
         /// Move assignment.

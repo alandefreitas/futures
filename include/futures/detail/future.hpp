@@ -18,25 +18,6 @@ namespace futures::detail {
     struct is_executor_opt<executor_opt<T>> {
         static constexpr bool value = true;
     };
-
-    template <bool allow_copy>
-    struct maybe_copyable {
-    protected:
-        maybe_copyable() = default;
-        ~maybe_copyable() = default;
-    };
-
-    template <>
-    struct maybe_copyable<false> {
-        maybe_copyable() = default;
-        maybe_copyable(maybe_copyable const&) = delete;
-        maybe_copyable&
-        operator=(maybe_copyable const&)
-            = delete;
-
-    protected:
-        ~maybe_copyable() = default;
-    };
 }
 
 #endif // FUTURES_DETAIL_FUTURE_HPP
