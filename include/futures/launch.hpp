@@ -13,6 +13,7 @@
 #include <futures/future.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/detail/future_launcher.hpp>
+#include <futures/detail/launch.hpp>
 #include <futures/detail/traits/is_future_options.hpp>
 #include <futures/detail/traits/launch_result.hpp>
 #include <futures/detail/deps/asio/defer.hpp>
@@ -26,6 +27,7 @@ namespace futures {
     /** @addtogroup launch Launch
      *  @{
      */
+
     /** @addtogroup launch-algorithms Launch Algorithms
      *
      * \brief Function to launch and schedule future tasks
@@ -40,62 +42,6 @@ namespace futures {
      *
      *  @{
      */
-
-    namespace detail {
-        /// Determine the options for a basic_future returned from async
-        template <class Executor, class Function, class... Args>
-        struct async_future_options {
-            using type = conditional_append_future_option_t<
-                std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
-                stoppable_opt,
-                future_options<executor_opt<Executor>, continuable_opt>>;
-            static_assert(is_future_options_v<type>);
-        };
-
-        template <class Executor, class Function, class... Args>
-        using async_future_options_t =
-            typename async_future_options<Executor, Function, Args...>::type;
-
-        /// Determine the options for a basic_future returned from schedule
-        template <class Executor, class Function, class... Args>
-        struct schedule_future_options {
-        private:
-            // base options
-            using base_options = future_options<executor_opt<Executor>>;
-            static_assert(is_future_options_v<base_options>);
-
-            // maybe include stop token
-            using maybe_stoppable_options = conditional_append_future_option_t<
-                std::is_invocable_v<std::decay_t<Function>, stop_token, Args...>,
-                stoppable_opt,
-                future_options<executor_opt<Executor>>>;
-            static_assert(is_future_options_v<maybe_stoppable_options>);
-
-            // include deferred option
-            using deferred_options = append_future_option_t<
-                always_deferred_opt,
-                maybe_stoppable_options>;
-            static_assert(is_future_options_v<deferred_options>);
-
-            // include deferred function type
-            using typed_deferred_function = std::conditional_t<
-                sizeof...(Args) == 0,
-                Function,
-                bind_deferred_state_args<Function, Args...>>;
-            static_assert(std::is_invocable_v<typed_deferred_function>);
-            using typed_deferred_options = append_future_option_t<
-                deferred_function_opt<typed_deferred_function>,
-                deferred_options>;
-            static_assert(is_future_options_v<typed_deferred_options>);
-        public:
-            using type = typed_deferred_options;
-            static_assert(is_future_options_v<type>);
-        };
-
-        template <class Executor, class Function, class... Args>
-        using schedule_future_options_t =
-            typename schedule_future_options<Executor, Function, Args...>::type;
-    } // namespace detail
 
     /// Launch an asynchronous task with the specified executor
     /**

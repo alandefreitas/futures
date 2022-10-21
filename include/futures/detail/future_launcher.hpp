@@ -11,8 +11,10 @@
 #include <futures/stop_token.hpp>
 #include <futures/traits/future_value.hpp>
 #include <futures/detail/continuations_source.hpp>
+#include <futures/detail/launch.hpp>
 #include <futures/detail/shared_state.hpp>
 #include <futures/detail/traits/launch_result.hpp>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 
 namespace futures::detail {
     /// A functor to launch and schedule new futures
@@ -103,9 +105,12 @@ namespace futures::detail {
         make_initial_state(Executor const& ex, Function&& f, Args&&... args)
             const {
             using operation_state_t = operation_state<ValueType, FutureOptions>;
-            (void) f;
-            ((void) args, ...);
-            return std::make_shared<operation_state_t>(ex);
+            // An eager operation state doesn't store the function and its
+            // arguments
+            boost::ignore_unused(f, args...);
+            return std::allocate_shared<operation_state_t>(
+                default_futures_allocator<operation_state_t>{},
+                ex);
         }
 
         template <

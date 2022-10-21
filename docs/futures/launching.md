@@ -199,13 +199,29 @@ end
 </div>
 
 In the general case, the operation state needs a stable address so that futures and promises can access it. In turn,
-this requires dynamic allocation of this shared state. For smaller tasks, the cost of this allocation might dominate the
-time spent by the parallel task.
+this requires dynamic memory allocations of this shared state. For smaller tasks, the cost of this allocation might
+dominate the time spent by the parallel task.
 
-For this reason, functions used for launching futures allow custom memory allocators for the shared tasks. Because a
-chain of futures implicitly work as task queue, simple and efficient linear allocators can reduce this allocation cost
-reasonably. When no allocator is provided to launching functions, such an optimized allocator is provided for the
-allocating the operation state.
+For this reason, functions used for launching futures allow custom memory allocators for eager tasks. When no
+allocator is provided for launching tasks, an optimized memory pool allocator is provided for the operation state.
+
+<div class="mermaid">
+graph LR
+F[Future] --> |read|S1[Shared State Pointer]
+T[Promise] --> |write|S2[Shared State Pointer]
+subgraph Shared State
+S1 --> O[Operation State 1]
+S2 --> O[Operation State 1]
+end
+P[Memory Pool] -.-> |owns|O[Operation State 1]
+P[Memory Pool] -.-> |owns|O2[Operation State 2]
+P[Memory Pool] -.-> |owns|O3[Operation State 3]
+P[Memory Pool] -.-> |owns|Odots[...]
+P[Memory Pool] -.-> |owns|ON[Operation State N]
+</div>
+
+The memory pool allows fast dynamic memory allocation and provides better cache locality for accessing the tasks
+and their results. 
 
 However, in some circumstances, the library implements a few optimizations to avoid allocations altogether. In the
 following example, we have a deferred future where no allocations are required.
