@@ -8,9 +8,14 @@
 #ifndef FUTURES_ALGORITHM_FIND_IF_HPP
 #define FUTURES_ALGORITHM_FIND_IF_HPP
 
-#include <futures/futures.hpp>
+#include <futures/future.hpp>
+#include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/traits/is_forward_iterator.hpp>
+#include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
+#include <futures/detail/container/atomic_queue.hpp>
+#include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <bitset>
 #include <execution>
 #include <variant>

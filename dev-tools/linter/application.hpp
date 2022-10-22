@@ -77,7 +77,10 @@ private:
     }
 
     static std::string
-    generate_include_guard(fs::path const& p, const fs::path& parent);
+    generate_include_guard(fs::path const& p, fs::path const& parent);
+
+    void
+    generate_unit_test(fs::path const& p, fs::path const& parent);
 
     // Configuration
     config config_;

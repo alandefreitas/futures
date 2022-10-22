@@ -8,6 +8,8 @@
 #ifndef FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 #define FUTURES_DETAIL_WAITER_FOR_ANY_HPP
 
+#include <futures/future.hpp>
+#include <futures/launch.hpp>
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/thread/lock.hpp>
 #include <utility>

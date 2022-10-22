@@ -13,6 +13,7 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/deps/asio/post.hpp>
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 
 namespace futures::detail {

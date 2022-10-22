@@ -8,9 +8,13 @@
 #ifndef FUTURES_ALGORITHM_REDUCE_HPP
 #define FUTURES_ALGORITHM_REDUCE_HPP
 
-#include <futures/futures.hpp>
+#include <futures/future.hpp>
+#include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
+#include <futures/algorithm/traits/is_forward_iterator.hpp>
+#include <futures/algorithm/traits/iter_difference.hpp>
+#include <futures/detail/container/atomic_queue.hpp>
 #include <execution>
 #include <numeric>
 #include <variant>

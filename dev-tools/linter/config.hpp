@@ -16,6 +16,11 @@ struct config {
     // Input paths
     std::vector<fs::path> include_paths;
 
+    // Unit tests
+    fs::path unit_test_path;
+    fs::path unit_test_template;
+    std::vector<std::string> unit_test_ignore_paths;
+
     // Dependency include paths
     std::vector<fs::path> dep_include_paths;
 
@@ -76,6 +81,8 @@ struct config {
 
     // Ensure the main headers do include all other headers
     bool update_main_headers{ true };
+
+
 };
 
 bool

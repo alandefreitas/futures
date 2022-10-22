@@ -99,6 +99,23 @@ parse(config &c, const std::vector<std::string_view> &args) {
         return false;
     }
 
+    auto [unit_test_ignore_paths_begin, unit_test_ignore_paths_end] = get_values(
+        "unit_test_ignore_paths");
+    c.unit_test_ignore_paths = std::vector<std::string>{ unit_test_ignore_paths_begin, unit_test_ignore_paths_end };
+    if (c.unit_test_ignore_paths.empty()) {
+        std::cerr << "No unit test ignore path segments provided\n";
+    }
+
+    auto [unit_test_path_begin, unit_test_path_end] = get_values(
+        "unit_test_path");
+    if (unit_test_path_begin != unit_test_path_end)
+        c.unit_test_path = *unit_test_path_begin;
+
+    auto [unit_test_template_begin, unit_test_template_end] = get_values(
+        "unit_test_template");
+    if (unit_test_template_begin != unit_test_template_end)
+        c.unit_test_template = *unit_test_template_begin;
+
     auto [deps_headers_path_begin, deps_headers_path_end] = get_values(
         "deps_headers_path");
     if (deps_headers_path_begin != deps_headers_path_end) {

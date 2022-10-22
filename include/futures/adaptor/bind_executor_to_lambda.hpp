@@ -10,6 +10,7 @@
 
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/traits/is_callable.hpp>
+#include <functional>
 #include <type_traits>
 
 namespace futures {

@@ -8,7 +8,6 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_TRAITS_BINARY_INVOKE_ALGORITHM_HPP
 
-#include <futures/futures.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>

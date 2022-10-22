@@ -8,7 +8,6 @@
 #ifndef FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 #define FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 
-#include <futures/futures.hpp>
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>

@@ -1,9 +1,7 @@
-#include <futures/futures.hpp>
+#include <futures/algorithm.hpp>
+//
 #include <array>
 #include <catch2/catch.hpp>
-#ifndef FUTURES_IS_SINGLE_HEADER
-#    include <futures/algorithm.hpp>
-#endif
 
 template <class Fn, class R, class Cb, class CheckCb>
 void
@@ -281,7 +279,7 @@ test_value_cmp(Fn fn, R&& r, T&& t, Result const& exp) {
     }
 }
 
-TEST_CASE(TEST_CASE_PREFIX "Async algorithm") {
+TEST_CASE("Async algorithm") {
     using namespace futures;
 
     SECTION("for_each") {
@@ -395,13 +393,13 @@ my_function() {
     }
 }
 
-TEST_CASE(TEST_CASE_PREFIX "Is constant evaluated") {
+TEST_CASE("Is constant evaluated") {
     constexpr int v = my_function();
     INFO(v);
     REQUIRE(v == 1);
 }
 
-TEST_CASE(TEST_CASE_PREFIX "constexpr algorithms") {
+TEST_CASE("constexpr algorithms") {
     constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 
     constexpr auto is_odd = [](int x) {

@@ -30,6 +30,10 @@ add_custom_target(
         COMMAND linter
         # Source include dirs
         --include_paths "${FUTURES_ROOT_DIR}/include"
+        # Directory for a our bundled dependencies
+        --unit_test_path "${FUTURES_ROOT_DIR}/tests/unit"
+        --unit_test_template "${FUTURES_ROOT_DIR}/dev-tools/linter/test_template.cpp"
+        --unit_test_ignore_paths "detail" "impl"
         # Dependency include dirs, so we can copy files from there
         --dep_include_paths ${DEP_INCLUDE_DIRS}
         # Directory with includes for our bundled dependencies

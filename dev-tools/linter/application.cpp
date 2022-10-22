@@ -98,6 +98,7 @@ application::sanitize_all() {
         // Lint file
         sanitize_include_guards(p, parent, content);
         bundle_includes(p, parent, content);
+        generate_unit_test(p, parent);
 
         // Save results
         std::ofstream fout(p);
@@ -389,15 +390,17 @@ application::bundle_includes(
             }
 
             // Check if this is an interdependency include
-            if (is_parent(config_.bundled_deps_path, p))
-            {
+            if (is_parent(config_.bundled_deps_path, p)) {
                 fs::path rel_this = fs::relative(p, config_.bundled_deps_path);
                 auto [this_file_path, exists_in_deps2]
                     = find_file(config_.dep_include_paths, rel_this);
-                auto it0 = find_parent_path(config_.dep_include_paths, this_file_path);
-                auto it1 = find_parent_path(config_.dep_include_paths, abs_file_path);
-                if (it0 != it1)
-                {
+                auto it0 = find_parent_path(
+                    config_.dep_include_paths,
+                    this_file_path);
+                auto it1 = find_parent_path(
+                    config_.dep_include_paths,
+                    abs_file_path);
+                if (it0 != it1) {
                     trace(
                         as_path,
                         "is doesn't belong to the same dependency as",
@@ -610,5 +613,77 @@ application::remove_unused_bundled_headers() {
     }
     for (auto &p: empty_dirs) {
         fs::remove(p);
+    }
+}
+
+void
+application::generate_unit_test(fs::path const &p, fs::path const &parent) {
+    if (config_.unit_test_template.empty()
+        || !fs::exists(config_.unit_test_template))
+        return;
+
+    if (std::any_of(p.begin(), p.end(), [this](auto &p) {
+            return std::any_of(
+                config_.unit_test_ignore_paths.begin(),
+                config_.unit_test_ignore_paths.end(),
+                [&p](auto i) { return i == p; });
+        }))
+        return;
+
+    std::ifstream f(config_.unit_test_template);
+    std::string content{ std::istreambuf_iterator<char>(f),
+                         std::istreambuf_iterator<char>() };
+
+    fs::path rel_p = fs::relative(p, parent);
+    std::string rel_p_str = rel_p.u8string();
+    fs::path testcase_name_path;
+    for (auto it = std::next(rel_p.begin()); it != rel_p.end(); ++it) {
+        testcase_name_path /= *it;
+    }
+    testcase_name_path.replace_extension("cpp");
+    std::string testcase_name
+        = fs::path(testcase_name_path).replace_extension().u8string();
+    std::transform(
+        testcase_name.begin(),
+        testcase_name.end(),
+        testcase_name.begin(),
+        [](char x) {
+        if ((x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z')
+            || (x >= '0' && x <= '9'))
+            return x;
+        else
+            return ' ';
+        });
+
+    auto search_begin(content.cbegin());
+    std::smatch var_match;
+    std::regex template_var("@([a-zA-Z0-9_/\\. ]+)@");
+    while (
+        std::regex_search(search_begin, content.cend(), var_match, template_var))
+    {
+        auto begin_offset = var_match[0].first - content.cbegin();
+        if (var_match[1] == "FILENAME") {
+            content.replace(var_match[0].first, var_match[0].second, rel_p_str);
+            search_begin = content.cbegin() + begin_offset
+                           + (config_.dry_run ? var_match[0].length() :
+                                                rel_p_str.size());
+        } else if (var_match[1] == "TESTNAME") {
+            content
+                .replace(var_match[0].first, var_match[0].second, testcase_name);
+            search_begin = content.cbegin() + begin_offset
+                           + (config_.dry_run ? var_match[0].length() :
+                                                testcase_name.size());
+        } else {
+            search_begin = var_match[0].second;
+        }
+    }
+    fs::path dest = config_.unit_test_path / testcase_name_path;
+    if (config_.dry_run) {
+        log(content);
+    } else if (!fs::exists(dest)) {
+        log("Create ", dest);
+        fs::create_directories(dest.parent_path());
+        std::ofstream fout(dest);
+        fout << content;
     }
 }

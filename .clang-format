@@ -184,7 +184,7 @@ IncludeCategories: # config < internal < detail < external < C++
     Priority:        3
   - Regex:           '^["<]futures/'                      # internal headers
     Priority:        4
-  - Regex:           '^(["<](boost|small|asio)/)'         # external headers
+  - Regex:           '^(["<](boost|small|asio|catch2)/)'  # external headers
     Priority:        8
   - Regex:           '<[[:alnum:].]+>'                    # C++ headers
     Priority:        9

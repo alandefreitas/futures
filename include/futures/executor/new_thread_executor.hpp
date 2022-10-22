@@ -9,6 +9,7 @@
 #define FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 
 #include <futures/config.hpp>
+#include <futures/launch.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/deps/asio/execution.hpp>

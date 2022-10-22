@@ -8,7 +8,6 @@
 #ifndef FUTURES_ALGORITHM_COUNT_HPP
 #define FUTURES_ALGORITHM_COUNT_HPP
 
-#include <futures/futures.hpp>
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/count_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>

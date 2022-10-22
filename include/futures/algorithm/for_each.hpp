@@ -8,8 +8,10 @@
 #ifndef FUTURES_ALGORITHM_FOR_EACH_HPP
 #define FUTURES_ALGORITHM_FOR_EACH_HPP
 
-#include <futures/futures.hpp>
+#include <futures/future.hpp>
+#include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>

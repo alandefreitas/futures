@@ -38,117 +38,151 @@ ProcessorCount(N_PROCESSORS)
 # Macro to create test targets and register with ctest
 # First parameter: filename without extension
 # Other parameters: libraries to link in this test (if empty, it links libcppm)
-macro(add_futures_test TEST_NAME)
-    # Identify libraries to link with, or link to futures
-    set(EXTRA_MACRO_ARGS ${ARGN})
-    list(LENGTH EXTRA_MACRO_ARGS NUM_EXTRA_ARGS)
-    if (${NUM_EXTRA_ARGS} GREATER 0)
-        set(LINK_LIBS ${ARGN})
+macro(add_futures_test TEST_FILE)
+    # Create a name for the test
+    string(REPLACE "/" "_" CMAKE_TEST_NAME ${TEST_FILE})
+    string(REPLACE ".cpp" "" CMAKE_TEST_NAME ${CMAKE_TEST_NAME})
+    set(CMAKE_TEST_NAME ut_${CMAKE_TEST_NAME})
+
+    # Create test
+    add_executable(${CMAKE_TEST_NAME} ${TEST_FILE})
+    target_link_libraries(${CMAKE_TEST_NAME} PUBLIC futures catch_main)
+
+    # Test compile options
+    if (GCC)
+        # A GCC bug on some tests that conflict with boost.container
+        target_compile_options(${CMAKE_TEST_NAME} INTERFACE -Wno-error=uninitialized -Wno-error=maybe-uninitialized)
+    endif ()
+    if (FUTURES_TESTS_SMALL_POOL)
+        target_compile_definitions(${CMAKE_TEST_NAME} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
     endif ()
 
-    # Check if these libraries really exist
-    set(LINK_LIBS_EXIST TRUE)
-    foreach (LINK_LIB ${LINK_LIBS})
-        if (NOT TARGET ${LINK_LIB})
-            set(LINK_LIBS_EXIST FALSE)
-            break()
-        endif ()
-    endforeach ()
-
-    if (LINK_LIBS_EXIST)
-        # Define test target variants
-        string(REPLACE "/" "_" CMAKE_TEST_NAME ${TEST_NAME})
-        set(TEST_NAME_VARIANTS "")
-        if (asio_FOUND OR Asio_FOUND)
-            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_asio)
-        endif ()
-        if (Boost_FOUND)
-            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_boost)
-        endif ()
-        if (N_PROCESSORS GREATER 1)
-            list(APPEND TEST_NAME_VARIANTS ${CMAKE_TEST_NAME}_small_pool)
-        endif ()
-
-        # Create executables for each variant
-        foreach (TEST_NAME_VARIANT ${TEST_NAME_VARIANTS})
-
-            # Create executable for test
-            add_executable(ut_${TEST_NAME_VARIANT} ${TEST_NAME}.cpp)
-
-            # Link with catch-main
-            target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC ${LINK_LIBS} catch_main)
-
-            if (GCC)
-                # A GCC bug on some tests that conflict with boost.container
-                target_compile_options(ut_${TEST_NAME_VARIANT} INTERFACE -Wno-error=uninitialized -Wno-error=maybe-uninitialized)
-            endif ()
-
-            # Link futures
-            if (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_asio)
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_asio)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Asio ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_boost)
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures_boost)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Boost ")
-            elseif (${TEST_NAME_VARIANT} STREQUAL ${CMAKE_TEST_NAME}_small_pool)
-                target_link_libraries(ut_${TEST_NAME_VARIANT} PUBLIC futures)
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} PUBLIC TEST_CASE_PREFIX="Small pool ")
-                target_compile_definitions(ut_${TEST_NAME_VARIANT} INTERFACE FUTURES_DEFAULT_THREAD_POOL_SIZE=1)
-            endif ()
-
-            # Register with ctest
-            if (FUTURES_CATCH2_REPORTER STREQUAL "console")
-                # This is the default normally used for local tests
-                catch_discover_tests(ut_${TEST_NAME_VARIANT})
-            else ()
-                # This is custom reporter (usually junit) normally used for CI
-                if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/reports)
-                    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/reports)
-                endif ()
-                catch_discover_tests(
-                        ut_${TEST_NAME_VARIANT}
-                        REPORTER ${FUTURES_CATCH2_REPORTER}
-                        OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/reports
-                        OUTPUT_SUFFIX ".${FUTURES_CATCH2_REPORTER}"
-                )
-            endif ()
-        endforeach ()
+    # Register with ctest
+    if (FUTURES_CATCH2_REPORTER STREQUAL "console")
+        # This is the default normally used for local tests
+        catch_discover_tests(${CMAKE_TEST_NAME})
     else ()
-        # Library not found. Throw.
-        message(FATAL_ERROR "${LINK_LIBS} does not exist")
+        # This is custom reporter (usually junit) used in CI
+        # The junit-report action provides feedback on the tests
+        if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/reports)
+            file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/reports)
+        endif ()
+        catch_discover_tests(
+                ${CMAKE_TEST_NAME}
+                REPORTER ${FUTURES_CATCH2_REPORTER}
+                OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/reports
+                OUTPUT_SUFFIX ".${FUTURES_CATCH2_REPORTER}"
+        )
     endif ()
 endmacro()
 
 ######################################################
 # Separate CMake tests                               #
 ######################################################
+add_futures_test(adaptor.cpp)
+add_futures_test(algorithm.cpp)
+add_futures_test(await.cpp)
+add_futures_test(config.cpp)
+add_futures_test(executor.cpp)
+add_futures_test(future.cpp)
+add_futures_test(future_error.cpp)
+add_futures_test(future_options.cpp)
+add_futures_test(future_options_args.cpp)
+add_futures_test(futures.cpp)
+add_futures_test(is_ready.cpp)
+add_futures_test(launch.cpp)
+add_futures_test(packaged_task.cpp)
+add_futures_test(promise.cpp)
+add_futures_test(stop_token.cpp)
+add_futures_test(wait_for_all.cpp)
+add_futures_test(wait_for_any.cpp)
+add_futures_test(adaptor/bind_executor_to_lambda.cpp)
+add_futures_test(adaptor/make_ready_future.cpp)
+add_futures_test(adaptor/then.cpp)
+add_futures_test(adaptor/when_all.cpp)
+add_futures_test(adaptor/when_any.cpp)
+add_futures_test(adaptor/detail/continue.cpp)
+add_futures_test(algorithm/all_of.cpp)
+add_futures_test(algorithm/any_of.cpp)
+add_futures_test(algorithm/count.cpp)
+add_futures_test(algorithm/count_if.cpp)
+add_futures_test(algorithm/find.cpp)
+add_futures_test(algorithm/find_if.cpp)
+add_futures_test(algorithm/find_if_not.cpp)
+add_futures_test(algorithm/for_each.cpp)
+add_futures_test(algorithm/none_of.cpp)
+add_futures_test(algorithm/policies.cpp)
+add_futures_test(algorithm/reduce.cpp)
+add_futures_test(algorithm/comparisons/compare_three_way.cpp)
+add_futures_test(algorithm/comparisons/equal_to.cpp)
+add_futures_test(algorithm/comparisons/greater.cpp)
+add_futures_test(algorithm/comparisons/greater_equal.cpp)
+add_futures_test(algorithm/comparisons/less.cpp)
+add_futures_test(algorithm/comparisons/less_equal.cpp)
+add_futures_test(algorithm/comparisons/not_equal_to.cpp)
+add_futures_test(algorithm/partitioner/partitioner.cpp)
+add_futures_test(algorithm/traits/binary_invoke_algorithm.cpp)
+add_futures_test(algorithm/traits/is_assignable_from.cpp)
+add_futures_test(algorithm/traits/is_constructible_from.cpp)
+add_futures_test(algorithm/traits/is_convertible_to.cpp)
+add_futures_test(algorithm/traits/is_copyable.cpp)
+add_futures_test(algorithm/traits/is_default_initializable.cpp)
+add_futures_test(algorithm/traits/is_derived_from.cpp)
+add_futures_test(algorithm/traits/is_equality_comparable.cpp)
+add_futures_test(algorithm/traits/is_equality_comparable_with.cpp)
+add_futures_test(algorithm/traits/is_forward_iterator.cpp)
+add_futures_test(algorithm/traits/is_incrementable.cpp)
+add_futures_test(algorithm/traits/is_indirectly_binary_invocable.cpp)
+add_futures_test(algorithm/traits/is_indirectly_readable.cpp)
+add_futures_test(algorithm/traits/is_indirectly_unary_invocable.cpp)
+add_futures_test(algorithm/traits/is_input_iterator.cpp)
+add_futures_test(algorithm/traits/is_input_or_output_iterator.cpp)
+add_futures_test(algorithm/traits/is_input_range.cpp)
+add_futures_test(algorithm/traits/is_movable.cpp)
+add_futures_test(algorithm/traits/is_move_constructible.cpp)
+add_futures_test(algorithm/traits/is_partially_ordered_with.cpp)
+add_futures_test(algorithm/traits/is_range.cpp)
+add_futures_test(algorithm/traits/is_regular.cpp)
+add_futures_test(algorithm/traits/is_semiregular.cpp)
+add_futures_test(algorithm/traits/is_sentinel_for.cpp)
+add_futures_test(algorithm/traits/is_swappable.cpp)
+add_futures_test(algorithm/traits/is_totally_ordered.cpp)
+add_futures_test(algorithm/traits/is_totally_ordered_with.cpp)
+add_futures_test(algorithm/traits/is_weakly_equality_comparable.cpp)
+add_futures_test(algorithm/traits/is_weakly_incrementable.cpp)
+add_futures_test(algorithm/traits/iter_difference.cpp)
+add_futures_test(algorithm/traits/iter_reference.cpp)
+add_futures_test(algorithm/traits/iter_rvalue_reference.cpp)
+add_futures_test(algorithm/traits/iter_value.cpp)
+add_futures_test(algorithm/traits/iterator.cpp)
+add_futures_test(algorithm/traits/range_value.cpp)
+add_futures_test(algorithm/traits/remove_cvref.cpp)
+add_futures_test(algorithm/traits/unary_invoke_algorithm.cpp)
+add_futures_test(algorithm/traits/value_cmp_algorithm.cpp)
+add_futures_test(executor/default_executor.cpp)
+add_futures_test(executor/inline_executor.cpp)
+add_futures_test(executor/is_executor.cpp)
+add_futures_test(executor/new_thread_executor.cpp)
+add_futures_test(traits/future_value.cpp)
+add_futures_test(traits/has_executor.cpp)
+add_futures_test(traits/has_ready_notifier.cpp)
+add_futures_test(traits/has_stop_token.cpp)
+add_futures_test(traits/is_always_deferred.cpp)
+add_futures_test(traits/is_continuable.cpp)
+add_futures_test(traits/is_future.cpp)
+add_futures_test(traits/is_shared_future.cpp)
+add_futures_test(traits/is_stoppable.cpp)
+add_futures_test(detail/utility/compressed_tuple.cpp)
+add_futures_test(detail/container/queue.cpp)
+add_futures_test(detail/operation_state.cpp)
 
-# Detail
-add_futures_test(detail/utility/compressed_tuple)
-add_futures_test(asio_executors)
-add_futures_test(queue)
-add_futures_test(operation_state)
+# Others: Algorithms
 
-# Futures
-add_futures_test(futures_types)
-add_futures_test(make_ready)
-add_futures_test(exceptions)
-add_futures_test(launch)
-add_futures_test(wait)
-
-# Extensions
-add_futures_test(shared_futures)
-add_futures_test(cancel_futures)
-add_futures_test(continuation_stop)
-
-# Adaptors
-add_futures_test(adaptor/detail/continue)
-add_futures_test(continuations)
-add_futures_test(conjunction)
-add_futures_test(disjunction)
-
-# Algorithms
-add_futures_test(algorithm)
+if (FUTURES_BUILD_SINGLE_HEADER)
+    add_executable(ut_single_header single_header.cpp)
+    target_link_libraries(ut_single_header PUBLIC catch_main)
+    target_link_libraries(ut_single_header PUBLIC futures::single_header)
+endif ()
 
 #####################################################
 # All tests as a single target                      #

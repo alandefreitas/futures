@@ -7,7 +7,7 @@
 
 #define REQUIRE_SAME(A, B) STATIC_REQUIRE(std::is_same_v<A, B>)
 
-TEST_CASE(TEST_CASE_PREFIX "Continuation traits") {
+TEST_CASE("Continuation traits") {
     using namespace futures;
     using namespace futures::detail;
     SECTION("LR-values") {

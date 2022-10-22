@@ -1,7 +1,7 @@
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <catch2/catch.hpp>
 
-TEST_CASE(TEST_CASE_PREFIX "Compressed tuple") {
+TEST_CASE("Compressed tuple") {
     using namespace futures::detail;
     compressed_tuple<int, double, double> ct;
     REQUIRE(ct.get<0>() == 0);

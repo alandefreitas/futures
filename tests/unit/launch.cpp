@@ -1,9 +1,10 @@
-#include <futures/futures.hpp>
+#include <futures/launch.hpp>
+//
+#include <catch2/catch.hpp>
 #include <array>
 #include <string>
-#include <catch2/catch.hpp>
 
-TEST_CASE(TEST_CASE_PREFIX "Launch") {
+TEST_CASE("Launch") {
     using namespace futures;
 
     STATIC_REQUIRE(!std::is_copy_constructible_v<cfuture<void>>);

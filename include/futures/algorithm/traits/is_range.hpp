@@ -9,6 +9,7 @@
 #define FUTURES_ALGORITHM_TRAITS_IS_RANGE_HPP
 
 #include <type_traits>
+#include <iterator>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms

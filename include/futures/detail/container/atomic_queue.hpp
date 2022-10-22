@@ -13,6 +13,7 @@
 #include <futures/detail/deps/boost/throw_exception.hpp>
 #include <atomic>
 #include <memory>
+#include <stdexcept>
 
 namespace futures::detail {
     template <class T>
