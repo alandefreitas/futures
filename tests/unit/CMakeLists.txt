@@ -176,14 +176,6 @@ add_futures_test(detail/utility/compressed_tuple.cpp)
 add_futures_test(detail/container/queue.cpp)
 add_futures_test(detail/operation_state.cpp)
 
-# Others: Algorithms
-
-if (FUTURES_BUILD_SINGLE_HEADER)
-    add_executable(ut_single_header single_header.cpp)
-    target_link_libraries(ut_single_header PUBLIC catch_main)
-    target_link_libraries(ut_single_header PUBLIC futures::single_header)
-endif ()
-
 #####################################################
 # All tests as a single target                      #
 #####################################################

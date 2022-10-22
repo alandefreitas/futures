@@ -4,25 +4,15 @@
 
 !!! example ""
 
-    === "Single header"
-
-        [=0% "Just checking it out"]
- 
-        You can copy the single-header file from our [release page](https://github.com/alandefreitas/futures/releases)
-        and include it in your project.
-
-        The single-header version of the library is intended for immediate experimentation, and use cases like 
-        [Compiler Explorer](https://godbolt.org/z/fbjEqjer1).
-
     === "Header only"
     
-        [=20% "Piece of Cake"]
+        [=0% "Easy"]
 
         You can use the library by simply copying the contents from the `include` directory into your project.
 
     === "CMake"
     
-        [=40% "Easy and faster"]
+        [=33% "Easy and faster"]
 
         === "Add subdirectory"
     
@@ -101,7 +91,7 @@
 
     === "Packages"
     
-        [=80% "Not available for all platforms"]
+        [=66% "Not available for all platforms"]
 
         !!! note
     

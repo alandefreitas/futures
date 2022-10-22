@@ -18,9 +18,8 @@ endif()
 ### What to build                                   ###
 #######################################################
 # C++ targets
-option(FUTURES_BUILD_SINGLE_HEADER "Build single-header library" ON)
 option(FUTURES_BUILD_TESTS "Build tests" ON)
-option(FUTURES_BUILD_SINGLE_TARGET_TESTS "Build tests" ${FUTURES_BUILD_TESTS})
+option(FUTURES_BUILD_SINGLE_TARGET_TESTS "Build tests" OFF)
 option(FUTURES_BUILD_EXAMPLES "Build examples" ON)
 
 # Custom targets

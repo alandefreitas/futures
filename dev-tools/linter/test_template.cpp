@@ -2,6 +2,6 @@
 //
 #include <catch2/catch.hpp>
 
-TEST_CASE(TEST_CASE_PREFIX "@TESTNAME@") {
+TEST_CASE("@TESTNAME@") {
     using namespace futures;
 }
