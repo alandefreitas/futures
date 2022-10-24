@@ -44,7 +44,9 @@
  */
 #if defined __has_include
 #    if __has_include(<asio.hpp>)
-#        define FUTURES_HAS_ASIO
+#        ifndef FUTURES_HAS_ASIO
+#            define FUTURES_HAS_ASIO
+#        endif
 #    endif
 #elif ASIO_HAS_CONSTEXPR || FUTURES_DOXYGEN
 #    define FUTURES_HAS_ASIO
@@ -78,7 +80,9 @@
  */
 #if defined __has_include
 #    if __has_include(<boost/config.hpp>)
-#        define FUTURES_HAS_BOOST
+#        ifndef FUTURES_HAS_BOOST
+#            define FUTURES_HAS_BOOST
+#        endif
 #    endif
 #elif BOOST_USER_CONFIG || FUTURES_DOXYGEN
 #    define FUTURES_HAS_BOOST

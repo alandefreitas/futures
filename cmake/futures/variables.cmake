@@ -3,6 +3,7 @@
 #######################################################
 include(cmake/functions/all.cmake)
 set_master_project_booleans()
+set_crosscompiling_booleans()
 set_debug_booleans()
 set_optimization_flags()
 set_compiler_booleans()

@@ -7,67 +7,57 @@ file(GLOB_RECURSE FUTURES_HEADERS CONFIGURE_DEPENDS futures/**/*.hpp)
 add_library(headers INTERFACE)
 add_library(futures::headers ALIAS headers)
 
-macro(set_futures_options TARGET_NAME)
-    # This library requires C++17
-    target_compile_features(${TARGET_NAME} INTERFACE cxx_std_17)
+# This library requires C++17
+target_compile_features(headers INTERFACE cxx_std_17)
 
-    # Include directories (development and installation)
-    target_include_directories(${TARGET_NAME}
-            INTERFACE $<BUILD_INTERFACE:${FUTURES_ROOT_DIR}/include>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-            )
+# Include directories (development and installation)
+target_include_directories(headers
+        INTERFACE $<BUILD_INTERFACE:${FUTURES_ROOT_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+        )
 
-    if (FUTURES_BUILD_WITH_EXCEPTIONS AND MSVC)
-        target_compile_options(${TARGET_NAME} INTERFACE /EHsc)
+if (FUTURES_BUILD_WITH_EXCEPTIONS AND MSVC)
+    # MSVC needs /EHsc to enable exceptions
+    target_compile_options(headers INTERFACE /EHsc)
+endif ()
+
+if (FUTURES_BUILD_WITH_PEDANTIC_WARNINGS)
+    # We usually enable warnings in development mode
+    if (MSVC)
+        target_compile_options(headers INTERFACE /W3 /WX)
+    else ()
+        target_compile_options(headers INTERFACE -Wall -Wextra -pedantic -Werror -ftemplate-backtrace-limit=0)
     endif ()
+endif ()
 
-    if (FUTURES_BUILD_WITH_PEDANTIC_WARNINGS)
-        if (MSVC)
-            target_compile_options(${TARGET_NAME} INTERFACE /W3 /WX)
-        else ()
-            target_compile_options(${TARGET_NAME} INTERFACE -Wall -Wextra -pedantic -Werror -ftemplate-backtrace-limit=0)
-        endif ()
-    endif ()
-
-    target_link_libraries(${TARGET_NAME} INTERFACE ${CMAKE_THREAD_LIBS_INIT})
-endmacro()
-
-set_futures_options(headers)
+# Threads
+target_link_libraries(headers INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 
 #######################################################
 ### Link Dependencies                               ###
 #######################################################
-if (FUTURES_PREFER_STANDALONE_DEPENDENCIES AND (asio_FOUND OR Asio_FOUND))
+foreach (FUTURE_FLAG FUTURES_PREFER_ASIO FUTURES_PREFER_BOOST)
+    if (${FUTURE_FLAG})
+        target_compile_definitions(headers INTERFACE ${FUTURE_FLAG})
+    endif ()
+endforeach ()
+
+# Only link asio::asio if we FUTURES_PREFER_ASIO
+# Otherwise, we use boost.asio or bundled asio
+if (FUTURES_PREFER_ASIO AND (asio_FOUND OR Asio_FOUND))
     target_link_libraries(headers INTERFACE asio::asio)
-    target_compile_definitions(headers INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
-elseif (FUTURES_PREFER_BOOST_DEPENDENCIES AND Boost_FOUND)
-    target_link_libraries(headers INTERFACE Boost::boost)
-    target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
-elseif(asio_FOUND OR Asio_FOUND)
-    target_link_libraries(headers INTERFACE asio::asio)
-    target_compile_definitions(headers INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
-elseif(Boost_FOUND)
-    target_link_libraries(headers INTERFACE Boost::boost)
-    target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
-else()
-    message(FATAL_ERROR "Neither Boost nor Asio are available")
+    target_compile_definitions(headers INTERFACE FUTURES_HAS_ASIO)
+    if (FUTURES_PREFER_ASIO OR NOT FUTURES_PREFER_BOOST)
+        target_compile_definitions(headers INTERFACE FUTURES_PREFER_ASIO)
+    endif()
 endif ()
 
-#######################################################
-### Targets for each dependency found               ###
-#######################################################
-if (asio_FOUND OR Asio_FOUND)
-    add_library(headers_asio INTERFACE)
-    add_library(futures::headers_asio ALIAS headers_asio)
-    set_futures_options(headers_asio)
-    target_link_libraries(headers_asio INTERFACE asio::asio)
-    target_compile_definitions(headers_asio INTERFACE FUTURES_PREFER_STANDALONE_DEPENDENCIES)
-endif ()
-
+# Link Boost headers whenever it's available because we need
+# more than Boost.Asio.
 if (Boost_FOUND)
-    add_library(headers_boost INTERFACE)
-    add_library(futures::headers_boost ALIAS headers_boost)
-    set_futures_options(headers_boost)
-    target_link_libraries(headers_boost INTERFACE Boost::boost)
-    target_compile_definitions(headers_boost INTERFACE FUTURES_PREFER_BOOST_DEPENDENCIES)
-endif ()
+    target_link_libraries(headers INTERFACE Boost::boost)
+    target_compile_definitions(headers INTERFACE FUTURES_HAS_BOOST)
+    if (FUTURES_PREFER_BOOST OR NOT (asio_FOUND OR Asio_FOUND))
+        target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST)
+    endif()
+endif()

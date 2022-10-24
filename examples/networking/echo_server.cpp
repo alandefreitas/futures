@@ -6,7 +6,8 @@
 // and asio executors.
 //
 
-#include <futures/futures.hpp>
+#include <futures/future.hpp>
+#include <futures/adaptor/then.hpp>
 #include <charconv>
 #include <cstdlib>
 #include <iostream>
@@ -14,14 +15,21 @@
 #include <utility>
 #include <string_view>
 
-#ifdef FUTURES_USE_STANDALONE_ASIO
-#    include <asio/ts/buffer.hpp>
-#    include <asio/ts/internet.hpp>
-#    include <asio.hpp>
+#if defined(FUTURES_HAS_ASIO) && defined(FUTURES_USE_STANDALONE_ASIO) \
+    || defined(FUTURES_USE_BUNDLED_ASIO)
+#    include <asio/buffer.hpp>
+#    include <asio/io_context.hpp>
+#    include <asio/ip/tcp.hpp>
+#    include <asio/use_future.hpp>
+#    include <asio/write.hpp>
+#elif defined(FUTURES_USE_BOOST_ASIO)
+#    include <boost/asio/buffer.hpp>
+#    include <boost/asio/io_context.hpp>
+#    include <boost/asio/ip/tcp.hpp>
+#    include <boost/asio/use_future.hpp>
+#    include <boost/asio/write.hpp>
 #else
-#    include <boost/asio.hpp>
-#    include <boost/asio/ts/buffer.hpp>
-#    include <boost/asio/ts/internet.hpp>
+#    error This example requires ASIO
 #endif
 
 using futures::asio::ip::tcp;
@@ -33,8 +41,7 @@ using futures::asio::ip::tcp;
 /// so we can write it back to the client.
 ///
 struct session_coroutine
-    : public std::enable_shared_from_this<session_coroutine>
-{
+    : public std::enable_shared_from_this<session_coroutine> {
 public:
     static constexpr size_t max_length = 1024;
 
@@ -47,9 +54,9 @@ public:
         case Reading:
             socket_.async_read_some(
                 futures::asio::buffer(data_, max_length),
-                [this, self = shared_from_this()](
-                    std::error_code ec,
-                    std::size_t length) {
+                [this,
+                 self
+                 = shared_from_this()](std::error_code ec, std::size_t length) {
                 if (!ec) {
                     std::cout << std::string_view(
                         data_.data(),
@@ -100,12 +107,12 @@ private:
 /// This class stores the all active session we have with clients and
 /// schedules the acceptor to create new sessions.
 ///
-class server
-{
+class server {
 public:
     server(futures::asio::io_context &io_context, short port)
-        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),
-          socket_(io_context), ex_(io_context.get_executor()) {
+        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
+        , socket_(io_context)
+        , ex_(io_context.get_executor()) {
         schedule_accept();
     }
 
@@ -113,24 +120,20 @@ private:
     void
     schedule_accept() {
         // Schedule function to accept connection from client
-        std::future<void> client_connected = acceptor_.async_accept(
-            socket_,
-            futures::asio::use_future);
+        std::future<void> client_connected
+            = acceptor_.async_accept(socket_, futures::asio::use_future);
 
         // Attach continuation so that when the client connects, we
         // create a new session
-        auto session_created = futures::
-            then(ex_, client_connected, [this]() {
-                std::cout << "Server log: New client" << '\n';
-                // Session is created with a shared pointer. The
-                // internals of session ensure this pointer is kept
-                // alive.
-                std::make_shared<session_coroutine>(
-                    std::move(socket_))
-                    ->resume();
-                // Create one more task accepting connections
-                schedule_accept();
-            });
+        auto session_created = futures::then(ex_, client_connected, [this]() {
+            std::cout << "Server log: New client" << '\n';
+            // Session is created with a shared pointer. The
+            // internals of session ensure this pointer is kept
+            // alive.
+            std::make_shared<session_coroutine>(std::move(socket_))->resume();
+            // Create one more task accepting connections
+            schedule_accept();
+        });
 
         // Schedule the tasks but don't wait for them to finish. It's
         // all detached. `client_connected.detach();`
@@ -157,8 +160,7 @@ main(int argc, char *argv[]) {
                 port,
                 10);
             if (ec != std::errc() || ptr != port_str.data()) {
-                std::cerr
-                    << "Invalid port number " << port_str << '\n';
+                std::cerr << "Invalid port number " << port_str << '\n';
             }
         }
         std::cout << "http://localhost:" << port << '\n';
@@ -168,8 +170,7 @@ main(int argc, char *argv[]) {
         server s(io_context, port);
 
         // Launch threads running io tasks
-        futures::asio::thread_pool pool(
-            futures::hardware_concurrency());
+        futures::asio::thread_pool pool(futures::hardware_concurrency());
         for (size_t i = 0; i < futures::hardware_concurrency(); ++i) {
             futures::asio::post(pool, [&]() { io_context.run(); });
         }

@@ -11,7 +11,7 @@
 
 int
 main(int argc, char** argv) {
-    std::cout << TEST_CASE_PREFIX << "launch\n";
+    std::cout << "launch\n";
     return STRESS(argc, argv, [] {
         using namespace futures;
         auto f = schedule([]() { return 2; });

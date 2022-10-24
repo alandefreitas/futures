@@ -30,9 +30,9 @@ TEST_CASE("Asio default executors") {
         REQUIRE(i == 2); // <- pool had already stopped
     }
 
+#ifndef FUTURES_IGNORE_USE_FUTURE_TESTS
     constexpr int thread_pool_replicates = 100;
 
-#ifndef FUTURES_IGNORE_USE_FUTURE_TESTS
     SECTION("Default thread pool") {
         asio::thread_pool &pool = default_execution_context();
         asio::thread_pool::executor_type ex = pool.executor();

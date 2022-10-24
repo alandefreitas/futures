@@ -35,8 +35,8 @@ option(FUTURES_ALWAYS_LINT "Run the linter before running unit tests" ON)
 #######################################################
 option(FUTURES_BUILD_WITH_PEDANTIC_WARNINGS  "Use pedantic warnings." ON)
 option(FUTURES_BUILD_WITH_SANITIZERS "Build with sanitizers." ${DEBUG_MODE})
-option(FUTURES_CATCH2_REPORTER "Reporter Catch2 should use when invoked from ctest." "console")
-option(FUTURES_TESTS_SMALL_POOL "Run tests with a default thread pool of size 1." "OFF")
+option(FUTURES_CATCH2_REPORTER "Reporter Catch2 should use when invoked from ctest." console)
+option(FUTURES_TESTS_SMALL_POOL "Run tests with a default thread pool of size 1." OFF)
 
 #######################################################
 ### How to build                                    ###

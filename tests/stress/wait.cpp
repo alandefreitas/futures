@@ -6,12 +6,14 @@
 //
 
 #include "stress.hpp"
-#include <futures/futures.hpp>
+#include <futures/future.hpp>
+#include <futures/launch.hpp>
+#include <futures/wait_for_any.hpp>
 #include <iostream>
 
 int
 main(int argc, char** argv) {
-    std::cout << TEST_CASE_PREFIX << "wait\n";
+    std::cout << "wait\n";
     return STRESS(argc, argv, [] {
         using namespace futures;
         constexpr auto enough_time_for_deadlock = std::chrono::milliseconds(20);

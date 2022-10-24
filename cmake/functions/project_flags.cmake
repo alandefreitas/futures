@@ -8,6 +8,18 @@ macro(set_master_project_booleans)
     endif ()
 endmacro()
 
+# @brief Set variable indicating if this is a master project
+# - This is important to avoid building tests and examples when project is not master
+macro(set_crosscompiling_booleans)
+    if (CMAKE_CROSSCOMPILING)
+        set(FUTURES_CROSSCOMPILING ON)
+        set(FUTURES_NOT_CROSSCOMPILING OFF)
+    else ()
+        set(FUTURES_CROSSCOMPILING OFF)
+        set(FUTURES_NOT_CROSSCOMPILING ON)
+    endif ()
+endmacro()
+
 # @brief Set variables indicating if mode is Debug or Release
 # - The mode might be neither of them
 macro(set_debug_booleans)

@@ -4,15 +4,40 @@
 
 !!! example ""
 
-    === "Header only"
+    === "Header-only"
     
-        [=0% "Easy"]
+        [=0%]
 
-        You can use the library by simply copying the contents from the `include` directory into your project.
+        To use the library as header-only, copy the contents from the `include` directory into your project.
+        The `<futures/futures.hpp>` includes the whole library as header-only:
+
+        ```cpp
+        #include <futures/futures.hpp>
+        ```
+
+        However, as you read the documentation, we recommend including only the headers for
+        the features you are using.
+
+    === "Compiled"
+
+        [=25%]
+
+        To manually use it as a compiled library, place the following line in exactly 
+        one new or existing source file in your project.
+
+        ```cpp
+        // In exactly *one* source file
+        #include <futures/impl/src.hpp>
+        ```
+
+        and set the macro `FUTURES_SEPARATE_COMPILATION`. 
+
+        Check the reference for [other available macros](/futures/config_reference).
+
 
     === "CMake"
     
-        [=33% "Easy and faster"]
+        [=50%]
 
         === "Add subdirectory"
     
@@ -91,7 +116,7 @@
 
     === "Packages"
     
-        [=66% "Not available for all platforms"]
+        [=75%]
 
         !!! note
     
@@ -106,7 +131,7 @@
 
     === "From source"
     
-        [=100% "You might need some setup"]
+        [=100%]
 
         === "Windows + MSVC"
         

@@ -1,10 +1,13 @@
 #######################################################
 ### Dependencies                                    ###
 #######################################################
-find_package(Catch2 2.13.8 CONFIG)
+if (FUTURES_USE_FIND_PACKAGE)
+    find_package(Catch2 2.13.8 CONFIG)
+endif()
+
 if (Catch2_FOUND)
     include(${Catch2_DIR}/Catch.cmake)
-else ()
+elseif (FUTURES_USE_FETCH_CONTENT)
     FetchContent_Declare(Catch2 URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.8.zip)
     FetchContent_GetProperties(Catch2)
     if (NOT Catch2_POPULATED)
@@ -21,13 +24,18 @@ else ()
         add_subdirectory(${catch2_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/catch2)
         include(${catch2_SOURCE_DIR}/contrib/Catch.cmake)
     endif ()
+else()
+    # Bundled Catch2
+    add_library(Catch2 INTERFACE)
+    add_library(Catch2::Catch2 ALIAS Catch2)
+    target_include_directories(Catch2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+    include(${CMAKE_CURRENT_SOURCE_DIR}/catch2/contrib/Catch.cmake)
 endif ()
 
 # Create a common catch main for all tests
 add_library(catch_main catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_compile_features(catch_main PUBLIC cxx_std_17)
-
 
 #######################################################
 ### Unit Tests                                      ###
@@ -39,6 +47,8 @@ ProcessorCount(N_PROCESSORS)
 # First parameter: filename without extension
 # Other parameters: libraries to link in this test (if empty, it links libcppm)
 macro(add_futures_test TEST_FILE)
+    list(APPEND FUTURES_TESTS_SOURCE ${TEST_FILE})
+
     # Create a name for the test
     string(REPLACE "/" "_" CMAKE_TEST_NAME ${TEST_FILE})
     string(REPLACE ".cpp" "" CMAKE_TEST_NAME ${CMAKE_TEST_NAME})
@@ -180,7 +190,6 @@ add_futures_test(detail/operation_state.cpp)
 # All tests as a single target                      #
 #####################################################
 if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
-    file(GLOB_RECURSE FUTURES_TESTS_SOURCE CONFIGURE_DEPENDS ./*.cpp)
     add_executable(ut_futures_all catch_main.cpp ${FUTURES_TESTS_SOURCE})
     target_link_libraries(ut_futures_all PUBLIC futures::futures Catch2::Catch2)
     target_compile_features(ut_futures_all PUBLIC cxx_std_17)

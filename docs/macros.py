@@ -310,8 +310,12 @@ def declare_variables(variables, macro):
 
         def sanitize_default_value(str):
             if str == '${MASTER_PROJECT}':
-                return 'ON'
-            return str
+                return '`ON` if running CMake from the root directory'
+            if str == '${FUTURES_NOT_CROSSCOMPILING}':
+                return '`ON` if not crosscompiling'
+            if str == '${DEBUG_MODE}':
+                return '`ON` if compiling in Debug mode'
+            return '`' + str + '`'
 
         # Read options from file
         with open(abs_path, "r") as f:
@@ -324,5 +328,5 @@ def declare_variables(variables, macro):
             for line in contents.splitlines():
                 result = pattern.search(line)
                 if result:
-                    res += f'|`{result.group(1)}`|{result.group(2)}|`{sanitize_default_value(result.group(3))}`|\n'
+                    res += f'|`{result.group(1)}`|{result.group(2)}|{sanitize_default_value(result.group(3))}|\n'
             return res

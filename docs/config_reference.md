@@ -9,6 +9,8 @@ These are the options available when building the project with CMake:
 By setting these CMake options, the CMake `futures` target will already define whatever configuration macros are
 necessary.
 
+All dependencies are bundled. Whenever a dependency is not found, the bundled version is used.
+
 ## Configuration Macros
 
 Set the following macros to define how the library is compiled.

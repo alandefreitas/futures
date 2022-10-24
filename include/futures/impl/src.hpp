@@ -18,6 +18,7 @@
 #    ifdef _WIN32
 #        include <SDKDDKVer.h>
 #    endif
+#define ASIO_SEPARATE_COMPILATION
 #include <futures/detail/deps/asio/impl/src.hpp>
 #endif
 

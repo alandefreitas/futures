@@ -68,7 +68,7 @@ with both versions of Asio.
             ```
 
             The preferred version of Asio is the version found when configuring the targets. If both versions are available,
-            the CMake options `FUTURES_PREFER_STANDALONE_DEPENDENCIES` and `FUTURES_PREFER_BOOST_DEPENDENCIES` can be
+            the CMake options `FUTURES_PREFER_ASIO` and `FUTURES_PREFER_BOOST` can be
             used to influence that choice.
 
         === "Standalone Asio"

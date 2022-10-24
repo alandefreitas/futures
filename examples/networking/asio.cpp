@@ -7,12 +7,15 @@
 
 #include <futures/algorithm.hpp>
 #include <futures/futures.hpp>
-#ifdef FUTURES_USE_STANDALONE_ASIO
-#include <asio/io_context.hpp>
-#else
-#include <boost/asio/io_context.hpp>
-#endif
 #include <iostream>
+
+#if defined(FUTURES_USE_STANDALONE_ASIO)
+#include <asio/io_context.hpp>
+#elif defined(FUTURES_USE_BOOST_ASIO)
+#include <boost/asio/io_context.hpp>
+#else
+#include <futures/detail/bundled/asio/io_context.hpp>
+#endif
 
 int
 main() {
