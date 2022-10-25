@@ -13,6 +13,14 @@
 #include <futures/detail/future_options_set.hpp>
 #include <type_traits>
 
+/**
+ *  @file future_options.hpp
+ *  @brief Future options
+ *
+ *  This file defines objects we can use to determine the compile-time options
+ *  for a future type.
+ */
+
 namespace futures {
     /** @addtogroup futures Futures
      *  @{

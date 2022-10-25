@@ -8,12 +8,21 @@
 #ifndef FUTURES_ALGORITHM_COMPARISONS_LESS_HPP
 #define FUTURES_ALGORITHM_COMPARISONS_LESS_HPP
 
+/**
+ *  @file algorithm/comparisons/less.hpp
+ *  @brief Less comparison functor
+ *
+ *  This file defines the less operator as a functor.
+ */
+
 #include <futures/algorithm/traits/is_totally_ordered_with.hpp>
 #include <utility>
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 functor equivalent to the C++20 std::ranges::less
+    /// A C++17 functor equivalent to the C++20 std::ranges::less
+    /**
+     * @see https://en.cppreference.com/w/cpp/utility/functional/less
      */
     struct less {
         template <

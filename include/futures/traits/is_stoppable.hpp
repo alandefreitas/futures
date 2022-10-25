@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_IS_STOPPABLE_HPP
 #define FUTURES_TRAITS_IS_STOPPABLE_HPP
 
+/**
+ *  @file traits/is_stoppable.hpp
+ *  @brief `is_stoppable` trait
+ *
+ *  This file defines the `is_stoppable` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
@@ -26,7 +33,7 @@ namespace futures {
     template <typename>
     struct is_stoppable : std::false_type {};
 
-    /// Customization point to define future as stoppable
+    /// @copydoc is_stoppable
     template <class T>
     constexpr bool is_stoppable_v = is_stoppable<T>::value;
 

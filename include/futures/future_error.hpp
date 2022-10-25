@@ -10,6 +10,13 @@
 
 #include <system_error>
 
+/**
+ *  @file future_error.hpp
+ *  @brief Future error types
+ *
+ *  This file defines error types used by futures types and algorithms.
+ */
+
 namespace futures {
     /** @addtogroup futures Futures
      *  @{
@@ -191,6 +198,7 @@ namespace futures {
                 future_errc::promise_already_satisfied) } {}
     };
 
+    /// Class for errors when the a unique future value has already been accessed
     class future_already_retrieved : public future_error {
     public:
         future_already_retrieved()
@@ -198,24 +206,28 @@ namespace futures {
                 future_errc::future_already_retrieved) } {}
     };
 
+    /// Class for errors when the value of an uninitialized promise is accessed
     class promise_uninitialized : public future_error {
     public:
         promise_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
+    /// Class for errors when the value of an uninitialized packaged task is accessed
     class packaged_task_uninitialized : public future_error {
     public:
         packaged_task_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
+    /// Class for errors when the value of an uninitialized future is accessed
     class future_uninitialized : public future_error {
     public:
         future_uninitialized()
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
+    /// Class for errors when the operation is not available for deferred futures
     class future_deferred : public future_error {
     public:
         future_deferred()

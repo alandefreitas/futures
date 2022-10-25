@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_VALUE_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITER_VALUE_HPP
 
+/**
+ *  @file algorithm/traits/iter_value.hpp
+ *  @brief `iter_value` trait
+ *
+ *  This file defines the `iter_value` trait.
+ */
+
 #include <futures/algorithm/traits/remove_cvref.hpp>
 #include <futures/algorithm/traits/detail/has_element_type.hpp>
 #include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
@@ -25,8 +32,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 iter_value
-     * concept
+    /// @brief A type trait equivalent to `std::iter_value`
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/iter_t
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

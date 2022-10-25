@@ -8,10 +8,17 @@
 #ifndef FUTURES_ADAPTOR_WHEN_ANY_HPP
 #define FUTURES_ADAPTOR_WHEN_ANY_HPP
 
-/// @file
-/// Implement the when_any functionality for futures and executors
-/// The same rationale as when_all applies here
-/// @see https://en.cppreference.com/w/cpp/experimental/when_any
+/**
+ *  @file adaptor/when_any.hpp
+ *  @brief Disjunction adaptors
+ *
+ *  This file defines adaptors to create a new future representing the
+ *  disjunction of other future objects.
+ *
+ *  It implements the when_any functionality for futures and executors
+ *  The same rationale as `std::experimental::when_any` applies here
+ *  @see https://en.cppreference.com/w/cpp/experimental/when_any
+ */
 
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
@@ -163,6 +170,8 @@ namespace futures {
          *  this function. Any shared state is released. valid() is false after
          *  a call to this method. The value v stored in the shared state, as
          *  std::move(v)
+         *
+         *  @return A @ref when_any_result holding the future objects
          */
         when_any_result<sequence_type>
         get() {
@@ -186,6 +195,8 @@ namespace futures {
          *  all invalid
          *
          *  @see https://en.cppreference.com/w/cpp/experimental/when_any
+         *
+         *  @return Return `true` if underlying futures are valid
          */
         [[nodiscard]] bool
         valid() const noexcept {
@@ -233,6 +244,9 @@ namespace futures {
          *  emulate for future conjunctions (when_all) because we can sleep on
          *  each task until they are all done, since we need all of them anyway.
          *
+         *  @param timeout_duration Time to wait
+         *  @return Status of the future after the specified duration
+         *
          *  @see https://en.m.wikipedia.org/wiki/Exponential_backoff
          */
         template <class Rep, class Period>
@@ -253,6 +267,9 @@ namespace futures {
         /**
          *  It blocks until specified timeout_time has been reached or the
          *  result becomes available, whichever comes first
+         *
+         *  @param timeout_time The timepoint to wait until
+         *  @return Status of the future after the specified duration
          */
         template <class Clock, class Duration>
         std::future_status
@@ -562,6 +579,7 @@ namespace futures {
      *  This overload uses a small vector to avoid further allocations for such
      *  a simple operation.
      *
+     *  @param first,last Range of futures
      *  @return @ref when_any_future with all future objects
      */
     template <
@@ -611,13 +629,13 @@ namespace futures {
         return when_any_future<sequence_type>(std::move(v));
     }
 
-    /// Create a future object that becomes ready when any of the futures
-    /// in the range is ready
+    /// @copybrief when_any
     /**
      *  This function does not participate in overload resolution unless every
      *  argument is either a (possibly cv-qualified) std::shared_future or a
      *  cv-unqualified std::future.
      *
+     *  @param r Range of futures
      *  @return @ref when_any_future with all future objects
      */
     template <
@@ -636,13 +654,13 @@ namespace futures {
             std::end(std::forward<Range>(r)));
     }
 
-    /// Create a future object that becomes ready when any of the input
-    /// futures is ready
+    /// @copybrief when_any
     /**
      *  This function does not participate in overload resolution unless every
      *  argument is either a (possibly cv-qualified) std::shared_future or a
      *  cv-unqualified std::future.
      *
+     *  @param futures A sequence of future objects
      *  @return @ref when_any_future with all future objects
      */
     template <
@@ -682,8 +700,7 @@ namespace futures {
         return when_any_future<sequence_type>(std::move(v));
     }
 
-    /// Operator to create a future object that becomes ready when any of
-    /// the input futures is ready
+    /// @copybrief when_any
     /**
      *  ready operator|| works for futures and functions (which are converted to
      *  futures with the default executor) If the future is a when_any_future
@@ -702,6 +719,9 @@ namespace futures {
      *  variadic functions and this intention can be controlled explicitly:
      *  - when_any(f1,f2,f3) -> <f1 || f2 || f3>
      *  - when_any(f1,when_any(f2,f3)) -> <f1 || <f2 || f3>>
+     *
+     *  @param lhs,rhs Future objects
+     *  @return A @ref when_any_future holding all future types
      */
     template <
         class T1,

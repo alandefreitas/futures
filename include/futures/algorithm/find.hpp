@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_FIND_HPP
 #define FUTURES_ALGORITHM_FIND_HPP
 
+/**
+ *  @file algorithm/find.hpp
+ *  @brief `find` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `find` algorithm.
+ */
+
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -30,17 +38,19 @@ namespace futures {
         friend value_cmp_algorithm_functor<find_functor>;
 
         /// Complete overload of the find algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam T Value to compare
-        ///
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param v Value
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam T Value to compare
+         *
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param v Value
+         */
         template <
             class E,
             class P,

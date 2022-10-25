@@ -12,8 +12,8 @@
 
 namespace futures::detail {
     template <class T>
-    using nested_iterator_traits_difference_type_t = typename std::iterator_traits<
-        T>::difference_type;
+    using nested_iterator_traits_difference_type_t = typename std::
+        iterator_traits<T>::difference_type;
 } // namespace futures::detail
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_ITERATOR_TRAITS_DIFFERENCE_TYPE_HPP

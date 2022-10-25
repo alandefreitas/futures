@@ -8,12 +8,21 @@
 #ifndef FUTURES_ALGORITHM_COMPARISONS_GREATER_HPP
 #define FUTURES_ALGORITHM_COMPARISONS_GREATER_HPP
 
+/**
+ *  @file algorithm/comparisons/greater.hpp
+ *  @brief Greater comparison functor
+ *
+ *  This file defines the greater operator as a functor.
+ */
+
 #include <futures/algorithm/comparisons/less.hpp>
 #include <utility>
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 functor equivalent to the C++20 std::ranges::greater
+    /// A C++17 functor equivalent to the C++20 std::ranges::greater
+    /**
+     * @see https://en.cppreference.com/w/cpp/utility/functional/greater
      */
     struct greater {
         template <

@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_SEMIREGULAR_HPP
 
+/**
+ *  @file algorithm/traits/is_semiregular.hpp
+ *  @brief `is_semiregular` trait
+ *
+ *  This file defines the `is_semiregular` trait.
+ */
+
 #include <futures/algorithm/traits/is_copyable.hpp>
 #include <futures/algorithm/traits/is_default_initializable.hpp>
 #include <type_traits>
@@ -21,8 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 semiregular
-     * concept
+    /// @brief A type trait equivalent to the `std::semiregular` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/semiregular
      */
     template <class T>
     using is_semiregular = std::

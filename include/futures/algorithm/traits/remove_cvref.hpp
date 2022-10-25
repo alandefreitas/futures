@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
 #define FUTURES_ALGORITHM_TRAITS_REMOVE_CVREF_HPP
 
+/**
+ *  @file algorithm/traits/remove_cvref.hpp
+ *  @brief `remove_cvref` trait
+ *
+ *  This file defines the `remove_cvref` trait.
+ */
+
 #include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <type_traits>
 
@@ -20,8 +27,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 remove_cvref
-     * concept
+    /// @brief A type trait equivalent to `std::remove_cvref`
+    /**
+     * @see https://en.cppreference.com/w/cpp/types/remove_cvref
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

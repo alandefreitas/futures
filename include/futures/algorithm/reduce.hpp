@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_REDUCE_HPP
 #define FUTURES_ALGORITHM_REDUCE_HPP
 
+/**
+ *  @file algorithm/reduce.hpp
+ *  @brief `reduce` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `reduce` algorithm.
+ */
+
 #include <futures/future.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -121,18 +129,19 @@ namespace futures {
         }
 
         /// Complete overload of the reduce algorithm
-        ///
-        /// The reduce algorithm is equivalent to a version std::accumulate
-        /// where the binary operation is applied out of order. @tparam E
-        /// Executor type @tparam P Partitioner type @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam Fun Function type
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param i Initial value for the reduction
-        /// @param f Function
+        /**
+         *  The reduce algorithm is equivalent to a version std::accumulate
+         *  where the binary operation is applied out of order. @tparam E
+         *  Executor type @tparam P Partitioner type @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam Fun Function type
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param i Initial value for the reduction
+         *  @param f Function
+         */
         template <
             class E,
             class P,

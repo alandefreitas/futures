@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_HPP
 #define FUTURES_ALGORITHM_TRAITS_RANGE_VALUE_HPP
 
+/**
+ *  @file algorithm/traits/range_value.hpp
+ *  @brief `range_value` trait
+ *
+ *  This file defines the `range_value` trait.
+ */
+
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/iterator.hpp>
@@ -25,8 +32,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 range_value
-     * concept
+    /// @brief A type trait equivalent to `std::range_value`
+    /**
+     * @see https://en.cppreference.com/w/cpp/ranges/iterator_t
      */
 #ifdef FUTURES_DOXYGEN
     template <class R>

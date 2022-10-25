@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_SWAPPABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_swappable.hpp
+ *  @brief `is_swappable` trait
+ *
+ *  This file defines the `is_swappable` trait.
+ */
+
 #include <type_traits>
 
 namespace futures {
@@ -19,7 +26,10 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 swappable concept
+    /// @brief A type trait equivalent to the `std::swappable`
+    /// concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/swappable
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

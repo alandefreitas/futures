@@ -8,6 +8,14 @@
 #ifndef FUTURES_PACKAGED_TASK_HPP
 #define FUTURES_PACKAGED_TASK_HPP
 
+/**
+ *  @file packaged_task.hpp
+ *  @brief Packaged task as a promise
+ *
+ *  This file defines packaged tasks we can use to represent a task and a
+ *  promise. These objects can be used to set promises manually.
+ */
+
 #include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/detail/shared_task.hpp>
@@ -30,13 +38,14 @@ namespace futures {
 #endif
 
     /// A packaged task that sets a shared state when done
-    ///
-    /// A packaged task holds a task to be executed and a shared state for its
-    /// result. It's very similar to a promise where the shared state is
-    /// extended with a task to generate the state.
-    ///
-    /// @tparam R Return type
-    /// @tparam Args Task arguments
+    /**
+     *  A packaged task holds a task to be executed and a shared state for its
+     *  result. It's very similar to a promise where the shared state is
+     *  extended with a task to generate the state.
+     *
+     *  @tparam R Return type
+     *  @tparam Args Task arguments
+     */
 #ifndef FUTURES_DOXYGEN
     template <typename R, typename... Args, class Options>
 #else
@@ -50,13 +59,14 @@ namespace futures {
 
         /// Construct a packaged task from a function with the default
         /// std allocator
-        ///
-        /// @par Constraints
-        /// This constructor only participates in overload resolution if Fn is
-        /// not a packaged task itself.
-        ///
-        /// @tparam Fn Function type
-        /// @param fn The callable target to execute
+        /**
+         *  @par Constraints
+         *  This constructor only participates in overload resolution if Fn is
+         *  not a packaged task itself.
+         *
+         *  @tparam Fn Function type
+         *  @param fn The callable target to execute
+         */
         template <
             typename Fn
 #ifndef FUTURES_DOXYGEN
@@ -73,21 +83,22 @@ namespace futures {
 
         /// Constructs a std::packaged_task object with a shared state
         /// and a copy of the task
-        ///
-        /// This function constructs a std::packaged_task object with a shared
-        /// state and a copy of the task, initialized with std::forward<Fn>(fn).
-        /// It uses the provided allocator to allocate memory necessary to store
-        /// the task.
-        ///
-        /// @par Constraints
-        /// This constructor does not participate in overload resolution if
-        /// std::decay<Fn>::type is the same type as
-        /// std::packaged_task<R(ArgTypes...)>.
-        ///
-        /// @tparam Fn Function type
-        /// @tparam Allocator Allocator type
-        /// @param alloc The allocator to use when storing the task
-        /// @param fn The callable target to execute
+        /**
+         *  This function constructs a std::packaged_task object with a shared
+         *  state and a copy of the task, initialized with std::forward<Fn>(fn).
+         *  It uses the provided allocator to allocate memory necessary to store
+         *  the task.
+         *
+         *  @par Constraints
+         *  This constructor does not participate in overload resolution if
+         *  std::decay<Fn>::type is the same type as
+         *  std::packaged_task<R(ArgTypes...)>.
+         *
+         *  @tparam Fn Function type
+         *  @tparam Allocator Allocator type
+         *  @param alloc The allocator to use when storing the task
+         *  @param fn The callable target to execute
+         */
         template <
             typename Fn,
             typename Allocator
@@ -146,19 +157,21 @@ namespace futures {
         }
 
         /// Checks if the task object has a valid function
-        ///
-        /// @return true if *this has a shared state, false otherwise
+        /**
+         *  @return true if *this has a shared state, false otherwise
+         */
         [[nodiscard]] bool
         valid() const noexcept {
             return task_ != nullptr;
         }
 
         /// Swaps two task objects
-        ///
-        /// This function exchanges the shared states and stored tasks of *this
-        /// and other
-        ///
-        /// @param other packaged task whose state to swap with
+        /**
+         *  This function exchanges the shared states and stored tasks of *this
+         *  and other
+         *
+         *  @param other packaged task whose state to swap with
+         */
         void
         swap(packaged_task &other) noexcept {
             std::swap(future_retrieved_, other.future_retrieved_);
@@ -166,11 +179,12 @@ namespace futures {
         }
 
         /// Returns a future object associated with the promised result
-        ///
-        /// This function constructs a future object that shares its state with
-        /// this promise Because this library handles more than a single future
-        /// type, the future type we want is a template parameter. This function
-        /// expects future type constructors to accept pointers to shared states.
+        /**
+         *  This function constructs a future object that shares its state with
+         *  this promise Because this library handles more than a single future
+         *  type, the future type we want is a template parameter. This function
+         *  expects future type constructors to accept pointers to shared states.
+         */
         template <class Future = basic_future<R, Options>>
         Future
         get_future() {
@@ -189,13 +203,14 @@ namespace futures {
         }
 
         /// Executes the function and set the shared state
-        ///
-        /// Calls the stored task with args as the arguments. The return value
-        /// of the task or any exceptions thrown are stored in the shared state
-        /// The shared state is made ready and any threads waiting for this are
-        /// unblocked.
-        ///
-        /// @param args the parameters to pass on invocation of the stored task
+        /**
+         *  Calls the stored task with args as the arguments. The return value
+         *  of the task or any exceptions thrown are stored in the shared state
+         *  The shared state is made ready and any threads waiting for this are
+         *  unblocked.
+         *
+         *  @param args the parameters to pass on invocation of the stored task
+         */
         template <class... OtherArgs>
         void
         operator()(OtherArgs... args) {
@@ -210,10 +225,11 @@ namespace futures {
 
         /// Resets the shared state abandoning any stored results of
         /// previous executions
-        ///
-        /// Resets the state abandoning the results of previous executions. A
-        /// new shared state is constructed. Equivalent to *this =
-        /// packaged_task(std::move(f)), where f is the stored task.
+        /**
+         *  Resets the state abandoning the results of previous executions. A
+         *  new shared state is constructed. Equivalent to *this =
+         *  packaged_task(std::move(f)), where f is the stored task.
+         */
         void
         reset() {
             if (!valid()) {
@@ -231,10 +247,10 @@ namespace futures {
         }
 
     private:
-        /// True if the corresponding future has already been retrieved
+        // True if the corresponding future has already been retrieved
         bool future_retrieved_{ false };
 
-        /// The function this task should execute
+        // The function this task should execute
         std::shared_ptr<detail::shared_task_base<R, Options, Args...>> task_{};
     };
 

@@ -12,7 +12,7 @@
 
 {% endif -%}
 
-{% if exists("location") -%}
+{% if exists("location") and kind != "namespace" -%}
 <sup>Defined in header [`<{{ location.file }}>`](https://github.com/alandefreitas/futures/blob/master/include/{{ location.file }})</sup>
 
 {% endif -%}

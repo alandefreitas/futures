@@ -8,10 +8,11 @@
 #ifndef FUTURES_CONFIG_HPP
 #define FUTURES_CONFIG_HPP
 
-/** @file config.hpp
+/**
+ *  @file config.hpp
  *  @brief Public configuration macros
  *
- *  This file includes public configuration macros. These are the macros
+ *  This file defines public configuration macros. These are the macros
  *  the user is allowed to define to change how the library is compiled.
  */
 

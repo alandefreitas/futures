@@ -8,6 +8,14 @@
 #ifndef FUTURES_FUTURE_OPTIONS_ARGS_HPP
 #define FUTURES_FUTURE_OPTIONS_ARGS_HPP
 
+/**
+ *  @file future_options_args.hpp
+ *  @brief Arguments for future options
+ *
+ *  This file defines objects arguments we can use in future options to
+ *  determine the compile-time properties of a future type.
+ */
+
 namespace futures {
     /** @addtogroup futures Futures
      *  @{

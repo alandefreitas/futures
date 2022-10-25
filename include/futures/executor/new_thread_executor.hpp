@@ -8,6 +8,15 @@
 #ifndef FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
 
+/**
+ *  @file executor/new_thread_executor.hpp
+ *  @brief New thread executor
+ *
+ *  This file defines the new thread executor, which creates a new thread
+ *  every time a new task is launched. This is somewhat equivalent to executing
+ *  tasks with C++11 `std::async`.
+ */
+
 #include <futures/config.hpp>
 #include <futures/launch.hpp>
 #include <futures/executor/inline_executor.hpp>

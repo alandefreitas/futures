@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_IS_SHARED_FUTURE_HPP
 #define FUTURES_TRAITS_IS_SHARED_FUTURE_HPP
 
+/**
+ *  @file traits/is_shared_future.hpp
+ *  @brief `is_shared_future` trait
+ *
+ *  This file defines the `is_shared_future` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
@@ -26,12 +33,11 @@ namespace futures {
     template <typename>
     struct is_shared_future : std::false_type {};
 
-    /// Customization point to determine if a type is a shared future
-    /// type (specialization for std::shared_future<T>)
+    /// @copydoc is_shared_future
     template <class T>
     struct is_shared_future<std::shared_future<T>> : std::true_type {};
 
-    /// Customization point to determine if a type is a shared future type
+    /// @copydoc is_shared_future
     template <class T>
     constexpr bool is_shared_future_v = is_shared_future<T>::value;
 

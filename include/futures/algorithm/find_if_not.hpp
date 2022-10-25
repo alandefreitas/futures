@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 #define FUTURES_ALGORITHM_FIND_IF_NOT_HPP
 
+/**
+ *  @file algorithm/find_if_not.hpp
+ *  @brief `find_if_not` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `find_if_not` algorithm.
+ */
+
 #include <futures/algorithm/find_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
@@ -57,17 +65,19 @@ namespace futures {
         }
 
         /// Complete overload of the find_if_not algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam Fun Function type
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param f Function
-        /// function template \c find_if_not
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam Fun Function type
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param f Function
+         *  function template \c find_if_not
+         */
         template <
             class E,
             class P,

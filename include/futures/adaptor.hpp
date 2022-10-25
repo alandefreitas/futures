@@ -8,6 +8,23 @@
 #ifndef FUTURES_ADAPTOR_HPP
 #define FUTURES_ADAPTOR_HPP
 
+/**
+ *  @dir adaptor
+ *  @brief Root adaptors directory
+ *  @details The root directory contains headers related to the adaptor module,
+ *  including conjunctions, disjunctions, and continuations.
+ */
+
+/**
+ *  @file adaptor.hpp
+ *  @brief All Adaptors
+ *
+ *  Use this header to include all functionalities of the algorithms module at
+ *  once. In most cases, however, we recommend only including the headers for the
+ *  functionality you need. Use the reference to identify these files.
+ */
+
+
 // #glob <futures/adaptor/*.hpp>
 #include <futures/adaptor/make_ready_future.hpp>
 #include <futures/adaptor/then.hpp>

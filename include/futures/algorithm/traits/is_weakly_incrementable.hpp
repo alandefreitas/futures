@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_INCREMENTABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_weakly_incrementable.hpp
+ *  @brief `is_weakly_incrementable` trait
+ *
+ *  This file defines the `is_weakly_incrementable` trait.
+ */
+
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <type_traits>
@@ -21,8 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 weakly_incrementable
-     * concept
+    /// @brief A type trait equivalent to the `std::weakly_incrementable` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/weakly_incrementable
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>

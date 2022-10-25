@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITER_RVALUE_REFERENCE_HPP
 
+/**
+ *  @file algorithm/traits/iter_rvalue_reference.hpp
+ *  @brief `iter_rvalue_reference` trait
+ *
+ *  This file defines the `iter_rvalue_reference` trait.
+ */
+
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <iterator>
 #include <type_traits>
@@ -21,8 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 iter_rvalue_reference
-     * concept
+    /// @brief A type trait equivalent to `std::iter_rvalue_reference`
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/iter_t
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

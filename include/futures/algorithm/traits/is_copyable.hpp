@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_COPYABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_copyable.hpp
+ *  @brief `is_copyable` trait
+ *
+ *  This file defines the `is_copyable` trait.
+ */
+
 #include <futures/algorithm/traits/is_assignable_from.hpp>
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <type_traits>
@@ -22,8 +29,9 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 copyable
-     * concept
+    /// @brief A type trait equivalent to the `std::copyable` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/copyable
      */
     template <class T>
     using is_copyable = std::conjunction<

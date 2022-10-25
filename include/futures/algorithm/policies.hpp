@@ -8,9 +8,13 @@
 #ifndef FUTURES_ALGORITHM_POLICIES_HPP
 #define FUTURES_ALGORITHM_POLICIES_HPP
 
-/// @file
-/// Identify traits for algorithms, like we do for other types
 /**
+ *  @file algorithm/policies.hpp
+ *  @brief Algorithm execution policies
+ *
+ *  This file defines the policies we can use to determine the appropriate
+ *  executor for algorithms.
+ *
  *  The traits help us generate auxiliary algorithm overloads
  *  This is somewhat similar to the pattern of traits and algorithms for ranges
  *  and views It allows us to get algorithm overloads for free, including
@@ -52,8 +56,6 @@ namespace futures {
     /// Class representing a type for an unsequenced_policy tag
     class unsequenced_policy {};
 
-    /// @name Instances of the execution policy types
-
     /// Tag used in algorithms for a sequenced_policy
     inline constexpr sequenced_policy seq{};
 
@@ -66,7 +68,7 @@ namespace futures {
     /// Tag used in algorithms for an unsequenced_policy
     inline constexpr unsequenced_policy unseq{};
 
-    /// Checks whether T is a standard or implementation-defined
+    /// Determines whether T is a standard or implementation-defined
     /// execution policy type.
     template <class T>
     struct is_execution_policy
@@ -76,14 +78,25 @@ namespace futures {
               std::is_same<T, parallel_unsequenced_policy>,
               std::is_same<T, unsequenced_policy>> {};
 
-    /// Checks whether T is a standard or implementation-defined
-    /// execution policy type.
+    /// @copydoc is_execution_policy
     template <class T>
     inline constexpr bool is_execution_policy_v = is_execution_policy<T>::value;
 
-    /// Make an executor appropriate to a given policy and a pair of
-    /// iterators This depends, of course, of the default executors we have
-    /// available and
+    namespace detail {
+        template <class E>
+        using policy_executor_type = std::conditional_t<
+            !std::is_same_v<E, sequenced_policy>,
+            default_execution_context_type::executor_type,
+            inline_executor>;
+    } // namespace detail
+
+    /// Make an executor appropriate to a given policy
+    /**
+     * The result type depends on the default executors we have available
+     * for each policy. Sequenced policy will often use an inline executor
+     * and other policies will use executors that will run the algorithms
+     * in parallel.
+     */
     template <
         class E,
         class I,
@@ -97,7 +110,7 @@ namespace futures {
         = 0
 #endif
         >
-    constexpr decltype(auto)
+    constexpr detail::policy_executor_type<E>
     make_policy_executor() {
         if constexpr (!std::is_same_v<E, sequenced_policy>) {
             return make_default_executor();

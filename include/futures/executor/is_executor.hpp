@@ -8,6 +8,14 @@
 #ifndef FUTURES_EXECUTOR_IS_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_IS_EXECUTOR_HPP
 
+/**
+ *  @file executor/is_executor.hpp
+ *  @brief Executor trait
+ *
+ *  This file defines the trait to identify whether a type represents an
+ *  executor.
+ */
+
 #include <futures/config.hpp>
 #include <futures/detail/deps/asio/is_executor.hpp>
 

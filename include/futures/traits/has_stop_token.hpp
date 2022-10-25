@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_HAS_STOP_TOKEN_HPP
 #define FUTURES_TRAITS_HAS_STOP_TOKEN_HPP
 
+/**
+ *  @file traits/has_stop_token.hpp
+ *  @brief `has_stop_token` trait
+ *
+ *  This file defines the `has_stop_token` trait.
+ */
+
 #include <future>
 #include <type_traits>
 

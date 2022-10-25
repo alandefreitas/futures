@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_REGULAR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_REGULAR_HPP
 
+/**
+ *  @file algorithm/traits/is_regular.hpp
+ *  @brief `is_regular` trait
+ *
+ *  This file defines the `is_regular` trait.
+ */
+
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
 #include <type_traits>
@@ -21,8 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 regular
-     * concept
+    /// @brief A type trait equivalent to the `std::regular` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/regular
      */
     template <class T>
     using is_regular = std::

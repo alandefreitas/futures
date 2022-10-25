@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_HAS_READY_NOTIFIER_HPP
 #define FUTURES_TRAITS_HAS_READY_NOTIFIER_HPP
 
+/**
+ *  @file traits/has_ready_notifier.hpp
+ *  @brief `has_ready_notifier` trait
+ *
+ *  This file defines the `has_ready_notifier` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
@@ -26,7 +33,7 @@ namespace futures {
     template <typename>
     struct has_ready_notifier : std::false_type {};
 
-    /// Customization point to determine if a type is a shared future type
+    /// @copydoc has_ready_notifier
     template <class T>
     constexpr bool has_ready_notifier_v = has_ready_notifier<T>::value;
 

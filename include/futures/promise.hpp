@@ -9,6 +9,15 @@
 #ifndef FUTURES_PROMISE_HPP
 #define FUTURES_PROMISE_HPP
 
+/**
+ *  @file promise.hpp
+ *  @brief Promises
+ *
+ *  This file defines promises we can use to represent the completion of a
+ *  task through a promise. These objects can be used to finalize an asynchnous
+ *  task manually.
+ */
+
 #include <futures/future.hpp>
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/utility/to_address.hpp>
@@ -28,31 +37,33 @@ namespace futures {
      */
 
     /// Common members to promises of all types
-    ///
-    /// This includes a pointer to the corresponding shared_state for the future
-    /// and the functions to manage the promise.
-    ///
-    /// The specific promise specialization will only differ by their set_value
-    /// functions.
-    ///
+    /**
+     *  This includes a pointer to the corresponding shared_state for the future
+     *  and the functions to manage the promise.
+     *
+     *  The specific promise specialization will only differ by their set_value
+     *  functions.
+     */
     template <class R, class Options = future_options<continuable_opt>>
     class promise_base {
     public:
         /// Create the base promise with std::allocator
-        ///
-        /// Use std::allocator_arg tag to dispatch and select allocator aware
-        /// constructor
+        /**
+         *  Use std::allocator_arg tag to dispatch and select allocator aware
+         *  constructor
+         */
         promise_base()
             : promise_base{ std::allocator_arg,
                             std::allocator<promise_base>{} } {}
 
         /// Create a base promise setting the shared state with the
         /// specified allocator
-        ///
-        /// This function allocates memory for and allocates an initial
-        /// promise_shared_state (the future value) with the specified
-        /// allocator. This object is stored in the internal intrusive pointer
-        /// as the future shared state.
+        /**
+         *  This function allocates memory for and allocates an initial
+         *  promise_shared_state (the future value) with the specified
+         *  allocator. This object is stored in the internal intrusive pointer
+         *  as the future shared state.
+         */
         template <typename Allocator>
         promise_base(std::allocator_arg_t, Allocator const &alloc)
             : shared_state_(make_shared_state(alloc)) {}
@@ -83,9 +94,10 @@ namespace futures {
         }
 
         /// Destructor
-        ///
-        /// This promise owns the shared state, so we need to warn the shared
-        /// state when it's destroyed.
+        /**
+         *  This promise owns the shared state, so we need to warn the shared
+         *  state when it's destroyed.
+         */
         virtual ~promise_base() {
             if (shared_state_ && obtained_) {
                 shared_state_->signal_promise_destroyed();
@@ -93,13 +105,14 @@ namespace futures {
         }
 
         /// Gets a future that shares its state with this promise
-        ///
-        /// This function constructs a future object that shares its state with
-        /// this promise. Because this library handles more than a single future
-        /// type, the future type we want is a template parameter.
-        ///
-        /// This function expects future type constructors to accept pointers to
-        /// shared states.
+        /**
+         *  This function constructs a future object that shares its state with
+         *  this promise. Because this library handles more than a single future
+         *  type, the future type we want is a template parameter.
+         *
+         *  This function expects future type constructors to accept pointers to
+         *  shared states.
+         */
         basic_future<R, Options>
         get_future() {
             if (obtained_) {
@@ -113,8 +126,10 @@ namespace futures {
         }
 
         /// Set the promise result as an exception
-        /// @note The set_value operation is only available at the concrete
-        /// derived class, where we know the class type
+        /**
+         *  @note The set_value operation is only available at the concrete
+         *  derived class, where we know the class type
+         */
         void
         set_exception(std::exception_ptr p) {
             if (!shared_state_) {
@@ -137,14 +152,14 @@ namespace futures {
         }
 
     protected:
-        /// Swap the value of two promises
+        // Swap the value of two promises
         void
         swap(promise_base &other) noexcept {
             std::swap(obtained_, other.obtained_);
             shared_state_.swap(other.shared_state_);
         }
 
-        /// Intrusive pointer to the future corresponding to this promise
+        // Intrusive pointer to the future corresponding to this promise
         constexpr detail::shared_state<R, Options> &
         get_shared_state() {
             return shared_state_;
@@ -164,23 +179,24 @@ namespace futures {
             }
         }
 
-        /// True if the future has already obtained the promise
+        // True if the future has already obtained the promise
         bool obtained_{ false };
 
-        /// Pointer to the shared state for this promise
+        // Pointer to the shared state for this promise
         detail::shared_state<R, Options> shared_state_{};
     };
 
     /// A shared state that will later be acquired by a future type
-    ///
-    /// The shared state is accessed by a future and a promise. The promise
-    /// can write to the shared state while the future can read from it.
-    ///
-    /// The shared state is an implementation detail that takes advantages
-    /// of the properties of futures and promises to avoid locking and
-    /// wasteful memory allocations.
-    ///
-    /// @tparam R The shared state type
+    /**
+     *  The shared state is accessed by a future and a promise. The promise
+     *  can write to the shared state while the future can read from it.
+     *
+     *  The shared state is an implementation detail that takes advantages
+     *  of the properties of futures and promises to avoid locking and
+     *  wasteful memory allocations.
+     *
+     *  @tparam R The shared state type
+     */
     template <
         class R,
         class Options
@@ -191,10 +207,11 @@ namespace futures {
         using promise_base<R, Options>::promise_base;
 
         /// Set the promise value
-        ///
-        /// After this value is set, it can be obtained by the future object
-        ///
-        /// @param args arguments to set the promise
+        /**
+         *  After this value is set, it can be obtained by the future object
+         *
+         *  @param args arguments to set the promise
+         */
         template <class... Args>
         void
         set_value(Args &&...args) {

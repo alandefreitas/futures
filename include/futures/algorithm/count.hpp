@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_COUNT_HPP
 #define FUTURES_ALGORITHM_COUNT_HPP
 
+/**
+ *  @file algorithm/count.hpp
+ *  @brief `count` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `count` algorithm.
+ */
+
 #include <futures/algorithm/comparisons/equal_to.hpp>
 #include <futures/algorithm/count_if.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -62,18 +70,20 @@ namespace futures {
 
 
         /// Complete overload of the count algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam T Value to compare
-        ///
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param v Value
-        /// function template \c count
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam T Value to compare
+         *
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param v Value
+         *  function template \c count
+         */
         template <
             class E,
             class P,

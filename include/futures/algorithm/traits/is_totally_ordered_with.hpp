@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_TOTALLY_ORDERED_WITH_HPP
 
+/**
+ *  @file algorithm/traits/is_totally_ordered_with.hpp
+ *  @brief `is_totally_ordered_with` trait
+ *
+ *  This file defines the `is_totally_ordered_with` trait.
+ */
+
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <futures/algorithm/traits/is_partially_ordered_with.hpp>
@@ -24,8 +31,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 totally_ordered_with
-     * concept
+    /// @brief A type trait equivalent to the `std::totally_ordered_with` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/totally_ordered
      */
     template <class T, class U>
     using is_totally_ordered_with = std::conjunction<

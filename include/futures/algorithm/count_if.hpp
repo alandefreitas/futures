@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_COUNT_IF_HPP
 #define FUTURES_ALGORITHM_COUNT_IF_HPP
 
+/**
+ *  @file algorithm/count_if.hpp
+ *  @brief `count_if` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `count_if` algorithm.
+ */
+
 #include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/launch.hpp>
@@ -136,17 +144,19 @@ namespace futures {
 
 
         /// Complete overload of the count_if algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam Fun Function type
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param f Function
-        /// function template \c count_if
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam Fun Function type
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param f Function
+         *  function template \c count_if
+         */
         template <
             class E,
             class P,

@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_FUTURE_VALUE_HPP
 #define FUTURES_TRAITS_FUTURE_VALUE_HPP
 
+/**
+ *  @file traits/future_value.hpp
+ *  @brief `future_value` trait
+ *
+ *  This file defines the `future_value` trait.
+ */
+
 #include <futures/traits/is_future.hpp>
 #include <futures/detail/traits/future_value.hpp>
 
@@ -21,19 +28,21 @@ namespace futures {
 
 
     /// Determine type the future object holds
-    ///
-    /// Primary template handles non-future types
-    ///
-    /// @note Not to be confused with continuation unwrapping
+    /**
+     *  Primary template handles non-future types
+     *
+     *  @note Not to be confused with continuation unwrapping
+     */
     template <class T, class Enable = void>
     struct future_value {};
 
     /// Determine type a future object holds (specialization for types
     /// that implement `get()`)
-    ///
-    /// Template for types that implement ::get()
-    ///
-    /// @note Not to be confused with continuation unwrapping
+    /**
+     *  Template for types that implement ::get()
+     *
+     *  @note Not to be confused with continuation unwrapping
+     */
     template <typename Future>
     struct future_value<
         Future,
@@ -43,8 +52,9 @@ namespace futures {
     };
 
     /// Determine type a future object holds
-    ///
-    /// @note Not to be confused with continuation unwrapping
+    /**
+     *  @note Not to be confused with continuation unwrapping
+     */
     template <class T>
     using future_value_t = typename future_value<T>::type;
 

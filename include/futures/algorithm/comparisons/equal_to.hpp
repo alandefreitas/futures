@@ -8,12 +8,21 @@
 #ifndef FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
 #define FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
 
+/**
+ *  @file algorithm/comparisons/equal_to.hpp
+ *  @brief Equality comparison functor
+ *
+ *  This file defines the equality operator as a functor.
+ */
+
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <utility>
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 functor equivalent to the C++20 std::ranges::equal_to
+    /// A C++17 functor equivalent to the C++20 std::ranges::equal_to
+    /**
+     * @see https://en.cppreference.com/w/cpp/utility/functional/equal_to
      */
     struct equal_to {
         template <

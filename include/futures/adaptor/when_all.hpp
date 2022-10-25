@@ -8,9 +8,13 @@
 #ifndef FUTURES_ADAPTOR_WHEN_ALL_HPP
 #define FUTURES_ADAPTOR_WHEN_ALL_HPP
 
-/// @file
-/// Implement the when_all functionality for futures and executors
 /**
+ *  @file adaptor/when_all.hpp
+ *  @brief Conjunction adaptors
+ *
+ *  This file defines adaptors to create a new future representing the
+ *  conjunction of other future objects.
+ *
  *  Because all tasks need to be done to achieve the result, the algorithm
  *  doesn't depend much on the properties of the underlying futures. The thread
  *  that is awaiting just needs sleep and await for each of the internal
@@ -192,6 +196,9 @@ namespace futures {
         /**
          *  Blocks until specified timeout_duration has elapsed or the result
          *  becomes available, whichever comes first.
+         *
+         *  @param timeout_duration Time to wait
+         *  @return Status of the future after the specified duration
          */
         template <class Rep, class Period>
         [[nodiscard]] std::future_status
@@ -261,6 +268,9 @@ namespace futures {
         /**
          *  It blocks until specified timeout_time has been reached or the
          *  result becomes available, whichever comes first
+         *
+         *  @param timeout_time The timepoint to wait until
+         *  @return Status of the future after the specified duration
          */
         template <class Clock, class Duration>
         std::future_status
@@ -313,25 +323,19 @@ namespace futures {
 #endif
 
     namespace detail {
-        /**
-         *  @name when_all helper traits
-         *  Useful traits for when all future
-         * @{
-         */
-
-        /// Check if type is a when_all_future as a type
+        // Check if type is a when_all_future as a type
         template <class>
         struct is_when_all_future : std::false_type {};
         template <class Sequence>
         struct is_when_all_future<when_all_future<Sequence>>
             : std::true_type {};
 
-        /// Check if type is a when_all_future as constant bool
+        // Check if type is a when_all_future as constant bool
         template <class T>
         constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
 
-        /// Check if a type can be used in a future conjunction
-        /// (when_all or operator&& for futures)
+        // Check if a type can be used in a future conjunction
+        // (when_all or operator&& for futures)
         template <class T>
         using is_valid_when_all_argument = std::disjunction<
             is_future<std::decay_t<T>>,
@@ -340,7 +344,7 @@ namespace futures {
         constexpr bool is_valid_when_all_argument_v
             = is_valid_when_all_argument<T>::value;
 
-        /// Trait to identify valid when_all inputs
+        // Trait to identify valid when_all inputs
         template <class...>
         struct are_valid_when_all_arguments : std::true_type {};
         template <class B1>
@@ -355,17 +359,13 @@ namespace futures {
         template <class... Args>
         constexpr bool are_valid_when_all_arguments_v
             = are_valid_when_all_arguments<Args...>::value;
-        /**
-         * @}
-         */
 
-        /**
-         * @name Helpers and traits for operator&& on futures, functions and
+        /*
+         * Helpers and traits for operator&& on futures, functions and
          * when_all futures
-         * @{
          */
 
-        /// Check if type is a when_all_future with tuples as a sequence type
+        // Check if type is a when_all_future with tuples as a sequence type
         template <class T, class Enable = void>
         struct is_when_all_tuple_future : std::false_type {};
         template <class Sequence>
@@ -377,8 +377,8 @@ namespace futures {
         constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<
             T>::value;
 
-        /// Check if all template parameters are when_all_future with
-        /// tuples as a sequence type
+        // Check if all template parameters are when_all_future with
+        // tuples as a sequence type
         template <class...>
         struct are_when_all_tuple_futures : std::true_type {};
         template <class B1>
@@ -394,8 +394,8 @@ namespace futures {
         constexpr bool are_when_all_tuple_futures_v
             = are_when_all_tuple_futures<Args...>::value;
 
-        /// Check if type is a when_all_future with a range as a sequence
-        /// type
+        // Check if type is a when_all_future with a range as a sequence
+        // type
         template <class T, class Enable = void>
         struct is_when_all_range_future : std::false_type {};
         template <class Sequence>
@@ -406,8 +406,8 @@ namespace futures {
         constexpr bool is_when_all_range_future_v = is_when_all_range_future<
             T>::value;
 
-        /// Check if all template parameters are when_all_future with
-        /// tuples as a sequence type
+        // Check if all template parameters are when_all_future with
+        // tuples as a sequence type
         template <class...>
         struct are_when_all_range_futures : std::true_type {};
         template <class B1>
@@ -422,9 +422,9 @@ namespace futures {
         constexpr bool are_when_all_range_futures_v
             = are_when_all_range_futures<Args...>::value;
 
-        /// Constructs a when_all_future that is a concatenation of all
-        /// when_all_futures in args
-        /**
+        // Constructs a when_all_future that is a concatenation of all
+        // when_all_futures in args
+        /*
          *  It's important to be able to merge when_all_future objects because
          *  of operator&& When the user asks for f1 && f2 && f3, we want that
          *  to return a single future that waits for <f1,f2,f3> rather than
@@ -445,7 +445,7 @@ namespace futures {
             return std::forward<WhenAllFuture>(arg0);
         }
 
-        /// Merging a two when_all_future objects of tuples
+        // Merging a two when_all_future objects of tuples
         template <
             class WhenAllFuture1,
             class WhenAllFuture2,
@@ -461,7 +461,7 @@ namespace futures {
             return when_all_future(std::move(s));
         }
 
-        /// Merging two+ when_all_future of tuples
+        // Merging two+ when_all_future of tuples
         template <
             class WhenAllFuture1,
             class... WhenAllFutures,
@@ -494,9 +494,6 @@ namespace futures {
                 return futures::async(std::forward<F>(f));
             }
         }
-        /**
-         * @}
-         */
     } // namespace detail
 
     /// Create a future object that becomes ready when the range of input
@@ -510,6 +507,7 @@ namespace futures {
      *  This overload uses a small vector for avoid further allocations for such
      *  a simple operation.
      *
+     *  @param first,last Range of futures
      *  @return Future object of type @ref when_all_future
      */
     template <
@@ -557,12 +555,12 @@ namespace futures {
         return when_all_future<sequence_type>(std::move(v));
     }
 
-    /// Create a future object that becomes ready when the range of input
-    /// futures becomes ready
+    /// @copybrief when_all
     /**
      *  This function does not participate in overload resolution unless the
      *  range type @ref is_future.
      *
+     *  @param r Range of futures
      *  @return Future object of type @ref when_all_future
      */
     template <
@@ -583,13 +581,13 @@ namespace futures {
             end(std::forward<Range>(r)));
     }
 
-    /// Create a future object that becomes ready when all of the input
-    /// futures become ready
+    /// @copybrief when_all
     /**
      *  This function does not participate in overload resolution unless every
      *  argument is either a (possibly cv-qualified) shared_future or a
      *  cv-unqualified future, as defined by the trait @ref is_future.
      *
+     *  @param futures Instances of future objects
      *  @return Future object of type @ref when_all_future
      */
     template <
@@ -612,8 +610,7 @@ namespace futures {
         return when_all_future<sequence_type>(std::move(v));
     }
 
-    /// Operator to create a future object that becomes ready when all of
-    /// the input futures are ready
+    /// @copybrief when_all
     /**
      *  Operator&& works for futures and functions (which are converted to
      *  futures with the default executor) If the future is a when_all_future
@@ -633,6 +630,7 @@ namespace futures {
      *  - when_all(f1,f2,f3) -> <f1,f2,f3>
      *  - when_all(f1,when_all(f2,f3)) -> <f1,<f2,f3>>
      *
+     *  @param lhs,rhs Future objects or callables
      *  @return @ref when_all_future object that concatenates all futures
      */
     template <

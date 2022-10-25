@@ -8,6 +8,22 @@
 #ifndef FUTURES_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_HPP
 
+/**
+ *  @dir algorithm
+ *  @brief Root algorithms directory
+ *  @details The root directory contains headers related to the algorithm module,
+ *  including algorithms, partitioners, and traits.
+ */
+
+/**
+ *  @file algorithm.hpp
+ *  @brief All Algorithms
+ *
+ *  Use this header to include all functionalities of the adaptors module at
+ *  once. In most cases, however, we recommend only including the headers for the
+ *  functionality you need. Use the reference to identify these files.
+ */
+
 // #glob <futures/algorithm/*.hpp>
 #include <futures/algorithm/all_of.hpp>
 #include <futures/algorithm/any_of.hpp>

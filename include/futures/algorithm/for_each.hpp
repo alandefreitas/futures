@@ -8,6 +8,14 @@
 #ifndef FUTURES_ALGORITHM_FOR_EACH_HPP
 #define FUTURES_ALGORITHM_FOR_EACH_HPP
 
+/**
+ *  @file algorithm/for_each.hpp
+ *  @brief `for_each` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `for_each` algorithm.
+ */
+
 #include <futures/future.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
@@ -90,15 +98,14 @@ namespace futures {
             }
 
             /// Wait for all tasks to finish
-            ///
-            /// This might sound like it should be as simple as a
-            /// when_all(tasks_). However, while we wait for some tasks here,
-            /// the running tasks might be enqueuing more tasks, so we still
-            /// need a read lock here. The number of times this happens and the
-            /// relative cost of this operation should still be negligible,
-            /// compared to other applications.
-            ///
-            /// @return `true` if we had to wait for any tasks
+            /**
+             *  This might sound like it should be as simple as a
+             *  when_all(tasks_). However, while we wait for some tasks here,
+             *  the running tasks might be enqueuing more tasks, so we still
+             *  need a read lock here. The number of times this happens and the
+             *  relative cost of this operation should still be negligible,
+             *  compared to other applications.
+             */
             void
             wait_for_sort_tasks() {
                 while (!tasks_.empty()) {
@@ -147,17 +154,19 @@ namespace futures {
         }
 
         /// Complete overload of the for_each algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam Fun Function type
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param f Function
-        /// function template \c for_each
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam Fun Function type
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param f Function
+         *  function template \c for_each
+         */
         template <
             class E,
             class P,

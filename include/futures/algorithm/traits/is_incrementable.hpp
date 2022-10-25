@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INCREMENTABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_INCREMENTABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_incrementable.hpp
+ *  @brief `is_incrementable` trait
+ *
+ *  This file defines the `is_incrementable` trait.
+ */
+
 #include <futures/algorithm/traits/is_regular.hpp>
 #include <futures/algorithm/traits/is_weakly_incrementable.hpp>
 #include <type_traits>
@@ -21,7 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 incrementable concept
+    /// @brief A type trait equivalent to the `std::incrementable` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/incrementable
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>

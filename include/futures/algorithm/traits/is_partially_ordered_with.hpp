@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP
 
+/**
+ *  @file algorithm/traits/is_partially_ordered_with.hpp
+ *  @brief `is_partially_ordered_with` trait
+ *
+ *  This file defines the `is_partially_ordered_with` trait.
+ */
+
 #include <type_traits>
 
 namespace futures {
@@ -19,8 +26,10 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 partially_ordered_with
-     * concept
+    /// @brief A type trait equivalent to the `std::partially_ordered_with`
+    /// concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/totally_ordered
      */
 #ifdef FUTURES_DOXYGEN
     template <class T, class U>

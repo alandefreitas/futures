@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_READABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_indirectly_readable.hpp
+ *  @brief `is_indirectly_readable` trait
+ *
+ *  This file defines the `is_indirectly_readable` trait.
+ */
+
 #include <futures/algorithm/traits/iter_reference.hpp>
 #include <futures/algorithm/traits/iter_rvalue_reference.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
@@ -22,8 +29,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 indirectly_readable
-     * concept
+    /// @brief A type trait equivalent to the `std::indirectly_readable` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/indirectly_readable
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

@@ -8,9 +8,9 @@
 #ifndef FUTURES_IMPL_CONFIG_HPP
 #define FUTURES_IMPL_CONFIG_HPP
 
-/// @file
-/// Apply config macros
-/**
+/*
+ * Apply configuration macros
+ *
  * This file applies the public configuration macros.
  *
  * This involves defining private shortcuts that depend on the existing
@@ -64,12 +64,14 @@ namespace asio {}
 #    define FUTURES_HEADER_ONLY
 #endif
 
+#if !defined(FUTURES_DOXYGEN)
 /*
  * Also raise mp11 library namespace
  */
 namespace boost {
     namespace mp11 {}
 } // namespace boost
+#endif
 
 namespace futures {
     /*

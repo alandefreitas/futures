@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_INPUT_ITERATOR_HPP
 
+/**
+ *  @file algorithm/traits/is_input_iterator.hpp
+ *  @brief `is_input_iterator` trait
+ *
+ *  This file defines the `is_input_iterator` trait.
+ */
+
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/is_input_or_output_iterator.hpp>
 #include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
@@ -22,7 +29,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 input_iterator concept
+    /// @brief A type trait equivalent to the `std::input_iterator` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/input_iterator
      */
     template <class T>
     using is_input_iterator = std::

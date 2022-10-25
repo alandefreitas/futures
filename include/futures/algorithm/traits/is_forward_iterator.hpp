@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_FORWARD_ITERATOR_HPP
 
+/**
+ *  @file algorithm/traits/is_forward_iterator.hpp
+ *  @brief `is_forward_iterator` trait
+ *
+ *  This file defines the `is_forward_iterator` trait.
+ */
+
 #include <futures/algorithm/traits/is_derived_from.hpp>
 #include <futures/algorithm/traits/is_incrementable.hpp>
 #include <futures/algorithm/traits/is_input_iterator.hpp>
@@ -24,8 +31,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 forward_iterator
-     * concept
+    /// @brief A type trait equivalent to the `std::forward_iterator` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/forward_iterator
      */
     template <class I>
     using is_forward_iterator = std::conjunction<

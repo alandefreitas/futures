@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_DEFAULT_INITIALIZABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_default_initializable.hpp
+ *  @brief `is_default_initializable` trait
+ *
+ *  This file defines the `is_default_initializable` trait.
+ */
+
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <type_traits>
 
@@ -21,8 +28,10 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 default_initializable
-     * concept
+    /// @brief A type trait equivalent to the `std::default_initializable`
+    /// concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/default_initializable
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

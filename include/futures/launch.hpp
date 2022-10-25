@@ -8,6 +8,14 @@
 #ifndef FUTURES_LAUNCH_HPP
 #define FUTURES_LAUNCH_HPP
 
+/**
+ *  @file launch.hpp
+ *  @brief Functions to launch new tasks
+ *
+ *  This file defines functions to launch or schedule new tasks and return
+ *  future objects as handles to the operation result.
+ */
+
 #include <futures/config.hpp>
 #include <futures/await.hpp>
 #include <futures/future.hpp>

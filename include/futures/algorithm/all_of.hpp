@@ -1,4 +1,3 @@
-
 //
 // Copyright (c) 2021 alandefreitas (alandefreitas@gmail.com)
 //
@@ -8,6 +7,14 @@
 
 #ifndef FUTURES_ALGORITHM_ALL_OF_HPP
 #define FUTURES_ALGORITHM_ALL_OF_HPP
+
+/**
+ *  @file algorithm/all_of.hpp
+ *  @brief `all_of` algorithm
+ *
+ *  This file defines the functor and callable for a parallel version of the
+ *  `all_of` algorithm.
+ */
 
 #include <futures/future.hpp>
 #include <futures/is_ready.hpp>
@@ -140,17 +147,19 @@ namespace futures {
         }
 
         /// Complete overload of the all_of algorithm
-        /// @tparam E Executor type
-        /// @tparam P Partitioner type
-        /// @tparam I Iterator type
-        /// @tparam S Sentinel iterator type
-        /// @tparam Fun Function type
-        /// @param ex Executor
-        /// @param p Partitioner
-        /// @param first Iterator to first element in the range
-        /// @param last Iterator to (last + 1)-th element in the range
-        /// @param f Function
-        /// function template \c all_of
+        /**
+         *  @tparam E Executor type
+         *  @tparam P Partitioner type
+         *  @tparam I Iterator type
+         *  @tparam S Sentinel iterator type
+         *  @tparam Fun Function type
+         *  @param ex Executor
+         *  @param p Partitioner
+         *  @param first Iterator to first element in the range
+         *  @param last Iterator to (last + 1)-th element in the range
+         *  @param f Function
+         *  function template \c all_of
+         */
         template <
             class E,
             class P,

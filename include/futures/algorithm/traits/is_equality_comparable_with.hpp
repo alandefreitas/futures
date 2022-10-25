@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_EQUALITY_COMPARABLE_WITH_HPP
 
+/**
+ *  @file algorithm/traits/is_equality_comparable_with.hpp
+ *  @brief `is_equality_comparable_with` trait
+ *
+ *  This file defines the `is_equality_comparable_with` trait.
+ */
+
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_weakly_equality_comparable.hpp>
 #include <type_traits>
@@ -21,8 +28,10 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20
-     * equality_comparable_with concept
+    /// @brief A type trait equivalent to the `std::equality_comparable_with`
+    /// concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/equality_comparable_with
      */
     template <class T, class U>
     using is_equality_comparable_with = std::conjunction<

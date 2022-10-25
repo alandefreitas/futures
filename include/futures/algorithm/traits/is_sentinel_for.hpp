@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_SENTINEL_FOR_HPP
 
+/**
+ *  @file algorithm/traits/is_sentinel_for.hpp
+ *  @brief `is_sentinel_for` trait
+ *
+ *  This file defines the `is_sentinel_for` trait.
+ */
+
 #include <futures/algorithm/traits/is_input_or_output_iterator.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
 #include <type_traits>
@@ -21,8 +28,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 sentinel_for
-     * concept
+    /// @brief A type trait equivalent to the `std::sentinel_for` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/iterator/sentinel_for
      */
     template <class S, class I>
     using is_sentinel_for = std::

@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_DERIVED_FROM_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_DERIVED_FROM_HPP
 
+/**
+ *  @file algorithm/traits/is_derived_from.hpp
+ *  @brief `is_derived_from` trait
+ *
+ *  This file defines the `is_derived_from` trait.
+ */
+
 #include <futures/algorithm/traits/iter_reference.hpp>
 #include <futures/algorithm/traits/iter_rvalue_reference.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
@@ -23,7 +30,9 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 derived_from concept
+    /// A type trait equivalent to the `derived_from` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/derived_from
      */
     template <class Derived, class Base>
     using is_derived_from = std::conjunction<

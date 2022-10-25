@@ -8,6 +8,14 @@
 #ifndef FUTURES_ADAPTOR_THEN_HPP
 #define FUTURES_ADAPTOR_THEN_HPP
 
+/**
+ *  @file adaptor/then.hpp
+ *  @brief Continuation adaptors
+ *
+ *  This file defines adaptors to create new futures as continuations to
+ *  previous tasks.
+ */
+
 #include <futures/adaptor/bind_executor_to_lambda.hpp>
 #include <futures/adaptor/detail/internal_then_functor.hpp>
 #include <future>
@@ -26,32 +34,36 @@ namespace futures {
      */
 
     /// Schedule a continuation function to a future
-    ///
-    /// This creates a continuation that gets executed when the before future is
-    /// over. The continuation needs to be invocable with the return type of the
-    /// previous future.
-    ///
-    /// This function works for all kinds of futures but behavior depends on the
-    /// input:
-    /// - If previous future is continuable, attach the function to the
-    /// continuation list
-    /// - If previous future is not continuable (such as std::future), post to
-    /// execution with deferred policy In both cases, the result becomes a
-    /// cfuture or jcfuture.
-    ///
-    /// Stop tokens are also propagated:
-    /// - If after function expects a stop token:
-    ///   - If previous future is stoppable and not-shared: return jcfuture with
-    ///   shared stop source
-    ///   - Otherwise:                                      return jcfuture with
-    ///   new stop source
-    /// - If after function does not expect a stop token:
-    ///   - If previous future is stoppable and not-shared: return jcfuture with
-    ///   shared stop source
-    ///   - Otherwise:                                      return cfuture with
-    ///   no stop source
-    ///
-    /// @return A continuation to the before future
+    /**
+     *  This function creates a continuation that gets executed when the
+     *  `before` future is completed. The continuation needs to be invocable
+     *  with the return type of the previous future.
+     *
+     *  This function works for all kinds of futures but behavior depends on the
+     *  input:
+     *  - If the previous future is continuable, attach the function to the
+     *  continuation list
+     *  - If the previous future is not continuable (such as std::future), post
+     *  to execution with deferred policy. In both cases, the result becomes a
+     *  cfuture or jcfuture.
+     *
+     *  Stop tokens are also propagated:
+     *  - If after function expects a stop token:
+     *    - If previous future is stoppable and not-shared: return jcfuture with
+     *    shared stop source
+     *    - Otherwise:                                      return jcfuture with
+     *    new stop source
+     *  - If after function does not expect a stop token:
+     *    - If previous future is stoppable and not-shared: return jcfuture with
+     *    shared stop source
+     *    - Otherwise:                                      return cfuture with
+     *    no stop source
+     *
+     *  @param ex The executor
+     *  @param before The antecedent future
+     *  @param after The continuation callable
+     *  @return A continuation to the before future
+     */
     template <
         class Executor,
         class Function,
@@ -78,12 +90,7 @@ namespace futures {
             std::forward<Function>(after));
     }
 
-    /// Schedule a continuation function to a future with the default
-    /// executor
-    ///
-    /// @return A continuation to the before future
-    ///
-    /// @see @ref then
+    /// @copydoc then
     template <
         class Future,
         class Function
@@ -141,10 +148,7 @@ namespace futures {
         return then(std::forward<Future>(before), std::forward<Function>(after));
     }
 
-    /// Schedule a continuation function to a future with a custom
-    /// executor
-    ///
-    /// @return A continuation to the before future
+    /// @copydoc then
     template <
         class Executor,
         class Future,

@@ -8,6 +8,71 @@
 #ifndef FUTURES_FUTURE_HPP
 #define FUTURES_FUTURE_HPP
 
+/**
+ *  @file future.hpp
+ *  @brief Future types
+ *
+ *  These future types support extensions such as:
+ *  - continuations
+ *  - stop tokens
+ *  - deferred tasks
+ *
+ *  <br>
+ *
+ *  Many of the ideas for these functions are based on:
+ *  - extensions for concurrency (ISO/IEC TS 19571:2016)
+ *  - async++
+ *  - continuable
+ *  - TBB
+ *
+ *  <br>
+ *
+ *  However, we use concepts and the ASIO proposed standard executors
+ *  (P0443r13, P1348r0, and P1393r0) to allow for better interoperability with
+ *  the C++ standard and other future types, such as `std::future` and
+ *  `boost::future`.
+ *
+ *  <br>
+ *
+ *  A few other relevant differences are:
+ *  - the `async` function can accept any executor
+ *  - the `async` function uses a reasonable dynamic thread pool by default
+ *  - future-concepts allows new future classes with extensions
+ *  - algorithms can be reused with other future types
+ *  - a cancellable future class is provided for more sensitive use cases
+ *  - the API can be updated as the standard gets updated
+ *  - standard parallel algorithms are provided with the executors
+ *
+ *  <br>
+ *
+ *  This interoperability comes at a price for continuations, as we might need
+ *  to poll for `when_all`/`when_any`/`then` events, because `std::future` does
+ *  not support internal continuations.
+ *
+ *  A number of heuristics to avoid polling for `when_all`/`when_any`/`then`:
+ *  - future-like classes that satisfy the `is_future` concept can be mixed
+ *  - `when_all` (or `operator&&`) returns a `when_all_future` class, which does not
+ *     create a new `future` at all and can check directly if futures are ready
+ *  - `when_any` (or `operator||`) returns a `when_any_future` class, which
+ *     implements a number of heuristics to avoid polling, such as
+ *     limited polling time, increased pooling intervals, and only
+ *     launching the necessary continuation futures for long tasks.
+ *  - `then` (or `operator>>`) returns a new future object that sleeps while the
+ *     previous future isn't ready
+ *  - when the standard supports that, this approach based on concepts also
+ *    serve as extension points to allow for these proxy classes to change
+ *    their behavior to some other algorithm that makes more sense for
+ *    futures that support continuations, cancellation, progress, and queries.
+ *  -  the concepts allow for all possible future types to interoperate.
+ *
+ *  Note that although `when_all` always takes longer than `when_any`,
+ *  `when_any` involves a number of heuristics that influence its performance.
+ *
+ *  @see https://en.cppreference.com/w/cpp/experimental/concurrency
+ *  @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
+ *  @see https://github.com/Amanieu/asyncplusplus
+ */
+
 #include <futures/future_options.hpp>
 #include <futures/stop_token.hpp>
 #include <futures/executor/default_executor.hpp>

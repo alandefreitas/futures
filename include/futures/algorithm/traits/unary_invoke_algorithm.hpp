@@ -8,9 +8,12 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP
 #define FUTURES_ALGORITHM_TRAITS_UNARY_INVOKE_ALGORITHM_HPP
 
-/// @file
-/// Identify traits for algorithms, like we do for other types
 /**
+ *  @file algorithm/traits/unary_invoke_algorithm.hpp
+ *  @brief `unary_invoke_algorithm` trait
+ *
+ *  This file defines the `unary_invoke_algorithm` trait.
+ *
  *  The traits help us generate auxiliary algorithm overloads
  *  This is somewhat similar to the pattern of traits and algorithms for ranges
  *  and views It allows us to get algorithm overloads for free, including

@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_ASSIGNABLE_FROM_HPP
 
+/**
+ *  @file algorithm/traits/is_assignable_from.hpp
+ *  @brief `is_assignable_from` trait
+ *
+ *  This file defines the `is_assignable_from` trait.
+ */
+
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
 #include <type_traits>
@@ -22,8 +29,9 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 assignable_from
-     * concept
+    /// @brief A type trait equivalent to the `std::assignable_from` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/assignable_from
      */
 #ifdef FUTURES_DOXYGEN
     template <class LHS, class RHS>

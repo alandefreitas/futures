@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_CONVERTIBLE_TO_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_CONVERTIBLE_TO_HPP
 
+/**
+ *  @file algorithm/traits/is_convertible_to.hpp
+ *  @brief `is_convertible_to` trait
+ *
+ *  This file defines the `is_convertible_to` trait.
+ */
+
 #include <type_traits>
 
 namespace futures {
@@ -20,8 +27,9 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 convertible_to
-     * concept
+    /// @brief A type trait equivalent to the `std::convertible_to` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/convertible_to
      */
 #ifdef FUTURES_DOXYGEN
     template <class From, class To>

@@ -8,7 +8,7 @@
 /// @file
 /// Private configuration macros
 /**
- * This file includes private configuration macros. These are the macros
+ * This file defines private configuration macros. These are the macros
  * only the library itself is allowed to use. The user is allowed to undefine
  * any of these macros.
  */

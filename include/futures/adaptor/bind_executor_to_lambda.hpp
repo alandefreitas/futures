@@ -13,6 +13,14 @@
 #include <functional>
 #include <type_traits>
 
+/**
+ *  @file adaptor/bind_executor_to_lambda.hpp
+ *  @brief Attach executor to callable
+ *
+ *  This file defines the operator we can use to bind an executor to a
+ *  callable. This is an intermediary step for executors.
+ */
+
 namespace futures {
     /** @addtogroup adaptors Adaptors
      *  @{
@@ -48,6 +56,8 @@ namespace futures {
      * like an obvious choice, % is the one that leads to less conflict with
      * other functions.
      *
+     * @param An executor
+     * @param A callable
      * @return A proxy pair to schedule execution
      */
     template <

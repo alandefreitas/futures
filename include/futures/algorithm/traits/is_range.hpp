@@ -8,8 +8,15 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_RANGE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_RANGE_HPP
 
-#include <type_traits>
+/**
+ *  @file algorithm/traits/is_range.hpp
+ *  @brief `is_range` trait
+ *
+ *  This file defines the `is_range` trait.
+ */
+
 #include <iterator>
+#include <type_traits>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -20,7 +27,10 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 range concept
+    /// @brief A type trait equivalent to the `std::partially_ordered_with`
+    /// concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/ranges/range
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

@@ -8,6 +8,13 @@
 #ifndef FUTURES_AWAIT_HPP
 #define FUTURES_AWAIT_HPP
 
+/**
+ *  @file await.hpp
+ *  @brief Helper function to wait for futures
+ *
+ *  This file defines syntax sugar to wait for futures.
+ */
+
 #include <futures/traits/future_value.hpp>
 #include <futures/traits/is_future.hpp>
 #include <type_traits>
@@ -37,9 +44,9 @@ namespace futures {
      *  @note This function only participates in overload resolution if all
      *  types are futures.
      *
-     *  @tparam Future A future type
+     *  @param f A future object
      *
-     * @return The result of the future object
+     *  @return The result of the future object
      **/
     template <
         typename Future
@@ -113,8 +120,7 @@ namespace futures {
      * @note This function only participates in overload resolutions if all
      * types are futures.
      *
-     * @tparam Future A future type
-     * @tparam Futures Future types
+     * @param fs Future objects
      *
      * @return The result of the future object
      **/

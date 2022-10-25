@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_HAS_EXECUTOR_HPP
 #define FUTURES_TRAITS_HAS_EXECUTOR_HPP
 
+/**
+ *  @file traits/has_executor.hpp
+ *  @brief `has_executor` trait
+ *
+ *  This file defines the `has_executor` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
@@ -26,7 +33,7 @@ namespace futures {
     template <typename>
     struct has_executor : std::false_type {};
 
-    /// Determine if a future type has an executor
+    /// @copydoc has_executor
     template <class T>
     constexpr bool has_executor_v = has_executor<T>::value;
 

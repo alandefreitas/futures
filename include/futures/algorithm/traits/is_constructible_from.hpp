@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_CONSTRUCTIBLE_FROM_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_CONSTRUCTIBLE_FROM_HPP
 
+/**
+ *  @file algorithm/traits/is_constructible_from.hpp
+ *  @brief `is_constructible_from` trait
+ *
+ *  This file defines the `is_constructible_from` trait.
+ */
+
 #include <type_traits>
 
 namespace futures {
@@ -19,8 +26,9 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20 constructible_from
-     * concept
+    /// @brief A type trait equivalent to the `std::constructible_from` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/constructible_from
      */
     template <class T, class... Args>
     using is_constructible_from = std::

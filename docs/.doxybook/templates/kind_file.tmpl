@@ -1,10 +1,15 @@
 {% include "header" -%}
 
-{% if exists("brief") %}{{brief}}{% endif %}{% if hasDetails %} [More...](#detailed-description){% endif %}
+{% if exists("brief") %}> {{brief}}{% endif %}
+
+{% if kind == "file" %}
+```cpp
+#include <{{title}}>
+```{% endif %}
 
 {% include "nonclass_members_tables" -%}
 
-{% if hasDetails %}## Detailed Description
+{% if hasDetails %}
 
 {% include "details" %}{% endif -%}
 

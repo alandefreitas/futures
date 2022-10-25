@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_IS_CONTINUABLE_HPP
 #define FUTURES_TRAITS_IS_CONTINUABLE_HPP
 
+/**
+ *  @file traits/is_continuable.hpp
+ *  @brief `is_continuable` trait
+ *
+ *  This file defines the `is_continuable` trait.
+ */
+
 #include <future>
 #include <type_traits>
 

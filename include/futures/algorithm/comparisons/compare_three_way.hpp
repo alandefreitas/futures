@@ -8,12 +8,21 @@
 #ifndef FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_HPP
 #define FUTURES_ALGORITHM_COMPARISONS_COMPARE_THREE_WAY_HPP
 
+/**
+ *  @file algorithm/comparisons/compare_three_way.hpp
+ *  @brief Spaceship comparison functor
+ *
+ *  This file defines the spaceship comparison as a functor.
+ */
+
 #include <futures/algorithm/comparisons/less.hpp>
 #include <utility>
 #include <type_traits>
 
 namespace futures {
-    /** A C++17 functor equivalent to the C++20 std::ranges::compare_three_way
+    /// A C++17 functor equivalent to the C++20 std::ranges::compare_three_way
+    /**
+     * @see https://en.cppreference.com/w/cpp/utility/compare/compare_three_way
      */
     struct compare_three_way {
         template <

@@ -8,6 +8,14 @@
 #ifndef FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP
 
+/**
+ *  @file executor/default_executor.hpp
+ *  @brief Default executor and related functions
+ *
+ *  This file defines the default executor and related functions.
+ *  The default executor is a dynamic thread pool.
+ */
+
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>

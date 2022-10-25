@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_EQUALITY_COMPARABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_WEAKLY_EQUALITY_COMPARABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_weakly_equality_comparable.hpp
+ *  @brief `is_weakly_equality_comparable` trait
+ *
+ *  This file defines the `is_weakly_equality_comparable` trait.
+ */
+
 #include <type_traits>
 
 namespace futures {
@@ -19,8 +26,13 @@ namespace futures {
      *  @{
      */
 
-    /** \brief A C++17 type trait equivalent to the C++20
+    /** \brief A type trait equivalent to the C++20
      * weakly_equality_comparable concept
+     */
+
+    /// @brief A type trait equivalent to the `std::weakly_equality_comparable` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/concepts/equality_comparable
      */
 #ifdef FUTURES_DOXYGEN
     template <class T, class U>

@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_IS_INDIRECTLY_BINARY_INVOCABLE_HPP
 
+/**
+ *  @file algorithm/traits/is_indirectly_binary_invocable.hpp
+ *  @brief `is_indirectly_binary_invocable` trait
+ *
+ *  This file defines the `is_indirectly_binary_invocable` trait.
+ */
+
 #include <futures/algorithm/traits/is_convertible_to.hpp>
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
@@ -23,9 +30,8 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20
-     * indirectly_binary_invocable concept
-     */
+    /// @brief Determine if a function can be invoke with the value type of both
+    /// iterators
 #ifdef FUTURES_DOXYGEN
     template <class F, class I1, class I2>
     using is_indirectly_binary_invocable = __see_below__;

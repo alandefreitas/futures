@@ -8,6 +8,13 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_ITERATOR_HPP
 #define FUTURES_ALGORITHM_TRAITS_ITERATOR_HPP
 
+/**
+ *  @file algorithm/traits/iterator.hpp
+ *  @brief `iterator` trait
+ *
+ *  This file defines the `iterator` trait.
+ */
+
 #include <futures/algorithm/traits/remove_cvref.hpp>
 #include <futures/algorithm/traits/detail/has_element_type.hpp>
 #include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
@@ -25,8 +32,9 @@ namespace futures {
      */
 
 
-    /** \brief A C++17 type trait equivalent to the C++20 iterator_t
-     * concept
+    /// @brief A type trait equivalent to the `std::iterator` concept
+    /**
+     * @see https://en.cppreference.com/w/cpp/ranges/iterator_t
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

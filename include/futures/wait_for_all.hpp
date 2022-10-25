@@ -8,6 +8,14 @@
 #ifndef FUTURES_WAIT_FOR_ALL_HPP
 #define FUTURES_WAIT_FOR_ALL_HPP
 
+/**
+ *  @file wait_for_all.hpp
+ *  @brief Functions to wait for all futures in a sequence
+ *
+ *  This file defines functions to wait for all futures in a sequence of
+ *  futures.
+ */
+
 #include <futures/adaptor/make_ready_future.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
@@ -24,19 +32,20 @@ namespace futures {
      */
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// This function waits for all futures in the range [`first`, `last`) to be
-    /// ready. It simply waits iteratively for each of the futures to be ready.
-    ///
-    /// @note This function is adapted from boost::wait_for_all
-    ///
-    /// @see
-    /// [boost.thread
-    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
-    ///
-    /// @tparam Iterator Iterator type in a range of futures
-    /// @param first Iterator to the first element in the range
-    /// @param last Iterator to one past the last element in the range
+    /**
+     *  This function waits for all futures in the range [`first`, `last`) to be
+     *  ready. It simply waits iteratively for each of the futures to be ready.
+     *
+     *  @note This function is adapted from boost::wait_for_all
+     *
+     *  @see
+     *  [boost.thread
+     *  wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+     *
+     *  @tparam Iterator Iterator type in a range of futures
+     *  @param first Iterator to the first element in the range
+     *  @param last Iterator to one past the last element in the range
+     */
     template <
         typename Iterator
 #ifndef FUTURES_DOXYGEN
@@ -58,18 +67,19 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// This function waits for all futures in the range `r` to be ready.
-    /// It simply waits iteratively for each of the futures to be ready.
-    ///
-    /// @note This function is adapted from boost::wait_for_all
-    ///
-    /// @see
-    /// [boost.thread
-    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
-    ///
-    /// @tparam Range A range of futures type
-    /// @param r Range of futures
+    /**
+     *  This function waits for all futures in the range `r` to be ready.
+     *  It simply waits iteratively for each of the futures to be ready.
+     *
+     *  @note This function is adapted from boost::wait_for_all
+     *
+     *  @see
+     *  [boost.thread
+     *  wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+     *
+     *  @tparam Range A range of futures type
+     *  @param r Range of futures
+     */
     template <
         typename Range
 #ifndef FUTURES_DOXYGEN
@@ -91,21 +101,22 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// This function waits for all specified futures `fs`... to be ready.
-    ///
-    /// It creates a compile-time fixed-size data structure to store references
-    /// to all of the futures and then waits for each of the futures to be
-    /// ready.
-    ///
-    /// @note This function is adapted from boost::wait_for_all
-    ///
-    /// @see
-    /// [boost.thread
-    /// wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
-    ///
-    /// @tparam Fs A list of future types
-    /// @param fs A list of future objects
+    /**
+     *  This function waits for all specified futures `fs`... to be ready.
+     *
+     *  It creates a compile-time fixed-size data structure to store references
+     *  to all of the futures and then waits for each of the futures to be
+     *  ready.
+     *
+     *  @note This function is adapted from boost::wait_for_all
+     *
+     *  @see
+     *  [boost.thread
+     *  wait_for_all](https://www.boost.org/doc/libs/1_78_0/doc/html/thread/synchronization.html#thread.synchronization.futures.reference.wait_for_all)
+     *
+     *  @tparam Fs A list of future types
+     *  @param fs A list of future objects
+     */
     template <
         typename... Fs
 #ifndef FUTURES_DOXYGEN
@@ -144,16 +155,17 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Iterator Iterator type in a range of futures
-    /// @tparam Rep Duration Rep
-    /// @tparam Period Duration Period
-    /// @param timeout_duration Time to wait for
-    /// @param first Iterator to the first element in the range
-    /// @param last Iterator to one past the last element in the range
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Iterator Iterator type in a range of futures
+     *  @tparam Rep Duration Rep
+     *  @tparam Period Duration Period
+     *  @param timeout_duration Time to wait for
+     *  @param first Iterator to the first element in the range
+     *  @param last Iterator to one past the last element in the range
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         typename Iterator,
         class Rep,
@@ -186,15 +198,16 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Range Range of futures
-    /// @tparam Rep Duration Rep
-    /// @tparam Period Duration Period
-    /// @param timeout_duration Time to wait for
-    /// @param r Range of futures
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Range Range of futures
+     *  @tparam Rep Duration Rep
+     *  @tparam Period Duration Period
+     *  @param timeout_duration Time to wait for
+     *  @param r Range of futures
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         class Range,
         class Rep,
@@ -220,15 +233,16 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Fs Range of futures
-    /// @tparam Rep Duration Rep
-    /// @tparam Period Duration Period
-    /// @param timeout_duration Time to wait for
-    /// @param fs Future objects
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Fs Range of futures
+     *  @tparam Rep Duration Rep
+     *  @tparam Period Duration Period
+     *  @param timeout_duration Time to wait for
+     *  @param fs Future objects
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         typename... Fs,
         class Rep,
@@ -260,15 +274,16 @@ namespace futures {
 
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Tuple Tuple of futures
-    /// @tparam Rep Duration Rep
-    /// @tparam Period Duration Period
-    /// @param timeout_duration Time to wait for
-    /// @param t Tuple of futures
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Tuple Tuple of futures
+     *  @tparam Rep Duration Rep
+     *  @tparam Period Duration Period
+     *  @param timeout_duration Time to wait for
+     *  @param t Tuple of futures
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         class Tuple,
         class Rep,
@@ -304,16 +319,17 @@ namespace futures {
 
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Iterator Iterator type in a range of futures
-    /// @tparam Clock Time point clock
-    /// @tparam Duration Time point duration
-    /// @param timeout_time Limit time point
-    /// @param first Iterator to the first element in the range
-    /// @param last Iterator to one past the last element in the range
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Iterator Iterator type in a range of futures
+     *  @tparam Clock Time point clock
+     *  @tparam Duration Time point duration
+     *  @param timeout_time Limit time point
+     *  @param first Iterator to the first element in the range
+     *  @param last Iterator to one past the last element in the range
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         typename Iterator,
         class Clock,
@@ -345,15 +361,16 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Range Range of futures
-    /// @tparam Clock Time point clock
-    /// @tparam Duration Time point duration
-    /// @param timeout_time Limit time point
-    /// @param r Range of futures
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Range Range of futures
+     *  @tparam Clock Time point clock
+     *  @tparam Duration Time point duration
+     *  @param timeout_time Limit time point
+     *  @param r Range of futures
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         class Range,
         class Clock,
@@ -379,15 +396,16 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Fs Future objects
-    /// @tparam Clock Time point clock
-    /// @tparam Duration Time point duration
-    /// @param timeout_time Limit time point
-    /// @param fs Future objects
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Fs Future objects
+     *  @tparam Clock Time point clock
+     *  @tparam Duration Time point duration
+     *  @param timeout_time Limit time point
+     *  @param fs Future objects
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         typename... Fs,
         class Clock,
@@ -418,15 +436,16 @@ namespace futures {
 
 
     /// Wait for a sequence of futures to be ready
-    ///
-    /// @tparam Tuple Tuple of futures
-    /// @tparam Clock Time point clock
-    /// @tparam Duration Time point duration
-    /// @param timeout_time Limit time point
-    /// @param t Tuple of futures
-    ///
-    /// @return `std::future_status::ready` if all futures got ready.
-    /// `std::future_status::timeout` otherwise.
+    /**
+     *  @tparam Tuple Tuple of futures
+     *  @tparam Clock Time point clock
+     *  @tparam Duration Time point duration
+     *  @param timeout_time Limit time point
+     *  @param t Tuple of futures
+     *
+     *  @return `std::future_status::ready` if all futures got ready.
+     *  `std::future_status::timeout` otherwise.
+     */
     template <
         class Tuple,
         class Clock,

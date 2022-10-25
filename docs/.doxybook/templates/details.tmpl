@@ -1,4 +1,4 @@
-{% if exists("brief") %}{{brief}}
+{% if exists("brief") and kind != "file" %}{{brief}}
 {% endif -%}
 
 {% if exists("templateParamsList") %}
@@ -31,7 +31,8 @@
 
 {# RENDER DETAILS (and always call it notes, as in cppreference) #}
 {% if exists("details") %}
-**Description**
+{% if kind != "file" %}
+**Description** {% endif -%}
 
 {{details}}
 
@@ -190,3 +191,5 @@
 {{inbody}}
 
 {% endif -%}
+
+<br/><br/>

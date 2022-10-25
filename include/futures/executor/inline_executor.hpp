@@ -8,6 +8,13 @@
 #ifndef FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP
 #define FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP
 
+/**
+ *  @file executor/inline_executor.hpp
+ *  @brief Inline executor
+ *
+ *  This file defines the inline executor, which executes tasks synchronously.
+ */
+
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/deps/asio/execution.hpp>

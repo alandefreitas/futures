@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_IS_FUTURE_HPP
 #define FUTURES_TRAITS_IS_FUTURE_HPP
 
+/**
+ *  @file traits/is_future.hpp
+ *  @brief `is_future` trait
+ *
+ *  This file defines the `is_future` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
@@ -26,18 +33,15 @@ namespace futures {
     template <typename>
     struct is_future : std::false_type {};
 
-    /// Customization point to determine if a type is a future type
-    /// (specialization for std::future<T>)
+    /// @copydoc is_future
     template <class T>
     struct is_future<std::future<T>> : std::true_type {};
 
-    /// Customization point to determine if a type is a future type
-    /// (specialization for std::shared_future<T>)
+    /// @copydoc is_future
     template <class T>
     struct is_future<std::shared_future<T>> : std::true_type {};
 
-    /// Customization point to determine if a type is a future type as a
-    /// bool value
+    /// @copydoc is_future
     template <class T>
     constexpr bool is_future_v = is_future<T>::value;
 

@@ -8,6 +8,13 @@
 #ifndef FUTURES_TRAITS_IS_ALWAYS_DEFERRED_HPP
 #define FUTURES_TRAITS_IS_ALWAYS_DEFERRED_HPP
 
+/**
+ *  @file traits/is_always_deferred.hpp
+ *  @brief `is_always_deferred` trait
+ *
+ *  This file defines the `is_always_deferred` trait.
+ */
+
 #include <future>
 #include <type_traits>
 
