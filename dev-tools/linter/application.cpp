@@ -253,7 +253,6 @@ application::bundle_includes(
                 patch += '/';
              patch += as_str;
              patch += include_match[5];
-             patch += " // redirect boost include";
              return patch;
          }}
     };
