@@ -105,6 +105,7 @@ application::sanitize_all() {
         fout << content;
     }
     remove_unused_bundled_headers();
+    print_stats();
     return true;
 }
 
@@ -131,6 +132,7 @@ application::sanitize_include_guards(
         trace("Found guard", include_guard_match[2]);
     } else {
         log("Cannot find include guard for", p);
+        ++stats_.n_header_guards_not_found;
         return true;
     }
 
@@ -148,8 +150,10 @@ application::sanitize_include_guards(
         }
         if (n == 1) {
             log(p, "include guard", expected_guard, "only found once");
+            ++stats_.n_header_guards_mismatch;
         } else if (n == 2) {
             log(p, "include guard", expected_guard, "only found twice");
+            ++stats_.n_header_guards_mismatch;
         }
         return true;
     } else {
@@ -163,6 +167,7 @@ application::sanitize_include_guards(
         });
     if (!new_guard_ok) {
         log("Inferred guard", expected_guard, "is not a valid macro name");
+        ++stats_.n_header_guards_invalid_macro;
         return false;
     }
 
@@ -471,6 +476,7 @@ application::bundle_includes(
                         abs_file_path,
                         dest,
                         fs::copy_options::overwrite_existing);
+                    ++stats_.n_bundled_files_created;
                 }
 
                 // Recursively bundle indirect include headers
@@ -579,6 +585,7 @@ application::create_redirect_header(fs::path const &as_path) {
         std::ofstream deps_out(redirect_header_p);
         deps_out << redirect_content;
         deps_out.close();
+        ++stats_.n_deps_files_created;
     }
 }
 void
@@ -600,6 +607,7 @@ application::remove_unused_bundled_headers() {
             if (!config_.dry_run) {
                 fs::remove(p);
             }
+            ++stats_.n_bundled_files_removed;
         }
     }
     // Remove empty dirs
@@ -684,5 +692,17 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
         fs::create_directories(dest.parent_path());
         std::ofstream fout(dest);
         fout << content;
+        ++stats_.n_unit_tests_created;
     }
+}
+
+void
+application::print_stats() {
+    log("Number of header guards not found:", stats_.n_header_guards_not_found);
+    log("Number of header guards not completely identified:", stats_.n_header_guards_mismatch);
+    log("Number of invalid header guards generated:", stats_.n_header_guards_invalid_macro);
+    log("Number of bundled files created:", stats_.n_bundled_files_created);
+    log("Number of bundled files removed:", stats_.n_bundled_files_removed);
+    log("Number of deps files created:", stats_.n_deps_files_created);
+    log("Number of unit tests created:", stats_.n_unit_tests_created);
 }

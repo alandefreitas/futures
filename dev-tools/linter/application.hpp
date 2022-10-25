@@ -82,6 +82,24 @@ private:
     void
     generate_unit_test(fs::path const& p, fs::path const& parent);
 
+    void
+    remove_unused_bundled_headers();
+
+    struct stats {
+        std::size_t n_header_guards_mismatch = 0;
+        std::size_t n_header_guards_not_found = 0;
+        std::size_t n_header_guards_invalid_macro = 0;
+        std::size_t n_bundled_files_created = 0;
+        std::size_t n_deps_files_created = 0;
+        std::size_t n_bundled_files_removed = 0;
+        std::size_t n_unit_tests_created = 0;
+    };
+
+    stats stats_;
+
+    void
+    print_stats();
+
     // Configuration
     config config_;
     bool ok_;
@@ -109,8 +127,6 @@ private:
 
     // This is the set of indirect external headers we need
     std::vector<fs::path> bundled_headers;
-    void
-    remove_unused_bundled_headers();
 };
 
 
