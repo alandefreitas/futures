@@ -133,6 +133,7 @@ constexpr /* see below */{% else -%}
 {# Render suffix -#}
 {% if overload.const %} const{% endif -%}
 {% if overload.override %} override{% endif -%}
+{% if last(split(overload.argsString, " ")) == "noexcept" %} noexcept{% endif -%}
 {% if overload.default %} = default{% endif -%}
 {% if overload.deleted %} = delete{% endif -%}
 {% if overload.pureVirtual %} =0{% endif %};
@@ -302,6 +303,14 @@ constexpr /* see below */{% else -%}
 {% endif -%}
 {% endfor %}
 {% endif -%} {# n_details > 0 #}
+
+**Exception Safety**
+
+{% if last(split(overload.argsString, " ")) == "noexcept" %}
+Throws nothing.
+{% else -%}
+Basic exception guarantee.
+{% endif -%}
 
 {# RENDER NOTES #}
 {% if n_notes>0 -%}
