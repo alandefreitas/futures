@@ -35,7 +35,7 @@
 
 <br/>
 
-[![Build Status](https://img.shields.io/github/workflow/status/alandefreitas/futures/Build?event=push&label=Build&logo=Github-Actions)](https://github.com/alandefreitas/futures/actions?query=workflow%3ABuild+event%3Apush)
+[![Build Status](https://img.shields.io/github/workflow/status/alandefreitas/futures/Build?event=push&label=Build&logo=Github-Actions)](https://github.com/alandefreitas/futures/actions?query=workflow%3ABuild+event%3Apush+branch%3Amaster+)
 [![Latest Release](https://img.shields.io/github/release/alandefreitas/futures.svg?label=Download)](https://GitHub.com/alandefreitas/futures/releases/)
 [![Documentation](https://img.shields.io/website-up-down-green-red/http/alandefreitas.github.io/futures.svg?label=Documentation)](https://alandefreitas.github.io/futures/)
 [![Discussions](https://img.shields.io/website-up-down-green-red/http/alandefreitas.github.io/futures.svg?label=Discussions)](https://github.com/alandefreitas/futures/discussions)

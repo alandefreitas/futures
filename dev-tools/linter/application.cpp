@@ -178,8 +178,9 @@ application::sanitize_include_guards(
            != std::string::npos)
     {
         content.replace(guard_match_pos, prev_guard.size(), expected_guard);
-        guard_search_begin = guard_match_pos + prev_guard.size();
+        guard_search_begin = guard_match_pos + expected_guard.size();
     }
+    ++stats_.n_header_guards_fixed;
 
     return true;
 }
@@ -476,6 +477,7 @@ application::bundle_includes(
                         abs_file_path,
                         dest,
                         fs::copy_options::overwrite_existing);
+                    log("Bundle", as_path);
                     ++stats_.n_bundled_files_created;
                 }
 
@@ -585,6 +587,7 @@ application::create_redirect_header(fs::path const &as_path) {
         std::ofstream deps_out(redirect_header_p);
         deps_out << redirect_content;
         deps_out.close();
+        log("Create dep header: ", redirect_header_p);
         ++stats_.n_deps_files_created;
     }
 }
@@ -603,7 +606,7 @@ application::remove_unused_bundled_headers() {
         if (std::find(bundled_headers.begin(), bundled_headers.end(), rel)
             == bundled_headers.end())
         {
-            log(p, "is not included in this project");
+            log("Remove bundled", p);
             if (!config_.dry_run) {
                 fs::remove(p);
             }
@@ -698,11 +701,17 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
 
 void
 application::print_stats() {
-    log("Number of header guards not found:", stats_.n_header_guards_not_found);
-    log("Number of header guards not completely identified:", stats_.n_header_guards_mismatch);
-    log("Number of invalid header guards generated:", stats_.n_header_guards_invalid_macro);
-    log("Number of bundled files created:", stats_.n_bundled_files_created);
-    log("Number of bundled files removed:", stats_.n_bundled_files_removed);
-    log("Number of deps files created:", stats_.n_deps_files_created);
-    log("Number of unit tests created:", stats_.n_unit_tests_created);
+    log_header("HEADER GUARDS");
+    log("Header guards fixed:", stats_.n_header_guards_fixed);
+    log("Header guards not found:", stats_.n_header_guards_not_found);
+    log("Header guards not completely identified:",
+        stats_.n_header_guards_mismatch);
+    log("Invalid header guards generated:",
+        stats_.n_header_guards_invalid_macro);
+    log_header("DEPENDENCIES");
+    log("Bundled files created:", stats_.n_bundled_files_created);
+    log("Bundled files removed:", stats_.n_bundled_files_removed);
+    log("Deps files created:", stats_.n_deps_files_created);
+    log_header("UNIT TESTS");
+    log("Unit tests created:", stats_.n_unit_tests_created);
 }

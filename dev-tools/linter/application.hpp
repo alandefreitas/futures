@@ -66,6 +66,15 @@ private:
         }
     }
 
+    void
+    log_header(std::string_view title) {
+        static constexpr std::size_t cols = 50;
+        std::size_t pad = cols - title.size();
+        std::size_t padl = pad / 2;
+        std::size_t padr = pad - padl;
+        log(std::string(padl, '='), title, std::string(padr, '='));
+    }
+
     template <typename Arg, typename... Args>
     void
     trace(Arg&& arg, Args&&... args) {
@@ -86,6 +95,7 @@ private:
     remove_unused_bundled_headers();
 
     struct stats {
+        std::size_t n_header_guards_fixed = 0;
         std::size_t n_header_guards_mismatch = 0;
         std::size_t n_header_guards_not_found = 0;
         std::size_t n_header_guards_invalid_macro = 0;
