@@ -188,6 +188,7 @@ add_futures_test(traits/is_shared_future.cpp)
 add_futures_test(traits/is_stoppable.cpp)
 add_futures_test(detail/utility/regular_void.cpp)
 add_futures_test(detail/utility/compressed_tuple.cpp)
+add_futures_test(detail/utility/is_constant_evaluated.cpp)
 add_futures_test(detail/container/queue.cpp)
 add_futures_test(detail/operation_state.cpp)
 

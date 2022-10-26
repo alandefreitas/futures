@@ -17,6 +17,7 @@
  */
 
 #include <futures/future.hpp>
+#include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>

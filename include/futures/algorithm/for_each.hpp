@@ -17,6 +17,7 @@
  */
 
 #include <futures/future.hpp>
+#include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>

@@ -154,14 +154,12 @@ namespace futures {
      */
     FUTURES_CONSTANT_EVALUATED_CONSTEXPR std::size_t
     make_grain_size(std::size_t n) {
-        return std::clamp(
-            n
-                / (8
-                   * std::
-                       max(futures::hardware_concurrency(),
-                           static_cast<std::size_t>(1))),
-            size_t(1),
-            size_t(2048));
+        std::size_t const nthreads = futures::hardware_concurrency();
+        std::size_t const safe_nthreads = std::
+            max(nthreads, static_cast<std::size_t>(1));
+        std::size_t const expected_nthreads = 8 * safe_nthreads;
+        std::size_t const grain_per_thread = n / expected_nthreads;
+        return std::clamp(grain_per_thread, size_t(1), size_t(2048));
     }
 
     /// Create an instance of the default partitioner with a reasonable
@@ -211,7 +209,7 @@ namespace futures {
     }
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
-    template <class T, class I, class S>
+    template <class T, class I, class S = I>
     using is_partitioner = std::conjunction<
         std::conditional_t<
             is_input_iterator_v<I>,
@@ -224,7 +222,7 @@ namespace futures {
         std::is_invocable<T, I, S>>;
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
-    template <class P, class I, class S>
+    template <class P, class I, class S = I>
     constexpr bool is_partitioner_v = is_partitioner<P, I, S>::value;
 
     /// Determine if P is a valid partitioner for the range `R`

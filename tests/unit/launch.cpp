@@ -95,6 +95,7 @@ TEST_CASE("Launch") {
             }
         }
     };
+
     using deferred_options
         = future_options<continuable_opt, always_deferred_opt>;
     STATIC_REQUIRE(
