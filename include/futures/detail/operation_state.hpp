@@ -17,9 +17,11 @@
 #include <futures/detail/thread/relocker.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
+#include <futures/detail/utility/regular_void.hpp>
 #include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/future_continue_task.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
 #include <futures/detail/deps/boost/throw_exception.hpp>
@@ -876,31 +878,18 @@ namespace futures::detail {
         void
         apply(Fn &&fn, Args &&...args) {
             try {
-                if constexpr (!Options::is_stoppable) {
-                    if constexpr (std::is_void_v<R>) {
-                        std::invoke(
-                            std::forward<Fn>(fn),
-                            std::forward<Args>(args)...);
-                        this->set_value();
+                set_value(regular_void_invoke(
+                    std::forward<Fn>(fn),
+                    [this]() {
+                    if constexpr (!Options::is_stoppable) {
+                        boost::ignore_unused(this);
+                        return regular_void{};
                     } else {
-                        this->set_value(std::invoke(
-                            std::forward<Fn>(fn),
-                            std::forward<Args>(args)...));
+                        return layout_.template get<stop_source_type>()
+                            .get_token();
                     }
-                } else {
-                    if constexpr (std::is_void_v<R>) {
-                        std::invoke(
-                            std::forward<Fn>(fn),
-                            layout_.template get<stop_source_type>().get_token(),
-                            std::forward<Args>(args)...);
-                        this->set_value();
-                    } else {
-                        this->set_value(std::invoke(
-                            std::forward<Fn>(fn),
-                            layout_.template get<stop_source_type>().get_token(),
-                            std::forward<Args>(args)...));
-                    }
-                }
+                    }(),
+                    std::forward<Args>(args)...));
             }
             catch (...) {
                 this->set_exception(std::current_exception());

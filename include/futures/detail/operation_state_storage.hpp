@@ -14,8 +14,8 @@
 #include <type_traits>
 
 namespace futures::detail {
-    /// Determine the type we should use to store a shared state internally
-    /**
+    // Determine the type we should use to store a shared state internally
+    /*
      * We usually need uninitialized storage for a given type, since the
      * shared state needs to be in control of constructors and destructors.
      *
@@ -26,8 +26,8 @@ namespace futures::detail {
     template <typename R, class Enable = void>
     class operation_state_storage {};
 
-    /// Operation state storage for void
-    /**
+    // Operation state storage for void
+    /*
      * When the operation state value type is void, we don't need to store
      * anything. The function are simply ignored.
      *
@@ -46,8 +46,8 @@ namespace futures::detail {
         get() {}
     };
 
-    /// Operation state storage for references
-    /**
+    // Operation state storage for references
+    /*
      * When the operation state value type is a reference, we internally
      * store a pointer. Whenever we access the value, the pointer is
      * dereferenced into a reference again.
@@ -85,8 +85,8 @@ namespace futures::detail {
         std::decay_t<R>* value_{ nullptr };
     };
 
-    /// Operation state storage for trivial types
-    /**
+    // Operation state storage for trivial types
+    /*
      * When the operation state value type is trivial, we store the value
      * directly. This means we can directly visualize the current value of
      * the operation state at any time, even when not explicitly initialized.
@@ -128,8 +128,8 @@ namespace futures::detail {
         R value_;
     };
 
-    /// Operation state storage for non-trivial types
-    /**
+    // Operation state storage for non-trivial types
+    /*
      * When the operation state value type is not trivial, we store the value
      * with inline aligned store. This acts like a std::optional that allows us
      * to keep an uninitialized value while the promise has not been set yet.

@@ -142,14 +142,9 @@ namespace futures::detail {
         void
         apply(UArgs &&...args) {
             try {
-                if constexpr (std::is_void_v<R>) {
-                    std::apply(this->get_function(), std::make_tuple(args...));
-                    this->set_value();
-                } else {
-                    this->set_value(std::apply(
-                        this->get_function(),
-                        std::make_tuple(args...)));
-                }
+                this->set_value(regular_void_invoke(
+                    this->get_function(),
+                    std::forward<UArgs>(args)...));
             }
             catch (...) {
                 this->set_exception(std::current_exception());

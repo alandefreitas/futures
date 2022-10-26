@@ -9,6 +9,7 @@
 #define FUTURES_DETAIL_UTILITY_COMPRESSED_TUPLE_HPP
 
 #include <futures/config.hpp>
+#include <futures/detail/traits/unwrap_refwrapper.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
@@ -112,20 +113,6 @@ namespace futures::detail {
     };
 
     // Make tuple
-    template <class T>
-    struct unwrap_refwrapper {
-        using type = T;
-    };
-
-    template <class T>
-    struct unwrap_refwrapper<std::reference_wrapper<T>> {
-        using type = T&;
-    };
-
-    template <class T>
-    using unwrap_decay_t = typename unwrap_refwrapper<
-        typename std::decay<T>::type>::type;
-
     template <class... Types>
     constexpr compressed_tuple<unwrap_decay_t<Types>...>
     make_tuple(Types&&... args) {

@@ -12,16 +12,6 @@
 #include <type_traits>
 
 namespace futures::detail {
-    // Check if type is a reference_wrapper
-    template <typename>
-    struct is_reference_wrapper : std::false_type {};
-
-    template <class T>
-    struct is_reference_wrapper<std::reference_wrapper<T>> : std::true_type {};
-
-    template <class T>
-    constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
-
     // Determine the type to be stored and returned by a future object
     /*
      * Given a task that returns `T`, this trait determines the value type `R`
@@ -30,7 +20,7 @@ namespace futures::detail {
     template <class T>
     struct future_value_type_for
         : std::conditional<
-              detail::is_reference_wrapper_v<std::decay_t<T>>,
+              is_reference_wrapper_v<std::decay_t<T>>,
               T &,
               std::decay_t<T>> {};
 
