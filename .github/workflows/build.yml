@@ -38,7 +38,6 @@ jobs:
             sudocmd: "",
             artifact_name: "Windows x64",
             cores: 2,
-            build_single_header: "OFF",
           }
           - {
             name: "Ubuntu/20.04/Static/X64/Release",
@@ -48,7 +47,6 @@ jobs:
             sudocmd: "sudo",
             artifact_name: "Linux",
             cores: 2,
-            build_single_header: "ON",
           }
           - {
             name: "MacOSX/10.15/Static/X64/Release",
@@ -58,7 +56,6 @@ jobs:
             sudocmd: "sudo",
             artifact_name: "MacOSX",
             cores: 4,
-            build_single_header: "OFF",
           }
     steps:
       - uses: actions/checkout@v2
@@ -76,7 +73,7 @@ jobs:
         run: ctest --parallel ${{ matrix.config.cores }} -C ${{ matrix.config.config }} --progress --output-on-failure
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v2
-        if: always() # always run even if the previous step fails
+        if: always() # always run even if the previous step fails, but still let it fail
         with:
           report_paths: '**/build/tests/unit_tests/reports/*.junit'
       - name: Install
@@ -90,26 +87,10 @@ jobs:
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
           path: build/futures-?.?.?-*.*
-      - name: Archive Single-Header as is
-        if: ${{ matrix.config.build_single_header == 'ON' }}
-        uses: kittaakos/upload-artifact-as-is@v0
-        with:
-          path: build/include/single_header/futures/futures.hpp
-      - name: Deploy single_header to gist
-        continue-on-error: true
-        if: ${{ matrix.config.build_single_header == 'ON' }}
-        uses: exuanbo/actions-deploy-gist@v1.1.2
-        with:
-          token: ${{ secrets.GIST_TOKEN }}
-          gist_id: 15c8cd11b9230cc75e163c7d7eb63a15
-          gist_description: "Single-header futures library"
-          gist_file_name: futures.hpp
-          file_path: ./build/include/single_header/futures/futures.hpp
       - name: Archive Installer Packages as is
         uses: kittaakos/upload-artifact-as-is@v0
         with:
           path: build/futures-?.?.?-*.*
-
 #      - name: Integration Test
 #        working-directory: ./test/integration
 #        run: |
