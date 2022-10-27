@@ -80,7 +80,9 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails, but still let it fail
         with:
-          report_paths: '**/build/tests/unit_tests/reports/*.junit'
+          check_name: Test Report - ${{ matrix.config.artifact_name }}
+          check_title_template: '{{TEST_NAME}}'
+          report_paths: build/tests/unit/reports/*.junit
       - name: Install
         working-directory: ./build
         run: ${{ matrix.config.sudocmd }} cmake --install .
