@@ -60,6 +60,10 @@ private:
     void
     log(Arg&& arg, Args&&... args) {
         if (config_.show_progress || config_.verbose) {
+            for (std::size_t i = 0; i < log_level; ++i)
+                std::cout << "==";
+            if (log_level)
+                std::cout << ' ';
             std::cout << std::forward<Arg>(arg);
             ((std::cout << ' ' << std::forward<Args>(args)), ...);
             std::cout << "\n";
@@ -79,6 +83,10 @@ private:
     void
     trace(Arg&& arg, Args&&... args) {
         if (config_.verbose) {
+            for (std::size_t i = 0; i < log_level; ++i)
+                std::cout << "--";
+            if (log_level)
+                std::cout << ' ';
             std::cout << std::forward<Arg>(arg);
             ((std::cout << ' ' << std::forward<Args>(args)), ...);
             std::cout << "\n";
@@ -94,6 +102,13 @@ private:
     void
     remove_unused_bundled_headers();
 
+    void
+    remove_unreachable_headers();
+
+    // get path relative to one of the include paths
+    fs::path
+    relative_path(fs::path const& p);
+
     struct stats {
         std::size_t n_header_guards_fixed = 0;
         std::size_t n_header_guards_mismatch = 0;
@@ -101,6 +116,7 @@ private:
         std::size_t n_header_guards_invalid_macro = 0;
         std::size_t n_bundled_files_created = 0;
         std::size_t n_deps_files_created = 0;
+        std::size_t n_unreachable_headers = 0;
         std::size_t n_bundled_files_removed = 0;
         std::size_t n_unit_tests_created = 0;
     };
@@ -137,6 +153,11 @@ private:
 
     // This is the set of indirect external headers we need
     std::vector<fs::path> bundled_headers;
+
+    std::size_t log_level = 0;
+
+    static std::regex const include_regex;
+    static std::regex const define_boost_config_regex;
 };
 
 

@@ -16,6 +16,9 @@ struct config {
     // Input paths
     std::vector<fs::path> include_paths;
 
+    // Main headers
+    std::vector<fs::path> main_headers;
+
     // Unit tests
     fs::path unit_test_path;
     fs::path unit_test_template;

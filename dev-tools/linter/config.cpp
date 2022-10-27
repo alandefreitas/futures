@@ -23,7 +23,7 @@ is_falsy(std::string_view value) {
 }
 
 bool
-parse(config &c, const std::vector<std::string_view> &args) {
+parse(config &c, std::vector<std::string_view> const &args) {
     // Find the specified key in args
     auto find_key = [&](std::string_view key) {
         return std::find_if(args.begin(), args.end(), [&](std::string_view arg) {
@@ -43,7 +43,7 @@ parse(config &c, const std::vector<std::string_view> &args) {
     };
 
     // Check if path is a directory that exists
-    auto exist_as_directory = [](const fs::path &p) {
+    auto exist_as_directory = [](fs::path const &p) {
         if (!fs::exists(p)) {
             std::cerr << "Path " << p << " does not exist\n";
             return false;
@@ -55,119 +55,113 @@ parse(config &c, const std::vector<std::string_view> &args) {
         return true;
     };
 
-    auto [include_paths_begin, include_paths_end] = get_values("include_paths");
-    c.include_paths = { include_paths_begin, include_paths_end };
-    if (c.include_paths.empty()) {
-        std::cerr << "No include paths provided\n";
-        return false;
+    // get values as vector<path>
+    auto get_paths = [&](std::string_view key) {
+        auto [first, last] = get_values(key);
+        return std::vector<fs::path>(first, last);
+    };
+
+    // get values as vector<string>
+    auto get_strings = [&](std::string_view key) {
+        auto [first, last] = get_values(key);
+        return std::vector<std::string>(first, last);
+    };
+
+    // get value as path
+    auto get_path = [&](std::string_view key) -> fs::path {
+        auto [first, last] = get_values(key);
+        if (first != last) {
+            return { *first };
+        } else {
+            return {};
+        }
+    };
+
+    // get value as bool
+    auto get_bool = [&](bool &v, std::string_view key) {
+        auto key_it = find_key(key);
+        if (key_it == args.end()) {
+            return;
+        }
+        auto [first, last] = get_values(key);
+        if (first == last) {
+            v = true;
+            return;
+        }
+        v = !is_falsy(*first);
+    };
+
+#define CHECK(test, msg)          \
+    if (!(test)) {                \
+        std::cerr << msg << "\n"; \
+        return false;             \
     }
-    if (!std::all_of(
+
+    c.include_paths = get_paths("include_paths");
+    CHECK(!c.include_paths.empty(), "No include paths provided")
+    CHECK(
+        std::all_of(
             c.include_paths.begin(),
             c.include_paths.end(),
-            exist_as_directory))
-    {
-        return false;
-    }
+            exist_as_directory),
+        "Include directories don't exist")
 
-    auto [dep_include_paths_begin, dep_include_paths_end] = get_values(
-        "dep_include_paths");
-    c.dep_include_paths = { dep_include_paths_begin, dep_include_paths_end };
-    if (c.dep_include_paths.empty()) {
-        std::cerr << "No dependency include paths provided\n";
-    }
-    if (!std::all_of(
+    c.main_headers = get_paths("main_headers");
+    CHECK(!c.main_headers.empty(), "No main headers provided")
+    CHECK(
+        std::all_of(
+            c.main_headers.begin(),
+            c.main_headers.end(),
+            [&c](fs::path const &p) {
+        return find_file(c.include_paths, p).second;
+            }),
+        "Main headers don't exist");
+
+    c.dep_include_paths = get_paths("dep_include_paths");
+    CHECK(!c.dep_include_paths.empty(), "No dependency include paths provided");
+    CHECK(
+        std::all_of(
             c.dep_include_paths.begin(),
             c.dep_include_paths.end(),
-            exist_as_directory))
-    {
-        return false;
-    }
+            exist_as_directory),
+        "Dep include paths must exist");
 
-    auto [bundle_ignore_prefix_begin, bundle_ignore_prefix_end] = get_values(
-        "bundle_ignore_prefix");
-    c.bundle_ignore_prefix = { bundle_ignore_prefix_begin, bundle_ignore_prefix_end };
+    c.bundle_ignore_prefix = get_paths("bundle_ignore_prefix");
 
-    auto [bundled_deps_path_begin, bundled_deps_path_end] = get_values(
-        "bundled_deps_path");
-    if (bundled_deps_path_begin != bundled_deps_path_end) {
-        c.bundled_deps_path = *bundled_deps_path_begin;
-        if (c.bundled_deps_path.empty()) {
-            std::cerr << "Empty destination path for bundled dependencies\n";
-        }
-    } else {
-        std::cerr << "No destination path for bundled dependencies\n";
-        return false;
-    }
+    c.bundled_deps_path = get_path("bundled_deps_path");
+    CHECK(
+        !c.bundled_deps_path.empty(),
+        "No destination path for bundled dependencies");
 
-    auto [unit_test_ignore_paths_begin, unit_test_ignore_paths_end] = get_values(
-        "unit_test_ignore_paths");
-    c.unit_test_ignore_paths = std::vector<std::string>{ unit_test_ignore_paths_begin, unit_test_ignore_paths_end };
-    if (c.unit_test_ignore_paths.empty()) {
-        std::cerr << "No unit test ignore path segments provided\n";
-    }
+    c.unit_test_ignore_paths = get_strings("unit_test_ignore_paths");
+    CHECK(
+        !c.unit_test_ignore_paths.empty(),
+        "No unit test ignore path segments provided");
 
-    auto [unit_test_path_begin, unit_test_path_end] = get_values(
-        "unit_test_path");
-    if (unit_test_path_begin != unit_test_path_end)
-        c.unit_test_path = *unit_test_path_begin;
+    c.unit_test_path = get_path("unit_test_path");
+    CHECK(!c.unit_test_path.empty(), "No unit test path not provided");
 
-    auto [unit_test_template_begin, unit_test_template_end] = get_values(
-        "unit_test_template");
-    if (unit_test_template_begin != unit_test_template_end)
-        c.unit_test_template = *unit_test_template_begin;
+    c.unit_test_template = get_path("unit_test_template");
+    CHECK(
+        !c.unit_test_template.empty(),
+        "No unit test template path not provided");
+    CHECK(
+        fs::exists(c.unit_test_template),
+        "No unit test template file does not exist");
 
-    auto [deps_headers_path_begin, deps_headers_path_end] = get_values(
-        "deps_headers_path");
-    if (deps_headers_path_begin != deps_headers_path_end) {
-        c.deps_headers_path = *deps_headers_path_begin;
-        if (c.deps_headers_path.empty()) {
-            std::cerr << "Empty destination path for bundled dependencies\n";
-        }
-    } else {
-        std::cerr << "No destination path for bundled dependencies\n";
-        return false;
-    }
+    c.deps_headers_path = get_path("deps_headers_path");
+    CHECK(!c.deps_headers_path.empty(), "No dep headers path not provided");
 
-    auto key_it = find_key("show_progress");
-    if (key_it != args.end()) {
-        c.show_progress = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("verbose");
-    if (key_it != args.end()) {
-        c.verbose = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("dry_run");
-    if (key_it != args.end()) {
-        c.dry_run = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("fix_include_guards");
-    if (key_it != args.end()) {
-        c.fix_include_guards = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("redirect_dep_includes");
-    if (key_it != args.end()) {
-        c.redirect_dep_includes = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("bundle_dependencies");
-    if (key_it != args.end()) {
-        c.bundle_dependencies = is_key(*key_it) || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("remove_unused_dependency_headers");
-    if (key_it != args.end()) {
-        c.remove_unused_dependency_headers = is_key(*key_it)
-                                             || !is_falsy(*key_it);
-    }
-
-    key_it = find_key("update_main_headers");
-    if (key_it != args.end()) {
-        c.update_main_headers = is_key(*key_it) || !is_falsy(*key_it);
-    }
+    get_bool(c.show_progress, "show_progress");
+    get_bool(c.verbose, "verbose");
+    get_bool(c.dry_run, "dry_run");
+    get_bool(c.fix_include_guards, "fix_include_guards");
+    get_bool(c.redirect_dep_includes, "redirect_dep_includes");
+    get_bool(c.bundle_dependencies, "bundle_dependencies");
+    get_bool(c.remove_unused_dependency_headers,
+        "remove_unused_dependency_headers");
+    get_bool(c.update_main_headers, "update_main_headers");
+#undef CHECK
 
     return true;
 }

@@ -11,8 +11,8 @@
 /**
  *  @dir algorithm
  *  @brief Root algorithms directory
- *  @details The root directory contains headers related to the algorithm module,
- *  including algorithms, partitioners, and traits.
+ *  @details The root directory contains headers related to the algorithm
+ * module, including algorithms, partitioners, and traits.
  */
 
 /**
@@ -20,13 +20,14 @@
  *  @brief All Algorithms
  *
  *  Use this header to include all functionalities of the adaptors module at
- *  once. In most cases, however, we recommend only including the headers for the
- *  functionality you need. Use the reference to identify these files.
+ *  once. In most cases, however, we recommend only including the headers for
+ * the functionality you need. Use the reference to identify these files.
  */
 
 // #glob <futures/algorithm/*.hpp>
 #include <futures/algorithm/all_of.hpp>
 #include <futures/algorithm/any_of.hpp>
+#include <futures/algorithm/comparisons.hpp>
 #include <futures/algorithm/count.hpp>
 #include <futures/algorithm/count_if.hpp>
 #include <futures/algorithm/find.hpp>
@@ -34,6 +35,8 @@
 #include <futures/algorithm/find_if_not.hpp>
 #include <futures/algorithm/for_each.hpp>
 #include <futures/algorithm/none_of.hpp>
+#include <futures/algorithm/partitioner.hpp>
 #include <futures/algorithm/reduce.hpp>
+#include <futures/algorithm/traits.hpp>
 
 #endif // FUTURES_ALGORITHM_HPP

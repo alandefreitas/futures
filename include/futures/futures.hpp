@@ -39,6 +39,7 @@
 #include <futures/packaged_task.hpp>
 #include <futures/promise.hpp>
 #include <futures/stop_token.hpp>
+#include <futures/traits.hpp>
 #include <futures/wait_for_all.hpp>
 #include <futures/wait_for_any.hpp>
 

@@ -8,6 +8,14 @@
 #include "application.hpp"
 #include <string_view>
 
+std::regex const application::include_regex{
+    "(^|\n) *# *include *[<\"] *([a-zA-Z0-9_/\\. ]+) *[>\"]"
+};
+
+std::regex const application::define_boost_config_regex{
+    "(^|\n) *# *define (BOOST_[A-Z]+_CONFIG) *([\"<]) *([a-zA-Z0-9_/\\. ]+.hpp) *([\">])"
+};
+
 application::application(int argc, char **argv)
     : ok_(parse(config_, argc, argv)) {}
 
@@ -17,7 +25,9 @@ application::run() {
         return 1;
     }
 
-    setup();
+    if (!setup()) {
+        return 1;
+    }
 
     // Find files in directory
     find_project_files();
@@ -65,12 +75,14 @@ application::find_project_files() {
 
 bool
 application::sanitize_all() {
-    log("Linting files");
+    log_header("LINTING SOURCE FILES");
     for (auto &p: file_paths) {
         // Validate the file
-        trace("Sanitize", p);
+        trace("Sanitize", relative_path(p));
+        ++log_level;
         if (!fs::exists(p)) {
             trace("File is not in include paths");
+            --log_level;
             continue;
         }
 
@@ -79,6 +91,7 @@ application::sanitize_all() {
         auto parent_it = find_parent_path(config_.include_paths, p);
         if (parent_it == config_.include_paths.end()) {
             log("Cannot find include paths for", p);
+            --log_level;
             return false;
         }
         fs::path parent = *parent_it;
@@ -87,6 +100,7 @@ application::sanitize_all() {
         std::ifstream t(p);
         if (!t) {
             log("Failed to open file");
+            --log_level;
             continue;
         }
 
@@ -96,17 +110,45 @@ application::sanitize_all() {
         t.close();
 
         // Lint file
+        trace("Sanitize include guards");
+        ++log_level;
         sanitize_include_guards(p, parent, content);
+        --log_level;
+
+        trace("Bundle includes");
+        ++log_level;
         bundle_includes(p, parent, content);
+        --log_level;
+
+        trace("Generate unit tests");
+        ++log_level;
         generate_unit_test(p, parent);
+        --log_level;
 
         // Save results
         std::ofstream fout(p);
         fout << content;
+        --log_level;
     }
     remove_unused_bundled_headers();
+    remove_unreachable_headers();
     print_stats();
     return true;
+}
+
+fs::path
+application::relative_path(fs::path const &p) {
+    if (p.is_relative())
+        return p;
+    auto it = find_parent_path(config_.include_paths, p);
+    if (it != config_.include_paths.end()) {
+        return fs::relative(p, *it);
+    }
+    it = find_parent_path(config_.dep_include_paths, p);
+    if (it != config_.dep_include_paths.end()) {
+        return fs::relative(p, *it);
+    }
+    return p;
 }
 
 bool
@@ -224,7 +266,7 @@ application::bundle_includes(
     };
     // clang-format off
     std::vector<replace_opts> replace_options = {
-        {std::regex("(^|\n) *# *include *[<\"] *([a-zA-Z0-9_/\\. ]+) *[>\"]"),
+        {include_regex,
          2,
          [is_bundled, this](std::smatch &include_match, std::string& as_str) {
              std::string patch;
@@ -241,7 +283,7 @@ application::bundle_includes(
              patch += ">";
              return patch;
         }},
-        {std::regex("(^|\n) *# *define (BOOST_[A-Z]+_CONFIG) *([\"<]) *([a-zA-Z0-9_/\\. ]+.hpp) *([\">])"),
+        {define_boost_config_regex,
          4,
          [is_bundled, this](std::smatch &include_match, std::string& as_str) {
              std::string patch;
@@ -289,9 +331,8 @@ application::bundle_includes(
                     == rel_deps_dir_str)
                 {
                     trace(
-                        "Source file",
                         as_str,
-                        "points to dependency ( pos ",
+                        "points to a dependency ( pos ",
                         include_match[0].first - content.cbegin(),
                         ")");
                     as_str.erase(
@@ -307,7 +348,6 @@ application::bundle_includes(
                     == rel_bundle_dir_str)
                 {
                     trace(
-                        "Source file",
                         as_str,
                         "is already a bundled dependency ( pos ",
                         include_match[0].first - content.cbegin(),
@@ -319,7 +359,9 @@ application::bundle_includes(
                         as_str.erase(as_str.begin(), as_str.begin() + 1);
                     }
                     as_path = static_cast<const fs::path>(as_str);
-                    trace("Looking for ", as_str, "in bundled headers");
+                    ++log_level;
+                    trace("Looking for", as_str, "in bundled headers");
+                    --log_level;
                 } else {
                     trace(
                         as_str,
@@ -335,11 +377,13 @@ application::bundle_includes(
             if (std::next(as_path.begin()) == as_path.end()
                 || as_str.find('.') == std::string_view::npos)
             {
+                ++log_level;
                 trace(
                     as_path,
                     "is a C++ header ( pos ",
                     include_match[0].first - content.cbegin(),
                     ")");
+                --log_level;
                 search_begin = include_match[0].second;
                 continue;
             }
@@ -350,11 +394,13 @@ application::bundle_includes(
             if (!exists_in_deps) {
                 fs::path dest = config_.bundled_deps_path / as_path;
                 if (fs::exists(dest)) {
+                    ++log_level;
                     trace(
                         as_path,
                         "is not available but it's already bundled ( pos ",
                         include_match[0].first - content.cbegin(),
                         ")");
+                    --log_level;
                     if (std::find(
                             bundled_headers.begin(),
                             bundled_headers.end(),
@@ -364,7 +410,9 @@ application::bundle_includes(
                         bundled_headers.emplace_back(as_path);
                         std::ifstream t(dest);
                         if (!t) {
+                            ++log_level;
                             log("Failed to open file", dest);
+                            --log_level;
                             search_begin = include_match[0].second;
                             continue;
                         }
@@ -373,11 +421,14 @@ application::bundle_includes(
                             std::istreambuf_iterator<char>()
                         };
                         t.close();
+                        trace("Bundle includes", relative_path(dest));
+                        ++log_level;
                         bundle_includes(
                             dest,
                             bundle_parent,
                             indirect_content,
                             true);
+                        --log_level;
                         std::ofstream fout(dest);
                         fout << indirect_content;
                         fout.close();
@@ -406,13 +457,15 @@ application::bundle_includes(
                     config_.dep_include_paths,
                     abs_file_path);
                 if (it0 != it1) {
+                    ++log_level;
                     trace(
                         as_path,
-                        "is doesn't belong to the same dependency as",
+                        "doesn't belong to the same dependency as",
                         rel_this,
                         " ( pos ",
                         include_match[0].first - content.cbegin(),
                         ")");
+                    --log_level;
                     search_begin = include_match[0].second;
                     continue;
                 }
@@ -429,6 +482,7 @@ application::bundle_includes(
                 }
             }
             if (ignore) {
+                ++log_level;
                 trace(
                     as_path,
                     "is an external header whose prefix",
@@ -436,11 +490,13 @@ application::bundle_includes(
                     "is ignored ( pos ",
                     include_match[0].first - content.cbegin(),
                     ")");
+                --log_level;
                 search_begin = include_match[0].second;
                 continue;
             }
 
             // This included file is an external header
+            ++log_level;
             trace("External header include:", as_path);
 
             // Patch #include
@@ -485,6 +541,7 @@ application::bundle_includes(
                 std::ifstream t(dest);
                 if (!t) {
                     log("Failed to open file", dest);
+                    --log_level;
                     continue;
                 }
                 std::string indirect_content{
@@ -503,6 +560,7 @@ application::bundle_includes(
             if (!is_bundled && config_.redirect_dep_includes) {
                 create_redirect_header(as_path);
             }
+            --log_level;
 
             // Update search range
             search_begin = content.cbegin() + begin_offset
@@ -700,7 +758,75 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
 }
 
 void
+application::remove_unreachable_headers() {
+    std::vector<fs::path> collected;
+    for (auto &p: config_.main_headers)
+        collected.emplace_back(find_file(config_.include_paths, p).first);
+    for (std::size_t i = 0; i < collected.size(); ++i) {
+        fs::path &p = collected[i];
+        std::ifstream fin(p);
+        std::string content{ std::istreambuf_iterator<char>(fin),
+                             std::istreambuf_iterator<char>() };
+        std::smatch include_guard_match;
+        std::vector<fs::path> includes;
+        std::size_t j = 0;
+        while (std::regex_search(
+            content.cbegin() + j,
+            content.cend(),
+            include_guard_match,
+            include_regex))
+        {
+            includes.emplace_back(include_guard_match[2]);
+            j = include_guard_match[0].second - content.cbegin();
+        }
+        for (auto &ip: includes) {
+            auto [abs, ok] = find_file(config_.include_paths, ip);
+            if (ok
+                && std::find(collected.begin(), collected.end(), abs)
+                       == collected.end())
+            {
+                collected.push_back(abs);
+            }
+        }
+        j = 0;
+        while (std::regex_search(
+            content.cbegin() + j,
+            content.cend(),
+            include_guard_match,
+            define_boost_config_regex))
+        {
+            includes.emplace_back(include_guard_match[4]);
+            j = include_guard_match[0].second - content.cbegin();
+        }
+        for (auto &ip: includes) {
+            auto [abs, ok] = find_file(config_.include_paths, ip);
+            if (ok
+                && std::find(collected.begin(), collected.end(), abs)
+                       == collected.end())
+            {
+                collected.push_back(abs);
+            }
+        }
+    }
+    std::sort(collected.begin(), collected.end());
+    bool first = true;
+    for (auto &p: file_paths) {
+        if (!std::binary_search(collected.begin(), collected.end(), p)) {
+            if (first) {
+                log_header("UNREACHABLE HEADERS");
+                first = false;
+            }
+            log(p);
+            ++stats_.n_unreachable_headers;
+        }
+    }
+}
+
+
+void
 application::print_stats() {
+    log_header("HEADERS");
+    log("Unreachable headers:", stats_.n_unreachable_headers);
     log_header("HEADER GUARDS");
     log("Header guards fixed:", stats_.n_header_guards_fixed);
     log("Header guards not found:", stats_.n_header_guards_not_found);

@@ -1,7 +1,6 @@
 #include <futures/adaptor/when_any.hpp>
 //
 #include <futures/adaptor/then.hpp>
-#include <futures/adaptor/detail/range_or_tuple_value.hpp>
 #include <catch2/catch.hpp>
 #include <array>
 #include <string>
@@ -199,8 +198,8 @@ TEST_CASE("Disjunction") {
             // when_any_result -> int
             using value_type = future_value_t<Future>;
             using when_any_sequence = typename value_type::sequence_type;
-            using when_any_element_type = detail::range_or_tuple_value_t<
-                when_any_sequence>;
+            using when_any_element_type = std::
+                tuple_element_t<0, when_any_sequence>;
             STATIC_REQUIRE(
                 boost::mp11::mp_apply<
                     std::is_invocable,

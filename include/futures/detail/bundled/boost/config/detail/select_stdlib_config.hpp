@@ -35,7 +35,7 @@
 // STLPort library; this _must_ come first, otherwise since
 // STLport typically sits on top of some other library, we
 // can end up detecting that first rather than STLport:
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/stlport.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/stlport.hpp"
 
 #else
 
@@ -55,43 +55,43 @@
 
 #if defined(__LIBCOMO__)
 // Comeau STL:
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libcomo.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libcomo.hpp"
 
 #elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
 // Rogue Wave library:
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/roguewave.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/roguewave.hpp"
 
 #elif defined(_LIBCPP_VERSION)
 // libc++
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libcpp.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libcpp.hpp"
 
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 // GNU libstdc++ 3
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libstdcpp3.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/libstdcpp3.hpp"
 
 #elif defined(__STL_CONFIG_H)
 // generic SGI STL
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/sgi.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/sgi.hpp"
 
 #elif defined(__MSL_CPP__)
 // MSL standard lib:
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/msl.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/msl.hpp"
 
 #elif defined(__IBMCPP__) && defined(__COMPILER_VER__) && defined(__MVS__)
 // IBM z/OS XL C/C++
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/xlcpp_zos.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/xlcpp_zos.hpp"
 
 #elif defined(__IBMCPP__)
 // take the default VACPP std lib
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/vacpp.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/vacpp.hpp"
 
 #elif defined(MSIPL_COMPILE_H)
 // Modena C++ standard library
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/modena.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/modena.hpp"
 
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
 // Dinkumware Library (this has to appear after any possible replacement libraries):
-#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/dinkumware.hpp" // redirect boost include
+#  define BOOST_STDLIB_CONFIG "futures/detail/bundled/boost/config/stdlib/dinkumware.hpp"
 
 #elif defined (BOOST_ASSERT_CONFIG)
 // this must come last - generate an error if we don't

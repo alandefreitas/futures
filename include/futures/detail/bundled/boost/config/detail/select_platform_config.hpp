@@ -15,83 +15,83 @@
 
 #if (defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__)) && !defined(_CRAYC)
 // linux, also other platforms (Hurd etc) that use GLIBC, should these really have their own config headers though?
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/linux.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/linux.hpp"
 
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 // BSD:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/bsd.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/bsd.hpp"
 
 #elif defined(sun) || defined(__sun)
 // solaris:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/solaris.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/solaris.hpp"
 
 #elif defined(__sgi)
 // SGI Irix:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/irix.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/irix.hpp"
 
 #elif defined(__hpux)
 // hp unix:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/hpux.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/hpux.hpp"
 
 #elif defined(__CYGWIN__)
 // cygwin is not win32:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cygwin.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cygwin.hpp"
 
 #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 // win32:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/win32.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/win32.hpp"
 
 #elif defined(__HAIKU__)
 // Haiku
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/haiku.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/haiku.hpp"
 
 #elif defined(__BEOS__)
 // BeOS
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/beos.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/beos.hpp"
 
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 // MacOS
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/macos.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/macos.hpp"
 
 #elif defined(__TOS_MVS__)
 // IBM z/OS
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/zos.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/zos.hpp"
 
 #elif defined(__IBMCPP__) || defined(_AIX)
 // IBM AIX
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/aix.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/aix.hpp"
 
 #elif defined(__amigaos__)
 // AmigaOS
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/amigaos.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/amigaos.hpp"
 
 #elif defined(__QNXNTO__)
 // QNX:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/qnxnto.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/qnxnto.hpp"
 
 #elif defined(__VXWORKS__)
 // vxWorks:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/vxworks.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/vxworks.hpp"
 
 #elif defined(__SYMBIAN32__) 
 // Symbian: 
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/symbian.hpp" // redirect boost include 
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/symbian.hpp" 
 
 #elif defined(_CRAYC)
 // Cray:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cray.hpp" // redirect boost include 
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cray.hpp" 
 
 #elif defined(__VMS) 
 // VMS:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/vms.hpp" // redirect boost include 
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/vms.hpp" 
 
 #elif defined(__CloudABI__)
 // Nuxi CloudABI:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cloudabi.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/cloudabi.hpp"
 
 #elif defined (__wasm__)
 // Web assembly:
-#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/wasm.hpp" // redirect boost include
+#  define BOOST_PLATFORM_CONFIG "futures/detail/bundled/boost/config/platform/wasm.hpp"
 
 #else
 
