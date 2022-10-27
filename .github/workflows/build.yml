@@ -22,6 +22,11 @@ on:
       - '**/CMakeLists.txt'
       - '.github/workflows/build.yml'
 
+# Cancel other runs in progress for the same branch
+concurrency:
+  group: ${{format('{0}:{1}', github.repository, github.ref)}}
+  cancel-in-progress: true
+
 jobs:
   Build:
     name: ${{ matrix.config.name }}
@@ -58,7 +63,7 @@ jobs:
             cores: 4,
           }
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create Build Dir
         run: mkdir build
       - name: Configure
@@ -72,7 +77,7 @@ jobs:
         working-directory: ./build
         run: ctest --parallel ${{ matrix.config.cores }} -C ${{ matrix.config.config }} --progress --output-on-failure
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
+        uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails, but still let it fail
         with:
           report_paths: '**/build/tests/unit_tests/reports/*.junit'
@@ -82,14 +87,12 @@ jobs:
       - name: Create packages
         working-directory: ./build
         run: ${{ matrix.config.sudocmd }} cpack
+      # Store packages as artifacts. Unfortunately, the action can't upload unzipped
+      # artifacts and kittaakos/upload-artifact-as-is is deprecated
       - name: Archive Packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
-          path: build/futures-?.?.?-*.*
-      - name: Archive Installer Packages as is
-        uses: kittaakos/upload-artifact-as-is@v0
-        with:
           path: build/futures-?.?.?-*.*
 #      - name: Integration Test
 #        working-directory: ./test/integration
