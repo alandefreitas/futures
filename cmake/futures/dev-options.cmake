@@ -12,7 +12,7 @@ endif ()
 
 if (NOT FUTURES_DEVELOPER_MODE)
     return()
-endif()
+endif ()
 
 #######################################################
 ### What to build                                   ###
@@ -33,8 +33,9 @@ option(FUTURES_ALWAYS_LINT "Run the linter before running unit tests" ON)
 #######################################################
 ### How to build                                    ###
 #######################################################
-option(FUTURES_BUILD_WITH_PEDANTIC_WARNINGS  "Use pedantic warnings." ON)
-option(FUTURES_BUILD_WITH_SANITIZERS "Build with sanitizers." ${DEBUG_MODE})
+option(FUTURES_PEDANTIC_WARNINGS "Use pedantic warnings." ON)
+option(FUTURES_WARNINGS_AS_ERRORS "Treat warnings as errors." ON)
+option(FUTURES_SANITIZERS "Build with sanitizers." ${DEBUG_MODE})
 option(FUTURES_CATCH2_REPORTER "Reporter Catch2 should use when invoked from ctest." console)
 option(FUTURES_TESTS_SMALL_POOL "Run tests with a default thread pool of size 1." OFF)
 
@@ -57,7 +58,7 @@ if (MASTER_PROJECT)
     endif ()
 
     # Maybe add sanitizers to all targets
-    if (FUTURES_BUILD_WITH_SANITIZERS AND NOT EMSCRIPTEN)
+    if (FUTURES_SANITIZERS AND NOT EMSCRIPTEN)
         add_sanitizers()
     endif ()
 
