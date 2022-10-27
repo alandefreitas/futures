@@ -55,7 +55,7 @@ jobs:
           }
           - {
             name: "MacOSX/10.15/Static/X64/Release",
-            os: macos-10.15,
+            os: macos-11,
             config: Release,
             cmake_extra_args: "-DCMAKE_CXX_FLAGS=\"-O2\"",
             sudocmd: "sudo",

@@ -36,6 +36,15 @@ if (FUTURES_WARNINGS_AS_ERRORS)
     endif ()
 endif ()
 
+if (CLANG)
+    # Disable allocator::rebind<void> warning on external deps
+    # futures/detail/bundled/boost/intrusive/pointer_rebind.hpp
+    target_compile_options(
+            headers
+            INTERFACE
+            -Wno-error=deprecated-declarations)
+endif ()
+
 # Threads
 target_link_libraries(headers INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 
@@ -55,7 +64,7 @@ if (FUTURES_PREFER_ASIO AND (asio_FOUND OR Asio_FOUND))
     target_compile_definitions(headers INTERFACE FUTURES_HAS_ASIO)
     if (FUTURES_PREFER_ASIO OR NOT FUTURES_PREFER_BOOST)
         target_compile_definitions(headers INTERFACE FUTURES_PREFER_ASIO)
-    endif()
+    endif ()
 endif ()
 
 # Link Boost headers whenever it's available because we need
@@ -65,5 +74,5 @@ if (Boost_FOUND)
     target_compile_definitions(headers INTERFACE FUTURES_HAS_BOOST)
     if (FUTURES_PREFER_BOOST OR NOT (asio_FOUND OR Asio_FOUND))
         target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST)
-    endif()
-endif()
+    endif ()
+endif ()
