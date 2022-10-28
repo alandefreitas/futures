@@ -96,6 +96,8 @@ jobs:
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
           path: build/futures-?.?.?-*.*
+      - name: Check conventional commit
+        uses: webiny/action-conventional-commits@v1.1.0
 #      - name: Integration Test
 #        working-directory: ./test/integration
 #        run: |
