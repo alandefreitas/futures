@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/mp11/utility.hpp from external or bundled boost 
+// Include boost/mp11/utility.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/mp11/utility.hpp>
+#    include <boost/mp11/utility.hpp>
 #else
-#include <futures/detail/bundled/boost/mp11/utility.hpp>
+#    include <futures/detail/bundled/boost/mp11/utility.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_MP11_UTILITY_HPP

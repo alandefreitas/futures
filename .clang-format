@@ -12,6 +12,7 @@ UseTab: Never
 DeriveLineEnding: true
 
 # Breaking around braces
+InsertBraces: true
 BreakBeforeBraces: Custom
 BraceWrapping:
   # Control

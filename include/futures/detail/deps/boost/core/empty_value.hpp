@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/core/empty_value.hpp from external or bundled boost 
+// Include boost/core/empty_value.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/core/empty_value.hpp>
+#    include <boost/core/empty_value.hpp>
 #else
-#include <futures/detail/bundled/boost/core/empty_value.hpp>
+#    include <futures/detail/bundled/boost/core/empty_value.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_CORE_EMPTY_VALUE_HPP

@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/pool/pool_alloc.hpp from external or bundled boost 
+// Include boost/pool/pool_alloc.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/pool/pool_alloc.hpp>
+#    include <boost/pool/pool_alloc.hpp>
 #else
-#include <futures/detail/bundled/boost/pool/pool_alloc.hpp>
+#    include <futures/detail/bundled/boost/pool/pool_alloc.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_POOL_POOL_ALLOC_HPP

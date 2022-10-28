@@ -37,7 +37,10 @@
  * Set boost/user if there's no boost
  */
 #if defined FUTURES_USE_BUNDLED_ASIO && !defined BOOST_USER_CONFIG
-#  define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp> // redirect boost include
+#    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
+#    if 0
+#        include <futures/detail/deps/boost/config/user.hpp>
+#    endif
 #endif
 
 /*

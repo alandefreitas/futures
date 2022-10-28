@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/core/noncopyable.hpp from external or bundled boost 
+// Include boost/core/noncopyable.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/core/noncopyable.hpp>
+#    include <boost/core/noncopyable.hpp>
 #else
-#include <futures/detail/bundled/boost/core/noncopyable.hpp>
+#    include <futures/detail/bundled/boost/core/noncopyable.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_CORE_NONCOPYABLE_HPP

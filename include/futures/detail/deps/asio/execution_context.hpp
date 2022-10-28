@@ -10,13 +10,13 @@
 
 #include <futures/config.hpp>
 
-// Include asio/execution_context.hpp from external or bundled asio 
+// Include asio/execution_context.hpp from external or bundled asio
 #if defined(FUTURES_USE_STANDALONE_ASIO)
-#include <asio/execution_context.hpp>
+#    include <asio/execution_context.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)
-#include <boost/asio/execution_context.hpp>
+#    include <boost/asio/execution_context.hpp>
 #else
-#include <futures/detail/bundled/asio/execution_context.hpp>
+#    include <futures/detail/bundled/asio/execution_context.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_ASIO_EXECUTION_CONTEXT_HPP

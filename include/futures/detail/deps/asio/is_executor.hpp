@@ -10,13 +10,13 @@
 
 #include <futures/config.hpp>
 
-// Include asio/is_executor.hpp from external or bundled asio 
+// Include asio/is_executor.hpp from external or bundled asio
 #if defined(FUTURES_USE_STANDALONE_ASIO)
-#include <asio/is_executor.hpp>
+#    include <asio/is_executor.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)
-#include <boost/asio/is_executor.hpp>
+#    include <boost/asio/is_executor.hpp>
 #else
-#include <futures/detail/bundled/asio/is_executor.hpp>
+#    include <futures/detail/bundled/asio/is_executor.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_ASIO_IS_EXECUTOR_HPP

@@ -10,13 +10,13 @@
 
 #include <futures/config.hpp>
 
-// Include asio/defer.hpp from external or bundled asio 
+// Include asio/defer.hpp from external or bundled asio
 #if defined(FUTURES_USE_STANDALONE_ASIO)
-#include <asio/defer.hpp>
+#    include <asio/defer.hpp>
 #elif defined(FUTURES_USE_BOOST_ASIO)
-#include <boost/asio/defer.hpp>
+#    include <boost/asio/defer.hpp>
 #else
-#include <futures/detail/bundled/asio/defer.hpp>
+#    include <futures/detail/bundled/asio/defer.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_ASIO_DEFER_HPP
