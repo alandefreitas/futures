@@ -37,9 +37,10 @@ namespace futures {
     template <class T>
     using is_executor
 #ifndef FUTURES_DOXYGEN
-        = asio::is_executor<T>
+        = asio::is_executor<T>;
+#else
+        __see_below__;
 #endif
-        ;
 
     /// Determine if type is an executor
     template <class T>

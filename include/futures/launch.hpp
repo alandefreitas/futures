@@ -104,14 +104,7 @@ namespace futures {
 #endif
         >
     decltype(auto)
-    async(Executor const &ex, Function &&f, Args &&...args) {
-        return detail::async_future_scheduler{}
-            .schedule<
-                detail::async_future_options_t<Executor, Function, Args...>>(
-                ex,
-                std::forward<Function>(f),
-                std::forward<Args>(args)...);
-    }
+    async(Executor const &ex, Function &&f, Args &&...args);
 
     /// Launch an asynchronous task with the default executor
     /**
@@ -140,16 +133,7 @@ namespace futures {
 #endif
         >
     decltype(auto)
-    async(Function &&f, Args &&...args) {
-        return detail::async_future_scheduler{}
-            .schedule<detail::async_future_options_t<
-                default_executor_type,
-                Function,
-                Args...>>(
-                ::futures::make_default_executor(),
-                std::forward<Function>(f),
-                std::forward<Args>(args)...);
-    }
+    async(Function &&f, Args &&...args);
 
     /// Schedule an asynchronous task with the specified executor
     /**
@@ -190,14 +174,7 @@ namespace futures {
 #endif
         >
     decltype(auto)
-    schedule(Executor const &ex, Function &&f, Args &&...args) {
-        return detail::async_future_scheduler{}
-            .schedule<
-                detail::schedule_future_options_t<Executor, Function, Args...>>(
-                ex,
-                std::forward<Function>(f),
-                std::forward<Args>(args)...);
-    }
+    schedule(Executor const &ex, Function &&f, Args &&...args);
 
     /// Schedule an asynchronous task with the default executor
     /**
@@ -226,20 +203,13 @@ namespace futures {
 #endif
         >
     decltype(auto)
-    schedule(Function &&f, Args &&...args) {
-        return detail::async_future_scheduler{}
-            .schedule<detail::schedule_future_options_t<
-                default_executor_type,
-                Function,
-                Args...>>(
-                ::futures::make_default_executor(),
-                std::forward<Function>(f),
-                std::forward<Args>(args)...);
-    }
+    schedule(Function &&f, Args &&...args);
 
     /** @} */
     /** @} */
     /** @} */
 } // namespace futures
+
+#include <futures/impl/launch.hpp>
 
 #endif // FUTURES_LAUNCH_HPP

@@ -67,6 +67,20 @@ namespace asio {}
 #    define FUTURES_HEADER_ONLY
 #endif
 
+// Avoid include Asio symbols twice
+#if defined(FUTURES_USE_BUNDLED_ASIO) && defined(FUTURES_SEPARATE_COMPILATION) \
+    && !defined(ASIO_SEPARATE_COMPILATION)
+#    define ASIO_SEPARATE_COMPILATION
+#endif
+
+// Macro to declare functions
+#ifdef FUTURES_HEADER_ONLY
+#    define FUTURES_DECLARE inline
+#else
+#    define FUTURES_DECLARE
+#endif
+
+
 #if !defined(FUTURES_DOXYGEN)
 /*
  * Also raise mp11 library namespace

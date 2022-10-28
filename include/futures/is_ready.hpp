@@ -42,17 +42,13 @@ namespace futures {
 #endif
         >
     bool
-    is_ready(Future &&f) {
-        assert(
-            f.valid()
-            && "Undefined behaviour. Checking if an invalid future is ready.");
-        if constexpr (detail::has_is_ready_v<Future>) {
-            return f.is_ready();
-        } else {
-            return f.wait_for(std::chrono::seconds(0))
-                   == std::future_status::ready;
-        }
-    }
+    is_ready(Future &&f);
+
+    /**
+     * @}
+     */
 } // namespace futures
+
+#include <futures/impl/is_ready.hpp>
 
 #endif // FUTURES_IS_READY_HPP

@@ -76,18 +76,7 @@ namespace futures {
 #endif
         >
     Iterator
-    wait_for_any(Iterator first, Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
-            return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
-            first->wait();
-            return first;
-        } else {
-            detail::waiter_for_any waiter(first, last);
-            auto ready_future_index = waiter.wait();
-            return std::next(first, ready_future_index);
-        }
-    }
+    wait_for_any(Iterator first, Iterator last);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -148,19 +137,7 @@ namespace futures {
 #endif
         >
     std::size_t
-    wait_for_any(Fs &&...fs) {
-        constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all(std::forward<Fs>(fs)...);
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            waiter.add(std::forward<Fs>(fs)...);
-            return waiter.wait();
-        }
-    }
+    wait_for_any(Fs &&...fs);
 
     /// Wait for any future in a tuple to be ready
     /**
@@ -192,21 +169,7 @@ namespace futures {
 #endif
         >
     std::size_t
-    wait_for_any(Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all(std::get<0>(std::forward<Tuple>(t)));
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
-                waiter.add(f);
-            });
-            return waiter.wait();
-        }
-    }
+    wait_for_any(Tuple &&t);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -232,18 +195,7 @@ namespace futures {
     wait_for_any_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
-        Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
-            return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
-            first->wait_for(timeout_duration);
-            return first;
-        } else {
-            detail::waiter_for_any waiter(first, last);
-            auto ready_future_index = waiter.wait_for(timeout_duration);
-            return std::next(first, ready_future_index);
-        }
-    }
+        Iterator last);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -307,19 +259,7 @@ namespace futures {
     std::size_t
     wait_for_any_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
-        Fs &&...fs) {
-        constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all_for(timeout_duration, std::forward<Fs>(fs)...);
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            waiter.add(std::forward<Fs>(fs)...);
-            return waiter.wait_for(timeout_duration);
-        }
-    }
+        Fs &&...fs);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -349,23 +289,7 @@ namespace futures {
     std::size_t
     wait_for_any_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
-        Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all_for(
-                timeout_duration,
-                std::get<0>(std::forward<Tuple>(t)));
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
-                waiter.add(f);
-            });
-            return waiter.wait_for(timeout_duration);
-        }
-    }
+        Tuple &&t);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -391,19 +315,7 @@ namespace futures {
     wait_for_any_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
-        Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
-            return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
-            first->wait_until(timeout_time);
-            return first;
-        } else {
-            detail::waiter_for_any waiter(first, last);
-            auto ready_future_index = waiter.wait_until(timeout_time);
-            return std::next(first, ready_future_index);
-        }
-    }
-
+        Iterator last);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -467,19 +379,7 @@ namespace futures {
     std::size_t
     wait_for_any_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
-        Fs &&...fs) {
-        constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all_until(timeout_time, std::forward<Fs>(fs)...);
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            waiter.add(std::forward<Fs>(fs)...);
-            return waiter.wait_until(timeout_time);
-        }
-    }
+        Fs &&...fs);
 
     /// Wait for any future in a sequence to be ready
     /**
@@ -509,27 +409,12 @@ namespace futures {
     std::size_t
     wait_for_any_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
-        Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
-            wait_for_all_until(
-                timeout_time,
-                std::get<0>(std::forward<Tuple>(t)));
-            return 0;
-        } else {
-            detail::waiter_for_any waiter;
-            detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
-                waiter.add(f);
-            });
-            return waiter.wait_until(timeout_time);
-        }
-    }
-
+        Tuple &&t);
 
     /** @} */
     /** @} */
 } // namespace futures
+
+#include <futures/impl/wait_for_any.hpp>
 
 #endif // FUTURES_WAIT_FOR_ANY_HPP

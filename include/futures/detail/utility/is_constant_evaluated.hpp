@@ -94,7 +94,7 @@ namespace futures::detail {
      */
 #    define FUTURES_CONSTANT_EVALUATED_CONSTEXPR constexpr
 #else
-#    define FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+#    define FUTURES_CONSTANT_EVALUATED_CONSTEXPR inline
 #endif
 
 #if defined(FUTURES_HAS_CONSTANT_EVALUATED) \

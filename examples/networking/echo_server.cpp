@@ -8,6 +8,7 @@
 
 #include <futures/future.hpp>
 #include <futures/adaptor/then.hpp>
+#include <futures/executor/hardware_concurrency.hpp>
 #include <charconv>
 #include <cstdlib>
 #include <iostream>

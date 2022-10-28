@@ -27,37 +27,6 @@ namespace futures {
      *  @{
      */
 
-    /// A version of hardware_concurrency that always returns at least 1
-    /**
-     *  This function is a safer version of hardware_concurrency that always
-     *  returns at least 1 to represent the current context when the value is
-     *  not computable.
-     *
-     *  - It never returns 0, 1 is returned instead.
-     *  - It is guaranteed to remain constant for the duration of the program.
-     *
-     *  It also improves on hardware_concurrency to provide a default value
-     *  of 1 when the function is being executed at compile time. This allows
-     *  partitioners and algorithms to be constexpr.
-     *
-     *  @see
-     *  https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
-     *
-     *  @return Number of concurrent threads supported. If the value is not
-     *  well-defined or not computable, returns 1.
-     **/
-    FUTURES_CONSTANT_EVALUATED_CONSTEXPR std::size_t
-    hardware_concurrency() noexcept {
-        // Cache the value because calculating it may be expensive
-        if (detail::is_constant_evaluated()) {
-            return 1;
-        } else {
-            std::size_t value = std::thread::hardware_concurrency();
-            // Return at least 1 core
-            return (std::max)(static_cast<std::size_t>(1), value);
-        }
-    }
-
     /// The default execution context for async operations
     /**
      *  Unless an executor is explicitly provided, this is the executor we use
@@ -83,10 +52,11 @@ namespace futures {
      *  - Non-copyable
      *  - May contain additional state, such as timers, and threads
      **/
+    using default_execution_context_type =
 #ifndef FUTURES_DOXYGEN
-    using default_execution_context_type = asio::thread_pool;
+        asio::thread_pool;
 #else
-    using default_execution_context_type = __implementation_defined__;
+        __implementation_defined__;
 #endif
 
     /// Default executor type
@@ -95,18 +65,8 @@ namespace futures {
     /// Create an instance of the default execution context
     ///
     /// @return Reference to the default execution context for @ref async
-    inline default_execution_context_type &
-    default_execution_context() {
-#ifdef FUTURES_DEFAULT_THREAD_POOL_SIZE
-        const std::size_t default_thread_pool_size
-            = FUTURES_DEFAULT_THREAD_POOL_SIZE;
-#else
-        const std::size_t default_thread_pool_size = std::
-            max(hardware_concurrency(), std::size_t(2));
-#endif
-        static asio::thread_pool pool(default_thread_pool_size);
-        return pool;
-    }
+    FUTURES_DECLARE default_execution_context_type&
+    default_execution_context();
 
     /// Create an Asio thread pool executor for the default thread pool
     /**
@@ -131,13 +91,14 @@ namespace futures {
      *
      * @return Executor handle to the default execution context
      **/
-    inline default_execution_context_type::executor_type
-    make_default_executor() {
-        asio::thread_pool &pool = default_execution_context();
-        return pool.executor();
-    }
+    FUTURES_DECLARE default_execution_context_type::executor_type
+    make_default_executor();
 
     /** @} */ // @addtogroup executors Executors
 } // namespace futures
+
+#ifdef FUTURES_HEADER_ONLY
+#    include <futures/executor/impl/default_executor.ipp>
+#endif
 
 #endif // FUTURES_EXECUTOR_DEFAULT_EXECUTOR_HPP

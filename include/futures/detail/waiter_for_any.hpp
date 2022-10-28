@@ -13,6 +13,7 @@
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/thread/lock.hpp>
 #include <utility>
+#include <vector>
 
 namespace futures::detail {
     /** @addtogroup futures Futures

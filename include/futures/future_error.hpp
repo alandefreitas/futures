@@ -8,6 +8,7 @@
 #ifndef FUTURES_FUTURE_ERROR_HPP
 #define FUTURES_FUTURE_ERROR_HPP
 
+#include <futures/config.hpp>
 #include <system_error>
 
 /**
@@ -67,8 +68,8 @@ namespace futures {
         future_deferred = 5
     };
 
-    // fwd-declare
-    inline std::error_category const &
+    FUTURES_DECLARE
+    std::error_category const &
     future_category() noexcept;
 
     /// Class representing the common error category properties for
@@ -82,88 +83,21 @@ namespace futures {
         }
 
         /// Generate error condition
+        FUTURES_DECLARE
         [[nodiscard]] std::error_condition
-        default_error_condition(int ev) const noexcept override {
-            switch (static_cast<future_errc>(ev)) {
-            case future_errc::broken_promise:
-                return std::error_condition{
-                    static_cast<int>(future_errc::broken_promise),
-                    future_category()
-                };
-            case future_errc::future_already_retrieved:
-                return std::error_condition{
-                    static_cast<int>(future_errc::future_already_retrieved),
-                    future_category()
-                };
-            case future_errc::promise_already_satisfied:
-                return std::error_condition{
-                    static_cast<int>(future_errc::promise_already_satisfied),
-                    future_category()
-                };
-            case future_errc::no_state:
-                return std::error_condition{
-                    static_cast<int>(future_errc::no_state),
-                    future_category()
-                };
-            case future_errc::future_deferred:
-                return std::error_condition{
-                    static_cast<int>(future_errc::future_deferred),
-                    future_category()
-                };
-            default:
-                return std::error_condition{ ev, *this };
-            }
-        }
+        default_error_condition(int ev) const noexcept override;
 
         /// Check error condition
+        FUTURES_DECLARE
         [[nodiscard]] bool
         equivalent(std::error_code const &code, int condition)
-            const noexcept override {
-            return *this == code.category()
-                   && static_cast<int>(
-                          default_error_condition(code.value()).value())
-                          == condition;
-        }
+            const noexcept override;
 
         /// Generate message
+        FUTURES_DECLARE
         [[nodiscard]] std::string
-        message(int ev) const override {
-            switch (static_cast<future_errc>(ev)) {
-            case future_errc::broken_promise:
-                return std::string{
-                    "The associated promise has been destructed prior "
-                    "to the associated state becoming ready."
-                };
-            case future_errc::future_already_retrieved:
-                return std::string{
-                    "The future has already been retrieved from "
-                    "the promise or packaged_task."
-                };
-            case future_errc::promise_already_satisfied:
-                return std::string{
-                    "The state of the promise has already been set."
-                };
-            case future_errc::no_state:
-                return std::string{
-                    "Operation not permitted on an object without "
-                    "an associated state."
-                };
-            case future_errc::future_deferred:
-                return std::string{
-                    "Operation not permitted on a deferred future."
-                };
-            }
-            return std::string{ "unspecified future_errc value\n" };
-        }
+        message(int ev) const override;
     };
-
-    /// Function to return a common reference to a global future error
-    /// category
-    inline std::error_category const &
-    future_category() noexcept {
-        static future_error_category cat;
-        return cat;
-    }
 
     /// Class for errors with specific future types or their
     /// dependencies, such as promises
@@ -174,13 +108,9 @@ namespace futures {
         explicit future_error(std::error_code ec) : futures_error{ ec } {}
     };
 
-    inline std::error_code
-    make_error_code(future_errc code) {
-        return std::error_code{
-            static_cast<int>(code),
-            futures::future_category()
-        };
-    }
+    FUTURES_DECLARE
+    std::error_code
+    make_error_code(future_errc code);
 
     /// Class for errors when a promise is not delivered properly
     class broken_promise : public future_error {
@@ -213,7 +143,8 @@ namespace futures {
             : future_error{ make_error_code(future_errc::no_state) } {}
     };
 
-    /// Class for errors when the value of an uninitialized packaged task is accessed
+    /// Class for errors when the value of an uninitialized packaged task is
+    /// accessed
     class packaged_task_uninitialized : public future_error {
     public:
         packaged_task_uninitialized()
@@ -237,5 +168,9 @@ namespace futures {
     /** @} */
     /** @} */
 } // namespace futures
+
+#ifdef FUTURES_HEADER_ONLY
+#    include <futures/impl/future_error.ipp>
+#endif
 
 #endif // FUTURES_FUTURE_ERROR_HPP

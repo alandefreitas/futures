@@ -26,6 +26,7 @@
 
 // #glob <futures/executor/*.hpp>
 #include <futures/executor/default_executor.hpp>
+#include <futures/executor/hardware_concurrency.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/executor/new_thread_executor.hpp>

@@ -65,11 +65,8 @@ namespace futures {
     };
 
     /// Get the inline execution context
-    inline asio::execution_context &
-    inline_execution_context() {
-        static asio::execution_context context;
-        return context;
-    }
+    FUTURES_DECLARE asio::execution_context &
+    inline_execution_context();
 
     /// Make an inline executor object
     constexpr inline_executor
@@ -151,6 +148,10 @@ namespace boost {
     }     // namespace asio
 #ifdef FUTURES_USE_BOOST_ASIO
 }
+#endif
+
+#ifdef FUTURES_HEADER_ONLY
+#    include <futures/executor/impl/inline_executor.ipp>
 #endif
 
 #endif // FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP

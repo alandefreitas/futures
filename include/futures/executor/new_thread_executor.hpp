@@ -62,11 +62,9 @@ namespace futures {
     };
 
     /// Make an new thread executor object
-    inline new_thread_executor
-    make_new_thread_executor() {
-        asio::execution_context &ctx = inline_execution_context();
-        return new_thread_executor{ &ctx };
-    }
+    FUTURES_DECLARE new_thread_executor
+    make_new_thread_executor();
+
     /** @} */ // @addtogroup executors Executors
 } // namespace futures
 
@@ -138,6 +136,10 @@ namespace boost {
     }     // namespace asio
 #ifdef FUTURES_USE_BOOST_ASIO
 }
+#endif
+
+#if FUTURES_HEADER_ONLY
+#    include <futures/executor/impl/new_thread_executor.hpp>
 #endif
 
 #endif // FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP
