@@ -25,7 +25,7 @@
 
 #include <futures/config.hpp>
 
-// #glob <futures/*.hpp>
+// #glob <futures/*.hpp> - <futures/config.hpp>
 #include <futures/adaptor.hpp>
 #include <futures/algorithm.hpp>
 #include <futures/await.hpp>
@@ -42,6 +42,7 @@
 #include <futures/traits.hpp>
 #include <futures/wait_for_all.hpp>
 #include <futures/wait_for_any.hpp>
+
 
 #ifdef FUTURES_DOXYGEN
 /// Main library namespace

@@ -26,9 +26,11 @@
 
 
 // #glob <futures/adaptor/*.hpp>
+#include <futures/adaptor/bind_executor_to_lambda.hpp>
 #include <futures/adaptor/make_ready_future.hpp>
 #include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_all.hpp>
 #include <futures/adaptor/when_any.hpp>
+
 
 #endif // FUTURES_ADAPTOR_HPP

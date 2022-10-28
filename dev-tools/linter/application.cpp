@@ -13,7 +13,8 @@ std::regex const application::include_regex{
 };
 
 std::regex const application::define_boost_config_regex{
-    "(^|\n) *# *define (BOOST_[A-Z]+_CONFIG) *([\"<]) *([a-zA-Z0-9_/\\. ]+.hpp) *([\">])"
+    "(^|\n) *# *define (BOOST_[A-Z]+_CONFIG) *([\"<]) *([a-zA-Z0-9_/\\. "
+    "]+.hpp) *([\">])"
 };
 
 application::application(int argc, char **argv)
@@ -71,6 +72,7 @@ application::find_project_files() {
             }
         }
     }
+    std::sort(file_paths.begin(), file_paths.end());
 }
 
 bool
@@ -110,6 +112,11 @@ application::sanitize_all() {
         t.close();
 
         // Lint file
+        ++log_level;
+        trace("Apply include glob");
+        apply_include_globs(p, parent, content);
+        --log_level;
+
         trace("Sanitize include guards");
         ++log_level;
         sanitize_include_guards(p, parent, content);
@@ -149,6 +156,107 @@ application::relative_path(fs::path const &p) {
         return fs::relative(p, *it);
     }
     return p;
+}
+
+void
+application::apply_include_globs(
+    fs::path const &p,
+    fs::path const &parent,
+    std::string &content) {
+    fs::path relative_p = fs::relative(p, parent);
+    if (is_parent(config_.bundled_deps_path, p)) {
+        trace("We do not change guards of bundled deps", relative_p);
+    }
+    static std::regex const glob_regex{
+        "// #glob < *([a-zA-Z0-9_/\\. \\*]+) *>"
+    };
+    static std::regex const glob_except_regex{
+        " * - * < *([a-zA-Z0-9_/\\. \\*]+) *>"
+    };
+    std::size_t i = 0;
+    std::smatch glob_match;
+    std::smatch glob_except_match;
+
+    while (std::regex_search(
+        content.cbegin() + i,
+        content.cend(),
+        glob_match,
+        glob_regex))
+    {
+        trace("Found glob regex", glob_match[0]);
+        bool has_except = false;
+        if (std::regex_search(
+                glob_match[0].second,
+                content.cend(),
+                glob_except_match,
+                glob_except_regex))
+        {
+            has_except = true;
+        }
+        std::size_t replace_begin = (has_except ? glob_except_match[0].second :
+                                                  glob_match[0].second)
+                                    - content.begin();
+        while (content[replace_begin] != '\n') {
+            ++replace_begin;
+        }
+        ++replace_begin;
+        std::size_t replace_end = replace_begin;
+        while (replace_end != content.size()) {
+            while (content[replace_end] == '\n' || content[replace_end] == ' ')
+            {
+                ++replace_end;
+            }
+            std::smatch include_match;
+            std::regex_search(
+                content.cbegin() + replace_end,
+                content.cend(),
+                include_match,
+                include_regex);
+            if (include_match[0].first != content.cbegin() + replace_end) {
+                break;
+            }
+            replace_end = include_match[0].second - content.cbegin();
+        }
+        std::string patch;
+        std::regex file_path_regex = glob_to_regex(glob_match[1]);
+        std::regex file_except_regex
+            = has_except ? glob_to_regex(glob_except_match[1]) : std::regex("a^");
+        auto self_r = relative_path(p);
+        for (auto &abs_h: file_paths) {
+            auto r = relative_path(abs_h);
+            if (r != self_r && std::regex_match(r.string(), file_path_regex)
+                && !std::regex_match(r.string(), file_except_regex))
+            {
+                patch += "#include <";
+                patch += r.string();
+                patch += ">\n";
+            }
+        }
+        std::size_t replace_n = replace_end - replace_begin;
+        patch += "\n\n";
+        if (patch != std::string_view(content).substr(replace_begin, replace_n))
+        {
+            ++stats_.n_glob_includes_applied;
+        }
+        if (!config_.dry_run) {
+            content.replace(replace_begin, replace_n, patch);
+        }
+        i = replace_begin + patch.size();
+    }
+}
+
+std::regex
+application::glob_to_regex(std::string const &exp) {
+    std::string file_glob_exp = exp;
+    std::string file_regex_exp = std::
+        regex_replace(file_glob_exp, std::regex("\\."), "\\.");
+    file_regex_exp = std::
+        regex_replace(file_regex_exp, std::regex("\\*"), "[^/]*");
+    file_regex_exp = std::regex_replace(
+        file_regex_exp,
+        std::regex("\\[\\^\\/\\]\\*\\[\\^\\/\\]\\*"),
+        ".*");
+    return std::regex(file_regex_exp);
 }
 
 bool
@@ -827,6 +935,7 @@ void
 application::print_stats() {
     log_header("HEADERS");
     log("Unreachable headers:", stats_.n_unreachable_headers);
+    log("Glob includes applied:", stats_.n_glob_includes_applied);
     log_header("HEADER GUARDS");
     log("Header guards fixed:", stats_.n_header_guards_fixed);
     log("Header guards not found:", stats_.n_header_guards_not_found);

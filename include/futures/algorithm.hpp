@@ -36,7 +36,9 @@
 #include <futures/algorithm/for_each.hpp>
 #include <futures/algorithm/none_of.hpp>
 #include <futures/algorithm/partitioner.hpp>
+#include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/reduce.hpp>
 #include <futures/algorithm/traits.hpp>
+
 
 #endif // FUTURES_ALGORITHM_HPP

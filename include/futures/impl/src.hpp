@@ -22,6 +22,7 @@
 #include <futures/detail/deps/asio/impl/src.hpp>
 #endif
 
-// #glob <futures/**/**.ipp>
+// #glob <futures/**.ipp> - <futures/detail/bundled/**.ipp>
+
 
 #endif // FUTURES_IMPL_SRC_HPP

@@ -100,6 +100,12 @@ private:
     generate_unit_test(fs::path const& p, fs::path const& parent);
 
     void
+    apply_include_globs(
+        fs::path const& p,
+        fs::path const& parent,
+        std::string& content);
+
+    void
     remove_unused_bundled_headers();
 
     void
@@ -109,8 +115,11 @@ private:
     fs::path
     relative_path(fs::path const& p);
 
+    static std::regex glob_to_regex(std::string const& exp);
+
     struct stats {
         std::size_t n_header_guards_fixed = 0;
+        std::size_t n_glob_includes_applied = 0;
         std::size_t n_header_guards_mismatch = 0;
         std::size_t n_header_guards_not_found = 0;
         std::size_t n_header_guards_invalid_macro = 0;

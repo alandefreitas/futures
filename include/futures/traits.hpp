@@ -35,4 +35,5 @@
 #include <futures/traits/is_shared_future.hpp>
 #include <futures/traits/is_stoppable.hpp>
 
+
 #endif // FUTURES_TRAITS_HPP
