@@ -12,8 +12,8 @@ namespace futures {
     template <
         typename Iterator,
         class Rep,
-        class Period,
-        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+        class Period FUTURES_REQUIRE_IMPL(
+            (is_future_v<iter_value_t<Iterator>>) )>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -33,9 +33,8 @@ namespace futures {
     template <
         typename... Fs,
         class Rep,
-        class Period,
-        typename std::
-            enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int>>
+        class Period FUTURES_REQUIRE_IMPL(
+            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -53,10 +52,8 @@ namespace futures {
     template <
         class Tuple,
         class Rep,
-        class Period,
-        typename std::enable_if_t<
-            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
-            int>>
+        class Period FUTURES_REQUIRE_IMPL(
+            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -78,8 +75,8 @@ namespace futures {
     template <
         typename Iterator,
         class Clock,
-        class Duration,
-        typename std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+        class Duration FUTURES_REQUIRE_IMPL(
+            (is_future_v<iter_value_t<Iterator>>) )>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
@@ -98,9 +95,8 @@ namespace futures {
     template <
         typename... Fs,
         class Clock,
-        class Duration,
-        typename std::
-            enable_if_t<std::conjunction_v<is_future<std::decay_t<Fs>>...>, int>>
+        class Duration FUTURES_REQUIRE_IMPL(
+            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
@@ -117,13 +113,8 @@ namespace futures {
     template <
         class Tuple,
         class Clock,
-        class Duration,
-        typename std::enable_if_t<
-            // clang-format off
-            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
-            // clang-format on
-            ,
-            int>>
+        class Duration FUTURES_REQUIRE_IMPL(
+            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,

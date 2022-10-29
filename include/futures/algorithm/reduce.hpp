@@ -106,21 +106,11 @@ namespace futures {
             class I,
             class S,
             class T,
-            class Fun = std::plus<>
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                std::is_same_v<iter_value_t<I>, T> &&
-                is_indirectly_binary_invocable_v<Fun, I, I> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
+            class Fun = std::plus<> FUTURES_REQUIRE((
+                is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                && std::is_same_v<iter_value_t<I>, T>
+                && is_indirectly_binary_invocable_v<Fun, I, I>
+                && std::is_copy_constructible_v<Fun>) )>
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
         inline_accumulate(I first, S last, T init, Fun op) {
             for (; first != last; ++first) {
@@ -149,23 +139,12 @@ namespace futures {
             class I,
             class S,
             class T,
-            class Fun = std::plus<>
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<E> &&
-                is_partitioner_v<P, I, S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                std::is_same_v<iter_value_t<I>, T> &&
-                is_indirectly_binary_invocable_v<Fun, I, I> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
+            class Fun = std::plus<> FUTURES_REQUIRE((
+                is_executor_v<E> && is_partitioner_v<P, I, S>
+                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                && std::is_same_v<iter_value_t<I>, T>
+                && is_indirectly_binary_invocable_v<Fun, I, I>
+                && std::is_copy_constructible_v<Fun>) )>
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
         run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {

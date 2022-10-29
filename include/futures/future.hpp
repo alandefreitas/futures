@@ -408,19 +408,13 @@ namespace futures {
          *
          * @param v Future value
          */
-        template <
-            class T
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<std::is_same_v<T, R> && !std::is_void_v<R>, int> = 0
-#endif
-            >
+        template <class T FUTURES_REQUIRE(
+            (std::is_same_v<T, R> && !std::is_void_v<R>) )>
         explicit basic_future(T &&v) noexcept
             : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)
-            } {
-        }
+            } {}
 
         /**
          * @}
@@ -544,7 +538,7 @@ namespace futures {
          *     - `void` -> return `void`
          *
          */
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         get();
 
         /// Get exception pointer without throwing an exception
@@ -765,17 +759,9 @@ namespace futures {
          */
         template <
             class Executor,
-            class Fn
-#ifndef FUTURES_DOXYGEN
-            ,
-            bool U = (Options::is_continuable || Options::is_always_deferred),
-            std::enable_if_t<
-                U && U == (Options::is_continuable || Options::is_always_deferred),
-                int>
-            = 0
-#endif
-            >
-        decltype(auto)
+            class Fn FUTURES_ALSO_SELF_REQUIRE(
+                (Options::is_continuable || Options::is_always_deferred))>
+        FUTURES_DETAIL(decltype(auto))
         then(Executor const &ex, Fn &&fn);
 
         /// Attaches a continuation to a future on the same executor
@@ -797,18 +783,9 @@ namespace futures {
          *
          * @return The continuation future
          */
-        template <
-            class Fn
-#ifndef FUTURES_DOXYGEN
-            ,
-            bool U = Options::is_continuable || Options::is_always_deferred,
-            std::enable_if_t<
-                U && U == (Options::is_continuable || Options::is_always_deferred),
-                int>
-            = 0
-#endif
-            >
-        decltype(auto)
+        template <class Fn FUTURES_ALSO_SELF_REQUIRE(
+            (Options::is_continuable || Options::is_always_deferred))>
+        FUTURES_DETAIL(decltype(auto))
         then(Fn &&fn);
 
         /// Get the current executor for this task
@@ -818,12 +795,7 @@ namespace futures {
          *
          * @return The executor associated with this future instance
          */
-        template <
-#ifndef FUTURES_DOXYGEN
-            bool U = Options::has_executor,
-            std::enable_if_t<U && U == Options::has_executor, int> = 0
-#endif
-            >
+        FUTURES_SELF_REQUIRE((Options::has_executor))
         const typename Options::executor_t &
         get_executor() const {
             static_assert(Options::has_executor);
@@ -853,12 +825,7 @@ namespace futures {
          *
          * @return `true` if this invocation made a stop request
          */
-        template <
-#ifndef FUTURES_DOXYGEN
-            bool U = Options::is_stoppable,
-            std::enable_if_t<U && U == Options::is_stoppable, int> = 0
-#endif
-            >
+        FUTURES_SELF_REQUIRE((Options::is_stoppable))
         bool
         request_stop() noexcept {
             return get_stop_source().request_stop();
@@ -874,12 +841,7 @@ namespace futures {
          *
          * @return The stop source
          */
-        template <
-#ifndef FUTURES_DOXYGEN
-            bool U = Options::is_stoppable,
-            std::enable_if_t<U && U == Options::is_stoppable, int> = 0
-#endif
-            >
+        FUTURES_SELF_REQUIRE((Options::is_stoppable))
         [[nodiscard]] stop_source
         get_stop_source() const noexcept {
             return state_.get_stop_source();
@@ -895,12 +857,7 @@ namespace futures {
          *
          * @return The stop token
          */
-        template <
-#ifndef FUTURES_DOXYGEN
-            bool U = Options::is_stoppable,
-            std::enable_if_t<U && U == Options::is_stoppable, int> = 0
-#endif
-            >
+        FUTURES_SELF_REQUIRE((Options::is_stoppable))
         [[nodiscard]] stop_token
         get_stop_token() const noexcept {
             return get_stop_source().get_token();
@@ -921,14 +878,9 @@ namespace futures {
          *
          * @return The continuations source
          */
-        template <
-#ifndef FUTURES_DOXYGEN
-            bool U = Options::is_continuable,
-            std::enable_if_t<U && U == Options::is_continuable, int> = 0
-#endif
-            >
-        [[nodiscard]] decltype(auto)
-        get_continuations_source() const noexcept {
+        FUTURES_SELF_REQUIRE((Options::is_continuable))
+        [[nodiscard]] FUTURES_DETAIL(decltype(auto))
+            get_continuations_source() const noexcept {
             return state_.get_continuations_source();
         }
 

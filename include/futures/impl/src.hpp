@@ -22,7 +22,7 @@
 #        define ASIO_SEPARATE_COMPILATION
 #    endif
 #    include <futures/detail/deps/asio/impl/src.hpp>
-#elif defined(FUTURES_USE_ASIO) || defined(FUTURES_USE_STANDALONE_ASIO)
+#elif defined(FUTURES_USE_STANDALONE_ASIO) || defined(FUTURES_USE_STANDALONE_ASIO)
 #    include <asio/impl/src.hpp>
 #elif defined(FUTURE_USE_BOOST)
 #    include <boost/asio/impl/src.hpp>

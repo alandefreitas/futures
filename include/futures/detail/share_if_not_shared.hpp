@@ -31,7 +31,7 @@ namespace futures::detail {
         : std::true_type {};
 
     template <class Future>
-    constexpr decltype(auto)
+    constexpr FUTURES_DETAIL(decltype(auto))
     share_if_not_shared(Future &&f) {
         if constexpr (is_shared_future_v<std::decay_t<Future>>) {
             return std::forward<Future>(f);

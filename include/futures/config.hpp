@@ -45,12 +45,12 @@
  */
 #if defined __has_include
 #    if __has_include(<asio.hpp>)
-#        ifndef FUTURES_HAS_ASIO
-#            define FUTURES_HAS_ASIO
+#        ifndef FUTURES_HAS_STANDALONE_ASIO
+#            define FUTURES_HAS_STANDALONE_ASIO
 #        endif
 #    endif
 #elif ASIO_HAS_CONSTEXPR || FUTURES_DOXYGEN
-#    define FUTURES_HAS_ASIO
+#    define FUTURES_HAS_STANDALONE_ASIO
 #endif
 
 /// Macro used to indicate Boost is available
@@ -98,11 +98,11 @@
  * macro ensure the standalone version is used.
  *
  * The availability of standalone Asio and Boost.Asio can be indicated with the
- * @ref FUTURES_HAS_ASIO and @ref FUTURES_HAS_BOOST macros.
+ * @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST macros.
  *
  * @par Default value
  *
- * In C++17, this macro is defined whenever @ref FUTURES_HAS_ASIO is defined
+ * In C++17, this macro is defined whenever @ref FUTURES_HAS_STANDALONE_ASIO is defined
  * and @ref FUTURES_PREFER_BOOST is undefined.
  *
  * When using the CMake package, the `futures` target will already define this
@@ -111,7 +111,7 @@
  * In all other cases, the macro is undefined by default. If standalone Asio is
  * available, it should be defined manually.
  *
- * If both @ref FUTURES_HAS_ASIO and @ref FUTURES_HAS_BOOST are undefined,
+ * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are undefined,
  * a bundled subset of Boost dependencies required by the library is used.
  *
  * @par References
@@ -119,9 +119,9 @@
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#if !defined(FUTURES_PREFER_BOOST) && !defined(FUTURES_PREFER_ASIO)
-#    ifdef FUTURES_HAS_ASIO
-#        define FUTURES_PREFER_ASIO
+#if !defined(FUTURES_PREFER_BOOST) && !defined(FUTURES_PREFER_STANDALONE_ASIO)
+#    ifdef FUTURES_HAS_STANDALONE_ASIO
+#        define FUTURES_PREFER_STANDALONE_ASIO
 #    else
 #        define FUTURES_PREFER_BOOST
 #    endif
@@ -137,12 +137,12 @@
  * macro ensure the Boost version is used.
  *
  * The availability of standalone Asio and Boost.Asio can be indicated with the
- * @ref FUTURES_HAS_ASIO and @ref FUTURES_HAS_BOOST macros.
+ * @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST macros.
  *
  * @par Default value
  *
  * In C++17, this macro is defined whenever @ref FUTURES_HAS_BOOST is defined
- * and @ref FUTURES_PREFER_ASIO is undefined.
+ * and @ref FUTURES_PREFER_STANDALONE_ASIO is undefined.
  *
  * When using the CMake package, the `futures` target will already define this
  * macro when standalone Asio is unavailable.
@@ -150,7 +150,7 @@
  * In all other cases, the macro is undefined by default. If Boost is
  * available, it should be defined manually.
  *
- * If both @ref FUTURES_HAS_ASIO and @ref FUTURES_HAS_BOOST are undefined,
+ * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are undefined,
  * a bundled subset of Boost dependencies required by the library is used.
  *
  * @par References

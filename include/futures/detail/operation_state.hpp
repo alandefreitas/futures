@@ -1021,7 +1021,7 @@ namespace futures::detail {
             : fn_(std::forward<OtherFn>(f))
             , args_(std::make_tuple(std::forward<OtherArgs>(args)...)) {}
 
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         operator()() {
             return std::apply(std::move(fn_), std::move(args_));
         }

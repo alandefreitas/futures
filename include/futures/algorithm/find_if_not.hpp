@@ -39,21 +39,10 @@ namespace futures {
         template <
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
+            class Fun FUTURES_REQUIRE(
+                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                 && is_indirectly_unary_invocable_v<Fun, I>
+                 && std::is_copy_constructible_v<Fun>) )>
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
         inline_find_if_not(I first, S last, Fun p) {
             for (; first != last; ++first) {
@@ -83,23 +72,11 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<E> &&
-                is_partitioner_v<P, I, S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
+            class Fun FUTURES_REQUIRE((
+                is_executor_v<E> && is_partitioner_v<P, I, S>
+                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                && is_indirectly_unary_invocable_v<Fun, I>
+                && std::is_copy_constructible_v<Fun>) )>
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
         run(E const& ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {

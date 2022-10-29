@@ -52,12 +52,7 @@ namespace futures {
      *  - Non-copyable
      *  - May contain additional state, such as timers, and threads
      **/
-    using default_execution_context_type =
-#ifndef FUTURES_DOXYGEN
-        asio::thread_pool;
-#else
-        __implementation_defined__;
-#endif
+    using default_execution_context_type = FUTURES_DETAIL(asio::thread_pool);
 
     /// Default executor type
     using default_executor_type = default_execution_context_type::executor_type;

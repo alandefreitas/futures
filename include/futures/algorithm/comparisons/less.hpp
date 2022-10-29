@@ -15,6 +15,7 @@
  *  This file defines the less operator as a functor.
  */
 
+#include <futures/config.hpp>
 #include <futures/algorithm/traits/is_totally_ordered_with.hpp>
 #include <utility>
 #include <type_traits>
@@ -27,12 +28,7 @@ namespace futures {
     struct less {
         template <
             class T,
-            class U
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<is_totally_ordered_with_v<T, U>, int> = 0
-#endif
-            >
+            class U FUTURES_REQUIRE((is_totally_ordered_with_v<T, U>) )>
         constexpr bool
         operator()(T &&t, U &&u) const {
             return std::forward<T>(t) < std::forward<U>(u);

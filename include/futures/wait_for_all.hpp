@@ -47,19 +47,8 @@ namespace futures {
      *  @param first Iterator to the first element in the range
      *  @param last Iterator to one past the last element in the range
      */
-    template <
-        typename Iterator
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_future_v<iter_value_t<Iterator>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+    template <typename Iterator FUTURES_REQUIRE(
+        (is_future_v<iter_value_t<Iterator>>) )>
     void
     wait_for_all(Iterator first, Iterator last) {
         for (Iterator it = first; it != last; ++it) {
@@ -81,20 +70,8 @@ namespace futures {
      *  @tparam Range A range of futures type
      *  @param r Range of futures
      */
-    template <
-        typename Range
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_range_v<Range> &&
-            is_future_v<range_value_t<Range>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+    template <typename Range FUTURES_REQUIRE(
+        (is_range_v<Range> && is_future_v<range_value_t<Range>>) )>
     void
     wait_for_all(Range &&r) {
         using std::begin;
@@ -118,38 +95,16 @@ namespace futures {
      *  @tparam Fs A list of future types
      *  @param fs A list of future objects
      */
-    template <
-        typename... Fs
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+    template <typename... Fs FUTURES_REQUIRE(
+        (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
     void
     wait_for_all(Fs &&...fs) {
         (fs.wait(), ...);
     }
 
     /// Wait for a sequence of futures to be ready
-    template <
-        class Tuple
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+    template <class Tuple FUTURES_REQUIRE(
+        (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
     void
     wait_for_all(Tuple &&t) {
         tuple_for_each(std::forward<Tuple>(t), [](auto &f) { f.wait(); });
@@ -170,18 +125,7 @@ namespace futures {
     template <
         typename Iterator,
         class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_future_v<iter_value_t<Iterator>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Period FUTURES_REQUIRE((is_future_v<iter_value_t<Iterator>>) )>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -202,19 +146,8 @@ namespace futures {
     template <
         class Range,
         class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_range_v<Range> &&
-            is_future_v<range_value_t<Range>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Period FUTURES_REQUIRE(
+            (is_range_v<Range> && is_future_v<range_value_t<Range>>) )>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -237,18 +170,8 @@ namespace futures {
     template <
         typename... Fs,
         class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Period FUTURES_REQUIRE(
+            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -269,18 +192,8 @@ namespace futures {
     template <
         class Tuple,
         class Rep,
-        class Period
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Period FUTURES_REQUIRE(
+            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
     std::future_status
     wait_for_all_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
@@ -301,18 +214,7 @@ namespace futures {
     template <
         typename Iterator,
         class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_future_v<iter_value_t<Iterator>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Duration FUTURES_REQUIRE((is_future_v<iter_value_t<Iterator>>) )>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
@@ -333,19 +235,8 @@ namespace futures {
     template <
         class Range,
         class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            is_range_v<Range> &&
-            is_future_v<range_value_t<Range>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Duration FUTURES_REQUIRE(
+            (is_range_v<Range> && is_future_v<range_value_t<Range>>) )>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
@@ -368,18 +259,8 @@ namespace futures {
     template <
         typename... Fs,
         class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            std::conjunction_v<is_future<std::decay_t<Fs>>...>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Duration FUTURES_REQUIRE(
+            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
@@ -399,18 +280,8 @@ namespace futures {
     template <
         class Tuple,
         class Clock,
-        class Duration
-#ifndef FUTURES_DOXYGEN
-        ,
-        typename std::enable_if_t<
-            // clang-format off
-            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
+        class Duration FUTURES_REQUIRE(
+            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
     std::future_status
     wait_for_all_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,

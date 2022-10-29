@@ -331,8 +331,9 @@ namespace futures {
                 constexpr auto n = std::tuple_size<sequence_type>();
                 ready_index = n;
                 detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
-                    if (ready_index == n && eq_comp(std::get<I>(v)))
+                    if (ready_index == n && eq_comp(std::get<I>(v))) {
                         ready_index = I;
+                    }
                 });
             }
             if (ready_index == size()) {
@@ -529,7 +530,7 @@ namespace futures {
         template <
             class WhenAllFuture,
             std::enable_if_t<is_when_any_tuple_future_v<WhenAllFuture>, int> = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_any_future_cat(WhenAllFuture &&arg0) {
             return std::forward<WhenAllFuture>(arg0);
         }
@@ -542,7 +543,7 @@ namespace futures {
                 are_when_any_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>,
                 int>
             = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_any_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
             auto s2 = std::move(std::forward<WhenAllFuture2>(arg1).release());
@@ -558,7 +559,7 @@ namespace futures {
                 are_when_any_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>,
                 int>
             = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_any_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
             auto s2 = std::move(
@@ -582,19 +583,9 @@ namespace futures {
      *  @param first,last Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    template <
-        class InputIt
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            detail::is_valid_when_any_argument_v<
-                typename std::iterator_traits<InputIt>::value_type>,
-            // clang-format on
-            int>
-        = 0
-#endif
-        >
+    template <class InputIt FUTURES_REQUIRE(
+        (detail::is_valid_when_any_argument_v<
+            typename std::iterator_traits<InputIt>::value_type>) )>
     when_any_future<detail::small_vector<detail::lambda_to_future_t<
         typename std::iterator_traits<InputIt>::value_type>>>
     when_any(InputIt first, InputIt last) {
@@ -638,13 +629,7 @@ namespace futures {
      *  @param r Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    template <
-        class Range
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
-#endif
-        >
+    template <class Range FUTURES_REQUIRE((is_range_v<std::decay_t<Range>>) )>
     when_any_future<detail::small_vector<
         detail::lambda_to_future_t<typename std::iterator_traits<
             typename std::decay_t<Range>::iterator>::value_type>>>
@@ -663,18 +648,8 @@ namespace futures {
      *  @param futures A sequence of future objects
      *  @return @ref when_any_future with all future objects
      */
-    template <
-        class... Futures
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            detail::are_valid_when_any_arguments_v<Futures...>,
-            // clang-format on
-            int>
-        = 0
-#endif
-        >
+    template <class... Futures FUTURES_REQUIRE(
+        (detail::are_valid_when_any_arguments_v<Futures...>) )>
     when_any_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
     when_any(Futures &&...futures) {
         // Infer sequence type
@@ -725,16 +700,9 @@ namespace futures {
      */
     template <
         class T1,
-        class T2
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            detail::is_valid_when_any_argument_v<T1>
-                && detail::is_valid_when_any_argument_v<T2>,
-            int>
-        = 0
-#endif
-        >
+        class T2 FUTURES_REQUIRE(
+            (detail::is_valid_when_any_argument_v<T1>
+             && detail::is_valid_when_any_argument_v<T2>) )>
     auto
     operator||(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_any = detail::is_when_any_future_v<T1>;

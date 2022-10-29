@@ -35,12 +35,7 @@ namespace futures {
      *  This trait might be adjusted to allow other executor types.
      **/
     template <class T>
-    using is_executor
-#ifndef FUTURES_DOXYGEN
-        = asio::is_executor<T>;
-#else
-        __see_below__;
-#endif
+    using is_executor = FUTURES_DETAIL(asio::is_executor<T>);
 
     /// Determine if type is an executor
     template <class T>

@@ -66,15 +66,8 @@ namespace futures {
          */
         template <
             class I,
-            class S
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
-                int>
-            = 0
-#endif
-            >
+            class S FUTURES_REQUIRE(
+                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
         I
         operator()(I first, S last) {
             std::size_t size = std::distance(first, last);
@@ -104,15 +97,8 @@ namespace futures {
 
         template <
             class I,
-            class S
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
-                int>
-            = 0
-#endif
-            >
+            class S FUTURES_REQUIRE(
+                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
         I
         operator()(I first, S last) {
             if (num_threads_ <= 1) {
@@ -137,12 +123,7 @@ namespace futures {
     /**
      *  Its type and parameters might change
      */
-    using default_partitioner =
-#ifdef FUTURES_DOXYGEN
-        __see_below__;
-#else
-        thread_partitioner;
-#endif
+    using default_partitioner = FUTURES_DETAIL(thread_partitioner);
 
     /// Determine a reasonable minimum grain size depending on the number
     /// of elements in a sequence
@@ -180,13 +161,8 @@ namespace futures {
      */
     template <
         class I,
-        class S
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<is_input_iterator_v<I> && is_sentinel_for_v<S, I>, int>
-        = 0
-#endif
-        >
+        class S FUTURES_REQUIRE(
+            (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
     default_partitioner
     make_default_partitioner(I first, S last) {
         return make_default_partitioner(std::distance(first, last));
@@ -197,13 +173,7 @@ namespace futures {
     /**
      *  The default partitioner type and parameters might change
      */
-    template <
-        class R
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<is_input_range_v<R>, int> = 0
-#endif
-        >
+    template <class R FUTURES_REQUIRE((is_input_range_v<R>) )>
     default_partitioner
     make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));

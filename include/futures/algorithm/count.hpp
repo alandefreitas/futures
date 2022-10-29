@@ -43,20 +43,9 @@ namespace futures {
         template <
             class I,
             class S,
-            class T
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_binary_invocable_v<equal_to, T *, I>
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
+            class T FUTURES_REQUIRE(
+                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                 && is_indirectly_binary_invocable_v<equal_to, T *, I>) )>
         static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
         inline_count(I first, S last, T const &v) {
             iter_difference_t<I> ret = 0;
@@ -89,22 +78,10 @@ namespace futures {
             class P,
             class I,
             class S,
-            class T
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<E> &&
-                is_partitioner_v<P, I, S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_binary_invocable_v<equal_to, T *, I>
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
+            class T FUTURES_REQUIRE(
+                (is_executor_v<E> && is_partitioner_v<P, I, S>
+                 && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                 && is_indirectly_binary_invocable_v<equal_to, T *, I>) )>
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
         run(E const &ex, P p, I first, S last, T const &v) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {

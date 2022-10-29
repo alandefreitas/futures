@@ -24,7 +24,7 @@
  * If the standalone is available, this is what we assume the user usually
  * prefers, since it's more specific
  */
-#if defined(FUTURES_HAS_ASIO) \
+#if defined(FUTURES_HAS_STANDALONE_ASIO) \
     && (!defined(FUTURES_HAS_BOOST) || !defined(FUTURES_PREFER_BOOST))
 #    ifndef FUTURES_USE_STANDALONE_ASIO
 #        define FUTURES_USE_STANDALONE_ASIO
@@ -44,9 +44,6 @@
  */
 #if defined FUTURES_USE_BUNDLED_ASIO && !defined BOOST_USER_CONFIG
 #    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
-#    if 0
-#        include <futures/detail/deps/boost/config/user.hpp>
-#    endif
 #endif
 
 /*
@@ -86,6 +83,50 @@ namespace asio {}
 #    define FUTURES_DECLARE
 #endif
 
+// How we declare implementation details
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_DETAIL(x) x
+#else
+#    define FUTURES_DETAIL(x) __see_below__
+#endif
+
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_REQUIRE(x) , std::enable_if_t<(x), int> = 0
+#else
+#    define FUTURES_REQUIRE(x)
+#endif
+
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_REQUIRE_IMPL(x) , std::enable_if_t<(x), int>
+#else
+#    define FUTURES_REQUIRE_IMPL(x)
+#endif
+
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_SELF_REQUIRE(x)    \
+        template <                     \
+            bool SELF_CONDITION = (x), \
+            std::enable_if_t<SELF_CONDITION && SELF_CONDITION == (x), int> = 0>
+#else
+#    define FUTURES_SELF_REQUIRE(x)
+#endif
+
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_ALSO_SELF_REQUIRE(x)                                   \
+        , bool SELF_CONDITION = (x),                                       \
+               std::enable_if_t < SELF_CONDITION && SELF_CONDITION == (x), \
+               int > = 0
+#else
+#    define FUTURES_ALSO_SELF_REQUIRE(x)
+#endif
+
+#ifndef FUTURES_DOXYGEN
+#    define FUTURES_ALSO_SELF_REQUIRE_IMPL(x) \
+        , bool SELF_CONDITION,                \
+            std::enable_if_t<SELF_CONDITION && SELF_CONDITION == (x), int>
+#else
+#    define FUTURES_ALSO_SELF_REQUIRE_IMPL(x)
+#endif
 
 #if !defined(FUTURES_DOXYGEN)
 /*
@@ -100,12 +141,10 @@ namespace futures {
     /*
      * Aliases
      */
-#if defined(FUTURES_DOXYGEN)
-    namespace asio = __see_below__;
-#elif defined(FUTURES_USE_BOOST_ASIO)
-    namespace asio = ::boost::asio;
+#if defined(FUTURES_USE_BOOST_ASIO)
+    namespace asio = FUTURES_DETAIL(::boost::asio);
 #else
-    namespace asio = ::asio;
+    namespace asio = FUTURES_DETAIL(::asio);
 #endif
 
     namespace detail {

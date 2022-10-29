@@ -67,22 +67,16 @@ namespace futures {
     template <
         class Executor,
         class Function,
-        class Future
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<std::decay_t<Executor>> &&
-            !is_executor_v<std::decay_t<Function>> &&
-            !is_executor_v<std::decay_t<Future>> &&
-            is_future_v<std::decay_t<Future>> &&
-            detail::next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
-            // clang-format on
-            int>
-        = 0
-#endif
-        >
-    decltype(auto)
+        class Future FUTURES_REQUIRE((
+            is_executor_v<std::decay_t<Executor>>
+            && !is_executor_v<std::decay_t<Function>>
+            && !is_executor_v<std::decay_t<Future>>
+            && is_future_v<std::decay_t<Future>>
+            && detail::next_future_traits<
+                Executor,
+                std::decay_t<Function>,
+                std::decay_t<Future>>::is_valid))>
+    FUTURES_DETAIL(decltype(auto))
     then(Executor const &ex, Future &&before, Function &&after) {
         return detail::internal_then(
             ex,
@@ -94,21 +88,12 @@ namespace futures {
     template <
         class Future,
         class Function
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            !is_executor_v<std::decay_t<Function>> &&
+FUTURES_REQUIRE((!is_executor_v<std::decay_t<Function>> &&
             !is_executor_v<std::decay_t<Future>> &&
             is_future_v<std::decay_t<Future>> &&
-            detail::next_future_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
+            detail::next_future_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid))
         >
-    decltype(auto)
+    FUTURES_DETAIL(decltype(auto))
     then(Future &&before, Function &&after) {
         if constexpr (has_executor_v<std::decay_t<Future>>) {
             return then(
@@ -128,22 +113,15 @@ namespace futures {
     /// @return A continuation to the before future
     template <
         class Future,
-        class Function
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            !is_executor_v<std::decay_t<Function>> &&
-            !is_executor_v<std::decay_t<Future>> &&
-            is_future_v<std::decay_t<Future>> &&
-            detail::next_future_traits<default_executor_type, std::decay_t<Function>, std::decay_t<Future>>::is_valid
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
-    decltype(auto)
+        class Function FUTURES_REQUIRE((
+            !is_executor_v<std::decay_t<Function>>
+            && !is_executor_v<std::decay_t<Future>>
+            && is_future_v<std::decay_t<Future>>
+            && detail::next_future_traits<
+                default_executor_type,
+                std::decay_t<Function>,
+                std::decay_t<Future>>::is_valid))>
+    FUTURES_DETAIL(decltype(auto))
     operator>>(Future &&before, Function &&after) {
         return then(std::forward<Future>(before), std::forward<Function>(after));
     }
@@ -153,22 +131,16 @@ namespace futures {
         class Executor,
         class Future,
         class Function,
-#ifndef FUTURES_DOXYGEN
-        bool RValue,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<std::decay_t<Executor>> &&
-            !is_executor_v<std::decay_t<Function>> &&
-            !is_executor_v<std::decay_t<Future>> &&
-            is_future_v<std::decay_t<Future>> &&
-            detail::next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
-    decltype(auto)
+        bool RValue FUTURES_REQUIRE((
+            is_executor_v<std::decay_t<Executor>>
+            && !is_executor_v<std::decay_t<Function>>
+            && !is_executor_v<std::decay_t<Future>>
+            && is_future_v<std::decay_t<Future>>
+            && detail::next_future_traits<
+                Executor,
+                std::decay_t<Function>,
+                std::decay_t<Future>>::is_valid))>
+    FUTURES_DETAIL(decltype(auto))
     operator>>(
         Future &&before,
         detail::executor_and_callable_reference<Executor, Function, RValue>

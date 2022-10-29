@@ -250,8 +250,9 @@ namespace futures {
                     constexpr auto n = std::tuple_size<sequence_type>::value;
                     auto idx = n;
                     detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
-                        if (idx == n && equal_fn(std::get<I>(v)))
+                        if (idx == n && equal_fn(std::get<I>(v))) {
                             idx = decltype(I)::value;
+                        }
                     });
                     if (idx == n) {
                         return std::future_status::ready;
@@ -440,7 +441,7 @@ namespace futures {
         template <
             class WhenAllFuture,
             std::enable_if_t<is_when_all_tuple_future_v<WhenAllFuture>, int> = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_all_future_cat(WhenAllFuture &&arg0) {
             return std::forward<WhenAllFuture>(arg0);
         }
@@ -453,7 +454,7 @@ namespace futures {
                 are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>,
                 int>
             = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
             auto s2 = std::move(std::forward<WhenAllFuture2>(arg1).release());
@@ -469,7 +470,7 @@ namespace futures {
                 are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>,
                 int>
             = 0>
-        decltype(auto)
+        FUTURES_DETAIL(decltype(auto))
         when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
             auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
             auto s2 = std::move(
@@ -484,8 +485,7 @@ namespace futures {
         // - shared futures need to be copied
         // - lambdas need to be posted
         template <class F>
-        constexpr decltype(auto)
-        move_share_or_post(F &&f) {
+        constexpr FUTURES_DETAIL(decltype(auto)) move_share_or_post(F &&f) {
             if constexpr (is_shared_future_v<std::decay_t<F>>) {
                 return std::forward<F>(f);
             } else if constexpr (is_future_v<std::decay_t<F>>) {
@@ -510,17 +510,9 @@ namespace futures {
      *  @param first,last Range of futures
      *  @return Future object of type @ref when_all_future
      */
-    template <
-        class InputIt
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            detail::is_valid_when_all_argument_v<
-                typename std::iterator_traits<InputIt>::value_type>,
-            int>
-        = 0
-#endif
-        >
+    template <class InputIt FUTURES_REQUIRE(
+        (detail::is_valid_when_all_argument_v<
+            typename std::iterator_traits<InputIt>::value_type>) )>
     when_all_future<detail::small_vector<detail::lambda_to_future_t<
         typename std::iterator_traits<InputIt>::value_type>>>
     when_all(InputIt first, InputIt last) {
@@ -563,13 +555,7 @@ namespace futures {
      *  @param r Range of futures
      *  @return Future object of type @ref when_all_future
      */
-    template <
-        class Range
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0
-#endif
-        >
+    template <class Range FUTURES_REQUIRE((is_range_v<std::decay_t<Range>>) )>
     when_all_future<detail::small_vector<
         detail::lambda_to_future_t<typename std::iterator_traits<
             typename std::decay_t<Range>::iterator>::value_type>>>
@@ -590,14 +576,8 @@ namespace futures {
      *  @param futures Instances of future objects
      *  @return Future object of type @ref when_all_future
      */
-    template <
-        class... Futures
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<detail::are_valid_when_all_arguments_v<Futures...>, int>
-        = 0
-#endif
-        >
+    template <class... Futures FUTURES_REQUIRE(
+        (detail::are_valid_when_all_arguments_v<Futures...>) )>
     when_all_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
     when_all(Futures &&...futures) {
         // Infer sequence type
@@ -635,16 +615,9 @@ namespace futures {
      */
     template <
         class T1,
-        class T2
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            detail::is_valid_when_all_argument_v<T1>
-                && detail::is_valid_when_all_argument_v<T2>,
-            int>
-        = 0
-#endif
-        >
+        class T2 FUTURES_REQUIRE(
+            (detail::is_valid_when_all_argument_v<T1>
+             && detail::is_valid_when_all_argument_v<T2>) )>
     auto
     operator&&(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;

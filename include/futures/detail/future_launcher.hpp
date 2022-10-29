@@ -31,20 +31,11 @@ namespace futures::detail {
             class FutureOptions,
             class Executor,
             class Function,
-            class... Args
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<Executor> &&
-                (std::is_invocable_v<Function, Args...> || std::is_invocable_v<Function, stop_token, Args...>)
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
-        decltype(auto)
+            class... Args FUTURES_REQUIRE(
+                is_executor_v<Executor>
+                && (std::is_invocable_v<Function, Args...>
+                    || std::is_invocable_v<Function, stop_token, Args...>) )>
+        FUTURES_DETAIL(decltype(auto))
         schedule(Executor const& ex, Function&& f, Args&&... args) const {
             // Future traits
             using value_type = launch_result_t<Function, Args...>;
@@ -83,13 +74,13 @@ namespace futures::detail {
         }
 
         template <class T>
-        static constexpr decltype(auto)
+        static constexpr FUTURES_DETAIL(decltype(auto))
         move_if_not_shared_ptr(T&& v) {
             return std::move<T>(v);
         }
 
         template <class T>
-        static constexpr decltype(auto)
+        static constexpr FUTURES_DETAIL(decltype(auto))
         move_if_not_shared_ptr(std::shared_ptr<T>&& v) {
             return std::forward<T>(v);
         }

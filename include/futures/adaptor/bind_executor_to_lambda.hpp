@@ -63,20 +63,10 @@ namespace futures {
     template <
         class Executor,
         class Function,
-        class... Args
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<std::decay_t<Executor>> &&
-            detail::is_callable_v<std::decay_t<Function>>
-            // clang-format on
-            ,
-            int>
-        = 0
-#endif
-        >
-    decltype(auto)
+        class... Args FUTURES_REQUIRE(
+            is_executor_v<std::decay_t<Executor>>&&
+                detail::is_callable_v<std::decay_t<Function>>)>
+    FUTURES_DETAIL(decltype(auto))
     operator%(Executor const& ex, Function&& after) {
         return detail::executor_and_callable_reference<
             std::decay_t<Executor>,

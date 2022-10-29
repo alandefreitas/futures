@@ -16,7 +16,7 @@
 #include <utility>
 #include <string_view>
 
-#if defined(FUTURES_HAS_ASIO) && defined(FUTURES_USE_STANDALONE_ASIO) \
+#if defined(FUTURES_HAS_STANDALONE_ASIO) && defined(FUTURES_USE_STANDALONE_ASIO) \
     || defined(FUTURES_USE_BUNDLED_ASIO)
 #    include <asio/buffer.hpp>
 #    include <asio/io_context.hpp>

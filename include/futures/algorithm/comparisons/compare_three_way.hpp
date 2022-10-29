@@ -27,12 +27,7 @@ namespace futures {
     struct compare_three_way {
         template <
             class T,
-            class U
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<is_totally_ordered_with_v<T, U>, int> = 0
-#endif
-            >
+            class U FUTURES_REQUIRE((is_totally_ordered_with_v<T, U>) )>
         constexpr auto
         operator()(T &&t, U &&u) const {
 #if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) \

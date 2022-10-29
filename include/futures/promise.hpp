@@ -140,12 +140,7 @@ namespace futures {
 
         /// Set the promise result as an exception
         template <
-            typename E
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<std::is_base_of_v<std::exception, E>, int> = 0
-#endif
-            >
+            typename E FUTURES_REQUIRE((std::is_base_of_v<std::exception, E>) )>
         void
         set_exception(E e) {
             set_exception(std::make_exception_ptr(e));

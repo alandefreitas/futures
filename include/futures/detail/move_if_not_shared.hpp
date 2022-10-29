@@ -25,7 +25,7 @@ namespace futures::detail {
     /// function. Shared futures can be copied. Normal futures should be moved.
     /// @return The moved future or the shared future
     template <class Future>
-    constexpr decltype(auto)
+    constexpr FUTURES_DETAIL(decltype(auto))
     move_if_not_shared(Future &&before) {
         if constexpr (is_shared_future_v<std::decay_t<Future>>) {
             return std::forward<Future>(before);

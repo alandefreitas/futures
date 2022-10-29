@@ -16,9 +16,9 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>
-#include <futures/detail/deps/boost/mp11/function.hpp>
 #include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
+#include <futures/detail/deps/boost/mp11/function.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -43,22 +43,16 @@ namespace futures::detail {
         template <
             class Executor,
             class Function,
-            class Future
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<std::decay_t<Executor>> &&
-                !is_executor_v<std::decay_t<Function>> &&
-                !is_executor_v<std::decay_t<Future>> &&
-                is_future_v<std::decay_t<Future>> &&
-                next_future_traits<Executor, std::decay_t<Function>, std::decay_t<Future>>::is_valid,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        decltype(auto)
+            class Future FUTURES_REQUIRE((
+                is_executor_v<std::decay_t<Executor>>
+                && !is_executor_v<std::decay_t<Function>>
+                && !is_executor_v<std::decay_t<Future>>
+                && is_future_v<std::decay_t<Future>>
+                && next_future_traits<
+                    Executor,
+                    std::decay_t<Function>,
+                    std::decay_t<Future>>::is_valid))>
+        FUTURES_DETAIL(decltype(auto))
         operator()(Executor const &ex, Future &&before, Function &&after)
             const {
             // Determine next future options

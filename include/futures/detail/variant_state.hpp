@@ -15,8 +15,8 @@
 #include <futures/detail/utility/byte.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <futures/detail/deps/boost/variant2/variant.hpp>
 #include <futures/detail/deps/boost/throw_exception.hpp>
+#include <futures/detail/deps/boost/variant2/variant.hpp>
 
 namespace futures::detail {
     /** @addtogroup futures Futures
@@ -184,16 +184,9 @@ namespace futures::detail {
          *
          * @tparam T
          */
-        template <
-            class T
-#ifndef FUTURES_DOXYGEN
-            // clang-format off
-            , std::enable_if_t<mp_contains<variant_type, std::decay_t<T>>::value, int> = 0
-        // clang-format on
-#endif
-            >
-        explicit variant_state(T&& other) : s_(std::forward<T>(other)) {
-        }
+        template <class T FUTURES_REQUIRE(
+            (mp_contains<variant_type, std::decay_t<T>>::value))>
+        explicit variant_state(T&& other) : s_(std::forward<T>(other)) {}
 
         /// Constructor
         /**
@@ -205,13 +198,8 @@ namespace futures::detail {
          */
         template <
             class T,
-            class... Args
-#ifndef FUTURES_DOXYGEN
-            // clang-format off
-            , std::enable_if_t<mp_contains<variant_type, std::decay_t<T>>::value, int> = 0
-        // clang-format on
-#endif
-            >
+            class... Args FUTURES_REQUIRE(
+                (mp_contains<variant_type, std::decay_t<T>>::value))>
         explicit variant_state(in_place_type_t<T>, Args&&... args)
             : s_(boost::variant2::in_place_type<T>, std::forward<Args>(args)...) {
         }
@@ -261,14 +249,8 @@ namespace futures::detail {
          *
          * @tparam T State type
          */
-        template <
-            class T
-#ifndef FUTURES_DOXYGEN
-            // clang-format off
-            , std::enable_if_t<mp_contains<variant_type, std::decay_t<T>>::value, int> = 0
-        // clang-format on
-#endif
-            >
+        template <class T FUTURES_REQUIRE(
+            (mp_contains<variant_type, std::decay_t<T>>::value))>
         [[nodiscard]] constexpr bool
         holds() const {
             return boost::variant2::holds_alternative<T>(s_);
@@ -306,28 +288,16 @@ namespace futures::detail {
         }
 
         /// Get variant value as specified type
-        template <
-            class T
-#ifndef FUTURES_DOXYGEN
-            // clang-format off
-            , std::enable_if_t<mp_contains<variant_type, std::decay_t<T>>::value, int> = 0
-        // clang-format on
-#endif
-            >
+        template <class T FUTURES_REQUIRE(
+            (mp_contains<variant_type, std::decay_t<T>>::value))>
         T&
         get_as() {
             return boost::variant2::get<T>(s_);
         }
 
         /// Get constant variant value as specified type
-        template <
-            class T
-#ifndef FUTURES_DOXYGEN
-            // clang-format off
-            , std::enable_if_t<mp_contains<variant_type, std::decay_t<T>>::value, int> = 0
-        // clang-format on
-#endif
-            >
+        template <class T FUTURES_REQUIRE(
+            (mp_contains<variant_type, std::decay_t<T>>::value))>
         constexpr T const&
         get_as() const {
             return boost::variant2::get<T>(s_);
@@ -513,14 +483,15 @@ namespace futures::detail {
         ///
         std::add_lvalue_reference_t<typename operation_state_type::value_type>
         get() {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->get();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().get();
-            else if (is_storage())
+            } else if (is_storage()) {
                 return get_as_storage().get();
-            else if (is_shared_storage())
+            } else if (is_shared_storage()) {
                 return get_as_shared_storage()->get();
+            }
             boost::throw_with_location(
                 std::invalid_argument{ "Operation state is invalid" });
         }
@@ -533,20 +504,22 @@ namespace futures::detail {
          */
         std::exception_ptr
         get_exception_ptr() {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->get_exception_ptr();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().get_exception_ptr();
+            }
             return nullptr;
         }
 
         /// Check if the current underlying operation state is valid
         [[nodiscard]] bool
         valid() const {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state().get() != nullptr;
-            else if (is_shared_storage())
+            } else if (is_shared_storage()) {
                 return get_as_shared_storage().get() != nullptr;
+            }
             return is_operation_state() || is_storage();
         }
 
@@ -618,20 +591,22 @@ namespace futures::detail {
          */
         [[nodiscard]] bool
         is_ready() const {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->is_ready();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().is_ready();
+            }
             return !is_empty();
         }
 
         /// Get continuations_source from underlying operation state type
         typename operation_state_type::continuations_type&
         get_continuations_source() {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->get_continuations_source();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().get_continuations_source();
+            }
             boost::throw_with_location(
                 std::logic_error{ "Future non-continuable" });
         }
@@ -639,10 +614,11 @@ namespace futures::detail {
         /// Include an external condition variable in the list of waiters
         typename operation_state_type::notify_when_ready_handle
         notify_when_ready(std::condition_variable_any& cv) {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->notify_when_ready(cv);
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().notify_when_ready(cv);
+            }
             // Notify and return null handle
             cv.notify_all();
             return {};
@@ -652,36 +628,39 @@ namespace futures::detail {
         void
         unnotify_when_ready(
             typename operation_state_type::notify_when_ready_handle h) {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->unnotify_when_ready(h);
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().unnotify_when_ready(h);
+            }
             boost::throw_with_location(std::logic_error{ "Invalid type id" });
         }
 
         /// Get stop_source from underlying operation state type
         [[nodiscard]] stop_source
         get_stop_source() const noexcept {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->get_stop_source();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().get_stop_source();
-            else if (is_storage() || is_shared_storage())
+            } else if (is_storage() || is_shared_storage()) {
                 boost::throw_with_location(
                     std::logic_error{ "Cannot stop a ready future" });
+            }
             boost::throw_with_location(std::logic_error{ "Invalid state" });
         }
 
         /// Get stop_source from underlying operation state type
         [[nodiscard]] const typename operation_state_type::executor_type&
         get_executor() const noexcept {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->get_executor();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().get_executor();
-            else if (is_storage() || is_shared_storage())
+            } else if (is_storage() || is_shared_storage()) {
                 boost::throw_with_location(std::logic_error{
                     "No associated executor to direct storage" });
+            }
             boost::throw_with_location(
                 std::logic_error{ "No associated executor to empty state" });
         }
@@ -689,13 +668,14 @@ namespace futures::detail {
         /// Get a reference to the mutex in the operation state
         std::mutex&
         waiters_mutex() {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state()->waiters_mutex();
-            else if (is_operation_state())
+            } else if (is_operation_state()) {
                 return get_as_operation_state().waiters_mutex();
-            else if (is_storage() || is_shared_storage())
+            } else if (is_storage() || is_shared_storage()) {
                 boost::throw_with_location(std::logic_error{
                     "No associated executor to direct storage" });
+            }
             boost::throw_with_location(
                 std::logic_error{ "No associated executor to empty state" });
         }
@@ -703,10 +683,11 @@ namespace futures::detail {
         /// Get number of futures pointing to the same operation state
         long
         use_count() const noexcept {
-            if (is_shared_state())
+            if (is_shared_state()) {
                 return get_as_shared_state().use_count();
-            else if (is_shared_storage())
+            } else if (is_shared_storage()) {
                 return get_as_shared_storage().use_count();
+            }
             return !is_empty();
         }
 
@@ -736,10 +717,11 @@ namespace futures::detail {
         template <bool is_const>
         static void
         wait_impl(add_const_if<is_const, variant_state>& s) {
-            if (s.is_shared_state())
+            if (s.is_shared_state()) {
                 s.get_as_shared_state()->wait();
-            else if (s.is_operation_state())
+            } else if (s.is_operation_state()) {
                 s.get_as_operation_state().wait();
+            }
             return;
         }
 
@@ -765,11 +747,12 @@ namespace futures::detail {
             add_const_if<is_const, variant_state>& s,
             std::chrono::duration<Rep, Period> const& timeout_duration) {
             share_inline(s);
-            if (s.is_shared_state())
+            if (s.is_shared_state()) {
                 return s.get_as_shared_state()->wait_for(timeout_duration);
-            else if (s.is_operation_state())
+            } else if (s.is_operation_state()) {
                 boost::throw_with_location(std::invalid_argument{
                     "Cannot wait for a const deferred state with a timeout" });
+            }
             return std::future_status::ready;
         }
 
@@ -782,11 +765,12 @@ namespace futures::detail {
             // guarantee what happens to the address after this operation
             // times out
             share_inline(s);
-            if (s.is_shared_state())
+            if (s.is_shared_state()) {
                 return s.get_as_shared_state()->wait_until(timeout_time);
-            else if (s.is_operation_state())
+            } else if (s.is_operation_state()) {
                 boost::throw_with_location(std::invalid_argument{
                     "Cannot wait for a const deferred state with timeout" });
+            }
             return std::future_status::ready;
         }
 
@@ -796,16 +780,18 @@ namespace futures::detail {
         // Copy the value from the other state, adapting as needed
         void
         copy_impl(variant_state const& other) {
-            if (other.is_shared_state())
+            if (other.is_shared_state()) {
                 emplace_shared_state(other.get_as_shared_state());
-            else if (other.is_shared_storage())
+            } else if (other.is_shared_storage()) {
                 emplace_shared_storage(other.get_as_shared_storage());
-            else if (other.is_empty())
+            } else if (other.is_empty()) {
                 emplace_empty(other.get_as_empty());
+            }
             // Throw in use cases where the future is not allowed to copy
-            if (is_storage() || is_operation_state())
+            if (is_storage() || is_operation_state()) {
                 boost::throw_with_location(
                     std::logic_error{ "Inline states cannot be copied" });
+            }
         }
 
         /**

@@ -16,6 +16,7 @@
  *  promise. These objects can be used to set promises manually.
  */
 
+#include <futures/config.hpp>
 #include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/detail/shared_task.hpp>
@@ -67,19 +68,12 @@ namespace futures {
          *  @tparam Fn Function type
          *  @param fn The callable target to execute
          */
-        template <
-            typename Fn
-#ifndef FUTURES_DOXYGEN
-            ,
-            typename = std::enable_if_t<
-                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
-#endif
-            >
+        template <typename Fn FUTURES_REQUIRE(
+            (!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>) )>
         explicit packaged_task(Fn &&fn)
             : packaged_task{ std::allocator_arg,
                              std::allocator<packaged_task>{},
-                             std::forward<Fn>(fn) } {
-        }
+                             std::forward<Fn>(fn) } {}
 
         /// Constructs a std::packaged_task object with a shared state
         /// and a copy of the task
@@ -101,13 +95,8 @@ namespace futures {
          */
         template <
             typename Fn,
-            typename Allocator
-#ifndef FUTURES_DOXYGEN
-            ,
-            typename = std::enable_if_t<
-                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>>
-#endif
-            >
+            typename Allocator FUTURES_REQUIRE((
+                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>) )>
         explicit packaged_task(
             std::allocator_arg_t,
             Allocator const &alloc,
@@ -183,7 +172,8 @@ namespace futures {
          *  This function constructs a future object that shares its state with
          *  this promise Because this library handles more than a single future
          *  type, the future type we want is a template parameter. This function
-         *  expects future type constructors to accept pointers to shared states.
+         *  expects future type constructors to accept pointers to shared
+         * states.
          */
         template <class Future = basic_future<R, Options>>
         Future

@@ -24,7 +24,7 @@ option(FUTURES_BUILD_PACKAGE "Build package" ${MASTER_PROJECT})
 # How to build
 option(FUTURES_USE_FIND_PACKAGE "Do not use find_package to find dependencies" ${FUTURES_NOT_CROSSCOMPILING})
 option(FUTURES_USE_FETCH_CONTENT "Do not use FetchContent to fetch dependencies" ${FUTURES_NOT_CROSSCOMPILING})
-option(FUTURES_PREFER_ASIO "Prefer standalone Asio if available" OFF)
+option(FUTURES_PREFER_STANDALONE_ASIO "Prefer standalone Asio if available" OFF)
 option(FUTURES_PREFER_BOOST "Prefer Boost.Asio if available" OFF)
 option(FUTURES_BUILD_WITH_EXCEPTIONS "Add compiler flags to use exceptions if needed." ON)
 

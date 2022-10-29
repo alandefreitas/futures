@@ -28,12 +28,7 @@ namespace futures {
     struct not_equal_to {
         template <
             class T,
-            class U
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<is_equality_comparable_with_v<T, U>, int> = 0
-#endif
-            >
+            class U FUTURES_REQUIRE((is_equality_comparable_with_v<T, U>) )>
         constexpr bool
         operator()(T &&t, U &&u) const {
             return !equal_to{}(std::forward<T>(t), std::forward<U>(u));

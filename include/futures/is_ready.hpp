@@ -35,12 +35,7 @@ namespace futures {
      *  is_ready, such as std::future.
      */
     template <
-        typename Future
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0
-#endif
-        >
+        typename Future FUTURES_REQUIRE((is_future_v<std::decay_t<Future>>) )>
     bool
     is_ready(Future &&f);
 

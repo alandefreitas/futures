@@ -55,23 +55,13 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_executor_v<E> &&
-                is_partitioner_v<P, I, S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>
-                // clang-format on
-                ,
-                int>
-            = 0>
-#endif
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                is_executor_v<E> && is_partitioner_v<P, I, S>
+                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                && is_indirectly_unary_invocable_v<Fun, I>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(FUTURES_DETAIL(decltype(auto)))
         operator()(E const &ex, P p, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
@@ -92,25 +82,14 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                !is_executor_v<E> &&
-                is_execution_policy_v<E> &&
-                is_partitioner_v<P, I, S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>
-                // clang-format on
-                ,
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                !is_executor_v<E> && is_execution_policy_v<E>
+                && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                && is_sentinel_for_v<S, I>
+                && is_indirectly_unary_invocable_v<Fun, I>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(E const &, P p, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
@@ -134,22 +113,14 @@ namespace futures {
             class E,
             class P,
             class R,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                (is_executor_v<E> || is_execution_policy_v<E>) &&
-                is_range_partitioner_v<P, R> &&
-                is_input_range_v<R> &&
-                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                (is_executor_v<E>
+                 || is_execution_policy_v<E>) &&is_range_partitioner_v<P, R>
+                && is_input_range_v<R>
+                && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(E const &ex, P p, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -169,21 +140,13 @@ namespace futures {
             class P,
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_partitioner_v<P, I,S> &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format off
-                int> = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                && is_sentinel_for_v<S, I>
+                && is_indirectly_unary_invocable_v<Fun, I>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(P p, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
@@ -193,12 +156,8 @@ namespace futures {
                     last,
                     std::move(f));
             } else {
-                return Derived().run(
-                    make_default_executor(),
-                    p,
-                    first,
-                    last,
-                    std::move(f));
+                return Derived()
+                    .run(make_default_executor(), p, first, last, std::move(f));
             }
         }
 
@@ -206,21 +165,12 @@ namespace futures {
         template <
             class P,
             class R,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_range_partitioner_v<P,R> &&
-                is_input_range_v<R> &&
-                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE(
+                (is_range_partitioner_v<P, R> && is_input_range_v<R>
+                 && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
+                 && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(P p, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -244,22 +194,14 @@ namespace futures {
             class E,
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                (is_executor_v<E> || is_execution_policy_v<E>) &&
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                (is_executor_v<E>
+                 || is_execution_policy_v<E>) &&is_input_iterator_v<I>
+                && is_sentinel_for_v<S, I>
+                && is_indirectly_unary_invocable_v<Fun, I>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(E const &ex, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -282,21 +224,13 @@ namespace futures {
         template <
             class E,
             class R,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                (is_executor_v<E> || is_execution_policy_v<E>) &&
-                is_input_range_v<R> &&
-                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE((
+                (is_executor_v<E>
+                 || is_execution_policy_v<E>) &&is_input_range_v<R>
+                && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
+                && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(E const &ex, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -319,21 +253,12 @@ namespace futures {
         template <
             class I,
             class S,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_input_iterator_v<I> &&
-                is_sentinel_for_v<S, I> &&
-                is_indirectly_unary_invocable_v<Fun, I> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE(
+                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+                 && is_indirectly_unary_invocable_v<Fun, I>
+                 && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
@@ -355,20 +280,12 @@ namespace futures {
         /// Overload for Ranges / default executor / default partitioner
         template <
             class R,
-            class Fun
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<
-                // clang-format off
-                is_input_range_v<R> &&
-                is_indirectly_unary_invocable_v<Fun, iterator_t<R>> &&
-                std::is_copy_constructible_v<Fun>,
-                // clang-format on
-                int>
-            = 0
-#endif
-            >
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR decltype(auto)
+            class Fun FUTURES_REQUIRE(
+                (is_input_range_v<R>
+                 && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
+                 && std::is_copy_constructible_v<Fun>) )>
+        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+        FUTURES_DETAIL(decltype(auto))
         operator()(R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(

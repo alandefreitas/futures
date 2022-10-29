@@ -53,7 +53,7 @@ namespace futures {
     }
 
     template <class R, class Options>
-    decltype(auto)
+    FUTURES_DETAIL(decltype(auto))
     basic_future<R, Options>::get() {
         if (!valid()) {
             boost::throw_with_location(future_uninitialized{});
@@ -166,12 +166,9 @@ namespace futures {
     template <class R, class Options>
     template <
         class Executor,
-        class Fn,
-        bool U,
-        std::enable_if_t<
-            U && U == (Options::is_continuable || Options::is_always_deferred),
-            int>>
-    decltype(auto)
+        class Fn FUTURES_ALSO_SELF_REQUIRE_IMPL(
+            (Options::is_continuable || Options::is_always_deferred))>
+    FUTURES_DETAIL(decltype(auto))
     basic_future<R, Options>::then(Executor const &ex, Fn &&fn) {
         // Throw if invalid
         if (!valid()) {
@@ -282,13 +279,9 @@ namespace futures {
     }
 
     template <class R, class Options>
-    template <
-        class Fn,
-        bool U,
-        std::enable_if_t<
-            U && U == (Options::is_continuable || Options::is_always_deferred),
-            int>>
-    decltype(auto)
+    template <class Fn FUTURES_ALSO_SELF_REQUIRE_IMPL(
+        (Options::is_continuable || Options::is_always_deferred))>
+    FUTURES_DETAIL(decltype(auto))
     basic_future<R, Options>::then(Fn &&fn) {
         if constexpr (Options::has_executor) {
             return this->then(get_executor(), std::forward<Fn>(fn));

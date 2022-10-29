@@ -9,9 +9,8 @@
 #define FUTURES_IMPL_IS_READY_HPP
 
 namespace futures {
-    template <
-        typename Future,
-        std::enable_if_t<is_future_v<std::decay_t<Future>>, int>>
+    template <typename Future FUTURES_REQUIRE_IMPL(
+        (is_future_v<std::decay_t<Future>>) )>
     bool
     is_ready(Future &&f) {
         assert(

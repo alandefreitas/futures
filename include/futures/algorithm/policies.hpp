@@ -100,16 +100,9 @@ namespace futures {
     template <
         class E,
         class I,
-        class S
-#ifndef FUTURES_DOXYGEN
-        ,
-        std::enable_if_t<
-            !is_executor_v<E> && is_execution_policy_v<E>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
-            int>
-        = 0
-#endif
-        >
+        class S FUTURES_REQUIRE(
+            (!is_executor_v<E> && is_execution_policy_v<E>
+             && is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
     constexpr detail::policy_executor_type<E>
     make_policy_executor() {
         if constexpr (!std::is_same_v<E, sequenced_policy>) {

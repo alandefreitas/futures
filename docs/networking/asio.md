@@ -68,7 +68,7 @@ with both versions of Asio.
             ```
 
             The preferred version of Asio is the version found when configuring the targets. If both versions are available,
-            the CMake options `FUTURES_PREFER_ASIO` and `FUTURES_PREFER_BOOST` can be
+            the CMake options `FUTURES_PREFER_STANDALONE_ASIO` and `FUTURES_PREFER_BOOST` can be
             used to influence that choice.
 
         === "Standalone Asio"
@@ -100,11 +100,11 @@ with both versions of Asio.
         When using this library as header-only or using another build system, use the appropriate macros to choose the
         Asio version should be set:
 
-        - The macros `FUTURES_HAS_ASIO` and `FUTURES_HAS_BOOST` can be used to indicate that Asio or Boost are 
+        - The macros `FUTURES_HAS_STANDALONE_ASIO` and `FUTURES_HAS_BOOST` can be used to indicate that Asio or Boost are 
           available. 
             - Build systems should be automatically setting these macros
             - If both are undefined, the bundled version of the libraries will be used
-        - When both are available, the macros `FUTURES_PREFER_ASIO` and `FUTURES_PREFER_BOOST` can be used to
+        - When both are available, the macros `FUTURES_PREFER_STANDALONE_ASIO` and `FUTURES_PREFER_BOOST` can be used to
           indicate whether Asio or Boost.Asio is preferred. 
 
         When the macros are undefined, the following steps will be performed to infer their values:        

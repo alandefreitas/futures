@@ -27,12 +27,7 @@ namespace futures {
     struct greater {
         template <
             class T,
-            class U
-#ifndef FUTURES_DOXYGEN
-            ,
-            std::enable_if_t<is_totally_ordered_with_v<T, U>, int> = 0
-#endif
-            >
+            class U FUTURES_REQUIRE((is_totally_ordered_with_v<T, U>) )>
         constexpr bool
         operator()(T &&t, U &&u) const {
             return less{}(std::forward<U>(u), std::forward<T>(t));

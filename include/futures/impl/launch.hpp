@@ -12,15 +12,11 @@ namespace futures {
     template <
         class Executor,
         class Function,
-        class... Args,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<Executor> &&
-            (std::is_invocable_v<Function, Args...> ||
-             std::is_invocable_v<Function, stop_token, Args...>),
-            // clang-format on
-            int>>
-    decltype(auto)
+        class... Args FUTURES_REQUIRE_IMPL(
+            (is_executor_v<Executor>
+             && (std::is_invocable_v<Function, Args...>
+                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
+    FUTURES_DETAIL(decltype(auto))
     async(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<
@@ -32,15 +28,11 @@ namespace futures {
 
     template <
         class Function,
-        class... Args,
-        std::enable_if_t<
-            // clang-format off
-            !is_executor_v<Function> &&
-            (std::is_invocable_v<Function, Args...> ||
-             std::is_invocable_v<Function, stop_token, Args...>),
-            // clang-format on
-            int>>
-    decltype(auto)
+        class... Args FUTURES_REQUIRE_IMPL(
+            (!is_executor_v<Function>
+             && (std::is_invocable_v<Function, Args...>
+                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
+    FUTURES_DETAIL(decltype(auto))
     async(Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<detail::async_future_options_t<
@@ -55,15 +47,11 @@ namespace futures {
     template <
         class Executor,
         class Function,
-        class... Args,
-        std::enable_if_t<
-            // clang-format off
-            is_executor_v<Executor> &&
-            (std::is_invocable_v<Function, Args...> ||
-             std::is_invocable_v<Function, stop_token, Args...>),
-            // clang-format on
-            int>>
-    decltype(auto)
+        class... Args FUTURES_REQUIRE_IMPL(
+            (is_executor_v<Executor>
+             && (std::is_invocable_v<Function, Args...>
+                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
+    FUTURES_DETAIL(decltype(auto))
     schedule(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<
@@ -75,15 +63,11 @@ namespace futures {
 
     template <
         class Function,
-        class... Args,
-        std::enable_if_t<
-            // clang-format off
-            !is_executor_v<Function> &&
-            (std::is_invocable_v<Function, Args...> ||
-             std::is_invocable_v<Function, stop_token, Args...>),
-            // clang-format on
-            int>>
-    decltype(auto)
+        class... Args FUTURES_REQUIRE_IMPL(
+            (!is_executor_v<Function>
+             && (std::is_invocable_v<Function, Args...>
+                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
+    FUTURES_DETAIL(decltype(auto))
     schedule(Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<detail::schedule_future_options_t<
