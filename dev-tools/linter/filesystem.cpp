@@ -11,7 +11,7 @@
 std::pair<fs::path, bool>
 find_file(std::vector<fs::path> const &include_paths, fs::path const &filename) {
     for (auto const &path: include_paths) {
-        auto p = path / filename;
+        auto p = path / fs::path(filename).make_preferred();
         if (fs::exists(p)) {
             return std::make_pair(p, true);
         }

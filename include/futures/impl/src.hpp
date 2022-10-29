@@ -22,6 +22,12 @@
 #        define ASIO_SEPARATE_COMPILATION
 #    endif
 #    include <futures/detail/deps/asio/impl/src.hpp>
+#elif defined(FUTURES_USE_ASIO) || defined(FUTURES_USE_STANDALONE_ASIO)
+#    include <asio/impl/src.hpp>
+#elif defined(FUTURE_USE_BOOST)
+#    include <boost/asio/impl/src.hpp>
+#else
+#error Logic error. FUTURES_USE_XXXXXX_ASIO undefined.
 #endif
 
 // #glob <futures/**.ipp> - <futures/detail/bundled/**.ipp>
@@ -29,5 +35,6 @@
 #include <futures/executor/impl/inline_executor.ipp>
 #include <futures/executor/impl/new_thread_executor.ipp>
 #include <futures/impl/future_error.ipp>
+
 
 #endif // FUTURES_IMPL_SRC_HPP

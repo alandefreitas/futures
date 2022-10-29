@@ -315,6 +315,8 @@ def declare_variables(variables, macro):
                 return '`ON` if not crosscompiling'
             if str == '${DEBUG_MODE}':
                 return '`ON` if compiling in Debug mode'
+            if str == '${NOT_MSVC}':
+                return '`ON` if not compiling with MSVC'
             return '`' + str + '`'
 
         # Read options from file

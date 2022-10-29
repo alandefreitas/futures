@@ -26,11 +26,17 @@
  */
 #if defined(FUTURES_HAS_ASIO) \
     && (!defined(FUTURES_HAS_BOOST) || !defined(FUTURES_PREFER_BOOST))
-#    define FUTURES_USE_STANDALONE_ASIO
+#    ifndef FUTURES_USE_STANDALONE_ASIO
+#        define FUTURES_USE_STANDALONE_ASIO
+#    endif
 #elif defined(FUTURES_HAS_BOOST)
-#    define FUTURES_USE_BOOST_ASIO
+#    ifndef FUTURES_USE_BOOST_ASIO
+#        define FUTURES_USE_BOOST_ASIO
+#    endif
 #else
-#    define FUTURES_USE_BUNDLED_ASIO
+#    ifndef FUTURES_USE_BUNDLED_ASIO
+#        define FUTURES_USE_BUNDLED_ASIO
+#    endif
 #endif
 
 /*

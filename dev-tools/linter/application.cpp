@@ -6,6 +6,7 @@
 //
 
 #include "application.hpp"
+#include <functional>
 #include <string_view>
 
 std::regex const application::include_regex{
@@ -34,8 +35,9 @@ application::run() {
     find_project_files();
 
     // Find files in directory
-    if (!sanitize_all() || !ok_)
+    if (!sanitize_all() || !ok_) {
         return 1;
+    }
     return 0;
 }
 
@@ -145,8 +147,9 @@ application::sanitize_all() {
 
 fs::path
 application::relative_path(fs::path const &p) {
-    if (p.is_relative())
+    if (p.is_relative()) {
         return p;
+    }
     auto it = find_parent_path(config_.include_paths, p);
     if (it != config_.include_paths.end()) {
         return fs::relative(p, *it);
@@ -207,28 +210,29 @@ application::apply_include_globs(
                 ++replace_end;
             }
             std::smatch include_match;
-            std::regex_search(
+            bool match = std::regex_search(
                 content.cbegin() + replace_end,
                 content.cend(),
                 include_match,
                 include_regex);
-            if (include_match[0].first != content.cbegin() + replace_end) {
+            if (!match || include_match[0].first != content.cbegin() + replace_end) {
                 break;
             }
             replace_end = include_match[0].second - content.cbegin();
         }
         std::string patch;
         std::regex file_path_regex = glob_to_regex(glob_match[1]);
-        std::regex file_except_regex
-            = has_except ? glob_to_regex(glob_except_match[1]) : std::regex("a^");
+        std::regex file_except_regex = has_except ?
+                                           glob_to_regex(glob_except_match[1]) :
+                                           std::regex("a^");
         auto self_r = relative_path(p);
         for (auto &abs_h: file_paths) {
             auto r = relative_path(abs_h);
-            if (r != self_r && std::regex_match(r.string(), file_path_regex)
-                && !std::regex_match(r.string(), file_except_regex))
+            if (r != self_r && std::regex_match(r.generic_u8string(), file_path_regex)
+                && !std::regex_match(r.generic_u8string(), file_except_regex))
             {
                 patch += "#include <";
-                patch += r.string();
+                patch += r.generic_u8string();
                 patch += ">\n";
             }
         }
@@ -691,9 +695,11 @@ application::generate_include_guard(fs::path const &p, fs::path const &parent) {
         [](char x) {
         if ((x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z')
             || (x >= '0' && x <= '9'))
+        {
             return static_cast<char>(std::toupper(x));
-        else
+        } else {
             return '_';
+        }
         });
     return expected_guard;
 }
@@ -720,8 +726,9 @@ application::create_redirect_header(fs::path const &as_path) {
 
     auto guard = generate_include_guard(redirect_header_p, deps_parent);
     std::string bundle_include_name = rel_bundle_dir.u8string();
-    if (bundle_include_name.back() != '/')
+    if (bundle_include_name.back() != '/') {
         bundle_include_name += '/';
+    }
     bundle_include_name += as_path.string();
     // clang-format off
     std::string redirect_content
@@ -796,7 +803,9 @@ void
 application::generate_unit_test(fs::path const &p, fs::path const &parent) {
     if (config_.unit_test_template.empty()
         || !fs::exists(config_.unit_test_template))
+    {
         return;
+    }
 
     if (std::any_of(p.begin(), p.end(), [this](auto &p) {
             return std::any_of(
@@ -804,7 +813,9 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
                 config_.unit_test_ignore_paths.end(),
                 [&p](auto i) { return i == p; });
         }))
+    {
         return;
+    }
 
     std::ifstream f(config_.unit_test_template);
     std::string content{ std::istreambuf_iterator<char>(f),
@@ -826,9 +837,11 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
         [](char x) {
         if ((x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z')
             || (x >= '0' && x <= '9'))
+        {
             return x;
-        else
+        } else {
             return ' ';
+        }
         });
 
     auto search_begin(content.cbegin());
@@ -868,8 +881,9 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
 void
 application::remove_unreachable_headers() {
     std::vector<fs::path> collected;
-    for (auto &p: config_.main_headers)
+    for (auto &p: config_.main_headers) {
         collected.emplace_back(find_file(config_.include_paths, p).first);
+    }
     for (std::size_t i = 0; i < collected.size(); ++i) {
         fs::path &p = collected[i];
         std::ifstream fin(p);
@@ -884,7 +898,9 @@ application::remove_unreachable_headers() {
             include_guard_match,
             include_regex))
         {
-            includes.emplace_back(include_guard_match[2]);
+            std::string as_str(include_guard_match[2]);
+            fs::path as_path(as_str);
+            includes.push_back(as_path);
             j = include_guard_match[0].second - content.cbegin();
         }
         for (auto &ip: includes) {
@@ -903,7 +919,9 @@ application::remove_unreachable_headers() {
             include_guard_match,
             define_boost_config_regex))
         {
-            includes.emplace_back(include_guard_match[4]);
+            std::string as_str(include_guard_match[4]);
+            fs::path as_path(as_str);
+            includes.push_back(std::move(as_path));
             j = include_guard_match[0].second - content.cbegin();
         }
         for (auto &ip: includes) {

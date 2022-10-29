@@ -57,22 +57,22 @@ foreach (FUTURE_FLAG FUTURES_PREFER_ASIO FUTURES_PREFER_BOOST)
     endif ()
 endforeach ()
 
-# Only link asio::asio if we FUTURES_PREFER_ASIO
-# Otherwise, we use boost.asio or bundled asio
-if (FUTURES_PREFER_ASIO AND (asio_FOUND OR Asio_FOUND))
+# Link appropriate version of asio::asio
+if ((asio_FOUND OR Asio_FOUND) AND (NOT Boost_FOUND OR NOT FUTURES_PREFER_BOOST))
     target_link_libraries(headers INTERFACE asio::asio)
     target_compile_definitions(headers INTERFACE FUTURES_HAS_ASIO)
-    if (FUTURES_PREFER_ASIO OR NOT FUTURES_PREFER_BOOST)
-        target_compile_definitions(headers INTERFACE FUTURES_PREFER_ASIO)
-    endif ()
-endif ()
-
-# Link Boost headers whenever it's available because we need
-# more than Boost.Asio.
-if (Boost_FOUND)
+    target_compile_definitions(headers INTERFACE FUTURES_HAS_STANDALONE_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_USE_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_USE_STANDALONE_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_PREFER_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_PREFER_STANDALONE_ASIO)
+elseif (Boost_FOUND)
     target_link_libraries(headers INTERFACE Boost::boost)
     target_compile_definitions(headers INTERFACE FUTURES_HAS_BOOST)
-    if (FUTURES_PREFER_BOOST OR NOT (asio_FOUND OR Asio_FOUND))
-        target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST)
-    endif ()
+    target_compile_definitions(headers INTERFACE FUTURES_USE_BOOST)
+    target_compile_definitions(headers INTERFACE FUTURES_PREFER_BOOST)
+else()
+    target_compile_definitions(headers INTERFACE FUTURES_HAS_BUNDLED_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_USE_BUNDLED_ASIO)
+    target_compile_definitions(headers INTERFACE FUTURES_PREFER_BUNDLED_ASIO)
 endif ()

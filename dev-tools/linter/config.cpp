@@ -118,7 +118,6 @@ parse(config &c, std::vector<std::string_view> const &args) {
         "Main headers don't exist");
 
     c.dep_include_paths = get_paths("dep_include_paths");
-    CHECK(!c.dep_include_paths.empty(), "No dependency include paths provided");
     CHECK(
         std::all_of(
             c.dep_include_paths.begin(),

@@ -29,9 +29,8 @@ if (FUTURES_USE_FETCH_CONTENT AND NOT Asio_FOUND)
     endif ()
 
     # Create imported CMake library
-    add_library(asio INTERFACE)
-    add_library(asio::asio ALIAS asio)
-    target_include_directories(asio INTERFACE "${asio_SOURCE_DIR}/asio/include")
+    add_library(asio::asio INTERFACE IMPORTED)
+    set_target_properties(asio::asio PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${asio_SOURCE_DIR}/asio/include")
 
     set(Asio_FOUND ON)
 endif ()
