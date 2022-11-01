@@ -35,83 +35,65 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {
-            name: "Windows-MSVC/2019/Static/X64/Release",
-            os: windows-2019,
-            config: Release,
-            cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2",
-            sudocmd: "",
-            artifact_name: "Windows x64",
-            cores: 2,
-          }
-          - {
-            name: "Windows-MSVC/2019/Shared/X64/Release",
-            os: windows-2019,
-            config: Release,
-            cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON,
-            sudocmd: "",
-            artifact_name: "Windows x64",
-            cores: 2,
-          }
-          - {
-            name: "Ubuntu/20.04/Static/X64/Release",
-            os: ubuntu-20.04,
-            config: Release,
-            cmake_extra_args: "-DCMAKE_C_COMPILER=/usr/bin/gcc-10 -DCMAKE_CXX_COMPILER=/usr/bin/g++-10  -DCMAKE_CXX_FLAGS=\"-O2\"",
-            sudocmd: "sudo",
-            artifact_name: "Linux",
-            cores: 2,
-          }
-          - {
-            name: "MacOSX/10.15/Static/X64/Release",
-            os: macos-11,
-            config: Release,
-            cmake_extra_args: "-DCMAKE_CXX_FLAGS=\"-O2\"",
-            sudocmd: "sudo",
-            artifact_name: "MacOSX",
-            cores: 4,
-          }
+          - { name: "MSVC 14.29",          os: windows-2019, config: Release, artifact_name: "Windows x64",          cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
+          - { name: "MSVC 14.29 (Shared)", os: windows-2019, config: Release, artifact_name: "Windows x64 (Shared)", cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
+          - { name: "GCC 10.3",            os: ubuntu-20.04, config: Release, artifact_name: "Linux",                cmake_extra_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10 -D CMAKE_CXX_COMPILER=/usr/bin/g++-10 -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "AppleClang 13.0",     os: macos-11,     config: Release, artifact_name: "MacOSX",               cmake_extra_args: -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "GCC 10.3 (Coverage)", os: ubuntu-20.04, config: Debug,   coverage: true,                        cmake_extra_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10 -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
     steps:
       - uses: actions/checkout@v3
+      - name: Ubuntu install
+        if: ${{ contains( matrix.config.os, 'ubuntu') }}
+        run: sudo apt install -y lcov
       - name: Create Build Dir
         run: mkdir build
+      - name: Get CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_extra_args }} -D CMAKE_BUILD_TYPE=${{ matrix.config.config }} -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit
+          cmake .. ${{ matrix.config.cmake_extra_args }} -D CMAKE_BUILD_TYPE=${{ matrix.config.config }} -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }}
       - name: Build
         working-directory: ./build
-        run: cmake --build . --parallel ${{ matrix.config.cores }} --config ${{ matrix.config.config }}
+        run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config ${{ matrix.config.config }}
       - name: Test
         working-directory: ./build
-        run: ctest --parallel ${{ matrix.config.cores }} -C ${{ matrix.config.config }} --progress --output-on-failure
+        run: ctest --parallel ${{ steps.cpu-cores.outputs.count }} -C ${{ matrix.config.config }} --progress --output-on-failure
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails, but still let it fail
         with:
-          check_name: Test Report - ${{ matrix.config.artifact_name }}
+          check_name: Test Report - ${{ matrix.config.name }}
           check_title_template: '{{TEST_NAME}}'
           report_paths: build/tests/unit/reports/*.junit
       - name: Install
         working-directory: ./build
-        run: ${{ matrix.config.sudocmd }} cmake --install .
+        run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cmake --install .
       - name: Create packages
         working-directory: ./build
-        run: ${{ matrix.config.sudocmd }} cpack
+        run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cpack
       # Store packages as artifacts. Unfortunately, the action can't upload unzipped
       # artifacts and kittaakos/upload-artifact-as-is is deprecated
       - name: Archive Packages
+        if: ${{ matrix.config.config != 'Debug' }}
         uses: actions/upload-artifact@v3
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
           path: build/futures-?.?.?-*.*
       - name: Check conventional commit
         uses: webiny/action-conventional-commits@v1.1.0
-#      - name: Integration Test
-#        working-directory: ./test/integration
-#        run: |
-#          mkdir build
-#          cd build
-#          cmake .. ${{ matrix.config.cmake_extra_args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }}
-#          cmake --build . --parallel ${{ matrix.config.cores }} --config ${{ matrix.config.config }}
-#        continue-on-error: true
+      #      - name: Integration Test
+      #        working-directory: ./test/integration
+      #        run: |
+      #          mkdir build
+      #          cd build
+      #          cmake .. ${{ matrix.config.cmake_extra_args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }}
+      #          cmake --build . --parallel ${{ matrix.config.cores }} --config ${{ matrix.config.config }}
+      #        continue-on-error: true
+      - name: Codecov generate
+        if: ${{ matrix.config.coverage }}
+        run: cmake --build ./build --target coverage
+      - name: Codecov upload
+        if: ${{ matrix.config.coverage }}
+        uses: codecov/codecov-action@v3
