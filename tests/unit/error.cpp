@@ -1,4 +1,4 @@
-#include <futures/future_error.hpp>
+#include <futures/error.hpp>
 //
 #include <futures/launch.hpp>
 #include <futures/adaptor/then.hpp>

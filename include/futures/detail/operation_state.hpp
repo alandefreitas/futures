@@ -9,7 +9,7 @@
 #define FUTURES_DETAIL_OPERATION_STATE_HPP
 
 #include <futures/config.hpp>
-#include <futures/future_error.hpp>
+#include <futures/error.hpp>
 #include <futures/future_options.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/continuations_source.hpp>
