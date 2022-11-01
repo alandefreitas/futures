@@ -8,6 +8,11 @@
 #ifndef FUTURES_IMPL_SRC_HPP
 #define FUTURES_IMPL_SRC_HPP
 
+// MUST COME FIRST
+#ifndef FUTURES_SOURCE
+#define FUTURES_SOURCE
+#endif
+
 #include <futures/config.hpp>
 
 #if defined(BOOST_ASIO_HEADER_ONLY) || !defined(FUTURES_SEPARATE_COMPILATION)

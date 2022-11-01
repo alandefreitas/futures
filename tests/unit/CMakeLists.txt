@@ -33,7 +33,7 @@ else ()
 endif ()
 
 # Create a common catch main for all tests
-add_library(catch_main catch_main.cpp)
+add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_compile_features(catch_main PUBLIC cxx_std_17)
 
@@ -68,7 +68,7 @@ macro(add_futures_test TEST_FILE)
     endif ()
 
     # Register with ctest
-    if (FUTURES_CATCH2_REPORTER STREQUAL "console")
+    if (FUTURES_CATCH2_REPORTER STREQUAL "console" OR BUILD_SHARED_LIBS)
         # This is the default normally used for local tests
         catch_discover_tests(${CMAKE_TEST_NAME})
     else ()

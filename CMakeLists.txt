@@ -13,6 +13,10 @@ set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
 message(STATUS "${CMAKE_PROJECT_NAME} v${CMAKE_PROJECT_VERSION}: ${CMAKE_PROJECT_HOMEPAGE_URL}")
 include(cmake/futures/in_source_guard.cmake)
 include(cmake/futures/variables.cmake)
+if (BUILD_SHARED_LIBS AND WIN32)
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/targets)
+    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/targets)
+endif()
 
 #######################################################
 ### Options                                         ###

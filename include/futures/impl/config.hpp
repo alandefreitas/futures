@@ -8,6 +8,8 @@
 #ifndef FUTURES_IMPL_CONFIG_HPP
 #define FUTURES_IMPL_CONFIG_HPP
 
+#include <futures/detail/deps/boost/config.hpp>
+
 /*
  * Apply configuration macros
  *
@@ -43,7 +45,7 @@
  * Set boost/user if there's no boost
  */
 #if defined FUTURES_USE_BUNDLED_ASIO && !defined BOOST_USER_CONFIG
-#    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
+#  define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
 #endif
 
 /*
@@ -80,8 +82,18 @@ namespace asio {}
 #ifdef FUTURES_HEADER_ONLY
 #    define FUTURES_DECLARE inline
 #else
+#    if defined(FUTURES_DYN_LINK) && !defined(FUTURES_STATIC_LINK)
+#        if defined(FUTURES_SOURCE)
+#            define FUTURES_DECLARE BOOST_SYMBOL_EXPORT
+#        else
+#            define FUTURES_DECLARE BOOST_SYMBOL_IMPORT
+#        endif
+#    endif
+#endif
+#ifndef FUTURES_DECLARE
 #    define FUTURES_DECLARE
 #endif
+
 
 // How we declare implementation details
 #ifndef FUTURES_DOXYGEN
