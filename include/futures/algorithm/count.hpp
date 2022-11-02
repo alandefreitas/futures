@@ -23,7 +23,8 @@
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <variant>
 
 namespace futures {
@@ -85,9 +86,11 @@ namespace futures {
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
         run(E const &ex, P p, I first, S last, T const &v) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                boost::ignore_unused(p);
                 return inline_count(first, last, v);
             } else {
                 if (detail::is_constant_evaluated()) {
+                    boost::ignore_unused(p);
                     return inline_count(first, last, v);
                 } else {
                     return count_if_functor::count_if_graph<E, I>(ex)

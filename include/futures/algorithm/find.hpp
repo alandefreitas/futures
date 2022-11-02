@@ -21,7 +21,7 @@
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
 #include <variant>
 
 namespace futures {

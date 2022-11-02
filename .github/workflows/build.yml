@@ -35,16 +35,31 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { name: "MSVC 14.29",          os: windows-2019, config: Release, artifact_name: "Windows x64",          cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
-          - { name: "MSVC 14.29 (Shared)", os: windows-2019, config: Release, artifact_name: "Windows x64 (Shared)", cmake_extra_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
-          - { name: "GCC 10.3",            os: ubuntu-20.04, config: Release, artifact_name: "Linux",                cmake_extra_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10 -D CMAKE_CXX_COMPILER=/usr/bin/g++-10 -D CMAKE_CXX_FLAGS="-O2", }
-          - { name: "AppleClang 13.0",     os: macos-11,     config: Release, artifact_name: "MacOSX",               cmake_extra_args: -D CMAKE_CXX_FLAGS="-O2", }
-          - { name: "GCC 10.3 (Coverage)", os: ubuntu-20.04, config: Debug,   coverage: true,                        cmake_extra_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10 -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          # Release config for each OS with the most recent compilers
+          - { name: "MSVC 14.33",          os: windows-2022, artifact_name: "Windows x64",          cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
+          - { name: "MSVC 14.33 (Shared)", os: windows-2022, artifact_name: "Windows x64 (Shared)", cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
+          - { name: "GCC 12",              os: ubuntu-22.04, artifact_name: "Linux",                packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-12 -D CMAKE_CXX_COMPILER=/usr/bin/g++-12 -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "AppleClang 13",       os: macos-12,     artifact_name: "MacOSX",               cmake_args: -D CMAKE_CXX_FLAGS="-O2", }
+
+          # Coverage
+          - { name: "GCC 12 (Coverage)",   os: ubuntu-22.04, coverage: true, packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+
+          # Sanitizers
+          - { name: "GCC 12 (ASan)",       os: ubuntu-22.04, asan: true,     packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+
+          # All compilers
+          - { name: "MSVC 14.29",          os: windows-2019, cmake_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
+          - { name: "GCC 11",              os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-11   -D CMAKE_CXX_COMPILER=/usr/bin/g++-11, }
+          - { name: "GCC 10",              os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10   -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "GCC 9",               os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-9    -D CMAKE_CXX_COMPILER=/usr/bin/g++-9, }
+          - { name: "Clang 14",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-14 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-14, }
+          - { name: "Clang 13",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-13 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-13, }
+          - { name: "Clang 12",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-12 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-12, }
     steps:
       - uses: actions/checkout@v3
-      - name: Ubuntu install
-        if: ${{ contains( matrix.config.os, 'ubuntu') }}
-        run: sudo apt install -y lcov
+      - name: Install apt dependencies
+        if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.packages || matrix.config.coverage) }}
+        run: sudo apt install -y ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.packages }}
       - name: Create Build Dir
         run: mkdir build
       - name: Get CPU cores
@@ -53,16 +68,16 @@ jobs:
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_extra_args }} -D CMAKE_BUILD_TYPE=${{ matrix.config.config }} -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }}
+          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }}
       - name: Build
         working-directory: ./build
-        run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config ${{ matrix.config.config }}
+        run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config Release
       - name: Test
         working-directory: ./build
-        run: ctest --parallel ${{ steps.cpu-cores.outputs.count }} -C ${{ matrix.config.config }} --progress --output-on-failure
+        run: ctest --parallel ${{ steps.cpu-cores.outputs.count }} -C Release --progress --output-on-failure
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
-        if: always() # always run even if the previous step fails, but still let it fail
+        if: always()
         with:
           check_name: Test Report - ${{ matrix.config.name }}
           check_title_template: '{{TEST_NAME}}'
@@ -73,23 +88,22 @@ jobs:
       - name: Create packages
         working-directory: ./build
         run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cpack
-      # Store packages as artifacts. Unfortunately, the action can't upload unzipped
-      # artifacts and kittaakos/upload-artifact-as-is is deprecated
       - name: Archive Packages
-        if: ${{ matrix.config.config != 'Debug' }}
+        if: ${{ matrix.config.artifact_name }}
         uses: actions/upload-artifact@v3
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
           path: build/futures-?.?.?-*.*
       - name: Check conventional commit
+        if: ${{ !contains( matrix.config.os, 'macos') }}
         uses: webiny/action-conventional-commits@v1.1.0
       #      - name: Integration Test
       #        working-directory: ./test/integration
       #        run: |
       #          mkdir build
       #          cd build
-      #          cmake .. ${{ matrix.config.cmake_extra_args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }}
-      #          cmake --build . --parallel ${{ matrix.config.cores }} --config ${{ matrix.config.config }}
+      #          cmake .. ${{ matrix.config.cmake_args }} -DCMAKE_BUILD_TYPE=Release
+      #          cmake --build . --parallel ${{ matrix.config.cores }} --config Release
       #        continue-on-error: true
       - name: Codecov generate
         if: ${{ matrix.config.coverage }}

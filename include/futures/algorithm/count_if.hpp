@@ -25,8 +25,9 @@
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
-#include <execution>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <variant>
 
 namespace futures {
@@ -160,9 +161,11 @@ namespace futures {
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
         run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                boost::ignore_unused(p);
                 return inline_count_if(first, last, f);
             } else {
                 if (detail::is_constant_evaluated()) {
+                    boost::ignore_unused(p);
                     return inline_count_if(first, last, f);
                 } else {
                     return count_if_graph<E, I>(ex).count_if(p, first, last, f);

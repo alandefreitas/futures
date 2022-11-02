@@ -4,6 +4,7 @@
 #include <catch2/catch.hpp>
 #include <algorithm>
 #include <atomic>
+#include <numeric>
 #include <vector>
 
 TEST_CASE("algorithm for each") {

@@ -70,7 +70,11 @@ macro(add_futures_test TEST_FILE)
     # Register with ctest
     if (FUTURES_CATCH2_REPORTER STREQUAL "console" OR BUILD_SHARED_LIBS)
         # This is the default normally used for local tests
-        catch_discover_tests(${CMAKE_TEST_NAME})
+        catch_discover_tests(
+            ${CMAKE_TEST_NAME}
+            PROPERTIES
+                ENVIRONMENT "detect_invalid_pointer_pairs=2"
+        )
     else ()
         # This is custom reporter (usually junit) used in CI
         # The junit-report action provides feedback on the tests
@@ -82,6 +86,8 @@ macro(add_futures_test TEST_FILE)
                 REPORTER ${FUTURES_CATCH2_REPORTER}
                 OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/reports
                 OUTPUT_SUFFIX ".${FUTURES_CATCH2_REPORTER}"
+                PROPERTIES
+                    ENVIRONMENT "detect_invalid_pointer_pairs=2"
         )
     endif ()
 endmacro()

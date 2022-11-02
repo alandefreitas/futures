@@ -24,7 +24,8 @@
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <numeric>
 #include <variant>
 
@@ -149,9 +150,11 @@ namespace futures {
         run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
             const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                boost::ignore_unused(p);
                 return inline_accumulate(first, last, i, f);
             } else {
                 if (detail::is_constant_evaluated()) {
+                    boost::ignore_unused(p);
                     return inline_accumulate(first, last, i, f);
                 } else {
                     return reduce_graph<E, T>(ex).reduce(p, first, last, i, f);

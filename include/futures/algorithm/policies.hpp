@@ -27,13 +27,7 @@
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
-#include <execution>
-
-#ifdef __has_include
-#    if __has_include(<version>)
-#        include <version>
-#    endif
-#endif
+#include <futures/algorithm/detail/execution.hpp>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -45,16 +39,50 @@ namespace futures {
      */
 
     /// Class representing a type for a sequenced_policy tag
+    /**
+     * This tag type is an alias to `std::execution::sequenced_policy` whenever
+     * it's available. Otherwise it's defined as an individual type.
+     */
+#ifdef FUTURES_HAS_STD_POLICIES
+    using sequenced_policy = std::execution::sequenced_policy;
+#else
     class sequenced_policy {};
+#endif
 
     /// Class representing a type for a parallel_policy tag
+    /**
+     * This tag type is an alias to `std::execution::parallel_policy` whenever
+     * it's available. Otherwise it's defined as an individual type.
+     */
+#ifdef FUTURES_HAS_STD_POLICIES
+    using parallel_policy = std::execution::parallel_policy;
+#else
     class parallel_policy {};
+#endif
 
     /// Class representing a type for a parallel_unsequenced_policy tag
+    /**
+     * This tag type is an alias to
+     * `std::execution::parallel_unsequenced_policy` whenever it's available.
+     * Otherwise it's defined as an individual type.
+     */
+#ifdef FUTURES_HAS_STD_POLICIES
+    using parallel_unsequenced_policy = std::execution::
+        parallel_unsequenced_policy;
+#else
     class parallel_unsequenced_policy {};
+#endif
 
     /// Class representing a type for an unsequenced_policy tag
+    /**
+     * This tag type is an alias to `std::execution::unsequenced_policy`
+     * whenever it's available. Otherwise it's defined as an individual type.
+     */
+#ifdef FUTURES_HAS_STD_POLICIES
+    using unsequenced_policy = std::execution::unsequenced_policy;
+#else
     class unsequenced_policy {};
+#endif
 
     /// Tag used in algorithms for a sequenced_policy
     inline constexpr sequenced_policy seq{};

@@ -27,7 +27,7 @@
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
 #include <numeric>
 #include <variant>
 

@@ -29,7 +29,7 @@
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms

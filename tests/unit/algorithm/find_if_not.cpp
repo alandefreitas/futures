@@ -4,6 +4,7 @@
 #include <catch2/catch.hpp>
 #include <algorithm>
 #include <array>
+#include <numeric>
 #include <vector>
 
 TEST_CASE("algorithm find if not") {

@@ -2,7 +2,9 @@
 //
 #include "test_unary_invoke.hpp"
 #include <catch2/catch.hpp>
+#include <algorithm>
 #include <array>
+#include <numeric>
 
 TEST_CASE("algorithm none of") {
     using namespace futures;

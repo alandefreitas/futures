@@ -2,6 +2,8 @@
 //
 #include "test_unary_invoke.hpp"
 #include <catch2/catch.hpp>
+#include <algorithm>
+#include <numeric>
 #include <array>
 #include <vector>
 

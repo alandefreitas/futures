@@ -22,8 +22,9 @@
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
+#include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
-#include <execution>
+#include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <variant>
 
 namespace futures {
@@ -159,9 +160,11 @@ namespace futures {
         FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
         run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+                boost::ignore_unused(p);
                 return inline_none_of(first, last, f);
             } else {
                 if (detail::is_constant_evaluated()) {
+                    boost::ignore_unused(p);
                     return inline_none_of(first, last, f);
                 } else {
                     return none_of_graph<E>(ex).none_of(p, first, last, f);

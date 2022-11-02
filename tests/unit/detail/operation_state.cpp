@@ -9,6 +9,7 @@ template <typename T, typename T2>
 void
 set_value_or_void(futures::promise<T> &p, T2 test_value) {
     if constexpr (std::is_same_v<T, void>) {
+        boost::ignore_unused(test_value);
         p.set_value();
     } else {
         p.set_value(test_value);
@@ -56,6 +57,7 @@ set_package_task_tests(T2 test_value) {
     using namespace futures;
     static_assert(std::is_same_v<T, T2> || std::is_same_v<T, void>);
     auto return_self = [](T2 n) {
+        boost::ignore_unused(n);
         if constexpr (!std::is_same_v<T, void>) {
             return n;
         }

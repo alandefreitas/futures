@@ -8,7 +8,7 @@ macro(add_sanitizer flag)
         set(CMAKE_REQUIRED_FLAGS "-Werror -fsanitize=${flag}")
         check_cxx_compiler_flag(-fsanitize=${flag} HAVE_FLAG_SANITIZER)
         if (HAVE_FLAG_SANITIZER)
-            message("Adding -fsanitize=${flag}")
+            message("Adding -fsanitize=${flag} for all targets")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=${flag} -fno-omit-frame-pointer")
             set(DCMAKE_C_FLAGS "${DCMAKE_C_FLAGS} -fsanitize=${flag} -fno-omit-frame-pointer")
             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=${flag}")
@@ -19,50 +19,12 @@ macro(add_sanitizer flag)
     endif ()
 endmacro()
 
-# @brief Add address sanitizer to all targets
-# - You shouldn't use sanitizers in Release Mode
-# - It's usually best to do that per target
-macro(add_address_sanitizer)
-    add_sanitizer("address")
-endmacro()
-
-# @brief Add thread sanitizer to all targets
-# - You shouldn't use sanitizers in Release Mode
-# - It's usually best to do that per target
-macro(add_thread_sanitizer)
-    add_sanitizer("thread")
-endmacro()
-
-# @brief Add undefined sanitizer to all targets
-# - You shouldn't use sanitizers in Release Mode
-# - It's usually best to do that per target
-macro(add_undefined_sanitizer)
-    add_sanitizer("undefined")
-endmacro()
-
-# @brief Add memory sanitizer to all targets
-# - You shouldn't use sanitizers in Release Mode
-# - It's usually best to do that per target
-macro(add_memory_sanitizer)
-    add_sanitizer("memory")
-endmacro()
-
-# @brief @brief Add leak sanitizer to all targets
-# - You shouldn't use sanitizers in Release Mode
-# - It's usually best to do that per target
-macro(add_leak_sanitizer)
-    add_sanitizer("leak")
-endmacro()
-
 # @brief Add all sanitizers to all targets
 # - You shouldn't use sanitizers in Release Mode
 # - It's usually best to do that per target
 macro(add_sanitizers)
-    add_address_sanitizer()
-    add_leak_sanitizer()
-    add_undefined_sanitizer()
-    # not allowed with address sanitizer
-    # add_thread_sanitizer()
-    # not supported
-    # add_memory_sanitizer()
+    add_sanitizer("address")
+    add_sanitizer("leak")
+    add_sanitizer("undefined")
+    add_sanitizer("pointer-compare")
 endmacro()

@@ -30,7 +30,7 @@
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
-#include <execution>
+#include <futures/algorithm/detail/execution.hpp>
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
