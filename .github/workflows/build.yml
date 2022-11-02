@@ -35,33 +35,38 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # Release config for each OS with the most recent compilers
-          - { name: "MSVC 14.33",          os: windows-2022, artifact_name: "Windows x64",          cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
-          - { name: "MSVC 14.33 (Shared)", os: windows-2022, artifact_name: "Windows x64 (Shared)", cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
-          - { name: "GCC 12",              os: ubuntu-22.04, artifact_name: "Linux",                packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-12 -D CMAKE_CXX_COMPILER=/usr/bin/g++-12 -D CMAKE_CXX_FLAGS="-O2", }
-          - { name: "AppleClang 13",       os: macos-12,     artifact_name: "MacOSX",               cmake_args: -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "MSVC 14.33 (Release)",           os: windows-2022, artifact_name: "Windows x64",          cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
+          - { name: "MSVC 14.33 (Release, Shared)",   os: windows-2022, artifact_name: "Windows x64 (Shared)", cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
+          - { name: "MSVC 14.29",                     os: windows-2019, cmake_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
 
-          # Coverage
-          - { name: "GCC 12 (Coverage)",   os: ubuntu-22.04, coverage: true, packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "GCC 12 (Release)",               os: ubuntu-22.04, artifact_name: "Linux",                packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-12 -D CMAKE_CXX_COMPILER=/usr/bin/g++-12 -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "GCC 12 (Coverage)",              os: ubuntu-22.04, coverage: true, packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "GCC 12 (ASan)",                  os: ubuntu-22.04, asan: true,     packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "GCC 11",                         os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-11   -D CMAKE_CXX_COMPILER=/usr/bin/g++-11, }
+          - { name: "GCC 10",                         os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10   -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "GCC 9",                          os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-9    -D CMAKE_CXX_COMPILER=/usr/bin/g++-9, }
 
-          # Sanitizers
-          - { name: "GCC 12 (ASan)",       os: ubuntu-22.04, asan: true,     packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
+          - { name: "Clang 14",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-14 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-14, }
+          - { name: "Clang 13",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-13 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-13, }
+          - { name: "Clang 12",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-12 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-12, }
 
-          # All compilers
-          - { name: "MSVC 14.29",          os: windows-2019, cmake_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
-          - { name: "GCC 11",              os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-11   -D CMAKE_CXX_COMPILER=/usr/bin/g++-11, }
-          - { name: "GCC 10",              os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10   -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
-          - { name: "GCC 9",               os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-9    -D CMAKE_CXX_COMPILER=/usr/bin/g++-9, }
-          - { name: "Clang 14",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-14 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-14, }
-          - { name: "Clang 13",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-13 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-13, }
-          - { name: "Clang 12",            os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-12 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-12, }
+          - { name: "AppleClang 13 (Release)",        os: macos-12,     artifact_name: "MacOSX",               cmake_args: -D CMAKE_CXX_FLAGS="-O2", }
     steps:
       - uses: actions/checkout@v3
-      - name: Install apt dependencies
+      - name: Apt packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
         if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.packages || matrix.config.coverage) }}
-        run: sudo apt install -y ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.packages }}
+        with:
+          packages: ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.packages }}
+          version: 1.0
+      - name: Fetched Content
+        id: cache-fetched-content
+        uses: actions/cache@v3
+        with:
+          path: build/_deps
+          key: ${{ matrix.config.os }}-fetched-content
       - name: Create Build Dir
-        run: mkdir build
+        run: cmake -E make_directory build
       - name: Get CPU cores
         uses: SimenB/github-actions-cpu-cores@v1
         id: cpu-cores
@@ -77,7 +82,7 @@ jobs:
         run: ctest --parallel ${{ steps.cpu-cores.outputs.count }} -C Release --progress --output-on-failure
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
-        if: always()
+        if: failure()
         with:
           check_name: Test Report - ${{ matrix.config.name }}
           check_title_template: '{{TEST_NAME}}'
