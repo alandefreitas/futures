@@ -5,11 +5,11 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
-#define FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
+#ifndef FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP
+#define FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP
 
 /**
- *  @file algorithm/comparisons/equal_to.hpp
+ *  @file algorithm/compare/equal_to.hpp
  *  @brief Equality comparison functor
  *
  *  This file defines the equality operator as a functor.
@@ -38,4 +38,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_EQUAL_TO_HPP
+#endif // FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP

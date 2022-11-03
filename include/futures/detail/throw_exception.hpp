@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_THROW_EXCEPTION_HPP
-#define FUTURES_THROW_EXCEPTION_HPP
+#ifndef FUTURES_DETAIL_THROW_EXCEPTION_HPP
+#define FUTURES_DETAIL_THROW_EXCEPTION_HPP
 
 #include <futures/detail/deps/boost/throw_exception.hpp>
 
@@ -24,4 +24,4 @@ namespace futures::detail {
     }
 } // namespace futures::detail
 
-#endif // FUTURES_THROW_EXCEPTION_HPP
+#endif // FUTURES_DETAIL_THROW_EXCEPTION_HPP

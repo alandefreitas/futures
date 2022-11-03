@@ -49,13 +49,9 @@ TEST_CASE("Continuation traits") {
 #else
             false;
 #endif
-        STATIC_REQUIRE(
-            (is_msvc && std::is_invocable_v<FL, S>)
-            || (!is_msvc && !std::is_invocable_v<FL, S>) );
+        STATIC_REQUIRE(is_msvc || !std::is_invocable_v<FL, S>);
         STATIC_REQUIRE(std::is_invocable_v<FL, SL>);
-        STATIC_REQUIRE(
-            (is_msvc && std::is_invocable_v<FL, SR>)
-            || (!is_msvc && !std::is_invocable_v<FL, SR>) );
+        STATIC_REQUIRE(is_msvc || !std::is_invocable_v<FL, SR>);
         STATIC_REQUIRE(std::is_invocable_v<FL, SCL>);
 
         auto fr = [](std::string&& x) {

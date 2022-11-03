@@ -5,17 +5,17 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_GREATER_HPP
-#define FUTURES_ALGORITHM_COMPARISONS_GREATER_HPP
+#ifndef FUTURES_ALGORITHM_COMPARE_GREATER_HPP
+#define FUTURES_ALGORITHM_COMPARE_GREATER_HPP
 
 /**
- *  @file algorithm/comparisons/greater.hpp
+ *  @file algorithm/compare/greater.hpp
  *  @brief Greater comparison functor
  *
  *  This file defines the greater operator as a functor.
  */
 
-#include <futures/algorithm/comparisons/less.hpp>
+#include <futures/algorithm/compare/less.hpp>
 #include <utility>
 #include <type_traits>
 
@@ -37,4 +37,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_GREATER_HPP
+#endif // FUTURES_ALGORITHM_COMPARE_GREATER_HPP

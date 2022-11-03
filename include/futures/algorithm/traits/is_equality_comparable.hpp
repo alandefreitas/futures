@@ -15,7 +15,13 @@
  *  This file defines the `is_equality_comparable` trait.
  */
 
+#include <futures/config.hpp>
+#include <futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp>
 #include <type_traits>
+
+#ifdef __cpp_lib_three_way_comparison
+#    include <compare>
+#endif
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -31,22 +37,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/equality_comparable
      */
-#ifdef FUTURES_DOXYGEN
+#if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
     template <class T>
-    using is_equality_comparable = __see_below__;
+    using is_equality_comparable = std::bool_constant<
+        std::equality_comparable<T>>;
 #else
-    template <class T, class = void>
-    struct is_equality_comparable : std::false_type {};
-
     template <class T>
-    struct is_equality_comparable<
-        T,
-        std::void_t<
-            // clang-format off
-            decltype(std::declval< std::remove_reference_t<T> const &>() == std::declval< std::remove_reference_t<T> const &>()),
-            decltype(std::declval< std::remove_reference_t<T> const &>() != std::declval< std::remove_reference_t<T> const &>())
-            // clang-format on
-            >> : std::true_type {};
+    using is_equality_comparable = detail::
+        is_weakly_equality_comparable_with<T, T>;
 #endif
 
     /// @copydoc is_equality_comparable

@@ -46,7 +46,7 @@
  * Set boost/user if there's no boost
  */
 #if defined(FUTURES_USE_BUNDLED_ASIO) && !defined(BOOST_USER_CONFIG)
-#    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
+#  define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
 #endif
 
 /*

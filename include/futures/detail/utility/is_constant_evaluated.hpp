@@ -62,7 +62,7 @@ namespace futures::detail {
     constexpr bool
     is_constant_evaluated() noexcept {
 #if __cpp_lib_is_constant_evaluated >= 201811L
-        return std::is_constant_evaluted();
+        return std::is_constant_evaluated();
 #elif defined(FUTURES_HAS_BUILTIN_CONSTANT_EVALUATED)
         return __builtin_is_constant_evaluated();
 #elif defined(FUTURES_HAS_GCC6_CONSTANT_EVALUATED)

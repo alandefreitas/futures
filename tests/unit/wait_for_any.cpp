@@ -35,7 +35,7 @@ TEST_CASE("wait for any") {
                     auto ready_it = wait_for_any(fs.begin(), fs.end());
                     REQUIRE(ready_it != fs.end());
                     REQUIRE(is_ready(*ready_it));
-                    REQUIRE(std::any_of(fs.begin(), fs.end(), [](auto &f) {
+                    REQUIRE(std::any_of(fs.begin(), fs.end(), [](future_t &f) {
                         return is_ready(f);
                     }));
                     int n = ready_it->get();
@@ -46,7 +46,7 @@ TEST_CASE("wait for any") {
                     auto ready_it = wait_for_any(fs);
                     REQUIRE(ready_it != fs.end());
                     REQUIRE(is_ready(*ready_it));
-                    REQUIRE(std::any_of(fs.begin(), fs.end(), [](auto &f) {
+                    REQUIRE(std::any_of(fs.begin(), fs.end(), [](future_t &f) {
                         return is_ready(f);
                     }));
                     int n = ready_it->get();

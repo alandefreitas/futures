@@ -196,8 +196,6 @@
             cpack build
             ```
 
-    Requirements: C++17
-    
 
 ## Hello world 👋
 
@@ -220,5 +218,14 @@
 ### Algorithms
 
 {{ all_code_snippets("quickstart/algorithms.cpp") }}
+
+## Requirements
+
+!!! hint ""
+
+    - Requirements: C++17
+    - Tested compilers: MSVC 14.2, 14.3; GCC 9, 10, 11, 12; Clang 12, 13, 14; AppleClang: 13
+    - Tested standards: C++20; C++17
+
 
 --8<-- "docs/references.md"

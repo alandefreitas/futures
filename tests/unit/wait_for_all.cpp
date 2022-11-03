@@ -18,13 +18,13 @@ TEST_CASE("wait for all") {
             fs.emplace_back(launch(std::function<int()>([]() { return 4; })));
             SECTION("Iterators") {
                 wait_for_all(fs.begin(), fs.end());
-                REQUIRE(std::all_of(fs.begin(), fs.end(), [](auto &f) {
+                REQUIRE(std::all_of(fs.begin(), fs.end(), [](future_t &f) {
                     return is_ready(f);
                 }));
             }
             SECTION("Ranges") {
                 wait_for_all(fs);
-                REQUIRE(std::all_of(fs.begin(), fs.end(), [](auto &f) {
+                REQUIRE(std::all_of(fs.begin(), fs.end(), [](future_t &f) {
                     return is_ready(f);
                 }));
             }

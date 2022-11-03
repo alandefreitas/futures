@@ -16,8 +16,12 @@
  */
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
-#include <futures/algorithm/traits/is_weakly_equality_comparable.hpp>
+#include <futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp>
 #include <type_traits>
+
+#ifdef __cpp_lib_three_way_comparison
+#    include <compare>
+#endif
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -33,11 +37,17 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/equality_comparable_with
      */
+#if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
+    template <class T, class U>
+    using is_equality_comparable_with = std::bool_constant<
+        std::equality_comparable_with<T, U>>;
+#else
     template <class T, class U>
     using is_equality_comparable_with = std::conjunction<
         is_equality_comparable<T>,
         is_equality_comparable<U>,
-        is_weakly_equality_comparable<T, U>>;
+        detail::is_weakly_equality_comparable_with<T, U>>;
+#endif
 
     /// @copydoc is_equality_comparable_with
     template <class T, class U>

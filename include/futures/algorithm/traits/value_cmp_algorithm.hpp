@@ -24,7 +24,7 @@
  * @see https://en.cppreference.com/w/cpp/ranges/view
  */
 
-#include <futures/algorithm/comparisons/equal_to.hpp>
+#include <futures/algorithm/compare/equal_to.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>

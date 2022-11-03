@@ -1,4 +1,4 @@
-#include <futures/algorithm/comparisons/equal_to.hpp>
+#include <futures/algorithm/compare/equal_to.hpp>
 //
 #include <catch2/catch.hpp>
 

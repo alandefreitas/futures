@@ -16,7 +16,12 @@
  */
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <futures/algorithm/traits/detail/is_partially_ordered_with.hpp>
 #include <type_traits>
+
+#ifdef __cpp_lib_three_way_comparison
+#    include <compare>
+#endif
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -32,24 +37,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/totally_ordered
      */
-#ifdef FUTURES_DOXYGEN
+#if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
     template <class T>
-    using is_totally_ordered = __see_below__;
+    using is_totally_ordered = std::bool_constant<std::totally_ordered<T>>;
 #else
-    template <class T, class = void>
-    struct is_totally_ordered : std::false_type {};
-
     template <class T>
-    struct is_totally_ordered<
-        T,
-        std::void_t<
-            // clang-format off
-            decltype(std::declval< std::remove_reference_t<T> const &>() < std::declval< std::remove_reference_t<T> const &>()),
-            decltype(std::declval< std::remove_reference_t<T> const &>() > std::declval< std::remove_reference_t<T> const &>()),
-            decltype(std::declval< std::remove_reference_t<T> const &>() <= std::declval< std::remove_reference_t<T> const &>()),
-            decltype(std::declval< std::remove_reference_t<T> const &>() >= std::declval< std::remove_reference_t<T> const &>())
-            // clang-format on
-            >> : is_equality_comparable<T> {};
+    using is_totally_ordered = std::conjunction<
+        is_equality_comparable<T>,
+        detail::is_partially_ordered_with<T, T>>;
 #endif
 
     /// @copydoc is_totally_ordered

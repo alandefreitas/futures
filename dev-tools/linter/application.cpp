@@ -228,11 +228,11 @@ application::apply_include_globs(
         auto self_r = relative_path(p);
         for (auto &abs_h: file_paths) {
             auto r = relative_path(abs_h);
-            if (r != self_r && std::regex_match(r.generic_u8string(), file_path_regex)
-                && !std::regex_match(r.generic_u8string(), file_except_regex))
+            if (r != self_r && std::regex_match(r.generic_string(), file_path_regex)
+                && !std::regex_match(r.generic_string(), file_except_regex))
             {
                 patch += "#include <";
-                patch += r.generic_u8string();
+                patch += r.generic_string();
                 patch += ">\n";
             }
         }
@@ -385,9 +385,9 @@ application::bundle_includes(
              patch = include_match[1];
              patch += "#include <";
              if (!is_bundled) {
-                 patch += rel_deps_dir.u8string();
+                 patch += rel_deps_dir.string();
              } else {
-                 patch += rel_bundle_dir.u8string();
+                 patch += rel_bundle_dir.string();
              }
              if (patch.back() != '/')
                 patch += '/';
@@ -405,9 +405,9 @@ application::bundle_includes(
              patch += " ";
              patch += include_match[3];
              if (!is_bundled) {
-                patch += rel_deps_dir.u8string();
+                patch += rel_deps_dir.string();
              } else {
-                patch += rel_bundle_dir.u8string();
+                patch += rel_bundle_dir.string();
              }
              if (patch.back() != '/')
                 patch += '/';
@@ -437,8 +437,8 @@ application::bundle_includes(
             bool should_exist_in_bundled = is_parent(rel_deps_dir, as_path)
                                            || is_parent(rel_bundle_dir, as_path);
             if (exists_in_source || should_exist_in_bundled) {
-                std::string rel_deps_dir_str = rel_deps_dir.u8string();
-                std::string rel_bundle_dir_str = rel_bundle_dir.u8string();
+                std::string rel_deps_dir_str = rel_deps_dir.string();
+                std::string rel_bundle_dir_str = rel_bundle_dir.string();
                 if (as_str.substr(0, rel_deps_dir_str.size())
                     == rel_deps_dir_str)
                 {
@@ -587,7 +587,7 @@ application::bundle_includes(
             bool ignore = false;
             std::string ig_str;
             for (auto const &ig: config_.bundle_ignore_prefix) {
-                ig_str = ig.u8string();
+                ig_str = ig.string();
                 if (as_str.substr(0, ig_str.size()) == ig_str) {
                     ignore = true;
                     break;
@@ -725,7 +725,7 @@ application::create_redirect_header(fs::path const &as_path) {
     }
 
     auto guard = generate_include_guard(redirect_header_p, deps_parent);
-    std::string bundle_include_name = rel_bundle_dir.u8string();
+    std::string bundle_include_name = rel_bundle_dir.string();
     if (bundle_include_name.back() != '/') {
         bundle_include_name += '/';
     }
@@ -744,7 +744,7 @@ application::create_redirect_header(fs::path const &as_path) {
           "\n"
           "#include <futures/config.hpp>\n"
           "\n"
-          "// Include " + as_path.string() + " from external or bundled " + as_path.begin()->u8string() + " \n"
+          "// Include " + as_path.string() + " from external or bundled " + as_path.begin()->string() + " \n"
           "#if defined(FUTURES_HAS_BOOST)\n"
           "#include <" + as_path.string() + ">\n"
           "#else\n"
@@ -822,14 +822,14 @@ application::generate_unit_test(fs::path const &p, fs::path const &parent) {
                          std::istreambuf_iterator<char>() };
 
     fs::path rel_p = fs::relative(p, parent);
-    std::string rel_p_str = rel_p.u8string();
+    std::string rel_p_str = rel_p.string();
     fs::path testcase_name_path;
     for (auto it = std::next(rel_p.begin()); it != rel_p.end(); ++it) {
         testcase_name_path /= *it;
     }
     testcase_name_path.replace_extension("cpp");
     std::string testcase_name
-        = fs::path(testcase_name_path).replace_extension().u8string();
+        = fs::path(testcase_name_path).replace_extension().string();
     std::transform(
         testcase_name.begin(),
         testcase_name.end(),

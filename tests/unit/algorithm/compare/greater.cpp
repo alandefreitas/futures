@@ -1,4 +1,4 @@
-#include <futures/algorithm/comparisons/greater.hpp>
+#include <futures/algorithm/compare/greater.hpp>
 //
 #include <catch2/catch.hpp>
 

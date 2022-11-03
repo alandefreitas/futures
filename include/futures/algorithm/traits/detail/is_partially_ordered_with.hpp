@@ -5,36 +5,12 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP
-#define FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP
-
-/**
- *  @file algorithm/traits/is_partially_ordered_with.hpp
- *  @brief `is_partially_ordered_with` trait
- *
- *  This file defines the `is_partially_ordered_with` trait.
- */
+#ifndef FUTURES_ALGORITHM_TRAITS_DETAIL_IS_PARTIALLY_ORDERED_WITH_HPP
+#define FUTURES_ALGORITHM_TRAITS_DETAIL_IS_PARTIALLY_ORDERED_WITH_HPP
 
 #include <type_traits>
 
-namespace futures {
-    /** @addtogroup algorithms Algorithms
-     *  @{
-     */
-
-    /** @addtogroup traits Traits
-     *  @{
-     */
-
-    /// @brief A type trait equivalent to the `std::partially_ordered_with`
-    /// concept
-    /**
-     * @see https://en.cppreference.com/w/cpp/concepts/totally_ordered
-     */
-#ifdef FUTURES_DOXYGEN
-    template <class T, class U>
-    using is_partially_ordered_with = __see_below__;
-#else
+namespace futures::detail {
     template <class T, class U, class = void>
     struct is_partially_ordered_with : std::false_type {};
 
@@ -54,15 +30,6 @@ namespace futures {
             decltype(std::declval< std::remove_reference_t<U> const &>() >= std::declval< std::remove_reference_t<T> const &>())
             // clang-format on
             >> : std::true_type {};
-#endif
+} // namespace futures::detail
 
-    /// @copydoc is_partially_ordered_with
-    template <class T, class U>
-    constexpr bool is_partially_ordered_with_v
-        = is_partially_ordered_with<T, U>::value;
-
-    /** @} */
-    /** @} */
-} // namespace futures
-
-#endif // FUTURES_ALGORITHM_TRAITS_IS_PARTIALLY_ORDERED_WITH_HPP
+#endif // FUTURES_ALGORITHM_TRAITS_DETAIL_IS_PARTIALLY_ORDERED_WITH_HPP

@@ -5,17 +5,17 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP
-#define FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP
+#ifndef FUTURES_ALGORITHM_COMPARE_NOT_EQUAL_TO_HPP
+#define FUTURES_ALGORITHM_COMPARE_NOT_EQUAL_TO_HPP
 
 /**
- *  @file algorithm/comparisons/not_equal_to.hpp
+ *  @file algorithm/compare/not_equal_to.hpp
  *  @brief Not equal comparison functor
  *
  *  This file defines the not equal operator as a functor.
  */
 
-#include <futures/algorithm/comparisons/equal_to.hpp>
+#include <futures/algorithm/compare/equal_to.hpp>
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <utility>
 #include <type_traits>
@@ -38,4 +38,4 @@ namespace futures {
 
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_COMPARISONS_NOT_EQUAL_TO_HPP
+#endif // FUTURES_ALGORITHM_COMPARE_NOT_EQUAL_TO_HPP

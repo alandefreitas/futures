@@ -27,7 +27,7 @@
 // #glob <futures/algorithm/*.hpp>
 #include <futures/algorithm/all_of.hpp>
 #include <futures/algorithm/any_of.hpp>
-#include <futures/algorithm/comparisons.hpp>
+#include <futures/algorithm/compare.hpp>
 #include <futures/algorithm/count.hpp>
 #include <futures/algorithm/count_if.hpp>
 #include <futures/algorithm/find.hpp>

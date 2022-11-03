@@ -27,6 +27,7 @@
 
 // #glob <futures/algorithm/traits/*.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
+#include <futures/algorithm/traits/common_comparison_category.hpp>
 #include <futures/algorithm/traits/is_assignable_from.hpp>
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
@@ -45,15 +46,15 @@
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/is_move_constructible.hpp>
-#include <futures/algorithm/traits/is_partially_ordered_with.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/is_regular.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/algorithm/traits/is_swappable.hpp>
+#include <futures/algorithm/traits/is_three_way_comparable.hpp>
+#include <futures/algorithm/traits/is_three_way_comparable_with.hpp>
 #include <futures/algorithm/traits/is_totally_ordered.hpp>
 #include <futures/algorithm/traits/is_totally_ordered_with.hpp>
-#include <futures/algorithm/traits/is_weakly_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_weakly_incrementable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/iter_reference.hpp>

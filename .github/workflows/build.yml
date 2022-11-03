@@ -35,29 +35,28 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { name: "MSVC 14.33 (Release)",           os: windows-2022, artifact_name: "Windows x64",          cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
-          - { name: "MSVC 14.33 (Release, Shared)",   os: windows-2022, artifact_name: "Windows x64 (Shared)", cmake_args: -G "Visual Studio 17 2022" -A x64 -D CMAKE_CXX_FLAGS="/O2" -D BUILD_SHARED_LIBS=ON, }
-          - { name: "MSVC 14.29",                     os: windows-2019, cmake_args: -G "Visual Studio 16 2019" -A x64 -D CMAKE_CXX_FLAGS="/O2", }
+          - { name: "MSVC 14.3 - C++20 (Release)",           os: windows-2022, flags: '/O2',               artifact_name: "Windows x64",          cxxstd: 20, cmake_args: -G "Visual Studio 17 2022" -A x64, }
+          - { name: "MSVC 14.3 - C++17 (Release, Shared)",   os: windows-2022, shared: true, flags: '/O2', artifact_name: "Windows x64 (Shared)", cxxstd: 17, cmake_args: -G "Visual Studio 17 2022" -A x64, }
+          - { name: "MSVC 14.2 - C++17",                     os: windows-2019, flags: '/O2',               cxxstd: 17, cmake_args: -G "Visual Studio 16 2019" -A x64, }
 
-          - { name: "GCC 12 (Release)",               os: ubuntu-22.04, artifact_name: "Linux",                  packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-12 -D CMAKE_CXX_COMPILER=/usr/bin/g++-12 -D CMAKE_CXX_FLAGS="-O2", }
-          - { name: "GCC 12 (Coverage)",              os: ubuntu-22.04, coverage: true, packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
-          - { name: "GCC 12 (ASan)",                  os: ubuntu-22.04, asan: true,     packages: gcc-12 g++-12, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10       -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
-          - { name: "GCC 11 (Bundled)",               os: ubuntu-22.04, use_bundled: true,                       cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-11   -D CMAKE_CXX_COMPILER=/usr/bin/g++-11, }
-          - { name: "GCC 10 (Boost)",                 os: ubuntu-22.04, packages: libboost-all-dev,              cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-10   -D CMAKE_CXX_COMPILER=/usr/bin/g++-10, }
-          - { name: "GCC 9",                          os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/gcc-9    -D CMAKE_CXX_COMPILER=/usr/bin/g++-9, }
+          - { name: "GCC 12 - C++20 (Release)",               os: ubuntu-22.04, flags: '-O2',           artifact_name: "Linux", cc: gcc-12, cxx: g++-12, cxxstd: 20, install: gcc-12 g++-12, }
+          - { name: "GCC 12 - C++17 (ASan)",                  os: ubuntu-22.04, asan: true,             cc: gcc-12, cxx: g++-12, cxxstd: 17, install: gcc-12 g++-12,    }
+          - { name: "GCC 11 - C++20 (Coverage)",              os: ubuntu-22.04, coverage: true,         cc: gcc-11, cxx: g++-11, cxxstd: 20, }
+          - { name: "GCC 10 - C++20 (Bundled)",               os: ubuntu-22.04, use_bundled: true,      cc: gcc-10, cxx: g++-10, cxxstd: 20, }
+          - { name: "GCC 9  - C++20 (Boost)",                 os: ubuntu-22.04,                         cc: gcc-9, cxx: g++-9, cxxstd: 20, install: libboost-all-dev, }
 
-          - { name: "Clang 14",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-14 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-14, }
-          - { name: "Clang 13",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-13 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-13, }
-          - { name: "Clang 12",                       os: ubuntu-22.04, cmake_args: -D CMAKE_C_COMPILER=/usr/bin/clang-12 -D CMAKE_CXX_COMPILER=/usr/bin/clang++-12, }
+          - { name: "Clang 14 - C++20",                       os: ubuntu-22.04,                         cc: clang-14, cxx: clang++-14, cxxstd: 20, }
+          - { name: "Clang 13 - C++17",                       os: ubuntu-22.04,                         cc: clang-13, cxx: clang++-13, cxxstd: 17, }
+          - { name: "Clang 12 - C++20",                       os: ubuntu-22.04,                         cc: clang-12, cxx: clang++-12, cxxstd: 20, }
 
-          - { name: "AppleClang 13 (Release)",        os: macos-12,     artifact_name: "MacOSX",               cmake_args: -D CMAKE_CXX_FLAGS="-O2", }
+          - { name: "AppleClang 13 (Release)",        os: macos-12,     flags: '-O2',           artifact_name: "MacOSX", }
     steps:
       - uses: actions/checkout@v3
       - name: Apt packages
         uses: awalsh128/cache-apt-pkgs-action@latest
-        if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.packages || matrix.config.coverage) }}
+        if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.install || matrix.config.coverage) }}
         with:
-          packages: ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.packages }}
+          packages: ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.install }}
           version: 1.0
       - name: Fetched Content
         if: ${{ !matrix.config.use_bundled }}
@@ -74,7 +73,7 @@ jobs:
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }}
+          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}
       - name: Build
         working-directory: ./build
         run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config Release

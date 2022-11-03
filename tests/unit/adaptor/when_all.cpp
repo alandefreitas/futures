@@ -277,6 +277,8 @@ TEST_CASE("when_all") {
                 };
                 static constexpr bool is_msvc =
 #ifdef BOOST_MSVC
+                    // this test might fail or succeed depending on the
+                    // msvc version
                     true;
 #else
                     false;
@@ -285,7 +287,7 @@ TEST_CASE("when_all") {
                     default_executor_type,
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid;
-                STATIC_REQUIRE((!is_msvc && !v) || (is_msvc && v));
+                STATIC_REQUIRE(is_msvc || !v);
             }
 
             SECTION("Continue with const lvalue") {
