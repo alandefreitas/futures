@@ -32,7 +32,7 @@ namespace futures {
     basic_future<R, detail::append_future_option_t<shared_opt, Options>>
     basic_future<R, Options>::share() {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
 
         // Determine type of corresponding shared future
@@ -56,7 +56,7 @@ namespace futures {
     FUTURES_DETAIL(decltype(auto))
     basic_future<R, Options>::get() {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         state_.wait();
         if constexpr (Options::is_shared) {
@@ -76,7 +76,7 @@ namespace futures {
     std::exception_ptr
     basic_future<R, Options>::get_exception_ptr() {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         state_.wait();
         return state_.get_exception_ptr();
@@ -86,10 +86,10 @@ namespace futures {
     void
     basic_future<R, Options>::wait() const {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         if constexpr (Options::is_always_deferred) {
-            boost::throw_with_location(future_deferred{});
+            detail::throw_exception(future_deferred{});
         }
         state_.wait();
     }
@@ -98,7 +98,7 @@ namespace futures {
     void
     basic_future<R, Options>::wait() {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         state_.wait();
     }
@@ -109,7 +109,7 @@ namespace futures {
     basic_future<R, Options>::wait_for(
         std::chrono::duration<Rep, Period> const &timeout_duration) const {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         if constexpr (Options::is_always_deferred) {
             return std::future_status::deferred;
@@ -123,7 +123,7 @@ namespace futures {
     basic_future<R, Options>::wait_for(
         std::chrono::duration<Rep, Period> const &timeout_duration) {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         return state_.wait_for(timeout_duration);
     }
@@ -134,7 +134,7 @@ namespace futures {
     basic_future<R, Options>::wait_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time) const {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         return state_.wait_until(timeout_time);
     }
@@ -145,10 +145,10 @@ namespace futures {
     basic_future<R, Options>::wait_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time) {
         if (!valid()) {
-            boost::throw_with_location(future_uninitialized{});
+            detail::throw_exception(future_uninitialized{});
         }
         if constexpr (Options::is_always_deferred) {
-            boost::throw_with_location(future_deferred{});
+            detail::throw_exception(future_deferred{});
         }
         return state_.wait_until(timeout_time);
     }
@@ -157,7 +157,7 @@ namespace futures {
     [[nodiscard]] bool
     basic_future<R, Options>::is_ready() const {
         if (!valid()) {
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::future_error{ std::future_errc::no_state });
         }
         return state_.is_ready();
@@ -172,7 +172,7 @@ namespace futures {
     basic_future<R, Options>::then(Executor const &ex, Fn &&fn) {
         // Throw if invalid
         if (!valid()) {
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::future_error{ std::future_errc::no_state });
         }
 

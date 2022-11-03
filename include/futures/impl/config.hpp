@@ -26,12 +26,13 @@
  * If the standalone is available, this is what we assume the user usually
  * prefers, since it's more specific
  */
-#if defined(FUTURES_HAS_STANDALONE_ASIO) \
-    && (!defined(FUTURES_HAS_BOOST) || !defined(FUTURES_PREFER_BOOST))
+#if defined(FUTURES_HAS_STANDALONE_ASIO)                               \
+    && (!defined(FUTURES_HAS_BOOST) || !defined(FUTURES_PREFER_BOOST)) \
+    && !defined(FUTURES_PREFER_BUNDLED)
 #    ifndef FUTURES_USE_STANDALONE_ASIO
 #        define FUTURES_USE_STANDALONE_ASIO
 #    endif
-#elif defined(FUTURES_HAS_BOOST)
+#elif defined(FUTURES_HAS_BOOST) && !defined(FUTURES_PREFER_BUNDLED)
 #    ifndef FUTURES_USE_BOOST_ASIO
 #        define FUTURES_USE_BOOST_ASIO
 #    endif
@@ -44,8 +45,8 @@
 /*
  * Set boost/user if there's no boost
  */
-#if defined FUTURES_USE_BUNDLED_ASIO && !defined BOOST_USER_CONFIG
-#  define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
+#if defined(FUTURES_USE_BUNDLED_ASIO) && !defined(BOOST_USER_CONFIG)
+#    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
 #endif
 
 /*
@@ -72,10 +73,19 @@ namespace asio {}
 #    define FUTURES_HEADER_ONLY
 #endif
 
-// Avoid include Asio symbols twice
-#if defined(FUTURES_USE_BUNDLED_ASIO) && defined(FUTURES_SEPARATE_COMPILATION) \
-    && !defined(ASIO_SEPARATE_COMPILATION)
-#    define ASIO_SEPARATE_COMPILATION
+// Avoid including Asio symbols twice
+#ifdef FUTURES_SEPARATE_COMPILATION
+#    if defined(FUTURES_USE_STANDALONE_ASIO) \
+        || defined(FUTURES_USE_BUNDLED_ASIO)
+#        ifndef ASIO_SEPARATE_COMPILATION
+#            define ASIO_SEPARATE_COMPILATION
+#        endif
+#    endif
+#    if defined(FUTURES_USE_BOOST_ASIO)
+#        ifndef BOOST_ASIO_SEPARATE_COMPILATION
+#            define BOOST_ASIO_SEPARATE_COMPILATION
+#        endif
+#    endif
 #endif
 
 // Macro to declare functions
@@ -93,7 +103,6 @@ namespace asio {}
 #ifndef FUTURES_DECLARE
 #    define FUTURES_DECLARE
 #endif
-
 
 // How we declare implementation details
 #ifndef FUTURES_DOXYGEN

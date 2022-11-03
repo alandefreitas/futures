@@ -15,7 +15,7 @@
 #include <futures/detail/utility/byte.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <futures/detail/deps/boost/throw_exception.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/deps/boost/variant2/variant.hpp>
 
 namespace futures::detail {
@@ -492,7 +492,7 @@ namespace futures::detail {
             } else if (is_shared_storage()) {
                 return get_as_shared_storage()->get();
             }
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::invalid_argument{ "Operation state is invalid" });
         }
 
@@ -607,7 +607,7 @@ namespace futures::detail {
             } else if (is_operation_state()) {
                 return get_as_operation_state().get_continuations_source();
             }
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::logic_error{ "Future non-continuable" });
         }
 
@@ -633,7 +633,7 @@ namespace futures::detail {
             } else if (is_operation_state()) {
                 return get_as_operation_state().unnotify_when_ready(h);
             }
-            boost::throw_with_location(std::logic_error{ "Invalid type id" });
+            detail::throw_exception(std::logic_error{ "Invalid type id" });
         }
 
         /// Get stop_source from underlying operation state type
@@ -644,10 +644,10 @@ namespace futures::detail {
             } else if (is_operation_state()) {
                 return get_as_operation_state().get_stop_source();
             } else if (is_storage() || is_shared_storage()) {
-                boost::throw_with_location(
+                detail::throw_exception(
                     std::logic_error{ "Cannot stop a ready future" });
             }
-            boost::throw_with_location(std::logic_error{ "Invalid state" });
+            detail::throw_exception(std::logic_error{ "Invalid state" });
         }
 
         /// Get stop_source from underlying operation state type
@@ -658,10 +658,10 @@ namespace futures::detail {
             } else if (is_operation_state()) {
                 return get_as_operation_state().get_executor();
             } else if (is_storage() || is_shared_storage()) {
-                boost::throw_with_location(std::logic_error{
+                detail::throw_exception(std::logic_error{
                     "No associated executor to direct storage" });
             }
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::logic_error{ "No associated executor to empty state" });
         }
 
@@ -673,10 +673,10 @@ namespace futures::detail {
             } else if (is_operation_state()) {
                 return get_as_operation_state().waiters_mutex();
             } else if (is_storage() || is_shared_storage()) {
-                boost::throw_with_location(std::logic_error{
+                detail::throw_exception(std::logic_error{
                     "No associated executor to direct storage" });
             }
-            boost::throw_with_location(
+            detail::throw_exception(
                 std::logic_error{ "No associated executor to empty state" });
         }
 
@@ -750,7 +750,7 @@ namespace futures::detail {
             if (s.is_shared_state()) {
                 return s.get_as_shared_state()->wait_for(timeout_duration);
             } else if (s.is_operation_state()) {
-                boost::throw_with_location(std::invalid_argument{
+                detail::throw_exception(std::invalid_argument{
                     "Cannot wait for a const deferred state with a timeout" });
             }
             return std::future_status::ready;
@@ -768,7 +768,7 @@ namespace futures::detail {
             if (s.is_shared_state()) {
                 return s.get_as_shared_state()->wait_until(timeout_time);
             } else if (s.is_operation_state()) {
-                boost::throw_with_location(std::invalid_argument{
+                detail::throw_exception(std::invalid_argument{
                     "Cannot wait for a const deferred state with timeout" });
             }
             return std::future_status::ready;
@@ -789,7 +789,7 @@ namespace futures::detail {
             }
             // Throw in use cases where the future is not allowed to copy
             if (is_storage() || is_operation_state()) {
-                boost::throw_with_location(
+                detail::throw_exception(
                     std::logic_error{ "Inline states cannot be copied" });
             }
         }

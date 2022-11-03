@@ -177,7 +177,7 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                boost::throw_with_location(
+                detail::throw_exception(
                     std::future_error{ std::future_errc::no_state });
             }
             // Wait for the complete sequence to be ready
@@ -230,7 +230,7 @@ namespace futures {
         wait() {
             // Check if the sequence is valid
             if (!valid()) {
-                boost::throw_with_location(
+                detail::throw_exception(
                     std::future_error{ std::future_errc::no_state });
             }
             // Reuse the logic from wait_for_any here

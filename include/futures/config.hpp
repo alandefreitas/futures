@@ -102,8 +102,8 @@
  *
  * @par Default value
  *
- * In C++17, this macro is defined whenever @ref FUTURES_HAS_STANDALONE_ASIO is defined
- * and @ref FUTURES_PREFER_BOOST is undefined.
+ * In C++17, this macro is defined whenever @ref FUTURES_HAS_STANDALONE_ASIO is
+ * defined and @ref FUTURES_PREFER_BOOST is undefined.
  *
  * When using the CMake package, the `futures` target will already define this
  * macro when standalone Asio is available.
@@ -111,19 +111,23 @@
  * In all other cases, the macro is undefined by default. If standalone Asio is
  * available, it should be defined manually.
  *
- * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are undefined,
- * a bundled subset of Boost dependencies required by the library is used.
+ * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are
+ * undefined, a bundled subset of Boost dependencies required by the library is
+ * used.
  *
  * @par References
  * @li <a href="https://think-async.com/Asio/">Asio</a>
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#if !defined(FUTURES_PREFER_BOOST) && !defined(FUTURES_PREFER_STANDALONE_ASIO)
-#    ifdef FUTURES_HAS_STANDALONE_ASIO
+#if !defined(FUTURES_PREFER_BOOST) && !defined(FUTURES_PREFER_STANDALONE_ASIO) \
+    && !defined(FUTURES_PREFER_BUNDLED)
+#    if defined(FUTURES_HAS_STANDALONE_ASIO)
 #        define FUTURES_PREFER_STANDALONE_ASIO
-#    else
+#    elif defined(FUTURES_HAS_BOOST)
 #        define FUTURES_PREFER_BOOST
+#    else
+#        define FUTURES_PREFER_BUNDLED
 #    endif
 #endif
 
@@ -150,8 +154,9 @@
  * In all other cases, the macro is undefined by default. If Boost is
  * available, it should be defined manually.
  *
- * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are undefined,
- * a bundled subset of Boost dependencies required by the library is used.
+ * If both @ref FUTURES_HAS_STANDALONE_ASIO and @ref FUTURES_HAS_BOOST are
+ * undefined, a bundled subset of Boost dependencies required by the library is
+ * used.
  *
  * @par References
  * @li <a href="https://think-async.com/Asio/">Asio</a>

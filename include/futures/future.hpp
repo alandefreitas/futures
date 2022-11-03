@@ -93,7 +93,7 @@
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/noncopyable.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <futures/detail/deps/boost/throw_exception.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <functional>
 #include <utility>
 #include <shared_mutex>
@@ -888,7 +888,7 @@ namespace futures {
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             if (!valid()) {
-                boost::throw_with_location(future_uninitialized{});
+                detail::throw_exception(future_uninitialized{});
             }
             return state_.notify_when_ready(cv);
         }
@@ -898,7 +898,7 @@ namespace futures {
         void
         unnotify_when_ready(notify_when_ready_handle h) {
             if (!valid()) {
-                boost::throw_with_location(future_uninitialized{});
+                detail::throw_exception(future_uninitialized{});
             }
             return state_.unnotify_when_ready(h);
         }
@@ -907,7 +907,7 @@ namespace futures {
         std::mutex &
         waiters_mutex() {
             if (!valid()) {
-                boost::throw_with_location(future_uninitialized{});
+                detail::throw_exception(future_uninitialized{});
             }
             return state_.waiters_mutex();
         }

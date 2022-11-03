@@ -10,7 +10,7 @@
 
 #include <futures/detail/deps/boost/core/allocator_access.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
-#include <futures/detail/deps/boost/throw_exception.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <atomic>
 #include <memory>
 #include <stdexcept>
@@ -143,7 +143,7 @@ namespace futures::detail {
                     if (old_head == old_tail) {
                         if (!old_head_next) {
                             // both are dummy -> empty queue
-                            boost::throw_with_location(std::runtime_error{
+                            detail::throw_exception(std::runtime_error{
                                 "Attempting to pop from an empty queue" });
                         }
                         // head == tail and not dummy -> race -> update tail
