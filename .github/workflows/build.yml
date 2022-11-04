@@ -73,7 +73,7 @@ jobs:
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}
+          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}  -D CMAKE_INSTALL_PREFIX=.local/usr/
       - name: Build
         working-directory: ./build
         run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config Release
@@ -102,14 +102,22 @@ jobs:
       - name: Check conventional commit
         if: ${{ !contains( matrix.config.os, 'macos') }}
         uses: webiny/action-conventional-commits@v1.1.0
-      #      - name: Integration Test
-      #        working-directory: ./test/integration
-      #        run: |
-      #          mkdir build
-      #          cd build
-      #          cmake .. ${{ matrix.config.cmake_args }} -DCMAKE_BUILD_TYPE=Release
-      #          cmake --build . --parallel ${{ matrix.config.cores }} --config Release
-      #        continue-on-error: true
+      - name: Header-only Integration Test
+        working-directory: ./build
+        run: cmake --build . --target header-only-integration-check
+      - name: Compiled Integration Test
+        working-directory: ./build
+        run: cmake --build . --target compiled-integration-check
+      - name: Cmake Subdir Integration Test
+        working-directory: ./build
+        run: cmake --build . --target cmake_subdir-integration-check
+      - name: CMake FetchContent Integration Test
+        working-directory: ./build
+        run: cmake --build . --target cmake_fetch-integration-check
+      - name: CMake Find Package Integration Test
+        if: ${{ !matrix.config.coverage && !matrix.config.asan }}
+        working-directory: ./build
+        run: cmake --build . --target cmake_package-integration-check
       - name: Codecov generate
         if: ${{ matrix.config.coverage }}
         run: cmake --build ./build --target coverage

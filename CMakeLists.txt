@@ -59,16 +59,20 @@ if (FUTURES_BUILD_INSTALLER)
     # Install headers
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/futures
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-            FILES_MATCHING PATTERN "*.hpp"
+            FILES_MATCHING PATTERN "*.[hic]pp"
             )
 
     # If Asio had to be fetched, install it
     # This installation has no targets, since those will be defined by
     # FindAsio.cmake
     if (DEFINED asio_SOURCE_DIR)
-        install(DIRECTORY ${asio_SOURCE_DIR}/asio/include/asio
-                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-                FILES_MATCHING PATTERN "*.hpp"
+        install(DIRECTORY ${asio_SOURCE_DIR}/asio/include
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/..
+                FILES_MATCHING PATTERN "*.[hic]pp"
+                )
+
+        install(FILES ${asio_SOURCE_DIR}/asio/LICENSE_1_0.txt
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/asio
                 )
     endif()
 
@@ -103,10 +107,13 @@ if (FUTURES_BUILD_INSTALLER)
             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/futures)
 
     # Create futures-config.cmake
+    set(INCLUDE_INSTALL_DIR include/ )
+    set(LIB_INSTALL_DIR lib/ )
     configure_package_config_file(
             ${CMAKE_CURRENT_SOURCE_DIR}/futures-config.cmake.in # input file
             ${CMAKE_CURRENT_BINARY_DIR}/futures-config.cmake    # output file
             INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/futures
+            PATH_VARS CMAKE_INSTALL_LIBDIR INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
     )
 
     # Install the file futures-config.cmake
@@ -149,6 +156,7 @@ endif ()
 ### Developer mode                                  ###
 #######################################################
 if (NOT FUTURES_DEVELOPER_MODE)
+    add_subdirectory(tests/integration)
     return()
 elseif (NOT MASTER_PROJECT)
     message(

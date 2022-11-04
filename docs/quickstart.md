@@ -8,29 +8,42 @@
     
         [=0%]
 
-        To use the library as header-only, copy the contents from the `include` directory into your project.
-        The `<futures/futures.hpp>` includes the whole library as header-only:
+        To use the library as header-only, copy the `futures` subdirectory from
+        [`include`](https://www.github.com/alandefreitas/futures/include) directory into your project.
 
-        ```cpp
-        #include <futures/futures.hpp>
-        ```
+        The `<futures/futures.hpp>` file includes the whole library as header-only:
 
+        {{ code_snippet("tests/integration/header_only/main.cpp", "include", "cpp", 8) }}
+        
         However, as you read the documentation, we recommend including only the headers for
-        the features you are using.
+        the features you are using, such as:
+
+        {{ code_snippet("tests/integration/header_only/main.cpp", "include_ind", "cpp", 8) }}
+
+        If the `futures` directory is not placed with your other headers files for your project, you
+        can create a target that also looks for headers in other directories. In CMake, this can be 
+        achieved with:
+
+        {{ code_snippet("tests/integration/header_only/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
+
 
     === "Compiled"
 
         [=25%]
 
-        To manually use it as a compiled library, place the following line in exactly 
-        one new or existing source file in your project.
+        To manually use it as a compiled library, define the macro `FUTURES_SEPARATE_COMPILATION` and 
+        include the following header in exactly one new or existing source file in your project:
 
-        ```cpp
-        // In exactly *one* source file
-        #include <futures/impl/src.hpp>
-        ```
+        {{ code_snippet("tests/integration/compiled/futures-src.cpp", "compiled_src", "cpp", 8) }}
 
-        and set the macro `FUTURES_SEPARATE_COMPILATION`. 
+        The macro must also be set before including any other sources files in the project.
+
+        {{ code_snippet("tests/integration/compiled/main.cpp", "include", "cpp", 8) }}
+
+        In general, it's easier to previously define this macro for any source file in the project.
+        In CMake, this can be achieved with:
+
+        {{ code_snippet("tests/integration/compiled/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
 
         Check the reference for [other available macros](/futures/config_reference).
 
@@ -38,6 +51,9 @@
     === "CMake"
     
         [=50%]
+
+        It's often easier to configure the project with CMake, where any required configurations will
+        be applied automatically.
 
         === "Add subdirectory"
     
@@ -47,82 +63,50 @@
             git clone https://github.com/alandefreitas/futures/
             ```
     
-            Add source to your CMake script:
+            Add add the source subdirectory in your CMake script:
 
-            ```cmake
-            add_subdirectory(futures)
-            ```
+            {{ code_snippet("tests/integration/cmake_subdir/CMakeLists.txt", "add_subdir", "cmake", 12, {"${FUTURES_SRC}": "path/to/futures"}) }}
 
-            Link to your own binaries:
-            
-            ```cmake
-            add_executable(your_target main.cpp)
-            target_link_libraries(your_target PUBLIC futures::futures)
-            ```
-    
         === "Fetch content"
     
-            Download and include the source from your CMake script:
+            Download and include the source directly from your CMake script:
 
-            ```cmake
-            if (not Futures_FOUND)
-                include(FetchContent)
-                FetchContent_Declare(futures
-                    GIT_REPOSITORY https://github.com/alandefreitas/futures
-                    GIT_TAG origin/master # or whatever tag you want
-                )
-    
-                FetchContent_GetProperties(futures)
-                if(NOT futures_POPULATED)
-                    FetchContent_Populate(futures)
-                    add_subdirectory(${futures_SOURCE_DIR} ${futures_BINARY_DIR} EXCLUDE_FROM_ALL)
-                endif()
-            endif()
-            ```
+            {{ code_snippet("tests/integration/cmake_fetch/CMakeLists.txt", "fetchcontent", "cmake", 12) }}
 
             Link to your own binaries:
 
-            ```cmake
-            add_executable(your_target main.cpp)
-            target_link_libraries(your_target PUBLIC futures::futures)
-            ```
+            {{ code_snippet("tests/integration/cmake_fetch/CMakeLists.txt", "link", "cmake", 12) }}
     
         === "External package"
     
             If you installed the library from source or with one of the packages, this project exports
-            a CMake package to be used with the [`find_package`][2] command of CMake:
+            a CMake configuration script to be used with the `find_package`:
 
-            ```cmake
-            # Follow installation instructions and then... 
-            find_package(Futures REQUIRED)
-            ```
-    
+            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "find_package", "cmake", 12) }}
+
             Or combine it with FetchContent:
 
-            ```cmake
-            # Follow installation instructions and then... 
-            find_package(Futures QUIET)
-            if(NOT Futures_FOUND)
-                # Throw or put your FetchContent script here
-            endif()
-            ```
+            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "find_or_fetch", "cmake", 12) }}
     
             Then link to your own binaries:
 
-            ```cmake
-            add_executable(your_target main.cpp)
-            target_link_libraries(your_target PUBLIC futures::futures)
+            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "link", "cmake", 12) }}
+
+            If the library not installed in one of the default directories for installed software, 
+            such as `/usr/local`, you might need to set the `CMAKE_PREFIX_PATH` when running CMake: 
+
+            ```bash
+            cmake <options> -D CMAKE_PREFIX_PATH=path/that/contains/futures
             ```
+
 
     === "Packages"
     
         [=75%]
 
-        !!! note
+        Get the binary packages from the [release section](https://github.com/alandefreitas/futures/releases). 
     
-            Get the binary packages from the [release section](https://github.com/alandefreitas/futures/releases). 
-    
-            These binaries refer to the latest release version of futures.
+        These binaries refer to the latest release version of futures.
     
         !!! hint
             
@@ -132,6 +116,9 @@
     === "From source"
     
         [=100%]
+
+        We do not provide binary packages for all platforms. In that case, you can build the package from 
+        source: 
 
         === "Windows + MSVC"
         
@@ -153,6 +140,13 @@
             ```bash
             cpack build
             ```
+
+            !!! hint "Packaging Debug and Release"
+            
+                Use [these instructions](https://cmake.org/cmake/help/latest/guide/tutorial/Packaging%20Debug%20and%20Release.html)
+                to setup CPack to bundle multiple build directories and construct a package that contains
+                multiple configurations of the same project.
+            
 
         === "Ubuntu + GCC"
     

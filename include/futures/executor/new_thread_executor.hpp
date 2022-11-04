@@ -138,8 +138,8 @@ namespace boost {
 }
 #endif
 
-#if FUTURES_HEADER_ONLY
-#    include <futures/executor/impl/new_thread_executor.hpp>
+#ifdef FUTURES_HEADER_ONLY
+#    include <futures/executor/impl/new_thread_executor.ipp>
 #endif
 
 #endif // FUTURES_EXECUTOR_NEW_THREAD_EXECUTOR_HPP

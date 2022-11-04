@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 def declare_variables(variables, macro):
     @macro
-    def code_snippet(filename: str, snippet: str = "", language: str = ""):
+    def code_snippet(filename: str, snippet: str = "", language: str = "", indent = 0, replacements = {}):
         """
         Load code from a file and save as a preformatted code block.
         If a language is specified, it's passed in as a hint for syntax highlighters.
@@ -104,10 +104,12 @@ def declare_variables(variables, macro):
                 if is_code:
                     if header:
                         contents += '=== "' + header + '"\n\n    '
+                        contents += ' ' * indent
                     contents += '```' + language
                     if len(content_lines) > 10:
                         contents += ' linenums="1" '
                     contents += '\n'
+                    contents += ' ' * indent
 
                 # Fill block with appropriate indentation
                 for line in content_lines[1:]:
@@ -120,12 +122,16 @@ def declare_variables(variables, macro):
                     if is_in_content_tab:
                         contents += '    '
                     contents += line[indent_size:] + '\n'
+                    contents += ' ' * indent
 
                 # Close code block
                 if is_code:
                     if header:
                         contents += '    '
                     contents += '```\n'
+
+                for [original, replace] in replacements.items():
+                    contents = contents.replace(original, replace)
 
                 return contents
 

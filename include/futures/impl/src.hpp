@@ -31,7 +31,7 @@
 #    ifndef ASIO_SEPARATE_COMPILATION
 #        define ASIO_SEPARATE_COMPILATION
 #    endif
-#elif defined(FUTURE_USE_BOOST_ASIO)
+#elif defined(FUTURES_USE_BOOST_ASIO)
 #    ifndef BOOST_ASIO_SEPARATE_COMPILATION
 #        define BOOST_ASIO_SEPARATE_COMPILATION
 #    endif
