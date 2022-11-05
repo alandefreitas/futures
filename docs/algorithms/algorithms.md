@@ -11,6 +11,16 @@ ranges as parameters.
 
 {{ code_snippet("algorithm/algorithms.cpp", "algorithm_range") }}
 
+!!! info "Better future algorithms"
+
+    This library includes:
+
+    - Large set of the STL-like algorithms in terms of futures and executors
+    - Easy access to async algorithms based on executors without requiring other external libraries
+        - This is [common](https://link.springer.com/chapter/10.1007/978-1-4842-4398-5_4) with C++ execution policies, such
+          as [TTB].
+
+
 ## Executors
 
 Like other parallel functions defined in this library, these algorithms allow simple execution policies to be replaced

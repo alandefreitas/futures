@@ -8,7 +8,6 @@ site_description: "Better Futures: Because futures don't have to be awful"
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
-  - Motivation: motivation.md
   - Futures:
     - Basic Types: futures/future_types.md
     - Launching Tasks: futures/launching.md

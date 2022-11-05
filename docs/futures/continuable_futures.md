@@ -17,7 +17,7 @@ T[Task] --> |set and continue|S
 end
 </div>
 
-## Historical Background
+## Motivation
 
 ### Non-continuable tasks
 
@@ -117,6 +117,56 @@ Thus, the biggest problem with this strategy is it cannot scale properly. For ev
 need one idle thread waiting for the previous task. In an application with 2000 tasks, we would need 1999 threads for
 polling antecedent tasks and only one thread would to execute real work.
 
+!!! info "Continuations in C++ libraries"
+
+    The act of waiting for a [std::future] **result is synchronous**, which is not appropriate in communication-intensive code.
+    In the original [std::future] model, if a continuation task `B` depends on the result of the first task `A`, we only
+    have two options:
+    
+    - waiting for the first task synchronously
+    - polling the first task asynchronously.
+    
+    If we always wait for the first task to start its continuation, the asynchronicity has **no purpose**. If we always poll for
+    the first task, we **waste resources** and an extra thread to repeatedly check the status of the first task.
+    
+    For this reason, the most common **extension** proposed for [std::future]
+    is [continuations](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf), such as implemented in
+    Microsoft's [PPL], [async++], [continuable].
+    
+    === "Waiting"
+    
+        ```cpp
+        std::future A = std::async([]() { return 2; });
+        int A_result = A.get();
+        std::cout << A_result << std::endl;
+        ```
+    
+    === "Polling"
+    
+        ```cpp
+        std::future A = std::async([]() { return 2; });
+        std::future B = std::async([&]() {
+            int A_result = A.get();
+            std::cout << A_result << std::endl;
+        });
+        B.wait();
+        ```
+    
+    === "Continuations"
+    
+        ```cpp
+        auto A = std::experimental::async([]() { return 2; });
+        auto B = A.then([](int A_result) {
+            std::cout << A_result << std::endl;
+        });
+        B.wait();
+        ```
+
+    Continuations are the foundation for composing task graphs, with operations such
+    as [std::experimental::when_all] and [std::experimental::when_any]. These conjunction and disjunction
+    operations depend on continuations so that previous tasks can inform the operation result when they
+    are ready without polling.
+
 ## Continuable futures
 
 Continuable futures allow us to launch a second task as a continuation to the first task, instead of an independent
@@ -170,6 +220,18 @@ For this reason, continuations are one of the most common proposed extensions fo
 model presented by
 the [Microsoft PPL Library](https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?redirectedfrom=MSDN&view=msvc-160)
 which inspired the [C++ Extensions for Concurrency].
+
+!!! info "Eager Future Continuations in C++"
+
+    _Eager_ futures with _eager_ continuation chaining, such as in [std::experimental::future], allow us to **asynchronously**
+    register a second operation and pass data to it. The first task **might already be running** eagerly.
+    
+    - The continuation is attached after the first task is scheduled
+    - The continuation is scheduled as soon as, but not before, the first task is ready
+    
+    The process does not consume any polling threads. The continuation can also have its continuations and so on.
+    In this scenario, attaching a continuation has its own synchronization cost.
+
 
 ## Deferred continuations
 
@@ -276,5 +338,57 @@ sequenceDiagram
 
 For this reason, by default, [then] attaches the previous future to its deferred continuation instead of attaching the
 continuation to the antecedent future.
+
+!!! info "Lazy future continuations in C++"
+
+    _Lazy_ futures with _lazy_ continuation chaining store the continuation in the shared state of the
+    first task **before** the task is scheduled.
+    
+    - The continuation is attached before the first task starts to execute
+    - The continuation is scheduled as soon as, but not before, the first task is ready
+    
+    As usual, all futures are programmed to run its internal continuations when they finish their
+    main task. This also avoids blocking waits and wasting threads pooling for the results of the
+    antecedent task. In this scenario, attaching a continuation has no synchronization cost.
+    
+    === "Continuations"
+    
+        ```cpp
+        auto A = std::experimental::async([]() { return 2; });
+        auto B = A.then([](int A_result) {
+            // This task is not scheduled until A completes
+            std::cout << A_result << std::endl;
+        });
+        B.wait();
+        ```
+
+!!! info "Exceptions and continuations in C++"
+
+    If the antecedent future throws an exception, attempting to retrieve the result usually rethrows the error.
+    Some models besides [C++ Extensions for Concurrency], such as [Continuable](https://github.com/Naios/continuable),
+    allow the continuation to also catch this error:
+    
+    === "Catching errors"
+    
+        ```cpp
+        async([]{ /* operation that might throw an error */ })
+          .then([] {
+            throw std::exception("Some error");
+          })
+          .fail([] (std::exception_ptr ptr) {
+              try {
+                std::rethrow_exception(ptr);
+              } catch(std::exception const& e) {
+                // Handle the exception or error code here
+              }
+          });
+        ```
+
+!!! info "Continuations and Executors in C++"
+
+    By default, the first task usually includes an executor handle and the continuation inherits it unless some other
+    executor is requested for the continuation. Futures with continuations can also be used as components
+    of [resumable functions](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3650.pdf).
+
 
 --8<-- "docs/references.md"

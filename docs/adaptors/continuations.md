@@ -34,6 +34,19 @@ However, the free function [then] is used to create a continuation to any future
 The free function [then] allows us to create task graphs with future continuations regardless of underlying support for
 lazy continuations.
 
+!!! info "Better future adaptors"
+
+    This library includes:
+
+    - Large set of [**composition** operations](#senders-and-receivers), such as [when_all] and [when_any]
+        - Easier composition of task graphs
+        - Syntax closer to the existing future types users are used to
+    - The future adaptors still work for existing future types
+    - Adaptors are also provided to facilitate the creation of cyclic task graphs
+    - Continuations are attached to old future types with a single polling future
+    - Integrations with Asio are provided, such as completion tokens and async IO operations.
+
+
 ## Lazy continuations
 
 The function [then] changes its behavior according to the traits [is_continuable] defined for the previous future type.
@@ -244,5 +257,7 @@ this means the [stop_source] is also moved into the continuation. If the future 
 request its corresponding task to stop, we can do that through its [stop_source].
 
 {{ code_snippet("adaptors/continuations_unwrap.cpp", "stop_source") }}
+
+
 
 --8<-- "docs/references.md"

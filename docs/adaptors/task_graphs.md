@@ -199,4 +199,129 @@ interleave data related to the application logic with the tasks and the intermed
 We could either recur to template instantiations for each possible graph combination or type erase these differences.
 Both alternatives are more expensive and verbose than directly creating functions to recursively reschedule tasks.
 
+!!! info "Task graphs in C++"
+
+    Libraries such as [Taskflow] and [TTB] provide facilities to compose complete task graphs:
+    
+    === "Futures"
+    
+        ```cpp
+        std::future A = std::async([] () { 
+            std::cout << "TaskA\n"; 
+        });
+        
+        // A runs before B and C
+        std::future B = std::async([&A] () { 
+            A.wait(); // Polling :( 
+            std::cout << "TaskB\n";
+        });
+        
+        std::future C = std::async([&A] () { 
+            A.wait(); // Polling :( 
+            std::cout << "TaskC\n"; 
+        });
+        
+        // D runs after B and C
+        std::future D = std::async([&B, &C] () { 
+            B.wait(); // Polling :(
+            C.wait(); // Polling :(
+            std::cout << "TaskD\n";
+        });
+        
+        D.wait(); 
+        ```
+    
+    === "Continuable Futures"
+    
+        ```cpp
+        std::future A = std::async([] () { 
+            std::cout << "TaskA\n"; 
+        });
+        
+        // A runs before B and C
+        std::future B = A.then([] () { // Synchronization cost :( 
+            std::cout << "TaskB\n"; // No polling :) 
+        });
+        
+        std::future C = A.then([] () { // Synchronization cost :( 
+            std::cout << "TaskC\n"; // No polling :)
+        });
+        
+        // D runs after B and C
+        std::future D = some_future_lib::when_all(B, C).then([] () { 
+            std::cout << "TaskD\n"; 
+        });
+        
+        D.wait(); 
+        ```
+    
+    === "Taskflow"
+    
+        ```cpp
+        tf::Executor executor;
+        tf::Taskflow taskflow;
+        
+        auto [A, B, C, D] = g.emplace(
+          [] () { 
+            std::cout << "TaskA\n"; // No eager execution 
+          },
+          [] () { 
+            std::cout << "TaskB\n"; // No eager execution 
+          },
+          [] () { 
+            std::cout << "TaskC\n"; // No eager execution 
+          },
+          [] () { 
+            std::cout << "TaskD\n"; // No eager execution 
+          } 
+        );
+              
+        A.precede(B, C); // No synchronization cost :)  
+        D.succeed(B, C); // No synchronization cost :)
+        
+        executor.run(g).wait(); 
+        ```
+    
+    === "TTB"
+    
+        ```cpp
+        graph g;
+        
+        function_node<void> A( g, 1, [] () { 
+            std::cout << "TaskA\n"; // No eager execution 
+        } );
+        
+        function_node<void> B( g, 1, [] () { 
+            std::cout << "TaskB\n"; // No eager execution 
+        } );
+        
+        function_node<void> C( g, 1, [] () { 
+            std::cout << "TaskC\n"; // No eager execution 
+        } );
+        
+        function_node<void> D( g, 1, [] () { 
+            std::cout << "TaskD\n"; // No eager execution 
+        } );
+        
+        make_edge(A, B); // No synchronization cost :) 
+        make_edge(A, C); // No synchronization cost :) 
+        make_edge(B, D); // No synchronization cost :) 
+        make_edge(C, D); // No synchronization cost :) 
+        
+        g.wait_for_all();
+        ```
+    
+    Tasks in a task graph are **analogous to deferred futures** whose continuations are defined before the execution starts.
+    However, we need to explicitly define all relationships between tasks before any execution starts, which might be
+    inconvenient in some applications. Futures and async functions, on the other hand, allow us to 1) combine eager and lazy
+    tasks, and 2) directly express their relationships in code without any explicit graph containers.
+    
+    On the other hand, [P1055](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1055r0.pdf) proposed the concept of
+    **deferred work**, in opposition to eager futures, such as [std::future]. The idea is that a task related to a future should
+    not start before its continuation is applied. This eliminates the race between the result and the continuation in eager
+    futures. Futures with deferred work are also easier to implement ([example](https://godbolt.org/z/jWYno73nE)).
+
+
+
+
 --8<-- "docs/references.md"
