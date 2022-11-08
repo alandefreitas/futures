@@ -33,10 +33,6 @@ namespace futures {
      *  @{
      */
     /** @addtogroup launch Launch
-     *  @{
-     */
-
-    /** @addtogroup launch-algorithms Launch Algorithms
      *
      * \brief Function to launch and schedule future tasks
      *
@@ -84,8 +80,8 @@ namespace futures {
      *  @return An eager future object whose shared state refers to the task
      *  result. The type of this future object depends on the task. If the task
      *  expects a @ref stop_token, the future will return a continuable,
-     * stoppable, eager future. Otherwise, the function will return a
-     * continuable eager future.
+     *  stoppable, eager future. Otherwise, the function will return a
+     *  continuable eager future.
      */
     FUTURES_TEMPLATE(class Executor, class Function, class... Args)
     (requires(
@@ -161,7 +157,6 @@ namespace futures {
              || std::is_invocable_v<Function, stop_token, Args...>) )))
         FUTURES_DETAIL(decltype(auto)) schedule(Function &&f, Args &&...args);
 
-    /** @} */
     /** @} */
     /** @} */
 } // namespace futures

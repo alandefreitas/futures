@@ -19,7 +19,7 @@ EXCLUDE = ./../include/futures/impl \
           ./../include/futures/futures/detail
 FILE_PATTERNS = *.hpp
 EXCLUDE_SYMBOLS = "std" "asio" "detail" "futures::detail" "detail::*" "futures::detail::*" "boost" "*_graph" "A" "Enable" "Proxy"
-EXAMPLE_PATH = ./../examples
+EXAMPLE_PATH = ./..
 EXAMPLE_PATTERNS = *.cpp
 
 DISTRIBUTE_GROUP_DOC=YES
