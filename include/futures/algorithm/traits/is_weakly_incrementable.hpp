@@ -34,7 +34,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>
-    using is_weakly_incrementable = __see_below__;
+    using is_weakly_incrementable = std::bool_constant<std::weakly_incrementable<T>>;
 #else
     template <class I, class = void>
     struct is_weakly_incrementable : std::false_type {};

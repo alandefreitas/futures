@@ -35,7 +35,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_default_initializable = __see_below__;
+    using is_default_initializable = std::bool_constant<std::default_initializable<T>>;
 #else
     template <class T, class = void>
     struct is_default_initializable : std::false_type {};

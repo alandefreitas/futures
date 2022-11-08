@@ -40,7 +40,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using iter_difference = __see_below__;
+    using iter_difference = std::iter_difference;
 #else
     namespace detail {
         template <class T>

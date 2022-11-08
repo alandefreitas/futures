@@ -32,13 +32,13 @@ namespace futures {
      */
 
 
-    /// @brief A type trait equivalent to the `std::iterator` concept
+    /// @brief A type trait equivalent to the `std::iterator` trait
     /**
      * @see https://en.cppreference.com/w/cpp/ranges/iterator_t
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using iterator = __see_below__;
+    using iterator = std::iterator<R>;
 #else
     template <class T, class = void>
     struct iterator {};

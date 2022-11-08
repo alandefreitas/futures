@@ -36,7 +36,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class F, class I>
-    using is_indirectly_unary_invocable = __see_below__;
+    using is_indirectly_unary_invocable = std::bool_constant<std::indirectly_unary_invocable<F, I>>;
 #else
     template <class F, class I, class = void>
     struct is_indirectly_unary_invocable : std::false_type {};

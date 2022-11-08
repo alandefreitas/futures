@@ -38,7 +38,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using iter_value = __see_below__;
+    using iter_value = std::iter_value;
 #else
     template <class T>
     using iter_value = detail::mp_cond<

@@ -38,7 +38,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class R>
-    using range_value = __see_below__;
+    using range_value = std::range_value<R>;
 #else
     template <class R, class = void>
     struct range_value {};

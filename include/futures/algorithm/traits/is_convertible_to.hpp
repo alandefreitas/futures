@@ -33,7 +33,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class From, class To>
-    using is_convertible_to = __see_below__;
+    using is_convertible_to = std::bool_constant<std::convertible_to<From, To>>;
 #else
     template <class From, class To, class = void>
     struct is_convertible_to : std::false_type {};

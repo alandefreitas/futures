@@ -33,7 +33,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using remove_cvref = __see_below__;
+    using remove_cvref = std::remove_cvref<T>;
 #else
     template <class T>
     using remove_cvref = detail::mp_identity<

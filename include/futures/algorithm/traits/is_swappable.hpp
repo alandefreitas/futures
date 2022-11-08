@@ -33,7 +33,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_swappable = __see_below__;
+    using is_swappable = std::bool_constant<std::swappable<T>>;
 #else
     template <class T, class = void>
     struct is_swappable : std::false_type {};

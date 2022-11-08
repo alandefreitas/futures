@@ -32,7 +32,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_input_or_output_iterator = __see_below__;
+    using is_input_or_output_iterator = std::bool_constant<std::is_input_or_output_iterator<T>>;
 #else
     template <class T, class = void>
     struct is_input_or_output_iterator : std::false_type {};

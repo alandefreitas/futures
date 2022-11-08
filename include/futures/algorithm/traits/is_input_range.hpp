@@ -36,7 +36,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_input_range = __see_below__;
+    using is_input_range = std::bool_constant<std::is_input_range<T>>;
 #else
     template <class T, class = void>
     struct is_input_range : std::false_type {};

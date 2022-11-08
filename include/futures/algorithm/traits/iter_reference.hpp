@@ -35,7 +35,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using iter_reference = __see_below__;
+    using iter_reference = std::iter_reference;
 #else
     template <class T, class = void>
     struct iter_reference {};

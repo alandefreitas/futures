@@ -35,7 +35,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_indirectly_readable = __see_below__;
+    using is_indirectly_readable = std::bool_constant<std::indirectly_readable<T>>;
 #else
     template <class T, class = void>
     struct is_indirectly_readable : std::false_type {};

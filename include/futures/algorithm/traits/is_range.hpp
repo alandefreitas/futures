@@ -27,14 +27,14 @@ namespace futures {
      *  @{
      */
 
-    /// @brief A type trait equivalent to the `std::partially_ordered_with`
+    /// @brief A type trait equivalent to the `std::range`
     /// concept
     /**
      * @see https://en.cppreference.com/w/cpp/ranges/range
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_range = __see_below__;
+    using is_range = std::bool_constant<std::range<T>>;
 #else
     template <class T, class = void>
     struct is_range : std::false_type {};

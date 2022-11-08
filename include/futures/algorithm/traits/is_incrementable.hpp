@@ -34,7 +34,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>
-    using is_incrementable = __see_below__;
+    using is_incrementable = std::bool_constant<std::incrementable<I>>;
 #else
     template <class I, class = void>
     struct is_incrementable : std::false_type {};

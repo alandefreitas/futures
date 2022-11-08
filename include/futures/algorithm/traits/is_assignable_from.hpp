@@ -35,7 +35,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class LHS, class RHS>
-    using is_assignable_from = __see_below__;
+    using is_assignable_from = std::bool_constant<std::assignable_from<LHS, RHS>>;
 #else
     template <class LHS, class RHS, class = void>
     struct is_assignable_from : std::false_type {};

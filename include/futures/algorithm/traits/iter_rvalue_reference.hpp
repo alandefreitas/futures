@@ -34,7 +34,7 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using iter_rvalue_reference = __see_below__;
+    using iter_rvalue_reference = std::iter_rvalue_reference;
 #else
     template <class T, class = void>
     struct iter_rvalue_reference {};
