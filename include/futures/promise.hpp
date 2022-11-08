@@ -20,9 +20,9 @@
 
 #include <futures/future.hpp>
 #include <futures/detail/operation_state.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <memory>
 
 namespace futures {
@@ -139,10 +139,9 @@ namespace futures {
         }
 
         /// Set the promise result as an exception
-        template <
-            typename E FUTURES_REQUIRE((std::is_base_of_v<std::exception, E>) )>
-        void
-        set_exception(E e) {
+        FUTURES_TEMPLATE(typename E)
+        (requires std::is_base_of_v<std::exception, E>) void set_exception(
+            E e) {
             set_exception(std::make_exception_ptr(e));
         }
 

@@ -37,15 +37,12 @@ namespace futures {
         : public unary_invoke_algorithm_functor<find_if_not_functor> {
         friend unary_invoke_algorithm_functor<find_if_not_functor>;
 
-        template <
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_unary_invocable_v<Fun, I>
-                 && std::is_copy_constructible_v<Fun>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
-        inline_find_if_not(I first, S last, Fun p) {
+        FUTURES_TEMPLATE(class I, class S, class Fun)
+        (requires is_input_iterator_v<I>&& is_sentinel_for_v<S, I>&&
+             is_indirectly_unary_invocable_v<Fun, I>&&
+                 std::is_copy_constructible_v<
+                     Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
+            inline_find_if_not(I first, S last, Fun p) {
             for (; first != last; ++first) {
                 if (!p(*first)) {
                     return first;
@@ -68,18 +65,13 @@ namespace futures {
          *  @param f Function
          *  function template \c find_if_not
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && is_indirectly_unary_invocable_v<Fun, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
-        run(E const& ex, P p, I first, S last, Fun f) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class Fun)
+        (requires is_executor_v<E>&& is_partitioner_v<P, I, S>&&
+             is_input_iterator_v<I>&& is_sentinel_for_v<S, I>&&
+                 is_indirectly_unary_invocable_v<Fun, I>&&
+                     std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
+            run(E const& ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 return inline_find_if_not(first, last, f);

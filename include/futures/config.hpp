@@ -18,6 +18,8 @@
 
 #include <futures/detail/config.hpp>
 
+#ifdef FUTURES_DOXYGEN
+
 /// Macro used to indicate standalone asio is available
 /**
  * This macro can be defined to indicate the standalone version of Asio is
@@ -43,15 +45,7 @@
  * @li <a href="https://think-async.com/Asio/">Asio</a>
  *
  */
-#if defined __has_include
-#    if __has_include(<asio.hpp>)
-#        ifndef FUTURES_HAS_STANDALONE_ASIO
-#            define FUTURES_HAS_STANDALONE_ASIO
-#        endif
-#    endif
-#elif ASIO_HAS_CONSTEXPR || FUTURES_DOXYGEN
 #    define FUTURES_HAS_STANDALONE_ASIO
-#endif
 
 /// Macro used to indicate Boost is available
 /**
@@ -79,15 +73,7 @@
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#if defined __has_include
-#    if __has_include(<boost/config.hpp>)
-#        ifndef FUTURES_HAS_BOOST
-#            define FUTURES_HAS_BOOST
-#        endif
-#    endif
-#elif BOOST_USER_CONFIG || FUTURES_DOXYGEN
 #    define FUTURES_HAS_BOOST
-#endif
 
 /// Macro used to indicate we prefer using standalone Asio over Boost.Asio
 /**
@@ -120,16 +106,17 @@
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#if !defined(FUTURES_PREFER_BOOST) && !defined(FUTURES_PREFER_STANDALONE_ASIO) \
-    && !defined(FUTURES_PREFER_BUNDLED)
-#    if defined(FUTURES_HAS_STANDALONE_ASIO)
-#        define FUTURES_PREFER_STANDALONE_ASIO
-#    elif defined(FUTURES_HAS_BOOST)
-#        define FUTURES_PREFER_BOOST
-#    else
-#        define FUTURES_PREFER_BUNDLED
+#    if !defined(FUTURES_PREFER_BOOST)              \
+        && !defined(FUTURES_PREFER_STANDALONE_ASIO) \
+        && !defined(FUTURES_PREFER_BUNDLED)
+#        if defined(FUTURES_HAS_STANDALONE_ASIO)
+#            define FUTURES_PREFER_STANDALONE_ASIO
+#        elif defined(FUTURES_HAS_BOOST)
+#            define FUTURES_PREFER_BOOST
+#        else
+#            define FUTURES_PREFER_BUNDLED
+#        endif
 #    endif
-#endif
 
 /// @def FUTURES_PREFER_BOOST
 /// Macro used to indicate we prefer using Boost.Asio over standalone Asio
@@ -163,9 +150,7 @@
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#ifdef FUTURES_DOXYGEN
 #    define FUTURES_PREFER_BOOST
-#endif
 
 /// @def FUTURES_SEPARATE_COMPILATION
 /// Use separately compiled source code for implementation
@@ -188,8 +173,8 @@
  * are unavailable and the bundled version of Asio is used.
  *
  */
-#ifdef FUTURES_DOXYGEN
 #    define FUTURES_SEPARATE_COMPILATION
+
 #endif
 
 #include <futures/impl/config.hpp>

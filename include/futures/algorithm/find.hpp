@@ -51,17 +51,11 @@ namespace futures {
          *  @param last Iterator to (last + 1)-th element in the range
          *  @param v Value
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class T FUTURES_REQUIRE(
-                (is_executor_v<E> && is_partitioner_v<P, I, S>
-                 && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_binary_invocable_v<equal_to, T *, I>) )>
-        I
-        run(E const &ex, P p, I first, S last, T const &v) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class T)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_binary_invocable_v<equal_to, T *, I>) I
+            run(E const &ex, P p, I first, S last, T const &v) const {
             return find_if_functor::find_if_graph<E, I>(ex)
                 .find_if(p, first, last, [&](auto const &el) {
                     return el == v;

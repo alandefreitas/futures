@@ -49,10 +49,9 @@ namespace futures {
      *
      *  @return The result of the future object
      */
-    template <
-        typename Future FUTURES_REQUIRE((is_future_v<std::decay_t<Future>>) )>
-    FUTURES_DETAIL(decltype(auto))
-    await(Future &&f) {
+    FUTURES_TEMPLATE(class Future)
+    (requires is_future_v<std::decay_t<Future>>) FUTURES_DETAIL(decltype(auto))
+        await(Future &&f) {
         return f.get();
     }
 
@@ -65,10 +64,9 @@ namespace futures {
      *
      * @return The result of the future object
      */
-    template <typename... Futures FUTURES_REQUIRE(
-        (std::conjunction_v<is_future<std::decay_t<Futures>>...>) )>
-    FUTURES_DETAIL(decltype(auto))
-    await(Futures &&...fs) {
+    FUTURES_TEMPLATE(class... Futures)
+    (requires std::conjunction_v<is_future<std::decay_t<Futures>>...>)
+        FUTURES_DETAIL(decltype(auto)) await(Futures &&...fs) {
         return detail::make_irregular_tuple(detail::regular_void_invoke(
             &std::decay_t<Futures>::get,
             std::forward<Futures>(fs))...);

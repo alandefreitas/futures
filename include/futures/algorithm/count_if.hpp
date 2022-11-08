@@ -115,15 +115,12 @@ namespace futures {
                 tasks_{};
         };
 
-        template <
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_unary_invocable_v<Fun, I>
-                 && std::is_copy_constructible_v<Fun>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        inline_count_if(I first, S last, Fun p) {
+        FUTURES_TEMPLATE(class I, class S, class Fun)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&is_indirectly_unary_invocable_v<Fun, I>
+                 &&std::is_copy_constructible_v<
+                     Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            iter_difference_t<I> inline_count_if(I first, S last, Fun p) {
             iter_difference_t<I> ret = 0;
             for (; first != last; ++first) {
                 if (p(*first)) {
@@ -148,18 +145,14 @@ namespace futures {
          *  @param f Function
          *  function template \c count_if
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && is_indirectly_unary_invocable_v<Fun, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        run(E const &ex, P p, I first, S last, Fun f) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class Fun)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_unary_invocable_v<Fun, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            iter_difference_t<I> run(E const &ex, P p, I first, S last, Fun f)
+                const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 return inline_count_if(first, last, f);

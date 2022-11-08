@@ -103,17 +103,13 @@ namespace futures {
                 tasks_{};
         };
 
-        template <
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
-        inline_accumulate(I first, S last, T init, Fun op) {
+        FUTURES_TEMPLATE(class I, class S, class T, class Fun = std::plus<>)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&std::is_same_v<iter_value_t<I>, T>
+                 &&is_indirectly_binary_invocable_v<Fun, I, I>
+                     &&std::is_copy_constructible_v<
+                         Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
+            inline_accumulate(I first, S last, T init, Fun op) {
             for (; first != last; ++first) {
                 init = op(std::move(init), *first); // std::move since C++20
             }
@@ -134,21 +130,21 @@ namespace futures {
          *  @param i Initial value for the reduction
          *  @param f Function
          */
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class I,
             class S,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
-        run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&std::is_same_v<iter_value_t<I>, T>
+                     &&is_indirectly_binary_invocable_v<Fun, I, I>
+                         &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
+            run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
+                const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 return inline_accumulate(first, last, i, f);

@@ -129,15 +129,12 @@ namespace futures {
                 tasks_;
         };
 
-        template <
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_unary_invocable_v<Fun, I>
-                 && std::is_copy_constructible_v<Fun>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR void
-        inline_for_each(I first, S last, Fun f) {
+        FUTURES_TEMPLATE(class I, class S, class Fun)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&is_indirectly_unary_invocable_v<Fun, I>
+                 &&std::is_copy_constructible_v<
+                     Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            void inline_for_each(I first, S last, Fun f) {
             for (; first != last; ++first) {
                 f(*first);
             }
@@ -157,18 +154,13 @@ namespace futures {
          *  @param f Function
          *  function template \c for_each
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && is_indirectly_unary_invocable_v<Fun, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR void
-        run(E const &ex, P p, I first, S last, Fun f) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class Fun)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_unary_invocable_v<Fun, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            void run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 inline_for_each(first, last, f);

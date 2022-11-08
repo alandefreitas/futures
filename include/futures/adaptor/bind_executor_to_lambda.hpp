@@ -60,14 +60,11 @@ namespace futures {
      * @param A callable
      * @return A proxy pair to schedule execution
      */
-    template <
-        class Executor,
-        class Function,
-        class... Args FUTURES_REQUIRE(
-            is_executor_v<std::decay_t<Executor>>&&
-                detail::is_callable_v<std::decay_t<Function>>)>
-    FUTURES_DETAIL(decltype(auto))
-    operator%(Executor const& ex, Function&& after) {
+    FUTURES_TEMPLATE(class Executor, class Function, class... Args)
+    (requires is_executor_v<std::decay_t<Executor>>&&
+         detail::is_callable_v<std::decay_t<Function>>)
+        FUTURES_DETAIL(decltype(auto))
+        operator%(Executor const& ex, Function&& after) {
         return detail::executor_and_callable_reference<
             std::decay_t<Executor>,
             std::decay_t<Function>,

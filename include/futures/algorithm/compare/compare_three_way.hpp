@@ -40,10 +40,8 @@ namespace futures {
     using compare_three_way = std::compare_three_way;
 #else
     struct compare_three_way {
-        template <
-            class T,
-            class U FUTURES_REQUIRE((is_three_way_comparable_with_v<T, U>) )>
-        constexpr partial_ordering
+        FUTURES_TEMPLATE(class T, class U)
+        (requires is_three_way_comparable_with_v<T, U>) constexpr partial_ordering
         operator()(T &&t, U &&u) const {
             // Spaceship operator is not available, so result is always
             // partial_ordering, which is the what the synthesized <=>

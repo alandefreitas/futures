@@ -26,10 +26,8 @@ namespace futures {
      * @see https://en.cppreference.com/w/cpp/utility/functional/less
      */
     struct less {
-        template <
-            class T,
-            class U FUTURES_REQUIRE((is_totally_ordered_with_v<T, U>) )>
-        constexpr bool
+        FUTURES_TEMPLATE(class T, class U)
+        (requires is_totally_ordered_with_v<T, U>) constexpr bool
         operator()(T &&t, U &&u) const {
             return std::forward<T>(t) < std::forward<U>(u);
         }

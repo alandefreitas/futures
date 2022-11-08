@@ -59,23 +59,27 @@ namespace futures {
     class error : public std::system_error {
     public:
         /// Constructor
-        template <class ErrorCodeEnum FUTURES_REQUIRE(
-            (std::is_error_code_enum_v<ErrorCodeEnum>
-             || std::is_same_v<ErrorCodeEnum, std::error_code>) )>
-        error(ErrorCodeEnum ec) : std::system_error{ ec } {}
+        FUTURES_TEMPLATE(class ErrorCodeEnum)
+        (requires(
+            std::is_error_code_enum_v<ErrorCodeEnum>
+            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            error(ErrorCodeEnum ec)
+            : std::system_error{ ec } {}
 
         /// Constructor
-        template <class ErrorCodeEnum FUTURES_REQUIRE(
-            (std::is_error_code_enum_v<ErrorCodeEnum>
-             || std::is_same_v<ErrorCodeEnum, std::error_code>) )>
-        error(ErrorCodeEnum ec, char const *what_arg)
+        FUTURES_TEMPLATE(class ErrorCodeEnum)
+        (requires(
+            std::is_error_code_enum_v<ErrorCodeEnum>
+            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            error(ErrorCodeEnum ec, char const *what_arg)
             : std::system_error{ ec, what_arg } {}
 
         /// Constructor
-        template <class ErrorCodeEnum FUTURES_REQUIRE(
-            (std::is_error_code_enum_v<ErrorCodeEnum>
-             || std::is_same_v<ErrorCodeEnum, std::error_code>) )>
-        error(ErrorCodeEnum ec, std::string const &what_arg)
+        FUTURES_TEMPLATE(class ErrorCodeEnum)
+        (requires(
+            std::is_error_code_enum_v<ErrorCodeEnum>
+            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            error(ErrorCodeEnum ec, std::string const &what_arg)
             : std::system_error{ ec, what_arg } {}
 
         /// Destructor

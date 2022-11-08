@@ -41,14 +41,13 @@ namespace futures {
     class count_functor : public value_cmp_algorithm_functor<count_functor> {
         friend value_cmp_algorithm_functor<count_functor>;
 
-        template <
-            class I,
-            class S,
-            class T FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_binary_invocable_v<equal_to, T *, I>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        inline_count(I first, S last, T const &v) {
+        FUTURES_TEMPLATE(class I, class S, class T)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&is_indirectly_binary_invocable_v<
+                 equal_to,
+                 T *,
+                 I>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            iter_difference_t<I> inline_count(I first, S last, T const &v) {
             iter_difference_t<I> ret = 0;
             for (; first != last; ++first) {
                 if (*first == v) {
@@ -74,17 +73,12 @@ namespace futures {
          *  @param v Value
          *  function template \c count
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class T FUTURES_REQUIRE(
-                (is_executor_v<E> && is_partitioner_v<P, I, S>
-                 && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_binary_invocable_v<equal_to, T *, I>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<I>
-        run(E const &ex, P p, I first, S last, T const &v) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class T)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_binary_invocable_v<equal_to, T *, I>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<
+                I> run(E const &ex, P p, I first, S last, T const &v) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 return inline_count(first, last, v);

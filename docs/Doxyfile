@@ -8,6 +8,7 @@ XML_OUTPUT = xml
 
 INPUT = ./../include/futures
 STRIP_FROM_PATH = ./../include
+INCLUDE_PATH = ./../include
 RECURSIVE = YES
 EXCLUDE = ./../include/futures/impl \
           ./../include/futures/detail \
@@ -22,8 +23,9 @@ EXAMPLE_PATH = ./../examples
 EXAMPLE_PATTERNS = *.cpp
 
 DISTRIBUTE_GROUP_DOC=YES
+ENABLE_PREPROCESSING=YES
 MACRO_EXPANSION=YES
-EXPAND_ONLY_PREDEF=YES
+EXPAND_ONLY_PREDEF=NO
 PREDEFINED= FUTURES_DOXYGEN \
             FUTURES_CONSTEXPR=constexpr \
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR=constexpr \

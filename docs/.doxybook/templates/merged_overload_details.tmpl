@@ -104,12 +104,11 @@
 {% if overload_candidate.name==child.name and overload_candidate.kind==child.kind -%}
 {% set overload = overload_candidate %}
 
-
 ```{% if exists(overload.language) %}{{overload.language}}{% else %}cpp{% endif %} {% if n_overloads > 1 %} title="({{ overload_counter }})" {% endif %}
-{# Render template paramaters -#}
+{# Render template parameters -#}
 {% if existsIn(overload, "templateParams") -%}
 template <{% for param in overload.templateParams %}{{param.typePlain}}{{param.name}}{% if existsIn(param, "defvalPlain") %} ={{param.defvalPlain}}{% endif -%}
-{% if not loop.is_last -%},{%- endif %}{% endfor %}>
+{% if not loop.is_last -%}, {%- endif %}{% endfor %}>
 {% endif -%}
 
 {# Render prefix -#}
@@ -120,9 +119,9 @@ template <{% for param in overload.templateParams %}{{param.typePlain}}{{param.n
 
 {# Render return type -#}
 {% if existsIn(overload, "typePlain") -%}
-{%- if overload.typePlain in ["__implementation_defined__", "auto", "decltype(auto)"] -%}
-/* see below */{% else if overload.typePlain == "decltype(auto) constexpr" -%}
-constexpr /* see below */{% else -%}
+{%- if overload.typePlain in ["__implementation_defined__", "__see_below__", "auto", "decltype(auto)"] -%}
+/* see return type below */{% else if overload.typePlain == "decltype(auto) constexpr" -%}
+constexpr /* see return type below */{% else -%}
 {{- overload.typePlain -}}
 {%- endif %} {% endif %}
 {# Render function name -#}

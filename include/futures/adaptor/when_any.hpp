@@ -583,12 +583,12 @@ namespace futures {
      *  @param first,last Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    template <class InputIt FUTURES_REQUIRE(
-        (detail::is_valid_when_any_argument_v<
-            typename std::iterator_traits<InputIt>::value_type>) )>
-    when_any_future<detail::small_vector<detail::lambda_to_future_t<
-        typename std::iterator_traits<InputIt>::value_type>>>
-    when_any(InputIt first, InputIt last) {
+    FUTURES_TEMPLATE(class InputIt)
+    (requires detail::is_valid_when_any_argument_v<
+        typename std::iterator_traits<InputIt>::value_type>)
+        when_any_future<detail::small_vector<
+            detail::lambda_to_future_t<typename std::iterator_traits<
+                InputIt>::value_type>>> when_any(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
             typename std::iterator_traits<InputIt>::value_type>;
@@ -629,11 +629,11 @@ namespace futures {
      *  @param r Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    template <class Range FUTURES_REQUIRE((is_range_v<std::decay_t<Range>>) )>
-    when_any_future<detail::small_vector<
-        detail::lambda_to_future_t<typename std::iterator_traits<
-            typename std::decay_t<Range>::iterator>::value_type>>>
-    when_any(Range &&r) {
+    FUTURES_TEMPLATE(class Range)
+    (requires is_range_v<std::decay_t<Range>>)
+        when_any_future<detail::small_vector<detail::lambda_to_future_t<
+            typename std::iterator_traits<typename std::decay_t<
+                Range>::iterator>::value_type>>> when_any(Range &&r) {
         return when_any(
             std::begin(std::forward<Range>(r)),
             std::end(std::forward<Range>(r)));
@@ -648,10 +648,10 @@ namespace futures {
      *  @param futures A sequence of future objects
      *  @return @ref when_any_future with all future objects
      */
-    template <class... Futures FUTURES_REQUIRE(
-        (detail::are_valid_when_any_arguments_v<Futures...>) )>
-    when_any_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
-    when_any(Futures &&...futures) {
+    FUTURES_TEMPLATE(class... Futures)
+    (requires detail::are_valid_when_any_arguments_v<Futures...>)
+        when_any_future<std::tuple<detail::lambda_to_future_t<
+            Futures>...>> when_any(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
@@ -698,12 +698,9 @@ namespace futures {
      *  @param lhs,rhs Future objects
      *  @return A @ref when_any_future holding all future types
      */
-    template <
-        class T1,
-        class T2 FUTURES_REQUIRE(
-            (detail::is_valid_when_any_argument_v<T1>
-             && detail::is_valid_when_any_argument_v<T2>) )>
-    auto
+    FUTURES_TEMPLATE(class T1, class T2)
+    (requires detail::is_valid_when_any_argument_v<T1>
+         &&detail::is_valid_when_any_argument_v<T2>) FUTURES_DETAIL(auto)
     operator||(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_any = detail::is_when_any_future_v<T1>;
         constexpr bool second_is_when_any = detail::is_when_any_future_v<T2>;

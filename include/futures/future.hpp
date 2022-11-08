@@ -84,6 +84,7 @@
 #include <futures/detail/future.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
 #include <futures/detail/variant_state.hpp>
@@ -93,7 +94,6 @@
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/noncopyable.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <functional>
 #include <utility>
 #include <shared_mutex>
@@ -408,9 +408,10 @@ namespace futures {
          *
          * @param v Future value
          */
-        template <class T FUTURES_REQUIRE(
-            (std::is_same_v<T, R> && !std::is_void_v<R>) )>
-        explicit basic_future(T &&v) noexcept
+        FUTURES_TEMPLATE(class T)
+        (requires(
+            std::is_same_v<T, R>
+            && !std::is_void_v<R>)) explicit basic_future(T &&v) noexcept
             : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)

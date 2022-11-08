@@ -68,9 +68,10 @@ namespace futures {
          *  @tparam Fn Function type
          *  @param fn The callable target to execute
          */
-        template <typename Fn FUTURES_REQUIRE(
-            (!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>) )>
-        explicit packaged_task(Fn &&fn)
+        FUTURES_TEMPLATE(class Fn)
+        (requires(!std::is_base_of_v<
+                  packaged_task,
+                  typename std::decay_t<Fn>>)) explicit packaged_task(Fn &&fn)
             : packaged_task{ std::allocator_arg,
                              std::allocator<packaged_task>{},
                              std::forward<Fn>(fn) } {}
@@ -93,11 +94,8 @@ namespace futures {
          *  @param alloc The allocator to use when storing the task
          *  @param fn The callable target to execute
          */
-        template <
-            typename Fn,
-            typename Allocator FUTURES_REQUIRE((
-                !std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>) )>
-        explicit packaged_task(
+        FUTURES_TEMPLATE(typename Fn, typename Allocator)
+        (requires(!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)) explicit packaged_task(
             std::allocator_arg_t,
             Allocator const &alloc,
             Fn &&fn) {

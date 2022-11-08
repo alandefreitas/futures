@@ -27,16 +27,17 @@ namespace futures::detail {
         /// This is the internal function async uses to finally schedule the
         /// function after setting the default parameters and converting
         /// policies into scheduling strategies.
-        template <
+        FUTURES_TEMPLATE(
             class FutureOptions,
             class Executor,
             class Function,
-            class... Args FUTURES_REQUIRE(
-                is_executor_v<Executor>
-                && (std::is_invocable_v<Function, Args...>
-                    || std::is_invocable_v<Function, stop_token, Args...>) )>
-        FUTURES_DETAIL(decltype(auto))
-        schedule(Executor const& ex, Function&& f, Args&&... args) const {
+            class... Args)
+        (requires is_executor_v<Executor>
+         && (std::is_invocable_v<Function, Args...>
+             || std::is_invocable_v<Function, stop_token, Args...>) )
+            FUTURES_DETAIL(decltype(auto))
+                schedule(Executor const& ex, Function&& f, Args&&... args)
+                    const {
             // Future traits
             using value_type = launch_result_t<Function, Args...>;
             static constexpr bool is_eager = !FutureOptions::is_always_deferred;
@@ -75,13 +76,13 @@ namespace futures::detail {
 
         template <class T>
         static constexpr FUTURES_DETAIL(decltype(auto))
-        move_if_not_shared_ptr(T&& v) {
+            move_if_not_shared_ptr(T&& v) {
             return std::move<T>(v);
         }
 
         template <class T>
         static constexpr FUTURES_DETAIL(decltype(auto))
-        move_if_not_shared_ptr(std::shared_ptr<T>&& v) {
+            move_if_not_shared_ptr(std::shared_ptr<T>&& v) {
             return std::forward<T>(v);
         }
 

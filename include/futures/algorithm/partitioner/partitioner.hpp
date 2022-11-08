@@ -64,11 +64,8 @@ namespace futures {
          *  @param last Last element in range
          *  @return Iterator to point where sequence should be split
          */
-        template <
-            class I,
-            class S FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
-        I
+        FUTURES_TEMPLATE(class I, class S)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>) I
         operator()(I first, S last) {
             std::size_t size = std::distance(first, last);
             return (size <= min_grain_size_) ?
@@ -95,11 +92,8 @@ namespace futures {
         explicit thread_partitioner(std::size_t min_grain_size)
             : min_grain_size_(min_grain_size) {}
 
-        template <
-            class I,
-            class S FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
-        I
+        FUTURES_TEMPLATE(class I, class S)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>) I
         operator()(I first, S last) {
             if (num_threads_ <= 1) {
                 return last;
@@ -159,12 +153,9 @@ namespace futures {
     /**
      *  The default partitioner type and parameters might change
      */
-    template <
-        class I,
-        class S FUTURES_REQUIRE(
-            (is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
-    default_partitioner
-    make_default_partitioner(I first, S last) {
+    FUTURES_TEMPLATE(class I, class S)
+    (requires(is_input_iterator_v<I> &&is_sentinel_for_v<S, I>))
+        default_partitioner make_default_partitioner(I first, S last) {
         return make_default_partitioner(std::distance(first, last));
     }
 
@@ -173,9 +164,9 @@ namespace futures {
     /**
      *  The default partitioner type and parameters might change
      */
-    template <class R FUTURES_REQUIRE((is_input_range_v<R>) )>
-    default_partitioner
-    make_default_partitioner(R &&r) {
+    FUTURES_TEMPLATE(class R)
+    (requires is_input_range_v<R>) default_partitioner
+        make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
     }
 

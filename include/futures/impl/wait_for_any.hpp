@@ -9,10 +9,9 @@
 #define FUTURES_IMPL_WAIT_FOR_ANY_HPP
 
 namespace futures {
-    template <typename Iterator FUTURES_REQUIRE_IMPL(
-        (is_future_v<iter_value_t<Iterator>>) )>
-    Iterator
-    wait_for_any(Iterator first, Iterator last) {
+    FUTURES_TEMPLATE_IMPL(typename Iterator)
+    (requires is_future_v<iter_value_t<Iterator>>) Iterator
+        wait_for_any(Iterator first, Iterator last) {
         if (bool const is_empty = first == last; is_empty) {
             return last;
         } else if (bool const is_single = std::next(first) == last; is_single) {
@@ -25,10 +24,9 @@ namespace futures {
         }
     }
 
-    template <typename... Fs FUTURES_REQUIRE_IMPL(
-        (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
-    std::size_t
-    wait_for_any(Fs &&...fs) {
+    FUTURES_TEMPLATE_IMPL(typename... Fs)
+    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+        wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
@@ -42,10 +40,9 @@ namespace futures {
         }
     }
 
-    template <class Tuple FUTURES_REQUIRE_IMPL(
-        (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
-    std::size_t
-    wait_for_any(Tuple &&t) {
+    FUTURES_TEMPLATE_IMPL(class Tuple)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any(Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
@@ -61,13 +58,8 @@ namespace futures {
         }
     }
 
-    template <
-        typename Iterator,
-        class Rep,
-        class Period FUTURES_REQUIRE_IMPL(
-            (is_future_v<iter_value_t<Iterator>>) )>
-    Iterator
-    wait_for_any_for(
+    FUTURES_TEMPLATE_IMPL(typename Iterator, class Rep, class Period)
+    (requires is_future_v<iter_value_t<Iterator>>) Iterator wait_for_any_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
         Iterator last) {
@@ -83,15 +75,11 @@ namespace futures {
         }
     }
 
-    template <
-        typename... Fs,
-        class Rep,
-        class Period FUTURES_REQUIRE_IMPL(
-            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
-    std::size_t
-    wait_for_any_for(
-        std::chrono::duration<Rep, Period> const &timeout_duration,
-        Fs &&...fs) {
+    FUTURES_TEMPLATE_IMPL(typename... Fs, class Rep, class Period)
+    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+        wait_for_any_for(
+            std::chrono::duration<Rep, Period> const &timeout_duration,
+            Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
@@ -105,15 +93,11 @@ namespace futures {
         }
     }
 
-    template <
-        class Tuple,
-        class Rep,
-        class Period FUTURES_REQUIRE_IMPL(
-            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
-    std::size_t
-    wait_for_any_for(
-        std::chrono::duration<Rep, Period> const &timeout_duration,
-        Tuple &&t) {
+    FUTURES_TEMPLATE_IMPL(class Tuple, class Rep, class Period)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any_for(
+            std::chrono::duration<Rep, Period> const &timeout_duration,
+            Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
@@ -131,13 +115,8 @@ namespace futures {
         }
     }
 
-    template <
-        typename Iterator,
-        class Clock,
-        class Duration FUTURES_REQUIRE_IMPL(
-            (is_future_v<iter_value_t<Iterator>>) )>
-    Iterator
-    wait_for_any_until(
+    FUTURES_TEMPLATE_IMPL(typename Iterator, class Clock, class Duration)
+    (requires is_future_v<iter_value_t<Iterator>>) Iterator wait_for_any_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
         Iterator last) {
@@ -153,15 +132,11 @@ namespace futures {
         }
     }
 
-    template <
-        typename... Fs,
-        class Clock,
-        class Duration FUTURES_REQUIRE_IMPL(
-            (std::conjunction_v<is_future<std::decay_t<Fs>>...>) )>
-    std::size_t
-    wait_for_any_until(
-        std::chrono::time_point<Clock, Duration> const &timeout_time,
-        Fs &&...fs) {
+    FUTURES_TEMPLATE_IMPL(typename... Fs, class Clock, class Duration)
+    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+        wait_for_any_until(
+            std::chrono::time_point<Clock, Duration> const &timeout_time,
+            Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;
@@ -175,15 +150,11 @@ namespace futures {
         }
     }
 
-    template <
-        class Tuple,
-        class Clock,
-        class Duration FUTURES_REQUIRE_IMPL(
-            (detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value))>
-    std::size_t
-    wait_for_any_until(
-        std::chrono::time_point<Clock, Duration> const &timeout_time,
-        Tuple &&t) {
+    FUTURES_TEMPLATE_IMPL(class Tuple, class Clock, class Duration)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any_until(
+            std::chrono::time_point<Clock, Duration> const &timeout_time,
+            Tuple &&t) {
         constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
         if constexpr (bool const is_empty = size == 0; is_empty) {
             return 0;

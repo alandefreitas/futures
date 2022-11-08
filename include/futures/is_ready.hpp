@@ -34,10 +34,8 @@ namespace futures {
      *  free function allows us to query other futures that don't implement
      *  is_ready, such as std::future.
      */
-    template <
-        typename Future FUTURES_REQUIRE((is_future_v<std::decay_t<Future>>) )>
-    bool
-    is_ready(Future &&f);
+    FUTURES_TEMPLATE(class Future)
+    (requires is_future_v<std::decay_t<Future>>) bool is_ready(Future &&f);
 
     /**
      * @}

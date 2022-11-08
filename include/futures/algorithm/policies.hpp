@@ -125,14 +125,11 @@ namespace futures {
      * and other policies will use executors that will run the algorithms
      * in parallel.
      */
-    template <
-        class E,
-        class I,
-        class S FUTURES_REQUIRE(
-            (!is_executor_v<E> && is_execution_policy_v<E>
-             && is_input_iterator_v<I> && is_sentinel_for_v<S, I>) )>
-    constexpr detail::policy_executor_type<E>
-    make_policy_executor() {
+    FUTURES_TEMPLATE(class E, class I, class S)
+    (requires(
+        !is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I>
+        && is_sentinel_for_v<S, I>)) constexpr detail::
+        policy_executor_type<E> make_policy_executor() {
         if constexpr (!std::is_same_v<E, sequenced_policy>) {
             return make_default_executor();
         } else {

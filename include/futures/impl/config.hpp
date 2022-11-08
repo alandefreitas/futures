@@ -21,7 +21,31 @@
  */
 
 /*
- * Decide what version of asio to use
+ * Determine what versions of asio are available
+ */
+#if defined __has_include
+#    if __has_include(<asio.hpp>)
+#        ifndef FUTURES_HAS_STANDALONE_ASIO
+#            define FUTURES_HAS_STANDALONE_ASIO
+#        endif
+#    endif
+#elif ASIO_HAS_CONSTEXPR
+#    define FUTURES_HAS_STANDALONE_ASIO
+#endif
+
+#if defined __has_include
+#    if __has_include(<boost/config.hpp>)
+#        ifndef FUTURES_HAS_BOOST
+#            define FUTURES_HAS_BOOST
+#        endif
+#    endif
+#elif BOOST_USER_CONFIG
+#    define FUTURES_HAS_BOOST
+#endif
+
+
+/*
+ * Determine what version of asio to use
  *
  * If the standalone is available, this is what we assume the user usually
  * prefers, since it's more specific
@@ -46,23 +70,15 @@
  * Set boost/user if there's no boost
  */
 #if defined(FUTURES_USE_BUNDLED_ASIO) && !defined(BOOST_USER_CONFIG)
-#  define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
+#    define BOOST_USER_CONFIG <futures/detail/deps/boost/config/user.hpp>
 #endif
 
 /*
- * Define namespaces
+ * Determine separate compilation and header only flags
  *
- * We raise and create aliases for the asio or boost asio namespaces,
- * depending on what library we should use.
+ * If the standalone is available, this is what we assume the user usually
+ * prefers, since it's more specific
  */
-#ifdef FUTURES_USE_BOOST_ASIO
-namespace boost {
-    namespace asio {}
-} // namespace boost
-#else
-namespace asio {}
-#endif
-
 // Include OS headers
 #ifdef _WIN32
 #    include <SDKDDKVer.h>
@@ -104,49 +120,18 @@ namespace asio {}
 #    define FUTURES_DECLARE
 #endif
 
-// How we declare implementation details
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_DETAIL(x) x
+/*
+ * Define namespaces
+ *
+ * We raise and create aliases for the asio or boost asio namespaces,
+ * depending on what library we should use.
+ */
+#ifdef FUTURES_USE_BOOST_ASIO
+namespace boost {
+    namespace asio {}
+} // namespace boost
 #else
-#    define FUTURES_DETAIL(x) __see_below__
-#endif
-
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_REQUIRE(x) , std::enable_if_t<(x), int> = 0
-#else
-#    define FUTURES_REQUIRE(x)
-#endif
-
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_REQUIRE_IMPL(x) , std::enable_if_t<(x), int>
-#else
-#    define FUTURES_REQUIRE_IMPL(x)
-#endif
-
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_SELF_REQUIRE(x)    \
-        template <                     \
-            bool SELF_CONDITION = (x), \
-            std::enable_if_t<SELF_CONDITION && SELF_CONDITION == (x), int> = 0>
-#else
-#    define FUTURES_SELF_REQUIRE(x)
-#endif
-
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_ALSO_SELF_REQUIRE(x)                                   \
-        , bool SELF_CONDITION = (x),                                       \
-               std::enable_if_t < SELF_CONDITION && SELF_CONDITION == (x), \
-               int > = 0
-#else
-#    define FUTURES_ALSO_SELF_REQUIRE(x)
-#endif
-
-#ifndef FUTURES_DOXYGEN
-#    define FUTURES_ALSO_SELF_REQUIRE_IMPL(x) \
-        , bool SELF_CONDITION,                \
-            std::enable_if_t<SELF_CONDITION && SELF_CONDITION == (x), int>
-#else
-#    define FUTURES_ALSO_SELF_REQUIRE_IMPL(x)
+namespace asio {}
 #endif
 
 #if !defined(FUTURES_DOXYGEN)
@@ -157,6 +142,7 @@ namespace boost {
     namespace mp11 {}
 } // namespace boost
 #endif
+
 
 namespace futures {
     /*

@@ -9,10 +9,8 @@
 #define FUTURES_IMPL_IS_READY_HPP
 
 namespace futures {
-    template <typename Future FUTURES_REQUIRE_IMPL(
-        (is_future_v<std::decay_t<Future>>) )>
-    bool
-    is_ready(Future &&f) {
+    FUTURES_TEMPLATE_IMPL(class Future)
+    (requires is_future_v<std::decay_t<Future>>) bool is_ready(Future &&f) {
         assert(
             f.valid()
             && "Undefined behaviour. Checking if an invalid future is ready.");

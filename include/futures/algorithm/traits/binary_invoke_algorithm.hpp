@@ -51,22 +51,26 @@ namespace futures {
     class binary_invoke_algorithm_functor {
     public:
         /// Complete overload
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class I,
             class S,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&std::is_same_v<iter_value_t<I>, T>
+                     &&is_indirectly_binary_invocable_v<Fun, I, I>
+                         &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(
+                E const &ex,
+                P p,
+                I first,
+                S last,
+                T i,
+                Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return Derived().run(
                     make_inline_executor(),
@@ -81,20 +85,19 @@ namespace futures {
         }
 
         /// Overload for default init value
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class I,
             class S,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, P p, I first, S last, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_binary_invocable_v<Fun, I, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, P p, I first, S last, Fun f = std::plus<>())
+                const {
             if (first == last) {
                 return iter_value_t<I>{};
             }
@@ -114,22 +117,27 @@ namespace futures {
         }
 
         /// Overload for execution policy instead of executor
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class I,
             class S,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                !is_executor_v<E> && is_execution_policy_v<E>
-                && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &, P p, I first, S last, T i, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires(
+            !is_executor_v<E> && is_execution_policy_v<E>
+            && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+            && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T>
+            && is_indirectly_binary_invocable_v<Fun, I, I>
+            && std::is_copy_constructible_v<Fun>))
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(
+                E const &,
+                P p,
+                I first,
+                S last,
+                T i,
+                Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -151,21 +159,21 @@ namespace futures {
 
         /// Overload for execution policy instead of executor / default init
         /// value
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class I,
             class S,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                !is_executor_v<E> && is_execution_policy_v<E>
-                && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &, P p, I first, S last, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires(
+            !is_executor_v<E> && is_execution_policy_v<E>
+            && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+            && is_sentinel_for_v<S, I>
+            && is_indirectly_binary_invocable_v<Fun, I, I>
+            && std::is_copy_constructible_v<Fun>))
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &, P p, I first, S last, Fun f = std::plus<>())
+                const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -184,23 +192,20 @@ namespace futures {
         }
 
         /// Overload for Ranges
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class P,
             class R,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_range_partitioner_v<P, R>
-                && is_input_range_v<R> && std::is_same_v<range_value_t<R>, T>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, P p, R &&r, T i, Fun f = std::plus<>()) const {
+            class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_range_partitioner_v<P, R> && is_input_range_v<R>
+         && std::is_same_v<range_value_t<R>, T>
+         && is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, P p, R &&r, T i, Fun f = std::plus<>())
+                const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -216,22 +221,13 @@ namespace futures {
         }
 
         /// Overload for Ranges / default init value
-        template <
-            class E,
-            class P,
-            class R,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_range_partitioner_v<P, R>
-                && is_input_range_v<R>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, P p, R &&r, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class E, class P, class R, class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_range_partitioner_v<P, R> && is_input_range_v<R>
+         && is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, P p, R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -246,19 +242,18 @@ namespace futures {
         }
 
         /// Overload for Iterators / default parallel executor
-        template <
+        FUTURES_TEMPLATE(
             class P,
             class I,
             class S,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
+            class Fun = std::plus<>)
+        (requires is_partitioner_v<P, I, S> &&is_input_iterator_v<I>
+             &&is_sentinel_for_v<S, I> &&std::is_same_v<iter_value_t<I>, T>
+                 &&is_indirectly_binary_invocable_v<Fun, I, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(P p, I first, S last, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return Derived{}.run(
                     make_inline_executor(),
@@ -280,18 +275,13 @@ namespace futures {
 
         /// Overload for Iterators / default parallel executor / default init
         /// value
-        template <
-            class P,
-            class I,
-            class S,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(P p, I first, S last, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class P, class I, class S, class Fun = std::plus<>)
+        (requires is_partitioner_v<P, I, S> &&is_input_iterator_v<I>
+             &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_binary_invocable_v<Fun, I, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(P p, I first, S last, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -310,21 +300,13 @@ namespace futures {
         }
 
         /// Overload for Ranges / default parallel executor
-        template <
-            class P,
-            class R,
-            class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
-                && std::is_same_v<range_value_t<R>, T>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class P, class R, class T, class Fun = std::plus<>)
+        (requires is_range_partitioner_v<P, R> &&is_input_range_v<
+            R> &&std::is_same_v<range_value_t<R>, T> &&
+             is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+                 &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(P p, R &&r, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -345,19 +327,12 @@ namespace futures {
         }
 
         /// Overload for Ranges / default parallel executor / default init value
-        template <
-            class P,
-            class R,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(P p, R &&r, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class P, class R, class Fun = std::plus<>)
+        (requires is_range_partitioner_v<P, R> &&is_input_range_v<R> &&
+             is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+                 &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(P p, R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -376,21 +351,20 @@ namespace futures {
         }
 
         /// Overload for Iterators / default partitioner
-        template <
+        FUTURES_TEMPLATE(
             class E,
             class I,
             class S,
             class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I> && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, I first, S last, T i, Fun f = std::plus<>())
-            const {
+            class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+         && std::is_same_v<iter_value_t<I>, T>
+         && is_indirectly_binary_invocable_v<Fun, I, I>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, I first, S last, T i, Fun f = std::plus<>())
+                const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -411,19 +385,14 @@ namespace futures {
         }
 
         /// Overload for Iterators / default partitioner / default init value
-        template <
-            class E,
-            class I,
-            class S,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_input_iterator_v<I>
-                && is_sentinel_for_v<S, I>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, I first, S last, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class E, class I, class S, class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
+         && is_indirectly_binary_invocable_v<Fun, I, I>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, I first, S last, Fun f = std::plus<>())
+                const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -442,22 +411,13 @@ namespace futures {
         }
 
         /// Overload for Ranges / default partitioner
-        template <
-            class E,
-            class R,
-            class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_input_range_v<R>
-                && std::is_same_v<range_value_t<R>, T>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, R &&r, T i, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class E, class R, class T, class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_input_range_v<R> && std::is_same_v<range_value_t<R>, T>
+         && is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, R &&r, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -478,20 +438,13 @@ namespace futures {
         }
 
         /// Overload for Ranges / default partitioner / default init value
-        template <
-            class E,
-            class R,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                (is_executor_v<E>
-                 || is_execution_policy_v<E>) &&is_input_range_v<R>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(E const &ex, R &&r, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class E, class R, class Fun = std::plus<>)
+        (requires(is_executor_v<E> || is_execution_policy_v<E>)
+         && is_input_range_v<R>
+         && is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+         && std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(E const &ex, R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -510,18 +463,13 @@ namespace futures {
         }
 
         /// Overload for Iterators / default executor / default partitioner
-        template <
-            class I,
-            class S,
-            class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && std::is_same_v<iter_value_t<I>, T>
-                && is_indirectly_binary_invocable_v<Fun, I, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(I first, S last, T i, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class I, class S, class T, class Fun = std::plus<>)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&std::is_same_v<iter_value_t<I>, T>
+                 &&is_indirectly_binary_invocable_v<Fun, I, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(I first, S last, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -543,16 +491,12 @@ namespace futures {
 
         /// Iterators / default executor / default partitioner / default init
         /// value
-        template <
-            class I,
-            class S,
-            class Fun = std::plus<> FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_binary_invocable_v<Fun, I, I>
-                 && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(I first, S last, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class I, class S, class Fun = std::plus<>)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&is_indirectly_binary_invocable_v<Fun, I, I>
+                 &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(I first, S last, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -571,19 +515,12 @@ namespace futures {
         }
 
         /// Overload for Ranges / default executor / default partitioner
-        template <
-            class R,
-            class T,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_input_range_v<R> && std::is_same_v<range_value_t<R>, T>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(R &&r, T i, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class R, class T, class Fun = std::plus<>)
+        (requires is_input_range_v<R> &&std::is_same_v<range_value_t<R>, T> &&
+             is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+                 &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(R &&r, T i, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),
@@ -604,18 +541,12 @@ namespace futures {
         }
 
         /// Ranges / default executor / default partitioner / default init value
-        template <
-            class R,
-            class Fun = std::plus<> FUTURES_REQUIRE((
-                is_input_range_v<R>
-                && is_indirectly_binary_invocable_v<
-                    Fun,
-                    iterator_t<R>,
-                    iterator_t<R>>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR
-        FUTURES_DETAIL(decltype(auto))
-        operator()(R &&r, Fun f = std::plus<>()) const {
+        FUTURES_TEMPLATE(class R, class Fun = std::plus<>)
+        (requires is_input_range_v<R> &&
+             is_indirectly_binary_invocable_v<Fun, iterator_t<R>, iterator_t<R>>
+                 &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
+            operator()(R &&r, Fun f = std::plus<>()) const {
             if (detail::is_constant_evaluated()) {
                 return operator()(
                     make_inline_executor(),

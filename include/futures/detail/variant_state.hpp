@@ -12,10 +12,10 @@
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/shared_state.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/utility/byte.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/deps/boost/variant2/variant.hpp>
 
 namespace futures::detail {
@@ -184,9 +184,10 @@ namespace futures::detail {
          *
          * @tparam T
          */
-        template <class T FUTURES_REQUIRE(
-            (mp_contains<variant_type, std::decay_t<T>>::value))>
-        explicit variant_state(T&& other) : s_(std::forward<T>(other)) {}
+        FUTURES_TEMPLATE(class T)
+        (requires(mp_contains<variant_type, std::decay_t<T>>::
+                      value)) explicit variant_state(T&& other)
+            : s_(std::forward<T>(other)) {}
 
         /// Constructor
         /**
@@ -196,11 +197,10 @@ namespace futures::detail {
          * @tparam Args
          * @param args
          */
-        template <
-            class T,
-            class... Args FUTURES_REQUIRE(
-                (mp_contains<variant_type, std::decay_t<T>>::value))>
-        explicit variant_state(in_place_type_t<T>, Args&&... args)
+        FUTURES_TEMPLATE(class T, class... Args)
+        (requires(
+            mp_contains<variant_type, std::decay_t<T>>::
+                value)) explicit variant_state(in_place_type_t<T>, Args&&... args)
             : s_(boost::variant2::in_place_type<T>, std::forward<Args>(args)...) {
         }
 
@@ -249,10 +249,9 @@ namespace futures::detail {
          *
          * @tparam T State type
          */
-        template <class T FUTURES_REQUIRE(
-            (mp_contains<variant_type, std::decay_t<T>>::value))>
-        [[nodiscard]] constexpr bool
-        holds() const {
+        FUTURES_TEMPLATE(class T)
+        (requires(mp_contains<variant_type, std::decay_t<T>>::value))
+            [[nodiscard]] constexpr bool holds() const {
             return boost::variant2::holds_alternative<T>(s_);
         }
 
@@ -288,18 +287,17 @@ namespace futures::detail {
         }
 
         /// Get variant value as specified type
-        template <class T FUTURES_REQUIRE(
-            (mp_contains<variant_type, std::decay_t<T>>::value))>
-        T&
-        get_as() {
+        FUTURES_TEMPLATE(class T)
+        (requires(
+            mp_contains<variant_type, std::decay_t<T>>::value)) T& get_as() {
             return boost::variant2::get<T>(s_);
         }
 
         /// Get constant variant value as specified type
-        template <class T FUTURES_REQUIRE(
-            (mp_contains<variant_type, std::decay_t<T>>::value))>
-        constexpr T const&
-        get_as() const {
+        FUTURES_TEMPLATE(class T)
+        (requires(
+            mp_contains<variant_type, std::decay_t<T>>::value)) constexpr T
+            const& get_as() const {
             return boost::variant2::get<T>(s_);
         }
 

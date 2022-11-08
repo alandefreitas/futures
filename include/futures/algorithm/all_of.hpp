@@ -25,9 +25,9 @@
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
-#include <futures/algorithm/detail/execution.hpp>
 #include <variant>
 
 namespace futures {
@@ -119,15 +119,12 @@ namespace futures {
                 tasks_{};
         };
 
-        template <
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE(
-                (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                 && is_indirectly_unary_invocable_v<Fun, I>
-                 && std::is_copy_constructible_v<Fun>) )>
-        static FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
-        inline_all_of(I first, S last, Fun p) {
+        FUTURES_TEMPLATE(class I, class S, class Fun)
+        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+             &&is_indirectly_unary_invocable_v<Fun, I>
+                 &&std::is_copy_constructible_v<
+                     Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            bool inline_all_of(I first, S last, Fun p) {
             for (; first != last; ++first) {
                 if (!p(*first)) {
                     return false;
@@ -150,18 +147,13 @@ namespace futures {
          *  @param f Function
          *  function template \c all_of
          */
-        template <
-            class E,
-            class P,
-            class I,
-            class S,
-            class Fun FUTURES_REQUIRE((
-                is_executor_v<E> && is_partitioner_v<P, I, S>
-                && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
-                && is_indirectly_unary_invocable_v<Fun, I>
-                && std::is_copy_constructible_v<Fun>) )>
-        FUTURES_CONSTANT_EVALUATED_CONSTEXPR bool
-        run(E const &ex, P p, I first, S last, Fun f) const {
+        FUTURES_TEMPLATE(class E, class P, class I, class S, class Fun)
+        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+             &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
+                 &&is_indirectly_unary_invocable_v<Fun, I>
+                     &&std::is_copy_constructible_v<Fun>)
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+            bool run(E const &ex, P p, I first, S last, Fun f) const {
             if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
                 boost::ignore_unused(p);
                 return inline_all_of(first, last, f);

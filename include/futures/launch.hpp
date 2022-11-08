@@ -87,15 +87,13 @@ namespace futures {
      * stoppable, eager future. Otherwise, the function will return a
      * continuable eager future.
      */
-    template <
-        class Executor,
-        class Function,
-        class... Args FUTURES_REQUIRE(
-            (is_executor_v<Executor>
-             && (std::is_invocable_v<Function, Args...>
-                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
-    FUTURES_DETAIL(decltype(auto))
-    async(Executor const &ex, Function &&f, Args &&...args);
+    FUTURES_TEMPLATE(class Executor, class Function, class... Args)
+    (requires(
+        is_executor_v<Executor>
+        && (std::is_invocable_v<Function, Args...>
+            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        FUTURES_DETAIL(decltype(auto))
+            async(Executor const &ex, Function &&f, Args &&...args);
 
     /// Launch an asynchronous task with the default executor
     /**
@@ -108,14 +106,12 @@ namespace futures {
      *
      * @return A future object with the function results
      */
-    template <
-        class Function,
-        class... Args FUTURES_REQUIRE(
-            (!is_executor_v<Function>
-             && (std::is_invocable_v<Function, Args...>
-                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
-    FUTURES_DETAIL(decltype(auto))
-    async(Function &&f, Args &&...args);
+    FUTURES_TEMPLATE(class Function, class... Args)
+    (requires(
+        !is_executor_v<Function>
+        && (std::is_invocable_v<Function, Args...>
+            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        FUTURES_DETAIL(decltype(auto)) async(Function &&f, Args &&...args);
 
     /// Schedule an asynchronous task with the specified executor
     /**
@@ -139,15 +135,13 @@ namespace futures {
      *  expects a @ref stop_token, the future will return a stoppable deferred
      *  future. Otherwise, the function will return a deferred future.
      */
-    template <
-        class Executor,
-        class Function,
-        class... Args FUTURES_REQUIRE(
-            (is_executor_v<Executor>
-             && (std::is_invocable_v<Function, Args...>
-                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
-    FUTURES_DETAIL(decltype(auto))
-    schedule(Executor const &ex, Function &&f, Args &&...args);
+    FUTURES_TEMPLATE(class Executor, class Function, class... Args)
+    (requires(
+        (is_executor_v<Executor>
+         && (std::is_invocable_v<Function, Args...>
+             || std::is_invocable_v<Function, stop_token, Args...>) )))
+        FUTURES_DETAIL(decltype(auto))
+            schedule(Executor const &ex, Function &&f, Args &&...args);
 
     /// Schedule an asynchronous task with the default executor
     /**
@@ -160,14 +154,12 @@ namespace futures {
      *
      *  @return A future object with the function results
      */
-    template <
-        class Function,
-        class... Args FUTURES_REQUIRE(
-            (!is_executor_v<Function>
-             && (std::is_invocable_v<Function, Args...>
-                 || std::is_invocable_v<Function, stop_token, Args...>) ))>
-    FUTURES_DETAIL(decltype(auto))
-    schedule(Function &&f, Args &&...args);
+    FUTURES_TEMPLATE(class Function, class... Args)
+    (requires(
+        (!is_executor_v<Function>
+         && (std::is_invocable_v<Function, Args...>
+             || std::is_invocable_v<Function, stop_token, Args...>) )))
+        FUTURES_DETAIL(decltype(auto)) schedule(Function &&f, Args &&...args);
 
     /** @} */
     /** @} */

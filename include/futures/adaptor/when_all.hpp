@@ -46,10 +46,10 @@
 #include <futures/launch.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/adaptor/detail/lambda_to_future.hpp>
 #include <futures/detail/deps/boost/mp11/function.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
-#include <futures/detail/throw_exception.hpp>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -510,12 +510,12 @@ namespace futures {
      *  @param first,last Range of futures
      *  @return Future object of type @ref when_all_future
      */
-    template <class InputIt FUTURES_REQUIRE(
-        (detail::is_valid_when_all_argument_v<
-            typename std::iterator_traits<InputIt>::value_type>) )>
-    when_all_future<detail::small_vector<detail::lambda_to_future_t<
-        typename std::iterator_traits<InputIt>::value_type>>>
-    when_all(InputIt first, InputIt last) {
+    FUTURES_TEMPLATE(class InputIt)
+    (requires detail::is_valid_when_all_argument_v<
+        typename std::iterator_traits<InputIt>::value_type>)
+        when_all_future<detail::small_vector<
+            detail::lambda_to_future_t<typename std::iterator_traits<
+                InputIt>::value_type>>> when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
             typename std::iterator_traits<InputIt>::value_type>;
@@ -555,11 +555,11 @@ namespace futures {
      *  @param r Range of futures
      *  @return Future object of type @ref when_all_future
      */
-    template <class Range FUTURES_REQUIRE((is_range_v<std::decay_t<Range>>) )>
-    when_all_future<detail::small_vector<
-        detail::lambda_to_future_t<typename std::iterator_traits<
-            typename std::decay_t<Range>::iterator>::value_type>>>
-    when_all(Range &&r) {
+    FUTURES_TEMPLATE(class Range)
+    (requires is_range_v<std::decay_t<Range>>)
+        when_all_future<detail::small_vector<detail::lambda_to_future_t<
+            typename std::iterator_traits<typename std::decay_t<
+                Range>::iterator>::value_type>>> when_all(Range &&r) {
         using std::begin;
         using std::end;
         return when_all(
@@ -576,10 +576,10 @@ namespace futures {
      *  @param futures Instances of future objects
      *  @return Future object of type @ref when_all_future
      */
-    template <class... Futures FUTURES_REQUIRE(
-        (detail::are_valid_when_all_arguments_v<Futures...>) )>
-    when_all_future<std::tuple<detail::lambda_to_future_t<Futures>...>>
-    when_all(Futures &&...futures) {
+    FUTURES_TEMPLATE(class... Futures)
+    (requires detail::are_valid_when_all_arguments_v<Futures...>)
+        when_all_future<std::tuple<detail::lambda_to_future_t<
+            Futures>...>> when_all(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
@@ -613,12 +613,9 @@ namespace futures {
      *  @param lhs,rhs Future objects or callables
      *  @return @ref when_all_future object that concatenates all futures
      */
-    template <
-        class T1,
-        class T2 FUTURES_REQUIRE(
-            (detail::is_valid_when_all_argument_v<T1>
-             && detail::is_valid_when_all_argument_v<T2>) )>
-    auto
+    FUTURES_TEMPLATE(class T1, class T2)
+    (requires detail::is_valid_when_all_argument_v<T1>
+         &&detail::is_valid_when_all_argument_v<T2>) auto
     operator&&(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;
         constexpr bool second_is_when_all = detail::is_when_all_future_v<T2>;
