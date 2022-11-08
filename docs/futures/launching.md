@@ -4,7 +4,7 @@
 
 The easiest way to create futures is by launching tasks:
 
-{{ code_snippet("future_types/launching.cpp", "no_param") }}
+{{ code_snippet("tests/unit/snippets.cpp", "no_param") }}
 
 This is what happens under the hood:
 
@@ -72,21 +72,21 @@ sequenceDiagram
 
 Like [std::async], [futures::async] is used to launch new tasks in parallel.
 
-{{ code_snippet("future_types/launching.cpp", "no_param") }}
+{{ code_snippet("tests/unit/snippets.cpp", "no_param") }}
 
 In this example, this function returns a continuable [cfuture] by default instead of a [std::future]. If the first task
 parameter is a [stop_source], it returns a [jcfuture] we can stop from the main thread with `request_stop`.
 
-{{ code_snippet("future_types/launching.cpp", "no_param_jcfuture") }}
+{{ code_snippet("tests/unit/snippets.cpp", "no_param_jcfuture") }}
 
 If the task accepts parameters, we can provide them directly to [async].
 
-{{ code_snippet("future_types/launching.cpp", "with_params") }}
+{{ code_snippet("tests/unit/snippets.cpp", "with_params") }}
 
 Unlike [std::async], which uses launch policies, [futures::async] can use any concrete [executor] specifying details
 about how the task should be executed.
 
-{{ code_snippet("future_types/launching.cpp", "with_executor") }}
+{{ code_snippet("tests/unit/snippets.cpp", "with_executor") }}
 
 If the [executor] is not defined, the default executor is used for the tasks. This executor ensures we do not launch a
 new thread for each task.
@@ -94,7 +94,7 @@ new thread for each task.
 To block execution of the main thread until the tasks are complete, we can use the functions [basic_future::wait]
 and [basic_future::get].
 
-{{ code_snippet("future_types/launching.cpp", "waiting") }}
+{{ code_snippet("tests/unit/snippets.cpp", "waiting") }}
 
 The function [basic_future::wait] will only block execution until the task is ready, while [basic_future::get] can be
 used to wait for and retrieve the final value.
@@ -149,7 +149,7 @@ sequenceDiagram
 
 The function [schedule] can be used to create lazy tasks.
 
-{{ code_snippet("future_types/schedule.cpp", "schedule") }}
+{{ code_snippet("tests/unit/snippets.cpp", "schedule") }}
 
 The main difference between [async] and [schedule] is the latter only posts the task to the executor when we
 call [basic_future::wait] or [basic_future::get] on the corresponding future:
@@ -383,7 +383,7 @@ futures are applicable, a few criteria might be considered.
 When assembling task graphs, it's often useful to include constant values for which we already know the result but
 behave like a future type. This can be achieved through [make_ready_future]:
 
-{{ code_snippet("future_types/launching.cpp", "ready_future") }}
+{{ code_snippet("tests/unit/snippets.cpp", "ready_future") }}
 
 The function returns a [vfuture], which represents a [basic_future] with no associated operation state extensions.
 
@@ -423,12 +423,12 @@ Future objects defined in this library handle exceptions the same way [std::futu
 exception internally, the exception is rethrown when we attempt to retrieve the value from the future
 with [basic_future::get].
 
-{{ code_snippet("future_types/launching.cpp", "throw_exception") }}
+{{ code_snippet("tests/unit/snippets.cpp", "throw_exception") }}
 
 When working without exceptions, we can avoid terminating the process by querying the state of the future before
 attempting to get its value.
 
-{{ code_snippet("future_types/launching.cpp", "query_exception") }}
+{{ code_snippet("tests/unit/snippets.cpp", "query_exception") }}
 
 ## Allocations
 
@@ -474,7 +474,7 @@ and their results.
 However, in some circumstances, the library implements a few optimizations to avoid allocations altogether. In the
 following example, we have a deferred future where no allocations are required.
 
-{{ code_snippet("future_types/schedule.cpp", "no_alloc") }}
+{{ code_snippet("tests/unit/snippets.cpp", "no_alloc") }}
 
 In this example, the operation state might be stored inline with the future:
 

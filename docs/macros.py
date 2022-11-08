@@ -2,16 +2,17 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
+
 def declare_variables(variables, macro):
     @macro
-    def code_snippet(filename: str, snippet: str = "", language: str = "", indent = 0, replacements = {}):
+    def code_snippet(filename: str, snippet: str = "", language: str = "", indent=0, replacements={}):
         """
         Load code from a file and save as a preformatted code block.
         If a language is specified, it's passed in as a hint for syntax highlighters.
 
         Example usage in markdown:
 
-            {{code_from_file("code/myfile.py", "python")}}
+            {{ code_snippet("code/myfile.py", "python") }}
 
         """
         docs_dir = variables.get("docs_dir", "docs")
@@ -63,25 +64,33 @@ def declare_variables(variables, macro):
                 snippet_open = comment_token + '['
                 snippet_close = comment_token + ']'
 
-                # Find the snippet start
+                # Read contents
                 contents = f.read()
+
+                # Find the snippet start
                 open_token = snippet_open + snippet
-                start_pos = contents.find(open_token)
+                start_pos = max(contents.find(open_token + ' '), contents.find(open_token + "\n"))
                 if start_pos == -1:
-                    print(f"Fail (no snippet start): {abs_path}\nsnippet: {snippet}\nlanguage: {language}")
-                    return f"""<b>Snippet {open_token} not found in {filename}</b>"""
+                    raise Exception(
+                        f"<b>Snippet {open_token} not found in {filename}</b>\nFail (no snippet start): {abs_path}\nsnippet: {snippet}\nlanguage: {language}")
                 start_pos += len(open_token)
+
+                # Check if snippet is unique
+                start_pos2 = max(contents.find(open_token + ' ', start_pos),
+                                 contents.find(open_token + "\n", start_pos))
+                if start_pos2 != -1:
+                    raise Exception(f"Snippet: {open_token} found twice in files {abs_path}")
 
                 # Find the snippet end
                 close_token = snippet_close + snippet
-                end_pos = contents.find(close_token, start_pos)
+                end_pos = max(contents.find(close_token + ' '), contents.find(close_token + "\n"))
                 if end_pos == -1:
                     # try only the close token, without snippet name
                     # (the close_token is for internal comments)
                     end_pos = contents.find(snippet_close, start_pos)
                 if end_pos == -1:
-                    print(f"Fail (no snippet end): {abs_path}\nsnippet: {snippet}\nlanguage: {language}")
-                    return f"""<b>Snippet {snippet} not found in {filename}</b>"""
+                    raise Exception(
+                        f"<b>Snippet {snippet} end not found in {filename}</b>\nFail (no snippet end): {abs_path}\nsnippet: {snippet}\nlanguage: {language}")
                 contents = contents[start_pos:end_pos]
 
                 # Find snippet header, if any
@@ -329,7 +338,7 @@ def declare_variables(variables, macro):
         with open(abs_path, "r") as f:
             contents = f.read()
 
-            res =  '| Option     | Description       | Default     |\n'
+            res = '| Option     | Description       | Default     |\n'
             res += '|------------|-------------------|-------------|\n'
 
             pattern = re.compile(" *option\\( *([^ ]+) *\"([^\"]+)\" *(.+) *\\).*")

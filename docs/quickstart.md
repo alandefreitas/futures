@@ -195,23 +195,32 @@
 
 ### Launching Futures
 
-{{ all_code_snippets("quickstart/launching.cpp") }}
+{{ code_snippet("tests/unit/snippets.cpp", "launching") }}
+{{ code_snippet("tests/unit/snippets.cpp", "launch_executor") }}
+{{ code_snippet("tests/unit/snippets.cpp", "launch_stoppable") }}
+{{ code_snippet("tests/unit/snippets.cpp", "launch_deferred") }}
+{{ code_snippet("tests/unit/snippets.cpp", "launch_interop") }}
 
 ### Continuations
 
-{{ all_code_snippets("quickstart/continuations.cpp") }}
+{{ code_snippet("tests/unit/snippets.cpp", "basic_continuation") }}
+{{ code_snippet("tests/unit/snippets.cpp", "continuation_operator") }}
+{{ code_snippet("tests/unit/snippets.cpp", "continuation_unwrapping") }}
 
-### Conjunctions
+### Adaptors
 
-{{ all_code_snippets("quickstart/conjunctions.cpp") }}
-
-### Disjunctions
-
-{{ all_code_snippets("quickstart/disjunctions.cpp") }}
+{{ code_snippet("tests/unit/snippets.cpp", "conjunctions") }}
+{{ code_snippet("tests/unit/snippets.cpp", "when_all_operator") }}
+{{ code_snippet("tests/unit/snippets.cpp", "when_all_unwrapping") }}
+{{ code_snippet("tests/unit/snippets.cpp", "disjunctions") }}
+{{ code_snippet("tests/unit/snippets.cpp", "when_any_operators") }}
+{{ code_snippet("tests/unit/snippets.cpp", "when_any_observers") }}
 
 ### Algorithms
 
-{{ all_code_snippets("quickstart/algorithms.cpp") }}
+{{ code_snippet("tests/unit/snippets.cpp", "algorithms_algorithms") }}
+{{ code_snippet("tests/unit/snippets.cpp", "algorithms_executor") }}
+{{ code_snippet("tests/unit/snippets.cpp", "algorithms_partitioner") }}
 
 ## Requirements
 

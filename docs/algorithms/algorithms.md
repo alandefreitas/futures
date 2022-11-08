@@ -4,12 +4,12 @@ The header [`algorithm.h`](/futures/reference/Files/algorithm_8h.md) and the cor
 [Algorithms Module](reference/Modules/group__algorithms/) includes parallel implementations of common STL algorithms
 using the library primitives.
 
-{{ code_snippet("algorithm/algorithms.cpp", "algorithm") }}
+{{ code_snippet("tests/unit/snippets.cpp", "algorithm") }}
 
 Like the C++20 [ranges library](https://en.cppreference.com/w/cpp/ranges), these algorithms accept both iterators or
 ranges as parameters.
 
-{{ code_snippet("algorithm/algorithms.cpp", "algorithm_range") }}
+{{ code_snippet("tests/unit/snippets.cpp", "algorithm_range") }}
 
 !!! info "Better future algorithms"
 
@@ -26,7 +26,7 @@ ranges as parameters.
 Like other parallel functions defined in this library, these algorithms allow simple execution policies to be replaced
 by concrete executors.
 
-{{ code_snippet("algorithm/algorithms.cpp", "executor") }}
+{{ code_snippet("tests/unit/snippets.cpp", "custom_executor") }}
 
 ## Parallel by default
 
@@ -36,9 +36,9 @@ and deadlocks in its provided functors.
 
 To execute algorithms sequentially, an appropriate executor or policy should be provided:
 
-{{ code_snippet("algorithm/algorithms.cpp", "inline_executor") }}
+{{ code_snippet("tests/unit/snippets.cpp", "inline_executor") }}
 
-{{ code_snippet("algorithm/algorithms.cpp", "seq_policy") }}
+{{ code_snippet("tests/unit/snippets.cpp", "seq_policy") }}
 
 Unless a policy is explicitly stated, all algorithms are parallel by default. These algorithms give us access to
 parallel algorithms that rely only on executors. This allows us to avoid of more complex libraries, such
@@ -49,7 +49,7 @@ as [TBB](https://github.com/oneapi-src/oneTBB), to execute efficient parallel al
 Like in [C++20](https://en.cppreference.com/w/cpp/algorithm), these algorithms can also be used in
 `constexpr` contexts with the default inline executor for these contexts.
 
-{{ code_snippet("algorithm/algorithms.cpp", "constexpr") }}
+{{ code_snippet("tests/unit/snippets.cpp", "constexpr") }}
 
 This feature depends on an internal library implementation equivalent to [std::is_constant_evaluated]. This
 implementation is available in most compilers (MSVC 1925, GCC 6, Clang 9), even when C++20 is not available. The macro

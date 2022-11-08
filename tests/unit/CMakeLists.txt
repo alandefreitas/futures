@@ -101,6 +101,10 @@ foreach (UNIT_TEST ${UNIT_TESTS})
     add_futures_test(${UNIT_TEST})
 endforeach()
 
+if (MSVC)
+    target_compile_options(ut_snippets PRIVATE /bigobj)
+endif()
+
 #####################################################
 # All tests as a single target                      #
 #####################################################
@@ -109,4 +113,7 @@ if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
     target_link_libraries(ut_futures_all PUBLIC futures::futures Catch2::Catch2)
     target_compile_features(ut_futures_all PUBLIC cxx_std_17)
     target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
+    if (MSVC)
+        target_compile_options(ut_futures_all PRIVATE /bigobj)
+    endif()
 endif ()

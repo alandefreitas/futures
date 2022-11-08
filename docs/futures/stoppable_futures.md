@@ -3,16 +3,16 @@
 When calling [async] with a callable that can be called with a [stop_token] as its first argument, it
 returns [jcfuture]:
 
-{{ code_snippet("future_types/stoppable.cpp", "stoppable") }}
+{{ code_snippet("tests/unit/snippets.cpp", "stoppable") }}
 
 The [stop_token] defined by the library is similar to the standard defined for [std::stop_token]. In this example, the
 task won't be ready until we ask it to stop through the state [stop_source].
 
-{{ code_snippet("future_types/stoppable.cpp", "not_ready") }}
+{{ code_snippet("tests/unit/snippets.cpp", "not_ready") }}
 
 We can use the function [basic_future::request_stop] to ask the task to stop through its future object.
 
-{{ code_snippet("future_types/stoppable.cpp", "request_stop") }}
+{{ code_snippet("tests/unit/snippets.cpp", "request_stop") }}
 
 The shared state of a [jcfuture] contains a [stop_source] which can be used to request the task to stop from another
 execution context:

@@ -10,38 +10,11 @@ function(add_futures_example EXAMPLE_PATH)
     endif ()
 endfunction()
 
-add_futures_example(quickstart/launching.cpp)
-add_futures_example(quickstart/continuations.cpp)
-add_futures_example(quickstart/conjunctions.cpp)
-add_futures_example(quickstart/disjunctions.cpp)
-add_futures_example(quickstart/algorithms.cpp)
-add_futures_example(future_types/interoperability.cpp)
-add_futures_example(future_types/launching.cpp)
-add_futures_example(future_types/schedule.cpp)
-add_futures_example(future_types/promises.cpp)
-add_futures_example(future_types/packaged_task.cpp)
-add_futures_example(future_types/continuable.cpp)
-add_futures_example(future_types/stoppable.cpp)
-add_futures_example(future_types/shared.cpp)
-add_futures_example(future_types/waiting.cpp)
-add_futures_example(motivation/polling_continuation.cpp)
-add_futures_example(adaptors/continuations.cpp)
-add_futures_example(adaptors/continuations_unwrap.cpp)
-add_futures_example(adaptors/conjunctions.cpp)
-add_futures_example(adaptors/conjunctions_unwrap.cpp)
-add_futures_example(adaptors/disjunctions.cpp)
-add_futures_example(adaptors/disjunctions_unwrap.cpp)
-add_futures_example(adaptors/task_graph.cpp)
-add_futures_example(algorithm/algorithms.cpp)
-
-if (asio_FOUND OR Asio_FOUND OR Boost_FOUND)
-    add_futures_example(networking/asio.cpp)
-    add_executable(networking-echo_server networking/echo_server.cpp)
-    target_link_libraries(networking-echo_server futures)
-#    if (asio_FOUND OR Asio_FOUND)
-#        target_link_libraries(networking-echo_server asio::asio)
-#    endif()
-#    if (Boost_FOUND)
-#        target_link_libraries(networking-echo_server Boost::boost)
-#    endif()
-endif()
+# - All snippets are under unit tests
+# - Look for sources of small and complete examples:
+#    - Tutorials teaching futures
+#    - Other futures libraries including other languages
+#    - Use cases mentioned in the documentation
+#        - Background task
+#        - Small server
+#        - Coroutines

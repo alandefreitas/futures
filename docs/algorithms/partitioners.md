@@ -4,12 +4,12 @@ All algorithms also have an optional extra parameter for custom partitioners. A 
 object that receives two iterators representing a range and returns an iterator indicating where this range should be
 split for a parallel algorithm. For instance, this would be a partitioner that always splits the problem in half:
 
-{{ code_snippet("algorithm/algorithms.cpp", "partitioner") }}
+{{ code_snippet("tests/unit/snippets.cpp", "partitioner") }}
 
 When we execute an algorithm with our custom partitioner, the algorithm would recursively split the input in half and
 launch a task for each of these parts.
 
-{{ code_snippet("algorithm/algorithms.cpp", "partitioner_algorithm") }}
+{{ code_snippet("tests/unit/snippets.cpp", "partitioner_algorithm") }}
 
 !!! hint
 
