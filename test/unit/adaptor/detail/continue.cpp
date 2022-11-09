@@ -1,6 +1,7 @@
 #include <futures/adaptor/detail/continue.hpp>
 //
 #include <futures/future.hpp>
+#include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_any.hpp>
 #include <futures/traits/future_value.hpp>
 #include <catch2/catch.hpp>
@@ -74,7 +75,7 @@ TEST_CASE("Continuation traits") {
     }
 
     SECTION("Traits") {
-        SECTION("Unwrap single value") {
+        SECTION("Deepest unwrap") {
             using F = future<int>;
             REQUIRE_SAME(unwrap_future_t<F>, int);
             using FF = future<future<int>>;
@@ -87,6 +88,9 @@ TEST_CASE("Continuation traits") {
             };
             using tag = continue_tag_t<F, decltype(f)>;
             REQUIRE_SAME(tag, continue_tags::rvalue_unwrap);
+
+            using tag2 = continue_tag_t<FFF, decltype(f)>;
+            REQUIRE_SAME(tag2, continue_tags::deepest_unwrap);
         }
 
         SECTION("Unwrap when any") {
@@ -102,4 +106,73 @@ TEST_CASE("Continuation traits") {
             REQUIRE_SAME(tag, exp);
         }
     }
+
+    SECTION("Unwrap types") {
+        SECTION("Auto unwrap") {
+            SECTION("Explicit return type") {
+                using F = cfuture<int>;
+                F before = async([]() { return 1; });
+                auto f = [](auto count) -> decltype(count.get()) {
+                    return count.get() * 2;
+                };
+                using tag = continue_tag_t<F, decltype(f)>;
+                REQUIRE_SAME(tag, continue_tags::no_unwrap);
+                int i = future_continue_functor{}(std::move(before), f);
+                REQUIRE(i == 2);
+            }
+
+            SECTION("Implicit return type") {
+                // https://stackoverflow.com/questions/64186621/why-doesnt-stdis-invocable-work-with-templated-operator-which-return-type-i
+                using F = cfuture<int>;
+                F before = async([]() { return 1; });
+                auto f = [](auto count) {
+                    return count.get() * 2;
+                };
+
+                boost::mp11::mp_for_each<boost::mp11::mp_list<
+                    futures::detail::continue_tags::no_unwrap,
+                    futures::detail::continue_tags::no_input,
+                    futures::detail::continue_tags::rvalue_unwrap>>([](auto I) {
+                    STATIC_REQUIRE(
+                        std::is_same_v<
+                            futures::detail::continue_tags::no_unwrap,
+                            decltype(I)>
+                        == futures::detail::continue_invoke_traits<
+                            decltype(I),
+                            F,
+                            mp_list<>,
+                            decltype(f)>::valid::value);
+                });
+
+                using tag = continue_tag_t<F, decltype(f)>;
+                REQUIRE_SAME(tag, continue_tags::no_unwrap);
+                int i = future_continue_functor{}(std::move(before), f);
+                REQUIRE(i == 2);
+
+                cfuture<int> f1 = async([]() { return 1; });
+                int v = future_continue_functor{}(std::move(f1), [](auto f) {
+                    return f.get();
+                });
+                REQUIRE(v == 1);
+                f1 = async([]() { return 1; });
+                auto f2 = then(f1, [](auto f) { return f.get(); });
+                REQUIRE(f2.get() == 1);
+            }
+        }
+
+        SECTION("No unwrap") {
+            using F = cfuture<int>;
+            F before = async([]() { return 1; });
+            auto f = [](F count) {
+                return count.get() * 2;
+            };
+            using tag = continue_tag_t<F, decltype(f)>;
+            REQUIRE_SAME(tag, continue_tags::no_unwrap);
+            int i = future_continue_functor{}(std::move(before), f);
+            REQUIRE(i == 2);
+        }
+    }
 }
+
+
+#undef REQUIRE_SAME

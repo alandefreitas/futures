@@ -25,27 +25,38 @@ namespace futures {
         // All other intermediary traits are left to next_future_traits_helper
         template <class Executor, class Function, class Future>
         struct next_future_traits {
+            static constexpr bool is_valid_with_stop_token_only = mp_eval_if_c<
+                continue_is_invocable_v<Future, Function>,
+                std::false_type,
+                continue_is_invocable,
+                Future,
+                Function,
+                stop_token>::value;
+
             static constexpr bool is_valid
                 = continue_is_invocable_v<Future, Function>
-                  || continue_is_invocable_v<Future, Function, stop_token>;
+                  || is_valid_with_stop_token_only;
 
             static constexpr bool expects_stop_token
-                = continue_is_invocable_v<Future, Function, stop_token>;
+                = is_valid_with_stop_token_only;
 
             static constexpr bool should_inherit_stop_source
                 = (has_stop_token_v<Future> && (!is_shared_future_v<Future>) )
                   && !expects_stop_token;
 
             using next_value_type = std::conditional_t<
-                continue_is_invocable_v<Future, Function, stop_token>,
-                typename mp_if<
+                is_valid_with_stop_token_only,
+                typename mp_eval_if_not<
                     std::conjunction<
                         is_stoppable<std::decay_t<Future>>,
                         std::is_same<
                             continue_invoke_result_t<Future, Function>,
                             continue_tags::failure>>,
-                    continue_invoke_result<Future, Function, stop_token>,
-                    mp_identity<continue_tags::failure>>::type,
+                    mp_identity<continue_tags::failure>,
+                    continue_invoke_result,
+                    Future,
+                    Function,
+                    stop_token>::type,
                 continue_invoke_result_t<Future, Function>>;
 
             using next_future_options = conditional_append_future_option_t<
@@ -56,7 +67,7 @@ namespace futures {
                     is_always_deferred_v<Future>,
                     always_deferred_opt,
                     conditional_append_future_option_t<
-                        continue_is_invocable_v<Future, Function, stop_token>,
+                        is_valid_with_stop_token_only,
                         stoppable_opt,
                         std::conditional_t<
                             !is_always_deferred_v<Future>,

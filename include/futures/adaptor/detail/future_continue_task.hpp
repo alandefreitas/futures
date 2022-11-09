@@ -27,7 +27,13 @@ namespace futures::detail {
             return future_continue(std::move(before_), std::move(after_));
         }
 
-        continue_invoke_result_t<Future, Function, stop_token>
+        mp_eval_if<
+            continue_is_invocable<Future, Function>,
+            detail::continue_tags::failure,
+            continue_invoke_result_t,
+            Future,
+            Function,
+            stop_token>
         operator()(stop_token st) {
             return future_continue(std::move(before_), std::move(after_), st);
         }

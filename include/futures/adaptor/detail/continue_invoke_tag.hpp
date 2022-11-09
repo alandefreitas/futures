@@ -27,7 +27,6 @@ namespace futures::detail {
         struct no_unwrap {};
         struct no_input {};
         struct rvalue_unwrap {};
-        struct lvalue_unwrap {};
         struct double_unwrap {};
         struct deepest_unwrap {};
         struct tuple_explode_unwrap {};
@@ -102,12 +101,18 @@ namespace futures::detail {
         Future,
         PrefixList,
         Function,
-        std::enable_if_t<mp_apply<
-            std::is_invocable,
-            mp_append<
-                mp_list<Function>,
+        std::enable_if_t<
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
                 PrefixList,
-                mp_list<rvalue_t<future_value_t<Future>>>>>::value>> {
+                Function>::valid::value
+            && mp_valid<
+                std::is_invocable,
+                mp_append<
+                    mp_list<Function>,
+                    PrefixList,
+                    mp_list<rvalue_t<future_value_t<Future>>>>>::value>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -117,7 +122,7 @@ namespace futures::detail {
                 PrefixList,
                 mp_list<rvalue_t<future_value_t<Future>>>>>;
     public:
-        using valid = std::true_type;
+        using valid = invoke_expr<std::is_invocable>;
         using result = invoke_expr<std::invoke_result>;
     };
 
@@ -127,7 +132,13 @@ namespace futures::detail {
         Future,
         PrefixList,
         Function,
-        std::enable_if_t<is_future_v<future_value_t<Future>>>> {
+        std::enable_if_t<
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_future_v<future_value_t<Future>>>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -135,8 +146,7 @@ namespace futures::detail {
             mp_append<
                 mp_list<Function>,
                 PrefixList,
-                mp_list<rvalue_t<
-                    future_value_t<future_value_t<Future>>>>>>;
+                mp_list<rvalue_t<future_value_t<future_value_t<Future>>>>>>;
     public:
         using valid = invoke_expr<std::is_invocable>;
         using result = invoke_expr<std::invoke_result>;
@@ -150,8 +160,7 @@ namespace futures::detail {
 
     template <class T>
     struct unwrap_future<T, std::enable_if_t<futures::is_future_v<T>>> {
-        using type = typename unwrap_future<
-            futures::future_value_t<T>>::type;
+        using type = typename unwrap_future<futures::future_value_t<T>>::type;
     };
 
     template <class F>
@@ -163,7 +172,13 @@ namespace futures::detail {
         Future,
         PrefixList,
         Function,
-        std::enable_if_t<is_future_v<future_value_t<Future>>>> {
+        std::enable_if_t<
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_future_v<future_value_t<Future>>>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -183,9 +198,14 @@ namespace futures::detail {
         Future,
         PrefixList,
         Function,
-        std::enable_if_t<mp_similar<
-            std::tuple<>,
-            std::decay_t<future_value_t<Future>>>::value>> {
+        std::enable_if_t<
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && mp_similar<std::tuple<>, std::decay_t<future_value_t<Future>>>::
+                value>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -206,8 +226,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            mp_similar<std::tuple<>, std::decay_t<future_value_t<Future>>>::
-                value
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && mp_similar<std::tuple<>, std::decay_t<future_value_t<Future>>>::value
             && mp_all_of<future_value_t<Future>, is_future>::value>> {
     private:
         template <template <class...> class F>
@@ -231,8 +255,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            mp_similar<std::tuple<>, std::decay_t<future_value_t<Future>>>::
-                value
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && mp_similar<std::tuple<>, std::decay_t<future_value_t<Future>>>::value
             && mp_all_of<
                 mp_transform<std::decay_t, future_value_t<Future>>,
                 is_future>::value>> {
@@ -258,7 +286,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_range_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_range_v<std::decay_t<future_value_t<Future>>>
             && is_future_v<
                 std::decay_t<range_value_t<future_value_t<Future>>>>>> {
     private:
@@ -268,8 +301,8 @@ namespace futures::detail {
             mp_append<
                 mp_list<Function>,
                 PrefixList,
-                mp_list<rvalue_t<detail::small_vector<future_value_t<
-                    range_value_t<future_value_t<Future>>>>>>>>;
+                mp_list<rvalue_t<detail::small_vector<
+                    future_value_t<range_value_t<future_value_t<Future>>>>>>>>;
     public:
         using valid = invoke_expr<std::is_invocable>;
         using result = invoke_expr<std::invoke_result>;
@@ -282,7 +315,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_range_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_range_v<std::decay_t<future_value_t<Future>>>
             && is_future_v<
                 std::decay_t<range_value_t<future_value_t<Future>>>>>> {
     private:
@@ -292,8 +330,8 @@ namespace futures::detail {
             mp_append<
                 mp_list<Function>,
                 PrefixList,
-                mp_list<rvalue_t<detail::small_vector<unwrap_future_t<
-                    range_value_t<future_value_t<Future>>>>>>>>;
+                mp_list<rvalue_t<detail::small_vector<
+                    unwrap_future_t<range_value_t<future_value_t<Future>>>>>>>>;
     public:
         using valid = invoke_expr<std::is_invocable>;
         using result = invoke_expr<std::invoke_result>;
@@ -306,7 +344,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>>> {
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -316,8 +359,7 @@ namespace futures::detail {
                 PrefixList,
                 mp_list<
                     rvalue_t<typename future_value_t<Future>::size_type>,
-                    rvalue_t<
-                        typename future_value_t<Future>::sequence_type>>>>;
+                    rvalue_t<typename future_value_t<Future>::sequence_type>>>>;
     public:
         using valid = invoke_expr<std::is_invocable>;
         using result = invoke_expr<std::invoke_result>;
@@ -330,11 +372,15 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && mp_similar<
                 std::tuple<>,
-                std::decay_t<
-                    typename future_value_t<Future>::sequence_type>>::value
+                std::decay_t<typename future_value_t<Future>::sequence_type>>::value
             && mp_all_of<
                 std::decay_t<typename future_value_t<Future>::sequence_type>,
                 is_future>::value>> {
@@ -345,8 +391,7 @@ namespace futures::detail {
             mp_append<
                 mp_list<Function>,
                 PrefixList,
-                mp_list<
-                    rvalue_t<typename future_value_t<Future>::size_type>>,
+                mp_list<rvalue_t<typename future_value_t<Future>::size_type>>,
                 mp_transform<
                     rvalue_t,
                     typename future_value_t<Future>::sequence_type>>>;
@@ -362,16 +407,19 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && mp_similar<
                 std::tuple<>,
-                std::decay_t<
-                    typename future_value_t<Future>::sequence_type>>::value
+                std::decay_t<typename future_value_t<Future>::sequence_type>>::value
             && mp_all_of<
                 mp_transform<
                     std::decay_t,
-                    std::decay_t<
-                        typename future_value_t<Future>::sequence_type>>,
+                    std::decay_t<typename future_value_t<Future>::sequence_type>>,
                 is_future>::value
             && mp_same<std::decay_t<
                 typename future_value_t<Future>::sequence_type>>::value>> {
@@ -397,7 +445,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && is_range_v<std::decay_t<
                 typename future_value_t<Future>::sequence_type>>>> {
     private:
@@ -421,11 +474,15 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && mp_similar<
                 std::tuple<>,
-                std::decay_t<
-                    typename future_value_t<Future>::sequence_type>>::value
+                std::decay_t<typename future_value_t<Future>::sequence_type>>::value
             && mp_all_of<
                 mp_transform<
                     std::decay_t,
@@ -433,8 +490,8 @@ namespace futures::detail {
                 is_future>::value
             && mp_same<mp_transform<
                 std::decay_t,
-                std::decay_t<typename future_value_t<
-                    Future>::sequence_type>>>::value>> {
+                std::decay_t<typename future_value_t<Future>::sequence_type>>>::
+                value>> {
     private:
         template <template <class...> class F>
         using invoke_expr = mp_apply<
@@ -457,11 +514,15 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && mp_similar<
                 std::tuple<>,
-                std::decay_t<
-                    typename future_value_t<Future>::sequence_type>>::value
+                std::decay_t<typename future_value_t<Future>::sequence_type>>::value
             && mp_all_of<
                 mp_transform<
                     std::decay_t,
@@ -492,7 +553,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && is_range_v<std::decay_t<
                 typename future_value_t<Future>::sequence_type>>>> {
     private:
@@ -516,7 +582,12 @@ namespace futures::detail {
         PrefixList,
         Function,
         std::enable_if_t<
-            is_when_any_result_v<std::decay_t<future_value_t<Future>>>
+            !continue_invoke_traits<
+                continue_tags::no_unwrap,
+                Future,
+                PrefixList,
+                Function>::valid::value
+            && is_when_any_result_v<std::decay_t<future_value_t<Future>>>
             && is_range_v<std::decay_t<
                 typename future_value_t<Future>::sequence_type>>>> {
     private:
