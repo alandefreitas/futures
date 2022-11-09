@@ -35,7 +35,7 @@ We can combine future adaptors to directly express task graphs without cycles. I
 adaptor [then] only supports a single continuation. What we need is another continuation that defines which continuation
 to execute. This is achieved by using the continuations to launch new tasks.
 
-{{ code_snippet("tests/unit/snippets.cpp", "dag") }}
+{{ code_snippet("test/unit/snippets.cpp", "dag") }}
 
 Task `A` can attach its continuation `B` as usual. However, task `B` needs to check a condition before launching `C` or
 `D`. The process of checking this condition becomes the continuation to `B`: a continuation to decide which continuation
@@ -90,13 +90,13 @@ end
 The previous pattern will not work for this graph because `B` needs to have recursive access to the task that launches
 itself. This simplest way to store these recursive functions is with a `struct` or `class`.
 
-{{ code_snippet("tests/unit/snippets.cpp", "reschedule_struct") }}
+{{ code_snippet("test/unit/snippets.cpp", "reschedule_struct") }}
 
 The graph contains a single promise whose value we will set when the complete subgraph is executed. Note that we can't
 simply wait for C outside the graph because its future instance is not valid until B succeeds. The future C will not
 exist yet rather than simply not being ready. So we start the task graph by launching A.
 
-{{ code_snippet("tests/unit/snippets.cpp", "reschedule_start") }}
+{{ code_snippet("test/unit/snippets.cpp", "reschedule_start") }}
 
 A is launched as soon as we start. We use the [inline_executor] for light callbacks as in the previous example. We
 detach the callback function to because we don't need to wait for this task. We only need to wait for the final promise.
@@ -104,7 +104,7 @@ detach the callback function to because we don't need to wait for this task. We 
 The process of scheduling B is modularized into another function because we need to access it recursively. This works as
 usual:
 
-{{ code_snippet("tests/unit/snippets.cpp", "reschedule_schedule_B") }}
+{{ code_snippet("test/unit/snippets.cpp", "reschedule_schedule_B") }}
 
 The light callback for B works as in the previous example for DAGs. The only difference here is `schedule_B` might need
 to call itself when it fails. The `struct` makes this recursion easier to access.
@@ -112,11 +112,11 @@ to call itself when it fails. The `struct` makes this recursion easier to access
 If the operation is successful and we schedule task C, it simply handles the operation result and sets the promise we
 created.
 
-{{ code_snippet("tests/unit/snippets.cpp", "schedule_C") }}
+{{ code_snippet("test/unit/snippets.cpp", "schedule_C") }}
 
 Outside the graph, we can just wait for the promise to be set.
 
-{{ code_snippet("tests/unit/snippets.cpp", "wait_for_graph") }}
+{{ code_snippet("test/unit/snippets.cpp", "wait_for_graph") }}
 
 In practice, we would probably attempt to reschedule B a number of times and a stop token could be attached to the graph
 to allow us to request it to stop at any time. These scheduling functions are usually going to be interleaved with the
@@ -172,23 +172,23 @@ What we have here is a conditional continuation that might move backwards in cas
 rescheduling `A` is the same as the logic for rescheduling `B`. We define this logic in a separate function and
 recursively call it. The new `struct` would be:
 
-{{ code_snippet("tests/unit/snippets.cpp", "loop_struct") }}
+{{ code_snippet("test/unit/snippets.cpp", "loop_struct") }}
 
 The logic to schedule A is now moved into another function because we need to reuse it. A schedules B as usual.
 
-{{ code_snippet("tests/unit/snippets.cpp", "loop_schedule_A") }}
+{{ code_snippet("test/unit/snippets.cpp", "loop_schedule_A") }}
 
 This time, in case of failure, task B moves back to task A instead of rescheduling.
 
-{{ code_snippet("tests/unit/snippets.cpp", "loop_schedule_B") }}
+{{ code_snippet("test/unit/snippets.cpp", "loop_schedule_B") }}
 
 Task C sets the promise as usual.
 
-{{ code_snippet("tests/unit/snippets.cpp", "loop_schedule_C") }}
+{{ code_snippet("test/unit/snippets.cpp", "loop_schedule_C") }}
 
 We also wait for the graph as usual.
 
-{{ code_snippet("tests/unit/snippets.cpp", "loop_wait_for_graph") }}
+{{ code_snippet("test/unit/snippets.cpp", "loop_wait_for_graph") }}
 
 Note that this pattern of implicit task graphs is easy enough to generalize as an explicit task graph object. An
 explicit task graph needs to be aware of the tasks it might launch (its vertices) and the connections between tasks (its

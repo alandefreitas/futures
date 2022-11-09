@@ -126,7 +126,7 @@ with both versions of Asio.
 The Asio library resolves around the `io_context` execution context. An `io_context` can be used as any other executor
 in this library to create futures:
 
-{{ code_snippet("tests/unit/snippets.cpp", "enqueue") }}
+{{ code_snippet("test/unit/snippets.cpp", "enqueue") }}
 
 However, the `io_context` executors have two important properties:
 
@@ -134,7 +134,7 @@ However, the `io_context` executors have two important properties:
 
 We need to explicitly ask `io_context` to execute all its pending tasks:
 
-{{ code_snippet("tests/unit/snippets.cpp", "pop") }}
+{{ code_snippet("test/unit/snippets.cpp", "pop") }}
 
 Tasks are pushed into the `io_context` queue which prevents them from being executed immediately. By executing the tasks
 in the queue, the future value was immediately set.
@@ -146,11 +146,11 @@ thread.
 
 Say we have a server acceptor listening for connections.
 
-{{ code_snippet("tests/unit/snippets.cpp", "push_networking") }}
+{{ code_snippet("test/unit/snippets.cpp", "push_networking") }}
 
 The listening task goes to the `io_context`. By executing the task, we effectively listen for the connections:
 
-{{ code_snippet("tests/unit/snippets.cpp", "pop_networking") }}
+{{ code_snippet("test/unit/snippets.cpp", "pop_networking") }}
 
 In a practical application, we would probably handle this connection by pushing more tasks to the executor to read and
 write from the client through the client socket.

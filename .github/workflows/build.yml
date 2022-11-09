@@ -88,7 +88,7 @@ jobs:
         with:
           check_name: Test Report - ${{ matrix.config.name }}
           check_title_template: '{{TEST_NAME}}'
-          report_paths: build/tests/unit/reports/*.junit
+          report_paths: build/test/unit/reports/*.junit
       - name: Install
         working-directory: ./build
         run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cmake --install .

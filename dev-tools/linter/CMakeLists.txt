@@ -31,7 +31,7 @@ add_custom_target(
         # Source include dirs
         --include_paths "${FUTURES_ROOT_DIR}/include"
         # Directory for a our bundled dependencies
-        --unit_test_path "${FUTURES_ROOT_DIR}/tests/unit"
+        --unit_test_path "${FUTURES_ROOT_DIR}/test/unit"
         --unit_test_template "${FUTURES_ROOT_DIR}/dev-tools/linter/test_template.cpp"
         --unit_test_ignore_paths "detail" "impl"
         # Main header so we can identify unreachable headers

@@ -13,18 +13,18 @@
 
         The `<futures/futures.hpp>` file includes the whole library as header-only:
 
-        {{ code_snippet("tests/integration/header_only/main.cpp", "include", "cpp", 8) }}
+        {{ code_snippet("test/integration/header_only/main.cpp", "include", "cpp", 8) }}
         
         However, as you read the documentation, we recommend including only the headers for
         the features you are using, such as:
 
-        {{ code_snippet("tests/integration/header_only/main.cpp", "include_ind", "cpp", 8) }}
+        {{ code_snippet("test/integration/header_only/main.cpp", "include_ind", "cpp", 8) }}
 
         If the `futures` directory is not placed with your other headers files for your project, you
         can create a target that also looks for headers in other directories. In CMake, this can be 
         achieved with:
 
-        {{ code_snippet("tests/integration/header_only/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
+        {{ code_snippet("test/integration/header_only/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
 
 
     === "Compiled"
@@ -34,16 +34,16 @@
         To manually use it as a compiled library, define the macro `FUTURES_SEPARATE_COMPILATION` and 
         include the following header in exactly one new or existing source file in your project:
 
-        {{ code_snippet("tests/integration/compiled/futures-src.cpp", "compiled_src", "cpp", 8) }}
+        {{ code_snippet("test/integration/compiled/futures-src.cpp", "compiled_src", "cpp", 8) }}
 
         The macro must also be set before including any other sources files in the project.
 
-        {{ code_snippet("tests/integration/compiled/main.cpp", "include", "cpp", 8) }}
+        {{ code_snippet("test/integration/compiled/main.cpp", "include", "cpp", 8) }}
 
         In general, it's easier to previously define this macro for any source file in the project.
         In CMake, this can be achieved with:
 
-        {{ code_snippet("tests/integration/compiled/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
+        {{ code_snippet("test/integration/compiled/CMakeLists.txt", "include_dirs", "cmake", 8, {"${FUTURES_SRC}": "path/to/futures"}) }}
 
         Check the reference for [other available macros](/futures/config_reference).
 
@@ -65,32 +65,32 @@
     
             Add add the source subdirectory in your CMake script:
 
-            {{ code_snippet("tests/integration/cmake_subdir/CMakeLists.txt", "add_subdir", "cmake", 12, {"${FUTURES_SRC}": "path/to/futures"}) }}
+            {{ code_snippet("test/integration/cmake_subdir/CMakeLists.txt", "add_subdir", "cmake", 12, {"${FUTURES_SRC}": "path/to/futures"}) }}
 
         === "Fetch content"
     
             Download and include the source directly from your CMake script:
 
-            {{ code_snippet("tests/integration/cmake_fetch/CMakeLists.txt", "fetchcontent", "cmake", 12) }}
+            {{ code_snippet("test/integration/cmake_fetch/CMakeLists.txt", "fetchcontent", "cmake", 12) }}
 
             Link to your own binaries:
 
-            {{ code_snippet("tests/integration/cmake_fetch/CMakeLists.txt", "link", "cmake", 12) }}
+            {{ code_snippet("test/integration/cmake_fetch/CMakeLists.txt", "link", "cmake", 12) }}
     
         === "External package"
     
             If you installed the library from source or with one of the packages, this project exports
             a CMake configuration script to be used with the `find_package`:
 
-            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "find_package", "cmake", 12) }}
+            {{ code_snippet("test/integration/cmake_package/CMakeLists.txt", "find_package", "cmake", 12) }}
 
             Or combine it with FetchContent:
 
-            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "find_or_fetch", "cmake", 12) }}
+            {{ code_snippet("test/integration/cmake_package/CMakeLists.txt", "find_or_fetch", "cmake", 12) }}
     
             Then link to your own binaries:
 
-            {{ code_snippet("tests/integration/cmake_package/CMakeLists.txt", "link", "cmake", 12) }}
+            {{ code_snippet("test/integration/cmake_package/CMakeLists.txt", "link", "cmake", 12) }}
 
             If the library not installed in one of the default directories for installed software, 
             such as `/usr/local`, you might need to set the `CMAKE_PREFIX_PATH` when running CMake: 
@@ -195,32 +195,32 @@
 
 ### Launching Futures
 
-{{ code_snippet("tests/unit/snippets.cpp", "launching") }}
-{{ code_snippet("tests/unit/snippets.cpp", "launch_executor") }}
-{{ code_snippet("tests/unit/snippets.cpp", "launch_stoppable") }}
-{{ code_snippet("tests/unit/snippets.cpp", "launch_deferred") }}
-{{ code_snippet("tests/unit/snippets.cpp", "launch_interop") }}
+{{ code_snippet("test/unit/snippets.cpp", "launching") }}
+{{ code_snippet("test/unit/snippets.cpp", "launch_executor") }}
+{{ code_snippet("test/unit/snippets.cpp", "launch_stoppable") }}
+{{ code_snippet("test/unit/snippets.cpp", "launch_deferred") }}
+{{ code_snippet("test/unit/snippets.cpp", "launch_interop") }}
 
 ### Continuations
 
-{{ code_snippet("tests/unit/snippets.cpp", "basic_continuation") }}
-{{ code_snippet("tests/unit/snippets.cpp", "continuation_operator") }}
-{{ code_snippet("tests/unit/snippets.cpp", "continuation_unwrapping") }}
+{{ code_snippet("test/unit/snippets.cpp", "basic_continuation") }}
+{{ code_snippet("test/unit/snippets.cpp", "continuation_operator") }}
+{{ code_snippet("test/unit/snippets.cpp", "continuation_unwrapping") }}
 
 ### Adaptors
 
-{{ code_snippet("tests/unit/snippets.cpp", "conjunctions") }}
-{{ code_snippet("tests/unit/snippets.cpp", "when_all_operator") }}
-{{ code_snippet("tests/unit/snippets.cpp", "when_all_unwrapping") }}
-{{ code_snippet("tests/unit/snippets.cpp", "disjunctions") }}
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_operators") }}
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_observers") }}
+{{ code_snippet("test/unit/snippets.cpp", "conjunctions") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_all_operator") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_all_unwrapping") }}
+{{ code_snippet("test/unit/snippets.cpp", "disjunctions") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_operators") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_observers") }}
 
 ### Algorithms
 
-{{ code_snippet("tests/unit/snippets.cpp", "algorithms_algorithms") }}
-{{ code_snippet("tests/unit/snippets.cpp", "algorithms_executor") }}
-{{ code_snippet("tests/unit/snippets.cpp", "algorithms_partitioner") }}
+{{ code_snippet("test/unit/snippets.cpp", "algorithms_algorithms") }}
+{{ code_snippet("test/unit/snippets.cpp", "algorithms_executor") }}
+{{ code_snippet("test/unit/snippets.cpp", "algorithms_partitioner") }}
 
 ## Requirements
 

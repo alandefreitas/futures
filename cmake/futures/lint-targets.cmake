@@ -21,7 +21,7 @@ endif()
 set(
         FORMAT_PATTERNS
         include/*.hpp include/*.cpp
-        source/*.hpp source/*.cpp
+        src/*.hpp src/*.cpp
         test/*.cpp test/*.hpp
 )
 

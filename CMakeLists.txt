@@ -41,7 +41,7 @@ include(cmake/futures/dev-options.cmake)
 #######################################################
 include(cmake/futures/dependencies.cmake)
 add_subdirectory(include)
-add_subdirectory(source)
+add_subdirectory(src)
 
 #######################################################
 ### Installer                                       ###
@@ -156,7 +156,7 @@ endif ()
 ### Developer mode                                  ###
 #######################################################
 if (NOT FUTURES_DEVELOPER_MODE)
-    add_subdirectory(tests/integration)
+    add_subdirectory(test/integration)
     return()
 elseif (NOT MASTER_PROJECT)
     message(
@@ -169,7 +169,7 @@ add_subdirectory(dev-tools)
 
 if (FUTURES_BUILD_TESTS)
     enable_testing()
-    add_subdirectory(tests)
+    add_subdirectory(test)
 endif ()
 
 if (FUTURES_BUILD_DOCS)
@@ -185,5 +185,5 @@ if (FUTURES_BUILD_LINT)
 endif()
 
 if (FUTURES_BUILD_EXAMPLES)
-    add_subdirectory(examples)
+    add_subdirectory(example)
 endif ()

@@ -17,14 +17,14 @@ Main --> End
 
 Achieving that with the function [then] is as simple as:
 
-{{ code_snippet("tests/unit/snippets.cpp", "continuables") }}
+{{ code_snippet("test/unit/snippets.cpp", "continuables") }}
 
 All instances of [basic_future] that support lazy continuations also have the member function [basic_future::then].
 However, the free function [then] is used to create a continuation to any future, which is itself another future value.
 
-{{ code_snippet("tests/unit/snippets.cpp", "continuable") }}
+{{ code_snippet("test/unit/snippets.cpp", "continuable") }}
 
-{{ code_snippet("tests/unit/snippets.cpp", "std_future") }}
+{{ code_snippet("test/unit/snippets.cpp", "std_future") }}
 
 !!! hint "Continuation Function"
 
@@ -57,7 +57,7 @@ If the next future type [is_deferred], then no lazy continuations need to be inv
 previous task to be ready inline. Only when the previous task is ready the continuation task will be launched to the
 executor.
 
-{{ code_snippet("tests/unit/snippets.cpp", "deferred") }}
+{{ code_snippet("test/unit/snippets.cpp", "deferred") }}
 
 In both cases, there's no polling involved. Polling is only necessary for (i) eager futures, (ii) that don't support
 continuations, and (iii) are potentially not ready. The last criteria eliminates future types such as [vfuture]
@@ -67,7 +67,7 @@ In general, such futures types should not be used when we require continuations.
 the function [then] also works for these future types and will automatically launch polling tasks to wait for their
 results.
 
-{{ code_snippet("tests/unit/snippets.cpp", "std_future") }}
+{{ code_snippet("test/unit/snippets.cpp", "std_future") }}
 
 ## Executors
 
@@ -79,7 +79,7 @@ launched by default. If a future object carries no executor, the default executo
 However, if the continuation should be launched with another executor, both the member function [basic_future::then] and
 the free function [then] support custom executors for the continuation task.
 
-{{ code_snippet("tests/unit/snippets.cpp", "executor_change") }}
+{{ code_snippet("test/unit/snippets.cpp", "executor_change") }}
 
 When this parameter is provided, the task will continue in another executor.
 
@@ -87,9 +87,9 @@ When this parameter is provided, the task will continue in another executor.
 
 The operator `>>` is defined as a convenience to assemble large task graphs including continuations.
 
-{{ code_snippet("tests/unit/snippets.cpp", "operator_then") }}
+{{ code_snippet("test/unit/snippets.cpp", "operator_then") }}
 
-{{ code_snippet("tests/unit/snippets.cpp", "operator_ex") }}
+{{ code_snippet("test/unit/snippets.cpp", "operator_ex") }}
 
 The types accepted by these operators are limited to those matching the future concept and callables that are valid as
 continuations to the future instance.
@@ -99,7 +99,7 @@ continuations to the future instance.
 By default, continuations attempt to receive the previous future object as their input. This allows the continuation to
 examine the state of the previous future object before deciding how to continue.
 
-{{ code_snippet("tests/unit/snippets.cpp", "error") }}
+{{ code_snippet("test/unit/snippets.cpp", "error") }}
 
 However, continuations involve accessing the future object from the previous task. This means continuation chains where
 the previous task is derived from a number of container adaptors can easily become verbose and error-prone. For
@@ -107,11 +107,11 @@ instance, consider a very simple continuation to a task that depends on 3 other 
 
 This is the task for which we need a continuation.
 
-{{ code_snippet("tests/unit/snippets.cpp", "verbose_create") }}
+{{ code_snippet("test/unit/snippets.cpp", "verbose_create") }}
 
 And this is how verbose the continuation looks like without unwrapping:
 
-{{ code_snippet("tests/unit/snippets.cpp", "verbose_continue") }}
+{{ code_snippet("test/unit/snippets.cpp", "verbose_continue") }}
 
 Although this pattern could be slightly simplified with more recent C++ features, such as structured bindings, this
 pattern is unmaintainable. To simplify this process, the function [then] accepts continuations that expect the unwrapped
@@ -119,7 +119,7 @@ result from the previous task.
 
 For instance, consider the following continuation function:
 
-{{ code_snippet("tests/unit/snippets.cpp", "unwrap_void") }}
+{{ code_snippet("test/unit/snippets.cpp", "unwrap_void") }}
 
 The continuation function requires no parameters. This means it only needs the previous future to be ready to be
 executor, but it does not require to access the previous future object so a parameter of the previous type would be of
@@ -131,7 +131,7 @@ as [`[[maybe_unused]]`](https://en.cppreference.com/w/cpp/language/attributes/ma
 If the previous task fails and its exception would be lost in the unwrapping process, the exception is automatically
 propagated to the following task.
 
-{{ code_snippet("tests/unit/snippets.cpp", "unwrap_fail_void") }}
+{{ code_snippet("test/unit/snippets.cpp", "unwrap_fail_void") }}
 
 With future adaptors, the exception information is still propagated to the unwrapped continuation future with the
 underlying future objects being unwrapped. Thus, continuations without unwrapping are only necessary when (i) the
@@ -143,24 +143,24 @@ error.
 
 The simplest form of unwrapping is sending the internal future value directly to the continuation function.
 
-{{ code_snippet("tests/unit/snippets.cpp", "value_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "value_unwrap") }}
 
 This allows the continuation function to worry only about the internal value type `int` instead of the complete future
 type `cfuture<int>`. This also makes the algorithm easier to generalize for alternative future types.
 
 If the previous future also contains a future, we can double unwrap the value to the next task:
 
-{{ code_snippet("tests/unit/snippets.cpp", "double_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "double_unwrap") }}
 
 ### Tuples unwrapping
 
 Tuple unwrapping becomes useful as a simplified way for futures to return multiple values to its continuations.
 
-{{ code_snippet("tests/unit/snippets.cpp", "tuple_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "tuple_unwrap") }}
 
 The tuple components are also double unwrapped if necessary:
 
-{{ code_snippet("tests/unit/snippets.cpp", "double_tuple_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "double_tuple_unwrap") }}
 
 In this case, without unwrapping, the continuation would require
 a `cfuture<std::tuple<vfuture<int>, vfuture<int>, vfuture<int>>>` as its first parameter.
@@ -171,7 +171,7 @@ Double tuple unwrapping is one of the most useful types of future unwrapping for
 When we wait for a conjunction of futures, the return value is represented as a tuple of all future objects that got
 ready. Double tuple unwrapping allows us to handle the results is a pattern that is more manageable:
 
-{{ code_snippet("tests/unit/snippets.cpp", "when_all_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_all_unwrap") }}
 
 This allows the continuation function to worry only about the internal value type `int` instead of the complete future
 type `cfuture<int>`. This also makes the algorithm easier to generalize for alternative future types.
@@ -182,13 +182,13 @@ Future disjunctions are represented with instances of [when_any_result]. Special
 these objects. This simplest for of unwrapping for disjunctions is the index of the ready future and the previous
 sequence of future objects.
 
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_unwrap") }}
 
 This can still be as verbose as wrapped tuples. However, we might still want to have access to each individual future as
 we know only one of them is ready when the continuation starts. So the second option is exploding the tuple of futures
 into the continuation parameters.
 
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_explode_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_explode_unwrap") }}
 
 This pattern allows us to do something about `f2` when `f1` is ready and vice-versa. It implies we want to continue as
 soon as there are results available but the results from unfinished tasks should not be discarded.
@@ -197,12 +197,12 @@ Very often, only one of the objects is really necessary and the meaning of what 
 this is the case when we attempt to connect to a number of servers and want to continue with whatever server replies
 first. In this case, unfinished futures can be discarded, and we only need the finished task to continue.
 
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_single_result") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_single_result") }}
 
 If the previous futures are stoppable, the adaptor will request other tasks to stop. If the tasks are homogeneous, this
 means we can also unwrap the underlying value of the finished task.
 
-{{ code_snippet("tests/unit/snippets.cpp", "when_any_single_result_unwrap") }}
+{{ code_snippet("test/unit/snippets.cpp", "when_any_single_result_unwrap") }}
 
 ### Summary
 
@@ -226,7 +226,7 @@ The following table describes all unwrapping functions by their priority:
 Note that types are very important here. Whenever the continuation has the same number of arguments for the same future
 output, a template function or a lambda using `auto` would be ambiguous.
 
-{{ code_snippet("tests/unit/snippets.cpp", "ambiguous") }}
+{{ code_snippet("test/unit/snippets.cpp", "ambiguous") }}
 
 In this case, the continuation function will attempt to use the unwrapping with the highest priority, which would
 be `cfuture<int>`. However, this is not always possible if the unwrapping overloads are ambiguous enough.
@@ -239,7 +239,7 @@ is also useful since the most verbose continuation patterns are the ones that co
 
 Future are allowed to expect other futures:
 
-{{ code_snippet("tests/unit/snippets.cpp", "return_future") }}
+{{ code_snippet("test/unit/snippets.cpp", "return_future") }}
 
 In this example, we can choose to wait for the value of the first future or the value of the future it encapsulates.
 
@@ -256,7 +256,7 @@ When a non-shared future has a continuation attached, its value is moved into th
 this means the [stop_source] is also moved into the continuation. If the future has already been moved, and we want to
 request its corresponding task to stop, we can do that through its [stop_source].
 
-{{ code_snippet("tests/unit/snippets.cpp", "stop_source") }}
+{{ code_snippet("test/unit/snippets.cpp", "stop_source") }}
 
 
 

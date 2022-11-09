@@ -23,7 +23,7 @@ end
 
 Consider what happens when we launch a task with C++11 [std::async]:
 
-{{ code_snippet("tests/unit/snippets.cpp", "std_async") }}
+{{ code_snippet("test/unit/snippets.cpp", "std_async") }}
 
 When we only need a single parallel task with future types, the main thread is allowed to wait or do some other work
 while the task is running.
@@ -58,7 +58,7 @@ Main --> End
 As we shall see, [std::async] does not provide the mechanisms to make this happen properly. The first alternative that
 usually comes to mind is waiting for one task after launching the next.
 
-{{ code_snippet("tests/unit/snippets.cpp", "wait_for_next") }}
+{{ code_snippet("test/unit/snippets.cpp", "wait_for_next") }}
 
 The code might look reasonable but, in that case, we would have:
 
@@ -91,7 +91,7 @@ worth using asynchronous code at all.
 The second alternative to solve this problem is polling. In this case, we would make task B wait for A before doing its
 work. The same for task B and C.
 
-{{ code_snippet("tests/unit/snippets.cpp", "polling") }}
+{{ code_snippet("test/unit/snippets.cpp", "polling") }}
 
 And now we have:
 
@@ -172,12 +172,12 @@ polling antecedent tasks and only one thread would to execute real work.
 Continuable futures allow us to launch a second task as a continuation to the first task, instead of an independent
 task.
 
-{{ code_snippet("tests/unit/snippets.cpp", "continuables") }}
+{{ code_snippet("test/unit/snippets.cpp", "continuables") }}
 
 Note we can use both the member function [basic_future::then] or the free function [then]. [basic_future::then] allows
 chaining while the free function [then] allows interoperability between future types.
 
-{{ code_snippet("tests/unit/snippets.cpp", "chaining") }}
+{{ code_snippet("test/unit/snippets.cpp", "chaining") }}
 
 In these examples,
 
@@ -244,7 +244,7 @@ The library implements this procedure with [atomic](https://en.cppreference.com/
 this cost. However, in some contexts, the cost of continuations can be further minimized
 by [launching deferred futures](/futures/launching/).
 
-{{ code_snippet("tests/unit/snippets.cpp", "deferred_continuables") }}
+{{ code_snippet("test/unit/snippets.cpp", "deferred_continuables") }}
 
 The continuation to a deferred shared state created with [schedule] is also deferred by default. When the task related
 to any shared state is deferred, we have a different sequence of events:

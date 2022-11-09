@@ -5,27 +5,27 @@
 This library implements a number of future types as a *concept* rather than a single concrete object.
 For instance, consider a task we are launching with C++11 [std::async]:
 
-{{ code_snippet("tests/unit/snippets.cpp", "interop_std_async") }}
+{{ code_snippet("test/unit/snippets.cpp", "interop_std_async") }}
 
 We could do something similar with the library function [futures::async]:
 
-{{ code_snippet("tests/unit/snippets.cpp", "interop_cfuture") }}
+{{ code_snippet("test/unit/snippets.cpp", "interop_cfuture") }}
 
 Notice how [async] returns a [cfuture] by default, which is a future to which we can attach continuations.
 The function [async] does not always return [cfuture]. For instance, suppose we call [async] with a
 function that accepts a [stop_token]:
 
-{{ code_snippet("tests/unit/snippets.cpp", "interop_jcfuture") }}
+{{ code_snippet("test/unit/snippets.cpp", "interop_jcfuture") }}
 
 It now returns [jcfuture] by default, which is a future type that supports stop tokens.
 We can ask the task to stop through the future at any time with:
 
-{{ code_snippet("tests/unit/snippets.cpp", "interop_jcfuture_stop") }}
+{{ code_snippet("test/unit/snippets.cpp", "interop_jcfuture_stop") }}
 
 We now have three types of future objects. Because all of these types has the requirements of the [is_future] concept,
 the library functions allow them to interoperate:
 
-{{ code_snippet("tests/unit/snippets.cpp", "types_wait_for_all") }}
+{{ code_snippet("test/unit/snippets.cpp", "types_wait_for_all") }}
 
 !!! info "Futures and Promises in Computer Science" 
 
