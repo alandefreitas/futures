@@ -6,6 +6,11 @@ on:
       - master
       - develop
 
+# Cancel other runs in progress for the same branch
+concurrency:
+  group: ${{format('docs-{0}:{1}', github.repository, github.ref)}}
+  cancel-in-progress: true
+
 jobs:
   generateDOC:
     name: Publish Docs
