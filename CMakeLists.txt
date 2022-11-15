@@ -48,6 +48,9 @@ add_subdirectory(src)
 #######################################################
 if (FUTURES_BUILD_INSTALLER)
     set(INSTALL_TARGET_LIST headers futures)
+    if (Asio_FETCHED)
+        list(APPEND INSTALL_TARGET_LIST asio)
+    endif()
 
     # Install targets
     install(TARGETS ${INSTALL_TARGET_LIST}
@@ -65,7 +68,7 @@ if (FUTURES_BUILD_INSTALLER)
     # If Asio had to be fetched, install it
     # This installation has no targets, since those will be defined by
     # FindAsio.cmake
-    if (DEFINED asio_SOURCE_DIR)
+    if (Asio_FETCHED)
         install(DIRECTORY ${asio_SOURCE_DIR}/asio/include
                 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/..
                 FILES_MATCHING PATTERN "*.[hic]pp"

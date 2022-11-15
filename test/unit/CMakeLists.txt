@@ -102,6 +102,7 @@ foreach (UNIT_TEST ${UNIT_TESTS})
 endforeach()
 
 if (MSVC)
+    # Snippets
     target_compile_options(ut_snippets PRIVATE /bigobj)
 endif()
 
@@ -114,6 +115,7 @@ if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
     target_compile_features(ut_futures_all PUBLIC cxx_std_17)
     target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
     if (MSVC)
+        # Snippets
         target_compile_options(ut_futures_all PRIVATE /bigobj)
     endif()
 endif ()
