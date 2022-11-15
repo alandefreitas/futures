@@ -1,5 +1,5 @@
 > Because futures don't have to be awful
 
-[![Futures](img/futures_banner.png)](https://alandefreitas.github.io/futures/)
+![Futures](img/futures_banner.png)
 
 {{ code_snippet("README.md", "abstract") }}
