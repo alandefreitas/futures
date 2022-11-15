@@ -4,22 +4,27 @@ on:
   push:
     branches:
       - master
+      - develop
 
 jobs:
   generateDOC:
     name: Publish Docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Update Contributors
-        uses: akhilmhdh/contributors-readme-action@v2.3
+        uses: akhilmhdh/contributors-readme-action@v2.3.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           image_size: 100
           columns_per_row: 6
           readme_path: docs/acknowledgments.md
+          committer_username: alandefreitas
+          committer_email: alandefreitas@gmail.com
         continue-on-error: true
+
       - name: Install doxygen
         run: |
           git clone -b 'Release_1_9_5' --depth 1 https://github.com/doxygen/doxygen.git
@@ -27,34 +32,40 @@ jobs:
           cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
           cd build
           sudo make install
+
+      - name: Install doxybook
+        run: |
+          git clone https://github.com/alandefreitas/doxybook --branch master --depth 1
+          cd doxybook
+          cmake -E make_directory build
+          cd build
+          cmake .. -D CMAKE_BUILD_TYPE=Release -DVCPKG_TARGET_TRIPLET=x64-linux -D CMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake --build . --config Release
+          sudo cmake --install .
+
       - name: Generate doxygen XML
         run: doxygen
         working-directory: ./docs
-      - name: Download doxybook2
-        uses: carlosperate/download-file-action@v1.0.3
-        id: download-doxybook2
-        with:
-          file-url: 'https://github.com/matusnovak/doxybook2/releases/download/v1.4.0/doxybook2-linux-amd64-v1.4.0.zip'
-          file-name: 'doxybook2.zip'
-          location: './docs'
-      - name: Unzip doxybook2
-        run: |
-          unzip doxybook2.zip
-          rm -f doxybook2.zip
-          sudo chmod +x ./bin/doxybook2
-          mkdir reference
-          ls
+
+      - name: Generate Doxybook Reference
+        run: doxybook --input ./xml --output reference --config .doxybook/config.json --templates .doxybook/templates
         working-directory: ./docs
-      - name: Generate Doxybook
-        run: ./bin/doxybook2 --input ./xml --output reference --config .doxybook/config.json --templates .doxybook/templates
-        working-directory: ./docs
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
+
       - name: Install Mkdocs Material
         run: pip install mkdocs-material
+
       - name: Install Macros for Mkdocs
         run: pip install mkdocs-macros-plugin
+
       - name: Deploy mkdocs to gh-pages branch
-        run: mkdocs gh-deploy --force
+        # Documentation is also generated in develop but only master goes to GitHub pages
+        # The docs in develop can be inspected with:
+        # $ git clone https://github.com/alandefreitas/futures --branch gh-pages-develop --depth 1
+        # $ cd futures
+        # $ python3 -m http.server
+        run: mkdocs gh-deploy --force --remote-branch ${{ (startsWith(github.ref, 'refs/heads/master') && 'gh-pages') || 'gh-pages-develop' }}
