@@ -40,7 +40,13 @@
  * above. FUTURES_TEMPLATE will be converted to template<..., enable_if<...>>
  * or template <...> requires ..., depending on whether concepts are available
  */
-#if defined(__cpp_concepts) || defined(BOOST_HAS_CONCEPTS) || defined(FUTURES_DOXYGEN)
+#if defined(FUTURES_DOXYGEN)
+#    define FUTURES_EXPAND(...)
+#    define FUTURES_TEMPLATE(...) \
+        template <__VA_ARGS__>    \
+        FUTURES_EXPAND
+#    define FUTURES_TEMPLATE_IMPL(...) FUTURES_TEMPLATE(__VA_ARGS__)
+#elif defined(__cpp_concepts) || defined(BOOST_HAS_CONCEPTS)
 #    define FUTURES_EXPAND(...) __VA_ARGS__
 #    define FUTURES_TEMPLATE(...) \
         template <__VA_ARGS__>    \
