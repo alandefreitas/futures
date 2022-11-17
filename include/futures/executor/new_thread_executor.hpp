@@ -30,8 +30,11 @@ namespace futures {
      */
 
     /// An executor that runs anything in a new thread, like std::async does
-    struct new_thread_executor {
+    class new_thread_executor {
         asio::execution_context *context_{ nullptr };
+
+    public:
+        new_thread_executor(asio::execution_context &ctx) : context_(&ctx) {}
 
         constexpr bool
         operator==(new_thread_executor const &other) const noexcept {
@@ -55,7 +58,7 @@ namespace futures {
 
         template <class F>
         void
-        execute(F f) const {
+        execute(F &&f) const {
             auto fut = std::async(std::launch::async, f);
             fut.wait_for(std::chrono::seconds(0));
         }

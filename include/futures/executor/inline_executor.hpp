@@ -34,8 +34,14 @@ namespace futures {
      * - The execute function
      * @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
      */
-    struct inline_executor {
+    class inline_executor {
         asio::execution_context *context_{ nullptr };
+
+    public:
+        constexpr inline_executor() : context_(nullptr) {}
+
+        constexpr inline_executor(asio::execution_context &ctx)
+            : context_(&ctx) {}
 
         constexpr bool
         operator==(inline_executor const &other) const noexcept {
@@ -59,7 +65,7 @@ namespace futures {
 
         template <class F>
         void
-        execute(F f) const {
+        execute(F &&f) const {
             f();
         }
     };

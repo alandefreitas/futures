@@ -23,7 +23,7 @@ namespace futures {
     new_thread_executor
     make_new_thread_executor() {
         asio::execution_context &ctx = inline_execution_context();
-        return new_thread_executor{ &ctx };
+        return new_thread_executor{ ctx };
     }
 } // namespace futures
 
