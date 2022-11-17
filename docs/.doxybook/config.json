@@ -9,5 +9,12 @@
   "indexRelatedPagesName": "index",
   "indexExamplesName": "index",
   "mainPageInRoot": true,
-  "mainPageName": "index"
+  "mainPageName": "index",
+  "replaceUnderscoresInAnchors": false,
+  "foldersToGenerate": [
+    "classes",
+    "files",
+    "modules",
+    "namespaces"
+  ]
 }
