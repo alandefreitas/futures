@@ -103,7 +103,7 @@ namespace futures {
      *
      * \brief Basic future types and functions
      *
-     * The futures library provides components to create and launch futures,
+     * The futures library provides components to create and launch futures:
      * objects representing data that might not be available yet.
      *  @{
      */
@@ -152,10 +152,13 @@ namespace futures {
      */
     template <class R, class Options = future_options<>>
     class basic_future
+#ifndef FUTURES_DOXYGEN
         : private std::conditional_t<
               !Options::is_shared,
               boost::noncopyable,
-              boost::empty_init_t> {
+              boost::empty_init_t>
+#endif
+    {
     private:
         /**
          * Private types
@@ -238,6 +241,7 @@ namespace futures {
          * @}
          */
 
+#ifndef FUTURES_DOXYGEN
         /**
          * @name Friend types
          *
@@ -277,6 +281,7 @@ namespace futures {
         /**
          * @}
          */
+#endif
 
         /**
          * @name Private constructors
@@ -523,10 +528,10 @@ namespace futures {
          *
          * It effectively calls wait() in order to wait for the result.
          *
-         * The behavior is undefined if `valid()` is false before the call to
+         * The behavior is undefined if @ref valid() is false before the call to
          * this function.
          *
-         * If the future is unique, any shared state is released and `valid()`
+         * If the future is unique, any shared state is released and valid()
          * is `false` after a call to this member function.
          *
          * - Unique futures:

@@ -27,6 +27,8 @@ namespace futures {
      */
     /** @addtogroup future-options Future options
      *  @{
+     *
+     *  @brief Traits to define @ref basic_future types
      */
 
     template <class... Args>

@@ -24,7 +24,7 @@
  *
  *  @see https://github.com/josuttis/jthread
  *
- *  Although the `std::future` class is obviously different from std::jthread,
+ *  Although the `std::future` class is obviously different from `std::jthread`,
  * this `stop_token` is not different from std::stop_token. The main goal here
  * is just to provide a stop source in C++17. In the future, we might replace
  * this with an alias to a C++20 std::stop_token.
@@ -57,7 +57,7 @@ namespace futures {
     /// Empty struct to initialize a @ref stop_source without a shared
     /// stop state
     struct nostopstate_t {
-        explicit nostopstate_t() = default;
+        explicit nostopstate_t() noexcept = default;
     };
 
     /// Empty struct to initialize a @ref stop_source without a shared
@@ -86,7 +86,7 @@ namespace futures {
          *  Constructs a stop_token whose associated stop-state is the same as
          *  that of other.
          *
-         *  @post *this and other share the same associated stop-state and
+         *  @post `*this` and other share the same associated stop-state and
          *  compare equal
          *
          *  @param other another stop_token object to construct this stop_token
@@ -99,7 +99,7 @@ namespace futures {
          *  Constructs a stop_token whose associated stop-state is the same as
          *  that of other; other is left empty
          *
-         *  @post *this has other's previously associated stop-state, and
+         *  @post `*this` has other's previously associated stop-state, and
          *  other.stop_possible() is false
          *
          *  @param other another stop_token object to construct this stop_token
@@ -110,12 +110,13 @@ namespace futures {
 
         /// Destroys the stop_token object.
         /**
-         *  @post If *this has associated stop-state, releases ownership of it.
+         *  @post If `*this` has associated stop-state, releases ownership of
+         * it.
          */
         ~stop_token() = default;
 
         /// Copy-assigns the associated stop-state of other to that of
-        /// *this
+        /// `*this`
         /**
          *  Equivalent to stop_token(other).swap(*this)
          *
@@ -132,12 +133,12 @@ namespace futures {
         }
 
         /// Move-assigns the associated stop-state of other to that of
-        /// *this
+        /// `*this`
         /**
          *  After the assignment, *this contains the previous associated
          *  stop-state of other, and other has no associated stop-state
          *
-         *  Equivalent to stop_token(std::move(other)).swap(*this)
+         *  Equivalent to `stop_token(std::move(other)).swap(*this)`
          *
          *  @param other Another stop_token object to share the stop-state with
          *  to or acquire the stop-state from
@@ -267,12 +268,12 @@ namespace futures {
     /// Object used to issue a stop request
     /**
      *  The stop_source class provides the means to issue a stop request, such
-     *  as for std::jthread cancellation. A stop request made for one
-     *  stop_source object is visible to all stop_sources and std::stop_tokens
-     *  of the same associated stop-state; any std::stop_callback(s) registered
-     *  for associated std::stop_token(s) will be invoked, and any
-     *  std::condition_variable_any objects waiting on associated
-     *  std::stop_token(s) will be awoken.
+     *  as for `std::jthread` cancellation. A stop request made for one
+     *  stop_source object is visible to all stop_sources and `std::stop_token`s
+     *  of the same associated stop-state; any `std::stop_callback(s)`
+     * registered for associated `std::stop_token(s)` will be invoked, and any
+     *  `std::condition_variable_any` objects waiting on associated
+     *  `std::stop_token(s)` will be awoken.
      */
     class stop_source {
     public:
@@ -297,7 +298,7 @@ namespace futures {
          *  Constructs a stop_source whose associated stop-state is the same as
          *  that of other.
          *
-         *  @post *this and other share the same associated stop-state and
+         *  @post `*this` and other share the same associated stop-state and
          *  compare equal
          *
          *  @param other another stop_source object to construct this
@@ -310,7 +311,7 @@ namespace futures {
          *  Constructs a stop_source whose associated stop-state is the same as
          *  that of other; other is left empty
          *
-         *  @post *this has other's previously associated stop-state, and
+         *  @post `*this` has other's previously associated stop-state, and
          *  other.stop_possible() is false
          *
          *  @param other another stop_source object to construct this
@@ -321,13 +322,16 @@ namespace futures {
 
         /// Destroys the stop_source object.
         /**
-         *  If *this has associated stop-state, releases ownership of it.
+         *  If `*this` has associated stop-state, releases ownership of it.
          */
         ~stop_source() = default;
 
         /// Copy-assigns the stop-state of other
         /**
-         *  Equivalent to stop_source(other).swap(*this)
+         *  Equivalent to `stop_source(other).swap(*this)`
+         *
+         *  @post After the assignment, `*this` contains the previous stop-state
+         *  of other, and other has no stop-state.
          *
          *  @param other another stop_source object acquire the stop-state from
          */
@@ -340,10 +344,10 @@ namespace futures {
 
         /// Move-assigns the stop-state of other
         /**
-         *  Equivalent to stop_source(std::move(other)).swap(*this)
+         *  Equivalent to `stop_source(std::move(other)).swap(*this)`
          *
-         *  @post After the assignment, *this contains the previous stop-state
-         *  of other, and other has no stop-state
+         *  @post After the assignment, `*this` contains the previous stop-state
+         *  of other.
          *
          *  @param other another stop_source object to share the stop-state with
          */

@@ -57,7 +57,7 @@ namespace futures {
 
     /// Wait for future types and retrieve their values as a tuple
     /**
-     * @note This function only participates in overload resolutions if all
+     * @note This function only participates in overload resolution if all
      * types are futures.
      *
      * @param fs Future objects

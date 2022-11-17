@@ -102,8 +102,8 @@ namespace futures {
 
     /// Wait for a sequence of futures to be ready
     FUTURES_TEMPLATE(class Tuple)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::
-         value) void wait_for_all(Tuple &&t) {
+    (requires(detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::
+                  value)) void wait_for_all(Tuple &&t) {
         tuple_for_each(std::forward<Tuple>(t), [](auto &f) { f.wait(); });
     }
 
