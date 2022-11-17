@@ -53,7 +53,7 @@ jobs:
         working-directory: ./docs
 
       - name: Generate Doxybook Reference
-        run: doxybook --input ./xml --output reference --config .doxybook/config.json --templates .doxybook/templates
+        run: doxybook --input ./xml --output reference --config .doxybook/config.json
         working-directory: ./docs
 
       - name: Setup Python
