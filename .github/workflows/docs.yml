@@ -18,6 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Environment
+        id: environment
+        run: |
+          echo "default_branch=${{ (startsWith(github.ref, 'refs/heads/master') && 'master') || 'develop' }}" >> $GITHUB_OUTPUT
+          echo "default_doc_branch=${{ (startsWith(github.ref, 'refs/heads/master') && 'gh-pages') || 'gh-pages-develop' }}" >> $GITHUB_OUTPUT
+
       - name: Update Contributors
         uses: akhilmhdh/contributors-readme-action@v2.3.6
         env:
@@ -36,9 +42,22 @@ jobs:
           packages: doxygen
           version: 1.0
 
+      - name: Inspect doxybook version
+        id: doxybook-hash
+        run: echo "hash=$(git ls-remote https://github.com/alandefreitas/doxybook ${{ steps.environment.outputs.default_branch }} | awk '{ print $1 }')" >> $GITHUB_OUTPUT
+
+      - name: Doxybook cache
+        if: ${{ !matrix.config.use_bundled }}
+        id: cache-doxybook
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/doxybook
+          key: ${{ steps.doxybook-hash.outputs.hash }}
+
       - name: Install doxybook
+        if: steps.cache-doxybook.outputs.cache-hit != 'true'
         run: |
-          git clone https://github.com/alandefreitas/doxybook --branch ${{ (startsWith(github.ref, 'refs/heads/master') && 'master') || 'develop' }} --depth 1 
+          git clone https://github.com/alandefreitas/doxybook --branch ${{ steps.environment.outputs.default_branch }} --depth 1 
           cd doxybook
           cmake -E make_directory build
           cd build
@@ -71,4 +90,4 @@ jobs:
         # $ git clone https://github.com/alandefreitas/futures --branch gh-pages-develop --depth 1
         # $ cd futures
         # $ python3 -m http.server
-        run: mkdocs gh-deploy --force --remote-branch ${{ (startsWith(github.ref, 'refs/heads/master') && 'gh-pages') || 'gh-pages-develop' }}
+        run: mkdocs gh-deploy --force --remote-branch ${{ steps.environment.outputs.default_doc_branch }}

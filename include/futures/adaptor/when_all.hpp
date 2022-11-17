@@ -513,9 +513,10 @@ namespace futures {
     FUTURES_TEMPLATE(class InputIt)
     (requires detail::is_valid_when_all_argument_v<
         typename std::iterator_traits<InputIt>::value_type>)
-        when_all_future<detail::small_vector<
-            detail::lambda_to_future_t<typename std::iterator_traits<
-                InputIt>::value_type>>> when_all(InputIt first, InputIt last) {
+        when_all_future<FUTURES_DETAIL(
+            detail::small_vector<detail::lambda_to_future_t<
+                typename std::iterator_traits<InputIt>::
+                    value_type>>)> when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
             typename std::iterator_traits<InputIt>::value_type>;
@@ -578,8 +579,9 @@ namespace futures {
      */
     FUTURES_TEMPLATE(class... Futures)
     (requires detail::are_valid_when_all_arguments_v<Futures...>)
-        when_all_future<std::tuple<detail::lambda_to_future_t<
-            Futures>...>> when_all(Futures &&...futures) {
+        when_all_future<std::tuple<FUTURES_DETAIL(
+            detail::lambda_to_future_t<
+                Futures>...)>> when_all(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
