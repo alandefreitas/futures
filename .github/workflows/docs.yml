@@ -31,12 +31,10 @@ jobs:
         continue-on-error: true
 
       - name: Install doxygen
-        run: |
-          git clone -b 'Release_1_9_5' --depth 1 https://github.com/doxygen/doxygen.git
-          cd doxygen
-          cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
-          cd build
-          sudo make install
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: doxygen
+          version: 1.0
 
       - name: Install doxybook
         run: |
