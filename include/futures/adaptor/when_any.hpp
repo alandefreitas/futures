@@ -45,10 +45,19 @@ namespace futures {
      */
     template <class Sequence>
     struct when_any_result {
+        /// Type used to represent the number of futures in the result
         using size_type = std::size_t;
+
+        /// A sequence type with all the futures
+        /**
+         * This sequence might be a range or a tuple.
+         */
         using sequence_type = Sequence;
 
+        /// Index of the element whose result was ready first
         size_type index{ static_cast<size_type>(-1) };
+
+        /// The sequence of future objects waited for
         sequence_type tasks;
     };
 
@@ -195,6 +204,8 @@ namespace futures {
          *  all invalid
          *
          *  @see https://en.cppreference.com/w/cpp/experimental/when_any
+         *  @see Go to my website
+         *  @see [some md](https://en.cppreference.com)
          *
          *  @return Return `true` if underlying futures are valid
          */
