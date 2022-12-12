@@ -28,7 +28,11 @@ set(
         --directory "${PROJECT_BINARY_DIR}" #  Use .da files in DIR instead of kernel
         --output-file "${PROJECT_BINARY_DIR}/coverage.info" #  Write data to FILENAME instead of stdout
 
-        --include "${PROJECT_SOURCE_DIR}/include/futures/*" # Include files
+        # Files in the report
+        --include "${PROJECT_SOURCE_DIR}/include/*"
+        --exclude "${PROJECT_SOURCE_DIR}/include/futures/detail/bundled/*"
+        --include "${PROJECT_SOURCE_DIR}/test/unit/*"
+        --exclude "${PROJECT_BINARY_DIR}/test/unit/catch2/*"
 )
 
 set(
@@ -40,7 +44,7 @@ set(
         # --quiet # Do not print progress messages
         "${PROJECT_BINARY_DIR}/coverage.info" # info file
 
-        --prefix "${PROJECT_SOURCE_DIR}/include" # Remove PREFIX from all directory names
+        --prefix "${PROJECT_SOURCE_DIR}" # Remove PREFIX from all directory names
         --output-directory "${PROJECT_BINARY_DIR}/coverage_html" # Write HTML output to OUTDIR
 )
 
