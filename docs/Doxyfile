@@ -6,7 +6,8 @@ GENERATE_LATEX = NO
 GENERATE_XML = YES
 XML_OUTPUT = xml
 
-INPUT = ./../include/futures
+INPUT = ./../include/futures/future.hpp \
+        ./../include/futures
 STRIP_FROM_PATH = ./../include
 INCLUDE_PATH = ./../include
 RECURSIVE = YES
