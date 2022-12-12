@@ -30,16 +30,31 @@ namespace futures {
      */
 
     /// Customization point to determine if a type is a future type
-    template <typename>
+    /**
+     * This trait identifies whether the type represents a future value.
+     *
+     * Unless the trait is specialized, a type is considered stoppable
+     * if it has the `get()` member function.
+     *
+     * @see
+     *      @li @ref has_stop_token
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_stoppable = __see_below__;
+#else
+    template <class T, class = void>
     struct is_future : std::false_type {};
 
-    /// @copydoc is_future
     template <class T>
-    struct is_future<std::future<T>> : std::true_type {};
-
-    /// @copydoc is_future
-    template <class T>
-    struct is_future<std::shared_future<T>> : std::true_type {};
+    struct is_future<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<T>().get())
+            // clang-format on
+            >> : std::true_type {};
+#endif
 
     /// @copydoc is_future
     template <class T>

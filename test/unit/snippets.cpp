@@ -1,5 +1,7 @@
 #include <futures/futures.hpp>
+//
 #include <catch2/catch.hpp>
+#include <future>
 
 #if defined(FUTURES_USE_STANDALONE_ASIO)
 #    include <asio/io_context.hpp>

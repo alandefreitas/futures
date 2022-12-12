@@ -27,7 +27,6 @@
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
 #include <atomic>
-#include <future>
 #include <condition_variable>
 
 namespace futures::detail {
