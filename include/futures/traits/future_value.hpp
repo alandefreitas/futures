@@ -15,6 +15,7 @@
  *  This file defines the `future_value` trait.
  */
 
+#include <futures/config.hpp>
 #include <futures/traits/is_future.hpp>
 #include <futures/detail/traits/future_value.hpp>
 
@@ -33,28 +34,26 @@ namespace futures {
      *
      *  @note Not to be confused with continuation unwrapping
      */
-    template <class T, class Enable = void>
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using future_value = __see_below__;
+#else
+    template <class T, class = void>
     struct future_value {};
 
-    /// Determine type a future object holds (specialization for types
-    /// that implement `get()`)
-    /**
-     *  Template for types that implement ::get()
-     *
-     *  @note Not to be confused with continuation unwrapping
-     */
-    template <typename Future>
+    // specialization for types that implement get()
+    template <class Future>
     struct future_value<
         Future,
-        std::enable_if_t<detail::has_get<std::decay_t<Future>>::value>> {
+        std::enable_if_t<
+            is_future_v<Future>
+            && detail::has_get<std::decay_t<Future>>::value>> {
         using type = std::decay_t<
             decltype(std::declval<std::decay_t<Future>>().get())>;
     };
+#endif
 
-    /// Determine type a future object holds
-    /**
-     *  @note Not to be confused with continuation unwrapping
-     */
+    /// @copydoc future_value
     template <class T>
     using future_value_t = typename future_value<T>::type;
 

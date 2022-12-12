@@ -29,9 +29,37 @@ namespace futures {
      *  @{
      */
 
-    /// Customization point to define future as stoppable
-    template <typename>
+    /// @brief Customization point to define future as stoppable
+    /**
+     * This trait identifies whether the future is stoppable, which means
+     * the future has a `request_stop` function to stop the underlying task.
+     *
+     * @note Not all stoppable futures have stops token, which can be shared
+     * with other futures to create a common thread of futures that can be
+     * stopped with the same token.
+     *
+     * Unless the trait is specialized, a type is considered stoppable
+     * if it has the `request_stop()` member function.
+     *
+     * @see
+     *      @li @ref has_stop_token
+     */
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using is_stoppable = __see_below__;
+#else
+    template <class T, class = void>
     struct is_stoppable : std::false_type {};
+
+    template <class T>
+    struct is_stoppable<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<T>().request_stop())
+            // clang-format on
+            >> : std::true_type {};
+#endif
 
     /// @copydoc is_stoppable
     template <class T>

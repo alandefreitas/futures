@@ -29,7 +29,11 @@ namespace futures {
      *  @{
      */
 
-    /// Customization point to determine if a type is a shared future type
+    /// Customization point to determine if a type has a ready notifier
+    /**
+     * The ready notifier is an external handle used to identify when the
+     * future is ready.
+     */
     template <typename>
     struct has_ready_notifier : std::false_type {};
 

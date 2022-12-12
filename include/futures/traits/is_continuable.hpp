@@ -29,13 +29,11 @@ namespace futures {
      *  @{
      */
 
-    /// Customization point to define future as supporting lazy
-    /// continuations
+    /// Customization point to define future as supporting continuations
     template <typename>
     struct is_continuable : std::false_type {};
 
-    /// Customization point to define future as supporting lazy
-    /// continuations
+    /// @copydoc is_continuable
     template <class T>
     constexpr bool is_continuable_v = is_continuable<T>::value;
 

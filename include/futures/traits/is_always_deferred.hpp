@@ -29,10 +29,15 @@ namespace futures {
      *  @{
      */
 
-    /// Customization point to define future as always deferred
+    /// Customization point to define a future as always deferred
     /**
-     * Deferred futures allow some optimization that make it worth indicating
-     * at compile time whether they can be applied.
+     * Deferred futures allow optimizations that make it worth indicating
+     * at compile time whether they can be applied. They can carry their
+     * tasks, avoid dynamic memory allocations, and attach continuations
+     * without any extra synchronization cost.
+     *
+     * Unless this trait is specialized, a type is considered to not be
+     * always deferred.
      */
     template <typename>
     struct is_always_deferred : std::false_type {};

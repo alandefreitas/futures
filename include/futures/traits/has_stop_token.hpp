@@ -37,11 +37,30 @@ namespace futures {
      * futures to create a common thread of futures that can be stopped
      * with the same token.
      *
+     * Unless the trait is specialized, a type is considered to have a
+     * stop token if it has the `get_stop_source()` and `get_stop_token()`
+     * member functions.
+     *
      * @see
      *      @li @ref is_stoppable
      */
-    template <typename>
+#ifdef FUTURES_DOXYGEN
+    template <class T>
+    using has_stop_token = __see_below__;
+#else
+    template <class T, class = void>
     struct has_stop_token : std::false_type {};
+
+    template <class T>
+    struct has_stop_token<
+        T,
+        std::void_t<
+            // clang-format off
+            decltype(std::declval<T>().get_stop_source()),
+            decltype(std::declval<T>().get_stop_token())
+            // clang-format on
+            >> : is_stoppable<T> {};
+#endif
 
     /// @copydoc has_stop_token
     template <class T>
