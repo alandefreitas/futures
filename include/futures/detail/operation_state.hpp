@@ -11,6 +11,7 @@
 #include <futures/config.hpp>
 #include <futures/error.hpp>
 #include <futures/future_options.hpp>
+#include <futures/future_status.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
@@ -382,7 +383,7 @@ namespace futures::detail {
          *  @return The state of the operation value
          */
         template <typename Rep, typename Period>
-        std::future_status
+        future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             auto timeout_time = std::chrono::system_clock::now()
                                 + timeout_duration;
@@ -391,7 +392,7 @@ namespace futures::detail {
 
         /// Wait for the operation state to become ready
         template <typename Rep, typename Period>
-        std::future_status
+        future_status
         wait_for(
             std::chrono::duration<Rep, Period> const &timeout_duration) const {
             auto timeout_time = std::chrono::system_clock::now()
@@ -413,7 +414,7 @@ namespace futures::detail {
          *  @return The state of the operation value
          */
         template <typename Clock, typename Duration>
-        std::future_status
+        future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) {
             return wait_impl<false>(*this, &timeout_time);
@@ -421,7 +422,7 @@ namespace futures::detail {
 
         /// Wait for the operation state to become ready
         template <typename Clock, typename Duration>
-        std::future_status
+        future_status
         wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
             const {
             return wait_impl<true>(*this, &timeout_time);
@@ -545,7 +546,7 @@ namespace futures::detail {
             bool is_const,
             typename Clock = std::chrono::system_clock,
             typename Duration = std::chrono::system_clock::duration>
-        static std::future_status
+        static future_status
         wait_impl(
             maybe_const_this<is_const> &op,
             std::chrono::time_point<Clock, Duration> const *timeout_time
@@ -553,7 +554,7 @@ namespace futures::detail {
             auto lk = op.make_wait_lock();
             if constexpr (is_const) {
                 if (op.is_deferred()) {
-                    return std::future_status::deferred;
+                    return future_status::deferred;
                 }
             }
             status prev = op.status_;
@@ -576,18 +577,18 @@ namespace futures::detail {
                                 return op.is_ready();
                             }))
                         {
-                            return std::future_status::ready;
+                            return future_status::ready;
                         } else {
                             op.status_ = status::launched;
-                            return std::future_status::timeout;
+                            return future_status::timeout;
                         }
                     } else {
                         op.waiter_.wait(lk, [&op]() { return op.is_ready(); });
-                        return std::future_status::ready;
+                        return future_status::ready;
                     }
                 }
             }
-            return std::future_status::ready;
+            return future_status::ready;
         }
 
         /**

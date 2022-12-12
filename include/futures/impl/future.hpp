@@ -105,21 +105,21 @@ namespace futures {
 
     template <class R, class Options>
     template <class Rep, class Period>
-    std::future_status
+    future_status
     basic_future<R, Options>::wait_for(
         std::chrono::duration<Rep, Period> const &timeout_duration) const {
         if (!valid()) {
             detail::throw_exception(future_uninitialized{});
         }
         if constexpr (Options::is_always_deferred) {
-            return std::future_status::deferred;
+            return future_status::deferred;
         }
         return state_.wait_for(timeout_duration);
     }
 
     template <class R, class Options>
     template <class Rep, class Period>
-    std::future_status
+    future_status
     basic_future<R, Options>::wait_for(
         std::chrono::duration<Rep, Period> const &timeout_duration) {
         if (!valid()) {
@@ -130,7 +130,7 @@ namespace futures {
 
     template <class R, class Options>
     template <class Clock, class Duration>
-    std::future_status
+    future_status
     basic_future<R, Options>::wait_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time) const {
         if (!valid()) {
@@ -141,7 +141,7 @@ namespace futures {
 
     template <class R, class Options>
     template <class Clock, class Duration>
-    std::future_status
+    future_status
     basic_future<R, Options>::wait_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time) {
         if (!valid()) {

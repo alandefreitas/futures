@@ -17,12 +17,11 @@ TEST_CASE("Disjunction") {
         auto f = when_any();
         REQUIRE(f.valid());
         REQUIRE_NOTHROW(f.wait());
-        REQUIRE(
-            f.wait_for(std::chrono::seconds(0)) == std::future_status::ready);
+        REQUIRE(f.wait_for(std::chrono::seconds(0)) == future_status::ready);
         REQUIRE(
             f.wait_until(
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
-            == std::future_status::ready);
+            == future_status::ready);
         REQUIRE(is_ready(f));
         when_any_result r = f.get();
         REQUIRE(r.index == size_t(-1));
@@ -34,12 +33,11 @@ TEST_CASE("Disjunction") {
         auto f = when_any(f1);
         REQUIRE(f.valid());
         f.wait();
-        REQUIRE(
-            f.wait_for(std::chrono::seconds(0)) == std::future_status::ready);
+        REQUIRE(f.wait_for(std::chrono::seconds(0)) == future_status::ready);
         REQUIRE(
             f.wait_until(
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
-            == std::future_status::ready);
+            == future_status::ready);
         REQUIRE(is_ready(f));
         when_any_result r = f.get();
         REQUIRE(r.index == size_t(0));
@@ -60,11 +58,11 @@ TEST_CASE("Disjunction") {
 
         SECTION("Wait") {
             f.wait();
-            std::future_status s1 = f.wait_for(std::chrono::seconds(0));
-            REQUIRE(s1 == std::future_status::ready);
-            std::future_status s2 = f.wait_until(
+            future_status s1 = f.wait_for(std::chrono::seconds(0));
+            REQUIRE(s1 == future_status::ready);
+            future_status s2 = f.wait_until(
                 std::chrono::system_clock::now() + std::chrono::seconds(0));
-            REQUIRE(s2 == std::future_status::ready);
+            REQUIRE(s2 == future_status::ready);
             REQUIRE(is_ready(f));
             when_any_result any_r = f.get();
             size_t i = any_r.index;
@@ -252,12 +250,11 @@ TEST_CASE("Disjunction") {
         SECTION("Wait") {
             REQUIRE_NOTHROW(f.wait());
             REQUIRE_NOTHROW(
-                f.wait_for(std::chrono::seconds(0))
-                == std::future_status::ready);
+                f.wait_for(std::chrono::seconds(0)) == future_status::ready);
             REQUIRE_NOTHROW(
                 f.wait_until(
                     std::chrono::system_clock::now() + std::chrono::seconds(0))
-                == std::future_status::ready);
+                == future_status::ready);
             REQUIRE(is_ready(f));
             auto rs = f.get();
             if (rs.index == 0) {

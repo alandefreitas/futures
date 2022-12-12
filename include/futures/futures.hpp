@@ -34,6 +34,7 @@
 #include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/future_options_args.hpp>
+#include <futures/future_status.hpp>
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/packaged_task.hpp>

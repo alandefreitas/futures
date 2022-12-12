@@ -640,13 +640,13 @@ namespace futures {
          * @return future status
          */
         template <class Rep, class Period>
-        std::future_status
+        future_status
         wait_for(
             std::chrono::duration<Rep, Period> const &timeout_duration) const;
 
         /// Waits for the result, returns if it is unavailable for duration
         template <class Rep, class Period>
-        std::future_status
+        future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration);
 
         /// Waits for the result, returns if it is unavailable for duration
@@ -672,13 +672,13 @@ namespace futures {
          * @return future status
          */
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) const;
 
         /// Waits for the result, returns if it is unavailable for duration
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time);
 

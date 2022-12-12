@@ -116,11 +116,11 @@ namespace futures {
      *  @param first Iterator to the first element in the range
      *  @param last Iterator to one past the last element in the range
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(typename Iterator, class Rep, class Period)
-    (requires is_future_v<iter_value_t<Iterator>>) std::future_status
+    FUTURES_TEMPLATE(class Iterator, class Rep, class Period)
+    (requires is_future_v<iter_value_t<Iterator>>) future_status
         wait_for_all_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Iterator first,
@@ -134,12 +134,12 @@ namespace futures {
      *  @param timeout_duration Time to wait for
      *  @param r Range of futures
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class Range, class Rep, class Period)
     (requires is_range_v<Range> &&is_future_v<range_value_t<Range>>)
-        std::future_status wait_for_all_for(
+        future_status wait_for_all_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Range &&r) {
         using std::begin;
@@ -154,12 +154,12 @@ namespace futures {
      *  @param timeout_duration Time to wait for
      *  @param fs Future objects
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(typename... Fs, class Rep, class Period)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>)
-        std::future_status wait_for_all_for(
+    FUTURES_TEMPLATE(class... Fs, class Rep, class Period)
+    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) future_status
+        wait_for_all_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Fs &&...fs);
 
@@ -172,12 +172,12 @@ namespace futures {
      *  @param timeout_duration Time to wait for
      *  @param t Tuple of futures
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class Tuple, class Rep, class Period)
     (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::future_status wait_for_all_for(
+        future_status wait_for_all_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Tuple &&t);
 
@@ -190,11 +190,11 @@ namespace futures {
      *  @param first Iterator to the first element in the range
      *  @param last Iterator to one past the last element in the range
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(typename Iterator, class Clock, class Duration)
-    (requires is_future_v<iter_value_t<Iterator>>) std::future_status
+    FUTURES_TEMPLATE(class Iterator, class Clock, class Duration)
+    (requires is_future_v<iter_value_t<Iterator>>) future_status
         wait_for_all_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Iterator first,
@@ -208,12 +208,12 @@ namespace futures {
      *  @param timeout_time Limit time point
      *  @param r Range of futures
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class Range, class Clock, class Duration)
     (requires is_range_v<Range> &&is_future_v<range_value_t<Range>>)
-        std::future_status wait_for_all_until(
+        future_status wait_for_all_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Range &&r) {
         using std::begin;
@@ -228,12 +228,12 @@ namespace futures {
      *  @param timeout_time Limit time point
      *  @param fs Future objects
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(typename... Fs, class Clock, class Duration)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>)
-        std::future_status wait_for_all_until(
+    FUTURES_TEMPLATE(class... Fs, class Clock, class Duration)
+    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) future_status
+        wait_for_all_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Fs &&...fs);
 
@@ -245,12 +245,12 @@ namespace futures {
      *  @param timeout_time Limit time point
      *  @param t Tuple of futures
      *
-     *  @return `std::future_status::ready` if all futures got ready.
-     *  `std::future_status::timeout` otherwise.
+     *  @return `future_status::ready` if all futures got ready.
+     *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class Tuple, class Clock, class Duration)
     (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::future_status wait_for_all_until(
+        future_status wait_for_all_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Tuple &&t);
 

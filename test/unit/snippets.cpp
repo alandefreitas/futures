@@ -425,8 +425,8 @@ TEST_CASE("Snippets") {
                 //[wait_for Waiting for a specific duration
                 cfuture<int> f = async([]() { return long_task(); });
                 std::chrono::seconds timeout(1);
-                std::future_status s = f.wait_for(timeout);
-                if (s == std::future_status::ready) {
+                future_status s = f.wait_for(timeout);
+                if (s == future_status::ready) {
                     assert(f.get() == 0);
                 } else {
                     // do some other work
@@ -454,8 +454,8 @@ TEST_CASE("Snippets") {
                     return res;
                 });
                 std::chrono::seconds timeout(1);
-                std::future_status s = f.wait_for(timeout);
-                if (s == std::future_status::ready) {
+                future_status s = f.wait_for(timeout);
+                if (s == future_status::ready) {
                     handle_success_vals(s);
                 } else {
                     f.request_stop();
@@ -468,8 +468,8 @@ TEST_CASE("Snippets") {
                 //[wait_until Waiting until a time-point
                 cfuture<int> f = async([]() { return long_task(); });
                 std::chrono::system_clock::time_point limit = noon();
-                std::future_status s = f.wait_until(limit);
-                if (s == std::future_status::ready) {
+                future_status s = f.wait_until(limit);
+                if (s == future_status::ready) {
                     assert(f.get() == 0);
                 } else {
                     // do some other work
@@ -560,8 +560,8 @@ TEST_CASE("Snippets") {
                 auto f3 = async([]() { return long_task(); });
                 //[wait_for_all_for Waiting for multiple tasks
                 std::chrono::seconds d(1);
-                std::future_status s = wait_for_all_for(d, f1, f2, f3);
-                if (s == std::future_status::ready) {
+                future_status s = wait_for_all_for(d, f1, f2, f3);
+                if (s == future_status::ready) {
                     assert(f1.get() == 0);
                     assert(f2.get() == 0);
                     assert(f3.get() == 0);

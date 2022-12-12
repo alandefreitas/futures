@@ -201,7 +201,7 @@ namespace futures {
          *  @return Status of the future after the specified duration
          */
         template <class Rep, class Period>
-        [[nodiscard]] std::future_status
+        [[nodiscard]] future_status
         wait_for(
             std::chrono::duration<Rep, Period> const &timeout_duration) const {
             constexpr bool is_compile_time_empty = []() {
@@ -212,11 +212,11 @@ namespace futures {
                 }
             }();
             if constexpr (sequence_is_tuple && is_compile_time_empty) {
-                return std::future_status::ready;
+                return future_status::ready;
             } else {
                 if constexpr (sequence_is_range) {
                     if (v.empty()) {
-                        return std::future_status::ready;
+                        return future_status::ready;
                     }
                 }
 
@@ -231,12 +231,11 @@ namespace futures {
                 duration_type total_elapsed = duration_cast<duration_type>(
                     nanoseconds(0));
                 auto equal_fn = [&](auto &&f) {
-                    std::future_status s = f.wait_for(
+                    future_status s = f.wait_for(
                         timeout_duration - total_elapsed);
                     total_elapsed = duration_cast<duration_type>(
                         system_clock::now() - start_time);
-                    const bool when_all_impossible
-                        = s != std::future_status::ready;
+                    const bool when_all_impossible = s != future_status::ready;
                     return when_all_impossible
                            || total_elapsed > timeout_duration;
                 };
@@ -244,7 +243,7 @@ namespace futures {
                     // Use a hack to "break" for_each loops with find_if
                     auto it = std::find_if(v.begin(), v.end(), equal_fn);
                     return (it == v.end()) ?
-                               std::future_status::ready :
+                               future_status::ready :
                                it->wait_for(seconds(0));
                 } else {
                     constexpr auto n = std::tuple_size<sequence_type>::value;
@@ -255,7 +254,7 @@ namespace futures {
                         }
                     });
                     if (idx == n) {
-                        return std::future_status::ready;
+                        return future_status::ready;
                     } else {
                         return detail::mp_with_index<n>(idx, [&](auto I) {
                             return std::get<I>(v).wait_for(seconds(0));
@@ -274,7 +273,7 @@ namespace futures {
          *  @return Status of the future after the specified duration
          */
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(std::chrono::time_point<Clock, Duration> const &timeout_time)
             const {
             auto now_time = std::chrono::system_clock::now();

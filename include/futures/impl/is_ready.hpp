@@ -8,7 +8,56 @@
 #ifndef FUTURES_IMPL_IS_READY_HPP
 #define FUTURES_IMPL_IS_READY_HPP
 
+#include <futures/config.hpp>
+#include <futures/future_status.hpp>
+#include <type_traits>
+
+#ifndef FUTURES_DOXYGEN
+namespace boost {
+    namespace fibers {
+        enum class future_status;
+    } // namespace fibers
+} // namespace boost
+
+namespace boost {
+    enum class future_status;
+} // namespace boost
+#endif
+
 namespace futures {
+#ifndef FUTURES_DOXYGEN
+    namespace detail {
+        // our own future status enum
+        inline bool
+        is_ready_status(future_status s) {
+            return s == future_status::ready;
+        }
+
+        // boost::fibers::future_status::ready == 1
+        inline
+        bool
+        is_ready_status(boost::fibers::future_status s) {
+            return static_cast<int>(s) == 1;
+        }
+
+        // boost::future_status::ready == 0
+        inline
+        bool
+        is_ready_status(boost::future_status s) {
+            return static_cast<int>(s) == 0;
+        }
+
+        // std::future_status::ready == 0
+        template <class E, std::enable_if_t<std::is_enum_v<E>, int> = 0>
+        bool
+        is_ready_status(E s) {
+            // This will work for any std::future_status or equivalent that
+            // defines future_status::ready as `0`
+            return static_cast<int>(s) == 0;
+        }
+    } // namespace detail
+#endif
+
     FUTURES_TEMPLATE_IMPL(class Future)
     (requires is_future_v<std::decay_t<Future>>) bool is_ready(Future &&f) {
         assert(
@@ -17,8 +66,7 @@ namespace futures {
         if constexpr (detail::has_is_ready_v<Future>) {
             return f.is_ready();
         } else {
-            return f.wait_for(std::chrono::seconds(0))
-                   == std::future_status::ready;
+            return detail::is_ready_status(f.wait_for(std::chrono::seconds(0)));
         }
     }
 } // namespace futures

@@ -546,7 +546,7 @@ namespace futures::detail {
          *  state type.
          */
         template <class Rep, class Period>
-        std::future_status
+        future_status
         wait_for(
             std::chrono::duration<Rep, Period> const& timeout_duration) const {
             return wait_for_impl<true>(*this, timeout_duration);
@@ -554,7 +554,7 @@ namespace futures::detail {
 
         /// @copydoc wait_for()
         template <class Rep, class Period>
-        std::future_status
+        future_status
         wait_for(std::chrono::duration<Rep, Period> const& timeout_duration) {
             return wait_for_impl<false>(*this, timeout_duration);
         }
@@ -569,7 +569,7 @@ namespace futures::detail {
          *  underlying state type.
          */
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(std::chrono::time_point<Clock, Duration> const& timeout_time)
             const {
             return wait_until_impl<true>(*this, timeout_time);
@@ -577,7 +577,7 @@ namespace futures::detail {
 
         /// @copydoc wait_until()
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const& timeout_time) {
             return wait_until_impl<false>(*this, timeout_time);
@@ -740,7 +740,7 @@ namespace futures::detail {
         share_inline(std::add_const<variant_state>&) {}
 
         template <bool is_const, class Rep, class Period>
-        static std::future_status
+        static future_status
         wait_for_impl(
             add_const_if<is_const, variant_state>& s,
             std::chrono::duration<Rep, Period> const& timeout_duration) {
@@ -751,11 +751,11 @@ namespace futures::detail {
                 detail::throw_exception(std::invalid_argument{
                     "Cannot wait for a const deferred state with a timeout" });
             }
-            return std::future_status::ready;
+            return future_status::ready;
         }
 
         template <bool is_const, class Clock, class Duration>
-        static std::future_status
+        static future_status
         wait_until_impl(
             add_const_if<is_const, variant_state>& s,
             std::chrono::time_point<Clock, Duration> const& timeout_time) {
@@ -769,7 +769,7 @@ namespace futures::detail {
                 detail::throw_exception(std::invalid_argument{
                     "Cannot wait for a const deferred state with timeout" });
             }
-            return std::future_status::ready;
+            return future_status::ready;
         }
 
         /*

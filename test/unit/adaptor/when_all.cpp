@@ -18,11 +18,11 @@ TEST_CASE("when_all") {
         REQUIRE(f.valid());
         REQUIRE_NOTHROW(f.wait());
         REQUIRE(
-            f.wait_for(std::chrono::seconds(0)) == std::future_status::ready);
+            f.wait_for(std::chrono::seconds(0)) == future_status::ready);
         REQUIRE(
             f.wait_until(
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
-            == std::future_status::ready);
+            == future_status::ready);
         REQUIRE(is_ready(f));
         REQUIRE(f.get() == std::make_tuple());
     }
@@ -41,11 +41,11 @@ TEST_CASE("when_all") {
             REQUIRE_NOTHROW(f.wait());
             REQUIRE_NOTHROW(
                 f.wait_for(std::chrono::seconds(0))
-                == std::future_status::ready);
+                == future_status::ready);
             REQUIRE_NOTHROW(
                 f.wait_until(
                     std::chrono::system_clock::now() + std::chrono::seconds(0))
-                == std::future_status::ready);
+                == future_status::ready);
             REQUIRE(is_ready(f));
             auto [r1, r2, r3] = f.get();
             REQUIRE(r1.get() == 2);
@@ -141,11 +141,11 @@ TEST_CASE("when_all") {
             REQUIRE_NOTHROW(f.wait());
             REQUIRE_NOTHROW(
                 f.wait_for(std::chrono::seconds(0))
-                == std::future_status::ready);
+                == future_status::ready);
             REQUIRE_NOTHROW(
                 f.wait_until(
                     std::chrono::system_clock::now() + std::chrono::seconds(0))
-                == std::future_status::ready);
+                == future_status::ready);
             REQUIRE(is_ready(f));
             auto rs = f.get();
             REQUIRE(rs[0].get() == 2);

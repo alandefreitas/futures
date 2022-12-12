@@ -261,16 +261,16 @@ namespace futures {
          *  @see https://en.m.wikipedia.org/wiki/Exponential_backoff
          */
         template <class Rep, class Period>
-        std::future_status
+        future_status
         wait_for(std::chrono::duration<Rep, Period> const &timeout_duration) {
             if (size() == 0) {
-                return std::future_status::ready;
+                return future_status::ready;
             }
             wait_for_any_for(timeout_duration, v);
             if (get_ready_index() == std::size_t(-1)) {
-                return std::future_status::timeout;
+                return future_status::timeout;
             } else {
-                return std::future_status::ready;
+                return future_status::ready;
             }
         }
 
@@ -283,17 +283,17 @@ namespace futures {
          *  @return Status of the future after the specified duration
          */
         template <class Clock, class Duration>
-        std::future_status
+        future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) {
             if (size() == 0) {
-                return std::future_status::ready;
+                return future_status::ready;
             }
             wait_for_any_until(timeout_time, v);
             if (get_ready_index() == std::size_t(-1)) {
-                return std::future_status::timeout;
+                return future_status::timeout;
             } else {
-                return std::future_status::ready;
+                return future_status::ready;
             }
         }
 
@@ -401,15 +401,15 @@ namespace futures {
         is_ready(size_t index) const {
             if constexpr (!sequence_is_range) {
                 return apply(
-                           [](auto &&el) -> std::future_status {
+                           [](auto &&el) -> future_status {
                                return el.wait_for(std::chrono::seconds(0));
                            },
                            v,
                            index)
-                       == std::future_status::ready;
+                       == future_status::ready;
             } else {
                 return v[index].wait_for(std::chrono::seconds(0))
-                       == std::future_status::ready;
+                       == future_status::ready;
             }
         }
 
