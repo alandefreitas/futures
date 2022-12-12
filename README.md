@@ -48,6 +48,9 @@
 <a href="https://github.com/alandefreitas/futures/discussions" target="_blank">
   <img alt="Discussions" src="https://img.shields.io/website-up-down-green-red/http/alandefreitas.github.io/futures.svg?label=Discussions">
 </a>
+<a href="https://codecov.io/gh/alandefreitas/futures"  target="_blank">
+  <img alt="Coverage" src="https://codecov.io/gh/alandefreitas/futures/branch/master/graph/badge.svg?token=ZW86JQCVYI"/> 
+</a>
 </div>
 
 <br/>
