@@ -8,6 +8,8 @@
 #ifndef FUTURES_IMPL_FUTURE_HPP
 #define FUTURES_IMPL_FUTURE_HPP
 
+#include <futures/error.hpp>
+
 namespace futures {
     template <class R, class Options>
     basic_future<R, Options>::~basic_future() {
@@ -157,8 +159,7 @@ namespace futures {
     [[nodiscard]] bool
     basic_future<R, Options>::is_ready() const {
         if (!valid()) {
-            detail::throw_exception(
-                std::future_error{ std::future_errc::no_state });
+            detail::throw_exception(no_state{});
         }
         return state_.is_ready();
     }
@@ -172,8 +173,7 @@ namespace futures {
     basic_future<R, Options>::then(Executor const &ex, Fn &&fn) {
         // Throw if invalid
         if (!valid()) {
-            detail::throw_exception(
-                std::future_error{ std::future_errc::no_state });
+            detail::throw_exception(no_state{});
         }
 
         if constexpr (Options::is_continuable) {

@@ -16,6 +16,7 @@
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/thread/relocker.hpp>
+#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
 #include <futures/detail/utility/regular_void.hpp>
@@ -25,7 +26,6 @@
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/list.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <atomic>
 #include <future>
 #include <condition_variable>
