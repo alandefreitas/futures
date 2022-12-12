@@ -1128,5 +1128,8 @@ namespace futures {
 } // namespace futures
 
 #include <futures/impl/future.hpp>
+#ifdef FUTURES_HEADER_ONLY
+#    include <futures/impl/future.ipp>
+#endif
 
 #endif // FUTURES_FUTURE_HPP
