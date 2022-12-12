@@ -56,8 +56,8 @@ namespace futures {
      * like an obvious choice, % is the one that leads to less conflict with
      * other functions.
      *
-     * @param An executor
-     * @param A callable
+     * @param ex An executor
+     * @param after A callable with the continuation
      * @return A proxy pair to schedule execution
      */
     FUTURES_TEMPLATE(class Executor, class Function, class... Args)

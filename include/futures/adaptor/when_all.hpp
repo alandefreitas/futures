@@ -552,10 +552,10 @@ namespace futures {
      *  @return Future object of type @ref when_all_future
      */
     FUTURES_TEMPLATE(class Range)
-    (requires is_range_v<std::decay_t<Range>>)
-        when_all_future<detail::small_vector<detail::lambda_to_future_t<
+    (requires is_range_v<std::decay_t<Range>>) when_all_future<FUTURES_DETAIL(
+        detail::small_vector<detail::lambda_to_future_t<
             typename std::iterator_traits<typename std::decay_t<
-                Range>::iterator>::value_type>>> when_all(Range &&r) {
+                Range>::iterator>::value_type>>)> when_all(Range &&r) {
         using std::begin;
         using std::end;
         return when_all(
@@ -594,25 +594,25 @@ namespace futures {
      *  itself, then it gets merged instead of becoming a child future of
      *  another when_all_future.
      *
-     *  When the user asks for f1 && f2 && f3, we want that to return a single
-     *  future that waits for <f1,f2,f3> rather than a future that wait for two
-     *  futures <f1,<f2,f3>>.
+     *  When the user asks for `f1 && f2 && f3`, we want that to return a single
+     *  future that waits for `<f1,f2,f3>` rather than a future that wait for
+     * two futures `<f1,<f2,f3>>`.
      *
      *  This emulates the usual behavior we expect from other types with
      *  operator&&.
      *
-     *  Note that this default behaviour is different from when_all(...), which
-     *  doesn't merge the when_all_future objects by default, because they are
-     *  variadic functions and this intention can be controlled explicitly:
-     *  - when_all(f1,f2,f3) -> <f1,f2,f3>
-     *  - when_all(f1,when_all(f2,f3)) -> <f1,<f2,f3>>
+     *  Note that this default behaviour is different from `when_all(...)`,
+     * which doesn't merge the when_all_future objects by default, because they
+     * are variadic functions and this intention can be controlled explicitly:
+     *  - `when_all(f1,f2,f3)` -> `<f1,f2,f3>`
+     *  - `when_all(f1,when_all(f2,f3))` -> `<f1,<f2,f3>>`
      *
      *  @param lhs,rhs Future objects or callables
      *  @return @ref when_all_future object that concatenates all futures
      */
     FUTURES_TEMPLATE(class T1, class T2)
     (requires detail::is_valid_when_all_argument_v<T1>
-         &&detail::is_valid_when_all_argument_v<T2>) auto
+         &&detail::is_valid_when_all_argument_v<T2>) FUTURES_DETAIL(auto)
     operator&&(T1 &&lhs, T2 &&rhs) {
         constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;
         constexpr bool second_is_when_all = detail::is_when_all_future_v<T2>;

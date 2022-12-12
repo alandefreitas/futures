@@ -595,9 +595,10 @@ namespace futures {
     FUTURES_TEMPLATE(class InputIt)
     (requires detail::is_valid_when_any_argument_v<
         typename std::iterator_traits<InputIt>::value_type>)
-        when_any_future<detail::small_vector<
-            detail::lambda_to_future_t<typename std::iterator_traits<
-                InputIt>::value_type>>> when_any(InputIt first, InputIt last) {
+        when_any_future<FUTURES_DETAIL(
+            detail::small_vector<detail::lambda_to_future_t<
+                typename std::iterator_traits<InputIt>::
+                    value_type>>)> when_any(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
             typename std::iterator_traits<InputIt>::value_type>;
@@ -639,10 +640,10 @@ namespace futures {
      *  @return @ref when_any_future with all future objects
      */
     FUTURES_TEMPLATE(class Range)
-    (requires is_range_v<std::decay_t<Range>>)
-        when_any_future<detail::small_vector<detail::lambda_to_future_t<
+    (requires is_range_v<std::decay_t<Range>>) when_any_future<FUTURES_DETAIL(
+        detail::small_vector<detail::lambda_to_future_t<
             typename std::iterator_traits<typename std::decay_t<
-                Range>::iterator>::value_type>>> when_any(Range &&r) {
+                Range>::iterator>::value_type>>)> when_any(Range &&r) {
         return when_any(
             std::begin(std::forward<Range>(r)),
             std::end(std::forward<Range>(r)));
@@ -659,8 +660,9 @@ namespace futures {
      */
     FUTURES_TEMPLATE(class... Futures)
     (requires detail::are_valid_when_any_arguments_v<Futures...>)
-        when_any_future<std::tuple<detail::lambda_to_future_t<
-            Futures>...>> when_any(Futures &&...futures) {
+        when_any_future<std::tuple<FUTURES_DETAIL(
+            detail::lambda_to_future_t<
+                Futures>...)>> when_any(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
@@ -691,18 +693,18 @@ namespace futures {
      *  itself, then it gets merged instead of becoming a child future of
      *  another when_any_future.
      *
-     *  When the user asks for f1 || f2 || f3, we want that to return a single
-     *  future that waits for <f1 || f2 || f3> rather than a future that wait
-     *  for two futures <f1 || <f2 || f3>>.
+     *  When the user asks for `f1 || f2 || f3`, we want that to return a single
+     *  future that waits for `<f1 || f2 || f3>` rather than a future that wait
+     *  for two futures `<f1 || <f2 || f3>>`.
      *
      *  This emulates the usual behavior we expect from other types with
-     *  operator||.
+     *  `operator||`.
      *
-     *  Note that this default behaviour is different from when_any(...), which
+     *  Note that this default behaviour is different from `when_any(...), which
      *  doesn't merge the when_any_future objects by default, because they are
      *  variadic functions and this intention can be controlled explicitly:
-     *  - when_any(f1,f2,f3) -> <f1 || f2 || f3>
-     *  - when_any(f1,when_any(f2,f3)) -> <f1 || <f2 || f3>>
+     *  - `when_any(f1,f2,f3)` -> `<f1 || f2 || f3>`
+     *  - `when_any(f1,when_any(f2,f3))` -> `<f1 || <f2 || f3>>`
      *
      *  @param lhs,rhs Future objects
      *  @return A @ref when_any_future holding all future types

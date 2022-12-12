@@ -94,7 +94,7 @@ namespace futures {
      *  @tparam Fs A list of future types
      *  @param fs A list of future objects
      */
-    FUTURES_TEMPLATE(typename... Fs)
+    FUTURES_TEMPLATE(class... Fs)
     (requires std::conjunction_v<
         is_future<std::decay_t<Fs>>...>) void wait_for_all(Fs &&...fs) {
         (fs.wait(), ...);
