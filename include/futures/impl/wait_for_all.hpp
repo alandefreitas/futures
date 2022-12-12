@@ -19,7 +19,16 @@ namespace futures {
         for (Iterator it = first; it != last; ++it) {
             it->wait_until(until_tp);
         }
-        if (std::all_of(first, last, [](auto &f) { return is_ready(f); })) {
+        bool all_ready = true;
+        auto it = first;
+        while (it != last)
+        {
+            if (!is_ready(*it)) {
+                all_ready = false;
+                break;
+            }
+        }
+        if (all_ready) {
             return future_status::ready;
         } else {
             return future_status::timeout;
@@ -69,7 +78,16 @@ namespace futures {
         for (Iterator it = first; it != last; ++it) {
             it->wait_until(timeout_time);
         }
-        if (std::all_of(first, last, [](auto &f) { return is_ready(f); })) {
+        bool all_ready = true;
+        auto it = first;
+        while (it != last)
+        {
+            if (!is_ready(*it)) {
+                all_ready = false;
+                break;
+            }
+        }
+        if (all_ready) {
             return future_status::ready;
         } else {
             return future_status::timeout;

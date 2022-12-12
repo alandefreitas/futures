@@ -94,7 +94,6 @@
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/noncopyable.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
-#include <functional>
 #include <utility>
 #include <shared_mutex>
 

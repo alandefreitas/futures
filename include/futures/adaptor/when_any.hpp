@@ -27,8 +27,6 @@
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/adaptor/detail/lambda_to_future.hpp>
 #include <futures/detail/deps/boost/mp11/function.hpp>
-#include <array>
-#include <optional>
 #include <condition_variable>
 #include <shared_mutex>
 

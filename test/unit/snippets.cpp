@@ -1,6 +1,7 @@
 #include <futures/futures.hpp>
 //
 #include <catch2/catch.hpp>
+#include <array>
 #include <future>
 
 #if defined(FUTURES_USE_STANDALONE_ASIO)

@@ -10,11 +10,20 @@
 
 #include <futures/config.hpp>
 
-// Include boost/container/small_vector.hpp from external or bundled boost 
+#ifdef BOOST_GCC
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
+// Include boost/container/small_vector.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/container/small_vector.hpp>
+#    include <boost/container/small_vector.hpp>
 #else
-#include <futures/detail/bundled/boost/container/small_vector.hpp>
+#    include <futures/detail/bundled/boost/container/small_vector.hpp>
+#endif
+
+#ifdef BOOST_GCC
+#    pragma GCC diagnostic pop
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_CONTAINER_SMALL_VECTOR_HPP

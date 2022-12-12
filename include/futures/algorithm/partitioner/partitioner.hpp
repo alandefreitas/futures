@@ -8,7 +8,6 @@
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/hardware_concurrency.hpp>
 #include <futures/detail/traits/future_value.hpp>
-#include <algorithm>
 #include <thread>
 
 /**
@@ -135,7 +134,11 @@ namespace futures {
             max(nthreads, static_cast<std::size_t>(1));
         std::size_t const expected_nthreads = 8 * safe_nthreads;
         std::size_t const grain_per_thread = n / expected_nthreads;
-        return std::clamp(grain_per_thread, size_t(1), size_t(2048));
+        return grain_per_thread < size_t(1) ?
+                   size_t(1) :
+               size_t(2048) < grain_per_thread ?
+                   size_t(2048) :
+                   grain_per_thread;
     }
 
     /// Create an instance of the default partitioner with a reasonable
