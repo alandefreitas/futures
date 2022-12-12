@@ -75,7 +75,7 @@ if (MASTER_PROJECT)
         endif ()
 
         # Time tracing
-        if (FUTURES_TIME_TRACE AND CLANG AND CLANG_VERSION_MAJOR GREATER_EQUAL 9)
+        if (FUTURES_TIME_TRACE AND CLANG AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9)
             add_compile_options(-ftime-trace)
         endif ()
     endif ()
