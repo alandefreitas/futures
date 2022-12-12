@@ -4,7 +4,6 @@
 #include <futures/adaptor/make_ready_future.hpp>
 #include <catch2/catch.hpp>
 #include <array>
-#include <string>
 
 TEST_CASE("Mt-Queue") {
     using namespace futures;

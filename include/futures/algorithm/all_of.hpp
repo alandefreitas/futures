@@ -20,12 +20,14 @@
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
-#include <futures/algorithm/traits/is_forward_iterator.hpp>
+#include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
+#include <futures/algorithm/traits/is_derived_from.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/algorithm/detail/execution.hpp>
+#include <futures/algorithm/traits/detail/iter_concept.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <variant>
@@ -50,66 +52,68 @@ namespace futures {
             explicit all_of_graph(Executor const &ex)
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
+            // Each recursive call to this function can either calculate
+            // `any_of` inline and push tasks to calculate the `any_of` for
+            // some subranges. Returning `true` means we found a matching
+            // element. Returning `false` means we didn't find a matching
+            // element, but we might still find it in one of the parallel tasks
+            // we have pushed.
             template <class P, class I, class S, class Fun>
             bool
             launch_all_of_tasks(P p, I first, S last, Fun f) {
-                auto middle = p(first, last);
-                bool const too_small = middle == last;
                 constexpr bool cannot_parallelize
                     = std::is_same_v<Executor, inline_executor>
-                      || is_forward_iterator_v<I>;
-                if (too_small || cannot_parallelize) {
+                      || !is_bidirectional_iterator_v<I>;
+                if (cannot_parallelize) {
                     return std::all_of(first, last, f);
-                } else {
-                    // Create task that launches tasks for rhs: [middle, last]
-                    basic_future<
-                        bool,
-                        future_options<executor_opt<Executor>, continuable_opt>>
-                        rhs_task = futures::async(
-                            boost::empty_value<Executor>::get(),
-                            [this, p, middle, last, f] {
-                        return launch_all_of_tasks(p, middle, last, f);
-                            });
-
-                    // Launch tasks for lhs: [first, middle]
-                    bool lhs_result = launch_all_of_tasks(p, first, middle, f);
-
-                    // When lhs is ready, we check on rhs
-                    if (!is_ready(rhs_task)) {
-                        // Put rhs_task on the list of tasks we need to await
-                        // later. This ensures we only deal with the task queue
-                        // if we really need to.
-                        if (lhs_result) {
-                            tasks_.push(std::move(rhs_task));
-                        } else {
-                            rhs_task.detach();
-                        }
-                        return lhs_result;
-                    } else {
-                        return lhs_result && rhs_task.get();
-                    }
                 }
+
+                auto middle = p(first, last);
+                bool const no_split = middle == last || middle == first;
+                if (no_split) {
+                    return std::all_of(first, last, f);
+                }
+
+                // Launch tasks for rhs: [middle, last]
+                basic_future<
+                    bool,
+                    future_options<executor_opt<Executor>, continuable_opt>>
+                    rhs_task = futures::async(
+                        boost::empty_value<Executor>::get(),
+                        [this, p, middle, last, f] {
+                    return launch_all_of_tasks(p, middle, last, f);
+                        });
+
+                // Launch tasks for lhs: [first, middle]
+                bool lhs_result = launch_all_of_tasks(p, first, middle, f);
+
+                // When rhs is ready, probably because it had a small task
+                // to solve, we check if any of the two subranges found a
+                // matching element.
+                if (is_ready(rhs_task)) {
+                    return lhs_result && rhs_task.get();
+                }
+
+                // In the general case, we push rhs to the list of tasks we
+                // have to await later
+                tasks_.push(std::move(rhs_task));
+                return lhs_result;
             }
 
             bool
             wait_for_all_of_tasks() {
+                bool r = true;
                 while (!tasks_.empty()) {
-                    if (!tasks_.pop().get()) {
-                        return false;
-                    }
+                    r = tasks_.pop().get() && r;
                 }
-                return true;
+                return r;
             }
 
             template <class P, class I, class S, class Fun>
             bool
             all_of(P p, I first, S last, Fun f) {
                 bool partial = launch_all_of_tasks(p, first, last, f);
-                if (partial) {
-                    return wait_for_all_of_tasks();
-                } else {
-                    return false;
-                }
+                return wait_for_all_of_tasks() && partial;
             }
 
         private:

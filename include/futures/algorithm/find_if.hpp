@@ -20,7 +20,7 @@
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
 #include <futures/algorithm/partitioner/partitioner.hpp>
-#include <futures/algorithm/traits/is_forward_iterator.hpp>
+#include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
@@ -56,7 +56,7 @@ namespace futures {
                 : boost::empty_value<Executor>(boost::empty_init, ex) {}
 
             template <class P, class S, class Fun>
-            std::pair<I, std::bitset<64>>
+            std::pair<I, std::size_t>
             launch_find_if_tasks(
                 P p,
                 I first,
@@ -64,109 +64,116 @@ namespace futures {
                 S overall_last,
                 Fun f,
                 std::size_t level = 0,
-                std::bitset<64> branch = 0) {
+                std::size_t branch = 0) {
                 auto middle = p(first, last);
-                iter_difference_t<I> const too_small = middle == last;
-                constexpr iter_difference_t<I> cannot_parallelize
-                    = std::is_same_v<Executor, inline_executor>
-                      || is_forward_iterator_v<I>;
-                if (too_small || cannot_parallelize) {
+                bool const no_split = middle == last || middle == first;
+                constexpr bool cannot_parallelize =
+                    // std::is_same_v<Executor, inline_executor>
+                    //||
+                    !is_bidirectional_iterator_v<I>;
+                if (no_split || cannot_parallelize) {
+                    // run sequential algorithm
                     I subrange_it = std::find_if(first, last, f);
                     if (subrange_it == last) {
+                        // overall last indicates nothing has been found
                         return std::make_pair(overall_last, branch);
                     } else {
+                        // subrange it indicates something has been found
                         return std::make_pair(subrange_it, branch);
                     }
-                } else {
-                    // Create task that launches tasks for rhs: [middle, last]
-                    std::bitset<64> rhs_branch = branch;
-                    rhs_branch[64 - level - 1] = true;
-                    basic_future<
-                        std::pair<I, std::bitset<64>>,
-                        future_options<executor_opt<Executor>, continuable_opt>>
-                        rhs_task = futures::async(
-                            boost::empty_value<Executor>::get(),
-                            [this,
-                             p,
-                             middle,
-                             last,
-                             overall_last,
-                             f,
-                             level,
-                             rhs_branch] {
-                        return launch_find_if_tasks(
-                            p,
-                            middle,
-                            last,
-                            overall_last,
-                            f,
-                            level + 1,
-                            rhs_branch);
-                            });
-
-                    // Launch tasks for lhs: [first, middle]
-                    branch[64 - level - 1] = false;
-                    std::pair<I, std::bitset<64>>
-                        lhs_result = launch_find_if_tasks(
-                            p,
-                            first,
-                            middle,
-                            overall_last,
-                            f,
-                            level + 1,
-                            branch);
-
-                    // When lhs is ready, we check on rhs
-                    if (!is_ready(rhs_task)) {
-                        // Put rhs_task on the list of tasks we need to await
-                        // later. This ensures we only deal with the task queue
-                        // if we really need to.
-                        if (lhs_result.first != overall_last) {
-                            rhs_task.detach();
-                        } else {
-                            tasks_.push(std::move(rhs_task));
-                        }
-                        return lhs_result;
-                    } else {
-                        if (lhs_result.first != overall_last) {
-                            return lhs_result;
-                        } else {
-                            return rhs_task.get();
-                        }
-                    }
                 }
+
+                // Create task that launches tasks for rhs: [middle, last]
+                std::size_t rhs_branch = branch;
+                rhs_branch |= std::size_t(1) << (8 * sizeof(std::size_t) - 1 - level);
+                basic_future<
+                    std::pair<I, std::size_t>,
+                    future_options<executor_opt<Executor>, continuable_opt>>
+                    rhs_task = futures::async(
+                        boost::empty_value<Executor>::get(),
+                        [this,
+                         p,
+                         middle,
+                         last,
+                         overall_last,
+                         f,
+                         level,
+                         rhs_branch] {
+                    return launch_find_if_tasks(
+                        p,
+                        middle,
+                        last,
+                        overall_last,
+                        f,
+                        level + 1,
+                        rhs_branch);
+                        });
+
+                // Launch tasks for lhs: [first, middle]
+                branch &= ~(std::size_t(1) << (8 * sizeof(std::size_t) - 1 - level));
+                std::pair<I, std::size_t> lhs_result = launch_find_if_tasks(
+                    p,
+                    first,
+                    middle,
+                    overall_last,
+                    f,
+                    level + 1,
+                    branch);
+
+                // When rhs is ready, probably because it had a small task
+                // to solve, we check if any of the two sub-ranges found a
+                // matching element.
+                if (is_ready(rhs_task)) {
+                    // We didn't find it in lhs
+                    if (lhs_result.first == overall_last) {
+                        return rhs_task.get();
+                    }
+                    return lhs_result;
+                }
+
+                // In the general case, we push rhs to the list of tasks we
+                // have to await later
+                tasks_.push(std::move(rhs_task));
+                return lhs_result;
             }
 
             template <class S>
-            I
+            std::pair<I, std::size_t>
             wait_for_find_if_tasks(S last) {
-                std::pair<I, std::bitset<64>> min_it{ last, -1 };
+                std::pair<I, std::size_t> min_it{ last, -1 };
                 while (!tasks_.empty()) {
-                    std::pair<I, std::bitset<64>> r = tasks_.pop().get();
-                    if (r.first != last
-                        && r.second.count() < min_it.second.count())
-                    {
+                    std::pair<I, std::size_t> r = tasks_.pop().get();
+                    if (r.first != last && r.second < min_it.second) {
                         min_it = r;
                     }
                 }
-                return min_it.first;
+                return min_it;
             }
 
             template <class P, class S, class Fun>
             I
             find_if(P p, I first, S last, Fun f) {
-                std::pair<I, std::bitset<64>>
+                // inline sub-ranges result
+                std::pair<I, std::size_t>
                     partial = launch_find_if_tasks(p, first, last, last, f);
-                if (partial.first != last) {
-                    return partial.first;
-                } else {
-                    return wait_for_find_if_tasks(last);
+                // async sub-ranges result
+                std::pair<I, std::size_t> partial_2 = wait_for_find_if_tasks(
+                    last);
+                if (partial.first == last) {
+                    return partial_2.first;
                 }
+                if (partial_2.first == last) {
+                    return partial.first;
+                }
+                if (partial.second < partial_2.second) {
+                    return partial.first;
+                }
+                return partial_2.first;
             }
 
         private:
             detail::atomic_queue<basic_future<
-                std::pair<I, std::bitset<64>>,
+                std::pair<I, std::size_t>,
                 future_options<executor_opt<Executor>, continuable_opt>>>
                 tasks_{};
         };
