@@ -23,6 +23,7 @@
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/deps/asio/execution.hpp>
 #include <futures/detail/deps/asio/execution_context.hpp>
+#include <thread>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -59,8 +60,11 @@ namespace futures {
         template <class F>
         void
         execute(F &&f) const {
-            auto fut = std::async(std::launch::async, f);
-            fut.wait_for(std::chrono::seconds(0));
+            // Like `std::async`, this creates a detached thread. We can
+            // ensure it won't be destructed before the task completes
+            // because the future will take care of ensuring the task is
+            // complete.
+            std::thread(f).detach();
         }
     };
 

@@ -75,7 +75,6 @@ namespace futures {
     class when_all_future {
     private:
         using sequence_type = Sequence;
-        using corresponding_future_type = std::future<sequence_type>;
         static constexpr bool sequence_is_range = is_range_v<sequence_type>;
         static constexpr bool sequence_is_tuple = detail::
             mp_similar<std::tuple<>, sequence_type>::value;

@@ -12,10 +12,11 @@
  *  @file traits/has_stop_token.hpp
  *  @brief `has_stop_token` trait
  *
- *  This file defines the `has_stop_token` trait.
+ *  This file defines the @ref has_stop_token trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
+#include <futures/traits/is_stoppable.hpp>
 #include <type_traits>
 
 namespace futures {

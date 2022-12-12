@@ -18,7 +18,6 @@
 
 #include <futures/adaptor/bind_executor_to_lambda.hpp>
 #include <futures/adaptor/detail/internal_then_functor.hpp>
-#include <future>
 #include <version>
 
 namespace futures {

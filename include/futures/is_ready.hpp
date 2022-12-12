@@ -21,7 +21,6 @@
 #include <futures/promise.hpp>
 #include <futures/traits/is_future.hpp>
 #include <futures/detail/is_ready.hpp>
-#include <future>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors

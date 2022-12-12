@@ -15,7 +15,7 @@
  *  This file defines the `has_ready_notifier` trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
 #include <type_traits>
 
 namespace futures {

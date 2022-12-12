@@ -15,7 +15,7 @@
  *  This file defines the `is_stoppable` trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
 #include <type_traits>
 
 namespace futures {

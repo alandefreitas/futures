@@ -15,7 +15,7 @@
  *  This file defines the `is_shared_future` trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -32,10 +32,6 @@ namespace futures {
     /// Customization point to determine if a type is a shared future type
     template <typename>
     struct is_shared_future : std::false_type {};
-
-    /// @copydoc is_shared_future
-    template <class T>
-    struct is_shared_future<std::shared_future<T>> : std::true_type {};
 
     /// @copydoc is_shared_future
     template <class T>

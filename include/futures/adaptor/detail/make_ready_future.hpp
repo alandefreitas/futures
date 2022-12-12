@@ -11,7 +11,6 @@
 #include <futures/future.hpp>
 #include <futures/promise.hpp>
 #include <futures/traits/is_future.hpp>
-#include <future>
 
 namespace futures::detail {
     struct make_ready_future_impl {

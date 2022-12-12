@@ -15,7 +15,7 @@
  *  This file defines the `has_executor` trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
 #include <type_traits>
 
 namespace futures {

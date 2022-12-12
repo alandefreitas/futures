@@ -15,7 +15,7 @@
  *  This file defines the `is_future` trait.
  */
 
-#include <future>
+#include <futures/config.hpp>
 #include <type_traits>
 
 namespace futures {
