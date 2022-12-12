@@ -29,6 +29,7 @@
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
 #include <futures/algorithm/traits/common_comparison_category.hpp>
 #include <futures/algorithm/traits/is_assignable_from.hpp>
+#include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
 #include <futures/algorithm/traits/is_copyable.hpp>
@@ -46,6 +47,7 @@
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/is_move_constructible.hpp>
+#include <futures/algorithm/traits/is_random_access_iterator.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/is_regular.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>

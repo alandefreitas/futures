@@ -44,15 +44,15 @@ namespace futures {
         I,
         std::void_t<
             // clang-format off
-            decltype(std::declval<I>()++),
-            decltype(++std::declval<I>()),
+            decltype(std::declval<I&>()++),
+            decltype(++std::declval<I&>()),
             iter_difference_t<I>
             // clang-format on
             >>
         : std::conjunction<
               // clang-format off
               is_movable<I>,
-              std::is_same<decltype(++std::declval<I>()), I&>
+              std::is_same<decltype(++std::declval<I&>()), I&>
               // clang-format on
               > {};
 #endif

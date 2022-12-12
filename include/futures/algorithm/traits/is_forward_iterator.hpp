@@ -15,6 +15,7 @@
  *  This file defines the `is_forward_iterator` trait.
  */
 
+#include <futures/config.hpp>
 #include <futures/algorithm/traits/is_derived_from.hpp>
 #include <futures/algorithm/traits/is_incrementable.hpp>
 #include <futures/algorithm/traits/is_input_iterator.hpp>
@@ -35,12 +36,17 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/iterator/forward_iterator
      */
+#if defined(FUTURES_DOXYGEN)
+    template <class T>
+    using is_forward_iterator = std::bool_constant<std::forward_iterator<T>>;
+#else
     template <class I>
     using is_forward_iterator = std::conjunction<
         is_input_iterator<I>,
         is_derived_from<detail::iter_concept_t<I>, std::forward_iterator_tag>,
         is_incrementable<I>,
         is_sentinel_for<I, I>>;
+#endif
 
     /// @copydoc is_forward_iterator
     template <class I>

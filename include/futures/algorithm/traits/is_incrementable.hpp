@@ -44,14 +44,14 @@ namespace futures {
         I,
         std::void_t<
             // clang-format off
-            decltype(std::declval<I>()++)
+            decltype(std::declval<I&>()++)
             // clang-format on
             >>
         : std::conjunction<
               // clang-format off
               is_regular<I>,
               is_weakly_incrementable<I>,
-              std::is_same<decltype(std::declval<I>()++), I>
+              std::is_same<decltype(std::declval<I&>()++), I>
               // clang-format on
               > {};
 #endif
