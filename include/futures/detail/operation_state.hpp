@@ -12,11 +12,11 @@
 #include <futures/error.hpp>
 #include <futures/future_options.hpp>
 #include <futures/future_status.hpp>
+#include <futures/throw.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/thread/relocker.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/utility/compressed_tuple.hpp>
 #include <futures/detail/utility/maybe_atomic.hpp>
 #include <futures/detail/utility/regular_void.hpp>
@@ -314,7 +314,7 @@ namespace futures::detail {
         get_exception_ptr() const {
             auto lk = make_wait_lock();
             if (!is_ready()) {
-                detail::throw_exception(promise_uninitialized{});
+                throw_exception(promise_uninitialized{});
             }
             return except_;
         }
@@ -528,7 +528,7 @@ namespace futures::detail {
         void
         mark_exception_unsafe(std::exception_ptr except) {
             if (is_ready()) {
-                detail::throw_exception(promise_already_satisfied{});
+                throw_exception(promise_already_satisfied{});
             }
             except_ = std::move(except);
             mark_ready_unsafe();
@@ -835,7 +835,7 @@ namespace futures::detail {
         void
         set_value(Args &&...args) {
             if (this->is_ready()) {
-                detail::throw_exception(promise_already_satisfied{});
+                throw_exception(promise_already_satisfied{});
             }
             get_storage().set_value(std::forward<Args>(args)...);
             this->mark_ready();

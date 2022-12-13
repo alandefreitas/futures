@@ -184,7 +184,7 @@ namespace futures {
         get() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception(no_state{});
+                throw_exception(no_state{});
             }
             // Wait for the complete sequence to be ready
             wait();
@@ -201,8 +201,6 @@ namespace futures {
          *  all invalid
          *
          *  @see https://en.cppreference.com/w/cpp/experimental/when_any
-         *  @see Go to my website
-         *  @see [some md](https://en.cppreference.com)
          *
          *  @return Return `true` if underlying futures are valid
          */
@@ -238,7 +236,7 @@ namespace futures {
         wait() {
             // Check if the sequence is valid
             if (!valid()) {
-                detail::throw_exception(no_state{});
+                throw_exception(no_state{});
             }
             // Reuse the logic from wait_for_any here
             wait_for_any(v);

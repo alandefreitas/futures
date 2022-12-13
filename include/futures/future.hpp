@@ -75,6 +75,7 @@
 
 #include <futures/future_options.hpp>
 #include <futures/stop_token.hpp>
+#include <futures/throw.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/traits/has_executor.hpp>
 #include <futures/traits/has_ready_notifier.hpp>
@@ -84,7 +85,6 @@
 #include <futures/detail/future.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/share_if_not_shared.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
 #include <futures/detail/variant_state.hpp>
@@ -893,7 +893,7 @@ namespace futures {
         notify_when_ready_handle
         notify_when_ready(std::condition_variable_any &cv) {
             if (!valid()) {
-                detail::throw_exception(future_uninitialized{});
+                throw_exception(future_uninitialized{});
             }
             return state_.notify_when_ready(cv);
         }
@@ -903,7 +903,7 @@ namespace futures {
         void
         unnotify_when_ready(notify_when_ready_handle h) {
             if (!valid()) {
-                detail::throw_exception(future_uninitialized{});
+                throw_exception(future_uninitialized{});
             }
             return state_.unnotify_when_ready(h);
         }
@@ -912,7 +912,7 @@ namespace futures {
         std::mutex &
         waiters_mutex() {
             if (!valid()) {
-                detail::throw_exception(future_uninitialized{});
+                throw_exception(future_uninitialized{});
             }
             return state_.waiters_mutex();
         }

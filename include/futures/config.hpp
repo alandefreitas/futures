@@ -108,7 +108,6 @@
  */
 #    define FUTURES_PREFER_STANDALONE_ASIO
 
-/// @def FUTURES_PREFER_BOOST
 /// Macro used to indicate we prefer using Boost.Asio over standalone Asio
 /**
  * This macro can be defined to indicate that we should prefer Boost.Asio over
@@ -165,8 +164,43 @@
  */
 #    define FUTURES_SEPARATE_COMPILATION
 
+/// Macro used to disable exception handling
+/**
+ * This macro can be defined to indicate that the library should not throw
+ * exceptions.
+ *
+ * When exceptions are disabled, the library might call `std::terminate`
+ * or a user-defined function.
+ *
+ * @par Default value
+ *
+ * The macro will be automatically defined if lack of exception support is
+ * detected.
+ *
+ * @see @ref FUTURES_CUSTOM_EXCEPTION_HANDLE
+ *
+ */
+#    define FUTURES_NO_EXCEPTIONS
+
+/// Customize exception handling
+/**
+ * If @ref FUTURES_NO_EXCEPTIONS is defined, this macro can be defined to
+ * indicate that the library should use a custom user function to handle
+ * exceptions.
+ *
+ * The function `futures::handle_exception` should be defined to determine how
+ * exceptions will be handled.
+ *
+ * @par Default value
+ *
+ * This macro is undefined by default.
+ *
+ */
+#    define FUTURES_CUSTOM_EXCEPTION_HANDLE
+
 #endif
 
 #include <futures/impl/config.hpp>
+
 
 #endif // FUTURES_CONFIG_HPP

@@ -108,4 +108,16 @@
             std::enable_if_t<SELF_CONDITION && SELF_CONDITION == (x), int>
 #endif
 
+
+/*
+ * Source location
+ */
+
+#if defined(__cpp_lib_source_location) || defined(FUTURES_DOXYGEN)
+#    define FUTURES_CURRENT_LOCATION std::source_location::current()
+#else
+#    define FUTURES_CURRENT_LOCATION BOOST_CURRENT_LOCATION
+#endif
+
+
 #endif // FUTURES_DETAIL_CONFIG_HPP

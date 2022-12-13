@@ -177,10 +177,10 @@ namespace futures {
         Future
         get_future() {
             if (future_retrieved_) {
-                detail::throw_exception(future_already_retrieved{});
+                throw_exception(future_already_retrieved{});
             }
             if (!valid()) {
-                detail::throw_exception(packaged_task_uninitialized{});
+                throw_exception(packaged_task_uninitialized{});
             }
             Future f{
                 std::static_pointer_cast<detail::operation_state<R, Options>>(
@@ -203,7 +203,7 @@ namespace futures {
         void
         operator()(OtherArgs... args) {
             if (!valid()) {
-                detail::throw_exception(packaged_task_uninitialized{});
+                throw_exception(packaged_task_uninitialized{});
             }
             task_->run(std::forward<OtherArgs>(args)...);
             if constexpr (Options::is_continuable) {
@@ -221,7 +221,7 @@ namespace futures {
         void
         reset() {
             if (!valid()) {
-                detail::throw_exception(packaged_task_uninitialized{});
+                throw_exception(packaged_task_uninitialized{});
             }
             task_ = task_->reset();
             future_retrieved_ = false;

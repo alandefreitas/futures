@@ -46,6 +46,7 @@
 #include <futures/executor/impl/new_thread_executor.ipp>
 #include <futures/impl/error.ipp>
 #include <futures/impl/future.ipp>
+#include <futures/impl/throw.ipp>
 
 
 #endif // FUTURES_IMPL_SRC_HPP

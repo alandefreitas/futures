@@ -19,8 +19,8 @@
  */
 
 #include <futures/future.hpp>
+#include <futures/throw.hpp>
 #include <futures/detail/operation_state.hpp>
-#include <futures/detail/throw_exception.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <memory>
@@ -116,10 +116,10 @@ namespace futures {
         basic_future<R, Options>
         get_future() {
             if (obtained_) {
-                detail::throw_exception(future_already_retrieved{});
+                throw_exception(future_already_retrieved{});
             }
             if (!shared_state_) {
-                detail::throw_exception(promise_uninitialized{});
+                throw_exception(promise_uninitialized{});
             }
             obtained_ = true;
             return basic_future<R, Options>{ shared_state_ };
@@ -133,7 +133,7 @@ namespace futures {
         void
         set_exception(std::exception_ptr p) {
             if (!shared_state_) {
-                detail::throw_exception(promise_uninitialized{});
+                throw_exception(promise_uninitialized{});
             }
             shared_state_->set_exception(p);
         }
@@ -210,7 +210,7 @@ namespace futures {
         void
         set_value(Args &&...args) {
             if (!promise_base<R, Options>::get_shared_state()) {
-                detail::throw_exception(promise_uninitialized{});
+                throw_exception(promise_uninitialized{});
             }
             promise_base<R, Options>::get_shared_state()->set_value(
                 std::forward<Args>(args)...);

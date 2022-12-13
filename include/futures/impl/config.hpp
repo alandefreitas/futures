@@ -159,4 +159,13 @@ namespace futures {
     } // namespace detail
 } // namespace futures
 
+/*
+ * Exceptions
+ */
+#ifndef FUTURES_NO_EXCEPTIONS
+#    ifdef BOOST_NO_EXCEPTIONS
+#        define FUTURES_NO_EXCEPTIONS
+#    endif
+#endif
+
 #endif // FUTURES_IMPL_CONFIG_HPP
