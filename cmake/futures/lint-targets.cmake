@@ -20,9 +20,9 @@ endif()
 #######################################################
 set(
         FORMAT_PATTERNS
-        include/*.hpp include/*.cpp
-        src/*.hpp src/*.cpp
-        test/*.cpp test/*.hpp
+        include/*.hpp include/*.cpp include/*.ipp
+        src/*.hpp src/*.cpp src/*.ipp
+        test/*.cpp test/*.hpp test/*.ipp
 )
 
 add_custom_target(

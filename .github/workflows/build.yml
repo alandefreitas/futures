@@ -47,7 +47,7 @@ jobs:
           - { name: "GCC 10 - C++20 (Bundled)",               os: ubuntu-22.04, use_bundled: true,      cc: gcc-10, cxx: g++-10, cxxstd: 20, }
           - { name: "GCC 9  - C++20 (Boost)",                 os: ubuntu-22.04,                         cc: gcc-9, cxx: g++-9, cxxstd: 20, install: libboost-all-dev, }
 
-          - { name: "Clang 14 - C++20",                       os: ubuntu-22.04,                         cc: clang-14, cxx: clang++-14, cxxstd: 20, }
+          - { name: "Clang 14 - C++20 (Time-Trace)",          os: ubuntu-22.04, time_trace: true,       cc: clang-14, cxx: clang++-14, cxxstd: 20, }
           - { name: "Clang 13 - C++17",                       os: ubuntu-22.04,                         cc: clang-13, cxx: clang++-13, cxxstd: 17, }
           - { name: "Clang 12 - C++20",                       os: ubuntu-22.04,                         cc: clang-12, cxx: clang++-12, cxxstd: 20, }
 
@@ -75,7 +75,7 @@ jobs:
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}  -D CMAKE_INSTALL_PREFIX=.local/usr/
+          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_TIME_TRACE=${{ (matrix.config.time_trace && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}  -D CMAKE_INSTALL_PREFIX=.local/usr/
       - name: Build
         working-directory: ./build
         run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config Release
@@ -96,7 +96,7 @@ jobs:
         working-directory: ./build
         run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cpack
       - name: Archive Packages
-        if: ${{ matrix.config.artifact_name }}
+        if: ${{ matrix.config.artifact_name && startsWith(github.ref, 'refs/heads/master') }}
         uses: actions/upload-artifact@v3
         with:
           name: Binary Packages ${{ matrix.config.artifact_name }}
@@ -126,3 +126,28 @@ jobs:
       - name: Codecov upload
         if: ${{ matrix.config.coverage }}
         uses: codecov/codecov-action@v3
+      - name: List build dir
+        if: ${{ matrix.config.time_trace }}
+        run: ls -R .
+        working-directory: ./build
+      # Visualize the time-trace with:
+      # - https://www.speedscope.app/ or https://github.com/jlfwong/speedscope
+      # - https://github.com/brendangregg/FlameGraph or https://www.brendangregg.com/flamegraphs.html
+      # - https://github.com/aras-p/ClangBuildAnalyzer
+      # We cannot create a link to the archive here because the archive is zipped. We would need to upload
+      # this trace somewhere else.
+      - name: Time-trace combine
+        if: ${{ matrix.config.time_trace }}
+        run: cmake --build ./build --target combine-time-traces
+      - name: Time-trace archive
+        id: time-trace-archive
+        if: ${{ matrix.config.time_trace }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Time-Trace
+          path: build/combined_traces.json
+          retention-days: 5
+      - name: Time-Trace link
+        if: ${{ matrix.config.time_trace }}
+#        run: echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+        run: echo "${{ toJSON(steps.time-trace-archive.outputs) }}"

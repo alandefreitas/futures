@@ -9,6 +9,7 @@ project(
         HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
 )
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(FUTURES_BINARY_ROOT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
 message(STATUS "${CMAKE_PROJECT_NAME} v${CMAKE_PROJECT_VERSION}: ${CMAKE_PROJECT_HOMEPAGE_URL}")
 include(cmake/futures/in_source_guard.cmake)
@@ -181,6 +182,10 @@ endif()
 
 if (FUTURES_BUILD_COVERAGE_REPORT)
     include(cmake/futures/coverage-report.cmake)
+endif()
+
+if (FUTURES_TIME_TRACE)
+    include(cmake/futures/combine-traces-target.cmake)
 endif()
 
 if (FUTURES_BUILD_LINT)
