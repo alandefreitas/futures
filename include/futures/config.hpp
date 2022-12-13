@@ -106,17 +106,7 @@
  * @li <a href="https://www.boost.org/">Boost</a>
  *
  */
-#    if !defined(FUTURES_PREFER_BOOST)              \
-        && !defined(FUTURES_PREFER_STANDALONE_ASIO) \
-        && !defined(FUTURES_PREFER_BUNDLED)
-#        if defined(FUTURES_HAS_STANDALONE_ASIO)
-#            define FUTURES_PREFER_STANDALONE_ASIO
-#        elif defined(FUTURES_HAS_BOOST)
-#            define FUTURES_PREFER_BOOST
-#        else
-#            define FUTURES_PREFER_BUNDLED
-#        endif
-#    endif
+#    define FUTURES_PREFER_STANDALONE_ASIO
 
 /// @def FUTURES_PREFER_BOOST
 /// Macro used to indicate we prefer using Boost.Asio over standalone Asio
