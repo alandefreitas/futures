@@ -24,6 +24,12 @@ set(
         src/*.hpp src/*.cpp src/*.ipp
         test/*.cpp test/*.hpp test/*.ipp
 )
+set(
+        FORMAT_EXCLUDE_PATTERNS
+        include/futures/detail/bundled/*
+        test/integration/*/*build*/*
+        test/unit/catch2/*
+)
 
 add_custom_target(
         format-check
@@ -32,6 +38,7 @@ add_custom_target(
 
         -D "FORMAT_COMMAND=${CLANG_FORMAT_EXECUTABLE}"
         -D "PATTERNS=${FORMAT_PATTERNS}"
+        -D "EXCLUDE_PATTERNS=${FORMAT_EXCLUDE_PATTERNS}"
         -P "${PROJECT_SOURCE_DIR}/cmake/futures/lint.cmake"
 
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
@@ -46,6 +53,7 @@ add_custom_target(
 
         -D "FORMAT_COMMAND=${CLANG_FORMAT_EXECUTABLE}"
         -D "PATTERNS=${FORMAT_PATTERNS}"
+        -D "EXCLUDE_PATTERNS=${FORMAT_EXCLUDE_PATTERNS}"
         -D FIX=YES
         -P "${PROJECT_SOURCE_DIR}/cmake/futures/lint.cmake"
 
