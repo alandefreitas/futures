@@ -18,6 +18,8 @@
 #include <futures/algorithm/traits/is_convertible_to.hpp>
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -48,8 +50,8 @@ namespace futures {
             // clang-format off
             is_indirectly_readable_v<I1> &&
             is_indirectly_readable_v<I2> &&
-            std::is_copy_constructible_v<F> &&
-            std::is_invocable_v<F&, iter_value_t<I1>&, iter_value_t<I2>&>
+            detail::is_copy_constructible_v<F> &&
+            detail::is_invocable_v<F&, iter_value_t<I1>&, iter_value_t<I2>&>
             // clang-format on
             >> : std::true_type {};
 #endif

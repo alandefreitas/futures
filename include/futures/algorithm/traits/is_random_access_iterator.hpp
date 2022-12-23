@@ -18,6 +18,7 @@
 #include <futures/config.hpp>
 #include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
 #include <futures/algorithm/traits/is_totally_ordered.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/iter_concept.hpp>
 #include <type_traits>
 
@@ -46,7 +47,7 @@ namespace futures {
     template <class I>
     struct is_random_access_iterator<
         I,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<I&>() += std::declval<iter_difference_t<I>>()),
             decltype(std::declval<I const&>() + std::declval<iter_difference_t<I>>()),
@@ -56,7 +57,7 @@ namespace futures {
             decltype(std::declval<I const&>()[std::declval<iter_difference_t<I>>()])
             // clang-format on
             >>
-        : std::conjunction<
+        : detail::conjunction<
               // clang-format off
               is_bidirectional_iterator<I>,
               is_derived_from<detail::iter_concept_t<I>, std::random_access_iterator_tag>,

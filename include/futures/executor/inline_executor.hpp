@@ -17,8 +17,6 @@
 
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
-#include <futures/detail/deps/asio/execution.hpp>
-#include <futures/detail/deps/asio/execution_context.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -35,33 +33,8 @@ namespace futures {
      * @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
      */
     class inline_executor {
-        asio::execution_context *context_{ nullptr };
-
     public:
-        constexpr inline_executor() : context_(nullptr) {}
-
-        constexpr inline_executor(asio::execution_context &ctx)
-            : context_(&ctx) {}
-
-        constexpr bool
-        operator==(inline_executor const &other) const noexcept {
-            return context_ == other.context_;
-        }
-
-        constexpr bool
-        operator!=(inline_executor const &other) const noexcept {
-            return !(*this == other);
-        }
-
-        [[nodiscard]] constexpr asio::execution_context &
-        query(asio::execution::context_t) const noexcept {
-            return *context_;
-        }
-
-        static constexpr asio::execution::blocking_t::never_t
-        query(asio::execution::blocking_t) noexcept {
-            return asio::execution::blocking_t::never;
-        }
+        constexpr inline_executor() = default;
 
         template <class F>
         void
@@ -70,94 +43,13 @@ namespace futures {
         }
     };
 
-    /// Get the inline execution context
-    FUTURES_DECLARE asio::execution_context &
-    inline_execution_context();
-
     /// Make an inline executor object
     constexpr inline_executor
     make_inline_executor() {
-        return inline_executor{};
+        return {};
     }
 
     /** @} */ // @addtogroup executors Executors
 } // namespace futures
-
-#ifdef FUTURES_USE_BOOST_ASIO
-namespace boost {
-#endif
-    namespace asio {
-        /// Ensure asio and our internal functions see inline_executor as
-        /// an executor
-        /**
-         *  This traits ensures asio and our internal functions see
-         *  inline_executor as an executor, as asio traits don't always work.
-         *
-         *  This is quite a workaround until things don't improve with our
-         *  executor traits.
-         *
-         *  Ideally, we would have our own executor traits and let asio pick up
-         *  from those.
-         **/
-        template <>
-        class is_executor<futures::inline_executor> : public std::true_type {};
-
-        namespace traits {
-#if !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
-            template <class F>
-            struct execute_member<futures::inline_executor, F> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef void result_type;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_EXECUTE_MEMBER_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
-            template <>
-            struct equality_comparable<futures::inline_executor> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_EQUALITY_COMPARABLE_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
-            template <>
-            struct query_member<
-                futures::inline_executor,
-                asio::execution::context_t> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef asio::execution_context &result_type;
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_QUERY_MEMBER_TRAIT)
-#if !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
-            template <class Property>
-            struct query_static_constexpr_member<
-                futures::inline_executor,
-                Property,
-                typename enable_if<std::is_convertible<
-                    Property,
-                    asio::execution::blocking_t>::value>::type> {
-                static constexpr bool is_valid = true;
-                static constexpr bool is_noexcept = true;
-                typedef asio::execution::blocking_t::never_t result_type;
-                static constexpr result_type
-                value() noexcept {
-                    return result_type();
-                }
-            };
-
-#endif // !defined(ASIO_HAS_DEDUCED_QUERY_STATIC_CONSTEXPR_MEMBER_TRAIT)
-
-        } // namespace traits
-    }     // namespace asio
-#ifdef FUTURES_USE_BOOST_ASIO
-}
-#endif
-
-#ifdef FUTURES_HEADER_ONLY
-#    include <futures/executor/impl/inline_executor.ipp>
-#endif
 
 #endif // FUTURES_EXECUTOR_INLINE_EXECUTOR_HPP

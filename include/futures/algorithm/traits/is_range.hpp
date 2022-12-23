@@ -15,6 +15,7 @@
  *  This file defines the `is_range` trait.
  */
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -42,7 +43,7 @@ namespace futures {
     template <class T>
     struct is_range<
         T,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(*std::begin(std::declval<T>())),
             decltype(*std::end(std::declval<T>()))

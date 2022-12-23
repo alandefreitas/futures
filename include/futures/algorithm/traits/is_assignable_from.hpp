@@ -35,7 +35,8 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class LHS, class RHS>
-    using is_assignable_from = std::bool_constant<std::assignable_from<LHS, RHS>>;
+    using is_assignable_from = std::bool_constant<
+        std::assignable_from<LHS, RHS>>;
 #else
     template <class LHS, class RHS, class = void>
     struct is_assignable_from : std::false_type {};
@@ -46,8 +47,8 @@ namespace futures {
         RHS,
         std::enable_if_t<
             // clang-format off
-            std::is_lvalue_reference_v<LHS> &&
-            std::is_same_v<decltype(std::declval<LHS>() = std::declval<RHS&&>()), LHS>
+            detail::is_lvalue_reference_v<LHS> &&
+            detail::is_same_v<decltype(std::declval<LHS>() = std::declval<RHS&&>()), LHS>
             // clang-format on
             >> : std::true_type {};
 #endif

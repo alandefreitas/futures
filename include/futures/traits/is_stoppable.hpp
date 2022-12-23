@@ -16,6 +16,7 @@
  */
 
 #include <futures/config.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -54,7 +55,7 @@ namespace futures {
     template <class T>
     struct is_stoppable<
         T,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<T>().request_stop())
             // clang-format on

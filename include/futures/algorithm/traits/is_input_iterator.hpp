@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/is_input_or_output_iterator.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
 #include <type_traits>
 
@@ -33,9 +34,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/iterator/input_iterator
      */
+#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_input_iterator = std::
+    using is_input_iterator = std::bool_constant<std::input_iterator<T>>;
+#else
+    template <class T>
+    using is_input_iterator = detail::
         conjunction<is_input_or_output_iterator<T>, is_indirectly_readable<T>>;
+#endif
 
     /// @copydoc is_input_iterator
     template <class T>

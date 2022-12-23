@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/config.hpp from external or bundled boost 
+// Include boost/config.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/config.hpp>
+#    include <boost/config.hpp>
 #else
-#include <futures/detail/bundled/boost/config.hpp>
+#    include <futures/detail/bundled/boost/config.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_CONFIG_HPP

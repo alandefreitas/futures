@@ -20,6 +20,7 @@
 #include <futures/algorithm/compare/strong_ordering.hpp>
 #include <futures/algorithm/compare/weak_ordering.hpp>
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <type_traits>
@@ -48,7 +49,7 @@ namespace futures {
 #else
     namespace detail {
         template <class T>
-        using is_comparison_category = std::disjunction<
+        using is_comparison_category = detail::disjunction<
             std::is_same<T, strong_ordering>,
             std::is_same<T, weak_ordering>,
             std::is_same<T, partial_ordering>>;

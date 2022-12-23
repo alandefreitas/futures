@@ -47,7 +47,10 @@
 #include <futures/throw.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/detail/container/small_vector.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <futures/adaptor/detail/lambda_to_future.hpp>
+#include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/function.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
 
@@ -78,7 +81,7 @@ namespace futures {
         static constexpr bool sequence_is_range = is_range_v<sequence_type>;
         static constexpr bool sequence_is_tuple = detail::
             mp_similar<std::tuple<>, sequence_type>::value;
-        static_assert(sequence_is_range || sequence_is_tuple);
+        FUTURES_STATIC_ASSERT(sequence_is_range || sequence_is_tuple);
 
     public:
         /// Constructor.
@@ -86,14 +89,15 @@ namespace futures {
          *  Constructs a when_all_future with no shared state. After
          *  construction, valid() == false
          */
-        when_all_future() noexcept = default;
+        when_all_future() = default;
 
         /// Move a sequence of futures into the when_all_future
         /**
          *  The sequence is moved into this future object and the
          *  objects from which the sequence was created get invalidated
          */
-        explicit when_all_future(sequence_type &&v) noexcept
+        explicit when_all_future(sequence_type &&v) noexcept(
+            std::is_nothrow_move_assignable<sequence_type>::value)
             : v(std::move(v)) {}
 
         /// Move constructor.
@@ -101,7 +105,8 @@ namespace futures {
          *  Constructs a when_all_future with the shared state of other using
          *  move semantics. After construction, other.valid() == false
          */
-        when_all_future(when_all_future &&other) noexcept
+        when_all_future(when_all_future &&other) noexcept(
+            std::is_nothrow_move_assignable<sequence_type>::value)
             : v(std::move(other.v)) {}
 
         /// when_all_future is not CopyConstructible
@@ -125,7 +130,8 @@ namespace futures {
          *  assignment.
          */
         when_all_future &
-        operator=(when_all_future &&other) noexcept {
+        operator=(when_all_future &&other) noexcept(
+            std::is_nothrow_move_assignable<sequence_type>::value) {
             v = std::move(other.v);
         }
 
@@ -155,21 +161,26 @@ namespace futures {
         }
 
         /// Checks if the future refers to a shared state
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         valid() const noexcept {
-            if constexpr (sequence_is_range) {
-                return std::all_of(v.begin(), v.end(), [](auto &&f) {
-                    return f.valid();
-                });
-            } else {
-                bool r = true;
-                detail::tuple_for_each(v, [&r](auto &&f) {
-                    r = r && f.valid();
-                });
-                return r;
-            }
+            return valid_impl(boost::mp11::mp_bool<sequence_is_range>{});
         }
 
+    private:
+        FUTURES_NODISCARD bool
+        valid_impl(std::true_type /* sequence_is_range */) const noexcept {
+            return std::all_of(v.begin(), v.end(), [](auto &&f) {
+                return f.valid();
+            });
+        }
+
+        FUTURES_NODISCARD bool
+        valid_impl(std::false_type /* sequence_is_range */) const noexcept {
+            bool r = true;
+            detail::tuple_for_each(v, [&r](auto &&f) { r = r && f.valid(); });
+            return r;
+        }
+    public:
         /// Blocks until the result becomes available.
         /**
          *  valid() == true after the call.
@@ -182,13 +193,107 @@ namespace futures {
             if (!valid()) {
                 throw_exception(no_state{});
             }
-            if constexpr (sequence_is_range) {
-                std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
+            wait_impl(boost::mp11::mp_bool<sequence_is_range>{});
+        }
+
+    private:
+        void
+        wait_impl(std::true_type /* sequence_is_range */) const {
+            std::for_each(v.begin(), v.end(), [](auto &&f) { f.wait(); });
+        }
+
+        void
+        wait_impl(std::false_type /* sequence_is_range */) const {
+            detail::tuple_for_each(v, [](auto &&f) { f.wait(); });
+        }
+
+        constexpr bool
+        is_empty_impl(std::true_type /* sequence is tuple */) const {
+            return std::tuple_size<sequence_type>::value == 0;
+        }
+
+        constexpr bool
+        is_empty_impl(std::false_type /* sequence is tuple */) const {
+            return v.empty();
+        }
+
+        constexpr bool
+        is_empty() const {
+            return is_empty_impl(boost::mp11::mp_bool<sequence_is_tuple>{});
+        }
+
+        template <class F>
+        FUTURES_NODISCARD future_status
+        wait_for_impl(std::true_type /* sequence_is_range */, F &equal_fn)
+            const {
+            // Use a hack to "break" for_each loops with find_if
+            auto it = std::find_if(v.begin(), v.end(), equal_fn);
+            return (it == v.end()) ?
+                       future_status::ready :
+                       it->wait_for(std::chrono::seconds(0));
+        }
+
+        template <class F>
+        FUTURES_NODISCARD future_status
+        wait_for_tuple_impl(std::true_type /* is_empty */, F &) const {
+            return future_status::ready;
+        }
+
+        template <class F>
+        FUTURES_NODISCARD future_status
+        wait_for_tuple_impl(std::false_type /* is_empty */, F &equal_fn) const {
+            constexpr auto n = std::tuple_size<sequence_type>::value;
+            auto idx = n;
+            detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
+                if (idx == n && equal_fn(std::get<I>(v))) {
+                    idx = decltype(I)::value;
+                }
+            });
+            if (idx == n) {
+                return future_status::ready;
             } else {
-                detail::tuple_for_each(v, [](auto &&f) { f.wait(); });
+                return detail::mp_with_index<n>(idx, [&](auto I) {
+                    return std::get<I>(v).wait_for(std::chrono::seconds(0));
+                });
             }
         }
 
+        template <class F>
+        FUTURES_NODISCARD future_status
+        wait_for_impl(std::false_type /* sequence_is_range */, F &equal_fn)
+            const {
+            constexpr auto n = std::tuple_size<sequence_type>::value;
+            return wait_for_tuple_impl(boost::mp11::mp_bool<n == 0>{}, equal_fn);
+        }
+
+        template <class Rep, class Period>
+        FUTURES_NODISCARD future_status
+        wait_for_impl(
+            std::chrono::duration<Rep, Period> const &timeout_duration) const {
+            // Duration spent waiting
+            using duration_type = std::chrono::duration<Rep, Period>;
+            using namespace std::chrono;
+            auto start_time = system_clock::now();
+            duration_type total_elapsed = duration_cast<duration_type>(
+                nanoseconds(0));
+
+            // Look for a future that's not ready.
+            // - Wait for i-th future and discount from duration
+            // - Return if no duration left, or we found a future is not ready
+            auto equal_fn = [&](auto &&f) {
+                future_status s = f.wait_for(timeout_duration - total_elapsed);
+                total_elapsed = duration_cast<duration_type>(
+                    system_clock::now() - start_time);
+                const bool when_all_impossible = s != future_status::ready;
+                return when_all_impossible || total_elapsed > timeout_duration;
+            };
+
+            return wait_for_impl(
+                boost::mp11::mp_bool<sequence_is_range>{},
+                equal_fn);
+        }
+
+    public:
         /// Waits for the result to become available.
         /**
          *  Blocks until specified timeout_duration has elapsed or the result
@@ -198,66 +303,19 @@ namespace futures {
          *  @return Status of the future after the specified duration
          */
         template <class Rep, class Period>
-        [[nodiscard]] future_status
+        FUTURES_NODISCARD future_status
         wait_for(
             std::chrono::duration<Rep, Period> const &timeout_duration) const {
-            constexpr bool is_compile_time_empty = []() {
-                if constexpr (sequence_is_tuple) {
-                    return std::tuple_size_v<sequence_type> == 0;
-                } else {
-                    return false;
-                }
-            }();
-            if constexpr (sequence_is_tuple && is_compile_time_empty) {
+            if (is_empty()) {
                 return future_status::ready;
-            } else {
-                if constexpr (sequence_is_range) {
-                    if (v.empty()) {
-                        return future_status::ready;
-                    }
-                }
-
-                // Check if the sequence is valid
-                if (!valid()) {
-                    throw_exception(no_state{});
-                }
-                using duration_type = std::chrono::duration<Rep, Period>;
-                using namespace std::chrono;
-                auto start_time = system_clock::now();
-                duration_type total_elapsed = duration_cast<duration_type>(
-                    nanoseconds(0));
-                auto equal_fn = [&](auto &&f) {
-                    future_status s = f.wait_for(
-                        timeout_duration - total_elapsed);
-                    total_elapsed = duration_cast<duration_type>(
-                        system_clock::now() - start_time);
-                    const bool when_all_impossible = s != future_status::ready;
-                    return when_all_impossible
-                           || total_elapsed > timeout_duration;
-                };
-                if constexpr (sequence_is_range) {
-                    // Use a hack to "break" for_each loops with find_if
-                    auto it = std::find_if(v.begin(), v.end(), equal_fn);
-                    return (it == v.end()) ?
-                               future_status::ready :
-                               it->wait_for(seconds(0));
-                } else {
-                    constexpr auto n = std::tuple_size<sequence_type>::value;
-                    auto idx = n;
-                    detail::mp_for_each<detail::mp_iota_c<n>>([&](auto I) {
-                        if (idx == n && equal_fn(std::get<I>(v))) {
-                            idx = decltype(I)::value;
-                        }
-                    });
-                    if (idx == n) {
-                        return future_status::ready;
-                    } else {
-                        return detail::mp_with_index<n>(idx, [&](auto I) {
-                            return std::get<I>(v).wait_for(seconds(0));
-                        });
-                    }
-                }
             }
+
+            // Check if the sequence is valid
+            if (!valid()) {
+                throw_exception(no_state{});
+            }
+
+            return wait_for_impl(timeout_duration);
         }
 
         /// Waits for a result to become available.
@@ -298,7 +356,7 @@ namespace futures {
             auto f_request_stop = [&](auto &&f) {
                 any_request = any_request || f.request_stop();
             };
-            if constexpr (sequence_is_range) {
+            FUTURES_IF_CONSTEXPR (sequence_is_range) {
                 std::for_each(v.begin(), v.end(), f_request_stop);
             } else {
                 tuple_for_each(v, f_request_stop);
@@ -310,186 +368,6 @@ namespace futures {
         /// Internal wait_all_future state
         sequence_type v;
     };
-
-#ifndef FUTURES_DOXYGEN
-    /// Specialization explicitly setting when_all_future<T> as a type of
-    /// future
-    template <class T>
-    struct is_future<when_all_future<T>> : std::true_type {};
-#endif
-
-    namespace detail {
-        // Check if type is a when_all_future as a type
-        template <class>
-        struct is_when_all_future : std::false_type {};
-        template <class Sequence>
-        struct is_when_all_future<when_all_future<Sequence>>
-            : std::true_type {};
-
-        // Check if type is a when_all_future as constant bool
-        template <class T>
-        constexpr bool is_when_all_future_v = is_when_all_future<T>::value;
-
-        // Check if a type can be used in a future conjunction
-        // (when_all or operator&& for futures)
-        template <class T>
-        using is_valid_when_all_argument = std::disjunction<
-            is_future<std::decay_t<T>>,
-            std::is_invocable<std::decay_t<T>>>;
-        template <class T>
-        constexpr bool is_valid_when_all_argument_v
-            = is_valid_when_all_argument<T>::value;
-
-        // Trait to identify valid when_all inputs
-        template <class...>
-        struct are_valid_when_all_arguments : std::true_type {};
-        template <class B1>
-        struct are_valid_when_all_arguments<B1>
-            : is_valid_when_all_argument<B1> {};
-        template <class B1, class... Bn>
-        struct are_valid_when_all_arguments<B1, Bn...>
-            : std::conditional_t<
-                  is_valid_when_all_argument_v<B1>,
-                  are_valid_when_all_arguments<Bn...>,
-                  std::false_type> {};
-        template <class... Args>
-        constexpr bool are_valid_when_all_arguments_v
-            = are_valid_when_all_arguments<Args...>::value;
-
-        /*
-         * Helpers and traits for operator&& on futures, functions and
-         * when_all futures
-         */
-
-        // Check if type is a when_all_future with tuples as a sequence type
-        template <class T, class Enable = void>
-        struct is_when_all_tuple_future : std::false_type {};
-        template <class Sequence>
-        struct is_when_all_tuple_future<
-            when_all_future<Sequence>,
-            std::enable_if_t<detail::mp_similar<Sequence>::value>>
-            : std::true_type {};
-        template <class T>
-        constexpr bool is_when_all_tuple_future_v = is_when_all_tuple_future<
-            T>::value;
-
-        // Check if all template parameters are when_all_future with
-        // tuples as a sequence type
-        template <class...>
-        struct are_when_all_tuple_futures : std::true_type {};
-        template <class B1>
-        struct are_when_all_tuple_futures<B1>
-            : is_when_all_tuple_future<std::decay_t<B1>> {};
-        template <class B1, class... Bn>
-        struct are_when_all_tuple_futures<B1, Bn...>
-            : std::conditional_t<
-                  is_when_all_tuple_future_v<std::decay_t<B1>>,
-                  are_when_all_tuple_futures<Bn...>,
-                  std::false_type> {};
-        template <class... Args>
-        constexpr bool are_when_all_tuple_futures_v
-            = are_when_all_tuple_futures<Args...>::value;
-
-        // Check if type is a when_all_future with a range as a sequence
-        // type
-        template <class T, class Enable = void>
-        struct is_when_all_range_future : std::false_type {};
-        template <class Sequence>
-        struct is_when_all_range_future<
-            when_all_future<Sequence>,
-            std::enable_if_t<is_range_v<Sequence>>> : std::true_type {};
-        template <class T>
-        constexpr bool is_when_all_range_future_v = is_when_all_range_future<
-            T>::value;
-
-        // Check if all template parameters are when_all_future with
-        // tuples as a sequence type
-        template <class...>
-        struct are_when_all_range_futures : std::true_type {};
-        template <class B1>
-        struct are_when_all_range_futures<B1> : is_when_all_range_future<B1> {};
-        template <class B1, class... Bn>
-        struct are_when_all_range_futures<B1, Bn...>
-            : std::conditional_t<
-                  is_when_all_range_future_v<B1>,
-                  are_when_all_range_futures<Bn...>,
-                  std::false_type> {};
-        template <class... Args>
-        constexpr bool are_when_all_range_futures_v
-            = are_when_all_range_futures<Args...>::value;
-
-        // Constructs a when_all_future that is a concatenation of all
-        // when_all_futures in args
-        /*
-         *  It's important to be able to merge when_all_future objects because
-         *  of operator&& When the user asks for f1 && f2 && f3, we want that
-         *  to return a single future that waits for <f1,f2,f3> rather than
-         *  a future that wait for two futures <f1,<f2,f3>>
-         *
-         *  @note "Merging" a single when_all_future of tuples. Overload
-         *  provided for symmetry.
-         *
-         *  @note This function only participates in overload
-         *  resolution if all types in std::decay_t<WhenAllFutures>... are
-         *  specializations of when_all_future with a tuple sequence type
-         */
-        template <
-            class WhenAllFuture,
-            std::enable_if_t<is_when_all_tuple_future_v<WhenAllFuture>, int> = 0>
-        FUTURES_DETAIL(decltype(auto))
-        when_all_future_cat(WhenAllFuture &&arg0) {
-            return std::forward<WhenAllFuture>(arg0);
-        }
-
-        // Merging a two when_all_future objects of tuples
-        template <
-            class WhenAllFuture1,
-            class WhenAllFuture2,
-            std::enable_if_t<
-                are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFuture2>,
-                int>
-            = 0>
-        FUTURES_DETAIL(decltype(auto))
-        when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFuture2 &&arg1) {
-            auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
-            auto s2 = std::move(std::forward<WhenAllFuture2>(arg1).release());
-            auto s = std::tuple_cat(std::move(s1), std::move(s2));
-            return when_all_future(std::move(s));
-        }
-
-        // Merging two+ when_all_future of tuples
-        template <
-            class WhenAllFuture1,
-            class... WhenAllFutures,
-            std::enable_if_t<
-                are_when_all_tuple_futures_v<WhenAllFuture1, WhenAllFutures...>,
-                int>
-            = 0>
-        FUTURES_DETAIL(decltype(auto))
-        when_all_future_cat(WhenAllFuture1 &&arg0, WhenAllFutures &&...args) {
-            auto s1 = std::move(std::forward<WhenAllFuture1>(arg0).release());
-            auto s2 = std::move(
-                when_all_future_cat(std::forward<WhenAllFutures>(args)...)
-                    .release());
-            auto s = std::tuple_cat(std::move(s1), std::move(s2));
-            return when_all_future(std::move(s));
-        }
-
-        // When making the tuple for when_all_future:
-        // - futures need to be moved
-        // - shared futures need to be copied
-        // - lambdas need to be posted
-        template <class F>
-        constexpr FUTURES_DETAIL(decltype(auto)) move_share_or_post(F &&f) {
-            if constexpr (is_shared_future_v<std::decay_t<F>>) {
-                return std::forward<F>(f);
-            } else if constexpr (is_future_v<std::decay_t<F>>) {
-                return std::move(std::forward<F>(f));
-            } else /* if constexpr (std::is_invocable_v<F>) */ {
-                return futures::async(std::forward<F>(f));
-            }
-        }
-    } // namespace detail
 
     /// Create a future object that becomes ready when the range of input
     /// futures becomes ready
@@ -506,42 +384,15 @@ namespace futures {
      *  @return Future object of type @ref when_all_future
      */
     FUTURES_TEMPLATE(class InputIt)
-    (requires detail::is_valid_when_all_argument_v<
-        typename std::iterator_traits<InputIt>::value_type>)
-        when_all_future<FUTURES_DETAIL(
-            detail::small_vector<detail::lambda_to_future_t<
-                typename std::iterator_traits<InputIt>::
-                    value_type>>)> when_all(InputIt first, InputIt last) {
-        // Infer types
-        using input_type = std::decay_t<
-            typename std::iterator_traits<InputIt>::value_type>;
-        constexpr bool input_is_future = is_future_v<input_type>;
-        constexpr bool input_is_invocable = std::is_invocable_v<input_type>;
-        static_assert(input_is_future || input_is_invocable);
-        using output_future_type = detail::lambda_to_future_t<input_type>;
-        using sequence_type = detail::small_vector<output_future_type>;
-        constexpr bool output_is_shared = is_shared_future_v<output_future_type>;
-
-        // Create sequence
-        sequence_type v;
-        v.reserve(std::distance(first, last));
-
-        // Move or copy the future objects
-        if constexpr (input_is_future) {
-            if constexpr (output_is_shared) {
-                std::copy(first, last, std::back_inserter(v));
-            } else /* if constexpr (not output_is_shared) */ {
-                std::move(first, last, std::back_inserter(v));
-            }
-        } else /* if constexpr (input_is_invocable) */ {
-            static_assert(input_is_invocable);
-            std::transform(first, last, std::back_inserter(v), [](auto &&f) {
-                return std::move(futures::async(std::forward<decltype(f)>(f)));
-            });
-        }
-
-        return when_all_future<sequence_type>(std::move(v));
-    }
+    (requires detail::disjunction_v<
+        is_future<
+            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
+        detail::is_invocable<
+            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>>)
+        when_all_future<
+            FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
+                               typename std::iterator_traits<InputIt>::
+                                   value_type>>)> when_all(InputIt first, InputIt last);
 
     /// @copybrief when_all
     /**
@@ -552,10 +403,11 @@ namespace futures {
      *  @return Future object of type @ref when_all_future
      */
     FUTURES_TEMPLATE(class Range)
-    (requires is_range_v<std::decay_t<Range>>) when_all_future<FUTURES_DETAIL(
-        detail::small_vector<detail::lambda_to_future_t<
-            typename std::iterator_traits<typename std::decay_t<
-                Range>::iterator>::value_type>>)> when_all(Range &&r) {
+    (requires is_range_v<std::decay_t<Range>>) when_all_future<
+        FUTURES_DETAIL(detail::small_vector<
+                       detail::lambda_to_future_t<typename std::iterator_traits<
+                           typename std::decay_t<Range>::
+                               iterator>::value_type>>)> when_all(Range &&r) {
         using std::begin;
         using std::end;
         return when_all(
@@ -573,19 +425,12 @@ namespace futures {
      *  @return Future object of type @ref when_all_future
      */
     FUTURES_TEMPLATE(class... Futures)
-    (requires detail::are_valid_when_all_arguments_v<Futures...>)
-        when_all_future<std::tuple<FUTURES_DETAIL(
-            detail::lambda_to_future_t<
-                Futures>...)>> when_all(Futures &&...futures) {
-        // Infer sequence type
-        using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
-
-        // Create sequence (and infer types as we go)
-        sequence_type v = std::make_tuple(
-            (detail::move_share_or_post(futures))...);
-
-        return when_all_future<sequence_type>(std::move(v));
-    }
+    (requires detail::conjunction_v<detail::disjunction<
+         is_future<std::decay_t<Futures>>,
+         detail::is_invocable<std::decay_t<Futures>>>...>)
+        when_all_future<std::tuple<
+            FUTURES_DETAIL(detail::lambda_to_future_t<
+                           Futures>...)>> when_all(Futures &&...futures);
 
     /// @copybrief when_all
     /**
@@ -611,65 +456,17 @@ namespace futures {
      *  @return @ref when_all_future object that concatenates all futures
      */
     FUTURES_TEMPLATE(class T1, class T2)
-    (requires detail::is_valid_when_all_argument_v<T1>
-         &&detail::is_valid_when_all_argument_v<T2>) FUTURES_DETAIL(auto)
-    operator&&(T1 &&lhs, T2 &&rhs) {
-        constexpr bool first_is_when_all = detail::is_when_all_future_v<T1>;
-        constexpr bool second_is_when_all = detail::is_when_all_future_v<T2>;
-        constexpr bool both_are_when_all = first_is_when_all
-                                           && second_is_when_all;
-        if constexpr (both_are_when_all) {
-            // Merge when all futures with operator&&
-            return detail::when_all_future_cat(
-                std::forward<T1>(lhs),
-                std::forward<T2>(rhs));
-        } else {
-            // At least one of the arguments is not a when_all_future.
-            // Any such argument might be another future or a function which
-            // needs to become a future. Thus, we need a function to maybe
-            // convert these functions to futures.
-            auto maybe_make_future = [](auto &&f) {
-                if constexpr (
-                    std::is_invocable_v<decltype(f)>
-                    && !is_future_v<decltype(f)>)
-                {
-                    // Convert to future with the default executor if not a
-                    // future yet
-                    return futures::async(
-                        make_default_executor(),
-                        std::forward<decltype(f)>(f));
-                } else {
-                    if constexpr (is_shared_future_v<decltype(f)>) {
-                        return std::forward<decltype(f)>(f);
-                    } else {
-                        return std::move(std::forward<decltype(f)>(f));
-                    }
-                }
-            };
-            // Simplest case, join futures in a new when_all_future
-            constexpr bool none_are_when_all = !first_is_when_all
-                                               && !second_is_when_all;
-            if constexpr (none_are_when_all) {
-                return when_all(
-                    maybe_make_future(std::forward<T1>(lhs)),
-                    maybe_make_future(std::forward<T2>(rhs)));
-            } else if constexpr (first_is_when_all) {
-                // If one of them is a when_all_future, then we need to
-                // concatenate the results rather than creating a child in the
-                // sequence. To concatenate them, the one that is not a
-                // when_all_future needs to become one.
-                return detail::when_all_future_cat(
-                    lhs,
-                    when_all(maybe_make_future(std::forward<T2>(rhs))));
-            } else /* if constexpr (second_is_when_all) */ {
-                return detail::when_all_future_cat(
-                    when_all(maybe_make_future(std::forward<T1>(lhs))),
-                    rhs);
-            }
-        }
-    }
+    (requires detail::disjunction_v<
+        is_future<std::decay_t<T1>>,
+        detail::is_invocable<std::decay_t<T1>>>
+         &&detail::disjunction_v<
+             is_future<std::decay_t<T2>>,
+             detail::is_invocable<std::decay_t<T2>>>) FUTURES_DETAIL(auto)
+    operator&&(T1 &&lhs, T2 &&rhs);
 
     /** @} */
 } // namespace futures
+
+#include <futures/adaptor/impl/when_all.hpp>
 
 #endif // FUTURES_ADAPTOR_WHEN_ALL_HPP

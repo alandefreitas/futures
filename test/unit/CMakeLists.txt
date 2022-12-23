@@ -7,7 +7,8 @@ endif ()
 
 if (Catch2_FOUND)
     include(${Catch2_DIR}/Catch.cmake)
-elseif (FUTURES_USE_FETCH_CONTENT)
+elseif (FUTURES_USE_FETCH_CONTENT AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.11.4)
+    include(FetchContent)
     FetchContent_Declare(Catch2 URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.8.zip)
     FetchContent_GetProperties(Catch2)
     if (NOT Catch2_POPULATED)
@@ -35,7 +36,7 @@ endif ()
 # Create a common catch main for all tests
 add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
-target_compile_features(catch_main PUBLIC cxx_std_17)
+target_compile_features(catch_main PUBLIC cxx_std_14)
 
 #######################################################
 ### Unit Tests                                      ###
@@ -95,16 +96,16 @@ endmacro()
 ######################################################
 # Separate CMake tests                               #
 ######################################################
-file(GLOB_RECURSE UNIT_TESTS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURE_DEPENDS **.cpp )
+file(GLOB_RECURSE UNIT_TESTS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURE_DEPENDS **.cpp)
 list(REMOVE_ITEM UNIT_TESTS catch_main.cpp)
 foreach (UNIT_TEST ${UNIT_TESTS})
     add_futures_test(${UNIT_TEST})
-endforeach()
+endforeach ()
 
 if (MSVC)
     # Snippets
     target_compile_options(ut_snippets PRIVATE /bigobj)
-endif()
+endif ()
 
 #####################################################
 # All tests as a single target                      #
@@ -112,10 +113,10 @@ endif()
 if (FUTURES_BUILD_SINGLE_TARGET_TESTS)
     add_executable(ut_futures_all catch_main.cpp ${FUTURES_TESTS_SOURCE})
     target_link_libraries(ut_futures_all PUBLIC futures::futures Catch2::Catch2)
-    target_compile_features(ut_futures_all PUBLIC cxx_std_17)
+    target_compile_features(ut_futures_all PUBLIC cxx_std_14)
     target_compile_definitions(ut_futures_all PUBLIC TEST_CASE_PREFIX="")
     if (MSVC)
         # Snippets
         target_compile_options(ut_futures_all PRIVATE /bigobj)
-    endif()
+    endif ()
 endif ()

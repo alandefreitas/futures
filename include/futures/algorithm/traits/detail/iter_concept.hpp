@@ -14,18 +14,24 @@
 #include <iterator>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T>
-    using iter_concept = mp_cond<
-        detail::has_iterator_traits_iterator_concept<remove_cvref_t<T>>,
-        mp_defer<nested_iterator_traits_iterator_concept_t, remove_cvref_t<T>>,
-        detail::has_iterator_traits_iterator_category<remove_cvref_t<T>>,
-        mp_defer<nested_iterator_traits_iterator_category_t, remove_cvref_t<T>>,
-        std::true_type,
-        mp_identity<std::random_access_iterator_tag>>;
+namespace futures {
+    namespace detail {
+        template <class T>
+        using iter_concept = mp_cond<
+            detail::has_iterator_traits_iterator_concept<remove_cvref_t<T>>,
+            mp_defer<
+                nested_iterator_traits_iterator_concept_t,
+                remove_cvref_t<T>>,
+            detail::has_iterator_traits_iterator_category<remove_cvref_t<T>>,
+            mp_defer<
+                nested_iterator_traits_iterator_category_t,
+                remove_cvref_t<T>>,
+            std::true_type,
+            mp_identity<std::random_access_iterator_tag>>;
 
-    template <class T>
-    using iter_concept_t = typename iter_concept<T>::type;
-} // namespace futures::detail
+        template <class T>
+        using iter_concept_t = typename iter_concept<T>::type;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_ITER_CONCEPT_HPP

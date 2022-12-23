@@ -30,7 +30,7 @@ TEST_CASE("await") {
         auto f2 = async([]() { return; });
         auto v = await(f1, f2);
         REQUIRE(std::get<0>(v) == 2);
-        STATIC_REQUIRE(std::tuple_size_v<decltype(v)> == 1);
+        STATIC_REQUIRE(std::tuple_size<decltype(v)>::value == 1);
     }
 
     SECTION("Deferred") {
@@ -38,6 +38,6 @@ TEST_CASE("await") {
         auto f2 = schedule([]() { return; });
         auto v = await(f1, f2);
         REQUIRE(std::get<0>(v) == 2);
-        STATIC_REQUIRE(std::tuple_size_v<decltype(v)> == 1);
+        STATIC_REQUIRE(std::tuple_size<decltype(v)>::value == 1);
     }
 }

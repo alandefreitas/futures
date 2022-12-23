@@ -156,9 +156,10 @@ TEST_CASE("future") {
                 };
                 using Function = decltype(fn);
                 STATIC_REQUIRE(
-                    !std::is_invocable_v<std::decay_t<Function>, stop_token>);
+                    !detail::is_invocable_v<std::decay_t<Function>, stop_token>);
                 STATIC_REQUIRE(
-                    std::is_same_v<detail::launch_result_t<decltype(fn)>, int>);
+                    detail::
+                        is_same_v<detail::launch_result_t<decltype(fn)>, int>);
                 auto r = async(fn);
                 REQUIRE(r.valid());
                 REQUIRE(r.get() == 2);
@@ -167,14 +168,15 @@ TEST_CASE("future") {
         }
 
         SECTION("Shared") {
-            STATIC_REQUIRE(!std::is_copy_constructible_v<cfuture<int>>);
-            STATIC_REQUIRE(std::is_copy_constructible_v<shared_cfuture<int>>);
+            STATIC_REQUIRE(!detail::is_copy_constructible_v<cfuture<int>>);
+            STATIC_REQUIRE(
+                detail::is_copy_constructible_v<shared_cfuture<int>>);
 
             using future_options_t = future_options<continuable_opt>;
             using shared_state_options = detail::
                 remove_future_option_t<shared_opt, future_options_t>;
             STATIC_REQUIRE(
-                std::is_same_v<
+                detail::is_same_v<
                     shared_state_options,
                     future_options<continuable_opt>>);
 
@@ -183,7 +185,7 @@ TEST_CASE("future") {
             using shared_shared_state_options = detail::
                 remove_future_option_t<shared_opt, shared_future_options_t>;
             STATIC_REQUIRE(
-                std::is_same_v<
+                detail::is_same_v<
                     shared_shared_state_options,
                     future_options<continuable_opt>>);
 
@@ -191,7 +193,7 @@ TEST_CASE("future") {
                 return 2;
             };
             STATIC_REQUIRE(
-                std::is_same_v<detail::launch_result_t<decltype(fn)>, int>);
+                detail::is_same_v<detail::launch_result_t<decltype(fn)>, int>);
             for (int32_t i = 0; i < thread_pool_replicates; ++i) {
                 cfuture<int32_t> r = async(fn);
                 REQUIRE(r.valid());

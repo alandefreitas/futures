@@ -33,33 +33,53 @@ jobs:
   Build:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
+    container: ${{ matrix.config.container }}
     strategy:
       fail-fast: false
       matrix:
         config:
-          - { name: "MSVC 14.3 - C++20 (Release)",           os: windows-2022, flags: '/O2',               artifact_name: "Windows x64",          cxxstd: 20, cmake_args: -G "Visual Studio 17 2022" -A x64, }
-          - { name: "MSVC 14.3 - C++17 (Release, Shared)",   os: windows-2022, shared: true, flags: '/O2', artifact_name: "Windows x64 (Shared)", cxxstd: 17, cmake_args: -G "Visual Studio 17 2022" -A x64, }
-          - { name: "MSVC 14.2 - C++17",                     os: windows-2019, flags: '/O2',               cxxstd: 17, cmake_args: -G "Visual Studio 16 2019" -A x64, }
+          - { name: "MSVC 14.3 - C++20 (Release)",            os: windows-2022, flags: '/O2',               artifact_name: "Windows x64",          cxxstd: 20, cmake_args: -G "Visual Studio 17 2022" -A x64, }
+          - { name: "MSVC 14.3 - C++17 (Release, Shared)",    os: windows-2022, shared: true, flags: '/O2', artifact_name: "Windows x64 (Shared)", cxxstd: 17, cmake_args: -G "Visual Studio 17 2022" -A x64, }
+          - { name: "MSVC 14.2 - C++17",                      os: windows-2019, flags: '/O2',               cxxstd: 17, cmake_args: -G "Visual Studio 16 2019" -A x64, }
 
-          - { name: "GCC 12 - C++20 (Release)",               os: ubuntu-22.04, flags: '-O2',           artifact_name: "Linux", cc: gcc-12, cxx: g++-12, cxxstd: 20, install: gcc-12 g++-12, }
-          - { name: "GCC 12 - C++17 (ASan)",                  os: ubuntu-22.04, asan: true,             cc: gcc-12, cxx: g++-12, cxxstd: 17, install: gcc-12 g++-12,    }
-          - { name: "GCC 11 - C++20 (Coverage)",              os: ubuntu-22.04, coverage: true,         cc: gcc-11, cxx: g++-11, cxxstd: 20, }
-          - { name: "GCC 10 - C++20 (Bundled)",               os: ubuntu-22.04, use_bundled: true,      cc: gcc-10, cxx: g++-10, cxxstd: 20, }
-          - { name: "GCC 9  - C++20 (Boost)",                 os: ubuntu-22.04,                         cc: gcc-9, cxx: g++-9, cxxstd: 20, install: libboost-all-dev, }
+          - { name: "GCC 12 - C++20 (Release)",               os: ubuntu-22.04, flags: '-O2',               artifact_name: "Linux", cc: gcc-12, cxx: g++-12, cxxstd: 20, }
+          - { name: "GCC 12 - C++17 (ASan)",                  os: ubuntu-22.04, asan: true,                 cc: gcc-12, cxx: g++-12, cxxstd: 17, }
+          - { name: "GCC 11 - C++20 (Coverage)",              os: ubuntu-22.04, coverage: true,             cc: gcc-11, cxx: g++-11, cxxstd: 20, }
+          - { name: "GCC 10 - C++20 (Bundled)",               os: ubuntu-22.04, use_bundled: true,          cc: gcc-10, cxx: g++-10, cxxstd: 20, }
+          - { name: "GCC 9  - C++20 (Boost)",                 os: ubuntu-22.04,                             cc: gcc-9,  cxx: g++-9,  cxxstd: 20, install: libboost-all-dev, }
+          - { name: "GCC 8  - C++17",                         os: ubuntu-20.04,                             cc: gcc-8,  cxx: g++-8,  cxxstd: 17, install: g++-8, }
+          - { name: "GCC 7  - C++14",                         os: ubuntu-20.04,                             cc: gcc-7,  cxx: g++-7,  cxxstd: 14, install: g++-7, }
+          # GCC5 and GCC6 support C++14 but have a bugs with SFINAE
+          # - { name: "GCC 6  - C++14",                         os: ubuntu-20.04, container: 'ubuntu:18.04',  cc: gcc-6,  cxx: g++-6,  cxxstd: 14, install: g++-6, }
+          # - { name: "GCC 5  - C++14",                         os: ubuntu-20.04, container: 'ubuntu:18.04',  cc: gcc-5,  cxx: g++-5,  cxxstd: 14, install: g++-5, }
 
-          - { name: "Clang 14 - C++20 (Time-Trace)",          os: ubuntu-22.04, time_trace: true,       cc: clang-14, cxx: clang++-14, cxxstd: 20, }
-          - { name: "Clang 13 - C++17",                       os: ubuntu-22.04,                         cc: clang-13, cxx: clang++-13, cxxstd: 17, }
-          - { name: "Clang 12 - C++20",                       os: ubuntu-22.04,                         cc: clang-12, cxx: clang++-12, cxxstd: 20, }
+          - { name: "Clang 14 - C++20 (Time-Trace)",          os: ubuntu-22.04, time_trace: true,           cc: clang-14, cxx: clang++-14, cxxstd: 20, }
+          - { name: "Clang 13 - C++17",                       os: ubuntu-22.04,                             cc: clang-13, cxx: clang++-13, cxxstd: 17, }
+          - { name: "Clang 12 - C++20",                       os: ubuntu-22.04,                             cc: clang-12, cxx: clang++-12, cxxstd: 20, }
+          - { name: "Clang 11 - C++17",                       os: ubuntu-20.04,                             cc: clang-11, cxx: clang++-11, cxxstd: 17, install: clang-11, }
+          # Incremental standard implementations are redundant
+          # - { name: "Clang 10 - C++17",                       os: ubuntu-20.04,                             cc: clang-10, cxx: clang++-10, cxxstd: 17, install: clang-10, }
+          # - { name: "Clang 9  - C++17",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-9 , cxx: clang++-9 , cxxstd: 17, install: clang-9 , }
+          # - { name: "Clang 8  - C++17",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-8 , cxx: clang++-8 , cxxstd: 17, install: clang-8 , }
+          # - { name: "Clang 7  - C++17",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-7 , cxx: clang++-7 , cxxstd: 17, install: clang-7 , }
+          - { name: "Clang 6  - C++17",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-6.0, cxx: clang++-6.0 , cxxstd: 17, install: clang-6.0, }
+          # - { name: "Clang 5  - C++14",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-5.0, cxx: clang++-5.0 , cxxstd: 14, install: clang-5.0, }
+          - { name: "Clang 4  - C++14",                       os: ubuntu-22.04, container: 'ubuntu:18.04',  cc: clang-4.0, cxx: clang++-4.0 , cxxstd: 14, install: clang-4.0, }
 
-          - { name: "AppleClang 13 (Release)",        os: macos-12,     flags: '-O2',           artifact_name: "MacOSX", }
+          - { name: "AppleClang 13 (Release)",                os: macos-12,     flags: '-O2',           artifact_name: "MacOSX", }
     steps:
       - uses: actions/checkout@v3
-      - name: Apt packages
+      - name: Apt packages cache
         uses: awalsh128/cache-apt-pkgs-action@latest
-        if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.install || matrix.config.coverage) }}
+        if: ${{ matrix.config.os == 'ubuntu-22.04' && !matrix.config.container && (matrix.config.install || matrix.config.coverage) }}
         with:
           packages: ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.install }}
-          version: 1.0
+          version: ${{ matrix.config.container || matrix.config.os }}
+      - name: Apt packages
+        if: ${{ ( matrix.config.container || (contains( matrix.config.os, 'ubuntu') && matrix.config.os != 'ubuntu-22.04')) && (matrix.config.install || matrix.config.coverage) }}
+        run: |
+          ${{ (!matrix.config.container && 'sudo') || '' }} apt-get update
+          ${{ (!matrix.config.container && 'sudo') || '' }} apt-get install -y ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.install }} ${{ (matrix.config.container && 'cmake python3') || '' }}
       - name: Fetched Content
         if: ${{ !matrix.config.use_bundled }}
         id: cache-fetched-content
@@ -68,33 +88,46 @@ jobs:
           path: build/_deps
           key: ${{ matrix.config.os }}-fetched-content
       - name: Create Build Dir
-        run: cmake -E make_directory build
+        run: |
+          cmake -E make_directory build
+          cmake -E make_directory .local/usr/
       - name: Get CPU cores
         uses: SimenB/github-actions-cpu-cores@v1
         id: cpu-cores
       - name: Configure
         working-directory: ./build
         run: |
-          cmake .. ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_TIME_TRACE=${{ (matrix.config.time_trace && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }}  -D CMAKE_INSTALL_PREFIX=.local/usr/
+          cmake --version
+          cmake ${{ matrix.config.cmake_args }} -D CMAKE_BUILD_TYPE=Release -D FUTURES_DEVELOPER_MODE=ON -D FUTURES_BUILD_LINTER=OFF -D FUTURES_CATCH2_REPORTER=junit -D FUTURES_BUILD_COVERAGE_REPORT=${{ (matrix.config.coverage && 'ON') || 'OFF' }} -D FUTURES_TIME_TRACE=${{ (matrix.config.time_trace && 'ON') || 'OFF' }} -D FUTURES_SANITIZERS=${{ ((matrix.config.asan || matrix.config.tsan) && 'ON') || 'OFF' }} -D FUTURES_THREAD_SANITIZER=${{ (matrix.config.tsan && 'ON') || 'OFF' }} -D FUTURES_USE_FIND_PACKAGE=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} -D FUTURES_USE_FETCH_CONTENT=${{ (matrix.config.use_bundled && 'OFF') || 'ON' }} ${{ (matrix.config.cc && format('-D CMAKE_C_COMPILER=/usr/bin/{0}', matrix.config.cc)) || '' }} ${{ (matrix.config.cxx && format('-D CMAKE_CXX_COMPILER=/usr/bin/{0}', matrix.config.cxx)) || '' }} ${{ (matrix.config.flags && format('-D CMAKE_CXX_FLAGS="{0}"', matrix.config.flags)) || '' }} -D BUILD_SHARED_LIBS=${{ (matrix.config.shared && 'ON') || 'OFF' }} -D CMAKE_CXX_STANDARD=${{ matrix.config.cxxstd || '17' }} -D CMAKE_INSTALL_PREFIX=.local/usr/ ..
       - name: Build
         working-directory: ./build
-        run: cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }} --config Release
+        run: cmake --build . ${{ (!matrix.config.container && format('--parallel {0}', steps.cpu-cores.outputs.count)) || '' }} --config Release
       - name: Test
+        id: test
         working-directory: ./build
-        run: ctest --parallel ${{ steps.cpu-cores.outputs.count }} -C Release --progress --output-on-failure
+        run: ctest ${{ (!matrix.config.container && format('--parallel {0}', steps.cpu-cores.outputs.count)) || '' }} -C Release --progress --output-on-failure
+      - name: Format JUnit reports
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: cmake --build ./build --target junit-format
+      - name: Archive Reports
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Failure Reports ${{ matrix.config.name }}
+          path: build/test/unit/reports/*.junit
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
-        if: failure()
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
         with:
           check_name: Test Report - ${{ matrix.config.name }}
           check_title_template: '{{TEST_NAME}}'
           report_paths: build/test/unit/reports/*.junit
       - name: Install
         working-directory: ./build
-        run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cmake --install .
+        run: ${{ (matrix.config.container && 'cmake --build . --target install') || 'cmake --install .' }} # cmake -P cmake_install.cmake
       - name: Create packages
         working-directory: ./build
-        run: ${{ ((contains( matrix.config.os, 'ubuntu') || contains( matrix.config.os, 'macos')) && 'sudo') || '' }} cpack
+        run: cpack
       - name: Archive Packages
         if: ${{ matrix.config.artifact_name && startsWith(github.ref, 'refs/heads/master') }}
         uses: actions/upload-artifact@v3
@@ -114,6 +147,7 @@ jobs:
         working-directory: ./build
         run: cmake --build . --target cmake_subdir-integration-check
       - name: CMake FetchContent Integration Test
+        if: ${{ !matrix.config.container }}
         working-directory: ./build
         run: cmake --build . --target cmake_fetch-integration-check
       - name: CMake Find Package Integration Test
@@ -147,7 +181,3 @@ jobs:
           name: Time-Trace
           path: build/combined_traces.json
           retention-days: 5
-      - name: Time-Trace link
-        if: ${{ matrix.config.time_trace }}
-#        run: echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
-        run: echo "${{ toJSON(steps.time-trace-archive.outputs) }}"

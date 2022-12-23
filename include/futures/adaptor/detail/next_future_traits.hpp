@@ -9,6 +9,7 @@
 #define FUTURES_ADAPTOR_DETAIL_NEXT_FUTURE_TRAITS_HPP
 
 #include <futures/config.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/adaptor/detail/future_continue_task.hpp>
 #include <utility>
 #include <type_traits>
@@ -47,7 +48,7 @@ namespace futures {
             using next_value_type = std::conditional_t<
                 is_valid_with_stop_token_only,
                 typename mp_eval_if_not<
-                    std::conjunction<
+                    conjunction<
                         is_stoppable<std::decay_t<Future>>,
                         std::is_same<
                             continue_invoke_result_t<Future, Function>,

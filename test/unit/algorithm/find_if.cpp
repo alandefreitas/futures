@@ -3,8 +3,8 @@
 #include "test_unary_invoke.hpp"
 #include <catch2/catch.hpp>
 #include <algorithm>
-#include <numeric>
 #include <array>
+#include <numeric>
 #include <vector>
 
 TEST_CASE("algorithm find if") {
@@ -19,7 +19,8 @@ TEST_CASE("algorithm find if") {
         test_unary_invoke(find_if, v, fun, v.begin() + 2699);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 

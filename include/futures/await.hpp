@@ -65,7 +65,7 @@ namespace futures {
      * @return The result of the future object
      */
     FUTURES_TEMPLATE(class... Futures)
-    (requires std::conjunction_v<is_future<std::decay_t<Futures>>...>)
+    (requires detail::conjunction_v<is_future<std::decay_t<Futures>>...>)
         FUTURES_DETAIL(decltype(auto)) await(Futures &&...fs) {
         return detail::make_irregular_tuple(detail::regular_void_invoke(
             &std::decay_t<Futures>::get,

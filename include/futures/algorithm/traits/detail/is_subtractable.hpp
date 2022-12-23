@@ -8,26 +8,29 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP
 #define FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T, class = void>
-    struct is_subtractable : std::false_type {};
+namespace futures {
+    namespace detail {
+        template <class T, class = void>
+        struct is_subtractable : std::false_type {};
 
-    template <class T>
-    struct is_subtractable<
-        T,
-        std::void_t<
-            // clang-format off
+        template <class T>
+        struct is_subtractable<
+            T,
+            void_t<
+                // clang-format off
             decltype(std::declval< std::remove_reference_t<T> const &>() - std::declval< std::remove_reference_t<T> const &>())
-            // clang-format on
-            >>
-        : std::is_integral<
-              decltype(std::declval<std::remove_reference_t<T> const &>() - std::declval<std::remove_reference_t<T> const &>())> {
-    };
+                // clang-format on
+                >>
+            : std::is_integral<
+                  decltype(std::declval<std::remove_reference_t<T> const &>() - std::declval<std::remove_reference_t<T> const &>())> {
+        };
 
-    template <class T>
-    constexpr bool is_subtractable_v = is_subtractable<T>::value;
-} // namespace futures::detail
+        template <class T>
+        constexpr bool is_subtractable_v = is_subtractable<T>::value;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_IS_SUBTRACTABLE_HPP

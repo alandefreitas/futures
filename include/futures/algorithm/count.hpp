@@ -25,7 +25,7 @@
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -79,7 +79,9 @@ namespace futures {
                  &&is_indirectly_binary_invocable_v<equal_to, T *, I>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR iter_difference_t<
                 I> run(E const &ex, P p, I first, S last, T const &v) const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 return inline_count(first, last, v);
             } else {
@@ -97,7 +99,7 @@ namespace futures {
     };
 
     /// Returns the number of elements matching an element
-    inline constexpr count_functor count;
+    FUTURES_INLINE_VAR constexpr count_functor count;
 
     /** @} */
     /** @} */

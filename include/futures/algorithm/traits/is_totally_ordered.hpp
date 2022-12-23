@@ -16,6 +16,7 @@
  */
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/is_partially_ordered_with.hpp>
 #include <type_traits>
 
@@ -42,7 +43,7 @@ namespace futures {
     using is_totally_ordered = std::bool_constant<std::totally_ordered<T>>;
 #else
     template <class T>
-    using is_totally_ordered = std::conjunction<
+    using is_totally_ordered = detail::conjunction<
         is_equality_comparable<T>,
         detail::is_partially_ordered_with<T, T>>;
 #endif

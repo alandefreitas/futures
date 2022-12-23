@@ -70,8 +70,7 @@ namespace futures {
      * @param loc Location where the exception occurred
      */
     template <class E>
-    BOOST_NORETURN
-    void
+    BOOST_NORETURN void
     throw_exception(
         E&& e,
         source_location const& loc = FUTURES_CURRENT_LOCATION);

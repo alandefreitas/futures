@@ -7,10 +7,10 @@
 TEST_CASE("Launch") {
     using namespace futures;
 
-    STATIC_REQUIRE(!std::is_copy_constructible_v<cfuture<void>>);
-    STATIC_REQUIRE(std::is_copy_constructible_v<shared_cfuture<void>>);
+    STATIC_REQUIRE(!detail::is_copy_constructible_v<cfuture<void>>);
+    STATIC_REQUIRE(detail::is_copy_constructible_v<shared_cfuture<void>>);
 
-    auto test_launch_function = [](std::string_view name, auto async_fn) {
+    auto test_launch_function = [](std::string name, auto async_fn) {
         SECTION(name.data()) {
             SECTION("Default executor") {
                 SECTION("No return") {
@@ -57,8 +57,8 @@ TEST_CASE("Launch") {
             }
 
             SECTION("Custom executor") {
-                asio::thread_pool pool(2);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(2);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
 
                 SECTION("No return") {
                     SECTION("No args") {
@@ -99,7 +99,7 @@ TEST_CASE("Launch") {
     using deferred_options
         = future_options<continuable_opt, always_deferred_opt>;
     STATIC_REQUIRE(
-        std::is_same_v<
+        detail::is_same_v<
             deferred_options,
             detail::remove_future_option_t<shared_opt, deferred_options>>);
 

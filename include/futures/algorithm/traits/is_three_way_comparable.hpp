@@ -21,6 +21,7 @@
 #include <futures/algorithm/compare/weak_ordering.hpp>
 #include <futures/algorithm/traits/common_comparison_category.hpp>
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/is_partially_ordered_with.hpp>
 #include <type_traits>
 
@@ -48,7 +49,7 @@ namespace futures {
         std::three_way_comparable<T, Cat>>;
 #else
     template <class T, class Cat = partial_ordering>
-    using is_three_way_comparable = std::conjunction<
+    using is_three_way_comparable = detail::conjunction<
         detail::is_weakly_equality_comparable_with<T, T>,
         detail::is_partially_ordered_with<T, T>>;
 #endif

@@ -18,103 +18,20 @@
 #include <futures/config.hpp>
 #include <futures/algorithm/compare/partial_ordering.hpp>
 
-namespace futures {
-#if FUTURES_DOXYGEN || __cpp_lib_three_way_comparison
-    /// the result type of 3-way comparison that supports all 6 operators and is
-    /// not substitutable
-    using weak_ordering = std::weak_ordering;
-#else
-    class weak_ordering {
-        using unspecified = partial_ordering::unspecified;
-
-        signed char v_;
-
-        constexpr explicit weak_ordering(signed char v) noexcept : v_(v) {}
-
-        friend class strong_ordering;
-
-    public:
-        static const weak_ordering less;
-        static const weak_ordering equivalent;
-        static const weak_ordering greater;
-
-        [[nodiscard]] constexpr operator partial_ordering() const noexcept {
-            return partial_ordering(v_);
-        }
-
-        // comparisons
-        [[nodiscard]] friend constexpr bool
-        operator==(weak_ordering lhs, unspecified) noexcept {
-            return lhs.v_ == 0;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator==(weak_ordering lhs, weak_ordering rhs) noexcept {
-            return lhs.v_ == rhs.v_;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator<(weak_ordering lhs, unspecified) noexcept {
-            return lhs.v_ < 0;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator>(weak_ordering lhs, unspecified) noexcept {
-            return lhs.v_ > 0;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator<=(weak_ordering lhs, unspecified) noexcept {
-            return lhs.v_ <= 0;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator>=(weak_ordering lhs, unspecified) noexcept {
-            return lhs.v_ >= 0;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator<(unspecified, weak_ordering lhs) noexcept {
-            return 0 < lhs.v_;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator>(unspecified, weak_ordering lhs) noexcept {
-            return 0 > lhs.v_;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator<=(unspecified, weak_ordering lhs) noexcept {
-            return 0 <= lhs.v_;
-        }
-
-        [[nodiscard]] friend constexpr bool
-        operator>=(unspecified, weak_ordering lhs) noexcept {
-            return 0 >= lhs.v_;
-        }
-
-#    if __cplusplus > 201703L && defined(__cpp_impl_three_way_comparison) \
-        && __has_include(<compare>)
-        [[nodiscard]] friend constexpr weak_ordering
-        operator<=>(weak_ordering lhs, unspecified) noexcept {
-            return lhs;
-        }
-
-        [[nodiscard]] friend constexpr weak_ordering
-        operator<=>(unspecified, weak_ordering rhs) noexcept {
-            return weak_ordering(-rhs.v_);
-        }
-#    endif
-    };
-
-    // valid values' definitions
-    inline constexpr weak_ordering weak_ordering::less(-1);
-
-    inline constexpr weak_ordering weak_ordering::equivalent(0);
-
-    inline constexpr weak_ordering weak_ordering::greater(1);
+#ifdef __cpp_lib_three_way_comparison
+#    include <compare>
 #endif
 
+namespace futures {
+#if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
+    /// the result type of 3-way comparison that supports all 6 operators, does
+    // not imply substitutability, and does not allow incomparable values
+    using weak_ordering = std::weak_ordering;
+#else
+    class weak_ordering;
+#endif
 } // namespace futures
+
+#include <futures/algorithm/compare/impl/weak_ordering.hpp>
 
 #endif // FUTURES_ALGORITHM_COMPARE_WEAK_ORDERING_HPP

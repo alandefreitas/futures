@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -32,9 +33,15 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/regular
      */
+#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_regular = std::
+    using is_regular = std::bool_constant<std::regular<T>>;
+#else
+    template <class T>
+    using is_regular = detail::
         conjunction<is_semiregular<T>, is_equality_comparable<T>>;
+#endif
+
 
     /// @copydoc is_regular
     template <class T>

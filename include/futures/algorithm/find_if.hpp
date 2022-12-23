@@ -24,11 +24,12 @@
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <bitset>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -85,7 +86,8 @@ namespace futures {
 
                 // Create task that launches tasks for rhs: [middle, last]
                 std::size_t rhs_branch = branch;
-                rhs_branch |= std::size_t(1) << (8 * sizeof(std::size_t) - 1 - level);
+                rhs_branch |= std::size_t(1)
+                              << (8 * sizeof(std::size_t) - 1 - level);
                 basic_future<
                     std::pair<I, std::size_t>,
                     future_options<executor_opt<Executor>, continuable_opt>>
@@ -110,7 +112,8 @@ namespace futures {
                         });
 
                 // Launch tasks for lhs: [first, middle]
-                branch &= ~(std::size_t(1) << (8 * sizeof(std::size_t) - 1 - level));
+                branch &= ~(
+                    std::size_t(1) << (8 * sizeof(std::size_t) - 1 - level));
                 std::pair<I, std::size_t> lhs_result = launch_find_if_tasks(
                     p,
                     first,
@@ -181,7 +184,7 @@ namespace futures {
         FUTURES_TEMPLATE(class I, class S, class Fun)
         (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
              &&is_indirectly_unary_invocable_v<Fun, I>
-                 &&std::is_copy_constructible_v<
+                 &&detail::is_copy_constructible_v<
                      Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
             inline_find_if(I first, S last, Fun p) {
             for (; first != last; ++first) {
@@ -210,10 +213,12 @@ namespace futures {
         (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_unary_invocable_v<Fun, I>
-                     &&std::is_copy_constructible_v<Fun>)
+                     &&detail::is_copy_constructible_v<Fun>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR I
             run(E const &ex, P p, I first, S last, Fun f) const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 return inline_find_if(first, last, f);
             } else {
@@ -228,7 +233,7 @@ namespace futures {
     };
 
     /// Finds the first element satisfying specific criteria
-    inline constexpr find_if_functor find_if;
+    FUTURES_INLINE_VAR constexpr find_if_functor find_if;
 
     /** @} */
     /** @} */

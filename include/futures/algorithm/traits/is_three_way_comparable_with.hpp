@@ -17,6 +17,7 @@
 
 #include <futures/config.hpp>
 #include <futures/algorithm/traits/is_three_way_comparable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/is_partially_ordered_with.hpp>
 #include <futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp>
 #include <type_traits>
@@ -46,7 +47,7 @@ namespace futures {
         std::three_way_comparable_with<T, U, Cat>>;
 #else
     template <class T, class U, class Cat = partial_ordering>
-    using is_three_way_comparable_with = std::conjunction<
+    using is_three_way_comparable_with = detail::conjunction<
         is_three_way_comparable<T>,
         is_three_way_comparable<U>,
         detail::is_weakly_equality_comparable_with<T, U>,

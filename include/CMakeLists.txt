@@ -8,7 +8,7 @@ add_library(headers INTERFACE)
 add_library(futures::headers ALIAS headers)
 
 # This library requires C++17
-target_compile_features(headers INTERFACE cxx_std_17)
+target_compile_features(headers INTERFACE cxx_std_14)
 
 # Include directories (development and installation)
 target_include_directories(headers
@@ -46,7 +46,9 @@ if (CLANG)
 endif ()
 
 # Threads
-target_link_libraries(headers INTERFACE ${CMAKE_THREAD_LIBS_INIT})
+if (Threads_FOUND)
+    target_link_libraries(headers INTERFACE Threads::Threads)
+endif ()
 
 #######################################################
 ### Link Dependencies                               ###
@@ -72,4 +74,15 @@ else ()
     target_compile_definitions(headers INTERFACE FUTURES_HAS_BUNDLED_ASIO)
     target_compile_definitions(headers INTERFACE FUTURES_USE_BUNDLED_ASIO)
     target_compile_definitions(headers INTERFACE FUTURES_PREFER_BUNDLED)
+endif ()
+
+#######################################################
+### Install targets                                 ###
+#######################################################
+if (FUTURES_BUILD_INSTALLER)
+    install(TARGETS headers
+            EXPORT futures-targets
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            )
 endif ()

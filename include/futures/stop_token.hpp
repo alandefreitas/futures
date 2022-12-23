@@ -31,6 +31,7 @@
  */
 
 
+#include <futures/config.hpp>
 #include <atomic>
 #include <memory>
 #include <thread>
@@ -62,7 +63,7 @@ namespace futures {
 
     /// Empty struct to initialize a @ref stop_source without a shared
     /// stop state
-    inline constexpr nostopstate_t nostopstate{};
+    FUTURES_INLINE_VAR constexpr nostopstate_t nostopstate{};
 
     /// Token to check if a stop request has been made
     /**
@@ -79,7 +80,7 @@ namespace futures {
         /**
          *  @post stop_possible() and stop_requested() are both false
          */
-        stop_token() noexcept = default;
+        stop_token() = default;
 
         /// Copy constructor.
         /**
@@ -92,7 +93,7 @@ namespace futures {
          *  @param other another stop_token object to construct this stop_token
          *  object
          */
-        stop_token(stop_token const &other) noexcept = default;
+        stop_token(stop_token const &other) = default;
 
         /// Move constructor.
         /**
@@ -181,7 +182,7 @@ namespace futures {
          *  @return true if the stop_token object has associated stop-state and
          *  it received a stop request, false otherwise.
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         stop_requested() const noexcept {
             return (shared_state_ != nullptr)
                    && shared_state_->load(std::memory_order_relaxed);
@@ -205,7 +206,7 @@ namespace futures {
          *  or it did not yet receive a stop request and there are no associated
          *  std::stop_source object(s); true otherwise
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         stop_possible() const noexcept {
             return (shared_state_ != nullptr)
                    && (shared_state_->load(std::memory_order_relaxed)
@@ -229,7 +230,7 @@ namespace futures {
          *  @return true if lhs and rhs have the same associated stop-state, or
          *  both have no associated stop-state, otherwise false
          */
-        [[nodiscard]] friend bool
+        FUTURES_NODISCARD friend bool
         operator==(stop_token const &a, stop_token const &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
@@ -243,7 +244,7 @@ namespace futures {
          *
          *  @return true if lhs and rhs have different associated stop-states
          */
-        [[nodiscard]] friend bool
+        FUTURES_NODISCARD friend bool
         operator!=(stop_token const &a, stop_token const &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }
@@ -418,7 +419,7 @@ namespace futures {
          *  @return A stop_token object, which will be empty if
          *  this->stop_possible() == false
          */
-        [[nodiscard]] stop_token
+        FUTURES_NODISCARD stop_token
         get_token() const noexcept {
             return stop_token{ shared_state_ };
         }
@@ -432,7 +433,7 @@ namespace futures {
          *  @return true if the stop_token object has a stop-state, and it has
          *  received a stop request, false otherwise
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         stop_requested() const noexcept {
             return (shared_state_ != nullptr)
                    && shared_state_->load(std::memory_order_relaxed);
@@ -448,7 +449,7 @@ namespace futures {
          *  @return true if the stop_source object has a stop-state, otherwise
          *  false
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         stop_possible() const noexcept {
             return shared_state_ != nullptr;
         }
@@ -458,11 +459,11 @@ namespace futures {
         /// @name Non-member functions
         /// @{
 
-        [[nodiscard]] friend bool
+        FUTURES_NODISCARD friend bool
         operator==(stop_source const &a, stop_source const &b) noexcept {
             return a.shared_state_ == b.shared_state_;
         }
-        [[nodiscard]] friend bool
+        FUTURES_NODISCARD friend bool
         operator!=(stop_source const &a, stop_source const &b) noexcept {
             return a.shared_state_ != b.shared_state_;
         }

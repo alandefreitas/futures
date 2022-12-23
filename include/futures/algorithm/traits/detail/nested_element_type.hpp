@@ -8,9 +8,11 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_ELEMENT_TYPE_HPP
 #define FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_ELEMENT_TYPE_HPP
 
-namespace futures::detail {
-    template <class T>
-    using nested_element_type_t = typename T::element_type;
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        template <class T>
+        using nested_element_type_t = typename T::element_type;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_ELEMENT_TYPE_HPP

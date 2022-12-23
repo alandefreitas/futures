@@ -13,18 +13,20 @@
 #include <iterator>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T>
-    using nested_iterator_traits_value_type = typename std::iterator_traits<
-        T>::value_type;
+namespace futures {
+    namespace detail {
+        template <class T>
+        using nested_iterator_traits_value_type = typename std::iterator_traits<
+            T>::value_type;
 
-    template <class T>
-    using has_iterator_traits_value_type
-        = mp_valid<nested_iterator_traits_value_type, T>;
+        template <class T>
+        using has_iterator_traits_value_type
+            = mp_valid<nested_iterator_traits_value_type, T>;
 
-    template <class T>
-    constexpr bool has_iterator_traits_value_type_v
-        = has_iterator_traits_value_type<T>::value;
-} // namespace futures::detail
+        template <class T>
+        constexpr bool has_iterator_traits_value_type_v
+            = has_iterator_traits_value_type<T>::value;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_HAS_ITERATOR_TRAITS_VALUE_TYPE_HPP

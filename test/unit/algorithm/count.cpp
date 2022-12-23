@@ -15,7 +15,7 @@ TEST_CASE("algorithm count") {
         test_value_cmp(count, v, 2000, 1);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
         STATIC_REQUIRE(futures::count(a, 3) == 1);

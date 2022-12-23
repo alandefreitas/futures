@@ -10,31 +10,38 @@
 
 #include <futures/traits/is_shared_future.hpp>
 
-namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
-    /** @addtogroup future-traits Future Traits
-     *  @{
-     */
-
-    /// Move or share a future, depending on the type of future input
-    ///
-    /// Create another future with the state of the before future (usually for a
-    /// continuation function). This state should be copied to the new callback
-    /// function. Shared futures can be copied. Normal futures should be moved.
-    /// @return The moved future or the shared future
-    template <class Future>
-    constexpr FUTURES_DETAIL(decltype(auto))
-    move_if_not_shared(Future &&before) {
-        if constexpr (is_shared_future_v<std::decay_t<Future>>) {
-            return std::forward<Future>(before);
-        } else {
-            return std::move(std::forward<Future>(before));
+namespace futures {
+    namespace detail {
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        move_if_not_shared_impl(
+            std::true_type /* is_shared_future */,
+            Future &&f) {
+            return std::forward<Future>(f);
         }
-    }
 
-    /** @} */ // @addtogroup future-traits Future Traits
-    /** @} */ // @addtogroup futures Futures
-} // namespace futures::detail
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        move_if_not_shared_impl(
+            std::false_type /* is_shared_future */,
+            Future &&f) {
+            return std::move(std::forward<Future>(f));
+        }
+
+        // Move or share a future, depending on the type of future input
+        //
+        // Create another future with the state of the f future (usually
+        // for a continuation function). This state should be copied to the new
+        // callback function. Shared futures can be copied. Normal futures
+        // should be moved.
+        // @return The moved future or the shared future
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        move_if_not_shared(Future &&f) {
+            return move_if_not_shared_impl(
+                is_shared_future<std::decay_t<Future>>{},
+                std::forward<Future>(f));
+        }
+    } // namespace detail
+} // namespace futures
 #endif // FUTURES_DETAIL_MOVE_IF_NOT_SHARED_HPP

@@ -22,12 +22,6 @@ include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 #######################################################
-### Enable FetchContent                             ###
-#######################################################
-# Functions to find or download packages if we can't find_package
-include(FetchContent)
-
-#######################################################
 ### Disable warnings in FetchContent                ###
 #######################################################
 # target_include_directories with the SYSTEM modifier will request the compiler

@@ -21,6 +21,7 @@
 #include <futures/future.hpp>
 #include <futures/throw.hpp>
 #include <futures/detail/operation_state.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/utility/to_address.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <memory>
@@ -140,7 +141,7 @@ namespace futures {
 
         /// Set the promise result as an exception
         FUTURES_TEMPLATE(typename E)
-        (requires std::is_base_of_v<std::exception, E>) void set_exception(
+        (requires std::is_base_of<std::exception, E>::value) void set_exception(
             E e) {
             set_exception(std::make_exception_ptr(e));
         }
@@ -163,14 +164,28 @@ namespace futures {
         template <class Allocator>
         detail::shared_state<R, Options>
         make_shared_state(Allocator const &alloc) {
-            if constexpr (Options::has_executor) {
-                return std::allocate_shared<detail::operation_state<R, Options>>(
-                    alloc,
-                    make_default_executor());
-            } else {
-                return std::allocate_shared<detail::operation_state<R, Options>>(
-                    alloc);
-            }
+            return make_shared_state_impl(
+                detail::mp_bool<Options::has_executor>{},
+                alloc);
+        }
+
+        template <class Allocator>
+        detail::shared_state<R, Options>
+        make_shared_state_impl(
+            std::true_type /* has_executor */,
+            Allocator const &alloc) {
+            return std::allocate_shared<detail::operation_state<R, Options>>(
+                alloc,
+                make_default_executor());
+        }
+
+        template <class Allocator>
+        detail::shared_state<R, Options>
+        make_shared_state_impl(
+            std::false_type /* has_executor */,
+            Allocator const &alloc) {
+            return std::allocate_shared<detail::operation_state<R, Options>>(
+                alloc);
         }
 
         // True if the future has already obtained the promise

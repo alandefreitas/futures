@@ -27,6 +27,7 @@
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 
 namespace futures {
@@ -85,22 +86,22 @@ namespace futures {
 #endif
 
     /// Tag used in algorithms for a sequenced_policy
-    inline constexpr sequenced_policy seq{};
+    FUTURES_INLINE_VAR constexpr sequenced_policy seq{};
 
     /// Tag used in algorithms for a parallel_policy
-    inline constexpr parallel_policy par{};
+    FUTURES_INLINE_VAR constexpr parallel_policy par{};
 
     /// Tag used in algorithms for a parallel_unsequenced_policy
-    inline constexpr parallel_unsequenced_policy par_unseq{};
+    FUTURES_INLINE_VAR constexpr parallel_unsequenced_policy par_unseq{};
 
     /// Tag used in algorithms for an unsequenced_policy
-    inline constexpr unsequenced_policy unseq{};
+    FUTURES_INLINE_VAR constexpr unsequenced_policy unseq{};
 
     /// Determines whether T is a standard or implementation-defined
     /// execution policy type.
     template <class T>
     struct is_execution_policy
-        : std::disjunction<
+        : detail::disjunction<
               std::is_same<T, sequenced_policy>,
               std::is_same<T, parallel_policy>,
               std::is_same<T, parallel_unsequenced_policy>,
@@ -108,14 +109,27 @@ namespace futures {
 
     /// @copydoc is_execution_policy
     template <class T>
-    inline constexpr bool is_execution_policy_v = is_execution_policy<T>::value;
+    FUTURES_INLINE_VAR constexpr bool is_execution_policy_v
+        = is_execution_policy<T>::value;
 
     namespace detail {
         template <class E>
         using policy_executor_type = std::conditional_t<
-            !std::is_same_v<E, sequenced_policy>,
+            !is_same_v<E, sequenced_policy>,
             default_execution_context_type::executor_type,
             inline_executor>;
+
+        template <class E>
+        constexpr detail::policy_executor_type<E>
+        make_policy_executor_impl(std::true_type) {
+            return make_default_executor();
+        }
+
+        template <class E>
+        constexpr detail::policy_executor_type<E>
+        make_policy_executor_impl(std::false_type) {
+            return make_inline_executor();
+        }
     } // namespace detail
 
     /// Make an executor appropriate to a given policy
@@ -130,11 +144,8 @@ namespace futures {
         !is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I>
         && is_sentinel_for_v<S, I>)) constexpr detail::
         policy_executor_type<E> make_policy_executor() {
-        if constexpr (!std::is_same_v<E, sequenced_policy>) {
-            return make_default_executor();
-        } else {
-            return make_inline_executor();
-        }
+        return detail::make_policy_executor_impl<E>(
+            boost::mp11::mp_bool<!detail::is_same_v<E, sequenced_policy>>{});
     }
 
     /** @} */

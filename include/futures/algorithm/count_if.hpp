@@ -25,10 +25,11 @@
 #include <futures/algorithm/traits/iter_difference.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -59,7 +60,7 @@ namespace futures {
                 auto middle = p(first, last);
                 iter_difference_t<I> const too_small = middle == last;
                 constexpr iter_difference_t<I> cannot_parallelize
-                    = std::is_same_v<Executor, inline_executor>
+                    = detail::is_same_v<Executor, inline_executor>
                       || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     return std::count_if(first, last, f);
@@ -118,7 +119,7 @@ namespace futures {
         FUTURES_TEMPLATE(class I, class S, class Fun)
         (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
              &&is_indirectly_unary_invocable_v<Fun, I>
-                 &&std::is_copy_constructible_v<
+                 &&detail::is_copy_constructible_v<
                      Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             iter_difference_t<I> inline_count_if(I first, S last, Fun p) {
             iter_difference_t<I> ret = 0;
@@ -149,11 +150,13 @@ namespace futures {
         (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_unary_invocable_v<Fun, I>
-                     &&std::is_copy_constructible_v<Fun>)
+                     &&detail::is_copy_constructible_v<Fun>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             iter_difference_t<I> run(E const &ex, P p, I first, S last, Fun f)
                 const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 return inline_count_if(first, last, f);
             } else {
@@ -168,7 +171,7 @@ namespace futures {
     };
 
     /// Returns the number of elements satisfying specific criteria
-    inline constexpr count_if_functor count_if;
+    FUTURES_INLINE_VAR constexpr count_if_functor count_if;
 
     /** @} */
     /** @} */

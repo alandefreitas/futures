@@ -19,7 +19,8 @@ TEST_CASE("algorithm find if not") {
         test_unary_invoke(find_if_not, v, fun, v.begin() + 2699);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 

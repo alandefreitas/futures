@@ -33,13 +33,18 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/copyable
      */
+#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_copyable = std::conjunction<
+    using is_copyable = std::bool_constant<std::copyable<T>>;
+#else
+    template <class T>
+    using is_copyable = detail::conjunction<
         std::is_copy_constructible<T>,
         is_movable<T>,
         is_assignable_from<T&, T&>,
         is_assignable_from<T&, std::add_const_t<T>&>,
         is_assignable_from<T&, std::add_const_t<T>>>;
+#endif
 
     /// @copydoc is_copyable
     template <class T>

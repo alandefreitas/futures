@@ -17,7 +17,10 @@
  */
 
 #include <futures/config.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
+#include <futures/executor/detail/is_executor.hpp>
 #include <futures/detail/deps/asio/is_executor.hpp>
+#include <futures/detail/deps/asio/execution/executor.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -35,7 +38,16 @@ namespace futures {
      *  This trait might be adjusted to allow other executor types.
      **/
     template <class T>
-    using is_executor = FUTURES_DETAIL(asio::is_executor<T>);
+    using is_executor =
+#ifndef FUTURES_DOXYGEN
+        detail::disjunction<
+            asio::is_executor<T>,
+            asio::execution::is_executor<T>,
+            detail::has_execute<T>>;
+#else
+        __see_below__;
+#endif
+
 
     /// Determine if type is an executor
     template <class T>

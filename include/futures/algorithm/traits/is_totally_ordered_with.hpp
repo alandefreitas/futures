@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/algorithm/traits/is_equality_comparable_with.hpp>
 #include <futures/algorithm/traits/is_totally_ordered.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/is_partially_ordered_with.hpp>
 #include <futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp>
 #include <type_traits>
@@ -41,7 +42,7 @@ namespace futures {
         std::totally_ordered_with<T, U>>;
 #else
     template <class T, class U>
-    using is_totally_ordered_with = std::conjunction<
+    using is_totally_ordered_with = detail::conjunction<
         is_totally_ordered<T>,
         is_totally_ordered<U>,
         is_equality_comparable_with<T, U>,

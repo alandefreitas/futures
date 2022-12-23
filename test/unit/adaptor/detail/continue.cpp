@@ -4,9 +4,10 @@
 #include <futures/adaptor/then.hpp>
 #include <futures/adaptor/when_any.hpp>
 #include <futures/traits/future_value.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <catch2/catch.hpp>
 
-#define REQUIRE_SAME(A, B) STATIC_REQUIRE(std::is_same_v<A, B>)
+#define REQUIRE_SAME(A, B) STATIC_REQUIRE(std::is_same<A, B>::value)
 
 TEST_CASE("Continuation traits") {
     using namespace futures;
@@ -33,10 +34,10 @@ TEST_CASE("Continuation traits") {
             return x;
         };
         using F = decltype(f);
-        STATIC_REQUIRE(std::is_invocable_v<F, S>);
-        STATIC_REQUIRE(std::is_invocable_v<F, SL>);
-        STATIC_REQUIRE(std::is_invocable_v<F, SR>);
-        STATIC_REQUIRE(std::is_invocable_v<F, SCL>);
+        STATIC_REQUIRE(is_invocable_v<F, S>);
+        STATIC_REQUIRE(is_invocable_v<F, SL>);
+        STATIC_REQUIRE(is_invocable_v<F, SR>);
+        STATIC_REQUIRE(is_invocable_v<F, SCL>);
 
         // invoke with f(x)
         auto fl = [](std::string& x) {
@@ -50,28 +51,28 @@ TEST_CASE("Continuation traits") {
 #else
             false;
 #endif
-        STATIC_REQUIRE(is_msvc || !std::is_invocable_v<FL, S>);
-        STATIC_REQUIRE(std::is_invocable_v<FL, SL>);
-        STATIC_REQUIRE(is_msvc || !std::is_invocable_v<FL, SR>);
-        STATIC_REQUIRE(std::is_invocable_v<FL, SCL>);
+        STATIC_REQUIRE(is_msvc || !is_invocable_v<FL, S>);
+        STATIC_REQUIRE(is_invocable_v<FL, SL>);
+        STATIC_REQUIRE(is_msvc || !is_invocable_v<FL, SR>);
+        STATIC_REQUIRE(is_invocable_v<FL, SCL>);
 
         auto fr = [](std::string&& x) {
             return std::move(x);
         };
         using FR = decltype(fr);
-        STATIC_REQUIRE(std::is_invocable_v<FR, S>);
-        STATIC_REQUIRE_FALSE(std::is_invocable_v<FR, SL>);
-        STATIC_REQUIRE(std::is_invocable_v<FR, SR>);
-        STATIC_REQUIRE_FALSE(std::is_invocable_v<FR, SCL>);
+        STATIC_REQUIRE(is_invocable_v<FR, S>);
+        STATIC_REQUIRE_FALSE(is_invocable_v<FR, SL>);
+        STATIC_REQUIRE(is_invocable_v<FR, SR>);
+        STATIC_REQUIRE_FALSE(is_invocable_v<FR, SCL>);
 
         auto fcl = [](std::string const& x) {
             return x;
         };
         using FCL = decltype(fcl);
-        STATIC_REQUIRE(std::is_invocable_v<FCL, S>);
-        STATIC_REQUIRE(std::is_invocable_v<FCL, SL>);
-        STATIC_REQUIRE(std::is_invocable_v<FCL, SR>);
-        STATIC_REQUIRE(std::is_invocable_v<FCL, SCL>);
+        STATIC_REQUIRE(is_invocable_v<FCL, S>);
+        STATIC_REQUIRE(is_invocable_v<FCL, SL>);
+        STATIC_REQUIRE(is_invocable_v<FCL, SR>);
+        STATIC_REQUIRE(is_invocable_v<FCL, SCL>);
     }
 
     SECTION("Traits") {
@@ -134,7 +135,7 @@ TEST_CASE("Continuation traits") {
                     futures::detail::continue_tags::no_input,
                     futures::detail::continue_tags::rvalue_unwrap>>([](auto I) {
                     STATIC_REQUIRE(
-                        std::is_same_v<
+                        is_same_v<
                             futures::detail::continue_tags::no_unwrap,
                             decltype(I)>
                         == futures::detail::continue_invoke_traits<
@@ -173,6 +174,5 @@ TEST_CASE("Continuation traits") {
         }
     }
 }
-
 
 #undef REQUIRE_SAME

@@ -18,13 +18,17 @@ TEST_CASE("algorithm all of") {
         test_unary_invoke(all_of, v, fun, true);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 
-        constexpr auto is_odd = [](int x) {
-            return x & 1;
+        struct is_odd_fn {
+            constexpr bool
+            operator()(int x) {
+                return x & 1;
+            };
         };
+        constexpr is_odd_fn is_odd;
         STATIC_REQUIRE(futures::all_of(a, is_odd) == false);
         STATIC_REQUIRE(futures::all_of(a.begin(), a.end(), is_odd) == false);
         futures::asio::thread_pool pool;

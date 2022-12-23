@@ -43,7 +43,7 @@ namespace futures {
      *  @return Number of concurrent threads supported. If the value is not
      *  well-defined or not computable, returns 1.
      **/
-    FUTURES_CONSTANT_EVALUATED_CONSTEXPR std::size_t
+    FUTURES_CONSTANT_EVALUATED_CONSTEXPR_DECLARE std::size_t
     hardware_concurrency() noexcept {
         if (detail::is_constant_evaluated()) {
             return 1;

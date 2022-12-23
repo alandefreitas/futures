@@ -16,6 +16,7 @@
  */
 
 #include <futures/algorithm/traits/remove_cvref.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/has_element_type.hpp>
 #include <futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp>
 #include <futures/algorithm/traits/detail/has_value_type.hpp>
@@ -44,7 +45,7 @@ namespace futures {
     struct iterator {};
 
     template <class T>
-    struct iterator<T, std::void_t<decltype(begin(std::declval<T&>()))>> {
+    struct iterator<T, detail::void_t<decltype(begin(std::declval<T&>()))>> {
         using type = decltype(begin(std::declval<T&>()));
     };
 #endif

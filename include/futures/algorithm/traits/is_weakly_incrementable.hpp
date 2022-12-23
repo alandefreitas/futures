@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_movable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -34,7 +35,8 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>
-    using is_weakly_incrementable = std::bool_constant<std::weakly_incrementable<T>>;
+    using is_weakly_incrementable = std::bool_constant<
+        std::weakly_incrementable<T>>;
 #else
     template <class I, class = void>
     struct is_weakly_incrementable : std::false_type {};
@@ -42,14 +44,14 @@ namespace futures {
     template <class I>
     struct is_weakly_incrementable<
         I,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<I&>()++),
             decltype(++std::declval<I&>()),
             iter_difference_t<I>
             // clang-format on
             >>
-        : std::conjunction<
+        : detail::conjunction<
               // clang-format off
               is_movable<I>,
               std::is_same<decltype(++std::declval<I&>()), I&>

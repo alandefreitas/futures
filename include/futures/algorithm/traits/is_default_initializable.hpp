@@ -16,6 +16,7 @@
  */
 
 #include <futures/algorithm/traits/is_constructible_from.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -35,7 +36,8 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_default_initializable = std::bool_constant<std::default_initializable<T>>;
+    using is_default_initializable = std::bool_constant<
+        std::default_initializable<T>>;
 #else
     template <class T, class = void>
     struct is_default_initializable : std::false_type {};
@@ -43,7 +45,7 @@ namespace futures {
     template <class T>
     struct is_default_initializable<
         T,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             std::enable_if_t<is_constructible_from_v<T>>,
             decltype(T{})

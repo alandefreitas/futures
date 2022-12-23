@@ -27,7 +27,7 @@
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <numeric>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -55,10 +55,10 @@ namespace futures {
                 auto middle = p(first, last);
                 iter_difference_t<I> const too_small = middle == last;
                 constexpr iter_difference_t<I> cannot_parallelize
-                    = std::is_same_v<Executor, inline_executor>
+                    = detail::is_same_v<Executor, inline_executor>
                       || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
-                    return std::reduce(first, last, i, f);
+                    return std::accumulate(first, last, i, f);
                 } else {
                     // Create task that launches tasks for rhs: [middle, last]
                     basic_future<
@@ -105,9 +105,9 @@ namespace futures {
 
         FUTURES_TEMPLATE(class I, class S, class T, class Fun = std::plus<>)
         (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
-             &&std::is_same_v<iter_value_t<I>, T>
+             &&detail::is_same_v<iter_value_t<I>, T>
                  &&is_indirectly_binary_invocable_v<Fun, I, I>
-                     &&std::is_copy_constructible_v<
+                     &&detail::is_copy_constructible_v<
                          Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
             inline_accumulate(I first, S last, T init, Fun op) {
             for (; first != last; ++first) {
@@ -139,13 +139,15 @@ namespace futures {
             class Fun = std::plus<>)
         (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
-                 &&std::is_same_v<iter_value_t<I>, T>
+                 &&detail::is_same_v<iter_value_t<I>, T>
                      &&is_indirectly_binary_invocable_v<Fun, I, I>
-                         &&std::is_copy_constructible_v<Fun>)
+                         &&detail::is_copy_constructible_v<Fun>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR T
             run(E const &ex, P p, I first, S last, T i, Fun f = std::plus<>())
                 const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 return inline_accumulate(first, last, i, f);
             } else {
@@ -161,7 +163,7 @@ namespace futures {
 
     /// Sums up (or accumulate with a custom function) a range of
     /// elements, except out of order
-    inline constexpr reduce_functor reduce;
+    FUTURES_INLINE_VAR constexpr reduce_functor reduce;
 
     /** @} */
     /** @} */

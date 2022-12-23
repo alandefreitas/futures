@@ -12,8 +12,8 @@ namespace futures {
     FUTURES_TEMPLATE_IMPL(class Executor, class Function, class... Args)
     (requires(
         is_executor_v<Executor>
-        && (std::is_invocable_v<Function, Args...>
-            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        && (detail::is_invocable_v<Function, Args...>
+            || detail::is_invocable_v<Function, stop_token, Args...>) ))
         FUTURES_DETAIL(decltype(auto))
             async(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
@@ -27,8 +27,8 @@ namespace futures {
     FUTURES_TEMPLATE_IMPL(class Function, class... Args)
     (requires(
         !is_executor_v<Function>
-        && (std::is_invocable_v<Function, Args...>
-            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        && (detail::is_invocable_v<Function, Args...>
+            || detail::is_invocable_v<Function, stop_token, Args...>) ))
         FUTURES_DETAIL(decltype(auto)) async(Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<detail::async_future_options_t<
@@ -43,8 +43,8 @@ namespace futures {
     FUTURES_TEMPLATE_IMPL(class Executor, class Function, class... Args)
     (requires(
         (is_executor_v<Executor>
-         && (std::is_invocable_v<Function, Args...>
-             || std::is_invocable_v<Function, stop_token, Args...>) )))
+         && (detail::is_invocable_v<Function, Args...>
+             || detail::is_invocable_v<Function, stop_token, Args...>) )))
         FUTURES_DETAIL(decltype(auto))
             schedule(Executor const &ex, Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
@@ -58,8 +58,8 @@ namespace futures {
     FUTURES_TEMPLATE_IMPL(class Function, class... Args)
     (requires(
         (!is_executor_v<Function>
-         && (std::is_invocable_v<Function, Args...>
-             || std::is_invocable_v<Function, stop_token, Args...>) )))
+         && (detail::is_invocable_v<Function, Args...>
+             || detail::is_invocable_v<Function, stop_token, Args...>) )))
         FUTURES_DETAIL(decltype(auto)) schedule(Function &&f, Args &&...args) {
         return detail::async_future_scheduler{}
             .schedule<detail::schedule_future_options_t<

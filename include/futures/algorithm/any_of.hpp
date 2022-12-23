@@ -22,10 +22,11 @@
 #include <futures/algorithm/partitioner/partitioner.hpp>
 #include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -50,7 +51,7 @@ namespace futures {
             bool
             launch_any_of_tasks(P p, I first, S last, Fun f) {
                 constexpr bool cannot_parallelize
-                    = std::is_same_v<Executor, inline_executor>
+                    = detail::is_same_v<Executor, inline_executor>
                       || !is_bidirectional_iterator_v<I>;
                 if (cannot_parallelize) {
                     return std::all_of(first, last, f);
@@ -114,7 +115,7 @@ namespace futures {
         FUTURES_TEMPLATE(class I, class S, class Fun)
         (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
              &&is_indirectly_unary_invocable_v<Fun, I>
-                 &&std::is_copy_constructible_v<
+                 &&detail::is_copy_constructible_v<
                      Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             bool inline_any_of(I first, S last, Fun p) {
             for (; first != last; ++first) {
@@ -143,10 +144,12 @@ namespace futures {
         (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_unary_invocable_v<Fun, I>
-                     &&std::is_copy_constructible_v<Fun>)
+                     &&detail::is_copy_constructible_v<Fun>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             bool run(E const &ex, P p, I first, S last, Fun f) const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 return inline_any_of(first, last, f);
             } else {
@@ -161,7 +164,7 @@ namespace futures {
     };
 
     /// Checks if a predicate is true for any of the elements in a range
-    inline constexpr any_of_functor any_of;
+    FUTURES_INLINE_VAR constexpr any_of_functor any_of;
 
     /** @} */
     /** @} */

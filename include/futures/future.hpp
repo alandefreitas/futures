@@ -87,6 +87,7 @@
 #include <futures/detail/share_if_not_shared.hpp>
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/variant_state.hpp>
 #include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
@@ -172,7 +173,7 @@ namespace futures {
          */
         using operation_state_options = detail::
             remove_future_option_t<shared_opt, Options>;
-        static_assert(
+        FUTURES_STATIC_ASSERT_MSG(
             !operation_state_options::is_shared,
             "The underlying operation state cannot be shared");
 
@@ -414,8 +415,8 @@ namespace futures {
          */
         FUTURES_TEMPLATE(class T)
         (requires(
-            std::is_same_v<T, R>
-            && !std::is_void_v<R>)) explicit basic_future(T &&v) noexcept
+            detail::is_same_v<T, R>
+            && !detail::is_void_v<R>)) explicit basic_future(T &&v) noexcept
             : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)
@@ -511,6 +512,7 @@ namespace futures {
         basic_future<R, detail::append_future_option_t<shared_opt, Options>>
         share();
 
+    public:
         /**
          * @}
          */
@@ -546,6 +548,17 @@ namespace futures {
         FUTURES_DETAIL(decltype(auto))
         get();
 
+    private:
+        FUTURES_DETAIL(decltype(auto))
+        get_impl(boost::mp11::mp_int<0>);
+
+        FUTURES_DETAIL(decltype(auto))
+        get_impl(boost::mp11::mp_int<1>);
+
+        FUTURES_DETAIL(decltype(auto))
+        get_impl(boost::mp11::mp_int<2>);
+
+    public:
         /// Get exception pointer without throwing an exception
         /**
          * If the future does not hold an exception, the exception_ptr is
@@ -587,7 +600,7 @@ namespace futures {
          *
          * @return true if `*this` refers to a valid operation state
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         valid() const {
             return state_.valid();
         }
@@ -689,7 +702,7 @@ namespace futures {
          *
          * @return `true` if the associated shared state is ready
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         is_ready() const;
 
         /// Tell this future not to join at destruction
@@ -769,6 +782,28 @@ namespace futures {
         FUTURES_DETAIL(decltype(auto))
         then(Executor const &ex, Fn &&fn);
 
+    private:
+        template <
+            class Executor,
+            class Fn FUTURES_ALSO_SELF_REQUIRE(
+                (Options::is_continuable || Options::is_always_deferred))>
+        FUTURES_DETAIL(decltype(auto))
+        then_impl(
+            std::true_type /* is_continuable */,
+            Executor const &ex,
+            Fn &&fn);
+
+        template <
+            class Executor,
+            class Fn FUTURES_ALSO_SELF_REQUIRE(
+                (Options::is_continuable || Options::is_always_deferred))>
+        FUTURES_DETAIL(decltype(auto))
+        then_impl(
+            std::false_type /* is_continuable */,
+            Executor const &ex,
+            Fn &&fn);
+
+    public:
         /// Attaches a continuation to a future on the same executor
         /**
          * Attach the continuation function to this future object with the
@@ -803,7 +838,7 @@ namespace futures {
         FUTURES_SELF_REQUIRE((Options::has_executor))
         const typename Options::executor_t &
         get_executor() const {
-            static_assert(Options::has_executor);
+            FUTURES_STATIC_ASSERT(Options::has_executor);
             return state_.get_executor();
         }
 
@@ -847,7 +882,7 @@ namespace futures {
          * @return The stop source
          */
         FUTURES_SELF_REQUIRE((Options::is_stoppable))
-        [[nodiscard]] stop_source
+        FUTURES_NODISCARD stop_source
         get_stop_source() const noexcept {
             return state_.get_stop_source();
         }
@@ -863,7 +898,7 @@ namespace futures {
          * @return The stop token
          */
         FUTURES_SELF_REQUIRE((Options::is_stoppable))
-        [[nodiscard]] stop_token
+        FUTURES_NODISCARD stop_token
         get_stop_token() const noexcept {
             return get_stop_source().get_token();
         }
@@ -884,8 +919,8 @@ namespace futures {
          * @return The continuations source
          */
         FUTURES_SELF_REQUIRE((Options::is_continuable))
-        [[nodiscard]] FUTURES_DETAIL(decltype(auto))
-            get_continuations_source() const noexcept {
+        FUTURES_NODISCARD FUTURES_DETAIL(decltype(auto))
+        get_continuations_source() const noexcept {
             return state_.get_continuations_source();
         }
 

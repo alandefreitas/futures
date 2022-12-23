@@ -34,26 +34,36 @@ namespace futures {
         }
 
         // boost::fibers::future_status::ready == 1
-        inline
-        bool
+        inline bool
         is_ready_status(boost::fibers::future_status s) {
             return static_cast<int>(s) == 1;
         }
 
         // boost::future_status::ready == 0
-        inline
-        bool
+        inline bool
         is_ready_status(boost::future_status s) {
             return static_cast<int>(s) == 0;
         }
 
         // std::future_status::ready == 0
-        template <class E, std::enable_if_t<std::is_enum_v<E>, int> = 0>
+        template <class E, std::enable_if_t<is_enum_v<E>, int> = 0>
         bool
         is_ready_status(E s) {
             // This will work for any std::future_status or equivalent that
             // defines future_status::ready as `0`
             return static_cast<int>(s) == 0;
+        }
+
+        template <class Future>
+        bool
+        is_ready_impl(std::true_type /* has_is_ready */, Future &&f) {
+            return f.is_ready();
+        }
+
+        template <class Future>
+        bool
+        is_ready_impl(std::false_type /* has_is_ready */, Future &&f) {
+            return detail::is_ready_status(f.wait_for(std::chrono::seconds(0)));
         }
     } // namespace detail
 #endif
@@ -63,11 +73,9 @@ namespace futures {
         assert(
             f.valid()
             && "Undefined behaviour. Checking if an invalid future is ready.");
-        if constexpr (detail::has_is_ready_v<Future>) {
-            return f.is_ready();
-        } else {
-            return detail::is_ready_status(f.wait_for(std::chrono::seconds(0)));
-        }
+        return detail::is_ready_impl(
+            detail::has_is_ready<Future>{},
+            std::forward<Future>(f));
     }
 } // namespace futures
 

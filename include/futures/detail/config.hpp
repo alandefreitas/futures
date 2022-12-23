@@ -13,6 +13,7 @@
  */
 
 #include <futures/detail/deps/boost/config.hpp>
+#include <futures/detail/deps/boost/static_assert.hpp>
 
 /*
  * Documentation related macros
@@ -59,16 +60,17 @@
 #    define FUTURES_CONCAT_HELPER(X, ...) X##__VA_ARGS__
 #    define FUTURES_CONCAT(X, ...)        FUTURES_CONCAT_HELPER(X, __VA_ARGS__)
 #    define FUTURES_REQUIRES_TO_SFINAE(...)                     \
-        std::enable_if_t<                                       \
+        typename std::enable_if<                                \
             FUTURES_CONCAT(FUTURES_TEMPLATE_AUX_, __VA_ARGS__), \
-            int>                                                \
+            int>::type                                          \
             = 0 >
 #    define FUTURES_TEMPLATE(...) \
         template <__VA_ARGS__, FUTURES_REQUIRES_TO_SFINAE
 #    define FUTURES_REQUIRES_TO_SFINAE_IMPL(...)                \
-        std::enable_if_t<                                       \
+        typename std::enable_if<                                \
             FUTURES_CONCAT(FUTURES_TEMPLATE_AUX_, __VA_ARGS__), \
-            int> >
+            int>::type                                          \
+            >
 #    define FUTURES_TEMPLATE_IMPL(...) \
         template <__VA_ARGS__, FUTURES_REQUIRES_TO_SFINAE_IMPL
 #    define FUTURES_TEMPLATE_AUX_requires
@@ -119,5 +121,90 @@
 #    define FUTURES_CURRENT_LOCATION BOOST_CURRENT_LOCATION
 #endif
 
+/*
+ * Inline variables
+ */
+#if !defined(BOOST_NO_CXX17_INLINE_VARIABLES) || defined(FUTURES_DOXYGEN)
+#    define FUTURES_INLINE_VAR inline
+#    define FUTURES_INLINE_VARIABLE(type, name) \
+        inline constexpr type name{};           \
+        /**/
+#else
+namespace futures {
+    namespace detail {
+        template <typename T>
+        struct static_const {
+            static constexpr T value{};
+        };
+
+        template <typename T>
+        constexpr T static_const<T>::value;
+    } // namespace detail
+} // namespace futures
+
+#    define FUTURES_INLINE_VAR
+#    define FUTURES_INLINE_VARIABLE(type, name)                    \
+        namespace {                                                \
+            constexpr auto& name = ::futures::detail<type>::value; \
+        }
+#endif
+
+/*
+ * STATIC_ASSERT
+ */
+#ifndef FUTURES_STATIC_ASSERT
+#    define FUTURES_STATIC_ASSERT(...)     BOOST_STATIC_ASSERT(__VA_ARGS__)
+#    define FUTURES_STATIC_ASSERT_MSG(...) BOOST_STATIC_ASSERT_MSG(__VA_ARGS__)
+#endif
+
+/*
+ * STATIC_ASSERT
+ */
+#ifndef FUTURES_IF_CONSTEXPR
+#    define FUTURES_IF_CONSTEXPR BOOST_IF_CONSTEXPR
+#endif
+
+/*
+ * CONSTINIT
+ */
+#if defined(__cpp_constinit) && __cpp_constinit >= 201907L
+#    define FUTURES_CONST_INIT constinit
+#elif __has_cpp_attribute(clang::require_constant_initialization)
+#    define FUTURES_CONST_INIT [[clang::require_constant_initialization]]
+#else
+#    define FUTURES_CONST_INIT
+#endif
+
+/*
+ * FUTURES_NODISCARD
+ */
+#ifndef FUTURES_NODISCARD
+#    ifdef BOOST_ATTRIBUTE_NODISCARD
+#        define FUTURES_NODISCARD BOOST_ATTRIBUTE_NODISCARD
+#    else
+#        define FUTURES_NODISCARD
+#    endif
+#endif
+
+/*
+ * constexpr
+ */
+// C++14 201304L supports relaxed constexpr with statements and non-const
+// constexpr
+#ifdef BOOST_NO_CXX14_CONSTEXPR
+#    define FUTURES_CXX14_CONSTEXPR
+#else
+#    define FUTURES_CXX14_CONSTEXPR constexpr
+#endif
+
+// C++17 201603L supports constexpr lambdas
+#if !defined(__cpp_constexpr) || (__cpp_constexpr < 201603L)
+#    define FUTURES_CXX17_CONSTEXPR
+#    define FUTURES_CXX17_CONSTEXPR_DECLARE inline
+#else
+#    define FUTURES_HAS_CXX17_CONSTEXPR
+#    define FUTURES_CXX17_CONSTEXPR_DECLARE constexpr
+#    define FUTURES_CXX17_CONSTEXPR         constexpr
+#endif
 
 #endif // FUTURES_DETAIL_CONFIG_HPP

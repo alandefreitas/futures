@@ -8,6 +8,7 @@
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/hardware_concurrency.hpp>
 #include <futures/detail/traits/future_value.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <thread>
 
 /**
@@ -175,7 +176,7 @@ namespace futures {
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
     template <class T, class I, class S = I>
-    using is_partitioner = std::conjunction<
+    using is_partitioner = detail::conjunction<
         std::conditional_t<
             is_input_iterator_v<I>,
             std::true_type,
@@ -184,7 +185,7 @@ namespace futures {
             is_input_iterator_v<S>,
             std::true_type,
             std::false_type>,
-        std::is_invocable<T, I, S>>;
+        detail::is_invocable<T, I, S>>;
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
     template <class P, class I, class S = I>

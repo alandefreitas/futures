@@ -20,6 +20,7 @@
 #include <futures/algorithm/traits/is_incrementable.hpp>
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_sentinel_for.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/iter_concept.hpp>
 #include <type_traits>
 
@@ -41,7 +42,7 @@ namespace futures {
     using is_forward_iterator = std::bool_constant<std::forward_iterator<T>>;
 #else
     template <class I>
-    using is_forward_iterator = std::conjunction<
+    using is_forward_iterator = detail::conjunction<
         is_input_iterator<I>,
         is_derived_from<detail::iter_concept_t<I>, std::forward_iterator_tag>,
         is_incrementable<I>,

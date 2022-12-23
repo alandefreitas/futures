@@ -13,12 +13,14 @@
 #include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T>
-    using has_value_type = mp_valid<nested_value_type_t, T>;
+namespace futures {
+    namespace detail {
+        template <class T>
+        using has_value_type = mp_valid<nested_value_type_t, T>;
 
-    template <class T>
-    constexpr bool has_value_type_v = has_value_type<T>::value;
-} // namespace futures::detail
+        template <class T>
+        constexpr bool has_value_type_v = has_value_type<T>::value;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_HAS_VALUE_TYPE_HPP

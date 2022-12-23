@@ -10,24 +10,26 @@
 
 #include <futures/detail/future_options_list.hpp>
 
-namespace futures::detail {
-    template <class Opt, class Opts, class = void>
-    struct prepend_future_option {
-        using type = Opts;
-    };
+namespace futures {
+    namespace detail {
+        template <class Opt, class Opts, class = void>
+        struct prepend_future_option {
+            using type = Opts;
+        };
 
-    template <class Opt, class... Args>
-    struct prepend_future_option<
-        Opt,
-        future_options_list<Args...>,
-        std::enable_if_t<!mp_contains<mp_list<Args...>, Opt>::value>> {
-        using type = future_options_list<Opt, Args...>;
-    };
+        template <class Opt, class... Args>
+        struct prepend_future_option<
+            Opt,
+            future_options_list<Args...>,
+            std::enable_if_t<!mp_contains<mp_list<Args...>, Opt>::value>> {
+            using type = future_options_list<Opt, Args...>;
+        };
 
-    template <class Opt, class Opts>
-    using prepend_future_option_t = typename prepend_future_option<Opt, Opts>::
-        type;
+        template <class Opt, class Opts>
+        using prepend_future_option_t =
+            typename prepend_future_option<Opt, Opts>::type;
 
-} // namespace futures::detail
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_DETAIL_TRAITS_PREPEND_FUTURE_OPTION_HPP

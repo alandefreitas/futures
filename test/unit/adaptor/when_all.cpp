@@ -17,8 +17,7 @@ TEST_CASE("when_all") {
         auto f = when_all();
         REQUIRE(f.valid());
         REQUIRE_NOTHROW(f.wait());
-        REQUIRE(
-            f.wait_for(std::chrono::seconds(0)) == future_status::ready);
+        REQUIRE(f.wait_for(std::chrono::seconds(0)) == future_status::ready);
         REQUIRE(
             f.wait_until(
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
@@ -40,14 +39,16 @@ TEST_CASE("when_all") {
         SECTION("Wait") {
             REQUIRE_NOTHROW(f.wait());
             REQUIRE_NOTHROW(
-                f.wait_for(std::chrono::seconds(0))
-                == future_status::ready);
+                f.wait_for(std::chrono::seconds(0)) == future_status::ready);
             REQUIRE_NOTHROW(
                 f.wait_until(
                     std::chrono::system_clock::now() + std::chrono::seconds(0))
                 == future_status::ready);
             REQUIRE(is_ready(f));
-            auto [r1, r2, r3] = f.get();
+            cfuture<int> r1;
+            cfuture<double> r2;
+            cfuture<std::string> r3;
+            std::tie(r1, r2, r3) = f.get();
             REQUIRE(r1.get() == 2);
             double d = r2.get();
             REQUIRE(d >= 3.0);
@@ -70,23 +71,24 @@ TEST_CASE("when_all") {
                     std::decay_t<decltype(continuation)>,
                     std::decay_t<decltype(f)>>::is_valid);
             STATIC_REQUIRE(
-                std::is_same_v<
+                std::is_same<
                     int,
-                    std::invoke_result_t<
+                    detail::invoke_result_t<
                         decltype(continuation),
                         std::tuple<
                             cfuture<int>,
                             cfuture<double>,
-                            cfuture<std::string>>>>);
+                            cfuture<std::string>>>>::value);
             STATIC_REQUIRE(
-                std::is_same_v<
+                std::is_same<
                     cfuture<int>,
                     decltype(detail::internal_then(
                         ::futures::make_default_executor(),
                         f,
-                        continuation))>);
+                        continuation))>::value);
             STATIC_REQUIRE(
-                std::is_same_v<cfuture<int>, decltype(then(f, continuation))>);
+                std::is_same<cfuture<int>, decltype(then(f, continuation))>::
+                    value);
             auto f4 = then(f, continuation);
             REQUIRE(f4.get() == 2 + 3 + 4);
         }
@@ -119,7 +121,9 @@ TEST_CASE("when_all") {
         auto f = when_all(f1, f2);
         REQUIRE(f.valid());
         REQUIRE_FALSE(f1.valid());
-        auto [r1, r2] = f.get();
+        cfuture<int> r1;
+        cfuture<double> r2;
+        std::tie(r1, r2) = f.get();
         REQUIRE(r1.get() == 2);
         double d = r2.get();
         REQUIRE(d > 3.);
@@ -140,8 +144,7 @@ TEST_CASE("when_all") {
         SECTION("Wait") {
             REQUIRE_NOTHROW(f.wait());
             REQUIRE_NOTHROW(
-                f.wait_for(std::chrono::seconds(0))
-                == future_status::ready);
+                f.wait_for(std::chrono::seconds(0)) == future_status::ready);
             REQUIRE_NOTHROW(
                 f.wait_until(
                     std::chrono::system_clock::now() + std::chrono::seconds(0))
@@ -181,20 +184,30 @@ TEST_CASE("when_all") {
                 using lvalue_type = std::add_lvalue_reference_t<value_type>;
                 using rvalue_type = std::add_rvalue_reference_t<value_type>;
                 STATIC_REQUIRE(
-                    std::is_same_v<
+                    std::is_same<
                         value_type,
-                        detail::small_vector<cfuture<int>>>);
+                        detail::small_vector<cfuture<int>>>::value);
                 STATIC_REQUIRE(
-                    std::is_same_v<
+                    std::is_same<
                         lvalue_type,
                         std::add_lvalue_reference_t<
-                            detail::small_vector<cfuture<int>>>>);
+                            detail::small_vector<cfuture<int>>>>::value);
                 STATIC_REQUIRE(
-                    std::is_same_v<
+                    std::is_same<
                         rvalue_type,
                         std::add_rvalue_reference_t<
-                            detail::small_vector<cfuture<int>>>>);
+                            detail::small_vector<cfuture<int>>>>::value);
+#ifdef __cpp_lib_is_invocable
+                // Test with `std` to ensure our implementation matches
+                STATIC_REQUIRE(std::is_invocable_v<Function, value_type>);
                 STATIC_REQUIRE(std::is_invocable_v<Function, lvalue_type>);
+                STATIC_REQUIRE(
+                    std::is_same_v<
+                        std::invoke_result_t<Function, lvalue_type>,
+                        int>);
+#endif
+                STATIC_REQUIRE(detail::is_invocable_v<Function, value_type>);
+                STATIC_REQUIRE(detail::is_invocable_v<Function, lvalue_type>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -336,9 +349,15 @@ TEST_CASE("when_all") {
             auto f = f1 && f2;
             REQUIRE_FALSE(f1.valid());
             REQUIRE_FALSE(f2.valid());
+#ifdef __cpp_structured_bindings
             auto [r1, r2] = f.get();
             REQUIRE(r1.get() == 1);
             REQUIRE(r2.get() == 2);
+#else
+            std::tie(f1, f2) = f.get();
+            REQUIRE(f1.get() == 1);
+            REQUIRE(f2.get() == 2);
+#endif
         }
 
         SECTION("Lambda conjunction") {
@@ -349,7 +368,13 @@ TEST_CASE("when_all") {
             } && [] {
                 return 2;
             };
+#ifdef __cpp_structured_bindings
             auto [r1, r2] = f.get();
+#else
+            cfuture<int> r1;
+            cfuture<int> r2;
+            std::tie(r1, r2) = f.get();
+#endif
             REQUIRE(r1.get() == 1);
             REQUIRE(r2.get() == 2);
         }
@@ -360,7 +385,13 @@ TEST_CASE("when_all") {
                 return 2;
             };
             REQUIRE_FALSE(f1.valid());
+#ifdef __cpp_structured_bindings
             auto [r1, r2] = f.get();
+#else
+            cfuture<int> r1;
+            cfuture<int> r2;
+            std::tie(r1, r2) = f.get();
+#endif
             REQUIRE(r1.get() == 1);
             REQUIRE(r2.get() == 2);
         }
@@ -371,7 +402,13 @@ TEST_CASE("when_all") {
                 return 1;
             } && f2;
             REQUIRE_FALSE(f2.valid());
+#ifdef __cpp_structured_bindings
             auto [r1, r2] = f.get();
+#else
+            cfuture<int> r1;
+            cfuture<int> r2;
+            std::tie(r1, r2) = f.get();
+#endif
             REQUIRE(r1.get() == 1);
             REQUIRE(r2.get() == 2);
         }
@@ -386,7 +423,15 @@ TEST_CASE("when_all") {
             REQUIRE_FALSE(f1.valid());
             REQUIRE_FALSE(f2.valid());
             REQUIRE_FALSE(f3.valid());
+#ifdef __cpp_structured_bindings
             auto [r1, r2, r3, r4] = f.get();
+#else
+            cfuture<int> r1;
+            cfuture<int> r2;
+            cfuture<int> r3;
+            cfuture<int> r4;
+            std::tie(r1, r2, r3, r4) = f.get();
+#endif
             REQUIRE(r1.get() == 1);
             REQUIRE(r2.get() == 2);
             REQUIRE(r3.get() == 3);

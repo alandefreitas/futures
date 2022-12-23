@@ -22,7 +22,7 @@
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/value_cmp_algorithm.hpp>
 #include <futures/algorithm/detail/execution.hpp>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -64,7 +64,7 @@ namespace futures {
     };
 
     /// Finds the first element equal to another element
-    inline constexpr find_functor find;
+    FUTURES_INLINE_VAR constexpr find_functor find;
 
     /** @} */
     /** @} */

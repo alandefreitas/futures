@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/iter_reference.hpp>
 #include <futures/algorithm/traits/iter_rvalue_reference.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -35,7 +36,8 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_indirectly_readable = std::bool_constant<std::indirectly_readable<T>>;
+    using is_indirectly_readable = std::bool_constant<
+        std::indirectly_readable<T>>;
 #else
     template <class T, class = void>
     struct is_indirectly_readable : std::false_type {};
@@ -43,7 +45,7 @@ namespace futures {
     template <class T>
     struct is_indirectly_readable<
         T,
-        std::void_t<
+        detail::void_t<
             iter_value_t<T>,
             iter_reference_t<T>,
             iter_rvalue_reference_t<T>,

@@ -13,7 +13,7 @@ TEST_CASE("wait for any") {
         constexpr auto enough_time_for_deadlock = std::chrono::milliseconds(20);
         SECTION("Basic Future") {
             SECTION("Ranges") {
-                using future_t = std::
+                using future_t = detail::
                     invoke_result_t<decltype(launch), std::function<int()>>;
                 std::vector<future_t> fs;
                 fs.emplace_back(launch(std::function<int()>{

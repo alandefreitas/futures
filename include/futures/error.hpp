@@ -9,6 +9,7 @@
 #define FUTURES_ERROR_HPP
 
 #include <futures/config.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <system_error>
 
 /**
@@ -61,24 +62,24 @@ namespace futures {
         /// Constructor
         FUTURES_TEMPLATE(class ErrorCodeEnum)
         (requires(
-            std::is_error_code_enum_v<ErrorCodeEnum>
-            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            detail::is_error_code_enum_v<ErrorCodeEnum>
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
             error(ErrorCodeEnum ec)
             : std::system_error{ ec } {}
 
         /// Constructor
         FUTURES_TEMPLATE(class ErrorCodeEnum)
         (requires(
-            std::is_error_code_enum_v<ErrorCodeEnum>
-            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            detail::is_error_code_enum_v<ErrorCodeEnum>
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
             error(ErrorCodeEnum ec, char const *what_arg)
             : std::system_error{ ec, what_arg } {}
 
         /// Constructor
         FUTURES_TEMPLATE(class ErrorCodeEnum)
         (requires(
-            std::is_error_code_enum_v<ErrorCodeEnum>
-            || std::is_same_v<ErrorCodeEnum, std::error_code>))
+            detail::is_error_code_enum_v<ErrorCodeEnum>
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
             error(ErrorCodeEnum ec, std::string const &what_arg)
             : std::system_error{ ec, what_arg } {}
 

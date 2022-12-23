@@ -102,6 +102,8 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 #    Macros
 AlignConsecutiveMacros: Consecutive
 AttributeMacros: ['FUTURES_CONSTEXPR']
+IfMacros: ['FUTURES_IF_CONSTEXPR']
+TypenameMacros: ['FUTURES_DETAIL']
 #    Declaration
 PointerAlignment: Left
 ReferenceAlignment: Pointer

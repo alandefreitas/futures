@@ -20,8 +20,8 @@
  *  @brief All Executors
  *
  *  Use this header to include all functionalities of the executors module at
- *  once. In most cases, however, we recommend only including the headers for the
- *  functionality you need. Use the reference to identify these files.
+ *  once. In most cases, however, we recommend only including the headers for
+ * the functionality you need. Use the reference to identify these files.
  */
 
 // #glob <futures/executor/*.hpp>

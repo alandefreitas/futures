@@ -17,25 +17,30 @@ namespace futures {
 } // namespace futures
 #endif
 
-namespace futures::detail {
-    // Check if type is a when_any_result
-    template <typename>
-    struct is_when_any_result : std::false_type {};
-    template <typename Sequence>
-    struct is_when_any_result<when_any_result<Sequence>> : std::true_type {};
-    template <typename Sequence>
-    struct is_when_any_result<when_any_result<Sequence> const>
-        : std::true_type {};
-    template <typename Sequence>
-    struct is_when_any_result<when_any_result<Sequence> &> : std::true_type {};
-    template <typename Sequence>
-    struct is_when_any_result<when_any_result<Sequence> &&> : std::true_type {};
-    template <typename Sequence>
-    struct is_when_any_result<when_any_result<Sequence> const &>
-        : std::true_type {};
-    template <class T>
-    constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        // Check if type is a when_any_result
+        template <typename>
+        struct is_when_any_result : std::false_type {};
+        template <typename Sequence>
+        struct is_when_any_result<when_any_result<Sequence>>
+            : std::true_type {};
+        template <typename Sequence>
+        struct is_when_any_result<when_any_result<Sequence> const>
+            : std::true_type {};
+        template <typename Sequence>
+        struct is_when_any_result<when_any_result<Sequence> &>
+            : std::true_type {};
+        template <typename Sequence>
+        struct is_when_any_result<when_any_result<Sequence> &&>
+            : std::true_type {};
+        template <typename Sequence>
+        struct is_when_any_result<when_any_result<Sequence> const &>
+            : std::true_type {};
+        template <class T>
+        constexpr bool is_when_any_result_v = is_when_any_result<T>::value;
+    } // namespace detail
+} // namespace futures
 
 
 #endif // FUTURES_ADAPTOR_DETAIL_WHEN_ANY_HPP

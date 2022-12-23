@@ -42,8 +42,6 @@
 
 // #glob <futures/**.ipp> - <futures/detail/bundled/**.ipp>
 #include <futures/executor/impl/default_executor.ipp>
-#include <futures/executor/impl/inline_executor.ipp>
-#include <futures/executor/impl/new_thread_executor.ipp>
 #include <futures/impl/error.ipp>
 #include <futures/impl/future.ipp>
 #include <futures/impl/throw.ipp>

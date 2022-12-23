@@ -17,6 +17,7 @@
 
 #include <futures/config.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/iter_concept.hpp>
 #include <type_traits>
 
@@ -45,13 +46,13 @@ namespace futures {
     template <class I>
     struct is_bidirectional_iterator<
         I,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<I&>()--),
             decltype(--std::declval<I&>())
             // clang-format on
             >>
-        : std::conjunction<
+        : detail::conjunction<
               // clang-format off
               is_forward_iterator<I>,
               is_derived_from<detail::iter_concept_t<I>, std::bidirectional_iterator_tag>,

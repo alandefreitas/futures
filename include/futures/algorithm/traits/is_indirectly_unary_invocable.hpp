@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/is_convertible_to.hpp>
 #include <futures/algorithm/traits/is_indirectly_readable.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -30,13 +31,16 @@ namespace futures {
      */
 
 
-    /// @brief A type trait equivalent to the `std::indirectly_unary_invocable` concept
+    /// @brief A type trait equivalent to the `std::indirectly_unary_invocable`
+    /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable
+     * @see
+     * https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable
      */
 #ifdef FUTURES_DOXYGEN
     template <class F, class I>
-    using is_indirectly_unary_invocable = std::bool_constant<std::indirectly_unary_invocable<F, I>>;
+    using is_indirectly_unary_invocable = std::bool_constant<
+        std::indirectly_unary_invocable<F, I>>;
 #else
     template <class F, class I, class = void>
     struct is_indirectly_unary_invocable : std::false_type {};
@@ -48,8 +52,8 @@ namespace futures {
         std::enable_if_t<
             // clang-format off
             is_indirectly_readable_v<I> &&
-            std::is_copy_constructible_v<F> &&
-            std::is_invocable_v<F&, iter_value_t<I>&>
+            detail::is_copy_constructible_v<F> &&
+            detail::is_invocable_v<F&, iter_value_t<I>&>
             // clang-format on
             >> : std::true_type {};
 #endif

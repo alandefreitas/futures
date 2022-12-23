@@ -12,9 +12,11 @@ namespace futures {
     FUTURES_TEMPLATE_IMPL(typename Iterator)
     (requires is_future_v<iter_value_t<Iterator>>) Iterator
         wait_for_any(Iterator first, Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
+        if (first == last) {
+            // is_empty
             return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
+        } else if (std::next(first) == last) {
+            // is_single
             first->wait();
             return first;
         } else {
@@ -25,12 +27,14 @@ namespace futures {
     }
 
     FUTURES_TEMPLATE_IMPL(typename... Fs)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
+        FUTURES_IF_CONSTEXPR (size == 0) {
+            // is_empty
             return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+        } else FUTURES_IF_CONSTEXPR (size == 1) {
+            // is_single
             wait_for_all(std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -40,22 +44,47 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(class Tuple)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any(Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
+    namespace detail {
+        template <class Tuple>
+        std::size_t
+        wait_for_tuple_any_impl(mp_int<0>, Tuple &&) {
+            // empty tuple
             return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+        }
+
+        template <class Tuple>
+        std::size_t
+        wait_for_tuple_any_impl(mp_int<1>, Tuple &&t) {
+            // tuple with only one element
             wait_for_all(std::get<0>(std::forward<Tuple>(t)));
             return 0;
-        } else {
+        }
+
+        template <class Tuple>
+        std::size_t
+        wait_for_tuple_any_impl(mp_int<2>, Tuple &&t) {
+            // general case
             detail::waiter_for_any waiter;
             detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait();
         }
+    } // namespace detail
+
+    FUTURES_TEMPLATE_IMPL(class Tuple)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any(Tuple &&t) {
+        constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
+        return detail::wait_for_tuple_any_impl(
+            boost::mp11::mp_cond<
+                boost::mp11::mp_bool<size == 0>,
+                boost::mp11::mp_int<0>,
+                boost::mp11::mp_bool<size == 1>,
+                boost::mp11::mp_int<1>,
+                std::true_type,
+                boost::mp11::mp_int<2>>{},
+            std::forward<Tuple>(t));
     }
 
     FUTURES_TEMPLATE_IMPL(typename Iterator, class Rep, class Period)
@@ -63,9 +92,11 @@ namespace futures {
         std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
         Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
+        if (first == last) {
+            // is_empty
             return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
+        } else if (std::next(first) == last) {
+            // is_single
             first->wait_for(timeout_duration);
             return first;
         } else {
@@ -76,14 +107,16 @@ namespace futures {
     }
 
     FUTURES_TEMPLATE_IMPL(typename... Fs, class Rep, class Period)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
+        FUTURES_IF_CONSTEXPR (size == 0) {
+            // is_empty
             return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+        } else FUTURES_IF_CONSTEXPR (size == 1) {
+            // is_single
             wait_for_all_for(timeout_duration, std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -93,26 +126,61 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(class Tuple, class Rep, class Period)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any_for(
+    namespace detail {
+        template <class Tuple, class Rep, class Period>
+        std::size_t
+        wait_for_tuple_any_for_impl(
+            mp_int<0>,
+            std::chrono::duration<Rep, Period> const &,
+            Tuple &&) {
+            // is_empty
+            return 0;
+        }
+
+        template <class Tuple, class Rep, class Period>
+        std::size_t
+        wait_for_tuple_any_for_impl(
+            mp_int<1>,
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+            // is_single element
             wait_for_all_for(
                 timeout_duration,
                 std::get<0>(std::forward<Tuple>(t)));
-            return 0;
-        } else {
+            return !is_ready(std::get<0>(std::forward<Tuple>(t)));
+        }
+
+        template <class Tuple, class Rep, class Period>
+        std::size_t
+        wait_for_tuple_any_for_impl(
+            mp_int<2>,
+            std::chrono::duration<Rep, Period> const &timeout_duration,
+            Tuple &&t) {
+            // general case
             detail::waiter_for_any waiter;
             detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait_for(timeout_duration);
         }
+    } // namespace detail
+
+    FUTURES_TEMPLATE_IMPL(class Tuple, class Rep, class Period)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any_for(
+            std::chrono::duration<Rep, Period> const &timeout_duration,
+            Tuple &&t) {
+        constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
+        return detail::wait_for_tuple_any_for_impl(
+            boost::mp11::mp_cond<
+                boost::mp11::mp_bool<size == 0>,
+                boost::mp11::mp_int<0>,
+                boost::mp11::mp_bool<size == 1>,
+                boost::mp11::mp_int<1>,
+                std::true_type,
+                boost::mp11::mp_int<2>>{},
+            timeout_duration,
+            std::forward<Tuple>(t));
     }
 
     FUTURES_TEMPLATE_IMPL(typename Iterator, class Clock, class Duration)
@@ -120,9 +188,11 @@ namespace futures {
         std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
         Iterator last) {
-        if (bool const is_empty = first == last; is_empty) {
+        if (first == last) {
+            // is_empty
             return last;
-        } else if (bool const is_single = std::next(first) == last; is_single) {
+        } else if (std::next(first) == last) {
+            // is_single
             first->wait_until(timeout_time);
             return first;
         } else {
@@ -133,14 +203,16 @@ namespace futures {
     }
 
     FUTURES_TEMPLATE_IMPL(typename... Fs, class Clock, class Duration)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
-        if constexpr (bool const is_empty = size == 0; is_empty) {
+        FUTURES_IF_CONSTEXPR (size == 0) {
+            // is_empty
             return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+        } else FUTURES_IF_CONSTEXPR (size == 1) {
+            // is_single
             wait_for_all_until(timeout_time, std::forward<Fs>(fs)...);
             return 0;
         } else {
@@ -150,26 +222,61 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(class Tuple, class Clock, class Duration)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any_until(
+    namespace detail {
+        template <class Tuple, class Clock, class Duration>
+        std::size_t
+        wait_for_tuple_any_until_impl(
+            mp_int<0>,
+            std::chrono::time_point<Clock, Duration> const &,
+            Tuple &&) {
+            // is_empty
+            return 0;
+        }
+
+        template <class Tuple, class Clock, class Duration>
+        std::size_t
+        wait_for_tuple_any_until_impl(
+            mp_int<1>,
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Tuple &&t) {
-        constexpr std::size_t size = std::tuple_size_v<std::decay_t<Tuple>>;
-        if constexpr (bool const is_empty = size == 0; is_empty) {
-            return 0;
-        } else if constexpr (bool const is_single = size == 1; is_single) {
+            // is_single element
             wait_for_all_until(
                 timeout_time,
                 std::get<0>(std::forward<Tuple>(t)));
-            return 0;
-        } else {
+            return !is_ready(std::get<0>(std::forward<Tuple>(t)));
+        }
+
+        template <class Tuple, class Clock, class Duration>
+        std::size_t
+        wait_for_tuple_any_until_impl(
+            mp_int<2>,
+            std::chrono::time_point<Clock, Duration> const &timeout_time,
+            Tuple &&t) {
+            // general case
             detail::waiter_for_any waiter;
             detail::tuple_for_each(std::forward<Tuple>(t), [&waiter](auto &f) {
                 waiter.add(f);
             });
             return waiter.wait_until(timeout_time);
         }
+    } // namespace detail
+
+    FUTURES_TEMPLATE_IMPL(class Tuple, class Clock, class Duration)
+    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
+        std::size_t wait_for_any_until(
+            std::chrono::time_point<Clock, Duration> const &timeout_time,
+            Tuple &&t) {
+        constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
+        return detail::wait_for_tuple_any_until_impl(
+            boost::mp11::mp_cond<
+                boost::mp11::mp_bool<size == 0>,
+                boost::mp11::mp_int<0>,
+                boost::mp11::mp_bool<size == 1>,
+                boost::mp11::mp_int<1>,
+                std::true_type,
+                boost::mp11::mp_int<2>>{},
+            timeout_time,
+            std::forward<Tuple>(t));
     }
 
 } // namespace futures

@@ -14,14 +14,16 @@
 #include <iterator>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T>
-    using has_iterator_traits_difference_type
-        = mp_valid<nested_iterator_traits_difference_type_t, T>;
+namespace futures {
+    namespace detail {
+        template <class T>
+        using has_iterator_traits_difference_type
+            = mp_valid<nested_iterator_traits_difference_type_t, T>;
 
-    template <class T>
-    constexpr bool has_iterator_traits_difference_type_v
-        = has_iterator_traits_difference_type<T>::value;
-} // namespace futures::detail
+        template <class T>
+        constexpr bool has_iterator_traits_difference_type_v
+            = has_iterator_traits_difference_type<T>::value;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_HAS_ITERATOR_TRAITS_DIFFERENCE_TYPE_HPP

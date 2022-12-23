@@ -13,8 +13,7 @@
 
 namespace futures {
     template <class E>
-    BOOST_NORETURN
-    void
+    BOOST_NORETURN void
     throw_exception(E&& e, source_location const& loc) {
         // By default, we forward the exception to boost.throw_exception
         // If exceptions are disabled, boost.throw_exception will call the

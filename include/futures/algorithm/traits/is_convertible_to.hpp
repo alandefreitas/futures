@@ -15,6 +15,7 @@
  *  This file defines the `is_convertible_to` trait.
  */
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -42,9 +43,9 @@ namespace futures {
     struct is_convertible_to<
         From,
         To,
-        std::void_t<
+        detail::void_t<
             // clang-format off
-            std::enable_if_t<std::is_convertible_v<From, To>>,
+            std::enable_if_t<detail::is_convertible_v<From, To>>,
             decltype(static_cast<To>(std::declval<From>()))
             // clang-format on
             >> : std::true_type {};

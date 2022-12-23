@@ -16,6 +16,7 @@
  */
 
 #include <futures/algorithm/traits/iter_value.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <iterator>
 #include <type_traits>
 
@@ -40,7 +41,7 @@ namespace futures {
     struct iter_rvalue_reference {};
 
     template <class T>
-    struct iter_rvalue_reference<T, std::void_t<iter_value_t<T>>> {
+    struct iter_rvalue_reference<T, detail::void_t<iter_value_t<T>>> {
         using type = std::add_rvalue_reference<iter_value_t<T>>;
     };
 #endif

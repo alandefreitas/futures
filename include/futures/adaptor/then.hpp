@@ -16,9 +16,9 @@
  *  previous tasks.
  */
 
+#include <futures/config.hpp>
 #include <futures/adaptor/bind_executor_to_lambda.hpp>
 #include <futures/adaptor/detail/internal_then_functor.hpp>
-#include <version>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -80,6 +80,32 @@ namespace futures {
             std::forward<Function>(after));
     }
 
+    namespace detail {
+        template <class Future, class Function>
+        FUTURES_DETAIL(decltype(auto))
+        then_no_exec_impl(
+            std::true_type /* has_executor */,
+            Future &&before,
+            Function &&after) {
+            return then(
+                before.get_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        }
+
+        template <class Future, class Function>
+        FUTURES_DETAIL(decltype(auto))
+        then_no_exec_impl(
+            std::false_type /* has_executor */,
+            Future &&before,
+            Function &&after) {
+            return then(
+                ::futures::make_default_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        }
+    } // namespace detail
+
     /// @copydoc then
     FUTURES_TEMPLATE(class Future, class Function)
     (requires(
@@ -91,17 +117,10 @@ namespace futures {
             std::decay_t<Function>,
             std::decay_t<Future>>::is_valid)) FUTURES_DETAIL(decltype(auto))
         then(Future &&before, Function &&after) {
-        if constexpr (has_executor_v<std::decay_t<Future>>) {
-            return then(
-                before.get_executor(),
-                std::forward<Future>(before),
-                std::forward<Function>(after));
-        } else {
-            return then(
-                ::futures::make_default_executor(),
-                std::forward<Future>(before),
-                std::forward<Function>(after));
-        }
+        return detail::then_no_exec_impl(
+            has_executor<std::decay_t<Future>>{},
+            std::forward<Future>(before),
+            std::forward<Function>(after));
     }
 
     /// Operator to schedule a continuation function to a future

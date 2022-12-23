@@ -10,13 +10,16 @@
 
 #include <futures/detail/deps/boost/container/small_vector.hpp>
 
-namespace futures::detail {
-    template <
-        class T,
-        size_t N
-        = (std::max)(std::size_t(5), (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
-        class Allocator = std::allocator<T>>
-    using small_vector = boost::container::small_vector<T, N, Allocator>;
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        template <
+            class T,
+            size_t N = (std::max)(
+                std::size_t(5),
+                (sizeof(T *) + sizeof(size_t)) / sizeof(T)),
+            class Allocator = std::allocator<T>>
+        using small_vector = boost::container::small_vector<T, N, Allocator>;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_DETAIL_CONTAINER_SMALL_VECTOR_HPP

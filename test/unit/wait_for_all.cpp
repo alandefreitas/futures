@@ -10,7 +10,7 @@ TEST_CASE("wait for all") {
 
     auto check = [](auto launch) {
         SECTION("Ranges") {
-            using future_t = std::
+            using future_t = detail::
                 invoke_result_t<decltype(launch), std::function<int()>>;
             std::vector<future_t> fs;
             fs.emplace_back(launch(std::function<int()>([]() { return 2; })));

@@ -10,39 +10,51 @@
 
 #include <futures/traits/is_future.hpp>
 #include <futures/traits/is_shared_future.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 
-namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
-    /** @addtogroup future-traits Future Traits
-     *  @{
-     */
+namespace futures {
+    namespace detail {
+        // Check if a type implements the share function
+        // This is what we use to identify the return type of the future type
+        // candidate.
+        template <class T, typename = void>
+        struct has_share : std::false_type {};
 
-    /// Check if a type implements the share function
-    /// This is what we use to identify the return type of a future type
-    /// candidate However, this doesn't mean the type is a future in the
-    /// terms of the is_future concept
-    template <class T, typename = void>
-    struct has_share : std::false_type {};
+        template <class T>
+        struct has_share<T, void_t<decltype(std::declval<T>().share())>>
+            : std::true_type {};
 
-    template <class T>
-    struct has_share<T, std::void_t<decltype(std::declval<T>().share())>>
-        : std::true_type {};
-
-    template <class Future>
-    constexpr FUTURES_DETAIL(decltype(auto))
-    share_if_not_shared(Future &&f) {
-        if constexpr (is_shared_future_v<std::decay_t<Future>>) {
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        share_if_not_shared_impl(mp_int<0> /* is_shared_future */, Future &&f) {
             return std::forward<Future>(f);
-        } else if constexpr (detail::has_share<std::decay_t<Future>>::value) {
+        }
+
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        share_if_not_shared_impl(mp_int<1> /* has_share */, Future &&f) {
             return std::forward<Future>(f).share();
-        } else {
+        }
+
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        share_if_not_shared_impl(
+            mp_int<2> /* !is_shared_future && !has_share */,
+            Future &&f) {
             return std::move(std::forward<Future>(f));
         }
-    }
 
-    /** @} */ // @addtogroup future-traits Future Traits
-    /** @} */ // @addtogroup futures Futures
-} // namespace futures::detail
+        template <class Future>
+        constexpr FUTURES_DETAIL(decltype(auto))
+        share_if_not_shared(Future &&f) {
+            return share_if_not_shared_impl(
+                mp_int < is_shared_future_v<std::decay_t<Future>> ?
+                    0 :
+                detail::has_share<std::decay_t<Future>>::value ?
+                    1 :
+                    2 > {},
+                std::forward<Future>(f));
+        }
+    } // namespace detail
+} // namespace futures
 #endif // FUTURES_DETAIL_SHARE_IF_NOT_SHARED_HPP

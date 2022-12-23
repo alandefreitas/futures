@@ -21,6 +21,7 @@
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/traits/is_future.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/waiter_for_any.hpp>
 #include <type_traits>
 
@@ -109,7 +110,7 @@ namespace futures {
      *  @return Index of the first future that got ready
      */
     FUTURES_TEMPLATE(class... Fs)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any(Fs &&...fs);
 
     /// Wait for any future in a tuple to be ready
@@ -179,7 +180,7 @@ namespace futures {
      *  @return Index of the future which got ready
      */
     FUTURES_TEMPLATE(typename... Fs, class Rep, class Period)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Fs &&...fs);
@@ -247,7 +248,7 @@ namespace futures {
      *  @return Index of the future which got ready
      */
     FUTURES_TEMPLATE(typename... Fs, class Clock, class Duration)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
         wait_for_any_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Fs &&...fs);

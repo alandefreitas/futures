@@ -15,6 +15,7 @@
  *  This file defines the `is_input_or_output_iterator` trait.
  */
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -26,13 +27,16 @@ namespace futures {
      *  @{
      */
 
-    /// @brief A type trait equivalent to the `std::is_input_or_output_iterator` concept
+    /// @brief A type trait equivalent to the `std::is_input_or_output_iterator`
+    /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator
+     * @see
+     * https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_input_or_output_iterator = std::bool_constant<std::is_input_or_output_iterator<T>>;
+    using is_input_or_output_iterator = std::bool_constant<
+        std::is_input_or_output_iterator<T>>;
 #else
     template <class T, class = void>
     struct is_input_or_output_iterator : std::false_type {};
@@ -40,7 +44,7 @@ namespace futures {
     template <class T>
     struct is_input_or_output_iterator<
         T,
-        std::void_t<decltype(*std::declval<T>())>> : std::true_type {};
+        detail::void_t<decltype(*std::declval<T>())>> : std::true_type {};
 #endif
 
     /// @copydoc is_input_or_output_iterator

@@ -18,7 +18,8 @@ TEST_CASE("algorithm none of") {
         test_unary_invoke(none_of, v, fun, true);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 

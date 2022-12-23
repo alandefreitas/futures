@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/is_assignable_from.hpp>
 #include <futures/algorithm/traits/is_move_constructible.hpp>
 #include <futures/algorithm/traits/is_swappable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -33,12 +34,17 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/movable
      */
+#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_movable = std::conjunction<
+    using is_movable = std::bool_constant<std::movable<T>>;
+#else
+    template <class T>
+    using is_movable = detail::conjunction<
         std::is_object<T>,
         is_move_constructible<T>,
         is_assignable_from<T&, T>,
         is_swappable<T>>;
+#endif
 
     /// @copydoc is_movable
     template <class T>

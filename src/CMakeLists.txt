@@ -39,3 +39,17 @@ else ()
     endif ()
 endif ()
 
+if (Threads_FOUND)
+    target_link_libraries(futures PUBLIC Threads::Threads)
+endif ()
+
+#######################################################
+### Install targets                                 ###
+#######################################################
+if (FUTURES_BUILD_INSTALLER)
+    install(TARGETS futures
+            EXPORT futures-targets
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            )
+endif ()

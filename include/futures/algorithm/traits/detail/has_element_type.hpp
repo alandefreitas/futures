@@ -12,9 +12,12 @@
 #include <futures/detail/deps/boost/mp11/utility.hpp>
 #include <type_traits>
 
-namespace futures::detail {
-    template <class T>
-    using has_element_type = detail::mp_valid<detail::nested_element_type_t, T>;
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        template <class T>
+        using has_element_type = detail::
+            mp_valid<detail::nested_element_type_t, T>;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_HAS_ELEMENT_TYPE_HPP

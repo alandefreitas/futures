@@ -15,12 +15,12 @@ namespace futures {
     make_error_code(future_errc code) {
         struct codes : public std::error_category {
         public:
-            [[nodiscard]] char const*
+            FUTURES_NODISCARD char const*
             name() const noexcept override {
                 return "futures";
             }
 
-            [[nodiscard]] std::string
+            FUTURES_NODISCARD std::string
             message(int ev) const override {
                 switch (static_cast<future_errc>(ev)) {
                 case future_errc::broken_promise:

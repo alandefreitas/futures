@@ -20,6 +20,7 @@
 #include <futures/future.hpp>
 #include <futures/future_options.hpp>
 #include <futures/detail/shared_task.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures {
@@ -69,7 +70,7 @@ namespace futures {
          *  @param fn The callable target to execute
          */
         FUTURES_TEMPLATE(class Fn)
-        (requires(!std::is_base_of_v<
+        (requires(!detail::is_base_of_v<
                   packaged_task,
                   typename std::decay_t<Fn>>)) explicit packaged_task(Fn &&fn)
             : packaged_task{ std::allocator_arg,
@@ -95,7 +96,7 @@ namespace futures {
          *  @param fn The callable target to execute
          */
         FUTURES_TEMPLATE(typename Fn, typename Allocator)
-        (requires(!std::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)) explicit packaged_task(
+        (requires(!detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)) explicit packaged_task(
             std::allocator_arg_t,
             Allocator const &alloc,
             Fn &&fn) {
@@ -147,7 +148,7 @@ namespace futures {
         /**
          *  @return true if *this has a shared state, false otherwise
          */
-        [[nodiscard]] bool
+        FUTURES_NODISCARD bool
         valid() const noexcept {
             return task_ != nullptr;
         }
@@ -206,11 +207,18 @@ namespace futures {
                 throw_exception(packaged_task_uninitialized{});
             }
             task_->run(std::forward<OtherArgs>(args)...);
-            if constexpr (Options::is_continuable) {
-                task_->get_continuations_source().request_run();
-            }
+            request_run_impl(boost::mp11::mp_bool<Options::is_continuable>{});
         }
 
+    private:
+        void
+        request_run_impl(std::true_type /* is continuable */) {
+            task_->get_continuations_source().request_run();
+        }
+
+        void
+        request_run_impl(std::false_type /* is continuable */) {}
+    public:
         /// Resets the shared state abandoning any stored results of
         /// previous executions
         /**

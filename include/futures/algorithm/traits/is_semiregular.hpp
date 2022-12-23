@@ -32,10 +32,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/semiregular
      */
+#ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_semiregular = std::
+    using is_semiregular = std::bool_constant<std::semiregular<T>>;
+#else
+    template <class T>
+    using is_semiregular = detail::
         conjunction<is_copyable<T>, is_default_initializable<T>>;
-
+#endif
 
     /// @copydoc is_semiregular
     template <class T>

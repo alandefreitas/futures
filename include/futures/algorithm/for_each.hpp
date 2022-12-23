@@ -23,11 +23,12 @@
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
-#include <variant>
+
 
 namespace futures {
     /** @addtogroup algorithms Algorithms
@@ -74,7 +75,7 @@ namespace futures {
                 auto middle = p(first, last);
                 bool const too_small = middle == last;
                 constexpr bool cannot_parallelize
-                    = std::is_same_v<Executor, inline_executor>
+                    = detail::is_same_v<Executor, inline_executor>
                       || is_forward_iterator_v<I>;
                 if (too_small || cannot_parallelize) {
                     std::for_each(first, last, f);
@@ -132,7 +133,7 @@ namespace futures {
         FUTURES_TEMPLATE(class I, class S, class Fun)
         (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
              &&is_indirectly_unary_invocable_v<Fun, I>
-                 &&std::is_copy_constructible_v<
+                 &&detail::is_copy_constructible_v<
                      Fun>) static FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             void inline_for_each(I first, S last, Fun f) {
             for (; first != last; ++first) {
@@ -158,10 +159,12 @@ namespace futures {
         (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_unary_invocable_v<Fun, I>
-                     &&std::is_copy_constructible_v<Fun>)
+                     &&detail::is_copy_constructible_v<Fun>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             void run(E const &ex, P p, I first, S last, Fun f) const {
-            if constexpr (std::is_same_v<std::decay_t<E>, inline_executor>) {
+            FUTURES_IF_CONSTEXPR (
+                detail::is_same_v<std::decay_t<E>, inline_executor>)
+            {
                 boost::ignore_unused(p);
                 inline_for_each(first, last, f);
             } else {
@@ -176,7 +179,7 @@ namespace futures {
     };
 
     /// Applies a function to a range of elements
-    inline constexpr for_each_functor for_each;
+    FUTURES_INLINE_VAR constexpr for_each_functor for_each;
 
     /** @} */
     /** @} */

@@ -17,6 +17,7 @@
 
 #include <futures/config.hpp>
 #include <futures/traits/is_stoppable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -54,7 +55,7 @@ namespace futures {
     template <class T>
     struct has_stop_token<
         T,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<T>().get_stop_source()),
             decltype(std::declval<T>().get_stop_token())

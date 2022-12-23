@@ -15,6 +15,7 @@
  *  This file defines the `is_swappable` trait.
  */
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -41,7 +42,7 @@ namespace futures {
     template <class T>
     struct is_swappable<
         T,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::swap(std::declval<T&>(), std::declval<T&>()))
             // clang-format on

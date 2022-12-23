@@ -24,8 +24,7 @@
 #include <futures/detail/launch.hpp>
 #include <futures/detail/traits/is_future_options.hpp>
 #include <futures/detail/traits/launch_result.hpp>
-#include <futures/detail/deps/asio/defer.hpp>
-#include <futures/detail/deps/asio/post.hpp>
+#include <futures/detail/utility/invoke.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 
 namespace futures {
@@ -86,8 +85,8 @@ namespace futures {
     FUTURES_TEMPLATE(class Executor, class Function, class... Args)
     (requires(
         is_executor_v<Executor>
-        && (std::is_invocable_v<Function, Args...>
-            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        && (detail::is_invocable_v<Function, Args...>
+            || detail::is_invocable_v<Function, stop_token, Args...>) ))
         FUTURES_DETAIL(decltype(auto))
             async(Executor const &ex, Function &&f, Args &&...args);
 
@@ -105,8 +104,8 @@ namespace futures {
     FUTURES_TEMPLATE(class Function, class... Args)
     (requires(
         !is_executor_v<Function>
-        && (std::is_invocable_v<Function, Args...>
-            || std::is_invocable_v<Function, stop_token, Args...>) ))
+        && (detail::is_invocable_v<Function, Args...>
+            || detail::is_invocable_v<Function, stop_token, Args...>) ))
         FUTURES_DETAIL(decltype(auto)) async(Function &&f, Args &&...args);
 
     /// Schedule an asynchronous task with the specified executor
@@ -134,8 +133,8 @@ namespace futures {
     FUTURES_TEMPLATE(class Executor, class Function, class... Args)
     (requires(
         (is_executor_v<Executor>
-         && (std::is_invocable_v<Function, Args...>
-             || std::is_invocable_v<Function, stop_token, Args...>) )))
+         && (detail::is_invocable_v<Function, Args...>
+             || detail::is_invocable_v<Function, stop_token, Args...>) )))
         FUTURES_DETAIL(decltype(auto))
             schedule(Executor const &ex, Function &&f, Args &&...args);
 
@@ -153,8 +152,8 @@ namespace futures {
     FUTURES_TEMPLATE(class Function, class... Args)
     (requires(
         (!is_executor_v<Function>
-         && (std::is_invocable_v<Function, Args...>
-             || std::is_invocable_v<Function, stop_token, Args...>) )))
+         && (detail::is_invocable_v<Function, Args...>
+             || detail::is_invocable_v<Function, stop_token, Args...>) )))
         FUTURES_DETAIL(decltype(auto)) schedule(Function &&f, Args &&...args);
 
     /** @} */

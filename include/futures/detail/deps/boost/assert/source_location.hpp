@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/assert/source_location.hpp from external or bundled boost 
+// Include boost/assert/source_location.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/assert/source_location.hpp>
+#    include <boost/assert/source_location.hpp>
 #else
-#include <futures/detail/bundled/boost/assert/source_location.hpp>
+#    include <futures/detail/bundled/boost/assert/source_location.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_ASSERT_SOURCE_LOCATION_HPP

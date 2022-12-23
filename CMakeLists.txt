@@ -1,13 +1,25 @@
 #######################################################
 ### Futures                                         ###
 #######################################################
-cmake_minimum_required(VERSION 3.16)
-project(
-        futures
-        VERSION 0.1.4
-        DESCRIPTION "C++ Lock-Free Task Programming"
-        HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
-)
+cmake_minimum_required(VERSION 3.10)
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.12.4)
+    project(
+            futures
+            VERSION 0.1.4
+            DESCRIPTION "C++ Lock-Free Task Programming"
+            HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
+            LANGUAGES CXX
+    )
+else ()
+    project(
+            futures
+            VERSION 0.1.4
+            DESCRIPTION "C++ Lock-Free Task Programming"
+            LANGUAGES CXX
+    )
+endif ()
+
+
 set(FUTURES_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(FUTURES_BINARY_ROOT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(FUTURES_VERSION ${CMAKE_PROJECT_VERSION})
@@ -17,7 +29,7 @@ include(cmake/futures/variables.cmake)
 if (BUILD_SHARED_LIBS AND WIN32)
     set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/targets)
     set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/targets)
-endif()
+endif ()
 
 #######################################################
 ### Options                                         ###
@@ -48,17 +60,9 @@ add_subdirectory(src)
 ### Installer                                       ###
 #######################################################
 if (FUTURES_BUILD_INSTALLER)
-    set(INSTALL_TARGET_LIST headers futures)
-    if (Asio_FETCHED)
-        list(APPEND INSTALL_TARGET_LIST asio)
-    endif()
-
-    # Install targets
-    install(TARGETS ${INSTALL_TARGET_LIST}
-            EXPORT futures-targets
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            )
+    # Targets are installed in the directory where they are created
+    # This was required before CMake version 3.14
+    # install(TARGETS ...)
 
     # Install headers
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/futures
@@ -78,7 +82,7 @@ if (FUTURES_BUILD_INSTALLER)
         install(FILES ${asio_SOURCE_DIR}/asio/LICENSE_1_0.txt
                 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/asio
                 )
-    endif()
+    endif ()
 
     # Install cmake targets script
     install(EXPORT futures-targets
@@ -111,8 +115,8 @@ if (FUTURES_BUILD_INSTALLER)
             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/futures)
 
     # Create futures-config.cmake
-    set(INCLUDE_INSTALL_DIR include/ )
-    set(LIB_INSTALL_DIR lib/ )
+    set(INCLUDE_INSTALL_DIR include/)
+    set(LIB_INSTALL_DIR lib/)
     configure_package_config_file(
             ${CMAKE_CURRENT_SOURCE_DIR}/futures-config.cmake.in # input file
             ${CMAKE_CURRENT_BINARY_DIR}/futures-config.cmake    # output file
@@ -178,19 +182,23 @@ endif ()
 
 if (FUTURES_BUILD_DOCS)
     add_subdirectory(docs)
-endif()
+endif ()
 
 if (FUTURES_BUILD_COVERAGE_REPORT)
     include(cmake/futures/coverage-report.cmake)
-endif()
+endif ()
 
 if (FUTURES_TIME_TRACE)
     include(cmake/futures/combine-traces-target.cmake)
-endif()
+endif ()
+
+if (FUTURES_CATCH2_REPORTER STREQUAL junit)
+    include(cmake/futures/junit-format-target.cmake)
+endif ()
 
 if (FUTURES_BUILD_LINT)
     include(cmake/futures/lint-targets.cmake)
-endif()
+endif ()
 
 if (FUTURES_BUILD_EXAMPLES)
     add_subdirectory(example)

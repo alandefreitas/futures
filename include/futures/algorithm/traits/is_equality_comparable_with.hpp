@@ -16,6 +16,7 @@
  */
 
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp>
 #include <type_traits>
 
@@ -43,7 +44,7 @@ namespace futures {
         std::equality_comparable_with<T, U>>;
 #else
     template <class T, class U>
-    using is_equality_comparable_with = std::conjunction<
+    using is_equality_comparable_with = detail::conjunction<
         is_equality_comparable<T>,
         is_equality_comparable<U>,
         detail::is_weakly_equality_comparable_with<T, U>>;

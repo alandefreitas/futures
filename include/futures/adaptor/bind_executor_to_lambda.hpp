@@ -10,6 +10,7 @@
 
 #include <futures/executor/is_executor.hpp>
 #include <futures/detail/traits/is_callable.hpp>
+#include <futures/detail/deps/boost/mp11/integral.hpp>
 #include <functional>
 #include <type_traits>
 
@@ -22,10 +23,6 @@
  */
 
 namespace futures {
-    /** @addtogroup adaptors Adaptors
-     *  @{
-     */
-
     namespace detail {
         template <class Executor, class Function, bool RValue>
         struct executor_and_callable_reference {
@@ -39,15 +36,26 @@ namespace futures {
 
             constexpr auto
             get_callable() noexcept {
-                if constexpr (!RValue) {
-                    return fn;
-                } else {
-                    return static_cast<
-                        typename std::remove_reference<Function>::type&&>(fn);
-                }
+                return get_callable_impl(detail::mp_bool<RValue>{});
+            }
+
+        private:
+            constexpr auto
+            get_callable_impl(std::true_type /* RValue */) noexcept {
+                return static_cast<
+                    typename std::remove_reference<Function>::type&&>(fn);
+            }
+
+            constexpr auto
+            get_callable_impl(std::false_type /* RValue */) noexcept {
+                return fn;
             }
         };
     } // namespace detail
+
+    /** @addtogroup adaptors Adaptors
+     *  @{
+     */
 
     /// Create a proxy pair with a lambda and an executor
     /**
@@ -61,14 +69,13 @@ namespace futures {
      * @return A proxy pair to schedule execution
      */
     FUTURES_TEMPLATE(class Executor, class Function, class... Args)
-    (requires is_executor_v<std::decay_t<Executor>>&&
-         detail::is_callable_v<std::decay_t<Function>>)
-        FUTURES_DETAIL(decltype(auto))
-        operator%(Executor const& ex, Function&& after) {
+    (requires is_executor_v<std::decay_t<Executor>>&& detail::is_callable_v<
+        std::decay_t<Function>>) FUTURES_DETAIL(decltype(auto))
+    operator%(Executor const& ex, Function&& after) {
         return detail::executor_and_callable_reference<
             std::decay_t<Executor>,
             std::decay_t<Function>,
-            std::is_rvalue_reference_v<Function>>{
+            std::is_rvalue_reference<Function>::value>{
             std::cref(ex),
             std::ref(after)
         };

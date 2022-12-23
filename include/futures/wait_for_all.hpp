@@ -21,6 +21,7 @@
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/traits/is_future.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <tuple>
 #include <type_traits>
 
@@ -95,9 +96,15 @@ namespace futures {
      *  @param fs A list of future objects
      */
     FUTURES_TEMPLATE(class... Fs)
-    (requires std::conjunction_v<
+    (requires detail::conjunction_v<
         is_future<std::decay_t<Fs>>...>) void wait_for_all(Fs &&...fs) {
+#ifdef BOOST_NO_CXX17_FOLD_EXPRESSIONS
+        detail::tuple_for_each(
+            std::forward_as_tuple(std::forward<Fs>(fs)...),
+            [](auto &&f) { f.wait(); });
+#else
         (fs.wait(), ...);
+#endif
     }
 
     /// Wait for a sequence of futures to be ready
@@ -158,8 +165,8 @@ namespace futures {
      *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class... Fs, class Rep, class Period)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) future_status
-        wait_for_all_for(
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>)
+        future_status wait_for_all_for(
             std::chrono::duration<Rep, Period> const &timeout_duration,
             Fs &&...fs);
 
@@ -232,8 +239,8 @@ namespace futures {
      *  `future_status::timeout` otherwise.
      */
     FUTURES_TEMPLATE(class... Fs, class Clock, class Duration)
-    (requires std::conjunction_v<is_future<std::decay_t<Fs>>...>) future_status
-        wait_for_all_until(
+    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>)
+        future_status wait_for_all_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time,
             Fs &&...fs);
 

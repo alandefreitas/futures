@@ -10,16 +10,19 @@
 
 #include <type_traits>
 
-namespace futures::detail {
-    // Check if type is a reference_wrapper
-    template <typename>
-    struct is_reference_wrapper : std::false_type {};
+namespace futures {
+    namespace detail {
+        // Check if type is a reference_wrapper
+        template <typename>
+        struct is_reference_wrapper : std::false_type {};
 
-    template <class T>
-    struct is_reference_wrapper<std::reference_wrapper<T>> : std::true_type {};
+        template <class T>
+        struct is_reference_wrapper<std::reference_wrapper<T>>
+            : std::true_type {};
 
-    template <class T>
-    constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
-} // namespace futures::detail
+        template <class T>
+        constexpr bool is_reference_wrapper_v = is_reference_wrapper<T>::value;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_DETAIL_TRAITS_IS_REFERENCE_WRAPPER_HPP

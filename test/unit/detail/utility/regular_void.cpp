@@ -2,24 +2,27 @@
 //
 #include <catch2/catch.hpp>
 
-namespace futures::detail {
-    bool
-    operator==(futures::detail::regular_void, futures::detail::regular_void) {
-        return true;
-    }
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        bool
+        operator==(
+            futures::detail::regular_void,
+            futures::detail::regular_void) {
+            return true;
+        }
+    } // namespace detail
+} // namespace futures
 
 TEST_CASE("Regular void") {
     using namespace futures::detail;
 
     SECTION("Conversions") {
-        STATIC_REQUIRE(std::is_same_v<make_regular_t<void>, regular_void>);
+        STATIC_REQUIRE(is_same_v<make_regular_t<void>, regular_void>);
         REQUIRE(make_irregular(2) == 2);
         auto fn = []() {
             return make_irregular(regular_void{});
         };
-        STATIC_REQUIRE(
-            std::is_same_v<std::invoke_result_t<decltype(fn)>, void>);
+        STATIC_REQUIRE(is_same_v<invoke_result_t<decltype(fn)>, void>);
     }
 
     SECTION("Invoke") {
@@ -28,7 +31,7 @@ TEST_CASE("Regular void") {
                 return 2;
             };
             STATIC_REQUIRE(
-                std::is_same_v<regular_invoke_result_t<decltype(fn)>, int>);
+                is_same_v<regular_invoke_result_t<decltype(fn)>, int>);
             REQUIRE(regular_void_invoke(fn) == 2);
         }
 
@@ -37,7 +40,7 @@ TEST_CASE("Regular void") {
                 return 2;
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<decltype(fn), regular_void>,
                     int>);
             REQUIRE(regular_void_invoke(fn, regular_void{}) == 2);
@@ -48,7 +51,7 @@ TEST_CASE("Regular void") {
                 return 2;
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<
                         decltype(fn),
                         regular_void,
@@ -63,7 +66,7 @@ TEST_CASE("Regular void") {
                 return 2 * x;
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<decltype(fn), int, regular_void>,
                     int>);
             REQUIRE(regular_void_invoke(fn, 2, regular_void{}) == 4);
@@ -74,7 +77,7 @@ TEST_CASE("Regular void") {
                 return 2 * x;
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<decltype(fn), regular_void, int>,
                     int>);
             REQUIRE(regular_void_invoke(fn, regular_void{}, 2) == 4);
@@ -85,7 +88,7 @@ TEST_CASE("Regular void") {
                 return 2 * x;
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<
                         decltype(fn),
                         regular_void,
@@ -101,7 +104,7 @@ TEST_CASE("Regular void") {
             auto fn = [](int) {
             };
             STATIC_REQUIRE(
-                std::is_same_v<
+                is_same_v<
                     regular_invoke_result_t<
                         decltype(fn),
                         regular_void,
@@ -135,7 +138,8 @@ TEST_CASE("Regular void") {
         }
 
         SECTION("Regular void and int") {
-            REQUIRE(make_irregular_tuple(regular_void{}, 2) == std::tuple(2));
+            REQUIRE(
+                make_irregular_tuple(regular_void{}, 2) == std::make_tuple(2));
         }
 
         SECTION("Interleaved") {

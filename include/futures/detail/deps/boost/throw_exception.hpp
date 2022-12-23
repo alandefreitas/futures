@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/throw_exception.hpp from external or bundled boost 
+// Include boost/throw_exception.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/throw_exception.hpp>
+#    include <boost/throw_exception.hpp>
 #else
-#include <futures/detail/bundled/boost/throw_exception.hpp>
+#    include <futures/detail/bundled/boost/throw_exception.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_THROW_EXCEPTION_HPP

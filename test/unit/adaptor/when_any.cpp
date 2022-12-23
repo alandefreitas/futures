@@ -10,7 +10,7 @@
 #    pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
-TEST_CASE("Disjunction") {
+TEST_CASE("when_any") {
     using namespace futures;
 
     SECTION("Empty disjunction") {
@@ -23,7 +23,7 @@ TEST_CASE("Disjunction") {
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
             == future_status::ready);
         REQUIRE(is_ready(f));
-        when_any_result r = f.get();
+        when_any_result<std::tuple<>> r = f.get();
         REQUIRE(r.index == size_t(-1));
         REQUIRE(r.tasks == std::make_tuple());
     }
@@ -39,7 +39,7 @@ TEST_CASE("Disjunction") {
                 std::chrono::system_clock::now() + std::chrono::seconds(0))
             == future_status::ready);
         REQUIRE(is_ready(f));
-        when_any_result r = f.get();
+        when_any_result<std::tuple<cfuture<int>>> r = f.get();
         REQUIRE(r.index == size_t(0));
         REQUIRE(std::get<0>(r.tasks).get() == 2);
     }
@@ -64,9 +64,16 @@ TEST_CASE("Disjunction") {
                 std::chrono::system_clock::now() + std::chrono::seconds(0));
             REQUIRE(s2 == future_status::ready);
             REQUIRE(is_ready(f));
-            when_any_result any_r = f.get();
+            /* when_any_result */ auto any_r = f.get();
             size_t i = any_r.index;
+#ifdef __cpp_structured_bindings
             auto [r1, r2, r3] = std::move(any_r.tasks);
+#else
+            cfuture<int> r1;
+            cfuture<double> r2;
+            cfuture<std::string> r3;
+            std::tie(r1, r2, r3) = std::move(any_r.tasks);
+#endif
             REQUIRE(i < 3);
             if (0 == i) {
                 REQUIRE(r1.get() == 2);
@@ -200,7 +207,7 @@ TEST_CASE("Disjunction") {
                 tuple_element_t<0, when_any_sequence>;
             STATIC_REQUIRE(
                 boost::mp11::mp_apply<
-                    std::is_invocable,
+                    detail::is_invocable,
                     boost::mp11::mp_append<
                         std::tuple<Function>,
                         std::tuple<future_value_t<when_any_element_type>>>>::
@@ -365,7 +372,13 @@ TEST_CASE("Disjunction") {
             auto f = f1 || f2;
             REQUIRE_FALSE(f1.valid());
             REQUIRE_FALSE(f2.valid());
+#ifdef __cpp_structured_bindings
             auto [index, tasks] = f.get();
+#else
+            auto r = f.get();
+            std::size_t index = r.index;
+            auto tasks = std::move(r.tasks);
+#endif
             if (index == 0) {
                 REQUIRE(std::get<0>(tasks).get() == 1);
             } else {
@@ -381,7 +394,13 @@ TEST_CASE("Disjunction") {
             } || [] {
                 return 2;
             };
+#ifdef __cpp_structured_bindings
             auto [index, tasks] = f.get();
+#else
+            auto r = f.get();
+            std::size_t index = r.index;
+            auto tasks = std::move(r.tasks);
+#endif
             if (index == 0) {
                 REQUIRE(std::get<0>(tasks).get() == 1);
             } else {
@@ -395,7 +414,13 @@ TEST_CASE("Disjunction") {
                 return 2;
             };
             REQUIRE_FALSE(f1.valid());
+#ifdef __cpp_structured_bindings
             auto [index, tasks] = f.get();
+#else
+            auto r = f.get();
+            std::size_t index = r.index;
+            auto tasks = std::move(r.tasks);
+#endif
             if (index == 0) {
                 REQUIRE(std::get<0>(tasks).get() == 1);
             } else {
@@ -409,7 +434,13 @@ TEST_CASE("Disjunction") {
                 return 1;
             } || f2;
             REQUIRE_FALSE(f2.valid());
+#ifdef __cpp_structured_bindings
             auto [index, tasks] = f.get();
+#else
+            auto r = f.get();
+            std::size_t index = r.index;
+            auto tasks = std::move(r.tasks);
+#endif
             if (index == 0) {
                 REQUIRE(std::get<0>(tasks).get() == 1);
             } else {
@@ -427,7 +458,13 @@ TEST_CASE("Disjunction") {
             REQUIRE_FALSE(f1.valid());
             REQUIRE_FALSE(f2.valid());
             REQUIRE_FALSE(f3.valid());
+#ifdef __cpp_structured_bindings
             auto [index, tasks] = f.get();
+#else
+            auto r = f.get();
+            std::size_t index = r.index;
+            auto tasks = std::move(r.tasks);
+#endif
             if (index == 0) {
                 REQUIRE(std::get<0>(tasks).get() == 1);
             } else if (index == 1) {
@@ -451,7 +488,7 @@ TEST_CASE("Disjunction") {
             return 4;
         };
         STATIC_REQUIRE(
-            std::is_same_v<future_value_t<Future>, when_any_result<Tuple>>);
+            std::is_same<future_value_t<Future>, when_any_result<Tuple>>::value);
         SECTION("Sync unwrap") {
             detail::future_continue(f, [](int a) { return a * 5; });
         }

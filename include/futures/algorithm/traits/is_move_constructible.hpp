@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_constructible_from.hpp>
 #include <futures/algorithm/traits/is_convertible_to.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -33,9 +34,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/move_constructible
      */
+#if defined(FUTURES_DOXYGEN)
     template <class T>
-    using is_move_constructible = std::
+    using is_move_constructible = std::bool_constant<std::move_constructible<T>>;
+#else
+    template <class T>
+    using is_move_constructible = detail::
         conjunction<is_constructible_from<T, T>, is_convertible_to<T, T>>;
+#endif
 
     /// @copydoc is_move_constructible
     template <class T>

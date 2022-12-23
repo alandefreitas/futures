@@ -100,7 +100,7 @@ namespace futures {
         (requires(is_executor_v<E> || is_execution_policy_v<E>)
          && is_range_partitioner_v<P, R> && is_input_range_v<R>
          && is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>>
-         && std::is_copy_constructible_v<T>)
+         && detail::is_copy_constructible_v<T>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &ex, P p, R &&r, T f) const {
             if (detail::is_constant_evaluated()) {
@@ -121,7 +121,7 @@ namespace futures {
         (requires is_partitioner_v<P, I, S> &&is_input_iterator_v<I>
              &&is_sentinel_for_v<S, I>
                  &&is_indirectly_binary_invocable_v<equal_to, T *, I>
-                     &&std::is_copy_constructible_v<T>)
+                     &&detail::is_copy_constructible_v<T>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(P p, I first, S last, T f) const {
             if (detail::is_constant_evaluated()) {
@@ -141,7 +141,7 @@ namespace futures {
         FUTURES_TEMPLATE(class P, class R, class T)
         (requires is_range_partitioner_v<P, R> &&is_input_range_v<R>
              &&is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>>
-                 &&std::is_copy_constructible_v<T>)
+                 &&detail::is_copy_constructible_v<T>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(P p, R &&r, T f) const {
             if (detail::is_constant_evaluated()) {
@@ -190,7 +190,7 @@ namespace futures {
         (requires(is_executor_v<E> || is_execution_policy_v<E>)
          && is_input_range_v<R>
          && is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>>
-         && std::is_copy_constructible_v<T>)
+         && detail::is_copy_constructible_v<T>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &ex, R &&r, T f) const {
             if (detail::is_constant_evaluated()) {
@@ -237,7 +237,7 @@ namespace futures {
         FUTURES_TEMPLATE(class R, class T)
         (requires is_input_range_v<R>
              &&is_indirectly_binary_invocable_v<equal_to, T *, iterator_t<R>>
-                 &&std::is_copy_constructible_v<T>)
+                 &&detail::is_copy_constructible_v<T>)
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(R &&r, T f) const {
             if (detail::is_constant_evaluated()) {

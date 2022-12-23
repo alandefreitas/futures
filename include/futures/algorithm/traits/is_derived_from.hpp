@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/iter_reference.hpp>
 #include <futures/algorithm/traits/iter_rvalue_reference.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -34,10 +35,15 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/concepts/derived_from
      */
+#ifdef FUTURES_DOXYGEN
     template <class Derived, class Base>
-    using is_derived_from = std::conjunction<
+    using is_derived_from = std::bool_constant<derived_from<Derived, Base>>;
+#else
+    template <class Derived, class Base>
+    using is_derived_from = detail::conjunction<
         std::is_base_of<Base, Derived>,
         std::is_convertible<const volatile Derived*, const volatile Base*>>;
+#endif
 
     /// @copydoc is_derived_from
     template <class Derived, class Base>

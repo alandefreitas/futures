@@ -15,6 +15,7 @@
  *  This file defines the `is_constructible_from` trait.
  */
 
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -31,7 +32,7 @@ namespace futures {
      * @see https://en.cppreference.com/w/cpp/concepts/constructible_from
      */
     template <class T, class... Args>
-    using is_constructible_from = std::
+    using is_constructible_from = detail::
         conjunction<std::is_destructible<T>, std::is_constructible<T, Args...>>;
 
     /// @copydoc is_constructible_from

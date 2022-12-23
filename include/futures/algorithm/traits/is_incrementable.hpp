@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_regular.hpp>
 #include <futures/algorithm/traits/is_weakly_incrementable.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -42,12 +43,12 @@ namespace futures {
     template <class I>
     struct is_incrementable<
         I,
-        std::void_t<
+        detail::void_t<
             // clang-format off
             decltype(std::declval<I&>()++)
             // clang-format on
             >>
-        : std::conjunction<
+        : detail::conjunction<
               // clang-format off
               is_regular<I>,
               is_weakly_incrementable<I>,

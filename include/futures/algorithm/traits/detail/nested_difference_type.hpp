@@ -8,9 +8,11 @@
 #ifndef FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_DIFFERENCE_TYPE_HPP
 #define FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_DIFFERENCE_TYPE_HPP
 
-namespace futures::detail {
-    template <class T>
-    using nested_difference_type_t = typename T::difference_type;
-} // namespace futures::detail
+namespace futures {
+    namespace detail {
+        template <class T>
+        using nested_difference_type_t = typename T::difference_type;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_ALGORITHM_TRAITS_DETAIL_NESTED_DIFFERENCE_TYPE_HPP

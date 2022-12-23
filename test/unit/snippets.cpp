@@ -87,7 +87,7 @@ handle_timeout() {
     return 1;
 }
 
-TEST_CASE("Snippets") {
+TEST_CASE("snippets") {
     using namespace futures;
 
     SECTION("Quickstart") {
@@ -106,8 +106,9 @@ TEST_CASE("Snippets") {
             //]
 
             //[launch_executor Custom executor
-            asio::thread_pool custom_pool(1);
-            asio::thread_pool::executor_type ex = custom_pool.executor();
+            futures::asio::thread_pool custom_pool(1);
+            futures::asio::thread_pool::executor_type ex
+                = custom_pool.executor();
             auto f3 = async(ex, [] {
                 // Task 3 in a custom executor
                 long_task();
@@ -240,8 +241,9 @@ TEST_CASE("Snippets") {
             //]
 
             //[algorithms_executor Custom executors
-            asio::thread_pool custom_pool(4);
-            asio::thread_pool::executor_type ex = custom_pool.executor();
+            futures::asio::thread_pool custom_pool(4);
+            futures::asio::thread_pool::executor_type ex
+                = custom_pool.executor();
             futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
                 assert(x >= 0 && x <= 50000);
             });
@@ -265,15 +267,15 @@ TEST_CASE("Snippets") {
         SECTION("Polling continuations") {
             // Waiting
             {
-                std::future A = std::async([]() { return 2; });
+                auto /* std::future */ A = std::async([]() { return 2; });
                 int A_result = A.get();
                 assert(A_result == 2);
             }
 
             // Polling
             {
-                std::future A = std::async([]() { return 2; });
-                std::future B = std::async([&]() {
+                auto /* std::future */ A = std::async([]() { return 2; });
+                auto /* std::future */ B = std::async([&]() {
                     int A_result = A.get();
                     assert(A_result == 2);
                 });
@@ -316,8 +318,9 @@ TEST_CASE("Snippets") {
             //]
 
             //[with_executor Launching a task with a custom executor
-            asio::thread_pool custom_pool(1);
-            asio::thread_pool::executor_type ex = custom_pool.executor();
+            futures::asio::thread_pool custom_pool(1);
+            futures::asio::thread_pool::executor_type ex
+                = custom_pool.executor();
             auto f5 = futures::async(ex, [] {
                 // Task in thread pool
                 long_task();
@@ -372,8 +375,9 @@ TEST_CASE("Snippets") {
         }
 
         SECTION("Scheduling") {
-            asio::thread_pool custom_pool(1);
-            asio::thread_pool::executor_type ex = custom_pool.executor();
+            futures::asio::thread_pool custom_pool(1);
+            futures::asio::thread_pool::executor_type ex
+                = custom_pool.executor();
 
             //[schedule Scheduling deferred tasks
             auto f1 = schedule([] {
@@ -534,6 +538,7 @@ TEST_CASE("Snippets") {
             }
 
             {
+#ifdef __cpp_structured_bindings
                 auto f1 = async([]() { return long_task(); });
                 auto f2 = async([]() { return long_task(); });
                 auto f3 = async([]() { return long_task(); });
@@ -543,6 +548,7 @@ TEST_CASE("Snippets") {
                 assert(r2 == 0);
                 assert(r3 == 0);
                 //]
+#endif
             }
 
             {
@@ -831,8 +837,9 @@ TEST_CASE("Snippets") {
             //[promise_thread_pool Promise set by thread pool
             promise<int> p4;
             cfuture<int> f4 = p4.get_future();
-            asio::thread_pool pool(1);
-            asio::post(pool, [&p4]() { p4.set_value(2); });
+            futures::asio::thread_pool pool(1);
+            pool.get_executor()
+                .post([&p4]() { p4.set_value(2); }, std::allocator<void>{});
             assert(f4.get() == 2);
             //]
 
@@ -864,8 +871,8 @@ TEST_CASE("Snippets") {
             //[packaged_task_executor Packaged task invoked by executor
             packaged_task<int()> p3([]() { return 2; });
             auto f3 = p3.get_future();
-            asio::thread_pool pool(1);
-            asio::post(pool, std::move(p3));
+            futures::asio::thread_pool pool(1);
+            pool.get_executor().post(std::move(p3), std::allocator<void>{});
             assert(f3.get() == 2);
             //]
         }
@@ -896,7 +903,7 @@ TEST_CASE("Snippets") {
 
             //[executor_change Continuation with another executor
             cfuture<int> f7 = async([] { return 2; });
-            asio::thread_pool pool(1);
+            futures::asio::thread_pool pool(1);
             auto ex = pool.executor();
             cfuture<int> f8 = then(ex, f7, [](int v) { return v * 2; });
             //]
@@ -1186,12 +1193,16 @@ TEST_CASE("Snippets") {
                 auto all = when_all(f1, f2, f3);
                 //]
 
+#ifdef __cpp_structured_bindings
                 //[conjunction_return Conjunction as tuple
                 auto [r1, r2, r3] = all.get(); // get ready futures
                 assert(r1.get() == 2);
                 assert(r2.get() == 3.5);
                 assert(r3.get() == "name");
                 //]
+#else
+                boost::ignore_unused(all);
+#endif
             }
 
             {
@@ -1285,6 +1296,7 @@ TEST_CASE("Snippets") {
             }
 
             {
+#ifdef __cpp_structured_bindings
                 //[disjunction Tuple disjunction
                 cfuture<int> f1 = async([]() { return 2; });
                 cfuture<double> f2 = async([]() { return 3.5; });
@@ -1306,6 +1318,7 @@ TEST_CASE("Snippets") {
                     assert(r3.get() == "name");
                 }
                 //]
+#endif
             }
 
             {
@@ -1553,7 +1566,7 @@ TEST_CASE("Snippets") {
         }
 
         //[custom_executor Custom executor
-        asio::thread_pool pool(4);
+        futures::asio::thread_pool pool(4);
         auto ex = pool.executor();
         futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
             assert(x >= 0 && x <= 50000);
@@ -1577,12 +1590,15 @@ TEST_CASE("Snippets") {
         }
 
         {
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
             //[constexpr Compile-time algorithms
             constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
             constexpr int n = futures::reduce(a);
             constexpr std::array<int, n> b{};
             assert(b.size() == 15);
             //]
+#endif
         }
 
         //[partitioner Defining a custom partitioner
@@ -1604,8 +1620,8 @@ TEST_CASE("Snippets") {
     SECTION("Networking") {
         {
             //[enqueue asio::io_context as a task queue
-            asio::io_context io;
-            using io_executor = asio::io_context::executor_type;
+            futures::asio::io_context io;
+            using io_executor = futures::asio::io_context::executor_type;
             io_executor ex = io.get_executor();
             cfuture<int, io_executor> f = async(ex, []() { return 2; });
             //]

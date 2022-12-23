@@ -2,8 +2,8 @@
 //
 #include <catch2/catch.hpp>
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
-constexpr int
+FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+int
 my_function() {
     if (futures::detail::is_constant_evaluated()) {
         return 1;
@@ -13,8 +13,12 @@ my_function() {
 }
 
 TEST_CASE("is constant evaluated") {
-    constexpr int v = my_function();
+    FUTURES_CONSTANT_EVALUATED_CONSTEXPR
+    int v = my_function();
     INFO(v);
+#ifdef FUTURES_HAS_CONSTANT_EVALUATED
     REQUIRE(v == 1);
-}
+#else
+    REQUIRE(v == 0);
 #endif
+}

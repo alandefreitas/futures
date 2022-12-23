@@ -17,7 +17,8 @@ TEST_CASE("algorithm reduce") {
         test_binary_invoke(reduce, v, custom_plus, v_sum);
     }
 
-#ifdef FUTURES_HAS_CONSTANT_EVALUATED
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
         STATIC_REQUIRE(futures::reduce(a) == 15);

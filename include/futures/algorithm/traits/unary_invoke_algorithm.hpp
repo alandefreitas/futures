@@ -29,6 +29,7 @@
 #include <futures/algorithm/traits/is_input_range.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 
 namespace futures {
@@ -55,7 +56,7 @@ namespace futures {
             is_executor_v<E> && is_partitioner_v<P, I, S>
             && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
             && is_indirectly_unary_invocable_v<Fun, I>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR
             FUTURES_DETAIL(FUTURES_DETAIL(decltype(auto)))
             operator()(E const &ex, P p, I first, S last, Fun f) const {
@@ -79,7 +80,7 @@ namespace futures {
             && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
             && is_sentinel_for_v<S, I>
             && is_indirectly_unary_invocable_v<Fun, I>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &, P p, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -106,7 +107,7 @@ namespace futures {
              || is_execution_policy_v<E>) &&is_range_partitioner_v<P, R>
             && is_input_range_v<R>
             && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &ex, P p, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -128,7 +129,7 @@ namespace futures {
             is_partitioner_v<P, I, S> && is_input_iterator_v<I>
             && is_sentinel_for_v<S, I>
             && is_indirectly_unary_invocable_v<Fun, I>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(P p, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -149,7 +150,7 @@ namespace futures {
         (requires(
             (is_range_partitioner_v<P, R> && is_input_range_v<R>
              && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
-             && std::is_copy_constructible_v<Fun>) ))
+             && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(P p, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -176,7 +177,7 @@ namespace futures {
              || is_execution_policy_v<E>) &&is_input_iterator_v<I>
             && is_sentinel_for_v<S, I>
             && is_indirectly_unary_invocable_v<Fun, I>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &ex, I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -201,7 +202,7 @@ namespace futures {
         (requires((
             (is_executor_v<E> || is_execution_policy_v<E>) &&is_input_range_v<R>
             && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
-            && std::is_copy_constructible_v<Fun>) ))
+            && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(E const &ex, R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -226,7 +227,7 @@ namespace futures {
         (requires(
             (is_input_iterator_v<I> && is_sentinel_for_v<S, I>
              && is_indirectly_unary_invocable_v<Fun, I>
-             && std::is_copy_constructible_v<Fun>) ))
+             && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(I first, S last, Fun f) const {
             if (detail::is_constant_evaluated()) {
@@ -251,7 +252,7 @@ namespace futures {
         (requires(
             (is_input_range_v<R>
              && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
-             && std::is_copy_constructible_v<Fun>) ))
+             && detail::is_copy_constructible_v<Fun>) ))
             FUTURES_CONSTANT_EVALUATED_CONSTEXPR FUTURES_DETAIL(decltype(auto))
             operator()(R &&r, Fun f) const {
             if (detail::is_constant_evaluated()) {

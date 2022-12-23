@@ -13,7 +13,8 @@ TEST_CASE("Exceptions") {
         auto ok = [](auto&& e) {
             try {
                 throw e;
-            } catch (futures::error& e) {
+            }
+            catch (futures::error& e) {
                 REQUIRE(e.code().value() != 0);
             }
         };

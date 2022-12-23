@@ -17,6 +17,7 @@
 
 #include <futures/algorithm/traits/is_input_or_output_iterator.hpp>
 #include <futures/algorithm/traits/is_semiregular.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -32,9 +33,14 @@ namespace futures {
     /**
      * @see https://en.cppreference.com/w/cpp/iterator/sentinel_for
      */
+#ifdef FUTURES_DOXYGEN
     template <class S, class I>
-    using is_sentinel_for = std::
+    using is_sentinel_for = std::bool_constant<std::sentinel_for<S, I>>;
+#else
+    template <class S, class I>
+    using is_sentinel_for = detail::
         conjunction<is_semiregular<S>, is_input_or_output_iterator<I>>;
+#endif
 
     /// @copydoc is_sentinel_for
     template <class S, class I>

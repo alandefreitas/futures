@@ -20,8 +20,8 @@
  *  @brief All Adaptors
  *
  *  Use this header to include all functionalities of the algorithms module at
- *  once. In most cases, however, we recommend only including the headers for the
- *  functionality you need. Use the reference to identify these files.
+ *  once. In most cases, however, we recommend only including the headers for
+ * the functionality you need. Use the reference to identify these files.
  */
 
 

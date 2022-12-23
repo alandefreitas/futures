@@ -8,16 +8,18 @@
 #ifndef FUTURES_DETAIL_FUTURE_HPP
 #define FUTURES_DETAIL_FUTURE_HPP
 
-namespace futures::detail {
-    template <class T>
-    struct is_executor_opt {
-        static constexpr bool value = false;
-    };
+namespace futures {
+    namespace detail {
+        template <class T>
+        struct is_executor_opt {
+            static constexpr bool value = false;
+        };
 
-    template <class T>
-    struct is_executor_opt<executor_opt<T>> {
-        static constexpr bool value = true;
-    };
-}
+        template <class T>
+        struct is_executor_opt<executor_opt<T>> {
+            static constexpr bool value = true;
+        };
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_DETAIL_FUTURE_HPP

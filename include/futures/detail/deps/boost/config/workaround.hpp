@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/config/workaround.hpp from external or bundled boost 
+// Include boost/config/workaround.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/config/workaround.hpp>
+#    include <boost/config/workaround.hpp>
 #else
-#include <futures/detail/bundled/boost/config/workaround.hpp>
+#    include <futures/detail/bundled/boost/config/workaround.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_CONFIG_WORKAROUND_HPP

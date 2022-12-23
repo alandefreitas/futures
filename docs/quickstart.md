@@ -226,9 +226,9 @@
 
 !!! hint ""
 
-    - Requirements: C++17
-    - Tested compilers: MSVC 14.2, 14.3; GCC 9, 10, 11, 12; Clang 12, 13, 14; AppleClang: 13
-    - Tested standards: C++20; C++17
+    - Requirements: C++14
+    - Tested compilers: MSVC 14.2, 14.3; GCC 7, 8, 9, 10, 11, 12; Clang 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14; AppleClang: 13
+    - Tested standards: C++20; C++17; C++14
 
 
 --8<-- "docs/references.md"

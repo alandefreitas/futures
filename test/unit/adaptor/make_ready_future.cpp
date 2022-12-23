@@ -13,7 +13,7 @@ TEST_CASE("adaptor make ready future") {
 
     SECTION("Reference") {
         int a = 3;
-        auto f = make_ready_future(std::reference_wrapper(a));
+        auto f = make_ready_future(std::reference_wrapper<int>(a));
         REQUIRE(is_ready(f));
         REQUIRE(f.get() == 3);
     }

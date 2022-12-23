@@ -10,20 +10,22 @@
 
 #include <functional>
 
-namespace futures::detail {
-    template <class T>
-    struct unwrap_refwrapper {
-        using type = T;
-    };
+namespace futures {
+    namespace detail {
+        template <class T>
+        struct unwrap_refwrapper {
+            using type = T;
+        };
 
-    template <class T>
-    struct unwrap_refwrapper<std::reference_wrapper<T>> {
-        using type = T&;
-    };
+        template <class T>
+        struct unwrap_refwrapper<std::reference_wrapper<T>> {
+            using type = T&;
+        };
 
-    template <class T>
-    using unwrap_decay_t = typename unwrap_refwrapper<
-        typename std::decay<T>::type>::type;
-} // namespace futures::detail
+        template <class T>
+        using unwrap_decay_t = typename unwrap_refwrapper<
+            typename std::decay<T>::type>::type;
+    } // namespace detail
+} // namespace futures
 
 #endif // FUTURES_DETAIL_TRAITS_UNWRAP_REFWRAPPER_HPP

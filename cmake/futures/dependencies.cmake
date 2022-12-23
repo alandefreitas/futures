@@ -15,27 +15,38 @@ if (FUTURES_USE_FIND_PACKAGE)
     find_package(Asio 1.21.0)
 endif ()
 
-if (FUTURES_USE_FETCH_CONTENT AND NOT Asio_FOUND)
-    message(STATUS "Fetching Asio")
+if (FUTURES_USE_FETCH_CONTENT AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.11.4)
+    include(FetchContent)
 
-    # Download Asio
-    FetchContent_Declare(Asio
-            GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
-            GIT_TAG asio-1-21-0
-            )
-    FetchContent_GetProperties(Asio)
-    if (NOT Asio_POPULATED)
-        FetchContent_Populate(Asio)
+    if (NOT Asio_FOUND)
+        message(STATUS "Fetching Asio")
+
+        # Download Asio
+        FetchContent_Declare(Asio
+                GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+                GIT_TAG asio-1-21-0
+                )
+        FetchContent_GetProperties(Asio)
+        if (NOT Asio_POPULATED)
+            FetchContent_Populate(Asio)
+        endif ()
+
+        # Create imported CMake library
+        add_library(asio INTERFACE)
+        target_include_directories(asio INTERFACE
+                $<BUILD_INTERFACE:${asio_SOURCE_DIR}/asio/include>
+                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+        add_library(asio::asio ALIAS asio)
+
+        set(Asio_FOUND ON)
+        set(Asio_FETCHED ON)
+        message(STATUS "asio fetched: ${asio_SOURCE_DIR}")
+
+        # If asio is not imported, it goes to the install list
+        install(TARGETS asio
+                EXPORT futures-targets
+                LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                )
     endif ()
-
-    # Create imported CMake library
-    add_library(asio INTERFACE)
-    target_include_directories(asio INTERFACE
-            $<BUILD_INTERFACE:${asio_SOURCE_DIR}/asio/include>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-    add_library(asio::asio ALIAS asio)
-
-    set(Asio_FOUND ON)
-    set(Asio_FETCHED ON)
-    message(STATUS "asio fetched: ${asio_SOURCE_DIR}")
 endif ()

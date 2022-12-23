@@ -11,27 +11,29 @@
 #include <futures/detail/operation_state.hpp>
 #include <memory>
 
-namespace futures::detail {
-    /** @addtogroup futures Futures
-     *  @{
-     */
+namespace futures {
+    namespace detail {
+        /** @addtogroup futures Futures
+         *  @{
+         */
 
-    /// A shared operation state
-    /**
-     * Futures typically require their operation states to be shared
-     *
-     * @tparam R State data type
-     * @tparam Options State options
-     */
-    template <class R, class Options>
-    using shared_state = std::shared_ptr<operation_state<R, Options>>;
+        /// A shared operation state
+        /**
+         * Futures typically require their operation states to be shared
+         *
+         * @tparam R State data type
+         * @tparam Options State options
+         */
+        template <class R, class Options>
+        using shared_state = std::shared_ptr<operation_state<R, Options>>;
 
-    template <class R, class Options>
-    using deferred_shared_state = std::shared_ptr<
-        deferred_operation_state<R, Options>>;
+        template <class R, class Options>
+        using deferred_shared_state = std::shared_ptr<
+            deferred_operation_state<R, Options>>;
 
-    /** @} */ // @addtogroup futures Futures
-} // namespace futures::detail
+        /** @} */ // @addtogroup futures Futures
+    }             // namespace detail
+} // namespace futures
 
 
 #endif // FUTURES_DETAIL_SHARED_STATE_HPP

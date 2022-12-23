@@ -29,10 +29,11 @@ TEST_CASE("then") {
             using unwrap_result_no_token_type = detail::
                 continue_invoke_result_t<Future, Function>;
 
-            STATIC_REQUIRE(std::is_same_v<unwrap_result_no_token_type, int>);
-            static constexpr bool is_valid_without_stop_token = !std::is_same_v<
+            STATIC_REQUIRE(
+                std::is_same<unwrap_result_no_token_type, int>::value);
+            static constexpr bool is_valid_without_stop_token = !std::is_same<
                 unwrap_result_no_token_type,
-                detail::continue_tags::failure>;
+                detail::continue_tags::failure>::value;
             STATIC_REQUIRE(is_valid_without_stop_token);
 
             STATIC_REQUIRE(
@@ -70,8 +71,8 @@ TEST_CASE("then") {
     SECTION("Custom executor") {
         SECTION("First parameter") {
             SECTION("Integer continuation") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 cfuture<int> before = async([] { return 2; });
                 REQUIRE(before.valid());
                 cfuture<int> after = then(ex, before, [](int v) {
@@ -82,8 +83,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Continuation to void") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<int> after = then(ex, before, []() { return 2; });
@@ -93,8 +94,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Void continuation") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<void> after = then(ex, before, [&]() { ++i; });
@@ -106,8 +107,8 @@ TEST_CASE("then") {
 
         SECTION("Second parameter") {
             SECTION("Integer continuation") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 cfuture<int> before = async([] { return 2; });
                 REQUIRE(before.valid());
                 cfuture<int> after = then(ex, before, [](int v) {
@@ -118,8 +119,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Continuation to void") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<int> after = then(ex, before, []() { return 2; });
@@ -129,8 +130,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Void continuation") {
-                asio::thread_pool pool(1);
-                asio::thread_pool::executor_type ex = pool.executor();
+                futures::asio::thread_pool pool(1);
+                futures::asio::thread_pool::executor_type ex = pool.executor();
                 int i = 0;
                 cfuture<void> before = async([&i] { ++i; });
                 cfuture<void> after = then(ex, before, [&i]() { ++i; });
@@ -356,7 +357,7 @@ TEST_CASE("then") {
 
             using value_type = future_value_t<Future>;
             constexpr bool tuple_explode = boost::mp11::mp_apply<
-                std::is_invocable,
+                detail::is_invocable,
                 boost::mp11::mp_append<std::tuple<Function>, value_type>>::value;
             STATIC_REQUIRE(!tuple_explode);
             constexpr bool is_future_tuple = boost::mp11::
@@ -365,9 +366,10 @@ TEST_CASE("then") {
             using unwrapped_elements = boost::mp11::
                 mp_transform<future_value_t, value_type>;
             STATIC_REQUIRE(
-                std::is_same_v<unwrapped_elements, std::tuple<int, int, int>>);
+                std::is_same<unwrapped_elements, std::tuple<int, int, int>>::
+                    value);
             constexpr bool tuple_explode_unwrap = boost::mp11::mp_apply<
-                std::is_invocable,
+                detail::is_invocable,
                 boost::mp11::
                     mp_append<std::tuple<Function>, unwrapped_elements>>::value;
             STATIC_REQUIRE(tuple_explode_unwrap);

@@ -18,6 +18,7 @@
 #include <futures/algorithm/traits/is_input_iterator.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iterator.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -28,7 +29,6 @@ namespace futures {
     /** @addtogroup traits Traits
      *  @{
      */
-
 
     /// @brief A type trait equivalent to the `std::input_range` concept
     /**
@@ -42,8 +42,8 @@ namespace futures {
     struct is_input_range : std::false_type {};
 
     template <class T>
-    struct is_input_range<T, std::void_t<iterator_t<T>>>
-        : std::conjunction<
+    struct is_input_range<T, detail::void_t<iterator_t<T>>>
+        : detail::conjunction<
               // clang-format off
               is_range<T>,
               is_input_iterator<iterator_t<T>>
