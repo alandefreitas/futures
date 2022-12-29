@@ -44,17 +44,22 @@ namespace futures {
     template <class T>
     using is_future = __see_below__;
 #else
-    template <class T, class = void>
-    struct is_future : std::false_type {};
+    namespace detail {
+        template <class T, class = void>
+        struct is_future_impl : std::false_type {};
+
+        template <class T>
+        struct is_future_impl<
+            T,
+            detail::void_t<
+                // clang-format off
+            decltype(std::declval<T>().get())
+                // clang-format on
+                >> : std::true_type {};
+    } // namespace detail
 
     template <class T>
-    struct is_future<
-        T,
-        detail::void_t<
-            // clang-format off
-            decltype(std::declval<T>().get())
-            // clang-format on
-            >> : std::true_type {};
+    struct is_future : detail::is_future_impl<T> {};
 #endif
 
     /// @copydoc is_future

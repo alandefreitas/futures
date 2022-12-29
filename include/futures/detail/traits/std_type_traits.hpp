@@ -92,8 +92,13 @@ namespace futures {
         template <class T>
         using decay_t = typename std::decay<T>::type;
 
-        template <class...>
-        using void_t = void;
+        template <typename... Ts>
+        struct make_void {
+            typedef void type;
+        };
+
+        template <typename... Ts>
+        using void_t = typename make_void<Ts...>::type;
     } // namespace detail
 } // namespace futures
 

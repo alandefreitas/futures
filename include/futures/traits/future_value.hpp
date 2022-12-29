@@ -38,19 +38,24 @@ namespace futures {
     template <class T>
     using future_value = __see_below__;
 #else
-    template <class T, class = void>
-    struct future_value {};
+    namespace detail {
+        template <class T, class = void>
+        struct future_value_impl {};
 
-    // specialization for types that implement get()
-    template <class Future>
-    struct future_value<
-        Future,
-        std::enable_if_t<
-            is_future_v<Future>
-            && detail::has_get<std::decay_t<Future>>::value>> {
-        using type = std::decay_t<
-            decltype(std::declval<std::decay_t<Future>>().get())>;
-    };
+        // specialization for types that implement get()
+        template <class Future>
+        struct future_value_impl<
+            Future,
+            std::enable_if_t<
+                is_future_v<Future>
+                && detail::has_get<std::decay_t<Future>>::value>> {
+            using type = std::decay_t<
+                decltype(std::declval<std::decay_t<Future>>().get())>;
+        };
+    } // namespace detail
+
+    template <class T>
+    struct future_value : detail::future_value_impl<T> {};
 #endif
 
     /// @copydoc future_value

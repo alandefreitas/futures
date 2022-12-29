@@ -49,17 +49,22 @@ namespace futures {
     template <class T>
     using is_stoppable = __see_below__;
 #else
-    template <class T, class = void>
-    struct is_stoppable : std::false_type {};
+    namespace detail {
+        template <class T, class = void>
+        struct is_stoppable_impl : std::false_type {};
+
+        template <class T>
+        struct is_stoppable_impl<
+            T,
+            detail::void_t<
+                // clang-format off
+            decltype(std::declval<T>().request_stop())
+                // clang-format on
+                >> : std::true_type {};
+    } // namespace detail
 
     template <class T>
-    struct is_stoppable<
-        T,
-        detail::void_t<
-            // clang-format off
-            decltype(std::declval<T>().request_stop())
-            // clang-format on
-            >> : std::true_type {};
+    struct is_stoppable : detail::is_stoppable_impl<T> {};
 #endif
 
     /// @copydoc is_stoppable
