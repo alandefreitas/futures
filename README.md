@@ -37,7 +37,7 @@
 
 <div style="text-align: center;">
 <a href="https://github.com/alandefreitas/futures/actions?query=workflow%3ABuild+event%3Apush+branch%3Amaster+" target="_blank">
-  <img alt="Build Status" src="https://img.shields.io/github/workflow/status/alandefreitas/futures/Build/master?event=push&label=Build&logo=Github-Actions">
+  <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/alandefreitas/futures/build.yml?branch=master&label=Build&logo=Github-Actions&event=push">
 </a>
 <a href="https://GitHub.com/alandefreitas/futures/releases/" target="_blank">
   <img alt="Latest Release" src="https://img.shields.io/github/release/alandefreitas/futures.svg?label=Download">
