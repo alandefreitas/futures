@@ -19,8 +19,8 @@
 #include <futures/config.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/executor/detail/is_executor.hpp>
-#include <futures/detail/deps/asio/is_executor.hpp>
 #include <futures/detail/deps/asio/execution/executor.hpp>
+#include <futures/detail/deps/asio/is_executor.hpp>
 
 namespace futures {
     /** @addtogroup executors Executors
@@ -43,7 +43,7 @@ namespace futures {
         detail::disjunction<
             asio::is_executor<T>,
             asio::execution::is_executor<T>,
-            detail::has_execute<T>>;
+            detail::is_executor_impl<T>>;
 #else
         __see_below__;
 #endif

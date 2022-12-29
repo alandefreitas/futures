@@ -71,8 +71,8 @@ TEST_CASE("then") {
     SECTION("Custom executor") {
         SECTION("First parameter") {
             SECTION("Integer continuation") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 cfuture<int> before = async([] { return 2; });
                 REQUIRE(before.valid());
                 cfuture<int> after = then(ex, before, [](int v) {
@@ -83,8 +83,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Continuation to void") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<int> after = then(ex, before, []() { return 2; });
@@ -94,8 +94,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Void continuation") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<void> after = then(ex, before, [&]() { ++i; });
@@ -107,8 +107,8 @@ TEST_CASE("then") {
 
         SECTION("Second parameter") {
             SECTION("Integer continuation") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 cfuture<int> before = async([] { return 2; });
                 REQUIRE(before.valid());
                 cfuture<int> after = then(ex, before, [](int v) {
@@ -119,8 +119,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Continuation to void") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 int i = 0;
                 cfuture<void> before = async([&] { ++i; });
                 cfuture<int> after = then(ex, before, []() { return 2; });
@@ -130,8 +130,8 @@ TEST_CASE("then") {
             }
 
             SECTION("Void continuation") {
-                futures::asio::thread_pool pool(1);
-                futures::asio::thread_pool::executor_type ex = pool.executor();
+                futures::thread_pool pool(1);
+                futures::thread_pool::executor_type ex = pool.get_executor();
                 int i = 0;
                 cfuture<void> before = async([&i] { ++i; });
                 cfuture<void> after = then(ex, before, [&i]() { ++i; });

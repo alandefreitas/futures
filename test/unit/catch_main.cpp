@@ -11,11 +11,11 @@
 #    endif
 #endif
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__clang__)
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 #include <catch2/catch.hpp>
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__clang__)
 #    pragma GCC diagnostic pop
 #endif

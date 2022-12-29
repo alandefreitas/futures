@@ -19,16 +19,16 @@ namespace futures {
             = FUTURES_DEFAULT_THREAD_POOL_SIZE;
 #else
         const std::size_t default_thread_pool_size = std::
-            max(hardware_concurrency(), std::size_t(2));
+            max(hardware_concurrency(), static_cast<unsigned int>(2));
 #endif
-        static asio::thread_pool pool(default_thread_pool_size);
+        static thread_pool pool(default_thread_pool_size);
         return pool;
     }
 
     default_execution_context_type::executor_type
     make_default_executor() {
-        asio::thread_pool &pool = default_execution_context();
-        return pool.executor();
+        thread_pool &pool = default_execution_context();
+        return pool.get_executor();
     }
 } // namespace futures
 

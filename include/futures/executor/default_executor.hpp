@@ -18,8 +18,8 @@
 
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
+#include <futures/executor/thread_pool.hpp>
 #include <futures/detail/utility/is_constant_evaluated.hpp>
-#include <futures/detail/deps/asio/thread_pool.hpp>
 #include <thread>
 
 namespace futures {
@@ -52,7 +52,7 @@ namespace futures {
      *  - Non-copyable
      *  - May contain additional state, such as timers, and threads
      **/
-    using default_execution_context_type = FUTURES_DETAIL(asio::thread_pool);
+    using default_execution_context_type = FUTURES_DETAIL(thread_pool);
 
     /// Default executor type
     using default_executor_type = default_execution_context_type::executor_type;

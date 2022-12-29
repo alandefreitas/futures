@@ -106,9 +106,8 @@ TEST_CASE("snippets") {
             //]
 
             //[launch_executor Custom executor
-            futures::asio::thread_pool custom_pool(1);
-            futures::asio::thread_pool::executor_type ex
-                = custom_pool.executor();
+            futures::thread_pool custom_pool(1);
+            futures::thread_pool::executor_type ex = custom_pool.get_executor();
             auto f3 = async(ex, [] {
                 // Task 3 in a custom executor
                 long_task();
@@ -241,9 +240,8 @@ TEST_CASE("snippets") {
             //]
 
             //[algorithms_executor Custom executors
-            futures::asio::thread_pool custom_pool(4);
-            futures::asio::thread_pool::executor_type ex
-                = custom_pool.executor();
+            futures::thread_pool custom_pool(4);
+            futures::thread_pool::executor_type ex = custom_pool.get_executor();
             futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
                 assert(x >= 0 && x <= 50000);
             });
@@ -318,9 +316,8 @@ TEST_CASE("snippets") {
             //]
 
             //[with_executor Launching a task with a custom executor
-            futures::asio::thread_pool custom_pool(1);
-            futures::asio::thread_pool::executor_type ex
-                = custom_pool.executor();
+            futures::thread_pool custom_pool(1);
+            futures::thread_pool::executor_type ex = custom_pool.get_executor();
             auto f5 = futures::async(ex, [] {
                 // Task in thread pool
                 long_task();
@@ -375,9 +372,8 @@ TEST_CASE("snippets") {
         }
 
         SECTION("Scheduling") {
-            futures::asio::thread_pool custom_pool(1);
-            futures::asio::thread_pool::executor_type ex
-                = custom_pool.executor();
+            futures::thread_pool custom_pool(1);
+            futures::thread_pool::executor_type ex = custom_pool.get_executor();
 
             //[schedule Scheduling deferred tasks
             auto f1 = schedule([] {
@@ -837,9 +833,8 @@ TEST_CASE("snippets") {
             //[promise_thread_pool Promise set by thread pool
             promise<int> p4;
             cfuture<int> f4 = p4.get_future();
-            futures::asio::thread_pool pool(1);
-            pool.get_executor()
-                .post([&p4]() { p4.set_value(2); }, std::allocator<void>{});
+            futures::thread_pool pool(1);
+            pool.get_executor().execute([&p4]() { p4.set_value(2); });
             assert(f4.get() == 2);
             //]
 
@@ -871,8 +866,8 @@ TEST_CASE("snippets") {
             //[packaged_task_executor Packaged task invoked by executor
             packaged_task<int()> p3([]() { return 2; });
             auto f3 = p3.get_future();
-            futures::asio::thread_pool pool(1);
-            pool.get_executor().post(std::move(p3), std::allocator<void>{});
+            futures::thread_pool pool(1);
+            pool.get_executor().execute(std::move(p3));
             assert(f3.get() == 2);
             //]
         }
@@ -903,8 +898,8 @@ TEST_CASE("snippets") {
 
             //[executor_change Continuation with another executor
             cfuture<int> f7 = async([] { return 2; });
-            futures::asio::thread_pool pool(1);
-            auto ex = pool.executor();
+            futures::thread_pool pool(1);
+            auto ex = pool.get_executor();
             cfuture<int> f8 = then(ex, f7, [](int v) { return v * 2; });
             //]
 
@@ -1566,8 +1561,8 @@ TEST_CASE("snippets") {
         }
 
         //[custom_executor Custom executor
-        futures::asio::thread_pool pool(4);
-        auto ex = pool.executor();
+        futures::thread_pool pool(4);
+        auto ex = pool.get_executor();
         futures::for_each(ex, v.begin(), v.begin() + 10, [](int x) {
             assert(x >= 0 && x <= 50000);
             long_task(x);
