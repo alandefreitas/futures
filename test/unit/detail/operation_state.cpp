@@ -137,7 +137,9 @@ TEST_CASE("Shared state") {
             }
             SECTION("Executor") {
                 futures::asio::thread_pool t(1);
-                futures::detail::execute(t, [&p]() { p.set_value(2); });
+                futures::detail::execute(t.get_executor(), [&p]() {
+                    p.set_value(2);
+                });
                 REQUIRE(f.get() == 2);
             }
         }
@@ -171,7 +173,7 @@ TEST_CASE("Shared state") {
             }
             SECTION("Executor") {
                 futures::asio::thread_pool t(1);
-                futures::asio::post(t, std::move(p));
+                futures::detail::execute(t.get_executor(), std::move(p));
                 REQUIRE(f.get() == 2);
             }
         }

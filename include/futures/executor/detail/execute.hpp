@@ -10,9 +10,9 @@
 
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
+#include <futures/detail/deps/asio/execution/executor.hpp>
 #include <futures/detail/deps/asio/is_executor.hpp>
 #include <futures/detail/deps/boost/mp11/integral.hpp>
-#include <futures/detail/deps/asio/execution/executor.hpp>
 #include <type_traits>
 
 namespace futures {
@@ -38,16 +38,9 @@ namespace futures {
             ex.execute(std::forward<F>(f));
         }
 
-        // asio execution context
         template <class E, class F>
         void
-        execute_impl(mp_int<3>, E& ex, F&& f) {
-            execute_impl(mp_int<1>{}, ex.get_executor(), std::forward<F>(f));
-        }
-
-        template <class E, class F>
-        void
-        execute(E& ex, F&& f) {
+        execute(E const& ex, F&& f) {
             execute_impl(
                 mp_cond<
                     asio::is_executor<E>,
@@ -55,9 +48,7 @@ namespace futures {
                     is_executor<E>,
                     mp_int<0>,
                     asio::execution::is_executor<E>,
-                    mp_int<2>,
-                    std::is_convertible<E&, asio::execution_context&>,
-                    mp_int<3>>{},
+                    mp_int<2>>{},
                 ex,
                 std::forward<F>(f));
         }
