@@ -9,9 +9,9 @@
 #define FUTURES_DETAIL_CONTINUATIONS_SOURCE_HPP
 
 #include <futures/config.hpp>
+#include <futures/executor/execute.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/container/small_vector.hpp>
-#include <futures/executor/detail/execute.hpp>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -131,7 +131,7 @@ namespace futures {
                     // When the shared state currently associated with *this is
                     // ready, the continuation is called on an unspecified
                     // thread of execution
-                    detail::execute(ex, std::forward<Fn>(fn));
+                    execute(ex, std::forward<Fn>(fn));
                     return false;
                 }
             }

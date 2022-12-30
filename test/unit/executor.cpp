@@ -21,11 +21,11 @@ TEST_CASE("Asio default executors") {
         REQUIRE(&pool == &ex.context());
         REQUIRE(ex == ex2);
         int i = 0;
-        futures::detail::execute(ex, [&]() { ++i; });
-        futures::detail::execute(ex2, [&]() { ++i; });
+        execute(ex, [&]() { ++i; });
+        execute(ex2, [&]() { ++i; });
         pool.wait(); // <- this will stop the pool
         REQUIRE(i == 2);
-        futures::detail::execute(ex, [&]() { ++i; });
+        execute(ex, [&]() { ++i; });
         pool.wait();
         REQUIRE(i == 2); // <- pool had already stopped
     }

@@ -1247,9 +1247,9 @@ namespace futures {
 
             void
             post_deferred_to_executor_impl(std::true_type /* has_executor */) {
-                detail::execute(
-                    operation_state<R, Options>::get_executor(),
-                    [this]() { this->apply(std::move(this->get_function())); });
+                execute(operation_state<R, Options>::get_executor(), [this]() {
+                    this->apply(std::move(this->get_function()));
+                });
             }
 
             void

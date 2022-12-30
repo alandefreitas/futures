@@ -15,14 +15,6 @@
 
 namespace futures {
     namespace detail {
-        template <class E, class F>
-        void
-        execute(E const& ex, F&& f);
-
-        template <class E, class F>
-        void
-        execute(E& ex, F&& f);
-
         // futures executor or asio::execution::executor
         template <class E, class F>
         void
@@ -37,42 +29,24 @@ namespace futures {
             ex.post(std::forward<F>(f), std::allocator<void>{});
         }
 
+        template <class E, class F>
+        void
+        execute_in_executor(E const& ex, F&& f) {
+            detail::execute_impl(
+                detail::mp_cond<
+                    detail::is_asio_executor<E>,
+                    detail::mp_int<1>,
+                    is_executor<E>,
+                    detail::mp_int<0>>{},
+                ex,
+                std::forward<F>(f));
+        }
+
         // execution context
         template <class E, class F>
         void
-        execute_impl(mp_int<2>, E& ex, F&& f) {
-            execute(ex.get_executor(), std::forward<F>(f));
-        }
-
-        template <class E, class F>
-        void
-        execute(E const& ex, F&& f) {
-            execute_impl(
-                mp_cond<
-                    // is_asio_executor<E>,
-                    is_asio_executor<E>,
-                    mp_int<1>,
-                    is_executor<E>,
-                    mp_int<0>,
-                    has_get_executor<E>,
-                    mp_int<2>>{},
-                ex,
-                std::forward<F>(f));
-        }
-
-        template <class E, class F>
-        void
-        execute(E& ex, F&& f) {
-            execute_impl(
-                mp_cond<
-                    is_asio_executor<E>,
-                    mp_int<1>,
-                    is_executor<E>,
-                    mp_int<0>,
-                    has_get_executor<E>,
-                    mp_int<2>>{},
-                ex,
-                std::forward<F>(f));
+        execute_in_context(E& ex, F&& f) {
+            execute_in_executor(ex.get_executor(), std::forward<F>(f));
         }
     } // namespace detail
 } // namespace futures

@@ -9,12 +9,12 @@
 #define FUTURES_DETAIL_FUTURE_LAUNCHER_HPP
 
 #include <futures/stop_token.hpp>
+#include <futures/executor/execute.hpp>
 #include <futures/traits/future_value.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/launch.hpp>
 #include <futures/detail/shared_state.hpp>
 #include <futures/detail/traits/launch_result.hpp>
-#include <futures/executor/detail/execute.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <type_traits>
 
@@ -74,7 +74,7 @@ namespace futures {
                 basic_future<value_type, FutureOptions> fut(shared_state);
 
                 // Launch task to fulfill the eager promise now
-                detail::execute(
+                execute(
                     ex,
                     std::move(
                         [state = std::move(shared_state),

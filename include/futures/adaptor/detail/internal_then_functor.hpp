@@ -11,6 +11,7 @@
 #include <futures/future.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
+#include <futures/executor/execute.hpp>
 #include <futures/traits/future_value.hpp>
 #include <futures/traits/is_future.hpp>
 #include <futures/detail/container/small_vector.hpp>
@@ -160,7 +161,7 @@ namespace futures {
                      task = std::move(task)]() mutable {
                     state->apply(std::move(task));
                 };
-                detail::execute(ex, std::move(poll_and_set_value));
+                execute(ex, std::move(poll_and_set_value));
                 return fut;
             }
         };

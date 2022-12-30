@@ -1,6 +1,6 @@
 #include <futures/executor/thread_pool.hpp>
 //
-#include <futures/executor/detail/execute.hpp>
+#include <futures/executor/execute.hpp>
 #include <catch2/catch.hpp>
 
 TEST_CASE("executor thread pool") {
@@ -25,7 +25,7 @@ TEST_CASE("executor thread pool") {
         SECTION("On executor") {
             thread_pool p;
             int a = 0;
-            detail::execute(p.get_executor(), [&a] { ++a; });
+            execute(p.get_executor(), [&a] { ++a; });
             p.join();
             REQUIRE(a == 1);
         }
@@ -33,7 +33,7 @@ TEST_CASE("executor thread pool") {
         SECTION("On context") {
             thread_pool p;
             int a = 0;
-            detail::execute(p, [&a] { ++a; });
+            execute(p, [&a] { ++a; });
             p.join();
             REQUIRE(a == 1);
         }
