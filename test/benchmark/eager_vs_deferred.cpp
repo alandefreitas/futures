@@ -8,9 +8,9 @@
 #include <futures/launch.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <algorithm>
-#include <numeric>
 #include <chrono>
 #include <iostream>
+#include <numeric>
 #include <random>
 #include <vector>
 

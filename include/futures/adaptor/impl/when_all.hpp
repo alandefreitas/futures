@@ -234,16 +234,28 @@ namespace futures {
 
     } // namespace detail
 
-    FUTURES_TEMPLATE_IMPL(class InputIt)
-    (requires detail::disjunction_v<
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class InputIt>
+    requires detail::disjunction_v<
         is_future<
             std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
         detail::is_invocable<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>>)
-        when_all_future<
-            FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
-                               typename std::iterator_traits<InputIt>::
-                                   value_type>>)> when_all(InputIt first, InputIt last) {
+            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>>
+#else
+    template <
+        class InputIt,
+        std::enable_if_t<
+            detail::disjunction_v<
+                is_future<std::decay_t<
+                    typename std::iterator_traits<InputIt>::value_type>>,
+                detail::is_invocable<std::decay_t<
+                    typename std::iterator_traits<InputIt>::value_type>>>,
+            int>>
+#endif
+    when_all_future<
+        FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
+                           typename std::iterator_traits<InputIt>::value_type>>)>
+    when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<
             typename std::iterator_traits<InputIt>::value_type>;
@@ -276,13 +288,24 @@ namespace futures {
         return when_all_future<sequence_type>(std::move(v));
     }
 
-    FUTURES_TEMPLATE_IMPL(class... Futures)
-    (requires detail::conjunction_v<detail::disjunction<
-         is_future<std::decay_t<Futures>>,
-         detail::is_invocable<std::decay_t<Futures>>>...>)
-        when_all_future<std::tuple<
-            FUTURES_DETAIL(detail::lambda_to_future_t<
-                           Futures>...)>> when_all(Futures &&...futures) {
+
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Futures>
+    requires detail::conjunction_v<detail::disjunction<
+        is_future<std::decay_t<Futures>>,
+        detail::is_invocable<std::decay_t<Futures>>>...>
+#else
+    template <
+        class... Futures,
+        std::enable_if_t<
+            detail::conjunction_v<detail::disjunction<
+                is_future<std::decay_t<Futures>>,
+                detail::is_invocable<std::decay_t<Futures>>>...>,
+            int>>
+#endif
+    when_all_future<
+        std::tuple<FUTURES_DETAIL(detail::lambda_to_future_t<Futures>...)>>
+    when_all(Futures &&...futures) {
         // Infer sequence type
         using sequence_type = std::tuple<detail::lambda_to_future_t<Futures>...>;
 
@@ -378,13 +401,28 @@ namespace futures {
         }
     } // namespace detail
 
-    FUTURES_TEMPLATE_IMPL(class T1, class T2)
-    (requires detail::disjunction_v<
-        is_future<std::decay_t<T1>>,
-        detail::is_invocable<std::decay_t<T1>>>
-         &&detail::disjunction_v<
-             is_future<std::decay_t<T2>>,
-             detail::is_invocable<std::decay_t<T2>>>) FUTURES_DETAIL(auto)
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class T1, class T2>
+    requires detail::disjunction_v<
+                 is_future<std::decay_t<T1>>,
+                 detail::is_invocable<std::decay_t<T1>>>
+             && detail::disjunction_v<
+                 is_future<std::decay_t<T2>>,
+                 detail::is_invocable<std::decay_t<T2>>>
+#else
+    template <
+        class T1,
+        class T2,
+        std::enable_if_t<
+            detail::disjunction_v<
+                is_future<std::decay_t<T1>>,
+                detail::is_invocable<std::decay_t<T1>>>
+                && detail::disjunction_v<
+                    is_future<std::decay_t<T2>>,
+                    detail::is_invocable<std::decay_t<T2>>>,
+            int>>
+#endif
+    FUTURES_DETAIL(auto)
     operator&&(T1 &&lhs, T2 &&rhs) {
         return detail::
             conjunction_impl(std::forward<T1>(lhs), std::forward<T2>(rhs));

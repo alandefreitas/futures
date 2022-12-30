@@ -69,13 +69,23 @@ namespace futures {
          *  @tparam Fn Function type
          *  @param fn The callable target to execute
          */
-        FUTURES_TEMPLATE(class Fn)
-        (requires(!detail::is_base_of_v<
-                  packaged_task,
-                  typename std::decay_t<Fn>>)) explicit packaged_task(Fn &&fn)
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class Fn>
+        requires(
+            !detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)
+#else
+        template <
+            class Fn,
+            std::enable_if_t<
+                (!detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>),
+                int>
+            = 0>
+#endif
+        explicit packaged_task(Fn &&fn)
             : packaged_task{ std::allocator_arg,
                              std::allocator<packaged_task>{},
-                             std::forward<Fn>(fn) } {}
+                             std::forward<Fn>(fn) } {
+        }
 
         /// Constructs a std::packaged_task object with a shared state
         /// and a copy of the task
@@ -95,8 +105,20 @@ namespace futures {
          *  @param alloc The allocator to use when storing the task
          *  @param fn The callable target to execute
          */
-        FUTURES_TEMPLATE(typename Fn, typename Allocator)
-        (requires(!detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)) explicit packaged_task(
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class Fn, class Allocator>
+        requires(
+            !detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>)
+#else
+        template <
+            class Fn,
+            class Allocator,
+            std::enable_if_t<
+                (!detail::is_base_of_v<packaged_task, typename std::decay_t<Fn>>),
+                int>
+            = 0>
+#endif
+        explicit packaged_task(
             std::allocator_arg_t,
             Allocator const &alloc,
             Fn &&fn) {

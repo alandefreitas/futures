@@ -68,8 +68,15 @@ namespace futures {
     } // namespace detail
 #endif
 
-    FUTURES_TEMPLATE_IMPL(class Future)
-    (requires is_future_v<std::decay_t<Future>>) bool is_ready(Future &&f) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <future_like Future>
+#else
+    template <
+        class Future,
+        std::enable_if_t<is_future_v<std::decay_t<Future>>, int>>
+#endif
+    bool
+    is_ready(Future &&f) {
         assert(
             f.valid()
             && "Undefined behaviour. Checking if an invalid future is ready.");

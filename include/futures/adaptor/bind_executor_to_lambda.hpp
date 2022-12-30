@@ -68,9 +68,22 @@ namespace futures {
      * @param after A callable with the continuation
      * @return A proxy pair to schedule execution
      */
-    FUTURES_TEMPLATE(class Executor, class Function, class... Args)
-    (requires is_executor_v<std::decay_t<Executor>>&& detail::is_callable_v<
-        std::decay_t<Function>>) FUTURES_DETAIL(decltype(auto))
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Executor, class Function, class... Args>
+    requires is_executor_v<std::decay_t<Executor>>
+             && detail::is_callable_v<std::decay_t<Function>>
+#else
+    template <
+        class Executor,
+        class Function,
+        class... Args,
+        std::enable_if_t<
+            is_executor_v<std::decay_t<Executor>>
+                && detail::is_callable_v<std::decay_t<Function>>,
+            int>
+        = 0>
+#endif
+    FUTURES_DETAIL(decltype(auto))
     operator%(Executor const& ex, Function&& after) {
         return detail::executor_and_callable_reference<
             std::decay_t<Executor>,

@@ -64,8 +64,18 @@ namespace futures {
          *  @param last Last element in range
          *  @return Iterator to point where sequence should be split
          */
-        FUTURES_TEMPLATE(class I, class S)
-        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>) I
+#ifdef FUTURES_HAS_CONCEPTS
+        template <std::input_iterator I, std::sentinel_for<I> S>
+#else
+        template <
+            class I,
+            class S,
+            std::enable_if_t<
+                is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
+                int>
+            = 0>
+#endif
+        I
         operator()(I first, S last) {
             std::size_t size = std::distance(first, last);
             return (size <= min_grain_size_) ?
@@ -92,8 +102,18 @@ namespace futures {
         explicit thread_partitioner(std::size_t min_grain_size)
             : min_grain_size_(min_grain_size) {}
 
-        FUTURES_TEMPLATE(class I, class S)
-        (requires is_input_iterator_v<I> &&is_sentinel_for_v<S, I>) I
+#ifdef FUTURES_HAS_CONCEPTS
+        template <std::input_iterator I, std::sentinel_for<I> S>
+#else
+        template <
+            class I,
+            class S,
+            std::enable_if_t<
+                is_input_iterator_v<I> && is_sentinel_for_v<S, I>,
+                int>
+            = 0>
+#endif
+        I
         operator()(I first, S last) {
             if (num_threads_ <= 1) {
                 return last;
@@ -157,9 +177,17 @@ namespace futures {
     /**
      *  The default partitioner type and parameters might change
      */
-    FUTURES_TEMPLATE(class I, class S)
-    (requires(is_input_iterator_v<I> &&is_sentinel_for_v<S, I>))
-        default_partitioner make_default_partitioner(I first, S last) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <std::input_iterator I, std::sentinel_for<I> S>
+#else
+    template <
+        class I,
+        class S,
+        std::enable_if_t<is_input_iterator_v<I> && is_sentinel_for_v<S, I>, int>
+        = 0>
+#endif
+    default_partitioner
+    make_default_partitioner(I first, S last) {
         return make_default_partitioner(std::distance(first, last));
     }
 
@@ -168,9 +196,14 @@ namespace futures {
     /**
      *  The default partitioner type and parameters might change
      */
-    FUTURES_TEMPLATE(class R)
-    (requires is_input_range_v<R>) default_partitioner
-        make_default_partitioner(R &&r) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class R>
+    requires is_input_range_v<R>
+#else
+    template <class R, std::enable_if_t<is_input_range_v<R>, int> = 0>
+#endif
+    default_partitioner
+    make_default_partitioner(R &&r) {
         return make_default_partitioner(std::begin(r), std::end(r));
     }
 

@@ -413,14 +413,23 @@ namespace futures {
          *
          * @param v Future value
          */
-        FUTURES_TEMPLATE(class T)
-        (requires(
-            detail::is_same_v<T, R>
-            && !detail::is_void_v<R>)) explicit basic_future(T &&v) noexcept
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class T>
+        requires(detail::is_same_v<T, R> && !detail::is_void_v<R>)
+#else
+        template <
+            class T,
+            std::enable_if_t<
+                detail::is_same_v<T, R> && !detail::is_void_v<R>,
+                int>
+            = 0>
+#endif
+        explicit basic_future(T &&v) noexcept
             : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)
-            } {}
+            } {
+        }
 
         /**
          * @}

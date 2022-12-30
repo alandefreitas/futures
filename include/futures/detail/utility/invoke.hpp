@@ -36,7 +36,8 @@ namespace futures {
 
         // is_invocable_v
         template <class Function, class... Args>
-        FUTURES_INLINE_VAR constexpr bool is_invocable_v = is_invocable<Function, Args...>::value;
+        FUTURES_INLINE_VAR constexpr bool is_invocable_v
+            = is_invocable<Function, Args...>::value;
 
         // is_invocable_r
         template <class R, class F, class... Args>

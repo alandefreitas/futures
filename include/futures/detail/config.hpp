@@ -47,12 +47,14 @@
         template <__VA_ARGS__>    \
         FUTURES_EXPAND
 #    define FUTURES_TEMPLATE_IMPL(...) FUTURES_TEMPLATE(__VA_ARGS__)
+#    define FUTURES_HAS_CONCEPTS
 #elif defined(__cpp_concepts) || defined(BOOST_HAS_CONCEPTS)
 #    define FUTURES_EXPAND(...) __VA_ARGS__
 #    define FUTURES_TEMPLATE(...) \
         template <__VA_ARGS__>    \
         FUTURES_EXPAND
 #    define FUTURES_TEMPLATE_IMPL(...) FUTURES_TEMPLATE(__VA_ARGS__)
+#    define FUTURES_HAS_CONCEPTS
 #else
 // For SFINAE, we concatenate the requirements and put them inside
 // std::enable_if<...>. An auxiliary macro helps us ignore the `requires`

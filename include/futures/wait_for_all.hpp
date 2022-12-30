@@ -48,10 +48,16 @@ namespace futures {
      *  @param first Iterator to the first element in the range
      *  @param last Iterator to one past the last element in the range
      */
-    FUTURES_TEMPLATE(class Iterator)
-    (requires is_future_v<iter_value_t<Iterator>>) void wait_for_all(
-        Iterator first,
-        Iterator last) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+#endif
+    void
+    wait_for_all(Iterator first, Iterator last) {
         for (Iterator it = first; it != last; ++it) {
             it->wait();
         }
@@ -71,9 +77,19 @@ namespace futures {
      *  @tparam Range A range of futures type
      *  @param r Range of futures
      */
-    FUTURES_TEMPLATE(class Range)
-    (requires is_range_v<Range>
-         &&is_future_v<range_value_t<Range>>) void wait_for_all(Range &&r) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Range>
+    requires is_range_v<Range> && is_future_v<range_value_t<Range>>
+#else
+    template <
+        class Range,
+        std::enable_if_t<
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            int>
+        = 0>
+#endif
+    void
+    wait_for_all(Range &&r) {
         using std::begin;
         wait_for_all(begin(r), end(r));
     }
@@ -95,9 +111,19 @@ namespace futures {
      *  @tparam Fs A list of future types
      *  @param fs A list of future objects
      */
-    FUTURES_TEMPLATE(class... Fs)
-    (requires detail::conjunction_v<
-        is_future<std::decay_t<Fs>>...>) void wait_for_all(Fs &&...fs) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>
+        = 0>
+#endif
+    void
+    wait_for_all(Fs &&...fs) {
 #ifdef BOOST_NO_CXX17_FOLD_EXPRESSIONS
         detail::tuple_for_each(
             std::forward_as_tuple(std::forward<Fs>(fs)...),
@@ -108,9 +134,19 @@ namespace futures {
     }
 
     /// Wait for a sequence of futures to be ready
-    FUTURES_TEMPLATE(class Tuple)
-    (requires(detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::
-                  value)) void wait_for_all(Tuple &&t) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>
+        = 0>
+#endif
+    void
+    wait_for_all(Tuple &&t) {
         tuple_for_each(std::forward<Tuple>(t), [](auto &f) { f.wait(); });
     }
 
@@ -126,12 +162,21 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Iterator, class Rep, class Period)
-    (requires is_future_v<iter_value_t<Iterator>>) future_status
-        wait_for_all_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Iterator first,
-            Iterator last);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator, class Rep, class Period>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        class Rep,
+        class Period,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+#endif
+    future_status
+    wait_for_all_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Iterator first,
+        Iterator last);
 
     /// Wait for a sequence of futures to be ready
     /**
@@ -144,11 +189,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Range, class Rep, class Period)
-    (requires is_range_v<Range> &&is_future_v<range_value_t<Range>>)
-        future_status wait_for_all_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Range &&r) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Range, class Rep, class Period>
+    requires is_range_v<Range> && is_future_v<range_value_t<Range>>
+#else
+    template <
+        class Range,
+        class Rep,
+        class Period,
+        std::enable_if_t<
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Range &&r) {
         using std::begin;
         return wait_for_all_for(begin(r), end(r), timeout_duration);
     }
@@ -164,11 +221,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class... Fs, class Rep, class Period)
-    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>)
-        future_status wait_for_all_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Fs &&...fs);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs, class Rep, class Period>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        class Rep,
+        class Period,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Fs &&...fs);
 
 
     /// Wait for a sequence of futures to be ready
@@ -182,11 +251,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Tuple, class Rep, class Period)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        future_status wait_for_all_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Tuple &&t);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple, class Rep, class Period>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        class Rep,
+        class Period,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Tuple &&t);
 
     /// Wait for a sequence of futures to be ready
     /**
@@ -200,12 +281,21 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Iterator, class Clock, class Duration)
-    (requires is_future_v<iter_value_t<Iterator>>) future_status
-        wait_for_all_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Iterator first,
-            Iterator last);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator, class Clock, class Duration>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        class Clock,
+        class Duration,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+#endif
+    future_status
+    wait_for_all_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Iterator first,
+        Iterator last);
 
     /// Wait for a sequence of futures to be ready
     /**
@@ -218,11 +308,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Range, class Clock, class Duration)
-    (requires is_range_v<Range> &&is_future_v<range_value_t<Range>>)
-        future_status wait_for_all_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Range &&r) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Range, class Clock, class Duration>
+    requires is_range_v<Range> && is_future_v<range_value_t<Range>>
+#else
+    template <
+        class Range,
+        class Clock,
+        class Duration,
+        std::enable_if_t<
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Range &&r) {
         using std::begin;
         return wait_for_all_until(begin(r), end(r), timeout_time);
     }
@@ -238,11 +340,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class... Fs, class Clock, class Duration)
-    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>)
-        future_status wait_for_all_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Fs &&...fs);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs, class Clock, class Duration>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        class Clock,
+        class Duration,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Fs &&...fs);
 
     /// Wait for a sequence of futures to be ready
     /**
@@ -255,11 +369,23 @@ namespace futures {
      *  @return `future_status::ready` if all futures got ready.
      *  `future_status::timeout` otherwise.
      */
-    FUTURES_TEMPLATE(class Tuple, class Clock, class Duration)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        future_status wait_for_all_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Tuple &&t);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple, class Clock, class Duration>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        class Clock,
+        class Duration,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>
+        = 0>
+#endif
+    future_status
+    wait_for_all_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Tuple &&t);
 
     /** @} */
     /** @} */

@@ -60,28 +60,60 @@ namespace futures {
     class error : public std::system_error {
     public:
         /// Constructor
-        FUTURES_TEMPLATE(class ErrorCodeEnum)
-        (requires(
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class ErrorCodeEnum>
+        requires(
             detail::is_error_code_enum_v<ErrorCodeEnum>
-            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
-            error(ErrorCodeEnum ec)
-            : std::system_error{ ec } {}
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>)
+#else
+        template <
+            class ErrorCodeEnum,
+            std::enable_if_t<
+                detail::is_error_code_enum_v<ErrorCodeEnum>
+                    || detail::is_same_v<ErrorCodeEnum, std::error_code>,
+                int>
+            = 0>
+#endif
+        error(ErrorCodeEnum ec) : std::system_error{ ec } {
+        }
 
         /// Constructor
-        FUTURES_TEMPLATE(class ErrorCodeEnum)
-        (requires(
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class ErrorCodeEnum>
+        requires(
             detail::is_error_code_enum_v<ErrorCodeEnum>
-            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
-            error(ErrorCodeEnum ec, char const *what_arg)
-            : std::system_error{ ec, what_arg } {}
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>)
+#else
+        template <
+            class ErrorCodeEnum,
+            std::enable_if_t<
+                detail::is_error_code_enum_v<ErrorCodeEnum>
+                    || detail::is_same_v<ErrorCodeEnum, std::error_code>,
+                int>
+            = 0>
+#endif
+        error(ErrorCodeEnum ec, char const *what_arg)
+            : std::system_error{ ec, what_arg } {
+        }
 
         /// Constructor
-        FUTURES_TEMPLATE(class ErrorCodeEnum)
-        (requires(
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class ErrorCodeEnum>
+        requires(
             detail::is_error_code_enum_v<ErrorCodeEnum>
-            || detail::is_same_v<ErrorCodeEnum, std::error_code>))
-            error(ErrorCodeEnum ec, std::string const &what_arg)
-            : std::system_error{ ec, what_arg } {}
+            || detail::is_same_v<ErrorCodeEnum, std::error_code>)
+#else
+        template <
+            class ErrorCodeEnum,
+            std::enable_if_t<
+                detail::is_error_code_enum_v<ErrorCodeEnum>
+                    || detail::is_same_v<ErrorCodeEnum, std::error_code>,
+                int>
+            = 0>
+#endif
+        error(ErrorCodeEnum ec, std::string const &what_arg)
+            : std::system_error{ ec, what_arg } {
+        }
 
         /// Destructor
         ~error() override = default;

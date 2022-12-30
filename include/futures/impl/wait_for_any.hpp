@@ -9,9 +9,16 @@
 #define FUTURES_IMPL_WAIT_FOR_ANY_HPP
 
 namespace futures {
-    FUTURES_TEMPLATE_IMPL(typename Iterator)
-    (requires is_future_v<iter_value_t<Iterator>>) Iterator
-        wait_for_any(Iterator first, Iterator last) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+#endif
+    Iterator
+    wait_for_any(Iterator first, Iterator last) {
         if (first == last) {
             // is_empty
             return last;
@@ -26,9 +33,18 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(typename... Fs)
-    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
-        wait_for_any(Fs &&...fs) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>>
+#endif
+    std::size_t
+    wait_for_any(Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         FUTURES_IF_CONSTEXPR (size == 0) {
             // is_empty
@@ -72,9 +88,18 @@ namespace futures {
         }
     } // namespace detail
 
-    FUTURES_TEMPLATE_IMPL(class Tuple)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any(Tuple &&t) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>>
+#endif
+    std::size_t
+    wait_for_any(Tuple &&t) {
         constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
         return detail::wait_for_tuple_any_impl(
             boost::mp11::mp_cond<
@@ -87,8 +112,18 @@ namespace futures {
             std::forward<Tuple>(t));
     }
 
-    FUTURES_TEMPLATE_IMPL(typename Iterator, class Rep, class Period)
-    (requires is_future_v<iter_value_t<Iterator>>) Iterator wait_for_any_for(
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator, class Rep, class Period>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        class Rep,
+        class Period,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+#endif
+    Iterator
+    wait_for_any_for(
         std::chrono::duration<Rep, Period> const &timeout_duration,
         Iterator first,
         Iterator last) {
@@ -106,11 +141,22 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(typename... Fs, class Rep, class Period)
-    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
-        wait_for_any_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Fs &&...fs) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs, class Rep, class Period>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        class Rep,
+        class Period,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>>
+#endif
+    std::size_t
+    wait_for_any_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         FUTURES_IF_CONSTEXPR (size == 0) {
             // is_empty
@@ -165,11 +211,22 @@ namespace futures {
         }
     } // namespace detail
 
-    FUTURES_TEMPLATE_IMPL(class Tuple, class Rep, class Period)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any_for(
-            std::chrono::duration<Rep, Period> const &timeout_duration,
-            Tuple &&t) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple, class Rep, class Period>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        class Rep,
+        class Period,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>>
+#endif
+    std::size_t
+    wait_for_any_for(
+        std::chrono::duration<Rep, Period> const &timeout_duration,
+        Tuple &&t) {
         constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
         return detail::wait_for_tuple_any_for_impl(
             boost::mp11::mp_cond<
@@ -183,8 +240,18 @@ namespace futures {
             std::forward<Tuple>(t));
     }
 
-    FUTURES_TEMPLATE_IMPL(typename Iterator, class Clock, class Duration)
-    (requires is_future_v<iter_value_t<Iterator>>) Iterator wait_for_any_until(
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Iterator, class Clock, class Duration>
+    requires is_future_v<iter_value_t<Iterator>>
+#else
+    template <
+        class Iterator,
+        class Clock,
+        class Duration,
+        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+#endif
+    Iterator
+    wait_for_any_until(
         std::chrono::time_point<Clock, Duration> const &timeout_time,
         Iterator first,
         Iterator last) {
@@ -202,11 +269,23 @@ namespace futures {
         }
     }
 
-    FUTURES_TEMPLATE_IMPL(typename... Fs, class Clock, class Duration)
-    (requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>) std::size_t
-        wait_for_any_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Fs &&...fs) {
+
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Fs, class Clock, class Duration>
+    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+#else
+    template <
+        class... Fs,
+        class Clock,
+        class Duration,
+        std::enable_if_t<
+            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            int>>
+#endif
+    std::size_t
+    wait_for_any_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Fs &&...fs) {
         constexpr std::size_t size = sizeof...(Fs);
         FUTURES_IF_CONSTEXPR (size == 0) {
             // is_empty
@@ -261,11 +340,22 @@ namespace futures {
         }
     } // namespace detail
 
-    FUTURES_TEMPLATE_IMPL(class Tuple, class Clock, class Duration)
-    (requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value)
-        std::size_t wait_for_any_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time,
-            Tuple &&t) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Tuple, class Clock, class Duration>
+    requires detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value
+#else
+    template <
+        class Tuple,
+        class Clock,
+        class Duration,
+        std::enable_if_t<
+            detail::mp_similar<std::tuple<>, std::decay_t<Tuple>>::value,
+            int>>
+#endif
+    std::size_t
+    wait_for_any_until(
+        std::chrono::time_point<Clock, Duration> const &timeout_time,
+        Tuple &&t) {
         constexpr std::size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
         return detail::wait_for_tuple_any_until_impl(
             boost::mp11::mp_cond<

@@ -140,9 +140,16 @@ namespace futures {
         }
 
         /// Set the promise result as an exception
-        FUTURES_TEMPLATE(typename E)
-        (requires std::is_base_of<std::exception, E>::value) void set_exception(
-            E e) {
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class E>
+        requires std::is_base_of<std::exception, E>::value
+#else
+        template <
+            class E,
+            std::enable_if_t<std::is_base_of<std::exception, E>::value, int> = 0>
+#endif
+        void
+        set_exception(E e) {
             set_exception(std::make_exception_ptr(e));
         }
 

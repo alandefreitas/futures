@@ -41,8 +41,9 @@ namespace futures {
                 }
             }
 
-            FUTURES_TEMPLATE(class Executor, class Function, class Future)
-            (requires(
+#ifdef FUTURES_HAS_CONCEPTS
+            template <class Executor, class Function, class Future>
+            requires(
                 is_executor_v<std::decay_t<Executor>>
                 && !is_executor_v<std::decay_t<Function>>
                 && !is_executor_v<std::decay_t<Future>>
@@ -50,12 +51,27 @@ namespace futures {
                 && next_future_traits<
                     Executor,
                     std::decay_t<Function>,
-                    std::decay_t<Future>>::is_valid))
-                FUTURES_DETAIL(decltype(auto))
-                operator()(
-                    Executor const &ex,
-                    Future &&before,
-                    Function &&after) const {
+                    std::decay_t<Future>>::is_valid)
+#else
+            template <
+                class Executor,
+                class Function,
+                class Future,
+                std::enable_if_t<
+                    (is_executor_v<std::decay_t<Executor>>
+                     && !is_executor_v<std::decay_t<Function>>
+                     && !is_executor_v<std::decay_t<Future>>
+                     && is_future_v<std::decay_t<Future>>
+                     && next_future_traits<
+                         Executor,
+                         std::decay_t<Function>,
+                         std::decay_t<Future>>::is_valid),
+                    int>
+                = 0>
+#endif
+            FUTURES_DETAIL(decltype(auto))
+            operator()(Executor const &ex, Future &&before, Function &&after)
+                const {
                 // Determine next future options
                 using traits = next_future_traits<
                     Executor,

@@ -62,7 +62,7 @@ namespace futures {
             decltype(std::declval<T>().get_stop_token())
                 // clang-format on
                 >> : is_stoppable<T> {};
-    }
+    } // namespace detail
     template <class T>
     struct has_stop_token : detail::has_stop_token_impl<T> {};
 #endif

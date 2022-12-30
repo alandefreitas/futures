@@ -18,7 +18,8 @@ TEST_CASE("algorithm all of") {
         test_unary_invoke(all_of, v, fun, true);
     }
 
-#if defined(FUTURES_HAS_CONSTANT_EVALUATED) && defined(__cpp_lib_array_constexpr)
+#if defined(FUTURES_HAS_CONSTANT_EVALUATED) \
+    && defined(__cpp_lib_array_constexpr)
     SECTION("constexpr") {
         constexpr std::array<int, 5> a = { 1, 2, 3, 4, 5 };
 

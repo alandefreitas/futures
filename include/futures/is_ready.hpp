@@ -17,6 +17,7 @@
  *  `is_ready()` member function.
  */
 
+#include <futures/config.hpp>
 #include <futures/future.hpp>
 #include <futures/promise.hpp>
 #include <futures/traits/is_future.hpp>
@@ -33,8 +34,15 @@ namespace futures {
      *  free function allows us to query other futures that don't implement
      *  is_ready, such as std::future.
      */
-    FUTURES_TEMPLATE(class Future)
-    (requires is_future_v<std::decay_t<Future>>) bool is_ready(Future &&f);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <future_like Future>
+#else
+    template <
+        class Future,
+        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0>
+#endif
+    bool
+    is_ready(Future &&f);
 
     /**
      * @}

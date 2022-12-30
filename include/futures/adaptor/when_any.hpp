@@ -491,16 +491,28 @@ namespace futures {
      *  @param first,last Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    FUTURES_TEMPLATE(class InputIt)
-    (requires detail::disjunction_v<
-        is_future<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
-        detail::is_invocable<
-            typename std::iterator_traits<InputIt>::value_type>>)
-        when_any_future<
-            FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
-                               typename std::iterator_traits<InputIt>::
-                                   value_type>>)> when_any(InputIt first, InputIt last);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class InputIt>
+    requires(
+        is_future_v<
+            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>
+        || detail::is_invocable_v<
+            typename std::iterator_traits<InputIt>::value_type>)
+#else
+    template <
+        class InputIt,
+        std::enable_if_t<
+            detail::disjunction_v<
+                is_future<
+                    std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
+                detail::is_invocable<
+                    typename std::iterator_traits<InputIt>::value_type>>,
+            int> = 0>
+#endif
+    when_any_future<
+        FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
+                           typename std::iterator_traits<InputIt>::
+                               value_type>>)> when_any(InputIt first, InputIt last);
 
     /// @copybrief when_any
     /**
@@ -511,12 +523,18 @@ namespace futures {
      *  @param r Range of futures
      *  @return @ref when_any_future with all future objects
      */
-    FUTURES_TEMPLATE(class Range)
-    (requires is_range_v<std::decay_t<Range>>) when_any_future<
-        FUTURES_DETAIL(detail::small_vector<
-                       detail::lambda_to_future_t<typename std::iterator_traits<
-                           typename std::decay_t<Range>::
-                               iterator>::value_type>>)> when_any(Range &&r) {
+#ifdef FUTURES_HAS_CONCEPTS
+    template <std::ranges::range Range>
+#else
+    template <
+        class Range,
+        std::enable_if_t<is_range_v<std::decay_t<Range>>, int> = 0>
+#endif
+    when_any_future<
+        FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
+                           typename std::iterator_traits<typename std::decay_t<
+                               Range>::iterator>::value_type>>)>
+    when_any(Range &&r) {
         return when_any(
             std::begin(std::forward<Range>(r)),
             std::end(std::forward<Range>(r)));
@@ -532,13 +550,24 @@ namespace futures {
      *  @param futures A sequence of future objects
      *  @return @ref when_any_future with all future objects
      */
-    FUTURES_TEMPLATE(class... Futures)
-    (requires detail::conjunction_v<detail::disjunction<
-         is_future<std::decay_t<Futures>>,
-         detail::is_invocable<std::decay_t<Futures>>>...>)
-        when_any_future<std::tuple<
-            FUTURES_DETAIL(detail::lambda_to_future_t<
-                           Futures>...)>> when_any(Futures &&...futures);
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class... Futures>
+    requires detail::conjunction_v<detail::disjunction<
+        is_future<std::decay_t<Futures>>,
+        detail::is_invocable<std::decay_t<Futures>>>...>
+#else
+    template <
+        class... Futures,
+        std::enable_if_t<
+            detail::conjunction_v<detail::disjunction<
+                is_future<std::decay_t<Futures>>,
+                detail::is_invocable<std::decay_t<Futures>>>...>,
+            int>
+        = 0>
+#endif
+    when_any_future<
+        std::tuple<FUTURES_DETAIL(detail::lambda_to_future_t<Futures>...)>>
+    when_any(Futures &&...futures);
 
     /// @copybrief when_any
     /**
@@ -563,13 +592,29 @@ namespace futures {
      *  @param lhs,rhs Future objects
      *  @return A @ref when_any_future holding all future types
      */
-    FUTURES_TEMPLATE(class T1, class T2)
-    (requires detail::disjunction_v<
-        is_future<std::decay_t<T1>>,
-        detail::is_invocable<std::decay_t<T1>>>
-         &&detail::disjunction_v<
-             is_future<std::decay_t<T2>>,
-             detail::is_invocable<std::decay_t<T2>>>) FUTURES_DETAIL(auto)
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class T1, class T2>
+    requires detail::disjunction_v<
+                 is_future<std::decay_t<T1>>,
+                 detail::is_invocable<std::decay_t<T1>>>
+             && detail::disjunction_v<
+                 is_future<std::decay_t<T2>>,
+                 detail::is_invocable<std::decay_t<T2>>>
+#else
+    template <
+        class T1,
+        class T2,
+        std::enable_if_t<
+            detail::disjunction_v<
+                is_future<std::decay_t<T1>>,
+                detail::is_invocable<std::decay_t<T1>>>
+                && detail::disjunction_v<
+                    is_future<std::decay_t<T2>>,
+                    detail::is_invocable<std::decay_t<T2>>>,
+            int>
+        = 0>
+#endif
+    FUTURES_DETAIL(auto)
     operator||(T1 &&lhs, T2 &&rhs);
 
     /** @} */

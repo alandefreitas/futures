@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/optional/optional.hpp from external or bundled boost 
+// Include boost/optional/optional.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/optional/optional.hpp>
+#    include <boost/optional/optional.hpp>
 #else
-#include <futures/detail/bundled/boost/optional/optional.hpp>
+#    include <futures/detail/bundled/boost/optional/optional.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_OPTIONAL_OPTIONAL_HPP

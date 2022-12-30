@@ -66,6 +66,24 @@ namespace futures {
     template <class T>
     constexpr bool is_future_v = is_future<T>::value;
 
+#ifdef FUTURES_HAS_CONCEPTS
+    /// @concept future_like
+    /// @brief An object with the common members of a future.
+    /**
+     * A class is considered future-like when 1) it specializes the
+     * @ref is_future trait to indicate it is a future type, or 2) it has the
+     * a `get()` function to obtain its future value.
+     *
+     * This allows algorithms to interoperate with future types from other
+     * libraries.
+     *
+     * @tparam T The type being tested for conformance to the future_like
+     * concept.
+     */
+    template <class T>
+    concept future_like = is_future_v<std::decay_t<T>>;
+#endif
+
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures
 } // namespace futures
