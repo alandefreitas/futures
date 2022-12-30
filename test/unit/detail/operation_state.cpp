@@ -137,6 +137,9 @@ TEST_CASE("Shared state") {
             }
             SECTION("Executor") {
                 futures::asio::thread_pool t(1);
+                using EX = futures::asio::thread_pool::executor_type;
+                STATIC_REQUIRE(std::is_copy_constructible<EX>::value);
+                STATIC_REQUIRE(detail::is_asio_executor<EX>::value);
                 futures::detail::execute(t.get_executor(), [&p]() {
                     p.set_value(2);
                 });

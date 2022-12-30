@@ -9,8 +9,8 @@
 #define FUTURES_EXECUTOR_DETAIL_IS_EXECUTOR_HPP
 
 #include <futures/config.hpp>
+#include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
-#include <futures/detail/deps/asio/is_executor.hpp>
 
 namespace futures {
     namespace detail {
@@ -53,6 +53,30 @@ namespace futures {
                 !detail::has_get_executor<T>::value
                 // clang-format on
                 >> : has_execute<T> {};
+
+        // check if something is an asio executor
+        template <class T, class = void>
+        struct is_asio_executor_impl : std::false_type {};
+
+        template <class T>
+        struct is_asio_executor_impl<
+            T,
+            void_t<
+                // clang-format off
+                decltype(std::declval<T>().context()),
+                decltype(std::declval<T>().on_work_started()),
+                decltype(std::declval<T>().on_work_finished()),
+                decltype(std::declval<T>().dispatch(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>())),
+                decltype(std::declval<T>().post(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>())),
+                decltype(std::declval<T>().defer(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>()))
+                // clang-format on
+                >>
+            : detail::conjunction<
+                  std::is_copy_constructible<T>,
+                  is_equality_comparable<T>> {};
+
+        template <typename T>
+        struct is_asio_executor : is_asio_executor_impl<T> {};
 
         // Check if a type implements the get function
         template <class T>

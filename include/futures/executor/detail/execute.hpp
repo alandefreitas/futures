@@ -10,8 +10,6 @@
 
 #include <futures/config.hpp>
 #include <futures/executor/is_executor.hpp>
-#include <futures/detail/deps/asio/execution/executor.hpp>
-#include <futures/detail/deps/asio/is_executor.hpp>
 #include <futures/detail/deps/boost/mp11/integral.hpp>
 #include <type_traits>
 
@@ -25,7 +23,7 @@ namespace futures {
         void
         execute(E& ex, F&& f);
 
-        // futures executor
+        // futures executor or asio::execution::executor
         template <class E, class F>
         void
         execute_impl(mp_int<0>, E const& ex, F&& f) {
@@ -39,17 +37,10 @@ namespace futures {
             ex.post(std::forward<F>(f), std::allocator<void>{});
         }
 
-        // asio execution::executor
-        template <class E, class F>
-        void
-        execute_impl(mp_int<2>, E const& ex, F&& f) {
-            ex.execute(std::forward<F>(f));
-        }
-
         // execution context
         template <class E, class F>
         void
-        execute_impl(mp_int<3>, E& ex, F&& f) {
+        execute_impl(mp_int<2>, E& ex, F&& f) {
             execute(ex.get_executor(), std::forward<F>(f));
         }
 
@@ -58,14 +49,13 @@ namespace futures {
         execute(E const& ex, F&& f) {
             execute_impl(
                 mp_cond<
-                    asio::is_executor<E>,
+                    // is_asio_executor<E>,
+                    is_asio_executor<E>,
                     mp_int<1>,
                     is_executor<E>,
                     mp_int<0>,
-                    asio::execution::is_executor<E>,
-                    mp_int<2>,
                     has_get_executor<E>,
-                    mp_int<3>>{},
+                    mp_int<2>>{},
                 ex,
                 std::forward<F>(f));
         }
@@ -75,14 +65,12 @@ namespace futures {
         execute(E& ex, F&& f) {
             execute_impl(
                 mp_cond<
-                    asio::is_executor<E>,
+                    is_asio_executor<E>,
                     mp_int<1>,
                     is_executor<E>,
                     mp_int<0>,
-                    asio::execution::is_executor<E>,
-                    mp_int<2>,
                     has_get_executor<E>,
-                    mp_int<3>>{},
+                    mp_int<2>>{},
                 ex,
                 std::forward<F>(f));
         }
