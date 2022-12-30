@@ -84,6 +84,9 @@ jobs:
       - name: Install Macros for Mkdocs
         run: pip install mkdocs-macros-plugin
 
+      - name: Install Lite-Vega for Mkdocs
+        run: pip install mkdocs-charts-plugin
+
       - name: Deploy mkdocs to gh-pages branch
         # Documentation is also generated in develop but only master goes to GitHub pages
         # The docs in develop can be inspected with:
