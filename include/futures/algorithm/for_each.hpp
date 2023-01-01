@@ -40,7 +40,13 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref for_each function
     class for_each_functor
-        : public unary_invoke_algorithm_functor<for_each_functor> {
+        :
+#ifdef FUTURES_DOXYGEN
+        public unary_invoke_algorithm_functor
+#else
+        public unary_invoke_algorithm_functor<for_each_functor>
+#endif
+    {
         friend unary_invoke_algorithm_functor<for_each_functor>;
 
         /// Internal class that takes care of the sorting tasks and its

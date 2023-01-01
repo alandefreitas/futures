@@ -38,7 +38,14 @@ namespace futures {
 
 
     /// Functor representing the overloads for the @ref count function
-    class count_functor : public value_cmp_algorithm_functor<count_functor> {
+    class count_functor
+        :
+#ifdef FUTURES_DOXYGEN
+        public value_cmp_algorithm_functor
+#else
+        public value_cmp_algorithm_functor<count_functor>
+#endif
+    {
         friend value_cmp_algorithm_functor<count_functor>;
 
         FUTURES_TEMPLATE(class I, class S, class T)

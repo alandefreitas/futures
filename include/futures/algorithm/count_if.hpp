@@ -44,7 +44,13 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref count_if function
     class count_if_functor
-        : public unary_invoke_algorithm_functor<count_if_functor> {
+        :
+#ifdef FUTURES_DOXYGEN
+        public unary_invoke_algorithm_functor
+#else
+        public unary_invoke_algorithm_functor<count_if_functor>
+#endif
+    {
         friend unary_invoke_algorithm_functor<count_if_functor>;
         friend count_functor;
 

@@ -43,7 +43,13 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref all_of function
     class all_of_functor
-        : public unary_invoke_algorithm_functor<all_of_functor> {
+        :
+#ifdef FUTURES_DOXYGEN
+        public unary_invoke_algorithm_functor
+#else
+        public unary_invoke_algorithm_functor<all_of_functor>
+#endif
+    {
         friend unary_invoke_algorithm_functor<all_of_functor>;
 
         template <class Executor>

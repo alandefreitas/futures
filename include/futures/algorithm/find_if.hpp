@@ -45,7 +45,13 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref find_if function
     class find_if_functor
-        : public unary_invoke_algorithm_functor<find_if_functor> {
+        :
+#ifdef FUTURES_DOXYGEN
+        public unary_invoke_algorithm_functor
+#else
+        public unary_invoke_algorithm_functor<find_if_functor>
+#endif
+    {
         friend unary_invoke_algorithm_functor<find_if_functor>;
         friend find_functor;
         friend find_if_not_functor;

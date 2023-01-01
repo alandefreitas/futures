@@ -40,7 +40,13 @@ namespace futures {
 
     /// Functor representing the overloads for the @ref reduce function
     class reduce_functor
-        : public binary_invoke_algorithm_functor<reduce_functor> {
+        :
+#ifdef FUTURES_DOXYGEN
+        public binary_invoke_algorithm_functor
+#else
+        public binary_invoke_algorithm_functor<reduce_functor>
+#endif
+    {
         friend binary_invoke_algorithm_functor<reduce_functor>;
 
         template <class Executor, class T>

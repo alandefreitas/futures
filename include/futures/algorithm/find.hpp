@@ -34,7 +34,14 @@ namespace futures {
      */
 
     /// Functor representing the overloads for the @ref find function
-    class find_functor : public value_cmp_algorithm_functor<find_functor> {
+    class find_functor
+        :
+#ifdef FUTURES_DOXYGEN
+        public value_cmp_algorithm_functor
+#else
+        public value_cmp_algorithm_functor<find_functor>
+#endif
+    {
         friend value_cmp_algorithm_functor<find_functor>;
 
         /// Complete overload of the find algorithm
