@@ -10,10 +10,10 @@
 
 namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Executor, class Function, class... Args>
-    requires is_executor_v<Executor>
-             && (detail::is_invocable_v<Function, Args...>
-                 || detail::is_invocable_v<Function, stop_token, Args...>)
+    template <executor Executor, class Function, class... Args>
+    requires(
+        detail::is_invocable_v<Function, Args...>
+        || detail::is_invocable_v<Function, stop_token, Args...>)
 #else
     template <
         class Executor,
@@ -60,11 +60,10 @@ namespace futures {
     }
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Executor, class Function, class... Args>
+    template <executor Executor, class Function, class... Args>
     requires(
-        is_executor_v<Executor>
-        && (detail::is_invocable_v<Function, Args...>
-            || detail::is_invocable_v<Function, stop_token, Args...>) )
+        (detail::is_invocable_v<Function, Args...>
+         || detail::is_invocable_v<Function, stop_token, Args...>) )
 #else
     template <
         class Executor,

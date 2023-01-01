@@ -225,8 +225,7 @@ namespace futures {
         void
         range_push_back_impl(mp_int<2>, Range &v, InputIt first, InputIt last) {
             FUTURES_STATIC_ASSERT(
-                detail::is_invocable_v<std::decay_t<
-                    typename std::iterator_traits<InputIt>::value_type>>);
+                detail::is_invocable_v<std::decay_t<iter_value_t<InputIt>>>);
             std::transform(first, last, std::back_inserter(v), [](auto &&f) {
                 return std::move(futures::async(std::forward<decltype(f)>(f)));
             });
@@ -237,28 +236,23 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires detail::disjunction_v<
-        is_future<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
-        detail::is_invocable<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>>
+        is_future<std::decay_t<std::iter_value_t<InputIt>>>,
+        detail::is_invocable<std::decay_t<std::iter_value_t<InputIt>>>>
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<
-                    typename std::iterator_traits<InputIt>::value_type>>,
-                detail::is_invocable<std::decay_t<
-                    typename std::iterator_traits<InputIt>::value_type>>>,
+                is_future<std::decay_t<iter_value_t<InputIt>>>,
+                detail::is_invocable<std::decay_t<iter_value_t<InputIt>>>>,
             int>>
 #endif
     when_all_future<
-        FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
-                           typename std::iterator_traits<InputIt>::value_type>>)>
+        FUTURES_DETAIL(detail::small_vector<
+                       detail::lambda_to_future_t<iter_value_t<InputIt>>>)>
     when_all(InputIt first, InputIt last) {
         // Infer types
-        using input_type = std::decay_t<
-            typename std::iterator_traits<InputIt>::value_type>;
+        using input_type = std::decay_t<iter_value_t<InputIt>>;
         constexpr bool input_is_future = is_future_v<input_type>;
         constexpr bool input_is_invocable = detail::is_invocable_v<input_type>;
         FUTURES_STATIC_ASSERT(input_is_future || input_is_invocable);

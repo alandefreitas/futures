@@ -483,7 +483,7 @@ namespace futures {
     /**
      *  This function does not participate in overload resolution unless
      *  InputIt's value type (i.e., typename
-     *  std::iterator_traits<InputIt>::value_type) @ref is_future .
+     *  std::iter_value_t<InputIt>) @ref is_future .
      *
      *  This overload uses a small vector to avoid further allocations for such
      *  a simple operation.
@@ -494,19 +494,17 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires(
-        is_future_v<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>
-        || detail::is_invocable_v<
-            typename std::iterator_traits<InputIt>::value_type>)
+        is_future_v<std::decay_t<std::iter_value_t<InputIt>>>
+        || detail::is_invocable_v<std::iter_value_t<InputIt>>)
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
                 is_future<
-                    std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
+                    std::decay_t<iter_value_t<InputIt>>>,
                 detail::is_invocable<
-                    typename std::iterator_traits<InputIt>::value_type>>,
+                    iter_value_t<InputIt>>>,
             int> = 0>
 #endif
     when_any_future<

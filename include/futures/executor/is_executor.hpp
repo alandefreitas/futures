@@ -49,6 +49,13 @@ namespace futures {
     template <class T>
     constexpr bool is_executor_v = is_executor<T>::value;
 
+#ifdef FUTURES_HAS_CONCEPTS
+    /// @concept executor
+    /// @brief Determines if a type is an executor
+    template <class T>
+    concept executor = is_executor_v<T>;
+#endif
+
     /** @} */ // @addtogroup executors Executors
 } // namespace futures
 

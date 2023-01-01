@@ -64,10 +64,9 @@ namespace futures {
      *  @return A continuation to the before future
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Executor, class Function, class Future>
+    template <executor Executor, class Function, class Future>
     requires(
-        is_executor_v<std::decay_t<Executor>>
-        && !is_executor_v<std::decay_t<Function>>
+        !is_executor_v<std::decay_t<Function>>
         && !is_executor_v<std::decay_t<Future>>
         && is_future_v<std::decay_t<Future>>
         && detail::next_future_traits<
@@ -127,11 +126,10 @@ namespace futures {
 
     /// @copydoc then
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Future, class Function>
+    template <future_like Future, class Function>
     requires(
         !is_executor_v<std::decay_t<Function>>
         && !is_executor_v<std::decay_t<Future>>
-        && is_future_v<std::decay_t<Future>>
         && detail::next_future_traits<
             default_executor_type,
             std::decay_t<Function>,
@@ -162,11 +160,10 @@ namespace futures {
     ///
     /// @return A continuation to the before future
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Future, class Function>
+    template <future_like Future, class Function>
     requires(
         !is_executor_v<std::decay_t<Function>>
         && !is_executor_v<std::decay_t<Future>>
-        && is_future_v<std::decay_t<Future>>
         && detail::next_future_traits<
             default_executor_type,
             std::decay_t<Function>,

@@ -10,8 +10,8 @@
 
 namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -34,8 +34,7 @@ namespace futures {
     }
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs>
 #else
     template <
         class... Fs,
@@ -113,8 +112,8 @@ namespace futures {
     }
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator, class Rep, class Period>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator, class Rep, class Period>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -142,8 +141,7 @@ namespace futures {
     }
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs, class Rep, class Period>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs, class Rep, class Period>
 #else
     template <
         class... Fs,
@@ -241,8 +239,8 @@ namespace futures {
     }
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator, class Clock, class Duration>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator, class Clock, class Duration>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -271,8 +269,7 @@ namespace futures {
 
 
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs, class Clock, class Duration>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs, class Clock, class Duration>
 #else
     template <
         class... Fs,

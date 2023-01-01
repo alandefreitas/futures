@@ -414,8 +414,8 @@ namespace futures {
          * @param v Future value
          */
 #ifdef FUTURES_HAS_CONCEPTS
-        template <class T>
-        requires(detail::is_same_v<T, R> && !detail::is_void_v<R>)
+        template <std::same_as<R> T>
+        requires std::negation_v<std::is_void<R>>
 #else
         template <
             class T,

@@ -42,12 +42,10 @@ namespace futures {
             }
 
 #ifdef FUTURES_HAS_CONCEPTS
-            template <class Executor, class Function, class Future>
+            template <executor Executor, class Function, future_like Future>
             requires(
-                is_executor_v<std::decay_t<Executor>>
-                && !is_executor_v<std::decay_t<Function>>
+                !is_executor_v<std::decay_t<Function>>
                 && !is_executor_v<std::decay_t<Future>>
-                && is_future_v<std::decay_t<Future>>
                 && next_future_traits<
                     Executor,
                     std::decay_t<Function>,

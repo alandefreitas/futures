@@ -70,8 +70,8 @@ namespace futures {
      *  @return Iterator to the first future that got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -97,15 +97,18 @@ namespace futures {
      *  @return Iterator to the first future that got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Range>
-    requires(is_range_v<Range> && is_future_v<range_value_t<Range>>)
+    template <std::ranges::range Range>
+    requires future_like<range_value_t<Range>>
 #else
     template <
         class Range,
         std::enable_if_t<
-            is_range_v<Range> && is_future_v<range_value_t<Range>>, int> = 0>
+            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            int>
+        = 0>
 #endif
-    iterator_t<Range> wait_for_any(Range &&r) {
+    iterator_t<Range>
+    wait_for_any(Range &&r) {
         return wait_for_any(std::begin(r), std::end(r));
     }
 
@@ -124,8 +127,7 @@ namespace futures {
      *  @return Index of the first future that got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs>
 #else
     template <
         class... Fs,
@@ -179,8 +181,8 @@ namespace futures {
      *  @return Iterator to the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator, class Rep, class Period>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator, class Rep, class Period>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -205,8 +207,8 @@ namespace futures {
      *  @return Iterator to the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <typename Range, class Rep, class Period>
-    requires is_range_v<Range> && is_future_v<range_value_t<Range>>
+    template <std::ranges::range Range, class Rep, class Period>
+    requires future_like<std::ranges::range_value_t<Range>>
 #else
     template <
         typename Range,
@@ -236,8 +238,7 @@ namespace futures {
      *  @return Index of the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs, class Rep, class Period>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs, class Rep, class Period>
 #else
     template <
         class... Fs,
@@ -293,8 +294,8 @@ namespace futures {
      *  @return Iterator to the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Iterator, class Clock, class Duration>
-    requires is_future_v<iter_value_t<Iterator>>
+    template <std::input_iterator Iterator, class Clock, class Duration>
+    requires future_like<iter_value_t<Iterator>>
 #else
     template <
         class Iterator,
@@ -319,8 +320,8 @@ namespace futures {
      *  @return Iterator to the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Range, class Clock, class Duration>
-    requires is_range_v<Range> && is_future_v<range_value_t<Range>>
+    template <std::ranges::range Range, class Clock, class Duration>
+    requires future_like<range_value_t<Range>>
 #else
     template <
         class Range,
@@ -350,8 +351,7 @@ namespace futures {
      *  @return Index of the future which got ready
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Fs, class Clock, class Duration>
-    requires detail::conjunction_v<is_future<std::decay_t<Fs>>...>
+    template <future_like... Fs, class Clock, class Duration>
 #else
     template <
         class... Fs,

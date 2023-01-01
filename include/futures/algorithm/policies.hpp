@@ -112,6 +112,13 @@ namespace futures {
     FUTURES_INLINE_VAR constexpr bool is_execution_policy_v
         = is_execution_policy<T>::value;
 
+#ifdef FUTURES_HAS_CONCEPTS
+    /// @concept execution_policy
+    /// @brief Determines if a type is an execution_policy
+    template <class E>
+    concept execution_policy = is_execution_policy_v<E>;
+#endif
+
     namespace detail {
         template <class E>
         using policy_executor_type = std::conditional_t<
@@ -140,21 +147,20 @@ namespace futures {
      * in parallel.
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class E, class I, class S>
-    requires(
-        !is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I>
-        && is_sentinel_for_v<S, I>)
+    template <execution_policy E, std::input_iterator I, std::sentinel_for<I> S>
 #else
     template <
-            class E, class I, class S,
-            std::enable_if_t<
-                (
-        !is_executor_v<E> && is_execution_policy_v<E> && is_input_iterator_v<I>
-        && is_sentinel_for_v<S, I>),
-                int>
-            = 0>
+        class E,
+        class I,
+        class S,
+        std::enable_if_t<
+            (!is_executor_v<E> && is_execution_policy_v<E>
+             && is_input_iterator_v<I> && is_sentinel_for_v<S, I>),
+            int>
+        = 0>
 #endif
-    constexpr detail::policy_executor_type<E> make_policy_executor() {
+    constexpr detail::policy_executor_type<E>
+    make_policy_executor() {
         return detail::make_policy_executor_impl<E>(
             boost::mp11::mp_bool<!detail::is_same_v<E, sequenced_policy>>{});
     }

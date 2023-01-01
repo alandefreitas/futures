@@ -53,6 +53,7 @@
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
 #include <futures/detail/deps/boost/mp11/function.hpp>
 #include <futures/detail/deps/boost/mp11/tuple.hpp>
+#include <iterator>
 
 namespace futures {
     /** @addtogroup adaptors Adaptors
@@ -374,7 +375,7 @@ namespace futures {
     /**
      *  This function does not participate in overload resolution unless
      *  InputIt's value type (i.e., typename
-     *  std::iterator_traits<InputIt>::value_type) is a std::future or
+     *  std::iter_value_t<InputIt>) is a std::future or
      *  std::shared_future.
      *
      *  This overload uses a small vector for avoid further allocations for such
@@ -386,25 +387,21 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires detail::disjunction_v<
-        is_future<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>,
-        detail::is_invocable<
-            std::decay_t<typename std::iterator_traits<InputIt>::value_type>>>
+        is_future<std::decay_t<std::iter_value_t<InputIt>>>,
+        detail::is_invocable<std::decay_t<std::iter_value_t<InputIt>>>>
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<
-                    typename std::iterator_traits<InputIt>::value_type>>,
-                detail::is_invocable<std::decay_t<
-                    typename std::iterator_traits<InputIt>::value_type>>>,
+                is_future<std::decay_t<iter_value_t<InputIt>>>,
+                detail::is_invocable<std::decay_t<iter_value_t<InputIt>>>>,
             int>
         = 0>
 #endif
     when_all_future<
-        FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
-                           typename std::iterator_traits<InputIt>::value_type>>)>
+        FUTURES_DETAIL(detail::small_vector<
+                       detail::lambda_to_future_t<iter_value_t<InputIt>>>)>
     when_all(InputIt first, InputIt last);
 
     /// @copybrief when_all
@@ -425,8 +422,7 @@ namespace futures {
 #endif
     when_all_future<
         FUTURES_DETAIL(detail::small_vector<detail::lambda_to_future_t<
-                           typename std::iterator_traits<typename std::decay_t<
-                               Range>::iterator>::value_type>>)>
+                           range_value_t<std::decay_t<Range>>>>)>
     when_all(Range &&r) {
         using std::begin;
         using std::end;

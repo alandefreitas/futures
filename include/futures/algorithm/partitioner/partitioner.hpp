@@ -237,6 +237,18 @@ namespace futures {
     template <class P, class R>
     constexpr bool is_range_partitioner_v = is_range_partitioner<P, R>::value;
 
+#ifdef FUTURES_HAS_CONCEPTS
+    /// @concept partitioner
+    /// @brief Determines if a type is an partitioner
+    template <class P, class I, class S = I>
+    concept partitioner = is_partitioner_v<P, I, S>;
+
+    /// @concept range_partitioner
+    /// @brief Determines if a type is an range_partitioner
+    template <class P, class R>
+    concept range_partitioner = is_range_partitioner_v<P, R>;
+#endif
+
     /** @} */ // @addtogroup partitioners Partitioners
     /** @} */ // @addtogroup algorithms Algorithms
 } // namespace futures

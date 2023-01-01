@@ -50,8 +50,7 @@ namespace futures {
      *  @return The result of the future object
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Future>
-    requires is_future_v<std::decay_t<Future>>
+    template <future_like Future>
 #else
     template <
         class Future,
@@ -72,8 +71,7 @@ namespace futures {
      * @return The result of the future object
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class... Futures>
-    requires detail::conjunction_v<is_future<std::decay_t<Futures>>...>
+    template <future_like... Futures>
 #else
     template <
         class... Futures,

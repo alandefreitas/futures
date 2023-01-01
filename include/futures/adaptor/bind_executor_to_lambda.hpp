@@ -69,14 +69,12 @@ namespace futures {
      * @return A proxy pair to schedule execution
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class Executor, class Function, class... Args>
-    requires is_executor_v<std::decay_t<Executor>>
-             && detail::is_callable_v<std::decay_t<Function>>
+    template <executor Executor, class Function>
+    requires detail::is_callable_v<std::decay_t<Function>>
 #else
     template <
         class Executor,
         class Function,
-        class... Args,
         std::enable_if_t<
             is_executor_v<std::decay_t<Executor>>
                 && detail::is_callable_v<std::decay_t<Function>>,
