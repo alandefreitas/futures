@@ -37,10 +37,9 @@ jobs:
         continue-on-error: true
 
       - name: Install doxygen
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: doxygen
-          version: 1.0
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
 
       - name: Inspect doxybook version
         id: doxybook-hash

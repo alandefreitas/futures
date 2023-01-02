@@ -69,17 +69,11 @@ jobs:
           - { name: "AppleClang 13 (Release)",                os: macos-12,     flags: '-O2',           artifact_name: "MacOSX", }
     steps:
       - uses: actions/checkout@v3
-      - name: Apt packages cache
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        if: ${{ matrix.config.os == 'ubuntu-22.04' && !matrix.config.container && (matrix.config.install || matrix.config.coverage) }}
-        with:
-          packages: ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.install }}
-          version: ${{ matrix.config.container || matrix.config.os }}
       - name: Apt packages
-        if: ${{ ( matrix.config.container || (contains( matrix.config.os, 'ubuntu') && matrix.config.os != 'ubuntu-22.04')) && (matrix.config.install || matrix.config.coverage) }}
+        if: ${{ contains( matrix.config.os, 'ubuntu') && (matrix.config.install || matrix.config.coverage || matrix.config.container) }}
         run: |
           ${{ (!matrix.config.container && 'sudo') || '' }} apt-get update
-          ${{ (!matrix.config.container && 'sudo') || '' }} apt-get install -y ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ matrix.config.install }} ${{ (matrix.config.container && 'cmake python3') || '' }}
+          ${{ (!matrix.config.container && 'sudo') || '' }} apt-get install -y ${{ matrix.config.install }} ${{ (matrix.config.coverage && 'lcov') || '' }} ${{ (matrix.config.container && 'cmake python3') || '' }}
       - name: Fetched Content
         if: ${{ !matrix.config.use_bundled }}
         id: cache-fetched-content
