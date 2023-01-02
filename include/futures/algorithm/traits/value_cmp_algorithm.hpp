@@ -74,7 +74,7 @@ namespace futures {
             executor E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             class T>
         requires std::
             indirect_binary_predicate<std::ranges::equal_to, I, T const *>
@@ -86,7 +86,7 @@ namespace futures {
             class S,
             class T,
             std::enable_if_t<
-                is_executor_v<E> && is_partitioner_v<P, I, S>
+                is_executor_v<E> && is_partitioner_for_v<P, I, S>
                     && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
                     && is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 int>
@@ -116,7 +116,7 @@ namespace futures {
             execution_policy E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             class T>
         requires std::
             indirect_binary_predicate<std::ranges::equal_to, I, T const *>
@@ -129,7 +129,7 @@ namespace futures {
             class T,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                    && is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_indirectly_binary_invocable_v<equal_to, T *, I>,
                 int>
@@ -159,7 +159,7 @@ namespace futures {
         template <
             executor E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             class T>
         requires std::indirect_binary_predicate<
             std::ranges::equal_to,
@@ -173,7 +173,7 @@ namespace futures {
             class T,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         equal_to,
                         T *,
@@ -202,7 +202,7 @@ namespace futures {
         template <
             execution_policy E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             class T>
         requires std::indirect_binary_predicate<
             std::ranges::equal_to,
@@ -216,7 +216,7 @@ namespace futures {
             class T,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         equal_to,
                         T *,
@@ -245,7 +245,7 @@ namespace futures {
         template <
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             class T>
         requires std::
             indirect_binary_predicate<std::ranges::equal_to, I, T const *>
@@ -256,7 +256,7 @@ namespace futures {
             class S,
             class T,
             std::enable_if_t<
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_indirectly_binary_invocable_v<equal_to, T *, I>
                     && detail::is_copy_constructible_v<T>,
@@ -284,7 +284,7 @@ namespace futures {
 
         /// Execute the algorithm on a range with the default executor
 #ifdef FUTURES_HAS_CONCEPTS
-        template <std::ranges::range R, range_partitioner<R> P, class T>
+        template <std::ranges::range R, partitioner_for<std::ranges::iterator_t<R>> P, class T>
         requires std::indirect_binary_predicate<
             std::ranges::equal_to,
             std::ranges::iterator_t<R>,
@@ -295,7 +295,7 @@ namespace futures {
             class R,
             class T,
             std::enable_if_t<
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
+                is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         equal_to,
                         T *,

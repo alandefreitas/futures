@@ -10,9 +10,13 @@ TEST_CASE("algorithm partitioner partitioner") {
             std::vector<int> r = { 1, 2 };
             halve_partitioner p(1);
             STATIC_REQUIRE(
-                is_partitioner_v<halve_partitioner, std::vector<int>::iterator>);
+                is_partitioner_for_v<
+                    halve_partitioner,
+                    std::vector<int>::iterator>);
             STATIC_REQUIRE(
-                is_range_partitioner_v<halve_partitioner, std::vector<int>>);
+                is_partitioner_for_v<
+                    halve_partitioner,
+                    iterator_t<std::vector<int>>>);
             REQUIRE(p(r.begin(), r.end()) - r.begin() == 1);
             REQUIRE(p(r.begin(), r.end()) == r.begin() + 1);
         }
@@ -21,9 +25,13 @@ TEST_CASE("algorithm partitioner partitioner") {
             std::vector<int> r = { 1, 2 };
             thread_partitioner p(1);
             STATIC_REQUIRE(
-                is_partitioner_v<thread_partitioner, std::vector<int>::iterator>);
+                is_partitioner_for_v<
+                    thread_partitioner,
+                    std::vector<int>::iterator>);
             STATIC_REQUIRE(
-                is_range_partitioner_v<thread_partitioner, std::vector<int>>);
+                is_partitioner_for_v<
+                    thread_partitioner,
+                    iterator_t<std::vector<int>>>);
             REQUIRE(
                 p(r.begin(), r.end()) - r.begin()
                 == (futures::hardware_concurrency() == 1) + 1);
@@ -33,11 +41,13 @@ TEST_CASE("algorithm partitioner partitioner") {
             std::vector<int> r = { 1, 2 };
             default_partitioner p(1);
             STATIC_REQUIRE(
-                is_partitioner_v<
+                is_partitioner_for_v<
                     default_partitioner,
                     std::vector<int>::iterator>);
             STATIC_REQUIRE(
-                is_range_partitioner_v<default_partitioner, std::vector<int>>);
+                is_partitioner_for_v<
+                    default_partitioner,
+                    iterator_t<std::vector<int>>>);
             REQUIRE(
                 p(r.begin(), r.end()) - r.begin()
                 == (futures::hardware_concurrency() == 1) + 1);

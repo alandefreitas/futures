@@ -75,7 +75,7 @@ namespace futures {
             executor E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::convertible_to<std::iter_value_t<I>> T,
             std::indirect_binary_predicate<I, T const *> Fun = std::plus<>>
 #else
@@ -87,7 +87,7 @@ namespace futures {
             class T,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_executor_v<E> && is_partitioner_v<P, I, S>
+                is_executor_v<E> && is_partitioner_for_v<P, I, S>
                     && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
                     && is_convertible_to_v<T, iter_value_t<I>>
                     && is_indirectly_binary_invocable_v<Fun, I, I>
@@ -126,7 +126,7 @@ namespace futures {
             executor E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirect_binary_predicate<I, I> Fun = std::plus<>>
 #else
         template <
@@ -136,7 +136,7 @@ namespace futures {
             class S,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_executor_v<E> && is_partitioner_v<P, I, S>
+                is_executor_v<E> && is_partitioner_for_v<P, I, S>
                     && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
                     && is_indirectly_binary_invocable_v<Fun, I, I>
                     && detail::is_copy_constructible_v<Fun>,
@@ -170,7 +170,7 @@ namespace futures {
             execution_policy E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::convertible_to<std::iter_value_t<I>> T,
             std::indirect_binary_predicate<I, T const *> Fun = std::plus<>>
 #else
@@ -183,7 +183,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                    && is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_convertible_to_v<T, iter_value_t<I>>
                     && is_indirectly_binary_invocable_v<Fun, I, I>
@@ -224,7 +224,7 @@ namespace futures {
             execution_policy E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirect_binary_predicate<I, I> Fun = std::plus<>>
 #else
         template <
@@ -235,7 +235,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 (!is_executor_v<E> && is_execution_policy_v<E>
-                 && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                 && is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                  && is_sentinel_for_v<S, I>
                  && is_indirectly_binary_invocable_v<Fun, I, I>
                  && detail::is_copy_constructible_v<Fun>),
@@ -267,7 +267,7 @@ namespace futures {
         template <
             executor E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::convertible_to<std::ranges::range_value_t<R>> T,
             std::indirect_binary_predicate<std::ranges::iterator_t<R>, T const *>
                 Fun
@@ -281,7 +281,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_convertible_to_v<T, range_value_t<R>>
                     && is_indirectly_binary_invocable_v<
                         Fun,
@@ -322,7 +322,7 @@ namespace futures {
         template <
             execution_policy E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::convertible_to<std::ranges::range_value_t<R>> T,
             std::indirect_binary_predicate<std::ranges::iterator_t<R>, T const *>
                 Fun
@@ -336,7 +336,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_convertible_to_v<T, range_value_t<R>>
                     && is_indirectly_binary_invocable_v<
                         Fun,
@@ -377,7 +377,7 @@ namespace futures {
         template <
             executor E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirect_binary_predicate<
                 std::ranges::iterator_t<R>,
                 std::ranges::iterator_t<R>> Fun
@@ -390,7 +390,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         Fun,
                         iterator_t<R>,
@@ -419,7 +419,7 @@ namespace futures {
         template <
             execution_policy E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirect_binary_predicate<
                 std::ranges::iterator_t<R>,
                 std::ranges::iterator_t<R>> Fun
@@ -432,7 +432,7 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         Fun,
                         iterator_t<R>,
@@ -461,7 +461,7 @@ namespace futures {
         template <
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::convertible_to<std::iter_value_t<I>> T,
             std::indirect_binary_predicate<I, T const *> Fun = std::plus<>>
 #else
@@ -472,7 +472,7 @@ namespace futures {
             class T,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_convertible_to_v<T, iter_value_t<I>>
                     && is_indirectly_binary_invocable_v<Fun, I, I>
@@ -506,7 +506,7 @@ namespace futures {
         template <
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirect_binary_predicate<I, I> Fun = std::plus<>>
 #else
         template <
@@ -515,7 +515,7 @@ namespace futures {
             class S,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_indirectly_binary_invocable_v<Fun, I, I>
                     && detail::is_copy_constructible_v<Fun>,
@@ -545,7 +545,7 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
         template <
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::convertible_to<std::ranges::range_value_t<R>> T,
             std::indirect_binary_predicate<std::ranges::iterator_t<R>, T const *>
                 Fun
@@ -557,7 +557,7 @@ namespace futures {
             class T,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
+                is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_convertible_to_v<T, range_value_t<R>>
                     && is_indirectly_binary_invocable_v<
                         Fun,
@@ -592,7 +592,7 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
         template <
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirect_binary_predicate<
                 std::ranges::iterator_t<R>,
                 std::ranges::iterator_t<R>> Fun
@@ -603,7 +603,7 @@ namespace futures {
             class R,
             class Fun = std::plus<>,
             std::enable_if_t<
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
+                is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         Fun,
                         iterator_t<R>,

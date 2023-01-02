@@ -74,7 +74,7 @@ namespace futures {
             executor E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirectly_unary_invocable<I> Fun>
 #else
         template <
@@ -84,7 +84,7 @@ namespace futures {
             class S,
             class Fun,
             std::enable_if_t<
-                is_executor_v<E> && is_partitioner_v<P, I, S>
+                is_executor_v<E> && is_partitioner_for_v<P, I, S>
                     && is_input_iterator_v<I> && is_sentinel_for_v<S, I>
                     && is_indirectly_unary_invocable_v<Fun, I>
                     && detail::is_copy_constructible_v<Fun>,
@@ -115,7 +115,7 @@ namespace futures {
             execution_policy E,
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirectly_unary_invocable<I> Fun>
 #else
         template <
@@ -126,7 +126,7 @@ namespace futures {
             class Fun,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                    && is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_indirectly_unary_invocable_v<Fun, I>
                     && detail::is_copy_constructible_v<Fun>,
@@ -157,7 +157,7 @@ namespace futures {
         template <
             executor E,
             std::ranges::input_range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirectly_unary_invocable<std::ranges::iterator_t<R>> Fun>
 #else
         template <
@@ -167,7 +167,7 @@ namespace futures {
             class Fun,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
                     && detail::is_copy_constructible_v<Fun>,
                 int>
@@ -193,7 +193,7 @@ namespace futures {
         template <
             execution_policy E,
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirectly_unary_invocable<std::ranges::iterator_t<R>> Fun>
 #else
         template <
@@ -203,7 +203,7 @@ namespace futures {
             class Fun,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_range_partitioner_v<P, R> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
                     && detail::is_copy_constructible_v<Fun>,
                 int>
@@ -229,7 +229,7 @@ namespace futures {
         template <
             std::input_iterator I,
             std::sentinel_for<I> S,
-            partitioner<I, S> P,
+            partitioner_for<I, S> P,
             std::indirectly_unary_invocable<I> Fun>
 #else
         template <
@@ -238,7 +238,7 @@ namespace futures {
             class S,
             class Fun,
             std::enable_if_t<
-                is_partitioner_v<P, I, S> && is_input_iterator_v<I>
+                is_partitioner_for_v<P, I, S> && is_input_iterator_v<I>
                     && is_sentinel_for_v<S, I>
                     && is_indirectly_unary_invocable_v<Fun, I>
                     && detail::is_copy_constructible_v<Fun>,
@@ -264,7 +264,7 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
         template <
             std::ranges::range R,
-            range_partitioner<R> P,
+            partitioner_for<std::ranges::iterator_t<R>> P,
             std::indirectly_unary_invocable<std::ranges::iterator_t<R>> Fun>
 #else
         template <
@@ -272,7 +272,7 @@ namespace futures {
             class R,
             class Fun,
             std::enable_if_t<
-                is_range_partitioner_v<P, R> && is_input_range_v<R>
+                is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
                     && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
                     && detail::is_copy_constructible_v<Fun>,
                 int>

@@ -59,7 +59,7 @@ namespace futures {
          *  @param v Value
          */
         FUTURES_TEMPLATE(class E, class P, class I, class S, class T)
-        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+        (requires is_executor_v<E> &&is_partitioner_for_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_binary_invocable_v<equal_to, T *, I>) I
             run(E const &ex, P p, I first, S last, T const &v) const {

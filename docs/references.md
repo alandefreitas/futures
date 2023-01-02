@@ -90,7 +90,7 @@
 [is_continuable]: /futures/reference/Classes/structfutures_1_1is__continuable/
 [operator&&]: /futures/reference/Namespaces/namespacefutures/#function-operator&&
 [operator||]: /futures/reference/Namespaces/namespacefutures/#function-operator||
-[is_partitioner]: /futures/reference/Namespaces/namespacefutures/#using-is_partitioner
-[partitioner]: /futures/reference/Namespaces/namespacefutures/#using-is_partitioner
+[is_partitioner_for]: /futures/reference/Namespaces/namespacefutures/#using-is_partitioner_for
+[partitioner_for]: /futures/reference/Namespaces/namespacefutures/#using-is_partitioner_for
 [default_partitioner]: /futures/reference/Namespaces/namespacefutures/#using-default_partitioner
 

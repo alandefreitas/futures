@@ -152,7 +152,7 @@ namespace futures {
          *  function template \c none_of
          */
         FUTURES_TEMPLATE(class E, class P, class I, class S, class Fun)
-        (requires is_executor_v<E> &&is_partitioner_v<P, I, S>
+        (requires is_executor_v<E> &&is_partitioner_for_v<P, I, S>
              &&is_input_iterator_v<I> &&is_sentinel_for_v<S, I>
                  &&is_indirectly_unary_invocable_v<Fun, I>
                      &&detail::is_copy_constructible_v<Fun>)

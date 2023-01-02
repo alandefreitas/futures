@@ -209,7 +209,7 @@ namespace futures {
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
     template <class T, class I, class S = I>
-    using is_partitioner = detail::conjunction<
+    using is_partitioner_for = detail::conjunction<
         std::conditional_t<
             is_input_iterator_v<I>,
             std::true_type,
@@ -222,31 +222,13 @@ namespace futures {
 
     /// Determine if P is a valid partitioner for the iterator range [I,S]
     template <class P, class I, class S = I>
-    constexpr bool is_partitioner_v = is_partitioner<P, I, S>::value;
-
-    /// Determine if P is a valid partitioner for the range `R`
-    template <class P, class R, class = void>
-    struct is_range_partitioner : std::false_type {};
-
-    /// @copydoc is_range_partitioner
-    template <class P, class R>
-    struct is_range_partitioner<P, R, std::enable_if_t<is_range_v<R>>>
-        : is_partitioner<P, iterator_t<R>, iterator_t<R>> {};
-
-    /// @copydoc is_range_partitioner
-    template <class P, class R>
-    constexpr bool is_range_partitioner_v = is_range_partitioner<P, R>::value;
+    constexpr bool is_partitioner_for_v = is_partitioner_for<P, I, S>::value;
 
 #ifdef FUTURES_HAS_CONCEPTS
-    /// @concept partitioner
+    /// @concept partitioner_for
     /// @brief Determines if a type is an partitioner
     template <class P, class I, class S = I>
-    concept partitioner = is_partitioner_v<P, I, S>;
-
-    /// @concept range_partitioner
-    /// @brief Determines if a type is an range_partitioner
-    template <class P, class R>
-    concept range_partitioner = is_range_partitioner_v<P, R>;
+    concept partitioner_for = is_partitioner_for_v<P, I, S>;
 #endif
 
     /** @} */ // @addtogroup partitioners Partitioners
