@@ -109,14 +109,14 @@ namespace futures {
 
             template <class Future>
             static constexpr std::
-                enable_if_t<is_future_v<Future>, unwrap_future_t<Future>>
+                enable_if_t<is_future_like_v<Future>, unwrap_future_t<Future>>
                 get_deepest(Future &&f) {
                 return get_deepest(std::forward<Future>(f).get());
             }
 
             template <class Future>
             static constexpr std::
-                enable_if_t<!is_future_v<Future>, unwrap_future_t<Future>>
+                enable_if_t<!is_future_like_v<Future>, unwrap_future_t<Future>>
                 get_deepest(Future &&f) {
                 return std::forward<Future>(f);
             }
@@ -163,7 +163,7 @@ namespace futures {
                 auto
                 operator()(T &&el) const {
                     return impl(
-                        is_future<std::decay_t<T>>{},
+                        is_future_like<std::decay_t<T>>{},
                         std::forward<T>(el));
                 }
 

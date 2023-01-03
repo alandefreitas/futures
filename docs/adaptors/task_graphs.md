@@ -130,7 +130,7 @@ tasks from the queue until there are no tasks left. At this point, we implicitly
 
 The promise makes the subgraph itself behave as a single future in the implicit task queue. The graph members could be
 encapsulated into a class, and the functions `get`/`wait` could be provided to request the value of the promise. In this
-case, we would have one more complete future type matching the [is_future] concept. This type would be able to interact
+case, we would have one more complete [future_like] object. This type would be able to interact
 with other futures through the library future adaptors.
 
 ## Loops in graphs

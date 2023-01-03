@@ -34,7 +34,7 @@ namespace futures {
         template <typename Future>
         struct lambda_to_future<
             Future,
-            std::enable_if_t<is_future_v<std::decay_t<Future>>>> {
+            std::enable_if_t<is_future_like_v<std::decay_t<Future>>>> {
             using type = std::decay_t<Future>;
         };
 

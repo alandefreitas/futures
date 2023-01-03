@@ -13,7 +13,7 @@
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/executor/execute.hpp>
 #include <futures/traits/future_value.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
 #include <futures/detail/traits/is_callable.hpp>
@@ -59,7 +59,7 @@ namespace futures {
                     (is_executor_v<std::decay_t<Executor>>
                      && !is_executor_v<std::decay_t<Function>>
                      && !is_executor_v<std::decay_t<Future>>
-                     && is_future_v<std::decay_t<Future>>
+                     && is_future_like_v<std::decay_t<Future>>
                      && next_future_traits<
                          Executor,
                          std::decay_t<Function>,

@@ -361,7 +361,7 @@ TEST_CASE("then") {
                 boost::mp11::mp_append<std::tuple<Function>, value_type>>::value;
             STATIC_REQUIRE(!tuple_explode);
             constexpr bool is_future_tuple = boost::mp11::
-                mp_all_of<value_type, is_future>::value;
+                mp_all_of<value_type, is_future_like>::value;
             STATIC_REQUIRE(is_future_tuple);
             using unwrapped_elements = boost::mp11::
                 mp_transform<future_value_t, value_type>;

@@ -46,6 +46,7 @@
 #include <futures/launch.hpp>
 #include <futures/throw.hpp>
 #include <futures/algorithm/traits/is_range.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/container/small_vector.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/utility/invoke.hpp>
@@ -387,14 +388,14 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires detail::disjunction_v<
-        is_future<std::decay_t<std::iter_value_t<InputIt>>>,
+        is_future_like<std::decay_t<std::iter_value_t<InputIt>>>,
         detail::is_invocable<std::decay_t<std::iter_value_t<InputIt>>>>
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<iter_value_t<InputIt>>>,
+                is_future_like<std::decay_t<iter_value_t<InputIt>>>,
                 detail::is_invocable<std::decay_t<iter_value_t<InputIt>>>>,
             int>
         = 0>
@@ -407,7 +408,7 @@ namespace futures {
     /// @copybrief when_all
     /**
      *  This function does not participate in overload resolution unless the
-     *  range type @ref is_future.
+     *  range @ref is_future_like trait.
      *
      *  @param r Range of futures
      *  @return Future object of type @ref when_all_future
@@ -435,7 +436,7 @@ namespace futures {
     /**
      *  This function does not participate in overload resolution unless every
      *  argument is either a (possibly cv-qualified) shared_future or a
-     *  cv-unqualified future, as defined by the trait @ref is_future.
+     *  cv-unqualified future, as defined by the @ref is_future_like trait.
      *
      *  @param futures Instances of future objects
      *  @return Future object of type @ref when_all_future
@@ -443,14 +444,14 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class... Futures>
     requires detail::conjunction_v<detail::disjunction<
-        is_future<std::decay_t<Futures>>,
+        is_future_like<std::decay_t<Futures>>,
         detail::is_invocable<std::decay_t<Futures>>>...>
 #else
     template <
         class... Futures,
         std::enable_if_t<
             detail::conjunction_v<detail::disjunction<
-                is_future<std::decay_t<Futures>>,
+                is_future_like<std::decay_t<Futures>>,
                 detail::is_invocable<std::decay_t<Futures>>>...>,
             int>
         = 0>
@@ -485,10 +486,10 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class T1, class T2>
     requires detail::disjunction_v<
-                 is_future<std::decay_t<T1>>,
+                 is_future_like<std::decay_t<T1>>,
                  detail::is_invocable<std::decay_t<T1>>>
              && detail::disjunction_v<
-                 is_future<std::decay_t<T2>>,
+                 is_future_like<std::decay_t<T2>>,
                  detail::is_invocable<std::decay_t<T2>>>
 #else
     template <
@@ -496,10 +497,10 @@ namespace futures {
         class T2,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<T1>>,
+                is_future_like<std::decay_t<T1>>,
                 detail::is_invocable<std::decay_t<T1>>>
                 && detail::disjunction_v<
-                    is_future<std::decay_t<T2>>,
+                    is_future_like<std::decay_t<T2>>,
                     detail::is_invocable<std::decay_t<T2>>>,
             int>
         = 0>

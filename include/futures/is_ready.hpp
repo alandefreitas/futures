@@ -20,7 +20,7 @@
 #include <futures/config.hpp>
 #include <futures/future.hpp>
 #include <futures/promise.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/is_ready.hpp>
 
 namespace futures {
@@ -39,7 +39,7 @@ namespace futures {
 #else
     template <
         class Future,
-        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0>
+        std::enable_if_t<is_future_like_v<std::decay_t<Future>>, int> = 0>
 #endif
     bool
     is_ready(Future &&f);

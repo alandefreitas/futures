@@ -13,7 +13,7 @@ namespace futures {
     // Specialization explicitly setting when_all_future<T> as a type of
     // future
     template <class T>
-    struct is_future<when_all_future<T>> : std::true_type {};
+    struct is_future_like<when_all_future<T>> : std::true_type {};
 #endif
 
     namespace detail {
@@ -32,7 +32,7 @@ namespace futures {
         // (when_all or operator&& for futures)
         template <class T>
         using is_valid_when_all_argument = disjunction<
-            is_future<std::decay_t<T>>,
+            is_future_like<std::decay_t<T>>,
             detail::is_invocable<std::decay_t<T>>>;
         template <class T>
         constexpr bool is_valid_when_all_argument_v
@@ -202,7 +202,7 @@ namespace futures {
                 mp_cond<
                     is_shared_future<std::decay_t<F>>,
                     mp_int<0>,
-                    is_future<std::decay_t<F>>,
+                    is_future_like<std::decay_t<F>>,
                     mp_int<1>,
                     std::true_type,
                     mp_int<2>>{},
@@ -236,14 +236,14 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires detail::disjunction_v<
-        is_future<std::decay_t<std::iter_value_t<InputIt>>>,
+        is_future_like<std::decay_t<std::iter_value_t<InputIt>>>,
         detail::is_invocable<std::decay_t<std::iter_value_t<InputIt>>>>
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<iter_value_t<InputIt>>>,
+                is_future_like<std::decay_t<iter_value_t<InputIt>>>,
                 detail::is_invocable<std::decay_t<iter_value_t<InputIt>>>>,
             int>>
 #endif
@@ -253,7 +253,7 @@ namespace futures {
     when_all(InputIt first, InputIt last) {
         // Infer types
         using input_type = std::decay_t<iter_value_t<InputIt>>;
-        constexpr bool input_is_future = is_future_v<input_type>;
+        constexpr bool input_is_future = is_future_like_v<input_type>;
         constexpr bool input_is_invocable = detail::is_invocable_v<input_type>;
         FUTURES_STATIC_ASSERT(input_is_future || input_is_invocable);
         using output_future_type = detail::lambda_to_future_t<input_type>;
@@ -266,11 +266,11 @@ namespace futures {
         detail::range_push_back_impl(
             boost::mp11::mp_cond<
                 detail::conjunction<
-                    is_future<input_type>,
+                    is_future_like<input_type>,
                     is_shared_future<output_future_type>>,
                 boost::mp11::mp_int<0>,
                 detail::conjunction<
-                    is_future<input_type>,
+                    is_future_like<input_type>,
                     boost::mp11::mp_not<is_shared_future<output_future_type>>>,
                 boost::mp11::mp_int<1>,
                 std::true_type,
@@ -286,14 +286,14 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class... Futures>
     requires detail::conjunction_v<detail::disjunction<
-        is_future<std::decay_t<Futures>>,
+        is_future_like<std::decay_t<Futures>>,
         detail::is_invocable<std::decay_t<Futures>>>...>
 #else
     template <
         class... Futures,
         std::enable_if_t<
             detail::conjunction_v<detail::disjunction<
-                is_future<std::decay_t<Futures>>,
+                is_future_like<std::decay_t<Futures>>,
                 detail::is_invocable<std::decay_t<Futures>>>...>,
             int>>
 #endif
@@ -317,7 +317,7 @@ namespace futures {
             operator()(F &&f) {
                 return impl(
                     mp_cond<
-                        conjunction<is_invocable<F>, mp_not<is_future<F>>>,
+                        conjunction<is_invocable<F>, mp_not<is_future_like<F>>>,
                         mp_int<0>,
                         is_shared_future<F>,
                         mp_int<1>,
@@ -398,10 +398,10 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class T1, class T2>
     requires detail::disjunction_v<
-                 is_future<std::decay_t<T1>>,
+                 is_future_like<std::decay_t<T1>>,
                  detail::is_invocable<std::decay_t<T1>>>
              && detail::disjunction_v<
-                 is_future<std::decay_t<T2>>,
+                 is_future_like<std::decay_t<T2>>,
                  detail::is_invocable<std::decay_t<T2>>>
 #else
     template <
@@ -409,10 +409,10 @@ namespace futures {
         class T2,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<T1>>,
+                is_future_like<std::decay_t<T1>>,
                 detail::is_invocable<std::decay_t<T1>>>
                 && detail::disjunction_v<
-                    is_future<std::decay_t<T2>>,
+                    is_future_like<std::decay_t<T2>>,
                     detail::is_invocable<std::decay_t<T2>>>,
             int>>
 #endif

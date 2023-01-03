@@ -104,7 +104,7 @@ namespace futures {
         std::enable_if_t<
             !is_executor_v<std::decay_t<Function>>
                 && !is_executor_v<std::decay_t<Future>>
-                && is_future_v<std::decay_t<Future>>
+                && is_future_like_v<std::decay_t<Future>>
                 && detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<Function>,
@@ -128,7 +128,7 @@ namespace futures {
     requires(
         !is_executor_v<std::decay_t<Function>>
         && !is_executor_v<std::decay_t<Future>>
-        && is_future_v<std::decay_t<Future>>
+        && is_future_like_v<std::decay_t<Future>>
         && detail::next_future_traits<
             Executor,
             std::decay_t<Function>,
@@ -142,7 +142,7 @@ namespace futures {
             (is_executor_v<std::decay_t<Executor>>
              && !is_executor_v<std::decay_t<Function>>
              && !is_executor_v<std::decay_t<Future>>
-             && is_future_v<std::decay_t<Future>>
+             && is_future_like_v<std::decay_t<Future>>
              && detail::next_future_traits<
                  Executor,
                  std::decay_t<Function>,
@@ -177,7 +177,7 @@ namespace futures {
         std::enable_if_t<
             !is_executor_v<std::decay_t<Function>>
                 && !is_executor_v<std::decay_t<Future>>
-                && is_future_v<std::decay_t<Future>>
+                && is_future_like_v<std::decay_t<Future>>
                 && detail::next_future_traits<
                     default_executor_type,
                     std::decay_t<Function>,
@@ -197,7 +197,7 @@ namespace futures {
         is_executor_v<std::decay_t<Executor>>
         && !is_executor_v<std::decay_t<Function>>
         && !is_executor_v<std::decay_t<Future>>
-        && is_future_v<std::decay_t<Future>>
+        && is_future_like_v<std::decay_t<Future>>
         && detail::next_future_traits<
             Executor,
             std::decay_t<Function>,
@@ -212,7 +212,7 @@ namespace futures {
             (is_executor_v<std::decay_t<Executor>>
              && !is_executor_v<std::decay_t<Function>>
              && !is_executor_v<std::decay_t<Future>>
-             && is_future_v<std::decay_t<Future>>
+             && is_future_like_v<std::decay_t<Future>>
              && detail::next_future_traits<
                  Executor,
                  std::decay_t<Function>,

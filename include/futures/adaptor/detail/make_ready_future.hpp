@@ -10,7 +10,7 @@
 
 #include <futures/future.hpp>
 #include <futures/promise.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 
 namespace futures {
     namespace detail {

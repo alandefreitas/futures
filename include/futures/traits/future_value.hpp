@@ -16,7 +16,7 @@
  */
 
 #include <futures/config.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/traits/future_value.hpp>
 
 namespace futures {
@@ -47,7 +47,7 @@ namespace futures {
         struct future_value_impl<
             Future,
             std::enable_if_t<
-                is_future_v<Future>
+                is_future_like_v<Future>
                 && detail::has_get<std::decay_t<Future>>::value>> {
             using type = std::decay_t<
                 decltype(std::declval<std::decay_t<Future>>().get())>;

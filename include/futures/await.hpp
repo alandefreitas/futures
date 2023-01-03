@@ -16,7 +16,7 @@
  */
 
 #include <futures/traits/future_value.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/utility/regular_void.hpp>
 #include <type_traits>
 
@@ -54,7 +54,7 @@ namespace futures {
 #else
     template <
         class Future,
-        std::enable_if_t<is_future_v<std::decay_t<Future>>, int> = 0>
+        std::enable_if_t<is_future_like_v<std::decay_t<Future>>, int> = 0>
 #endif
     FUTURES_DETAIL(decltype(auto))
     await(Future &&f) {
@@ -76,7 +76,7 @@ namespace futures {
     template <
         class... Futures,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Futures>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Futures>>...>,
             int>
         = 0>
 #endif

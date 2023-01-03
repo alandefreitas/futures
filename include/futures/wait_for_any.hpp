@@ -20,7 +20,7 @@
 #include <futures/algorithm/traits/is_range.hpp>
 #include <futures/algorithm/traits/iter_value.hpp>
 #include <futures/algorithm/traits/range_value.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/waiter_for_any.hpp>
 #include <type_traits>
@@ -75,7 +75,7 @@ namespace futures {
 #else
     template <
         class Iterator,
-        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+        std::enable_if_t<is_future_like_v<iter_value_t<Iterator>>, int> = 0>
 #endif
     Iterator
     wait_for_any(Iterator first, Iterator last);
@@ -103,7 +103,7 @@ namespace futures {
     template <
         class Range,
         std::enable_if_t<
-            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            is_range_v<Range> && is_future_like_v<range_value_t<Range>>,
             int>
         = 0>
 #endif
@@ -132,7 +132,7 @@ namespace futures {
     template <
         class... Fs,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Fs>>...>,
             int>
         = 0>
 #endif
@@ -188,7 +188,7 @@ namespace futures {
         class Iterator,
         class Rep,
         class Period,
-        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+        std::enable_if_t<is_future_like_v<iter_value_t<Iterator>>, int> = 0>
 #endif
     Iterator
     wait_for_any_for(
@@ -215,7 +215,7 @@ namespace futures {
         class Rep,
         class Period,
         std::enable_if_t<
-            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            is_range_v<Range> && is_future_like_v<range_value_t<Range>>,
             int>
         = 0>
 #endif
@@ -245,7 +245,7 @@ namespace futures {
         class Rep,
         class Period,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Fs>>...>,
             int>
         = 0>
 #endif
@@ -301,7 +301,7 @@ namespace futures {
         class Iterator,
         class Clock,
         class Duration,
-        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int> = 0>
+        std::enable_if_t<is_future_like_v<iter_value_t<Iterator>>, int> = 0>
 #endif
     Iterator
     wait_for_any_until(
@@ -328,7 +328,7 @@ namespace futures {
         class Clock,
         class Duration,
         std::enable_if_t<
-            is_range_v<Range> && is_future_v<range_value_t<Range>>,
+            is_range_v<Range> && is_future_like_v<range_value_t<Range>>,
             int>
         = 0>
 #endif
@@ -358,7 +358,7 @@ namespace futures {
         class Clock,
         class Duration,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Fs>>...>,
             int>
         = 0>
 #endif

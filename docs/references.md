@@ -48,7 +48,8 @@
 [launch]: /futures/reference/Namespaces/namespacefutures/#enum-launch
 [executor]: /futures/reference/Namespaces/namespacefutures/#using-is_executor
 [futures::async]: /futures/reference/Namespaces/namespacefutures/#function-async
-[is_future]: /futures/reference/Classes/structfutures_1_1is__future/
+[future_like]: /futures/reference/libraries/group__future-traits/#concept-future_like
+[is_future_like]: /futures/reference/libraries/group__future-traits/#using-is_future_like
 [inline_executor]: /futures/reference/Classes/structfutures_1_1inline__executor/
 [basic_future]: /futures/reference/Classes/classfutures_1_1basic__future/
 [basic_future::get]: /futures/reference/Classes/classfutures_1_1basic__future/#function-get

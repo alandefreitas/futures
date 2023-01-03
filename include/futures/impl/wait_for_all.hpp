@@ -20,7 +20,7 @@ namespace futures {
         class Iterator,
         class Rep,
         class Period,
-        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+        std::enable_if_t<is_future_like_v<iter_value_t<Iterator>>, int>>
 #endif
     future_status
     wait_for_all_for(
@@ -54,7 +54,7 @@ namespace futures {
         class Rep,
         class Period,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Fs>>...>,
             int>>
 #endif
     future_status
@@ -119,7 +119,7 @@ namespace futures {
         class Iterator,
         class Clock,
         class Duration,
-        std::enable_if_t<is_future_v<iter_value_t<Iterator>>, int>>
+        std::enable_if_t<is_future_like_v<iter_value_t<Iterator>>, int>>
 #endif
     future_status
     wait_for_all_until(
@@ -152,7 +152,7 @@ namespace futures {
         class Clock,
         class Duration,
         std::enable_if_t<
-            detail::conjunction_v<is_future<std::decay_t<Fs>>...>,
+            detail::conjunction_v<is_future_like<std::decay_t<Fs>>...>,
             int>>
 #endif
     future_status

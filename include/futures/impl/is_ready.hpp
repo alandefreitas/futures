@@ -73,7 +73,7 @@ namespace futures {
 #else
     template <
         class Future,
-        std::enable_if_t<is_future_v<std::decay_t<Future>>, int>>
+        std::enable_if_t<is_future_like_v<std::decay_t<Future>>, int>>
 #endif
     bool
     is_ready(Future &&f) {

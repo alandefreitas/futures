@@ -181,7 +181,7 @@ TEST_CASE("when_any") {
             auto continuation = [](cfuture<int> r) {
                 return r.get() * 3;
             };
-            STATIC_REQUIRE(is_future_v<decltype(f)>);
+            STATIC_REQUIRE(is_future_like_v<decltype(f)>);
             STATIC_REQUIRE(
                 detail::next_future_traits<
                     default_executor_type,
@@ -199,7 +199,7 @@ TEST_CASE("when_any") {
             };
             using Future = decltype(f);
             using Function = decltype(continuation);
-            STATIC_REQUIRE(is_future_v<decltype(f)>);
+            STATIC_REQUIRE(is_future_like_v<decltype(f)>);
             // when_any_result -> int
             using value_type = future_value_t<Future>;
             using when_any_sequence = typename value_type::sequence_type;
@@ -285,7 +285,7 @@ TEST_CASE("when_any") {
                 }
                 return 0;
             };
-            STATIC_REQUIRE(is_future_v<decltype(f)>);
+            STATIC_REQUIRE(is_future_like_v<decltype(f)>);
             STATIC_REQUIRE(
                 detail::next_future_traits<
                     default_executor_type,
@@ -333,7 +333,7 @@ TEST_CASE("when_any") {
             auto continuation = [](int r) {
                 return r * 3;
             };
-            STATIC_REQUIRE(is_future_v<decltype(f)>);
+            STATIC_REQUIRE(is_future_like_v<decltype(f)>);
             STATIC_REQUIRE(
                 detail::next_future_traits<
                     default_executor_type,

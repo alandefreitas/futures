@@ -5,14 +5,14 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_TRAITS_IS_FUTURE_HPP
-#define FUTURES_TRAITS_IS_FUTURE_HPP
+#ifndef FUTURES_TRAITS_IS_FUTURE_LIKE_HPP
+#define FUTURES_TRAITS_IS_FUTURE_LIKE_HPP
 
 /**
- *  @file traits/is_future.hpp
- *  @brief `is_future` trait
+ *  @file traits/is_future_like.hpp
+ *  @brief `is_future_like` trait
  *
- *  This file defines the `is_future` trait.
+ *  This file defines the `is_future_like` trait.
  */
 
 #include <futures/config.hpp>
@@ -42,14 +42,14 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_future = __see_below__;
+    using is_future_like = __see_below__;
 #else
     namespace detail {
         template <class T, class = void>
-        struct is_future_impl : std::false_type {};
+        struct is_future_like_impl : std::false_type {};
 
         template <class T>
-        struct is_future_impl<
+        struct is_future_like_impl<
             T,
             detail::void_t<
                 // clang-format off
@@ -59,12 +59,12 @@ namespace futures {
     } // namespace detail
 
     template <class T>
-    struct is_future : detail::is_future_impl<T> {};
+    struct is_future_like : detail::is_future_like_impl<T> {};
 #endif
 
-    /// @copydoc is_future
+    /// @copydoc is_future_like
     template <class T>
-    constexpr bool is_future_v = is_future<T>::value;
+    constexpr bool is_future_like_v = is_future_like<T>::value;
 
 #ifdef FUTURES_HAS_CONCEPTS
     /// @concept future_like
@@ -81,11 +81,11 @@ namespace futures {
      * concept.
      */
     template <class T>
-    concept future_like = is_future_v<std::decay_t<T>>;
+    concept future_like = is_future_like_v<std::decay_t<T>>;
 #endif
 
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures
 } // namespace futures
 
-#endif // FUTURES_TRAITS_IS_FUTURE_HPP
+#endif // FUTURES_TRAITS_IS_FUTURE_LIKE_HPP

@@ -64,7 +64,7 @@ TEST_CASE("when_all") {
                        + static_cast<int>(std::get<1>(r).get())
                        + static_cast<int>(std::get<2>(r).get().size());
             };
-            STATIC_REQUIRE(is_future_v<decltype(f)>);
+            STATIC_REQUIRE(is_future_like_v<decltype(f)>);
             STATIC_REQUIRE(
                 detail::next_future_traits<
                     default_executor_type,
@@ -161,7 +161,7 @@ TEST_CASE("when_all") {
                 auto continuation = [](detail::small_vector<cfuture<int>> rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -179,7 +179,7 @@ TEST_CASE("when_all") {
                 using Function = decltype(continuation);
                 STATIC_REQUIRE(!is_executor_v<Function>);
                 STATIC_REQUIRE(!is_executor_v<Future>);
-                STATIC_REQUIRE(is_future_v<Future>);
+                STATIC_REQUIRE(is_future_like_v<Future>);
                 using value_type = future_value_t<Future>;
                 using lvalue_type = std::add_lvalue_reference_t<value_type>;
                 using rvalue_type = std::add_rvalue_reference_t<value_type>;
@@ -218,8 +218,8 @@ TEST_CASE("when_all") {
                         default_executor_type,
                         std::decay_t<decltype(continuation)>,
                         std::decay_t<decltype(f)>>::is_valid);
-                STATIC_REQUIRE(is_future_v<Future>);
-                STATIC_REQUIRE(!is_future_v<Function>);
+                STATIC_REQUIRE(is_future_like_v<Future>);
+                STATIC_REQUIRE(!is_future_like_v<Function>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -234,8 +234,8 @@ TEST_CASE("when_all") {
                     [](detail::small_vector<cfuture<int>> const &) {
                     return 2 + 3 + 4; // <- cannot get from const future :P
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(!is_future_v<decltype(continuation)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
+                STATIC_REQUIRE(!is_future_like_v<decltype(continuation)>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -250,8 +250,8 @@ TEST_CASE("when_all") {
                     [](detail::small_vector<cfuture<int>> &&rs) {
                     return rs[0].get() + rs[1].get() + rs[2].get();
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
-                STATIC_REQUIRE(!is_future_v<decltype(continuation)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
+                STATIC_REQUIRE(!is_future_like_v<decltype(continuation)>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -267,7 +267,7 @@ TEST_CASE("when_all") {
                 auto continuation = [](detail::small_vector<int> rs) {
                     return rs[0] + rs[1] + rs[2];
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,
@@ -284,7 +284,7 @@ TEST_CASE("when_all") {
             }
 
             SECTION("Continue with lvalue") {
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
                 auto continuation = [](detail::small_vector<int> &rs) {
                     return rs[0] + rs[1] + rs[2];
                 };
@@ -307,7 +307,7 @@ TEST_CASE("when_all") {
                 auto continuation = [](detail::small_vector<int> const &rs) {
                     return rs[0] + rs[1] + rs[2];
                 };
-                STATIC_REQUIRE(is_future_v<decltype(f)>);
+                STATIC_REQUIRE(is_future_like_v<decltype(f)>);
                 STATIC_REQUIRE(
                     detail::next_future_traits<
                         default_executor_type,

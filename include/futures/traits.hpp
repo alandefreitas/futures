@@ -31,7 +31,7 @@
 #include <futures/traits/has_stop_token.hpp>
 #include <futures/traits/is_always_deferred.hpp>
 #include <futures/traits/is_continuable.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/traits/is_shared_future.hpp>
 #include <futures/traits/is_stoppable.hpp>
 

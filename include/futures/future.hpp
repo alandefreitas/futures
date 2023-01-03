@@ -80,7 +80,7 @@
 #include <futures/traits/has_executor.hpp>
 #include <futures/traits/has_ready_notifier.hpp>
 #include <futures/traits/is_continuable.hpp>
-#include <futures/traits/is_future.hpp>
+#include <futures/traits/is_future_like.hpp>
 #include <futures/detail/continuations_source.hpp>
 #include <futures/detail/future.hpp>
 #include <futures/detail/move_if_not_shared.hpp>
@@ -949,7 +949,7 @@ namespace futures {
 #ifndef FUTURES_DOXYGEN
     /// Define all basic_futures as a kind of future
     template <typename... Args>
-    struct is_future<basic_future<Args...>> : std::true_type {};
+    struct is_future_like<basic_future<Args...>> : std::true_type {};
 
     /// Define all basic_futures as a future with a ready notifier
     template <typename... Args>

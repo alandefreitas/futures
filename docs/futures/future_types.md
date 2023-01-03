@@ -22,7 +22,7 @@ We can ask the task to stop through the future at any time with:
 
 {{ code_snippet("test/unit/snippets.cpp", "interop_jcfuture_stop") }}
 
-We now have three types of future objects. Because all of these types has the requirements of the [is_future] concept,
+We now have three types of future objects. Because all of these types are [future_like],
 the library functions allow them to interoperate:
 
 {{ code_snippet("test/unit/snippets.cpp", "types_wait_for_all") }}
@@ -98,7 +98,7 @@ For instance, these are some concrete future classes defined in this library and
       destruction. However, because any handle to a future value is a "future" object, it is unlikely that a single concrete
       future definition will be appropriate for most applications.
     - **This library**: This library attempts to [solve this problem](#the-futures-library) by defining generic algorithms for **a
-      common [is_future] concept**, which includes 1) existing future types, such as [std::future], `boost::future`
+      common [future_like] concept**, which includes 1) existing future types, such as [std::future], `boost::future`
       , `boost::fiber::future`; 2) library provided future types, such as [cfuture] and [jfuture]; and 3) custom future types.
     - **Results**: The concepts allow reusable algorithms for all future types, an alternative to [std::async] based on executors, various
       efficient future types, many future composition algorithms, a syntax closer to other programming languages, and parallel
@@ -122,7 +122,7 @@ new tasks.
 
 ## Custom future types
 
-Any custom type with the requirements of [is_future] can interoperate with other future type. These classes might
+Any custom type satisfying the [future_like] requirements can interoperate with other future type. These classes might
 represent any process for which a result will only be available in the future, such as child processes and network
 requests with third-party libraries.
 
@@ -209,7 +209,7 @@ T[Promised Task] --> |write|S
 
     This documentation includes historical notes about many models proposed for asynchronicity in C++.
     Given the pros and cons of each model described in this review, this library models future types as a
-    simple [is_future] concept/trait, which supports all the features we have discussed in this overview, 
+    simple [future_like] concept/trait, which supports all the features we have discussed in this overview, 
     such as executors, continuations, and deferred work. We implement optimizations possible to each 
     future types while sticking to existing practice.
 

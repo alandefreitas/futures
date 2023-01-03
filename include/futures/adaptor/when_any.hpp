@@ -481,27 +481,20 @@ namespace futures {
     /// Create a future object that becomes ready when any of the futures
     /// in the range is ready
     /**
-     *  This function does not participate in overload resolution unless
-     *  InputIt's value type (i.e., typename
-     *  std::iter_value_t<InputIt>) @ref is_future .
-     *
-     *  This overload uses a small vector to avoid further allocations for such
-     *  a simple operation.
-     *
      *  @param first,last Range of futures
      *  @return @ref when_any_future with all future objects
      */
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
     requires(
-        is_future_v<std::decay_t<std::iter_value_t<InputIt>>>
+        is_future_like_v<std::decay_t<std::iter_value_t<InputIt>>>
         || detail::is_invocable_v<std::iter_value_t<InputIt>>)
 #else
     template <
         class InputIt,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<
+                is_future_like<
                     std::decay_t<iter_value_t<InputIt>>>,
                 detail::is_invocable<
                     iter_value_t<InputIt>>>,
@@ -551,14 +544,14 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class... Futures>
     requires detail::conjunction_v<detail::disjunction<
-        is_future<std::decay_t<Futures>>,
+        is_future_like<std::decay_t<Futures>>,
         detail::is_invocable<std::decay_t<Futures>>>...>
 #else
     template <
         class... Futures,
         std::enable_if_t<
             detail::conjunction_v<detail::disjunction<
-                is_future<std::decay_t<Futures>>,
+                is_future_like<std::decay_t<Futures>>,
                 detail::is_invocable<std::decay_t<Futures>>>...>,
             int>
         = 0>
@@ -593,10 +586,10 @@ namespace futures {
 #ifdef FUTURES_HAS_CONCEPTS
     template <class T1, class T2>
     requires detail::disjunction_v<
-                 is_future<std::decay_t<T1>>,
+                 is_future_like<std::decay_t<T1>>,
                  detail::is_invocable<std::decay_t<T1>>>
              && detail::disjunction_v<
-                 is_future<std::decay_t<T2>>,
+                 is_future_like<std::decay_t<T2>>,
                  detail::is_invocable<std::decay_t<T2>>>
 #else
     template <
@@ -604,10 +597,10 @@ namespace futures {
         class T2,
         std::enable_if_t<
             detail::disjunction_v<
-                is_future<std::decay_t<T1>>,
+                is_future_like<std::decay_t<T1>>,
                 detail::is_invocable<std::decay_t<T1>>>
                 && detail::disjunction_v<
-                    is_future<std::decay_t<T2>>,
+                    is_future_like<std::decay_t<T2>>,
                     detail::is_invocable<std::decay_t<T2>>>,
             int>
         = 0>

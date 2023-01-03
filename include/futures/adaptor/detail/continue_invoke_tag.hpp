@@ -140,7 +140,7 @@ namespace futures {
                     Future,
                     PrefixList,
                     Function>::valid::value
-                && is_future_v<future_value_t<Future>>>> {
+                && is_future_like_v<future_value_t<Future>>>> {
         private:
             template <template <class...> class F>
             using invoke_expr = mp_apply<
@@ -161,7 +161,7 @@ namespace futures {
         };
 
         template <class T>
-        struct unwrap_future<T, std::enable_if_t<futures::is_future_v<T>>> {
+        struct unwrap_future<T, std::enable_if_t<futures::is_future_like_v<T>>> {
             using type = typename unwrap_future<
                 futures::future_value_t<T>>::type;
         };
@@ -181,7 +181,7 @@ namespace futures {
                     Future,
                     PrefixList,
                     Function>::valid::value
-                && is_future_v<future_value_t<Future>>>> {
+                && is_future_like_v<future_value_t<Future>>>> {
         private:
             template <template <class...> class F>
             using invoke_expr = mp_apply<
@@ -238,7 +238,7 @@ namespace futures {
                 && mp_similar<
                     std::tuple<>,
                     std::decay_t<future_value_t<Future>>>::value
-                && mp_all_of<future_value_t<Future>, is_future>::value>> {
+                && mp_all_of<future_value_t<Future>, is_future_like>::value>> {
         private:
             template <template <class...> class F>
             using invoke_expr = mp_apply<
@@ -271,7 +271,7 @@ namespace futures {
                     std::decay_t<future_value_t<Future>>>::value
                 && mp_all_of<
                     mp_transform<std::decay_t, future_value_t<Future>>,
-                    is_future>::value>> {
+                    is_future_like>::value>> {
         private:
             template <template <class...> class F>
             using invoke_expr = mp_apply<
@@ -300,7 +300,7 @@ namespace futures {
                     PrefixList,
                     Function>::valid::value
                 && is_range_v<std::decay_t<future_value_t<Future>>>
-                && is_future_v<
+                && is_future_like_v<
                     std::decay_t<range_value_t<future_value_t<Future>>>>>> {
         private:
             template <template <class...> class F>
@@ -329,7 +329,7 @@ namespace futures {
                     PrefixList,
                     Function>::valid::value
                 && is_range_v<std::decay_t<future_value_t<Future>>>
-                && is_future_v<
+                && is_future_like_v<
                     std::decay_t<range_value_t<future_value_t<Future>>>>>> {
         private:
             template <template <class...> class F>
@@ -393,7 +393,7 @@ namespace futures {
                         typename future_value_t<Future>::sequence_type>>::value
                 && mp_all_of<
                     std::decay_t<typename future_value_t<Future>::sequence_type>,
-                    is_future>::value>> {
+                    is_future_like>::value>> {
         private:
             template <template <class...> class F>
             using invoke_expr = mp_apply<
@@ -432,7 +432,7 @@ namespace futures {
                         std::decay_t,
                         std::decay_t<
                             typename future_value_t<Future>::sequence_type>>,
-                    is_future>::value
+                    is_future_like>::value
                 && mp_same<std::decay_t<
                     typename future_value_t<Future>::sequence_type>>::value>> {
         private:
@@ -500,7 +500,7 @@ namespace futures {
                     mp_transform<
                         std::decay_t,
                         typename future_value_t<Future>::sequence_type>,
-                    is_future>::value
+                    is_future_like>::value
                 && mp_same<mp_transform<
                     std::decay_t,
                     std::decay_t<typename future_value_t<
@@ -541,7 +541,7 @@ namespace futures {
                     mp_transform<
                         std::decay_t,
                         typename future_value_t<Future>::sequence_type>,
-                    is_future>::value
+                    is_future_like>::value
                 && mp_same<mp_transform_q<
                     mp_compose<unwrap_future_t, std::decay_t>,
                     typename future_value_t<Future>::sequence_type>>::value>> {
