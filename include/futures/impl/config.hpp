@@ -39,7 +39,7 @@
 #            define FUTURES_HAS_BOOST
 #        endif
 #    endif
-#elif BOOST_USER_CONFIG
+#elif defined(BOOST_USER_CONFIG)
 #    define FUTURES_HAS_BOOST
 #endif
 

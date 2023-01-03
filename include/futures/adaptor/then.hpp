@@ -32,6 +32,32 @@ namespace futures {
      *  @{
      */
 
+    namespace detail {
+        template <class Future, class Function>
+        FUTURES_DETAIL(decltype(auto))
+        then_no_exec_impl(
+            std::true_type /* has_executor */,
+            Future &&before,
+            Function &&after) {
+            return then(
+                before.get_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        }
+
+        template <class Future, class Function>
+        FUTURES_DETAIL(decltype(auto))
+        then_no_exec_impl(
+            std::false_type /* has_executor */,
+            Future &&before,
+            Function &&after) {
+            return then(
+                ::futures::make_default_executor(),
+                std::forward<Future>(before),
+                std::forward<Function>(after));
+        }
+    } // namespace detail
+
     /// Schedule a continuation function to a future
     /**
      *  This function creates a continuation that gets executed when the
@@ -58,10 +84,44 @@ namespace futures {
      *    - Otherwise:                                      return cfuture with
      *    no stop source
      *
-     *  @param ex The executor
      *  @param before The antecedent future
      *  @param after The continuation callable
      *  @return A continuation to the before future
+     */
+#ifdef FUTURES_HAS_CONCEPTS
+    template <future_like Future, class Function>
+    requires(
+        !is_executor_v<std::decay_t<Function>>
+        && !is_executor_v<std::decay_t<Future>>
+        && detail::next_future_traits<
+            default_executor_type,
+            std::decay_t<Function>,
+            std::decay_t<Future>>::is_valid)
+#else
+    template <
+        class Future,
+        class Function,
+        std::enable_if_t<
+            !is_executor_v<std::decay_t<Function>>
+                && !is_executor_v<std::decay_t<Future>>
+                && is_future_v<std::decay_t<Future>>
+                && detail::next_future_traits<
+                    default_executor_type,
+                    std::decay_t<Function>,
+                    std::decay_t<Future>>::is_valid,
+            int>
+        = 0>
+#endif
+    FUTURES_DETAIL(decltype(auto)) then(Future &&before, Function &&after) {
+        return detail::then_no_exec_impl(
+            has_executor<std::decay_t<Future>>{},
+            std::forward<Future>(before),
+            std::forward<Function>(after));
+    }
+
+    /// @copydoc then
+    /**
+     * @param ex The executor
      */
 #ifdef FUTURES_HAS_CONCEPTS
     template <executor Executor, class Function, class Future>
@@ -94,64 +154,6 @@ namespace futures {
         then(Executor const &ex, Future &&before, Function &&after) {
         return detail::internal_then(
             ex,
-            std::forward<Future>(before),
-            std::forward<Function>(after));
-    }
-
-    namespace detail {
-        template <class Future, class Function>
-        FUTURES_DETAIL(decltype(auto))
-        then_no_exec_impl(
-            std::true_type /* has_executor */,
-            Future &&before,
-            Function &&after) {
-            return then(
-                before.get_executor(),
-                std::forward<Future>(before),
-                std::forward<Function>(after));
-        }
-
-        template <class Future, class Function>
-        FUTURES_DETAIL(decltype(auto))
-        then_no_exec_impl(
-            std::false_type /* has_executor */,
-            Future &&before,
-            Function &&after) {
-            return then(
-                ::futures::make_default_executor(),
-                std::forward<Future>(before),
-                std::forward<Function>(after));
-        }
-    } // namespace detail
-
-    /// @copydoc then
-#ifdef FUTURES_HAS_CONCEPTS
-    template <future_like Future, class Function>
-    requires(
-        !is_executor_v<std::decay_t<Function>>
-        && !is_executor_v<std::decay_t<Future>>
-        && detail::next_future_traits<
-            default_executor_type,
-            std::decay_t<Function>,
-            std::decay_t<Future>>::is_valid)
-#else
-    template <
-            class Future,
-            class Function,
-            std::enable_if_t<
-                !is_executor_v<std::decay_t<Function>>
-                    && !is_executor_v<std::decay_t<Future>>
-                    && is_future_v<std::decay_t<Future>>
-                    && detail::next_future_traits<
-                        default_executor_type,
-                        std::decay_t<Function>,
-                        std::decay_t<Future>>::is_valid,
-                int>
-            = 0>
-#endif
-    FUTURES_DETAIL(decltype(auto)) then(Future &&before, Function &&after) {
-        return detail::then_no_exec_impl(
-            has_executor<std::decay_t<Future>>{},
             std::forward<Future>(before),
             std::forward<Function>(after));
     }

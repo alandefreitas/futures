@@ -13,7 +13,7 @@
 #include <system_error>
 
 /**
- *  @file future_error.hpp
+ *  @file error.hpp
  *  @brief Future error types
  *
  *  This file defines error types used by futures types and algorithms.

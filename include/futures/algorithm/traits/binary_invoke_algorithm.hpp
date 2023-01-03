@@ -52,7 +52,7 @@ namespace futures {
      * CRTP class with the overloads for algorithms that aggregate
      * elements in a sequence with an binary function.
      *
-     * This includes algorithms such as @ref reduce and @ref accumulate.
+     * This includes algorithms such as @ref reduce and `accumulate`.
      */
     template <class Derived>
     class binary_invoke_algorithm_functor {

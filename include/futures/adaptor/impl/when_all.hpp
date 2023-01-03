@@ -10,8 +10,8 @@
 
 namespace futures {
 #ifndef FUTURES_DOXYGEN
-    /// Specialization explicitly setting when_all_future<T> as a type of
-    /// future
+    // Specialization explicitly setting when_all_future<T> as a type of
+    // future
     template <class T>
     struct is_future<when_all_future<T>> : std::true_type {};
 #endif
@@ -421,8 +421,6 @@ namespace futures {
         return detail::
             conjunction_impl(std::forward<T1>(lhs), std::forward<T2>(rhs));
     }
-
-    /** @} */
 } // namespace futures
 
 #endif // FUTURES_ADAPTOR_IMPL_WHEN_ALL_HPP

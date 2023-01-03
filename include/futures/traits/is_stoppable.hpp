@@ -43,7 +43,7 @@ namespace futures {
      * if it has the `request_stop()` member function.
      *
      * @see
-     *      @li @ref has_stop_token
+     *      @li has_stop_token
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

@@ -38,7 +38,7 @@ namespace futures {
      * if it has the `get()` member function.
      *
      * @see
-     *      @li @ref has_stop_token
+     *      @li has_stop_token
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
@@ -71,7 +71,7 @@ namespace futures {
     /// @brief An object with the common members of a future.
     /**
      * A class is considered future-like when 1) it specializes the
-     * @ref is_future trait to indicate it is a future type, or 2) it has the
+     * `is_future` trait to indicate it is a future type, or 2) it has the
      * a `get()` function to obtain its future value.
      *
      * This allows algorithms to interoperate with future types from other

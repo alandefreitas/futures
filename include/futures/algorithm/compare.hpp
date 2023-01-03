@@ -9,14 +9,14 @@
 #define FUTURES_ALGORITHM_COMPARE_HPP
 
 /**
- *  @dir algorithm/comparisons
+ *  @dir algorithm/compare
  *  @brief Root comparisons directory
  *  @details This directory contains all headers related to the algorithm
  *  comparisons module.
  */
 
 /**
- *  @file algorithm/comparisons.hpp
+ *  @file algorithm/compare.hpp
  *  @brief All comparisons
  *
  *  Use this header to include all functionalities of the algorithm comparisons

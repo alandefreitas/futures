@@ -25,10 +25,18 @@ namespace futures {
 
     /// Make a placeholder future object that is ready at construction
     /**
-     *  @param value The value for the new future
      *  @return A future associated with the shared state that is created.
      *
      *  @see https://en.cppreference.com/w/cpp/experimental/make_ready_future
+     */
+    inline basic_future<void, future_options<>>
+    make_ready_future() {
+        return detail::make_ready_future_impl{}.make_ready_future();
+    }
+
+    /// @copydoc make_ready_future
+    /**
+     * @param value The value for the new future
      */
     template <class T>
     basic_future<typename std::decay_t<T>, future_options<>>
@@ -38,17 +46,14 @@ namespace futures {
     }
 
     /// @copydoc make_ready_future
+    /**
+     * @param value The value for the new future
+     */
     template <class T>
     basic_future<T &, future_options<>>
     make_ready_future(std::reference_wrapper<T> value) {
         return detail::make_ready_future_impl{}.template make_ready_future<T>(
             value);
-    }
-
-    /// @copydoc make_ready_future
-    inline basic_future<void, future_options<>>
-    make_ready_future() {
-        return detail::make_ready_future_impl{}.make_ready_future();
     }
 
     /// Make a placeholder future object that is ready with an exception

@@ -26,8 +26,8 @@ namespace futures {
 
     /// Specifies state of a future
     /**
-     * Specifies state of a future as returned by @ref wait_for and
-     * @ref wait_until functions of @ref basic_future.
+     * Specifies state of a future as returned by `wait_for` and
+     * `wait_until` functions of @ref basic_future.
      */
     enum class future_status
     {

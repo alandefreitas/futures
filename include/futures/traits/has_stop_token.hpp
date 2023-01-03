@@ -12,7 +12,7 @@
  *  @file traits/has_stop_token.hpp
  *  @brief `has_stop_token` trait
  *
- *  This file defines the @ref has_stop_token trait.
+ *  This file defines the has_stop_token trait.
  */
 
 #include <futures/config.hpp>
@@ -43,7 +43,7 @@ namespace futures {
      * member functions.
      *
      * @see
-     *      @li @ref is_stoppable
+     *      @li is_stoppable
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

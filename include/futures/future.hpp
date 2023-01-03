@@ -160,12 +160,12 @@ namespace futures {
 #endif
     {
     private:
-        /**
+        /*
          * Private types
          */
 
-        /// The traits for the shared state
-        /**
+        // The traits for the shared state
+        /*
          * We remove shared_opt from operation state traits because there's
          * no difference in their internal implementation. The difference
          * is in the future, which needs to choose between inline storage or
@@ -177,8 +177,8 @@ namespace futures {
             !operation_state_options::is_shared,
             "The underlying operation state cannot be shared");
 
-        /// Determine type of inline operation state
-        /**
+        // Determine type of inline operation state
+        /*
          * A future that is always deferred needs to store the function type
          * beyond the state type. The extended operation state with information
          * about the function type is implemented through the deferred operation
@@ -186,27 +186,21 @@ namespace futures {
          *
          * @tparam is_always_deferred whether the future is always deferred
          */
-        template <bool is_always_deferred>
-        struct operation_state_type_impl {
-            using type = std::conditional_t<
-                is_always_deferred,
-                // Type with complete information about the task
-                detail::deferred_operation_state<R, operation_state_options>,
-                // Type to be shared, task is erased
-                detail::operation_state<R, operation_state_options>>;
-        };
-
         static constexpr bool inline_op_state = Options::is_always_deferred
                                                 && !Options::is_shared;
 
-        using operation_state_type = typename operation_state_type_impl<
-            inline_op_state>::type;
+        using operation_state_type = std::conditional_t<
+            inline_op_state,
+            // Type with complete information about the task
+            detail::deferred_operation_state<R, operation_state_options>,
+            // Type to be shared, task is erased
+            detail::operation_state<R, operation_state_options>>;
 
-        /// Determine the shared state type, whenever it needs to be shared
+        // Determine the shared state type, whenever it needs to be shared
         using shared_state_type = std::shared_ptr<operation_state_type>;
 
-        /// Determine the future state type
-        /**
+        // Determine the future state type
+        /*
          * The future state is a variant type the might hold no state, inline
          * value storage, an operation state, or a shared state.
          *
@@ -215,41 +209,35 @@ namespace futures {
          */
         using future_state_type = detail::variant_state<R, operation_state_type>;
 
-
-        /// Determine the base operation state type
-        /**
+        // Determine the base operation state type
+        /*
          * The base operation state implementation type is where the
          * notification handle lives, so we can also expose it in the future
          * type.
          */
         using operation_state_base = detail::operation_state_base;
 
-        /// Determine the type of notification handles
-        /**
+        // Determine the type of notification handles
+        /*
          * Notification handles are used to allow external condition variables
          * to wait for a future value.
          */
         using notify_when_ready_handle = typename operation_state_base::
             notify_when_ready_handle;
 
-        /// Determine the type of this basic future when shared
+        // Determine the type of this basic future when shared
         using shared_basic_future = basic_future<
             R,
             detail::append_future_option_t<shared_opt, Options>>;
 
-        /**
-         * @}
-         */
-
 #ifndef FUTURES_DOXYGEN
-        /**
-         * @name Friend types
+        /*
+         * Friend types
          *
          * Future types need to be created through other function available
          * for launching futures. These friend types have access to the
          * private basic_future constructors to achieve that.
          *
-         * @{
          */
 
         // Convert similar future types
@@ -277,23 +265,17 @@ namespace futures {
 
         // Append external waiters to future
         friend struct detail::make_ready_future_impl;
-
-        /**
-         * @}
-         */
 #endif
 
-        /**
-         * @name Private constructors
+        /*
+         * Private constructors
          *
          * Futures should be constructed through friend functions, which will
          * create a shared state for the task they launch and the future.
-         *
-         * @{
          */
 
-        /// Construct future from a shared operation state
-        /**
+        // Construct future from a shared operation state
+        /*
          * This constructor is used by @ref async and other launching functions
          * that create eager futures. It represents the traditional type of
          * shared state, also available in C++11 std::future.
@@ -313,8 +295,8 @@ namespace futures {
         explicit basic_future(shared_state_type const &s) noexcept
             : state_{ s } {}
 
-        /// Construct future from an rvalue shared operation state
-        /**
+        // Construct future from an rvalue shared operation state
+        /*
          * This constructor is used by @ref async and other launching functions
          * that create eager futures. It represents the traditional type of
          * shared state, also available in C++11 std::future.
@@ -334,8 +316,8 @@ namespace futures {
         explicit basic_future(shared_state_type &&s) noexcept
             : state_{ std::move(s) } {}
 
-        /// Construct from an inline operation state
-        /**
+        // Construct from an inline operation state
+        /*
          * This constructor is mostly used by @ref schedule and other scheduling
          * functions that create deferred futures. It represents an operation
          * state that is not-shared, which makes it more efficient in terms
@@ -363,8 +345,8 @@ namespace futures {
         explicit basic_future(operation_state_type &&op) noexcept
             : state_{ std::move(op) } {}
 
-        /// Construct from an direct operation state storage
-        /**
+        // Construct from an direct operation state storage
+        /*
          * This constructor is used by @ref make_ready_future and other
          * functions that create futures objects holding values that might be
          * already known at construction. These future objects are often
@@ -380,8 +362,8 @@ namespace futures {
         explicit basic_future(detail::operation_state_storage<R> &&op) noexcept
             : state_{ std::move(op) } {}
 
-        /// Construct future from a variant future operation state
-        /**
+        // Construct future from a variant future operation state
+        /*
          * This constructor is used by any function that might create a future
          * from another future, where the variant state is already constructed.
          *
@@ -392,8 +374,8 @@ namespace futures {
         explicit basic_future(future_state_type const &s) noexcept
             : state_{ s } {}
 
-        /// Construct future from an rvalue variant future operation state
-        /**
+        // Construct future from an rvalue variant future operation state
+        /*
          * This constructor is used by any function that might create a future
          * from another future, where the variant state is already constructed.
          *
@@ -404,8 +386,8 @@ namespace futures {
         explicit basic_future(future_state_type &&s) noexcept
             : state_{ std::move(s) } {}
 
-        /// Construct a ready future from a value_type
-        /**
+        // Construct a ready future from a value_type
+        /*
          * This constructor is used by any function that might create a future
          * that's already ready.
          *
@@ -413,27 +395,14 @@ namespace futures {
          *
          * @param v Future value
          */
-#ifdef FUTURES_HAS_CONCEPTS
-        template <std::same_as<R> T>
-        requires std::negation_v<std::is_void<R>>
-#else
-        template <
-            class T,
-            std::enable_if_t<
-                detail::is_same_v<T, R> && !detail::is_void_v<R>,
-                int>
-            = 0>
-#endif
-        explicit basic_future(T &&v) noexcept
+        FUTURES_TEMPLATE(class T)
+        (requires detail::is_same_v<T, R>
+         && (!detail::is_void_v<R>) ) explicit basic_future(T &&v) noexcept
             : state_{
                 detail::in_place_type_t<detail::operation_state_storage<R>>{},
                 std::forward<T>(v)
-            } {
-        }
+            } {}
 
-        /**
-         * @}
-         */
     public:
         /// @name Public types
         /// @{

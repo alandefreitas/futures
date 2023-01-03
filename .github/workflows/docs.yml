@@ -36,17 +36,32 @@ jobs:
           committer_email: alandefreitas@gmail.com
         continue-on-error: true
 
+      - name: Inspect doxygen version
+        id: doxygen-hash
+        run: echo "hash=$(git ls-remote https://github.com/doxygen/doxygen master | awk '{ print $1 }')" >> $GITHUB_OUTPUT
+
+      - name: Doxygen cache
+        id: cache-doxygen
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/doxygen
+          key: ${{ steps.doxygen-hash.outputs.hash }}
+
       - name: Install doxygen
+        if: steps.cache-doxygen.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y doxygen
+          git clone -b 'master' --depth 1 https://github.com/doxygen/doxygen.git
+          cd doxygen
+          cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
+          cd build
+          sudo make install
+          doxygen --version
 
       - name: Inspect doxybook version
         id: doxybook-hash
         run: echo "hash=$(git ls-remote https://github.com/alandefreitas/doxybook ${{ steps.environment.outputs.default_branch }} | awk '{ print $1 }')" >> $GITHUB_OUTPUT
 
       - name: Doxybook cache
-        if: ${{ !matrix.config.use_bundled }}
         id: cache-doxybook
         uses: actions/cache@v3
         with:
@@ -65,7 +80,7 @@ jobs:
           sudo cmake --install .
 
       - name: Generate doxygen XML
-        run: doxygen
+        run: doxygen | egrep -i '(warning|error):\s*:' || true
         working-directory: ./docs
 
       - name: Generate Doxybook Reference
