@@ -17,7 +17,7 @@
  */
 
 #include <futures/algorithm/find_if.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>

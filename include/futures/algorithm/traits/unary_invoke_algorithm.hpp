@@ -23,7 +23,9 @@
  *  @see https://en.cppreference.com/w/cpp/ranges/view
  */
 
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/default_partitioner.hpp>
+#include <futures/algorithm/partitioner/halve_partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_unary_invocable.hpp>
 #include <futures/algorithm/traits/is_input_range.hpp>
@@ -167,7 +169,8 @@ namespace futures {
             class Fun,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
                     && detail::is_copy_constructible_v<Fun>,
                 int>
@@ -203,7 +206,8 @@ namespace futures {
             class Fun,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_unary_invocable_v<Fun, iterator_t<R>>
                     && detail::is_copy_constructible_v<Fun>,
                 int>

@@ -25,7 +25,10 @@
  */
 
 // #glob <futures/algorithm/partitioner/*.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/default_partitioner.hpp>
+#include <futures/algorithm/partitioner/halve_partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
+#include <futures/algorithm/partitioner/thread_partitioner.hpp>
 
 
 #endif // FUTURES_ALGORITHM_PARTITIONER_HPP

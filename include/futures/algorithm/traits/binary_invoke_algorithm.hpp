@@ -22,7 +22,10 @@
  *  This file defines the `binary_invoke_algorithm` trait.
  */
 
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/config.hpp>
+#include <futures/algorithm/partitioner/default_partitioner.hpp>
+#include <futures/algorithm/partitioner/halve_partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/is_input_range.hpp>
@@ -281,7 +284,8 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_convertible_to_v<T, range_value_t<R>>
                     && is_indirectly_binary_invocable_v<
                         Fun,
@@ -336,7 +340,8 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_convertible_to_v<T, range_value_t<R>>
                     && is_indirectly_binary_invocable_v<
                         Fun,
@@ -390,7 +395,8 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         Fun,
                         iterator_t<R>,
@@ -432,7 +438,8 @@ namespace futures {
             class Fun = std::plus<>,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         Fun,
                         iterator_t<R>,

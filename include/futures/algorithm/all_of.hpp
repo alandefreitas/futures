@@ -19,7 +19,7 @@
 #include <futures/future.hpp>
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/traits/is_bidirectional_iterator.hpp>
 #include <futures/algorithm/traits/is_derived_from.hpp>
 #include <futures/algorithm/traits/is_range.hpp>

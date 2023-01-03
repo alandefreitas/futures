@@ -18,7 +18,7 @@
 
 #include <futures/algorithm/compare/equal_to.hpp>
 #include <futures/algorithm/count_if.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>

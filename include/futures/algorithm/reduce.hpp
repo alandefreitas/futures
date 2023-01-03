@@ -19,7 +19,7 @@
 #include <futures/future.hpp>
 #include <futures/is_ready.hpp>
 #include <futures/launch.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/traits/binary_invoke_algorithm.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/iter_difference.hpp>

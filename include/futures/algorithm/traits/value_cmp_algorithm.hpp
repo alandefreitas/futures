@@ -25,9 +25,12 @@
  */
 
 #include <futures/algorithm/compare/equal_to.hpp>
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/halve_partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/policies.hpp>
 #include <futures/algorithm/traits/is_indirectly_binary_invocable.hpp>
+#include <futures/algorithm/traits/is_input_range.hpp>
+#include <futures/algorithm/traits/iterator.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/algorithm/detail/execution.hpp>
@@ -173,7 +176,8 @@ namespace futures {
             class T,
             std::enable_if_t<
                 is_executor_v<E> && !is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         equal_to,
                         T *,
@@ -216,7 +220,8 @@ namespace futures {
             class T,
             std::enable_if_t<
                 !is_executor_v<E> && is_execution_policy_v<E>
-                    && is_partitioner_for_v<P, iterator_t<R>> && is_input_range_v<R>
+                    && is_partitioner_for_v<P, iterator_t<R>>
+                    && is_input_range_v<R>
                     && is_indirectly_binary_invocable_v<
                         equal_to,
                         T *,
@@ -284,7 +289,10 @@ namespace futures {
 
         /// Execute the algorithm on a range with the default executor
 #ifdef FUTURES_HAS_CONCEPTS
-        template <std::ranges::range R, partitioner_for<std::ranges::iterator_t<R>> P, class T>
+        template <
+            std::ranges::range R,
+            partitioner_for<std::ranges::iterator_t<R>> P,
+            class T>
         requires std::indirect_binary_predicate<
             std::ranges::equal_to,
             std::ranges::iterator_t<R>,

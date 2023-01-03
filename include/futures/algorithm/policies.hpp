@@ -24,7 +24,8 @@
  *  @see https://en.cppreference.com/w/cpp/ranges/view
  */
 
-#include <futures/algorithm/partitioner/partitioner.hpp>
+#include <futures/algorithm/partitioner/partitioner_for.hpp>
+#include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/executor/default_executor.hpp>
 #include <futures/executor/inline_executor.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>

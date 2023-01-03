@@ -2,7 +2,6 @@
 //
 #include <futures/packaged_task.hpp>
 #include <futures/promise.hpp>
-#include <futures/detail/deps/asio/post.hpp>
 #include <catch2/catch.hpp>
 #include <array>
 
