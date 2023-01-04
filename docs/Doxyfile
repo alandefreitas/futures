@@ -14,9 +14,19 @@ RECURSIVE = YES
 EXCLUDE = ./../include/futures/impl \
           ./../include/futures/detail \
           ./../include/futures/adaptor/detail \
+          ./../include/futures/adaptor/impl \
           ./../include/futures/algorithm/detail \
+          ./../include/futures/algorithm/impl \
+          ./../include/futures/algorithm/compare/detail \
+          ./../include/futures/algorithm/compare/impl \
+          ./../include/futures/algorithm/partitioner/detail \
+          ./../include/futures/algorithm/partitioner/impl \
           ./../include/futures/algorithm/traits/detail \
+          ./../include/futures/algorithm/traits/impl \
           ./../include/futures/executor/detail \
+          ./../include/futures/executor/impl \
+          ./../include/futures/traits/detail \
+          ./../include/futures/traits/impl \
           ./../include/futures/futures/detail
 FILE_PATTERNS = *.hpp
 EXCLUDE_SYMBOLS = "std" "asio" "detail" "futures::detail" "detail::*" "futures::detail::*" "boost" "*_graph" "A" "Enable" "Proxy"
