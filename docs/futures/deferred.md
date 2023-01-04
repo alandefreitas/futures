@@ -31,7 +31,7 @@ state inline and no synchronization cost to attach continuations.
     ```
     
     - The library achieves a similar overhead for eager and deferred futures, with 
-      deferred futures being 0.0089 faster.
+      deferred futures being 1.00719 faster.
     - Most overhead comes from the executor, which is a thread pool in this example
     - Invoking the task directly or through the inline executor has a similar cost
 
