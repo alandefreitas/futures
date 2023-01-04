@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1has__ready__notifier" kind="struct" language="C++" prot="public">
+    <compoundname>futures::has_ready_notifier</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes refid="has__ready__notifier_8hpp" local="no">has_ready_notifier.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Customization point to determine if a type has a ready notifier. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The ready notifier is an external handle used to identify when the future is ready. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::has_ready_notifier&lt; typename &gt;</label>
+        <link refid="structfutures_1_1has__ready__notifier"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::has_ready_notifier&lt; typename &gt;</label>
+        <link refid="structfutures_1_1has__ready__notifier"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/traits/has_ready_notifier.hpp" line="38" column="5" bodyfile="futures/traits/has_ready_notifier.hpp" bodystart="38" bodyend="38"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

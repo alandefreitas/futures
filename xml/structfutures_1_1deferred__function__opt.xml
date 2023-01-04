@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1deferred__function__opt" kind="struct" language="C++" prot="public">
+    <compoundname>futures::deferred_function_opt</compoundname>
+    <includes refid="future__options__args_8hpp" local="no">future_options_args.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Function</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structfutures_1_1deferred__function__opt_1a9b198ed0e3a16a7fa8dc11386fcca9ec" prot="public" static="no">
+        <type>Function</type>
+        <definition>using futures::deferred_function_opt&lt; Function &gt;::type =  Function</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>futures::deferred_function_opt::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future_options_args.hpp" line="82" column="9" bodyfile="futures/future_options_args.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Type of the deferred function. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/future_options_args.hpp" line="81" column="5" bodyfile="futures/future_options_args.hpp" bodystart="81" bodyend="83"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1deferred__function__opt_1a9b198ed0e3a16a7fa8dc11386fcca9ec" prot="public" virt="non-virtual"><scope>futures::deferred_function_opt</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

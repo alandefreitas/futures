@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="conceptfutures_1_1future__like" kind="concept">
+    <compoundname>futures::future_like</compoundname>
+    <includes refid="is__future__like_8hpp" local="no">is_future_like.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;class T&gt;
+concept <ref refid="conceptfutures_1_1future__like" kindref="compound">futures::future_like</ref> =  is_future_like_v&lt;std::decay_t&lt;T&gt;&gt;    </initializer>
+    <briefdescription>
+<para>A class is considered future-like when 1) it specializes the <computeroutput>is_future_like</computeroutput> trait to indicate it is a future type, or 2) it has the a <computeroutput>get()</computeroutput> function to obtain its future value. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>An object with the common members of a future.</para>
+<para>This allows algorithms to interoperate with future types from other libraries.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type being tested for conformance to the future_like concept. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="futures/traits/is_future_like.hpp" line="91" column="5"/>
+  </compounddef>
+</doxygen>

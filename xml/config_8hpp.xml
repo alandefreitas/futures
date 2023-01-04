@@ -1,0 +1,1164 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="config_8hpp" kind="file" language="C++">
+    <compoundname>config.hpp</compoundname>
+    <includes local="no">futures/detail/config.hpp</includes>
+    <includes local="no">futures/impl/config.hpp</includes>
+    <includedby refid="then_8hpp" local="no">futures/adaptor/then.hpp</includedby>
+    <includedby refid="when__all_8hpp" local="no">futures/adaptor/when_all.hpp</includedby>
+    <includedby refid="compare__three__way_8hpp" local="no">futures/algorithm/compare/compare_three_way.hpp</includedby>
+    <includedby refid="equal__to_8hpp" local="no">futures/algorithm/compare/equal_to.hpp</includedby>
+    <includedby refid="less_8hpp" local="no">futures/algorithm/compare/less.hpp</includedby>
+    <includedby refid="partial__ordering_8hpp" local="no">futures/algorithm/compare/partial_ordering.hpp</includedby>
+    <includedby refid="strong__ordering_8hpp" local="no">futures/algorithm/compare/strong_ordering.hpp</includedby>
+    <includedby refid="weak__ordering_8hpp" local="no">futures/algorithm/compare/weak_ordering.hpp</includedby>
+    <includedby refid="default__partitioner_8hpp" local="no">futures/algorithm/partitioner/default_partitioner.hpp</includedby>
+    <includedby refid="halve__partitioner_8hpp" local="no">futures/algorithm/partitioner/halve_partitioner.hpp</includedby>
+    <includedby refid="partitioner__for_8hpp" local="no">futures/algorithm/partitioner/partitioner_for.hpp</includedby>
+    <includedby refid="thread__partitioner_8hpp" local="no">futures/algorithm/partitioner/thread_partitioner.hpp</includedby>
+    <includedby refid="binary__invoke__algorithm_8hpp" local="no">futures/algorithm/traits/binary_invoke_algorithm.hpp</includedby>
+    <includedby refid="common__comparison__category_8hpp" local="no">futures/algorithm/traits/common_comparison_category.hpp</includedby>
+    <includedby refid="is__bidirectional__iterator_8hpp" local="no">futures/algorithm/traits/is_bidirectional_iterator.hpp</includedby>
+    <includedby refid="is__equality__comparable_8hpp" local="no">futures/algorithm/traits/is_equality_comparable.hpp</includedby>
+    <includedby refid="is__forward__iterator_8hpp" local="no">futures/algorithm/traits/is_forward_iterator.hpp</includedby>
+    <includedby refid="is__random__access__iterator_8hpp" local="no">futures/algorithm/traits/is_random_access_iterator.hpp</includedby>
+    <includedby refid="is__three__way__comparable_8hpp" local="no">futures/algorithm/traits/is_three_way_comparable.hpp</includedby>
+    <includedby refid="is__three__way__comparable__with_8hpp" local="no">futures/algorithm/traits/is_three_way_comparable_with.hpp</includedby>
+    <includedby refid="error_8hpp" local="no">futures/error.hpp</includedby>
+    <includedby refid="default__executor_8hpp" local="no">futures/executor/default_executor.hpp</includedby>
+    <includedby refid="execute_8hpp" local="no">futures/executor/execute.hpp</includedby>
+    <includedby refid="hardware__concurrency_8hpp" local="no">futures/executor/hardware_concurrency.hpp</includedby>
+    <includedby refid="inline__executor_8hpp" local="no">futures/executor/inline_executor.hpp</includedby>
+    <includedby refid="is__execution__context_8hpp" local="no">futures/executor/is_execution_context.hpp</includedby>
+    <includedby refid="is__executor_8hpp" local="no">futures/executor/is_executor.hpp</includedby>
+    <includedby refid="new__thread__executor_8hpp" local="no">futures/executor/new_thread_executor.hpp</includedby>
+    <includedby refid="thread__pool_8hpp" local="no">futures/executor/thread_pool.hpp</includedby>
+    <includedby refid="futures_8hpp" local="no">futures/futures.hpp</includedby>
+    <includedby refid="is__ready_8hpp" local="no">futures/is_ready.hpp</includedby>
+    <includedby refid="launch_8hpp" local="no">futures/launch.hpp</includedby>
+    <includedby refid="packaged__task_8hpp" local="no">futures/packaged_task.hpp</includedby>
+    <includedby refid="stop__token_8hpp" local="no">futures/stop_token.hpp</includedby>
+    <includedby refid="throw_8hpp" local="no">futures/throw.hpp</includedby>
+    <includedby refid="future__value_8hpp" local="no">futures/traits/future_value.hpp</includedby>
+    <includedby refid="has__executor_8hpp" local="no">futures/traits/has_executor.hpp</includedby>
+    <includedby refid="has__ready__notifier_8hpp" local="no">futures/traits/has_ready_notifier.hpp</includedby>
+    <includedby refid="has__stop__token_8hpp" local="no">futures/traits/has_stop_token.hpp</includedby>
+    <includedby refid="is__always__deferred_8hpp" local="no">futures/traits/is_always_deferred.hpp</includedby>
+    <includedby refid="is__continuable_8hpp" local="no">futures/traits/is_continuable.hpp</includedby>
+    <includedby refid="is__future__like_8hpp" local="no">futures/traits/is_future_like.hpp</includedby>
+    <includedby refid="is__shared__future_8hpp" local="no">futures/traits/is_shared_future.hpp</includedby>
+    <includedby refid="is__stoppable_8hpp" local="no">futures/traits/is_stoppable.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="3">
+        <label>futures/impl/config.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>futures/adaptor.hpp</label>
+        <link refid="adaptor_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>futures/adaptor/bind_executor_to_lambda.hpp</label>
+        <link refid="bind__executor__to__lambda_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/adaptor/then.hpp</label>
+        <link refid="then_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures/adaptor/when_all.hpp</label>
+        <link refid="when__all_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>futures/adaptor/when_any.hpp</label>
+        <link refid="when__any_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures/algorithm.hpp</label>
+        <link refid="algorithm_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>futures/algorithm/all_of.hpp</label>
+        <link refid="all__of_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>futures/algorithm/any_of.hpp</label>
+        <link refid="any__of_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/compare.hpp</label>
+        <link refid="compare_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/compare/compare_three_way.hpp</label>
+        <link refid="compare__three__way_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/compare/equal_to.hpp</label>
+        <link refid="equal__to_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>futures/algorithm/compare/greater.hpp</label>
+        <link refid="greater_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>futures/algorithm/compare/greater_equal.hpp</label>
+        <link refid="greater__equal_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>futures/algorithm/compare/less.hpp</label>
+        <link refid="less_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>futures/algorithm/compare/less_equal.hpp</label>
+        <link refid="less__equal_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>futures/algorithm/compare/not_equal_to.hpp</label>
+        <link refid="not__equal__to_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>futures/algorithm/compare/partial_ordering.hpp</label>
+        <link refid="partial__ordering_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>futures/algorithm/compare/strong_ordering.hpp</label>
+        <link refid="strong__ordering_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>futures/algorithm/compare/weak_ordering.hpp</label>
+        <link refid="weak__ordering_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>futures/algorithm/count.hpp</label>
+        <link refid="count_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>futures/algorithm/count_if.hpp</label>
+        <link refid="count__if_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>futures/algorithm/find.hpp</label>
+        <link refid="find_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>futures/algorithm/find_if.hpp</label>
+        <link refid="find__if_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>futures/algorithm/find_if_not.hpp</label>
+        <link refid="find__if__not_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>futures/algorithm/for_each.hpp</label>
+        <link refid="for__each_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>futures/algorithm/none_of.hpp</label>
+        <link refid="none__of_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>futures/algorithm/partitioner.hpp</label>
+        <link refid="partitioner_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>futures/algorithm/partitioner/default_partitioner.hpp</label>
+        <link refid="default__partitioner_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>futures/algorithm/partitioner/halve_partitioner.hpp</label>
+        <link refid="halve__partitioner_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>futures/algorithm/partitioner/partitioner_for.hpp</label>
+        <link refid="partitioner__for_8hpp"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>futures/algorithm/partitioner/thread_partitioner.hpp</label>
+        <link refid="thread__partitioner_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>futures/algorithm/policies.hpp</label>
+        <link refid="policies_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>futures/algorithm/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>futures/algorithm/traits.hpp</label>
+        <link refid="algorithm_2traits_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>futures/algorithm/traits/binary_invoke_algorithm.hpp</label>
+        <link refid="binary__invoke__algorithm_8hpp"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>futures/algorithm/traits/common_comparison_category.hpp</label>
+        <link refid="common__comparison__category_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>futures/algorithm/traits/is_bidirectional_iterator.hpp</label>
+        <link refid="is__bidirectional__iterator_8hpp"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>futures/algorithm/traits/is_equality_comparable.hpp</label>
+        <link refid="is__equality__comparable_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>futures/algorithm/traits/is_equality_comparable_with.hpp</label>
+        <link refid="is__equality__comparable__with_8hpp"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>futures/algorithm/traits/is_forward_iterator.hpp</label>
+        <link refid="is__forward__iterator_8hpp"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>futures/algorithm/traits/is_incrementable.hpp</label>
+        <link refid="is__incrementable_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>futures/algorithm/traits/is_random_access_iterator.hpp</label>
+        <link refid="is__random__access__iterator_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>futures/algorithm/traits/is_regular.hpp</label>
+        <link refid="is__regular_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>futures/algorithm/traits/is_three_way_comparable.hpp</label>
+        <link refid="is__three__way__comparable_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>futures/algorithm/traits/is_three_way_comparable_with.hpp</label>
+        <link refid="is__three__way__comparable__with_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>futures/algorithm/traits/is_totally_ordered.hpp</label>
+        <link refid="is__totally__ordered_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>futures/algorithm/traits/is_totally_ordered_with.hpp</label>
+        <link refid="is__totally__ordered__with_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>futures/algorithm/traits/unary_invoke_algorithm.hpp</label>
+        <link refid="unary__invoke__algorithm_8hpp"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>futures/algorithm/traits/value_cmp_algorithm.hpp</label>
+        <link refid="value__cmp__algorithm_8hpp"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>futures/await.hpp</label>
+        <link refid="await_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>futures/error.hpp</label>
+        <link refid="error_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>futures/executor.hpp</label>
+        <link refid="executor_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>futures/executor/default_executor.hpp</label>
+        <link refid="default__executor_8hpp"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>futures/executor/execute.hpp</label>
+        <link refid="execute_8hpp"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>futures/executor/hardware_concurrency.hpp</label>
+        <link refid="hardware__concurrency_8hpp"/>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>futures/executor/inline_executor.hpp</label>
+        <link refid="inline__executor_8hpp"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>futures/executor/is_execution_context.hpp</label>
+        <link refid="is__execution__context_8hpp"/>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>futures/executor/is_executor.hpp</label>
+        <link refid="is__executor_8hpp"/>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>futures/executor/new_thread_executor.hpp</label>
+        <link refid="new__thread__executor_8hpp"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>futures/executor/thread_pool.hpp</label>
+        <link refid="thread__pool_8hpp"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>futures/future.hpp</label>
+        <link refid="future_8hpp"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>futures/future_options.hpp</label>
+        <link refid="future__options_8hpp"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+      <node id="54">
+        <label>futures/is_ready.hpp</label>
+        <link refid="is__ready_8hpp"/>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>futures/launch.hpp</label>
+        <link refid="launch_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>futures/packaged_task.hpp</label>
+        <link refid="packaged__task_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>futures/promise.hpp</label>
+        <link refid="promise_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>futures/stop_token.hpp</label>
+        <link refid="stop__token_8hpp"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>futures/throw.hpp</label>
+        <link refid="throw_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>futures/traits.hpp</label>
+        <link refid="traits_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>futures/traits/future_value.hpp</label>
+        <link refid="future__value_8hpp"/>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>futures/traits/has_executor.hpp</label>
+        <link refid="has__executor_8hpp"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="74">
+        <label>futures/traits/has_ready_notifier.hpp</label>
+        <link refid="has__ready__notifier_8hpp"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>futures/traits/has_stop_token.hpp</label>
+        <link refid="has__stop__token_8hpp"/>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>futures/traits/is_always_deferred.hpp</label>
+        <link refid="is__always__deferred_8hpp"/>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>futures/traits/is_continuable.hpp</label>
+        <link refid="is__continuable_8hpp"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>futures/traits/is_future_like.hpp</label>
+        <link refid="is__future__like_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>futures/traits/is_shared_future.hpp</label>
+        <link refid="is__shared__future_8hpp"/>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="82">
+        <label>futures/traits/is_stoppable.hpp</label>
+        <link refid="is__stoppable_8hpp"/>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>futures/wait_for_all.hpp</label>
+        <link refid="wait__for__all_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>futures/wait_for_any.hpp</label>
+        <link refid="wait__for__any_8hpp"/>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" prot="public" static="no">
+        <name>FUTURES_HAS_STANDALONE_ASIO</name>
+        <briefdescription>
+<para>Macro used to indicate standalone asio is available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This macro can be defined to indicate the standalone version of Asio is available.</para>
+<para>If both the standalone and the Boost versions of Asio are available, the standalone version is preferred unless <ref refid="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" kindref="member">FUTURES_PREFER_BOOST</ref> is defined.</para>
+<para>If both the standalone and the Boost versions of Asio are unavailable, a bundled version of the subset of Asio required by library is used.</para>
+<para><simplesect kind="par"><title>Default value</title><para>In C++17, this macro is determined by the availability of the <computeroutput>asio.hpp</computeroutput> header.</para>
+</simplesect>
+When using the CMake package, the <computeroutput>futures</computeroutput> target will already define this macro if appropriate.</para>
+<para>In all other cases, the macro is undefined by default. If standalone Asio is available, it should be defined manually.</para>
+<para><simplesect kind="par"><title>References</title><para><itemizedlist>
+<listitem><para><ulink url="https://think-async.com/Asio/">Asio</ulink> </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="48" column="13" bodyfile="futures/config.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" prot="public" static="no">
+        <name>FUTURES_HAS_BOOST</name>
+        <briefdescription>
+<para>Macro used to indicate Boost is available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This macro can be defined to indicate that Boost is available as a dependency.</para>
+<para>If both the standalone and the Boost versions of Asio are available, the standalone version is preferred unless <ref refid="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" kindref="member">FUTURES_PREFER_BOOST</ref> is defined.</para>
+<para>If both the standalone and the Boost versions of Asio are unavailable, a bundled version of the subset of Boost required by library is used.</para>
+<para><simplesect kind="par"><title>Default value</title><para></para>
+</simplesect>
+In C++17, this macro is determined by the availability of the <computeroutput>asio.hpp</computeroutput> header.</para>
+<para>When using the CMake package, the <computeroutput>futures</computeroutput> target will already define this macro if appropriate.</para>
+<para>In all other cases, the macro is undefined by default. If standalone Asio is available, it should be defined manually.</para>
+<para><simplesect kind="par"><title>References</title><para><itemizedlist>
+<listitem><para><ulink url="https://www.boost.org/">Boost</ulink> </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="76" column="13" bodyfile="futures/config.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1aee57248b1b744817f4a2b02507b93d91" prot="public" static="no">
+        <name>FUTURES_PREFER_STANDALONE_ASIO</name>
+        <briefdescription>
+<para>Macro used to indicate we prefer using standalone Asio over Boost.Asio. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This macro can be defined to indicate that we should prefer standalone Asio over Boost whenever standalone Asio is available.</para>
+<para>If both the standalone and the Boost versions of Asio are available, this macro ensure the standalone version is used.</para>
+<para>The availability of standalone Asio and Boost.Asio can be indicated with the <ref refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kindref="member">FUTURES_HAS_STANDALONE_ASIO</ref> and <ref refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kindref="member">FUTURES_HAS_BOOST</ref> macros.</para>
+<para><simplesect kind="par"><title>Default value</title><para></para>
+</simplesect>
+In C++17, this macro is defined whenever <ref refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kindref="member">FUTURES_HAS_STANDALONE_ASIO</ref> is defined and <ref refid="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" kindref="member">FUTURES_PREFER_BOOST</ref> is undefined.</para>
+<para>When using the CMake package, the <computeroutput>futures</computeroutput> target will already define this macro when standalone Asio is available.</para>
+<para>In all other cases, the macro is undefined by default. If standalone Asio is available, it should be defined manually.</para>
+<para>If both <ref refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kindref="member">FUTURES_HAS_STANDALONE_ASIO</ref> and <ref refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kindref="member">FUTURES_HAS_BOOST</ref> are undefined, a bundled subset of Boost dependencies required by the library is used.</para>
+<para><simplesect kind="par"><title>References</title><para><itemizedlist>
+<listitem><para><ulink url="https://think-async.com/Asio/">Asio</ulink> </para>
+</listitem>
+<listitem><para><ulink url="https://www.boost.org/">Boost</ulink> </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="109" column="13" bodyfile="futures/config.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" prot="public" static="no">
+        <name>FUTURES_PREFER_BOOST</name>
+        <briefdescription>
+<para>Macro used to indicate we prefer using Boost.Asio over standalone Asio. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This macro can be defined to indicate that we should prefer Boost.Asio over standalone Asio over Boost whenever standalone Boost is available.</para>
+<para>If both the standalone and the Boost versions of Asio are available, this macro ensure the Boost version is used.</para>
+<para>The availability of standalone Asio and Boost.Asio can be indicated with the <ref refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kindref="member">FUTURES_HAS_STANDALONE_ASIO</ref> and <ref refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kindref="member">FUTURES_HAS_BOOST</ref> macros.</para>
+<para><simplesect kind="par"><title>Default value</title><para></para>
+</simplesect>
+In C++17, this macro is defined whenever <ref refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kindref="member">FUTURES_HAS_BOOST</ref> is defined and <ref refid="config_8hpp_1aee57248b1b744817f4a2b02507b93d91" kindref="member">FUTURES_PREFER_STANDALONE_ASIO</ref> is undefined.</para>
+<para>When using the CMake package, the <computeroutput>futures</computeroutput> target will already define this macro when standalone Asio is unavailable.</para>
+<para>In all other cases, the macro is undefined by default. If Boost is available, it should be defined manually.</para>
+<para>If both <ref refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kindref="member">FUTURES_HAS_STANDALONE_ASIO</ref> and <ref refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kindref="member">FUTURES_HAS_BOOST</ref> are undefined, a bundled subset of Boost dependencies required by the library is used.</para>
+<para><simplesect kind="par"><title>References</title><para><itemizedlist>
+<listitem><para><ulink url="https://think-async.com/Asio/">Asio</ulink> </para>
+</listitem>
+<listitem><para><ulink url="https://www.boost.org/">Boost</ulink> </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="142" column="13" bodyfile="futures/config.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1a1411791fc0bb5c82a23e24a875e9a5d2" prot="public" static="no">
+        <name>FUTURES_SEPARATE_COMPILATION</name>
+        <briefdescription>
+<para>Use separately compiled source code for implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>By default, Futures is a header-only library.</para>
+<para>To reduce compile times, users can also build the library using separately compiled source code.</para>
+<para>If the library is integrated with CMake, the appropriate macros should already define the appropriate macros for separate compilation.</para>
+<para>To do this without a build system, add <computeroutput>#include &lt;futures/impl/src.hpp&gt;</computeroutput> to one (and only one) source file of your program, then build the program with <computeroutput>FUTURES_SEPARATE_COMPILATION</computeroutput> defined in the project\/compiler settings.</para>
+<para>When using this library with Asio, this option is independent of the <computeroutput>ASIO_SEPARATE_COMPILATION</computeroutput> or <computeroutput>BOOST_ASIO_SEPARATE_COMPILATION</computeroutput> options. <computeroutput>FUTURES_SEPARATE_COMPILATION</computeroutput> only implies in <computeroutput>BOOST_ASIO_SEPARATE_COMPILATION</computeroutput> when both standalone Asio and Boost.Asio are unavailable and the bundled version of Asio is used. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="165" column="13" bodyfile="futures/config.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1a88c5f8bac9b8cee5d61caf298c83cf49" prot="public" static="no">
+        <name>FUTURES_NO_EXCEPTIONS</name>
+        <briefdescription>
+<para>Macro used to disable exception handling. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This macro can be defined to indicate that the library should not throw exceptions.</para>
+<para>When exceptions are disabled, the library might call <computeroutput>std::terminate</computeroutput> or a user-defined function.</para>
+<para><simplesect kind="par"><title>Default value</title><para></para>
+</simplesect>
+The macro will be automatically defined if lack of exception support is detected.</para>
+<para><simplesect kind="see"><para><ref refid="config_8hpp_1aafd86f87f4188bfabe42994ad5b2fec4" kindref="member">FUTURES_CUSTOM_EXCEPTION_HANDLE</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="183" column="13" bodyfile="futures/config.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="config_8hpp_1aafd86f87f4188bfabe42994ad5b2fec4" prot="public" static="no">
+        <name>FUTURES_CUSTOM_EXCEPTION_HANDLE</name>
+        <briefdescription>
+<para>Customize exception handling. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If <ref refid="config_8hpp_1a88c5f8bac9b8cee5d61caf298c83cf49" kindref="member">FUTURES_NO_EXCEPTIONS</ref> is defined, this macro can be defined to indicate that the library should use a custom user function to handle exceptions.</para>
+<para>The function <computeroutput>futures::handle_exception</computeroutput> should be defined to determine how exceptions will be handled.</para>
+<para><simplesect kind="par"><title>Default value</title><para></para>
+</simplesect>
+This macro is undefined by default. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/config.hpp" line="199" column="13" bodyfile="futures/config.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Public configuration macros. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This file defines public configuration macros. These are the macros the user is allowed to define to change how the library is compiled. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2022<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_CONFIG_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_CONFIG_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;futures/detail/config.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>FUTURES_DOXYGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48" refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_HAS_STANDALONE_ASIO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76" refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_HAS_BOOST</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109" refid="config_8hpp_1aee57248b1b744817f4a2b02507b93d91" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_PREFER_STANDALONE_ASIO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142" refid="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_PREFER_BOOST</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165" refid="config_8hpp_1a1411791fc0bb5c82a23e24a875e9a5d2" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_SEPARATE_COMPILATION</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="183" refid="config_8hpp_1a88c5f8bac9b8cee5d61caf298c83cf49" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_NO_EXCEPTIONS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="199" refid="config_8hpp_1aafd86f87f4188bfabe42994ad5b2fec4" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>define<sp/>FUTURES_CUSTOM_EXCEPTION_HANDLE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;futures/impl/config.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_CONFIG_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/config.hpp"/>
+  </compounddef>
+</doxygen>

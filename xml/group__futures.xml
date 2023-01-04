@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__futures" kind="group">
+    <compoundname>futures</compoundname>
+    <title>Futures</title>
+    <innergroup refid="group__future-types">Future types</innergroup>
+    <innergroup refid="group__waiting">Waiting</innergroup>
+    <innergroup refid="group__error">Error</innergroup>
+    <innergroup refid="group__future-options">Future options</innergroup>
+    <innergroup refid="group__launch">Launch</innergroup>
+    <innergroup refid="group__shared__state">Shared State</innergroup>
+    <innergroup refid="group__cancellation">Cancellation</innergroup>
+    <innergroup refid="group__future-traits">Future Traits</innergroup>
+    <briefdescription>
+<para>Basic future types and functions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The futures library provides components to create and launch futures: objects representing data that might not be available yet. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

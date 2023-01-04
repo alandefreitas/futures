@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__error" kind="group">
+    <compoundname>error</compoundname>
+    <title>Error</title>
+    <innerclass refid="classfutures_1_1error" prot="public">futures::error</innerclass>
+    <innerclass refid="classfutures_1_1broken__promise" prot="public">futures::broken_promise</innerclass>
+    <innerclass refid="classfutures_1_1future__already__retrieved" prot="public">futures::future_already_retrieved</innerclass>
+    <innerclass refid="classfutures_1_1promise__already__satisfied" prot="public">futures::promise_already_satisfied</innerclass>
+    <innerclass refid="classfutures_1_1no__state" prot="public">futures::no_state</innerclass>
+    <innerclass refid="classfutures_1_1promise__uninitialized" prot="public">futures::promise_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1packaged__task__uninitialized" prot="public">futures::packaged_task_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__uninitialized" prot="public">futures::future_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__deferred" prot="public">futures::future_deferred</innerclass>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__error_1ga6b514c11923c676167997aae802757b8" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>future_errc</name>
+        <qualifiedname>futures::future_errc</qualifiedname>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a2c6bc6062e72db1c0915032943cb6452" prot="public">
+          <name>broken_promise</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+<para>The state owner got destroyed before the promise has been fulfilled. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a829037befd349f04ff71ddea385bdb9a" prot="public">
+          <name>future_already_retrieved</name>
+          <briefdescription>
+<para>Attempted to retrieve a unique future twice. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a9327d6f7b9aca59b62b436696fd17a00" prot="public">
+          <name>promise_already_satisfied</name>
+          <briefdescription>
+<para>Promise has already been fulfilled. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8ac537dcef56fd6ff75592c0220fd3dae1" prot="public">
+          <name>no_state</name>
+          <briefdescription>
+<para>There is no shared state we can access. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a10a2ce2357c08905b322144ac783b248" prot="public">
+          <name>promise_uninitialized</name>
+          <briefdescription>
+<para>The promised hasn&apos;t been initialized yet. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8ada2a787ba1dc30bb1fdcd016be91c974" prot="public">
+          <name>packaged_task_uninitialized</name>
+          <briefdescription>
+<para>The packaged task hasn&apos;t been initialized yet. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8af7626f3bd2a01c1cf17826a6a0302d7b" prot="public">
+          <name>future_uninitialized</name>
+          <briefdescription>
+<para>The future hasn&apos;t been initialized yet. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__error_1gga6b514c11923c676167997aae802757b8a2002f5e501ea387b93c160010199797b" prot="public">
+          <name>future_deferred</name>
+          <briefdescription>
+<para>Invalid operation on deferred future. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Error codes for futures. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="34" column="5" bodyfile="futures/error.hpp" bodystart="35" bodyend="52"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__error_1gaa09c7b0f3e466783023afb96eea90fad" prot="public" static="no">
+        <type>std::source_location</type>
+        <definition>using futures::source_location = typedef std::source_location</definition>
+        <argsstring></argsstring>
+        <name>source_location</name>
+        <qualifiedname>futures::source_location</qualifiedname>
+        <briefdescription>
+<para>A library type equivalent to <computeroutput>std::source_location</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The source_location class represents certain information about the source code, such as file names, line numbers, and function names.</para>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/source_location"><computeroutput>std::source_location</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/throw.hpp" line="45" column="5" bodyfile="futures/throw.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__error_1ga1d60ca812337944e729a84a9f37195ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::handle_exception</definition>
+        <argsstring>(std::exception const &amp;, boost::source_location const &amp;)</argsstring>
+        <name>handle_exception</name>
+        <qualifiedname>futures::handle_exception</qualifiedname>
+        <param>
+          <type>std::exception const &amp;</type>
+        </param>
+        <param>
+          <type>boost::source_location const &amp;</type>
+        </param>
+        <briefdescription>
+<para>Customization point to handle exceptions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>When exception support is disabled with <ref refid="config_8hpp_1a88c5f8bac9b8cee5d61caf298c83cf49" kindref="member">FUTURES_NO_EXCEPTIONS</ref>, this function will be called to handle exceptions.</para>
+<para>To customize how exceptions will be handled, define the macro <ref refid="config_8hpp_1aafd86f87f4188bfabe42994ad5b2fec4" kindref="member">FUTURES_CUSTOM_EXCEPTION_HANDLE</ref>, and define an alternative implementation for this function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/throw.hpp" line="61" column="5" declfile="futures/throw.hpp" declline="61" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="group__error_1ga3ee1de4e2e5e2809f8936319b4b2ce09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::throw_exception</definition>
+        <argsstring>(E &amp;&amp;e, source_location const &amp;loc=std::source_location::current())</argsstring>
+        <name>throw_exception</name>
+        <qualifiedname>futures::throw_exception</qualifiedname>
+        <param>
+          <type>E &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>source_location const &amp;</type>
+          <declname>loc</declname>
+          <defval>std::source_location::current()</defval>
+        </param>
+        <briefdescription>
+<para>Library function used to throw exceptions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the main library function used to throw exceptions according to the functions available for handling exceptions.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>E</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Exception type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>e</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Exception object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>loc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Location where the exception occurred </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/throw.hpp" line="74" column="5" declfile="futures/throw.hpp" declline="74" declcolumn="5"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" prot="public" static="no">
+        <name>FUTURES_ERROR_TYPE</name>
+        <param><defname>name</defname></param>
+        <initializer>    class name : public error {                                 \
+    public:                                                     \
+        name() : error{ make_error_code(future_errc::name) } {} \
+    }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="128" column="9" bodyfile="futures/error.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Basic future errors. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1thread__partitioner" kind="class" language="C++" prot="public">
+    <compoundname>futures::thread_partitioner</compoundname>
+    <includes refid="thread__partitioner_8hpp" local="no">thread_partitioner.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1thread__partitioner_1a1a7591eff0bec060e9d81a12414122a9" prot="private" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t futures::thread_partitioner::min_grain_size_</definition>
+        <argsstring></argsstring>
+        <name>min_grain_size_</name>
+        <qualifiedname>futures::thread_partitioner::min_grain_size_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="43" column="21" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1thread__partitioner_1a6aec1e23b05d1cc7a9dbaf351ef6f3b2" prot="private" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t futures::thread_partitioner::num_threads_</definition>
+        <argsstring></argsstring>
+        <name>num_threads_</name>
+        <qualifiedname>futures::thread_partitioner::num_threads_</qualifiedname>
+        <initializer>{ <ref refid="group__executors_1gaa58c1bc10fe96080f355b709a30473f6" kindref="member">hardware_concurrency</ref>() }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="44" column="21" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1thread__partitioner_1a3b104fb60aa20fe7b6ce9312093bb3b2" prot="private" static="no" mutable="no">
+        <type>std::thread::id</type>
+        <definition>std::thread::id futures::thread_partitioner::last_thread_id_</definition>
+        <argsstring></argsstring>
+        <name>last_thread_id_</name>
+        <qualifiedname>futures::thread_partitioner::last_thread_id_</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="45" column="25" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1thread__partitioner_1a27ad4c7f543c86eb37c3f6ef4f4b9556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_partitioner::thread_partitioner</definition>
+        <argsstring>(std::size_t min_grain_size)</argsstring>
+        <name>thread_partitioner</name>
+        <qualifiedname>futures::thread_partitioner::thread_partitioner</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>min_grain_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="48" column="18" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="48" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__partitioner_1a8c54592986537e2e4b220da8d2240eb7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type>I</type>
+        <definition>I futures::thread_partitioner::operator()</definition>
+        <argsstring>(I first, S last)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::thread_partitioner::operator()</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="63" column="9" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="63" bodyend="79"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A partitioner that always splits the problem when moving to new threads. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>A partitioner that splits the ranges until it identifies we are not moving to new threads.</para>
+<para>This partitioner splits the ranges until it identifies we are not moving to new threads. Apart from that, it behaves as a halve_partitioner, splitting the range up to a minimum grain size. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/partitioner/thread_partitioner.hpp" line="42" column="5" bodyfile="futures/algorithm/partitioner/thread_partitioner.hpp" bodystart="42" bodyend="80"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1thread__partitioner_1a3b104fb60aa20fe7b6ce9312093bb3b2" prot="private" virt="non-virtual"><scope>futures::thread_partitioner</scope><name>last_thread_id_</name></member>
+      <member refid="classfutures_1_1thread__partitioner_1a1a7591eff0bec060e9d81a12414122a9" prot="private" virt="non-virtual"><scope>futures::thread_partitioner</scope><name>min_grain_size_</name></member>
+      <member refid="classfutures_1_1thread__partitioner_1a6aec1e23b05d1cc7a9dbaf351ef6f3b2" prot="private" virt="non-virtual"><scope>futures::thread_partitioner</scope><name>num_threads_</name></member>
+      <member refid="classfutures_1_1thread__partitioner_1a8c54592986537e2e4b220da8d2240eb7" prot="public" virt="non-virtual"><scope>futures::thread_partitioner</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1thread__partitioner_1a27ad4c7f543c86eb37c3f6ef4f4b9556" prot="public" virt="non-virtual"><scope>futures::thread_partitioner</scope><name>thread_partitioner</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

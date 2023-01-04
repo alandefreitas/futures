@@ -1,0 +1,1878 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__traits" kind="group">
+    <compoundname>traits</compoundname>
+    <title>Traits</title>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__traits_1gacd1a119404dd4b52bcb267a28c530720" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>Ts</declname>
+            <defname>Ts</defname>
+          </param>
+        </templateparamlist>
+        <type>std::common_comparison_category&lt; Ts... &gt;</type>
+        <definition>using futures::common_comparison_category = typedef std::common_comparison_category&lt;Ts...&gt;</definition>
+        <argsstring></argsstring>
+        <name>common_comparison_category</name>
+        <qualifiedname>futures::common_comparison_category</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/common_comparison_category.hpp" line="48" column="5" bodyfile="futures/algorithm/traits/common_comparison_category.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaa31c7a165f142f3cbb7523128b649038" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>Ts</declname>
+            <defname>Ts</defname>
+          </param>
+        </templateparamlist>
+        <type>typename common_comparison_category&lt; Ts... &gt;::type</type>
+        <definition>using futures::common_comparison_category_t = typedef typename common_comparison_category&lt; Ts...&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>common_comparison_category_t</name>
+        <qualifiedname>futures::common_comparison_category_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/common_comparison_category.hpp" line="76" column="5" bodyfile="futures/algorithm/traits/common_comparison_category.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga7bda1c11fe675de42221596af9f0df5f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class LHS</type>
+          </param>
+          <param>
+            <type>class RHS</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::assignable_from&lt; LHS, RHS &gt; &gt;</type>
+        <definition>using futures::is_assignable_from = typedef std::bool_constant&lt; std::assignable_from&lt;LHS, RHS&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_assignable_from</name>
+        <qualifiedname>futures::is_assignable_from</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::assignable_from</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/assignable_from"><computeroutput>std::assignable_from</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_assignable_from.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_assignable_from.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga76db62394fec337406efe0efe4680339" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::bidirectional_iterator&lt; T &gt; &gt;</type>
+        <definition>using futures::is_bidirectional_iterator = typedef std::bool_constant&lt; std::bidirectional_iterator&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_bidirectional_iterator</name>
+        <qualifiedname>futures::is_bidirectional_iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::bidirectional_iterator</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator"><computeroutput>std::bidirectional_iterator</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_bidirectional_iterator.hpp" line="40" column="5" bodyfile="futures/algorithm/traits/is_bidirectional_iterator.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaa14660ab0fd62ba08cc33db046c7f3b1" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>detail::conjunction&lt; std::is_destructible&lt; T &gt;, std::is_constructible&lt; T, Args... &gt; &gt;</type>
+        <definition>using futures::is_constructible_from = typedef detail:: conjunction&lt;std::is_destructible&lt;T&gt;, std::is_constructible&lt;T, Args...&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_constructible_from</name>
+        <qualifiedname>futures::is_constructible_from</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::constructible_from</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/constructible_from"><computeroutput>std::constructible_from</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_constructible_from.hpp" line="35" column="5" bodyfile="futures/algorithm/traits/is_constructible_from.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga478ba461a135cc0e9c291252ec9b2d8f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class From</type>
+          </param>
+          <param>
+            <type>class To</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::convertible_to&lt; From, To &gt; &gt;</type>
+        <definition>using futures::is_convertible_to = typedef std::bool_constant&lt;std::convertible_to&lt;From, To&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_convertible_to</name>
+        <qualifiedname>futures::is_convertible_to</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::convertible_to</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/convertible_to"><computeroutput>std::convertible_to</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_convertible_to.hpp" line="37" column="5" bodyfile="futures/algorithm/traits/is_convertible_to.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gafeeb5e8c14faf5518660bbbd61cadf2b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::copyable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_copyable = typedef std::bool_constant&lt;std::copyable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_copyable</name>
+        <qualifiedname>futures::is_copyable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::copyable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/copyable"><computeroutput>std::copyable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_copyable.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_copyable.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gade601510289810972f9caf8e2b4c73fb" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::default_initializable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_default_initializable = typedef std::bool_constant&lt; std::default_initializable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_default_initializable</name>
+        <qualifiedname>futures::is_default_initializable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::default_initializable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/default_initializable"><computeroutput>std::default_initializable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_default_initializable.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_default_initializable.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga1e386f4f05388c302d714c7d1a2c6aa2" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class Derived</type>
+          </param>
+          <param>
+            <type>class Base</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; derived_from&lt; Derived, Base &gt; &gt;</type>
+        <definition>using futures::is_derived_from = typedef std::bool_constant&lt;derived_from&lt;Derived, Base&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_derived_from</name>
+        <qualifiedname>futures::is_derived_from</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>derived_from</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/derived_from"><computeroutput>std::derived_from</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_derived_from.hpp" line="40" column="5" bodyfile="futures/algorithm/traits/is_derived_from.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga700cff8b3f85ddd38376e54c9ca3e6b8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::equality_comparable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_equality_comparable = typedef std::bool_constant&lt; std::equality_comparable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable</name>
+        <qualifiedname>futures::is_equality_comparable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/equality_comparable"><computeroutput>std::equality_comparable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable.hpp" line="42" column="5" bodyfile="futures/algorithm/traits/is_equality_comparable.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga33c9e5b16ea99aea746e3bffa28cc56c" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::equality_comparable_with&lt; T, U &gt; &gt;</type>
+        <definition>using futures::is_equality_comparable_with = typedef std::bool_constant&lt; std::equality_comparable_with&lt;T, U&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_with</name>
+        <qualifiedname>futures::is_equality_comparable_with</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable_with</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/equality_comparable_with"><computeroutput>std::equality_comparable_with</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable_with.hpp" line="43" column="5" bodyfile="futures/algorithm/traits/is_equality_comparable_with.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga848d84bbb112bc916c2efd34da93a572" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::forward_iterator&lt; T &gt; &gt;</type>
+        <definition>using futures::is_forward_iterator = typedef std::bool_constant&lt;std::forward_iterator&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_forward_iterator</name>
+        <qualifiedname>futures::is_forward_iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::forward_iterator</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/forward_iterator"><computeroutput>std::forward_iterator</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_forward_iterator.hpp" line="42" column="5" bodyfile="futures/algorithm/traits/is_forward_iterator.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga33d3975351d7b6285a7e0c8663e96c84" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::incrementable&lt; I &gt; &gt;</type>
+        <definition>using futures::is_incrementable = typedef std::bool_constant&lt;std::incrementable&lt;I&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_incrementable</name>
+        <qualifiedname>futures::is_incrementable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::incrementable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/incrementable"><computeroutput>std::incrementable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_incrementable.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_incrementable.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gacec3cf84299f155f1a34a4984c69a8e3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_indirectly_binary_invocable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_binary_invocable</name>
+        <qualifiedname>futures::is_indirectly_binary_invocable</qualifiedname>
+        <briefdescription>
+<para>Determine if a function can be invoke with the value type of both iterators. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga5d997016e1af193a53e63e8d35454110" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::indirectly_readable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_indirectly_readable = typedef std::bool_constant&lt; std::indirectly_readable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_readable</name>
+        <qualifiedname>futures::is_indirectly_readable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::indirectly_readable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/indirectly_readable"><computeroutput>std::indirectly_readable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_readable.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_indirectly_readable.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga8a78009173a34f27d5d088459b744253" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::indirectly_unary_invocable&lt; F, I &gt; &gt;</type>
+        <definition>using futures::is_indirectly_unary_invocable = typedef std::bool_constant&lt; std::indirectly_unary_invocable&lt;F, I&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_unary_invocable</name>
+        <qualifiedname>futures::is_indirectly_unary_invocable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::indirectly_unary_invocable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable"><computeroutput>std::indirectly_unary_invocable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" line="42" column="5" bodyfile="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gafdc7cbe83b02548031e1457c533b0413" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::input_iterator&lt; T &gt; &gt;</type>
+        <definition>using futures::is_input_iterator = typedef std::bool_constant&lt;std::input_iterator&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_input_iterator</name>
+        <qualifiedname>futures::is_input_iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::input_iterator</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/input_iterator"><computeroutput>std::input_iterator</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_iterator.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_input_iterator.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga787d4f89658a472119f07b2b0797000f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::is_input_or_output_iterator&lt; T &gt; &gt;</type>
+        <definition>using futures::is_input_or_output_iterator = typedef std::bool_constant&lt; std::is_input_or_output_iterator&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_input_or_output_iterator</name>
+        <qualifiedname>futures::is_input_or_output_iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::is_input_or_output_iterator</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator"><computeroutput>std::is_input_or_output_iterator</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_or_output_iterator.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_input_or_output_iterator.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaf1bf7865ae3e06fd952ef1f861a28f70" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::is_input_range&lt; T &gt; &gt;</type>
+        <definition>using futures::is_input_range = typedef std::bool_constant&lt;std::is_input_range&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_input_range</name>
+        <qualifiedname>futures::is_input_range</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::input_range</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/input_range"><computeroutput>std::ranges::input_range</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_range.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_input_range.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaf041a0c651e1e59ea18df0e2dc2dc8fe" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::movable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_movable = typedef std::bool_constant&lt;std::movable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_movable</name>
+        <qualifiedname>futures::is_movable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::movable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/movable"><computeroutput>std::movable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_movable.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_movable.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gae4e9bd33e6ed647165d69f3ece27935d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::move_constructible&lt; T &gt; &gt;</type>
+        <definition>using futures::is_move_constructible = typedef std::bool_constant&lt;std::move_constructible&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_move_constructible</name>
+        <qualifiedname>futures::is_move_constructible</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::move_constructible</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/move_constructible"><computeroutput>std::move_constructible</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_move_constructible.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/is_move_constructible.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga0a68b1cb70778749f176868ea5489453" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::random_access_iterator&lt; T &gt; &gt;</type>
+        <definition>using futures::is_random_access_iterator = typedef std::bool_constant&lt; std::random_access_iterator&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_random_access_iterator</name>
+        <qualifiedname>futures::is_random_access_iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::random_access_iterator</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/random_access_iterator"><computeroutput>std::random_access_iterator</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_random_access_iterator.hpp" line="41" column="5" bodyfile="futures/algorithm/traits/is_random_access_iterator.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaea08f93eea232d08478c9cc04773e116" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::range&lt; T &gt; &gt;</type>
+        <definition>using futures::is_range = typedef std::bool_constant&lt;std::range&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_range</name>
+        <qualifiedname>futures::is_range</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::range</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/range"><computeroutput>std::ranges::range</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_range.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_range.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga6c651460b5dfa33f143fef4514c3120b" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::regular&lt; T &gt; &gt;</type>
+        <definition>using futures::is_regular = typedef std::bool_constant&lt;std::regular&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_regular</name>
+        <qualifiedname>futures::is_regular</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::regular</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/regular"><computeroutput>std::regular</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_regular.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_regular.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga1f7dc3c45de0abcd0e466f853e283679" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::semiregular&lt; T &gt; &gt;</type>
+        <definition>using futures::is_semiregular = typedef std::bool_constant&lt;std::semiregular&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_semiregular</name>
+        <qualifiedname>futures::is_semiregular</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::semiregular</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/semiregular"><computeroutput>std::semiregular</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_semiregular.hpp" line="37" column="5" bodyfile="futures/algorithm/traits/is_semiregular.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga5dea935029d8615e75f76c5d244f1a46" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::sentinel_for&lt; S, I &gt; &gt;</type>
+        <definition>using futures::is_sentinel_for = typedef std::bool_constant&lt;std::sentinel_for&lt;S, I&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_sentinel_for</name>
+        <qualifiedname>futures::is_sentinel_for</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::sentinel_for</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/sentinel_for"><computeroutput>std::sentinel_for</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_sentinel_for.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_sentinel_for.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaced3438d14261ee82a0efa2cff8a08e4" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::swappable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_swappable = typedef std::bool_constant&lt;std::swappable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_swappable</name>
+        <qualifiedname>futures::is_swappable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::swappable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/swappable"><computeroutput>std::swappable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_swappable.hpp" line="37" column="5" bodyfile="futures/algorithm/traits/is_swappable.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gac22a6b82a79830ec1177653c62c89597" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Cat</type>
+            <defval>std::partial_ordering</defval>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::three_way_comparable&lt; T, Cat &gt; &gt;</type>
+        <definition>using futures::is_three_way_comparable = typedef std::bool_constant&lt; std::three_way_comparable&lt;T, Cat&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_three_way_comparable</name>
+        <qualifiedname>futures::is_three_way_comparable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_three_way_comparable.hpp" line="48" column="5" bodyfile="futures/algorithm/traits/is_three_way_comparable.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga7d342b63b24fa9b3a399a8be75a909b1" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+          <param>
+            <type>class Cat</type>
+            <defval>std::partial_ordering</defval>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::three_way_comparable_with&lt; T, U, Cat &gt; &gt;</type>
+        <definition>using futures::is_three_way_comparable_with = typedef std::bool_constant&lt; std::three_way_comparable_with&lt;T, U, Cat&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_three_way_comparable_with</name>
+        <qualifiedname>futures::is_three_way_comparable_with</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable_with</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_three_way_comparable_with.hpp" line="46" column="5" bodyfile="futures/algorithm/traits/is_three_way_comparable_with.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gacca0150c5cccef1847a596ff7dbfb85c" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::totally_ordered&lt; T &gt; &gt;</type>
+        <definition>using futures::is_totally_ordered = typedef std::bool_constant&lt;std::totally_ordered&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered</name>
+        <qualifiedname>futures::is_totally_ordered</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::totally_ordered</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><computeroutput>std::totally_ordered</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered.hpp" line="43" column="5" bodyfile="futures/algorithm/traits/is_totally_ordered.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga3e7a594dd861beb0287aab525b8d44d8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::totally_ordered_with&lt; T, U &gt; &gt;</type>
+        <definition>using futures::is_totally_ordered_with = typedef std::bool_constant&lt; std::totally_ordered_with&lt;T, U&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_with</name>
+        <qualifiedname>futures::is_totally_ordered_with</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::totally_ordered_with</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><computeroutput>std::totally_ordered</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered_with.hpp" line="41" column="5" bodyfile="futures/algorithm/traits/is_totally_ordered_with.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga9420a5b6af74d0339ded7b71b49aae5c" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; std::weakly_incrementable&lt; T &gt; &gt;</type>
+        <definition>using futures::is_weakly_incrementable = typedef std::bool_constant&lt; std::weakly_incrementable&lt;T&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_incrementable</name>
+        <qualifiedname>futures::is_weakly_incrementable</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::weakly_incrementable</computeroutput> concept. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/weakly_incrementable"><computeroutput>std::weakly_incrementable</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_incrementable.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/is_weakly_incrementable.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga0cd4722e248e01dcf1f077f5b64dd135" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::iter_difference</type>
+        <definition>using futures::iter_difference = typedef std::iter_difference</definition>
+        <argsstring></argsstring>
+        <name>iter_difference</name>
+        <qualifiedname>futures::iter_difference</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_difference</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_difference</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_difference.hpp" line="43" column="5" bodyfile="futures/algorithm/traits/iter_difference.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gadb88ead4be9c831ffd25b07850d1f1db" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_difference&lt; T &gt;::type</type>
+        <definition>using futures::iter_difference_t = typedef typename iter_difference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_difference_t</name>
+        <qualifiedname>futures::iter_difference_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_difference</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_difference</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_difference.hpp" line="67" column="5" bodyfile="futures/algorithm/traits/iter_difference.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gae8d16e13ff22db3256af14a4d4b89fa9" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::iter_reference</type>
+        <definition>using futures::iter_reference = typedef std::iter_reference</definition>
+        <argsstring></argsstring>
+        <name>iter_reference</name>
+        <qualifiedname>futures::iter_reference</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_reference</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_reference</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_reference.hpp" line="39" column="5" bodyfile="futures/algorithm/traits/iter_reference.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga4b1badc7c239d872ac366d4a8c57101a" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_reference&lt; T &gt;::type</type>
+        <definition>using futures::iter_reference_t = typedef typename iter_reference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_reference_t</name>
+        <qualifiedname>futures::iter_reference_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_reference</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_reference</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_reference.hpp" line="52" column="5" bodyfile="futures/algorithm/traits/iter_reference.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga512a5a98c50c6dd379e05bb4934ceed2" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::iter_rvalue_reference</type>
+        <definition>using futures::iter_rvalue_reference = typedef std::iter_rvalue_reference</definition>
+        <argsstring></argsstring>
+        <name>iter_rvalue_reference</name>
+        <qualifiedname>futures::iter_rvalue_reference</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_rvalue_reference</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_rvalue_reference</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_rvalue_reference.hpp" line="38" column="5" bodyfile="futures/algorithm/traits/iter_rvalue_reference.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga2de87617ebb91ba233b7d4f5ee08e703" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_rvalue_reference&lt; T &gt;::type</type>
+        <definition>using futures::iter_rvalue_reference_t = typedef typename iter_rvalue_reference&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_rvalue_reference_t</name>
+        <qualifiedname>futures::iter_rvalue_reference_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_rvalue_reference</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_rvalue_reference</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_rvalue_reference.hpp" line="51" column="5" bodyfile="futures/algorithm/traits/iter_rvalue_reference.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gab7bdd46a3627a696302c30934567f51d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::iter_value</type>
+        <definition>using futures::iter_value = typedef std::iter_value</definition>
+        <argsstring></argsstring>
+        <name>iter_value</name>
+        <qualifiedname>futures::iter_value</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_value</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_value</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_value.hpp" line="41" column="5" bodyfile="futures/algorithm/traits/iter_value.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gabd912e4dacd864daedb36cd1f39e1723" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iter_value&lt; T &gt;::type</type>
+        <definition>using futures::iter_value_t = typedef typename iter_value&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iter_value_t</name>
+        <qualifiedname>futures::iter_value_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::iter_value</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/iter_t"><computeroutput>std::iter_value</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iter_value.hpp" line="61" column="5" bodyfile="futures/algorithm/traits/iter_value.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaba9b74185a646620729400ed744f7ecc" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::iterator&lt; R &gt;</type>
+        <definition>using futures::iterator = typedef std::iterator&lt;R&gt;</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>futures::iterator</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::iterator</computeroutput> trait. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/iterator_t"><computeroutput>std::ranges::iterator_t</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iterator.hpp" line="42" column="5" bodyfile="futures/algorithm/traits/iterator.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga25b9349b8a29ca3bea4913f8b704e515" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename iterator&lt; T &gt;::type</type>
+        <definition>using futures::iterator_t = typedef typename iterator&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>iterator_t</name>
+        <qualifiedname>futures::iterator_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::iterator</computeroutput> trait.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/iterator_t"><computeroutput>std::ranges::iterator_t</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/iterator.hpp" line="55" column="5" bodyfile="futures/algorithm/traits/iterator.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gaa097d6855d1af3709d4facf9848b3088" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+        </templateparamlist>
+        <type>std::range_value&lt; R &gt;</type>
+        <definition>using futures::range_value = typedef std::range_value&lt;R&gt;</definition>
+        <argsstring></argsstring>
+        <name>range_value</name>
+        <qualifiedname>futures::range_value</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::range_value</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/iterator_t"><computeroutput>std::ranges::iterator_t</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/range_value.hpp" line="41" column="5" bodyfile="futures/algorithm/traits/range_value.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga36b10fa59d1005a75cecb03df26b12d8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+        </templateparamlist>
+        <type>typename range_value&lt; R &gt;::type</type>
+        <definition>using futures::range_value_t = typedef typename range_value&lt;R&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>range_value_t</name>
+        <qualifiedname>futures::range_value_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::range_value</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/iterator_t"><computeroutput>std::ranges::iterator_t</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/range_value.hpp" line="58" column="5" bodyfile="futures/algorithm/traits/range_value.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1gab2f4c9b824ed7e93242a4f61967218df" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>std::remove_cvref&lt; T &gt;</type>
+        <definition>using futures::remove_cvref = typedef std::remove_cvref&lt;T&gt;</definition>
+        <argsstring></argsstring>
+        <name>remove_cvref</name>
+        <qualifiedname>futures::remove_cvref</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::remove_cvref</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/types/remove_cvref"><computeroutput>std::remove_cvref</computeroutput></ulink> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/remove_cvref.hpp" line="36" column="5" bodyfile="futures/algorithm/traits/remove_cvref.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__traits_1ga08dfd6b7fc387123f45b76f825a47193" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename remove_cvref&lt; T &gt;::type</type>
+        <definition>using futures::remove_cvref_t = typedef typename remove_cvref&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>remove_cvref_t</name>
+        <qualifiedname>futures::remove_cvref_t</qualifiedname>
+        <briefdescription>
+<para>A type trait equivalent to <computeroutput>std::remove_cvref</computeroutput>   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/types/remove_cvref"><computeroutput>std::remove_cvref</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/remove_cvref.hpp" line="45" column="5" bodyfile="futures/algorithm/traits/remove_cvref.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__traits_1ga77606ec080e615c4f83c1a737589268d" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class LHS</type>
+          </param>
+          <param>
+            <type>class RHS</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_assignable_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_assignable_from_v</name>
+        <qualifiedname>futures::is_assignable_from_v</qualifiedname>
+        <initializer>= is_assignable_from&lt;LHS, RHS&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::assignable_from</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/assignable_from"><computeroutput>std::assignable_from</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_assignable_from.hpp" line="58" column="20" bodyfile="futures/algorithm/traits/is_assignable_from.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga53831f07f1d23a5c9575f717bf4c4ce1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_bidirectional_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_bidirectional_iterator_v</name>
+        <qualifiedname>futures::is_bidirectional_iterator_v</qualifiedname>
+        <initializer>= is_bidirectional_iterator&lt;
+        I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::bidirectional_iterator</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator"><computeroutput>std::bidirectional_iterator</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_bidirectional_iterator.hpp" line="67" column="20" bodyfile="futures/algorithm/traits/is_bidirectional_iterator.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga6c5fc06c5acf15dbbc0e490988e0bbcc" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_constructible_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_constructible_from_v</name>
+        <qualifiedname>futures::is_constructible_from_v</qualifiedname>
+        <initializer>= is_constructible_from&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::constructible_from</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/constructible_from"><computeroutput>std::constructible_from</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_constructible_from.hpp" line="40" column="20" bodyfile="futures/algorithm/traits/is_constructible_from.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga99d9a1bd8e1ab89863224c78b515e4e1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class From</type>
+          </param>
+          <param>
+            <type>class To</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_convertible_to_v</definition>
+        <argsstring></argsstring>
+        <name>is_convertible_to_v</name>
+        <qualifiedname>futures::is_convertible_to_v</qualifiedname>
+        <initializer>= is_convertible_to&lt;From, To&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::convertible_to</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/convertible_to"><computeroutput>std::convertible_to</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_convertible_to.hpp" line="56" column="20" bodyfile="futures/algorithm/traits/is_convertible_to.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga19bdaf3c43f699426957a966a1d16c37" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_copyable_v</definition>
+        <argsstring></argsstring>
+        <name>is_copyable_v</name>
+        <qualifiedname>futures::is_copyable_v</qualifiedname>
+        <initializer>= is_copyable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::copyable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/copyable"><computeroutput>std::copyable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_copyable.hpp" line="51" column="20" bodyfile="futures/algorithm/traits/is_copyable.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga25c80aeac9b688386b0755fd4f7e2236" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_default_initializable_v</definition>
+        <argsstring></argsstring>
+        <name>is_default_initializable_v</name>
+        <qualifiedname>futures::is_default_initializable_v</qualifiedname>
+        <initializer>= is_default_initializable&lt;
+        T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::default_initializable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/default_initializable"><computeroutput>std::default_initializable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_default_initializable.hpp" line="58" column="20" bodyfile="futures/algorithm/traits/is_default_initializable.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gac0544fcb34d2441bf49ecd2b4165b727" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class Derived</type>
+          </param>
+          <param>
+            <type>class Base</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_derived_from_v</definition>
+        <argsstring></argsstring>
+        <name>is_derived_from_v</name>
+        <qualifiedname>futures::is_derived_from_v</qualifiedname>
+        <initializer>= is_derived_from&lt;Derived, Base&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>derived_from</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/derived_from"><computeroutput>std::derived_from</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_derived_from.hpp" line="50" column="20" bodyfile="futures/algorithm/traits/is_derived_from.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga8465918081b89b0713376f47aa9e51cf" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_equality_comparable_v</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_v</name>
+        <qualifiedname>futures::is_equality_comparable_v</qualifiedname>
+        <initializer>= is_equality_comparable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/equality_comparable"><computeroutput>std::equality_comparable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable.hpp" line="52" column="20" bodyfile="futures/algorithm/traits/is_equality_comparable.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga5a60f9e666ffd6d75f260a8cd79c4fcb" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_equality_comparable_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_equality_comparable_with_v</name>
+        <qualifiedname>futures::is_equality_comparable_with_v</qualifiedname>
+        <initializer>= is_equality_comparable_with&lt;T, U&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable_with</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/equality_comparable_with"><computeroutput>std::equality_comparable_with</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_equality_comparable_with.hpp" line="55" column="20" bodyfile="futures/algorithm/traits/is_equality_comparable_with.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga39f0eb89da25215eabcb5b741a1f2f8f" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_forward_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_forward_iterator_v</name>
+        <qualifiedname>futures::is_forward_iterator_v</qualifiedname>
+        <initializer>= is_forward_iterator&lt;I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::forward_iterator</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/forward_iterator"><computeroutput>std::forward_iterator</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_forward_iterator.hpp" line="54" column="20" bodyfile="futures/algorithm/traits/is_forward_iterator.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gab9d3117a9157923b43113f8950b58ea6" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_incrementable_v</definition>
+        <argsstring></argsstring>
+        <name>is_incrementable_v</name>
+        <qualifiedname>futures::is_incrementable_v</qualifiedname>
+        <initializer>= is_incrementable&lt;I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::incrementable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/incrementable"><computeroutput>std::incrementable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_incrementable.hpp" line="62" column="20" bodyfile="futures/algorithm/traits/is_incrementable.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga2ce9de37185584b4cc70508a0c709f72" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_binary_invocable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_binary_invocable_v</name>
+        <qualifiedname>futures::is_indirectly_binary_invocable_v</qualifiedname>
+        <initializer>= is_indirectly_binary_invocable&lt;F, I1, I2&gt;::value</initializer>
+        <briefdescription>
+<para>Determine if a function can be invoke with the value type of both iterators.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" line="61" column="20" bodyfile="futures/algorithm/traits/is_indirectly_binary_invocable.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga39b8d413d2e15c20ad26708791d48c96" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_readable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_readable_v</name>
+        <qualifiedname>futures::is_indirectly_readable_v</qualifiedname>
+        <initializer>= is_indirectly_readable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::indirectly_readable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/indirectly_readable"><computeroutput>std::indirectly_readable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_readable.hpp" line="57" column="20" bodyfile="futures/algorithm/traits/is_indirectly_readable.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga035daff7f18105b4ec196371bdeb6d5c" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_indirectly_unary_invocable_v</definition>
+        <argsstring></argsstring>
+        <name>is_indirectly_unary_invocable_v</name>
+        <qualifiedname>futures::is_indirectly_unary_invocable_v</qualifiedname>
+        <initializer>= is_indirectly_unary_invocable&lt;F, I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::indirectly_unary_invocable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable"><computeroutput>std::indirectly_unary_invocable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" line="63" column="20" bodyfile="futures/algorithm/traits/is_indirectly_unary_invocable.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga164df25f7613782d753e35e084c236b7" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_input_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_iterator_v</name>
+        <qualifiedname>futures::is_input_iterator_v</qualifiedname>
+        <initializer>= is_input_iterator&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::input_iterator</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/input_iterator"><computeroutput>std::input_iterator</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_iterator.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_input_iterator.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gac5975521439989723185832ac2645166" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_input_or_output_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_or_output_iterator_v</name>
+        <qualifiedname>futures::is_input_or_output_iterator_v</qualifiedname>
+        <initializer>= is_input_or_output_iterator&lt;
+        T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::is_input_or_output_iterator</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator"><computeroutput>std::is_input_or_output_iterator</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_or_output_iterator.hpp" line="52" column="20" bodyfile="futures/algorithm/traits/is_input_or_output_iterator.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gac9784d2e05f3cf8a9f9590f04f123e74" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>bool constexpr</type>
+        <definition>bool constexpr futures::is_input_range_v</definition>
+        <argsstring></argsstring>
+        <name>is_input_range_v</name>
+        <qualifiedname>futures::is_input_range_v</qualifiedname>
+        <initializer>= is_input_range&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::input_range</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/input_range"><computeroutput>std::ranges::input_range</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_input_range.hpp" line="57" column="20" bodyfile="futures/algorithm/traits/is_input_range.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga9900979cf6cb29a928197a494ccfd023" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_movable_v</definition>
+        <argsstring></argsstring>
+        <name>is_movable_v</name>
+        <qualifiedname>futures::is_movable_v</qualifiedname>
+        <initializer>= is_movable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::movable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/movable"><computeroutput>std::movable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_movable.hpp" line="51" column="20" bodyfile="futures/algorithm/traits/is_movable.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaaba2a10a79777082f19420c161b7ca40" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_move_constructible_v</definition>
+        <argsstring></argsstring>
+        <name>is_move_constructible_v</name>
+        <qualifiedname>futures::is_move_constructible_v</qualifiedname>
+        <initializer>= is_move_constructible&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::move_constructible</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/move_constructible"><computeroutput>std::move_constructible</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_move_constructible.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_move_constructible.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gae9954a411bcf40e3f06c2c24b4b0a6bd" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_random_access_iterator_v</definition>
+        <argsstring></argsstring>
+        <name>is_random_access_iterator_v</name>
+        <qualifiedname>futures::is_random_access_iterator_v</qualifiedname>
+        <initializer>= is_random_access_iterator&lt;
+        I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::random_access_iterator</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/random_access_iterator"><computeroutput>std::random_access_iterator</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_random_access_iterator.hpp" line="78" column="20" bodyfile="futures/algorithm/traits/is_random_access_iterator.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_range_v</definition>
+        <argsstring></argsstring>
+        <name>is_range_v</name>
+        <qualifiedname>futures::is_range_v</qualifiedname>
+        <initializer>= is_range&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::range</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/ranges/range"><computeroutput>std::ranges::range</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_range.hpp" line="56" column="20" bodyfile="futures/algorithm/traits/is_range.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaaa5f05191e3a4aaf4b084d1c29559bc4" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_regular_v</definition>
+        <argsstring></argsstring>
+        <name>is_regular_v</name>
+        <qualifiedname>futures::is_regular_v</qualifiedname>
+        <initializer>= is_regular&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::regular</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/regular"><computeroutput>std::regular</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_regular.hpp" line="48" column="20" bodyfile="futures/algorithm/traits/is_regular.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gadcef95d15ae7d9498b6c45d0f05bc648" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_semiregular_v</definition>
+        <argsstring></argsstring>
+        <name>is_semiregular_v</name>
+        <qualifiedname>futures::is_semiregular_v</qualifiedname>
+        <initializer>= is_semiregular&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::semiregular</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/semiregular"><computeroutput>std::semiregular</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_semiregular.hpp" line="46" column="20" bodyfile="futures/algorithm/traits/is_semiregular.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gacadf25f8f6492d3710eb2d513b0dc7a7" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_sentinel_for_v</definition>
+        <argsstring></argsstring>
+        <name>is_sentinel_for_v</name>
+        <qualifiedname>futures::is_sentinel_for_v</qualifiedname>
+        <initializer>= is_sentinel_for&lt;S, I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::sentinel_for</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/sentinel_for"><computeroutput>std::sentinel_for</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_sentinel_for.hpp" line="47" column="20" bodyfile="futures/algorithm/traits/is_sentinel_for.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga3df986359d7ffe87ad775677e9e46326" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_swappable_v</definition>
+        <argsstring></argsstring>
+        <name>is_swappable_v</name>
+        <qualifiedname>futures::is_swappable_v</qualifiedname>
+        <initializer>= is_swappable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::swappable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/swappable"><computeroutput>std::swappable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_swappable.hpp" line="54" column="20" bodyfile="futures/algorithm/traits/is_swappable.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga7f63cfc0969c7768a3ed2fb040a99b95" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Cat</type>
+            <defval>partial_ordering</defval>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_three_way_comparable_v</definition>
+        <argsstring></argsstring>
+        <name>is_three_way_comparable_v</name>
+        <qualifiedname>futures::is_three_way_comparable_v</qualifiedname>
+        <initializer>= is_three_way_comparable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_three_way_comparable.hpp" line="59" column="20" bodyfile="futures/algorithm/traits/is_three_way_comparable.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga8830992102877a3f25d09866d080333f" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_three_way_comparable_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_three_way_comparable_with_v</name>
+        <qualifiedname>futures::is_three_way_comparable_with_v</qualifiedname>
+        <initializer>= is_three_way_comparable_with&lt;T, U&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::equality_comparable_with</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><computeroutput>std::three_way_comparable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_three_way_comparable_with.hpp" line="59" column="20" bodyfile="futures/algorithm/traits/is_three_way_comparable_with.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_totally_ordered_v</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_v</name>
+        <qualifiedname>futures::is_totally_ordered_v</qualifiedname>
+        <initializer>= is_totally_ordered&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::totally_ordered</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><computeroutput>std::totally_ordered</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered.hpp" line="53" column="20" bodyfile="futures/algorithm/traits/is_totally_ordered.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gafa9051526c36ea222da0f4d83f3d3b66" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_totally_ordered_with_v</definition>
+        <argsstring></argsstring>
+        <name>is_totally_ordered_with_v</name>
+        <qualifiedname>futures::is_totally_ordered_with_v</qualifiedname>
+        <initializer>= is_totally_ordered_with&lt;T, U&gt;::
+        value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::totally_ordered_with</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><computeroutput>std::totally_ordered</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_totally_ordered_with.hpp" line="54" column="20" bodyfile="futures/algorithm/traits/is_totally_ordered_with.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__traits_1gaa514a224bede48a6941ec53d58b3692f" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_weakly_incrementable_v</definition>
+        <argsstring></argsstring>
+        <name>is_weakly_incrementable_v</name>
+        <qualifiedname>futures::is_weakly_incrementable_v</qualifiedname>
+        <initializer>= is_weakly_incrementable&lt;I&gt;::value</initializer>
+        <briefdescription>
+<para>A type trait equivalent to the <computeroutput>std::weakly_incrementable</computeroutput> concept.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/iterator/weakly_incrementable"><computeroutput>std::weakly_incrementable</computeroutput></ulink>   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/is_weakly_incrementable.hpp" line="64" column="20" bodyfile="futures/algorithm/traits/is_weakly_incrementable.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

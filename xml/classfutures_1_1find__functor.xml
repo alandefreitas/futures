@@ -1,0 +1,882 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1find__functor" kind="class" language="C++" prot="public">
+    <compoundname>futures::find_functor</compoundname>
+    <basecompoundref refid="classfutures_1_1value__cmp__algorithm__functor" prot="public" virt="non-virtual">futures::value_cmp_algorithm_functor&lt; Derived &gt;</basecompoundref>
+    <includes refid="find_8hpp" local="no">find.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1find__functor_1aa09369fde0320619e3fff6ca99cafa9b" prot="private" static="no" mutable="no">
+        <type>friend</type>
+        <definition>friend futures::find_functor::value_cmp_algorithm_functor&lt; find_functor &gt;</definition>
+        <argsstring></argsstring>
+        <name>value_cmp_algorithm_functor&lt; find_functor &gt;</name>
+        <qualifiedname>futures::find_functor::value_cmp_algorithm_functor&lt; find_functor &gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find.hpp" line="45" column="9" bodyfile="futures/algorithm/find.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1find__functor_1aca7793887f348c6985e8aa08ac52bca7" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class P</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>I</type>
+        <definition>I futures::find_functor::run</definition>
+        <argsstring>(E const &amp;ex, P p, I first, S last, T const &amp;v) const</argsstring>
+        <name>run</name>
+        <qualifiedname>futures::find_functor::run</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Complete overload of the find algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>E</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>P</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>I</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>S</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Value to compare</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to (last + 1)-th element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find.hpp" line="62" column="13" bodyfile="futures/algorithm/find.hpp" bodystart="62" bodyend="67"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a80be044c56540abebdcc81240e29cbf6" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the underlying algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>E</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>I</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>S</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>P</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Value to compare with the iterator value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An executor instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A partitioner instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel iterator to one element past the last </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value to compare the elements to </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Result of the underlying algorithm </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="100" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="100" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a5fd55d225acfdd07108c2653f241cc34" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;, P p, I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the algorithm with an execution policy. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The execution policy is converted into the corresponding executor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="142" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="142" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the underlying algorithm on a range of iterators. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="190" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="190" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the algorithm on a range of iterators and execution policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="234" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="234" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a112c7d4cafb79b5a457382fbb31b1553" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the underlying algorithm with the default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="271" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="271" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a51e87b9d3cb5c68da580fb002707a7b1" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the algorithm on a range with the default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="315" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="315" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the algorithm with the default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="355" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="355" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute the algorithm with execution policy and default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="395" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="395" bodyend="411"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute algorithm on a range with the default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="437" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="437" bodyend="453"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute algorithm on a range with policy and default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="479" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="479" bodyend="495"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a51af8cca6aeaa1c7a71d0c4f647aa0ca" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(I first, S last, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std:: indirect_binary_predicate&lt;std::ranges::equal_to, I, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute algorithm with default partitioner and executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="513" column="13" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="513" bodyend="529"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1value__cmp__algorithm__functor_1a1e851756adcd930a117f41af67a5872e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::value_cmp_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, T const &amp;value) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::value_cmp_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+    <requiresclause>std::indirect_binary_predicate&lt; std::ranges::equal_to, std::ranges::iterator_t&lt;R&gt;, T const *&gt;    </requiresclause>
+        <briefdescription>
+<para>Execute algorithm on a range with default partitioner and executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/value_cmp_algorithm.hpp" line="553" column="9" bodyfile="futures/algorithm/traits/value_cmp_algorithm.hpp" bodystart="553" bodyend="569"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Functor representing the overloads for the <ref refid="group__functions_1ga15c434fa0fbabddf6b1ab8cf06760ec5" kindref="member">find</ref> function. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::find_functor</label>
+        <link refid="classfutures_1_1find__functor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::value_cmp_algorithm_functor&lt; Derived &gt;</label>
+        <link refid="classfutures_1_1value__cmp__algorithm__functor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::find_functor</label>
+        <link refid="classfutures_1_1find__functor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures::value_cmp_algorithm_functor&lt; Derived &gt;</label>
+        <link refid="classfutures_1_1value__cmp__algorithm__functor"/>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/find.hpp" line="37" column="5" bodyfile="futures/algorithm/find.hpp" bodystart="44" bodyend="68"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a80be044c56540abebdcc81240e29cbf6" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a5fd55d225acfdd07108c2653f241cc34" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a112c7d4cafb79b5a457382fbb31b1553" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51e87b9d3cb5c68da580fb002707a7b1" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51af8cca6aeaa1c7a71d0c4f647aa0ca" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1value__cmp__algorithm__functor_1a1e851756adcd930a117f41af67a5872e" prot="public" virt="non-virtual"><scope>futures::find_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1find__functor_1aca7793887f348c6985e8aa08ac52bca7" prot="private" virt="non-virtual"><scope>futures::find_functor</scope><name>run</name></member>
+      <member refid="classfutures_1_1find__functor_1aa09369fde0320619e3fff6ca99cafa9b" prot="private" virt="non-virtual"><scope>futures::find_functor</scope><name>value_cmp_algorithm_functor&lt; find_functor &gt;</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

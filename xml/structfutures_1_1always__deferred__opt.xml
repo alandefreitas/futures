@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1always__deferred__opt" kind="struct" language="C++" prot="public">
+    <compoundname>futures::always_deferred_opt</compoundname>
+    <includes refid="future__options__args_8hpp" local="no">future_options_args.hpp</includes>
+    <briefdescription>
+<para>Future option to determine the future is always_deferred. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>A future that is known to always be deferred can implement a number of optimizations a regular future cannot. For instance,<itemizedlist>
+<listitem><para>continuations can happen without the continuation list because the next future can simply hold the previous future.</para>
+</listitem><listitem><para>Continuations lists and the base operation state also don&apos;t need any synchronization because the task* is known to not have been launched when these primitives are being set.</para>
+</listitem><listitem><para>The operation state might be stored inline without any dynamic memory allocations because we can assume the calling thread will be locked when waiting for the future so the address of the operation state cannot change. </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <location file="futures/future_options_args.hpp" line="77" column="5" bodyfile="futures/future_options_args.hpp" bodystart="77" bodyend="77"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

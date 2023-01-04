@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_e7b4090e56732c0d3902af1e1fd5618b" kind="dir">
+    <compoundname>futures/algorithm</compoundname>
+    <innerdir refid="dir_34b5388a361cceed2f002017f04883fe">futures/algorithm/compare</innerdir>
+    <innerdir refid="dir_e0a1cc086a107475864c8fa8ce1ca572">futures/algorithm/partitioner</innerdir>
+    <innerdir refid="dir_f487c0495566dbafde251364b6bff68f">futures/algorithm/traits</innerdir>
+    <innerfile refid="all__of_8hpp">all_of.hpp</innerfile>
+    <innerfile refid="any__of_8hpp">any_of.hpp</innerfile>
+    <innerfile refid="compare_8hpp">compare.hpp</innerfile>
+    <innerfile refid="count_8hpp">count.hpp</innerfile>
+    <innerfile refid="count__if_8hpp">count_if.hpp</innerfile>
+    <innerfile refid="find_8hpp">find.hpp</innerfile>
+    <innerfile refid="find__if_8hpp">find_if.hpp</innerfile>
+    <innerfile refid="find__if__not_8hpp">find_if_not.hpp</innerfile>
+    <innerfile refid="for__each_8hpp">for_each.hpp</innerfile>
+    <innerfile refid="none__of_8hpp">none_of.hpp</innerfile>
+    <innerfile refid="partitioner_8hpp">partitioner.hpp</innerfile>
+    <innerfile refid="policies_8hpp">policies.hpp</innerfile>
+    <innerfile refid="reduce_8hpp">reduce.hpp</innerfile>
+    <innerfile refid="algorithm_2traits_8hpp">traits.hpp</innerfile>
+    <briefdescription>
+<para>Root algorithms directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The root directory contains headers related to the algorithm module, including algorithms, partitioners, and traits. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/"/>
+  </compounddef>
+</doxygen>

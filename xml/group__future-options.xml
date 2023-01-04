@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__future-options" kind="group">
+    <compoundname>future-options</compoundname>
+    <title>Future options</title>
+    <innerclass refid="structfutures_1_1executor__opt" prot="public">futures::executor_opt</innerclass>
+    <innerclass refid="structfutures_1_1continuable__opt" prot="public">futures::continuable_opt</innerclass>
+    <innerclass refid="structfutures_1_1stoppable__opt" prot="public">futures::stoppable_opt</innerclass>
+    <innerclass refid="structfutures_1_1always__detached__opt" prot="public">futures::always_detached_opt</innerclass>
+    <innerclass refid="structfutures_1_1always__deferred__opt" prot="public">futures::always_deferred_opt</innerclass>
+    <innerclass refid="structfutures_1_1deferred__function__opt" prot="public">futures::deferred_function_opt</innerclass>
+    <innerclass refid="structfutures_1_1shared__opt" prot="public">futures::shared_opt</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>detail::future_options_flat_t&lt; Args... &gt;</type>
+        <definition>using futures::future_options = typedef detail::future_options_flat_t&lt;Args...&gt;</definition>
+        <argsstring></argsstring>
+        <name>future_options</name>
+        <qualifiedname>futures::future_options</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future_options.hpp" line="35" column="5" bodyfile="futures/future_options.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Traits to define <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> types. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

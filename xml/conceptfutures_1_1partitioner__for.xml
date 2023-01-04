@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="conceptfutures_1_1partitioner__for" kind="concept">
+    <compoundname>futures::partitioner_for</compoundname>
+    <includes refid="partitioner__for_8hpp" local="no">partitioner_for.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class P</type>
+      </param>
+      <param>
+        <type>class I</type>
+      </param>
+      <param>
+        <type>class S</type>
+        <defval>I</defval>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;class P, class I, class S I&gt;
+concept <ref refid="conceptfutures_1_1partitioner__for" kindref="compound">futures::partitioner_for</ref> =  std::input_iterator&lt;I&gt; &amp;&amp; std::sentinel_for&lt;S, I&gt;
+                              &amp;&amp; std::invocable&lt;P, I, S&gt;    </initializer>
+    <briefdescription>
+<para>Determines if a type is an partitioner. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/algorithm/partitioner/partitioner_for.hpp" line="40" column="5"/>
+  </compounddef>
+</doxygen>

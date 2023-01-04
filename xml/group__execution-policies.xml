@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__execution-policies" kind="group">
+    <compoundname>execution-policies</compoundname>
+    <title>Execution Policies</title>
+    <innerclass refid="structfutures_1_1is__execution__policy" prot="public">futures::is_execution_policy</innerclass>
+    <innerconcept refid="conceptfutures_1_1execution__policy">futures::execution_policy</innerconcept>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__execution-policies_1gaf5d088ab9052836d3d58c62a02697e26" prot="public" static="no">
+        <type>std::execution::sequenced_policy</type>
+        <definition>using futures::sequenced_policy = typedef std::execution::sequenced_policy</definition>
+        <argsstring></argsstring>
+        <name>sequenced_policy</name>
+        <qualifiedname>futures::sequenced_policy</qualifiedname>
+        <briefdescription>
+<para>Class representing a type for a sequenced_policy tag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This tag type is an alias to <computeroutput>std::execution::sequenced_policy</computeroutput> whenever it&apos;s available. Otherwise it&apos;s defined as an individual type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="50" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__execution-policies_1gaeb6a426f21b797b63d6cfd5f1a4585ee" prot="public" static="no">
+        <type>std::execution::parallel_policy</type>
+        <definition>using futures::parallel_policy = typedef std::execution::parallel_policy</definition>
+        <argsstring></argsstring>
+        <name>parallel_policy</name>
+        <qualifiedname>futures::parallel_policy</qualifiedname>
+        <briefdescription>
+<para>Class representing a type for a parallel_policy tag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This tag type is an alias to <computeroutput>std::execution::parallel_policy</computeroutput> whenever it&apos;s available. Otherwise it&apos;s defined as an individual type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="61" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__execution-policies_1ga1cfc7e6ec53363f996022ad8282b0cfe" prot="public" static="no">
+        <type>std::execution::parallel_unsequenced_policy</type>
+        <definition>using futures::parallel_unsequenced_policy = typedef std::execution:: parallel_unsequenced_policy</definition>
+        <argsstring></argsstring>
+        <name>parallel_unsequenced_policy</name>
+        <qualifiedname>futures::parallel_unsequenced_policy</qualifiedname>
+        <briefdescription>
+<para>Class representing a type for a parallel_unsequenced_policy tag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This tag type is an alias to <computeroutput>std::execution::parallel_unsequenced_policy</computeroutput> whenever it&apos;s available. Otherwise it&apos;s defined as an individual type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="73" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__execution-policies_1gabaa708215fbcb22a94cc04f7ef726059" prot="public" static="no">
+        <type>std::execution::unsequenced_policy</type>
+        <definition>using futures::unsequenced_policy = typedef std::execution::unsequenced_policy</definition>
+        <argsstring></argsstring>
+        <name>unsequenced_policy</name>
+        <qualifiedname>futures::unsequenced_policy</qualifiedname>
+        <briefdescription>
+<para>Class representing a type for an unsequenced_policy tag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This tag type is an alias to <computeroutput>std::execution::unsequenced_policy</computeroutput> whenever it&apos;s available. Otherwise it&apos;s defined as an individual type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="85" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__execution-policies_1gabc55040ea2bc2503075ab0b70004899a" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr sequenced_policy</type>
+        <definition>constexpr sequenced_policy futures::seq</definition>
+        <argsstring></argsstring>
+        <name>seq</name>
+        <qualifiedname>futures::seq</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a sequenced_policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="91" column="41" bodyfile="futures/algorithm/policies.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga15d309529b3196659d901c905bd0bbc6" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr parallel_policy</type>
+        <definition>constexpr parallel_policy futures::par</definition>
+        <argsstring></argsstring>
+        <name>par</name>
+        <qualifiedname>futures::par</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a parallel_policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="94" column="40" bodyfile="futures/algorithm/policies.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga2dfc04fa043d76435dfc6531db67a93d" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr parallel_unsequenced_policy</type>
+        <definition>constexpr parallel_unsequenced_policy futures::par_unseq</definition>
+        <argsstring></argsstring>
+        <name>par_unseq</name>
+        <qualifiedname>futures::par_unseq</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for a parallel_unsequenced_policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="97" column="52" bodyfile="futures/algorithm/policies.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga92c59cac6e6ea17c04b929917c037446" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr unsequenced_policy</type>
+        <definition>constexpr unsequenced_policy futures::unseq</definition>
+        <argsstring></argsstring>
+        <name>unseq</name>
+        <qualifiedname>futures::unseq</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Tag used in algorithms for an unsequenced_policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="100" column="43" bodyfile="futures/algorithm/policies.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__execution-policies_1ga91acd0da3465836ab08bfa9ed016d2dd" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_execution_policy_v</definition>
+        <argsstring></argsstring>
+        <name>is_execution_policy_v</name>
+        <qualifiedname>futures::is_execution_policy_v</qualifiedname>
+        <initializer>= is_execution_policy&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Determines whether T is a standard or implementation-defined execution policy type.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/policies.hpp" line="114" column="29" bodyfile="futures/algorithm/policies.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

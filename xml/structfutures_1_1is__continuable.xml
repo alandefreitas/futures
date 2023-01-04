@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1is__continuable" kind="struct" language="C++" prot="public">
+    <compoundname>futures::is_continuable</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes refid="is__continuable_8hpp" local="no">is_continuable.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Customization point to define future as supporting continuations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::is_continuable&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__continuable"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::is_continuable&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__continuable"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/traits/is_continuable.hpp" line="34" column="5" bodyfile="futures/traits/is_continuable.hpp" bodystart="34" bodyend="34"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

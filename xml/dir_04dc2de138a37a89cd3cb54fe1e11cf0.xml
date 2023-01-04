@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_04dc2de138a37a89cd3cb54fe1e11cf0" kind="dir">
+    <compoundname>futures/traits</compoundname>
+    <innerfile refid="future__value_8hpp">future_value.hpp</innerfile>
+    <innerfile refid="has__executor_8hpp">has_executor.hpp</innerfile>
+    <innerfile refid="has__ready__notifier_8hpp">has_ready_notifier.hpp</innerfile>
+    <innerfile refid="has__stop__token_8hpp">has_stop_token.hpp</innerfile>
+    <innerfile refid="is__always__deferred_8hpp">is_always_deferred.hpp</innerfile>
+    <innerfile refid="is__continuable_8hpp">is_continuable.hpp</innerfile>
+    <innerfile refid="is__future__like_8hpp">is_future_like.hpp</innerfile>
+    <innerfile refid="is__shared__future_8hpp">is_shared_future.hpp</innerfile>
+    <innerfile refid="is__stoppable_8hpp">is_stoppable.hpp</innerfile>
+    <briefdescription>
+<para>Root traits directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This directory contains headers related to the future traits module. </para>
+    </detaileddescription>
+    <location file="futures/traits/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="conceptfutures_1_1executor__for" kind="concept">
+    <compoundname>futures::executor_for</compoundname>
+    <includes refid="is__executor_8hpp" local="no">is_executor.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class E</type>
+      </param>
+      <param>
+        <type>class F</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;class E, class F&gt;
+concept <ref refid="conceptfutures_1_1executor__for" kindref="compound">futures::executor_for</ref> =  requires(E e, F f) { e.execute(f); }    </initializer>
+    <briefdescription>
+<para>Determines if a type is an executor for the specified type of task. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/executor/is_executor.hpp" line="34" column="5"/>
+  </compounddef>
+</doxygen>

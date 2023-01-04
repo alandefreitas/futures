@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1is__always__deferred" kind="struct" language="C++" prot="public">
+    <compoundname>futures::is_always_deferred</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes refid="is__always__deferred_8hpp" local="no">is_always_deferred.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Customization point to define a future as always deferred. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Deferred futures allow optimizations that make it worth indicating at compile time whether they can be applied. They can carry their tasks, avoid dynamic memory allocations, and attach continuations without any extra synchronization cost.</para>
+<para>Unless this trait is specialized, a type is considered to not be always deferred. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::is_always_deferred&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__always__deferred"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::is_always_deferred&lt; typename &gt;</label>
+        <link refid="structfutures_1_1is__always__deferred"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/traits/is_always_deferred.hpp" line="43" column="5" bodyfile="futures/traits/is_always_deferred.hpp" bodystart="43" bodyend="43"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

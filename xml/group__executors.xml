@@ -1,0 +1,352 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__executors" kind="group">
+    <compoundname>executors</compoundname>
+    <title>Executors</title>
+    <innerclass refid="classfutures_1_1inline__executor" prot="public">futures::inline_executor</innerclass>
+    <innerclass refid="classfutures_1_1new__thread__executor" prot="public">futures::new_thread_executor</innerclass>
+    <innerclass refid="classfutures_1_1thread__pool" prot="public">futures::thread_pool</innerclass>
+    <innerconcept refid="conceptfutures_1_1execution__context__for">futures::execution_context_for</innerconcept>
+    <innerconcept refid="conceptfutures_1_1execution__context">futures::execution_context</innerconcept>
+    <innerconcept refid="conceptfutures_1_1executor__for">futures::executor_for</innerconcept>
+    <innerconcept refid="conceptfutures_1_1executor">futures::executor</innerconcept>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__executors_1gaf961f88543ab12949fd90f310bc90663" prot="public" static="no">
+        <type>__see_below__</type>
+        <definition>using futures::default_execution_context_type = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>default_execution_context_type</name>
+        <qualifiedname>futures::default_execution_context_type</qualifiedname>
+        <briefdescription>
+<para>The default execution context for async operations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Unless an executor is explicitly provided, this is the executor we use for async operations.</para>
+<para>This is the ASIO thread pool execution context with a default number of threads. However, the default execution context (and its type) might change in other versions of this library if something more general comes along. As the standard for executors gets adopted, libraries are likely to provide better implementations.</para>
+<para>Also note that executors might not allow work-stealing. This needs to be taken into account when implementing algorithms with recursive tasks. One common options is to use <computeroutput>try_async</computeroutput> for recursive tasks.</para>
+<para>Also note that, in the executors notation, the pool is an execution context but not an executor:<itemizedlist>
+<listitem><para>Execution context: a place where we can execute functions</para>
+</listitem><listitem><para>A thread pool is an execution context, not an executor</para>
+</listitem></itemizedlist>
+</para>
+<para>An execution context is:<itemizedlist>
+<listitem><para>Usually long lived</para>
+</listitem><listitem><para>Non-copyable</para>
+</listitem><listitem><para>May contain additional state, such as timers, and threads </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/default_executor.hpp" line="55" column="5" bodyfile="futures/executor/default_executor.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__executors_1gacdecb5da8c06084b542ae33964dba59b" prot="public" static="no">
+        <type>default_execution_context_type::executor_type</type>
+        <definition>using futures::default_executor_type = typedef default_execution_context_type::executor_type</definition>
+        <argsstring></argsstring>
+        <name>default_executor_type</name>
+        <qualifiedname>futures::default_executor_type</qualifiedname>
+        <briefdescription>
+<para>Default executor type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/default_executor.hpp" line="58" column="5" bodyfile="futures/executor/default_executor.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__executors_1gad9066c383b30d857c2527720c86f0a71" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; execution_context_for&lt; E, F &gt; &gt;</type>
+        <definition>using futures::is_execution_context_for = typedef std::bool_constant&lt; execution_context_for&lt;E, F&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_execution_context_for</name>
+        <qualifiedname>futures::is_execution_context_for</qualifiedname>
+        <briefdescription>
+<para>Determine if type is an execution context for the specified type of task. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_execution_context.hpp" line="55" column="5" bodyfile="futures/executor/is_execution_context.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__executors_1ga50b8774bb35c27e2150e9080a3590038" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; execution_context&lt; E &gt; &gt;</type>
+        <definition>using futures::is_execution_context = typedef std::bool_constant&lt;execution_context&lt;E&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_execution_context</name>
+        <qualifiedname>futures::is_execution_context</qualifiedname>
+        <briefdescription>
+<para>Determines if a type is an execution context for invocable types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_execution_context.hpp" line="65" column="5" bodyfile="futures/executor/is_execution_context.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__executors_1ga6702c04e6873f0a2ce6344a5dd3a60a7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; executor_for&lt; E, F &gt; &gt;</type>
+        <definition>using futures::is_executor_for = typedef std::bool_constant&lt;executor_for&lt;E, F&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_executor_for</name>
+        <qualifiedname>futures::is_executor_for</qualifiedname>
+        <briefdescription>
+<para>Determine if type is an executor for the specified type of task. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_executor.hpp" line="62" column="5" bodyfile="futures/executor/is_executor.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__executors_1gaabcc65b63cd88a8479054d368e688f27" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>std::bool_constant&lt; executor&lt; E &gt; &gt;</type>
+        <definition>using futures::is_executor = typedef std::bool_constant&lt;executor&lt;E&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>is_executor</name>
+        <qualifiedname>futures::is_executor</qualifiedname>
+        <briefdescription>
+<para>Determines if a type is an executor for invocable types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_executor.hpp" line="73" column="5" bodyfile="futures/executor/is_executor.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__executors_1ga1ce8960b0f1aeaf6f5d9c1a08291041d" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_execution_context_for_v</definition>
+        <argsstring></argsstring>
+        <name>is_execution_context_for_v</name>
+        <qualifiedname>futures::is_execution_context_for_v</qualifiedname>
+        <initializer>= execution_context_for&lt;E, F&gt;</initializer>
+        <briefdescription>
+<para>Determine if type is an execution context for the specified type of task.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_execution_context.hpp" line="75" column="20" bodyfile="futures/executor/is_execution_context.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__executors_1ga7a06e7d040be2e43b5ae92f8b754133b" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_execution_context_v</definition>
+        <argsstring></argsstring>
+        <name>is_execution_context_v</name>
+        <qualifiedname>futures::is_execution_context_v</qualifiedname>
+        <initializer>= execution_context&lt;E&gt;</initializer>
+        <briefdescription>
+<para>Determines if a type is an execution context for invocable types.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_execution_context.hpp" line="85" column="20" bodyfile="futures/executor/is_execution_context.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__executors_1ga29e93e53607e1d7fd42078006e8d2155" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_executor_for_v</definition>
+        <argsstring></argsstring>
+        <name>is_executor_for_v</name>
+        <qualifiedname>futures::is_executor_for_v</qualifiedname>
+        <initializer>= executor_for&lt;E, F&gt;</initializer>
+        <briefdescription>
+<para>Determine if type is an executor for the specified type of task.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_executor.hpp" line="82" column="20" bodyfile="futures/executor/is_executor.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__executors_1ga27c20c657a0f5357f9523df487980a88" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_executor_v</definition>
+        <argsstring></argsstring>
+        <name>is_executor_v</name>
+        <qualifiedname>futures::is_executor_v</qualifiedname>
+        <initializer>= executor&lt;E&gt;</initializer>
+        <briefdescription>
+<para>Determines if a type is an executor for invocable types.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/is_executor.hpp" line="91" column="20" bodyfile="futures/executor/is_executor.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__executors_1ga046c80f7c9ec8c63cd18bebe62f3ce3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>default_execution_context_type &amp;</type>
+        <definition>default_execution_context_type &amp; futures::default_execution_context</definition>
+        <argsstring>()</argsstring>
+        <name>default_execution_context</name>
+        <qualifiedname>futures::default_execution_context</qualifiedname>
+        <briefdescription>
+<para>Create an instance of the default execution context. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Reference to the default execution context for <ref refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kindref="member">async</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/default_executor.hpp" line="64" column="5" declfile="futures/executor/default_executor.hpp" declline="64" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="group__executors_1ga1ab933a38b4db38d0955b3e6764dd90d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>default_execution_context_type::executor_type</type>
+        <definition>default_execution_context_type::executor_type futures::make_default_executor</definition>
+        <argsstring>()</argsstring>
+        <name>make_default_executor</name>
+        <qualifiedname>futures::make_default_executor</qualifiedname>
+        <briefdescription>
+<para>Create an Asio thread pool executor for the default thread pool. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In the executors notation:<itemizedlist>
+<listitem><para>Executor: set of rules governing where, when and how to run a function object<itemizedlist>
+<listitem><para>A thread pool is an execution context for which we can create executors pointing to the pool.</para>
+</listitem><listitem><para>The executor rule for the default thread pool executor is to run function objects in the pool and nowhere else.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<para>An executor is:<itemizedlist>
+<listitem><para>Lightweight and copyable (just references and pointers to the execution context).</para>
+</listitem><listitem><para>May be long or short lived.</para>
+</listitem><listitem><para>May be customized on a fine-grained basis, such as exception behavior, and order</para>
+</listitem></itemizedlist>
+</para>
+<para>There might be many executor types associated with with the same execution context.</para>
+<para><simplesect kind="return"><para>Executor handle to the default execution context </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/default_executor.hpp" line="90" column="5" declfile="futures/executor/default_executor.hpp" declline="90" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="group__executors_1gaa58c1bc10fe96080f355b709a30473f6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>unsigned int</type>
+        <definition>unsigned int futures::hardware_concurrency</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>hardware_concurrency</name>
+        <qualifiedname>futures::hardware_concurrency</qualifiedname>
+        <briefdescription>
+<para>A version of hardware_concurrency that always returns at least 1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function is a safer version of hardware_concurrency that always returns at least 1 to represent the current context when the value is not computable.</para>
+<para><itemizedlist>
+<listitem><para>It never returns 0, 1 is returned instead.</para>
+</listitem><listitem><para>It is guaranteed to remain constant for the duration of the program.</para>
+</listitem></itemizedlist>
+</para>
+<para>It also improves on hardware_concurrency to provide a default value of 1 when the function is being executed at compile time. This allows partitioners and algorithms to be constexpr.</para>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency"><computeroutput>std::hardware_concurrency</computeroutput></ulink></para>
+</simplesect>
+<simplesect kind="return"><para>Number of concurrent threads supported. If the value is not well-defined or not computable, returns 1. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/hardware_concurrency.hpp" line="47" column="5" bodyfile="futures/executor/hardware_concurrency.hpp" bodystart="47" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="group__executors_1ga8402f32dc6d52a81897b54b45ec84616" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr inline_executor</type>
+        <definition>constexpr inline_executor futures::make_inline_executor</definition>
+        <argsstring>()</argsstring>
+        <name>make_inline_executor</name>
+        <qualifiedname>futures::make_inline_executor</qualifiedname>
+        <briefdescription>
+<para>Make an inline executor object. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="48" column="5" bodyfile="futures/executor/inline_executor.hpp" bodystart="48" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="group__executors_1ga421a5f50523a4c393344869afbb7a85f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr new_thread_executor</type>
+        <definition>constexpr new_thread_executor futures::make_new_thread_executor</definition>
+        <argsstring>()</argsstring>
+        <name>make_new_thread_executor</name>
+        <qualifiedname>futures::make_new_thread_executor</qualifiedname>
+        <briefdescription>
+<para>Make an new thread executor object. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/new_thread_executor.hpp" line="49" column="5" bodyfile="futures/executor/new_thread_executor.hpp" bodystart="49" bodyend="51"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

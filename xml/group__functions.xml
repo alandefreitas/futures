@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__functions" kind="group">
+    <compoundname>functions</compoundname>
+    <title>Functions</title>
+    <innerclass refid="classfutures_1_1all__of__functor" prot="public">futures::all_of_functor</innerclass>
+    <innerclass refid="classfutures_1_1any__of__functor" prot="public">futures::any_of_functor</innerclass>
+    <innerclass refid="classfutures_1_1count__functor" prot="public">futures::count_functor</innerclass>
+    <innerclass refid="classfutures_1_1count__if__functor" prot="public">futures::count_if_functor</innerclass>
+    <innerclass refid="classfutures_1_1find__functor" prot="public">futures::find_functor</innerclass>
+    <innerclass refid="classfutures_1_1find__if__functor" prot="public">futures::find_if_functor</innerclass>
+    <innerclass refid="classfutures_1_1find__if__not__functor" prot="public">futures::find_if_not_functor</innerclass>
+    <innerclass refid="classfutures_1_1for__each__functor" prot="public">futures::for_each_functor</innerclass>
+    <innerclass refid="classfutures_1_1none__of__functor" prot="public">futures::none_of_functor</innerclass>
+    <innerclass refid="classfutures_1_1reduce__functor" prot="public">futures::reduce_functor</innerclass>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__functions_1ga0a19ce4d22f4c8a251aced2077623b03" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr all_of_functor</type>
+        <definition>constexpr all_of_functor futures::all_of</definition>
+        <argsstring></argsstring>
+        <name>all_of</name>
+        <qualifiedname>futures::all_of</qualifiedname>
+        <briefdescription>
+<para>Checks if a predicate is true for all the elements in a range. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/all_of.hpp" line="176" column="39" bodyfile="futures/algorithm/all_of.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1gac70d945839135728f9ac534f5a8626c9" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr any_of_functor</type>
+        <definition>constexpr any_of_functor futures::any_of</definition>
+        <argsstring></argsstring>
+        <name>any_of</name>
+        <qualifiedname>futures::any_of</qualifiedname>
+        <briefdescription>
+<para>Checks if a predicate is true for any of the elements in a range. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/any_of.hpp" line="165" column="39" bodyfile="futures/algorithm/any_of.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1gaeb543fc7a0437fc057e2acf823abbb13" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr count_functor</type>
+        <definition>constexpr count_functor futures::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>futures::count</qualifiedname>
+        <briefdescription>
+<para>Returns the number of elements matching an element. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/count.hpp" line="101" column="38" bodyfile="futures/algorithm/count.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga0741d870e77e49d34e7daae10ecfb721" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr count_if_functor</type>
+        <definition>constexpr count_if_functor futures::count_if</definition>
+        <argsstring></argsstring>
+        <name>count_if</name>
+        <qualifiedname>futures::count_if</qualifiedname>
+        <briefdescription>
+<para>Returns the number of elements satisfying specific criteria. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/count_if.hpp" line="172" column="41" bodyfile="futures/algorithm/count_if.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga15c434fa0fbabddf6b1ab8cf06760ec5" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr find_functor</type>
+        <definition>constexpr find_functor futures::find</definition>
+        <argsstring></argsstring>
+        <name>find</name>
+        <qualifiedname>futures::find</qualifiedname>
+        <briefdescription>
+<para>Finds the first element equal to another element. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find.hpp" line="71" column="37" bodyfile="futures/algorithm/find.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga10dff629b2c06c53c69024821bce5efc" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr find_if_functor</type>
+        <definition>constexpr find_if_functor futures::find_if</definition>
+        <argsstring></argsstring>
+        <name>find_if</name>
+        <qualifiedname>futures::find_if</qualifiedname>
+        <briefdescription>
+<para>Finds the first element satisfying specific criteria. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if.hpp" line="234" column="40" bodyfile="futures/algorithm/find_if.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga58db85c74ede4cc40c6e8735e3f228d7" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr find_if_not_functor</type>
+        <definition>constexpr find_if_not_functor futures::find_if_not</definition>
+        <argsstring></argsstring>
+        <name>find_if_not</name>
+        <qualifiedname>futures::find_if_not</qualifiedname>
+        <briefdescription>
+<para>Finds the first element not satisfying specific criteria. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/find_if_not.hpp" line="94" column="44" bodyfile="futures/algorithm/find_if_not.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga696ae412208d98f074d3ed6667e1a64f" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr for_each_functor</type>
+        <definition>constexpr for_each_functor futures::for_each</definition>
+        <argsstring></argsstring>
+        <name>for_each</name>
+        <qualifiedname>futures::for_each</qualifiedname>
+        <briefdescription>
+<para>Applies a function to a range of elements. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/for_each.hpp" line="180" column="41" bodyfile="futures/algorithm/for_each.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga0fb3a8de3d488915fcd3ebe63d603731" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr none_of_functor</type>
+        <definition>constexpr none_of_functor futures::none_of</definition>
+        <argsstring></argsstring>
+        <name>none_of</name>
+        <qualifiedname>futures::none_of</qualifiedname>
+        <briefdescription>
+<para>Checks if a predicate is true for none of the elements in a range. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/none_of.hpp" line="170" column="40" bodyfile="futures/algorithm/none_of.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__functions_1ga12eba09a0c6fb20ae5a7f3c561e2b433" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr reduce_functor</type>
+        <definition>constexpr reduce_functor futures::reduce</definition>
+        <argsstring></argsstring>
+        <name>reduce</name>
+        <qualifiedname>futures::reduce</qualifiedname>
+        <briefdescription>
+<para>Sums up (or accumulate with a custom function) a range of elements, except out of order. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/reduce.hpp" line="162" column="39" bodyfile="futures/algorithm/reduce.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

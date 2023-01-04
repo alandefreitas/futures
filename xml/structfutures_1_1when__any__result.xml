@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1when__any__result" kind="struct" language="C++" prot="public">
+    <compoundname>futures::when_any_result</compoundname>
+    <includes refid="when__any_8hpp" local="no">when_any.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Sequence</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" prot="public" static="no">
+        <type>std::size_t</type>
+        <definition>using futures::when_any_result&lt; Sequence &gt;::size_type =  std::size_t</definition>
+        <argsstring></argsstring>
+        <name>size_type</name>
+        <qualifiedname>futures::when_any_result::size_type</qualifiedname>
+        <briefdescription>
+<para>Type used to represent the number of futures in the result. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="49" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" prot="public" static="no">
+        <type>Sequence</type>
+        <definition>using futures::when_any_result&lt; Sequence &gt;::sequence_type =  Sequence</definition>
+        <argsstring></argsstring>
+        <name>sequence_type</name>
+        <qualifiedname>futures::when_any_result::sequence_type</qualifiedname>
+        <briefdescription>
+<para>A sequence type with all the futures. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This sequence might be a range or a tuple. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="55" column="9" bodyfile="futures/adaptor/when_any.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structfutures_1_1when__any__result_1a6e7503a645fb889c080ba674ac794fa0" prot="public" static="no" mutable="no">
+        <type><ref refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kindref="member">size_type</ref></type>
+        <definition>size_type futures::when_any_result&lt; Sequence &gt;::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>futures::when_any_result::index</qualifiedname>
+        <initializer>{ static_cast&lt;<ref refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kindref="member">size_type</ref>&gt;(-1) }</initializer>
+        <briefdescription>
+<para>Index of the element whose result was ready first. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="58" column="19" bodyfile="futures/adaptor/when_any.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfutures_1_1when__any__result_1a221787d150f27ae4f9234b8876525a6f" prot="public" static="no" mutable="no">
+        <type><ref refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" kindref="member">sequence_type</ref></type>
+        <definition>sequence_type futures::when_any_result&lt; Sequence &gt;::tasks</definition>
+        <argsstring></argsstring>
+        <name>tasks</name>
+        <qualifiedname>futures::when_any_result::tasks</qualifiedname>
+        <briefdescription>
+<para>The sequence of future objects waited for. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/adaptor/when_any.hpp" line="61" column="23" bodyfile="futures/adaptor/when_any.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Result type for when_any_future objects. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This is defined in a separate file because many other concepts depend on this definition, especially the inferences for unwrapping <computeroutput>then</computeroutput> continuations, regardless of the when_any algorithm. </para>
+    </detaileddescription>
+    <location file="futures/adaptor/when_any.hpp" line="47" column="5" bodyfile="futures/adaptor/when_any.hpp" bodystart="47" bodyend="62"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1when__any__result_1a6e7503a645fb889c080ba674ac794fa0" prot="public" virt="non-virtual"><scope>futures::when_any_result</scope><name>index</name></member>
+      <member refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" prot="public" virt="non-virtual"><scope>futures::when_any_result</scope><name>sequence_type</name></member>
+      <member refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" prot="public" virt="non-virtual"><scope>futures::when_any_result</scope><name>size_type</name></member>
+      <member refid="structfutures_1_1when__any__result_1a221787d150f27ae4f9234b8876525a6f" prot="public" virt="non-virtual"><scope>futures::when_any_result</scope><name>tasks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

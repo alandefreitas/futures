@@ -1,0 +1,1419 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Better Futures: Because futures don't have to be awful">
+      
+      
+      
+        <link rel="canonical" href="https://alandefreitas.github.io/futures/futures/launching/">
+      
+      
+        <link rel="prev" href="../future_types/">
+      
+      
+        <link rel="next" href="../deferred/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.2">
+    
+    
+      
+        <title>Launching Tasks - Better Futures</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f56500e0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-290016612",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-290016612",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="futures" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#launching-tasks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Better Futures" class="md-header__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Better Futures
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Launching Tasks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+<!-- Main navigation -->
+
+
+<div
+        class="md-sidebar md-sidebar--primary"
+        data-md-component="sidebar" data-md-type="navigation"
+        
+>
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Better Futures" class="md-nav__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    Better Futures
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Futures" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../future_types/" class="md-nav__link">
+        Basic Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Launching Tasks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Launching Tasks
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#future-tasks" class="md-nav__link">
+    Future tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eager-tasks" class="md-nav__link">
+    Eager tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allocations" class="md-nav__link">
+    Allocations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executors" class="md-nav__link">
+    Executors
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/" class="md-nav__link">
+        Deferred Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../continuable_futures/" class="md-nav__link">
+        Continuable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stoppable_futures/" class="md-nav__link">
+        Stoppable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shared_futures/" class="md-nav__link">
+        Shared Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../waiting/" class="md-nav__link">
+        Waiting for Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../promises/" class="md-nav__link">
+        Promises and Tasks
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Future Adaptors" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/continuations/" class="md-nav__link">
+        Continuations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/conjunctions/" class="md-nav__link">
+        Conjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/disjunctions/" class="md-nav__link">
+        Disjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/task_graphs/" class="md-nav__link">
+        Task Graphs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Parallel Algorithms" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/partitioners/" class="md-nav__link">
+        Partitioners
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Networking" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/asio/" class="md-nav__link">
+        Asio
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_reference/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__futures/" class="md-nav__link">
+        Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__adaptors/" class="md-nav__link">
+        Adaptors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__executors/" class="md-nav__link">
+        Executors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/namespaces/namespacefutures/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/files/" class="md-nav__link">
+        Files
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+        </div>
+    </div>
+</div>
+
+
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#future-tasks" class="md-nav__link">
+    Future tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eager-tasks" class="md-nav__link">
+    Eager tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allocations" class="md-nav__link">
+    Allocations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executors" class="md-nav__link">
+    Executors
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+            <div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+        </div>
+    </div>
+</div>
+
+
+
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+                  
+
+  
+  
+
+
+
+<h1 id="launching-tasks">Launching tasks</h1>
+<h2 id="future-tasks">Future tasks</h2>
+<p>The easiest way to create futures is by launching tasks:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Launching a simple task</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Task 1</span>
+<span class="w">    </span><span class="n">long_task</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This is what happens under the hood:</p>
+<div class="mermaid">
+graph LR
+M[[Main Thread]] ==> |store|F[Future Value]
+E[[Executor]] --> |run|T[Task]
+M -.-> |launch|T
+subgraph Futures and Promises
+F --> |read|S[(Operation State)]
+T[Promised Task] --> |write|S
+end
+</div>
+
+<ol>
+<li>An executor handles a task. Any data is stored in a private operation state.</li>
+<li>While the executor handles a task, the main thread holds a future value.</li>
+<li>When the task is completed, it fulfills its promise by setting the operation state with its result.</li>
+<li>The future is considered ready and the main thread can obtain its value.</li>
+</ol>
+<p>This is how these three steps might happen:</p>
+<div class="mermaid">
+sequenceDiagram
+    rect rgb(191, 200, 255)
+    Main->>Task: Launch
+    Task->>State: Create
+    activate Task
+    State->>Future: Create
+    Task->>Task: Executor runs task
+    Future->>Main: Store
+    end
+    Main->>Main: Do work before waiting
+    rect rgb(191, 223, 200)
+    Main->>Future: Wait
+    Future->>State: Wait
+    Task->>State: Write
+    deactivate Task
+    Future->>State: Read
+    end
+    rect rgb(150, 223, 255)
+    Future->>Main: Return
+    end
+</div>
+
+<div class="admonition hint">
+<p class="admonition-title">The Operation State</p>
+<p>The operation state is a private implementation detail with 
+which the user does not interact. </p>
+<p>This encapsulation ensures all write operations will happen
+through the promised task and all read operations will happen
+through the future.</p>
+<p>It also enables optimizations based on assumptions about how
+specific future and promise types can access the operation 
+state.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Inline Operation States</p>
+<p>If these future and promise objects are stable during the execution
+of the task, the operation state can be stored inline. This is 
+an optimization that avoids dynamic memory allocations.    </p>
+</div>
+<h2 id="eager-tasks">Eager tasks</h2>
+<p>Like <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a>, <a href="/futures/reference/Namespaces/namespacefutures/#function-async">futures::async</a> is used to launch new tasks in parallel.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Launching a simple task</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Task 1</span>
+<span class="w">    </span><span class="n">long_task</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In this example, this function returns a continuable <a href="/futures/reference/Namespaces/namespacefutures/#using-cfuture">cfuture</a> by default instead of a <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>. If the first task
+parameter is a <a href="/futures/reference/Classes/classfutures_1_1stop__source/">stop_source</a>, it returns a <a href="/futures/reference/Namespaces/namespacefutures/#using-jcfuture">jcfuture</a> we can stop from the main thread with <code>request_stop</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Launching a task with a stop token</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">jcfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([](</span><span class="n">stop_token</span><span class="w"> </span><span class="n">st</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">stop_requested</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Running task 2</span>
+<span class="w">        </span><span class="n">shorter_task</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+<span class="n">f2</span><span class="p">.</span><span class="n">request_stop</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>If the task accepts parameters, we can provide them directly to <a href="/futures/reference/Namespaces/namespacefutures/#function-async">async</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Launching a task with parameters</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Unlike <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a>, which uses launch policies, <a href="/futures/reference/Namespaces/namespacefutures/#function-async">futures::async</a> can use any concrete <a href="/futures/reference/Namespaces/namespacefutures/#using-is_executor">executor</a> specifying details
+about how the task should be executed.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Launching a task with a custom executor</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">futures</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="nf">custom_pool</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">futures</span><span class="o">::</span><span class="n">thread_pool</span><span class="o">::</span><span class="n">executor_type</span><span class="w"> </span><span class="n">ex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">custom_pool</span><span class="p">.</span><span class="n">get_executor</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Task in thread pool</span>
+<span class="w">    </span><span class="n">long_task</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">f6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">make_inline_executor</span><span class="p">(),</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Inline task</span>
+<span class="w">    </span><span class="n">long_task</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>If the <a href="/futures/reference/Namespaces/namespacefutures/#using-is_executor">executor</a> is not defined, the default executor is used for the tasks. This executor ensures we do not launch a
+new thread for each task.</p>
+<p>To block execution of the main thread until the tasks are complete, we can use the functions <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-wait">basic_future::wait</a>
+and <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-get">basic_future::get</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Waiting for tasks</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">f1</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="n">f2</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="n">f3</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f4</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="n">f5</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="n">f6</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The function <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-wait">basic_future::wait</a> will only block execution until the task is ready, while <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-get">basic_future::get</a> can be
+used to wait for and retrieve the final value.</p>
+<p>Note that eager tasks are allowed to start as soon as they are launched:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>+Task: Launch
+    Task->>Task: Do work
+    Main->>Main: Do work
+    Main->>Task: Wait
+    Task->>-Main: Return
+</div>
+
+<div class="admonition info">
+<p class="admonition-title">Callbacks and Eager Futures in C++</p>
+<p>In <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf">N3747</a>
+, <a href="https://github.com/chriskohlhoff">Christopher Kohlhoff</a> compares the model of eager continuations, such as
+in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf">N3784</a> to the model of <strong>callback functions</strong> used in
+the <a href="https://github.com/chriskohlhoff/asio">Asio</a> library:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Futures</label><label for="__tabbed_7_2">Callbacks</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// the antecedent future represents the future result of `async_write`</span>
+<span class="w">    </span><span class="n">some_future_lib</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">))</span>
+<span class="w">        </span><span class="c1">// The continuation function creates a new future</span>
+<span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="n">schedule_read_function</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">schedule_write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// async_write returns void</span>
+<span class="w">    </span><span class="n">asio</span><span class="o">::</span><span class="n">async_write</span><span class="p">(</span><span class="n">socket_</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">data_</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">),</span><span class="w"> </span>
+<span class="w">        </span><span class="c1">// the continuation is provided when `async_write` schedules the first task</span>
+<span class="w">        </span><span class="n">schedule_read_function</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Eager continuable futures may attach the continuation <em>before or after</em> the antecedent future starts. With
+callbacks functions the calling function provides the continuation <em>before</em> the antecedent task starts, which
+<strong>avoids the synchronization cost</strong> in a race between the result and its continuation.</p>
+</div>
+<h2 id="exceptions">Exceptions</h2>
+<p>Future objects defined in this library handle exceptions the same way <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> does. If the task throws an
+exception internally, the exception is rethrown when we attempt to retrieve the value from the future
+with <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-get">basic_future::get</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">futures</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">task_that_might_fail</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">handle_error</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>When working without exceptions, we can avoid terminating the process by querying the state of the future before
+attempting to get its value.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">task_that_might_fail</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">get_exception_ptr</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// handle error</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="allocations">Allocations</h2>
+<p>The operation state is a private implementation detail with which the user does not interact. To ensure stability,
+it is usually implemented as a shared pointer to the concrete Operation State, which is where the task will store its
+result.</p>
+<div class="mermaid">
+graph LR
+F[Future] --> |read|S1[Shared State Pointer]
+T[Promise] --> |write|S2[Shared State Pointer]
+subgraph Shared State
+S1 --> O[Operation State]
+S2 --> O[Operation State]
+end
+</div>
+
+<p>In the general case, the operation state needs a stable address so that futures and promises can access it. In turn,
+this requires dynamic memory allocations of this shared state. For smaller tasks, the cost of this allocation might
+dominate the time spent by the parallel task.</p>
+<p>For this reason, functions used for launching futures allow custom memory allocators for eager tasks. When no
+allocator is provided for launching tasks, an optimized memory pool allocator is provided for the operation state.</p>
+<div class="mermaid">
+graph LR
+F[Future] --> |read|S1[Shared State Pointer]
+T[Promise] --> |write|S2[Shared State Pointer]
+subgraph Shared State
+S1 --> O[Operation State 1]
+S2 --> O[Operation State 1]
+end
+P[Memory Pool] -.-> |owns|O[Operation State 1]
+P[Memory Pool] -.-> |owns|O2[Operation State 2]
+P[Memory Pool] -.-> |owns|O3[Operation State 3]
+P[Memory Pool] -.-> |owns|Odots[...]
+P[Memory Pool] -.-> |owns|ON[Operation State N]
+</div>
+
+<p>The memory pool allows fast dynamic memory allocation and provides better cache locality for accessing the tasks
+and their results.</p>
+<p>However, in some circumstances, the library implements a few optimizations to avoid allocations altogether. In the
+following example, we have a deferred future where no allocations are required.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Allocations not required</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">schedule</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In this example, the operation state might be stored inline with the future:</p>
+<div class="mermaid">
+graph RL
+F[Future<br>+<br>Operation State] --> |read|F
+T[Promise] --> |write|F
+</div>
+
+<p>With this optimization, the operation state is stored in the future, so the future can read the results from its own
+operation state. The promise can use the address of the operation state in the future to write its result. In this case,
+the promise is <strong>connected</strong> with the future and can store results directly in its operation state.</p>
+<p>This optimization is only applicable if the address of the future will not change, i.e.: will not be moved or destroyed,
+during task execution, i.e.: (i) after the task to set the operation state is launched and (ii) before the operation
+state is set. This is easiest to achieve in deferred futures, because the thread waiting for its result is blocked when
+we call <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-wait">basic_future::wait</a> and the future can only be moved or destroyed after the underlying operation state is set.</p>
+<p>Note that this optimization is only possible if we can ensure the future cannot be moved or destroyed during task
+execution:</p>
+<ul>
+<li>Functions such as <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-wait_for">basic_future::wait_for</a> will disable this optimization for deferred futures because the underlying
+  object might be moved after <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-wait_for">basic_future::wait_for</a> times out and during task execution.</li>
+<li>This optimization can be enabled for eager futures that we know should not be moved or destroyed during task
+  execution. This is common in applications represented as classes that store their future instances. If we mistakenly
+  attempt to move or destroy the future during execution, it blocks the calling thread until the operation state is set.</li>
+<li>Similarly, this optimization can be enabled for shared futures if the future object from where the task is launched is
+  not moved or destroyed during execution.</li>
+</ul>
+<h2 id="executors">Executors</h2>
+<p>The concept defined for an <a href="/futures/reference/Namespaces/namespacefutures/#using-is_executor">executor</a> uses Asio executors as defined
+by <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1393r0.html">P1393r0</a>. This model for executors has been
+evolving for over a decade and is widely adopted in C++. If the C++ standard eventually adopts a common vocabulary for
+executors, the <a href="/futures/reference/Namespaces/namespacefutures/#using-is_executor">executor</a> concept can be easily adjusted to handle these new executors types.</p>
+<div class="admonition info">
+<p class="admonition-title">Executors in C++</p>
+<p>The first clear problem identified with <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> is we <strong>cannot define its executor</strong> (or scheduler). That is, we cannot
+define <em>where</em> these tasks are executed. By default, every task is executed in a new thread in C++11, which is
+unacceptable to most applications. Common executors for these tasks would be thread pools, strands, or GPUs.</p>
+<p>Many <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html">models for standard executors</a> have been
+proposed <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html#appendix-executors-bibilography">over time</a>
+. In most current models, executors (or schedulers) are <strong>light handles</strong> representing an execution context <em>where</em> work can
+be executed. The context is usually called an execution context or execution resource. Executors might be constructed
+directly from execution contexts or adapted from other executors.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Better future executors</p>
+<ul>
+<li>Support for custom executors<ul>
+<li>Its traits are currently a subset of existing Asio executors.</li>
+</ul>
+</li>
+<li>Customization points can make other executor types work with the library types</li>
+<li>Provides an alternative to <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> <strong>based on <a href="#executors">executors</a></strong><ul>
+<li>Still adaptable to other executor or scheduler concepts, including senders and receivers.</li>
+<li>The default executor does NOT create a new thread for each task</li>
+</ul>
+</li>
+</ul>
+</div>
+<!-- Standard C++ -->
+<!-- C++ Standard library -->
+<!-- C++ Standard library / Extensions and Proposals -->
+<!-- Libraries -->
+<!-- Futures -->
+
+
+  
+
+
+
+
+                
+
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px; text-align: center;">
+    <a href="https://github.com/alandefreitas/futures/" title="Better Futures" class="md-button" target="_blank">
+        ⭐️ Star Better Futures
+    </a>
+</footer>
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Application footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+    <div class="md-footer-nav">
+        <nav
+                class="md-footer-nav__inner md-grid"
+                aria-label=""
+        >
+
+            <!-- Link to previous page -->
+            
+            <a
+                    href="../future_types/"
+                    class="md-footer-nav__link md-footer-nav__link--prev"
+                    rel="prev"
+            >
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+                </div>
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                        Basic Types
+                    </div>
+                </div>
+            </a>
+            
+
+            <!-- Link to next page -->
+            
+            <a
+                    href="../deferred/"
+                    class="md-footer-nav__link md-footer-nav__link--next"
+                    rel="next"
+            >
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                        Deferred Tasks
+                    </div>
+                </div>
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+                </div>
+            </a>
+            
+        </nav>
+    </div>
+    
+
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+        <div class="md-footer-meta__inner md-grid">
+
+            <!-- Copyright and theme information -->
+            <div class="md-footer-copyright">
+                
+                <div class="md-footer-copyright__highlight">
+                    Copyright &copy; Alan Freitas
+                </div>
+                
+                Made with
+                <a
+                        href="https://squidfunk.github.io/mkdocs-material/"
+                        target="_blank" rel="noopener"
+                >
+                    Material for MkDocs
+                </a>
+            </div>
+
+            <!-- Social links -->
+            <div class="md-social">
+  
+</div>
+        </div>
+    </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="../../js/mkdocs-charts-plugin.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>

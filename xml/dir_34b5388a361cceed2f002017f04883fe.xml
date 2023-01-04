@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_34b5388a361cceed2f002017f04883fe" kind="dir">
+    <compoundname>futures/algorithm/compare</compoundname>
+    <innerfile refid="compare__three__way_8hpp">compare_three_way.hpp</innerfile>
+    <innerfile refid="equal__to_8hpp">equal_to.hpp</innerfile>
+    <innerfile refid="greater_8hpp">greater.hpp</innerfile>
+    <innerfile refid="greater__equal_8hpp">greater_equal.hpp</innerfile>
+    <innerfile refid="less_8hpp">less.hpp</innerfile>
+    <innerfile refid="less__equal_8hpp">less_equal.hpp</innerfile>
+    <innerfile refid="not__equal__to_8hpp">not_equal_to.hpp</innerfile>
+    <innerfile refid="partial__ordering_8hpp">partial_ordering.hpp</innerfile>
+    <innerfile refid="strong__ordering_8hpp">strong_ordering.hpp</innerfile>
+    <innerfile refid="weak__ordering_8hpp">weak_ordering.hpp</innerfile>
+    <briefdescription>
+<para>Root comparisons directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This directory contains all headers related to the algorithm comparisons module. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/compare/"/>
+  </compounddef>
+</doxygen>

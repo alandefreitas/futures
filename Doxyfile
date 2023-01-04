@@ -1,0 +1,57 @@
+PROJECT_NAME = "Futures"
+DOXYFILE_ENCODING = UTF-8
+OUTPUT_DIRECTORY = .
+GENERATE_LATEX = NO
+
+GENERATE_XML = YES
+XML_OUTPUT = xml
+
+INPUT = ./../include/futures/future.hpp \
+        ./../include/futures
+STRIP_FROM_PATH = ./../include
+INCLUDE_PATH = ./../include
+RECURSIVE = YES
+EXCLUDE = ./../include/futures/impl \
+          ./../include/futures/detail \
+          ./../include/futures/adaptor/detail \
+          ./../include/futures/adaptor/impl \
+          ./../include/futures/algorithm/detail \
+          ./../include/futures/algorithm/impl \
+          ./../include/futures/algorithm/compare/detail \
+          ./../include/futures/algorithm/compare/impl \
+          ./../include/futures/algorithm/partitioner/detail \
+          ./../include/futures/algorithm/partitioner/impl \
+          ./../include/futures/algorithm/traits/detail \
+          ./../include/futures/algorithm/traits/impl \
+          ./../include/futures/executor/detail \
+          ./../include/futures/executor/impl \
+          ./../include/futures/traits/detail \
+          ./../include/futures/traits/impl \
+          ./../include/futures/futures/detail
+FILE_PATTERNS = *.hpp
+EXCLUDE_SYMBOLS = "std" "asio" "detail" "futures::detail" "detail::*" "futures::detail::*" "boost" "*_graph" "A" "Enable" "Proxy"
+EXAMPLE_PATH = ./..
+EXAMPLE_PATTERNS = *.cpp
+
+DISTRIBUTE_GROUP_DOC=YES
+ENABLE_PREPROCESSING=YES
+MACRO_EXPANSION=YES
+EXPAND_ONLY_PREDEF=NO
+PREDEFINED= FUTURES_DOXYGEN \
+            FUTURES_CONSTEXPR=constexpr \
+            FUTURES_CONSTANT_EVALUATED_CONSTEXPR=constexpr \
+            FUTURES_USE_STANDALONE_ASIO=1
+
+JAVADOC_AUTOBRIEF=YES
+
+INLINE_INHERITED_MEMB=YES
+INHERIT_DOCS=YES
+SHOW_NAMESPACES = YES
+EXTRACT_ALL = YES
+AUTOLINK_SUPPORT = NO
+GENERATE_HTML = NO
+
+CALL_GRAPH = NO
+HAVE_DOT = NO
+
+IMAGE_PATH = img

@@ -1,0 +1,1429 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1basic__future" kind="class" language="C++" prot="public">
+    <compoundname>futures::basic_future</compoundname>
+    <includes refid="future_8hpp" local="no">future.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class R</type>
+      </param>
+      <param>
+        <type>class Options</type>
+        <defval><ref refid="group__future-options_1ga7f03484ae7db4ae89f95bade537afc35" kindref="member">future_options</ref>&lt;&gt;</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="user-defined">
+      <header>Public types</header>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1ad7308ec8c2fa1672b28aad2f29524348" prot="public" static="no">
+        <type>R</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::value_type =  R</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>futures::basic_future::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="408" column="9" bodyfile="futures/future.hpp" bodystart="408" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Members</header>
+      <description><para>Pointer to shared state </para>
+</description>
+      <memberdef kind="variable" id="classfutures_1_1basic__future_1abb0c68ad541e5fd0d6f00a613c8ba190" prot="private" static="no" mutable="yes">
+        <type>future_state_type</type>
+        <definition>future_state_type futures::basic_future&lt; R, Options &gt;::state_</definition>
+        <argsstring></argsstring>
+        <name>state_</name>
+        <qualifiedname>futures::basic_future::state_</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Whether this future should join at destruction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="940" column="35" bodyfile="futures/future.hpp" bodystart="940" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classfutures_1_1basic__future_1a97d6f334a8ad61e3605e4acfb561fd75" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool futures::basic_future&lt; R, Options &gt;::join_</definition>
+        <argsstring></argsstring>
+        <name>join_</name>
+        <qualifiedname>futures::basic_future::join_</qualifiedname>
+        <initializer>{ !Options::is_always_detached }</initializer>
+        <briefdescription>
+<para>Whether this future should join at destruction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="943" column="14" bodyfile="futures/future.hpp" bodystart="943" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Getting the result</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a9b0f2cf31b6faf5b70113e50613a59f6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::get_impl</definition>
+        <argsstring>(boost::mp11::mp_int&lt; 0 &gt;)</argsstring>
+        <name>get_impl</name>
+        <qualifiedname>futures::basic_future::get_impl</qualifiedname>
+        <param>
+          <type>boost::mp11::mp_int&lt; 0 &gt;</type>
+        </param>
+        <briefdescription>
+<para>Returns the result. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The get member function waits until the future has a valid result and retrieves it.</para>
+<para>It effectively calls wait() in order to wait for the result.</para>
+<para>The behavior is undefined if <ref refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" kindref="member">valid()</ref> is false before the call to this function.</para>
+<para>If the future is unique, any shared state is released and valid() is <computeroutput>false</computeroutput> after a call to this member function.</para>
+<para><itemizedlist>
+<listitem><para>Unique futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>R</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Shared futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>const R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput> </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="529" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a0a006bc832ee31fc1ee9674621e4df22" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::get_impl</definition>
+        <argsstring>(boost::mp11::mp_int&lt; 1 &gt;)</argsstring>
+        <name>get_impl</name>
+        <qualifiedname>futures::basic_future::get_impl</qualifiedname>
+        <param>
+          <type>boost::mp11::mp_int&lt; 1 &gt;</type>
+        </param>
+        <briefdescription>
+<para>Returns the result. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The get member function waits until the future has a valid result and retrieves it.</para>
+<para>It effectively calls wait() in order to wait for the result.</para>
+<para>The behavior is undefined if <ref refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" kindref="member">valid()</ref> is false before the call to this function.</para>
+<para>If the future is unique, any shared state is released and valid() is <computeroutput>false</computeroutput> after a call to this member function.</para>
+<para><itemizedlist>
+<listitem><para>Unique futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>R</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Shared futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>const R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput> </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="532" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aa25e9a793417ab77f978bf57cf89fcf2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::get_impl</definition>
+        <argsstring>(boost::mp11::mp_int&lt; 2 &gt;)</argsstring>
+        <name>get_impl</name>
+        <qualifiedname>futures::basic_future::get_impl</qualifiedname>
+        <param>
+          <type>boost::mp11::mp_int&lt; 2 &gt;</type>
+        </param>
+        <briefdescription>
+<para>Returns the result. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The get member function waits until the future has a valid result and retrieves it.</para>
+<para>It effectively calls wait() in order to wait for the result.</para>
+<para>The behavior is undefined if <ref refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" kindref="member">valid()</ref> is false before the call to this function.</para>
+<para>If the future is unique, any shared state is released and valid() is <computeroutput>false</computeroutput> after a call to this member function.</para>
+<para><itemizedlist>
+<listitem><para>Unique futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>R</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Shared futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>const R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput> </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="535" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a1491b64679c09495bc8dee965dd97813" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::get</definition>
+        <argsstring>()</argsstring>
+        <name>get</name>
+        <qualifiedname>futures::basic_future::get</qualifiedname>
+        <briefdescription>
+<para>Returns the result. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The get member function waits until the future has a valid result and retrieves it.</para>
+<para>It effectively calls wait() in order to wait for the result.</para>
+<para>The behavior is undefined if <ref refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" kindref="member">valid()</ref> is false before the call to this function.</para>
+<para>If the future is unique, any shared state is released and valid() is <computeroutput>false</computeroutput> after a call to this member function.</para>
+<para><itemizedlist>
+<listitem><para>Unique futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>R</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Shared futures:<itemizedlist>
+<listitem><para><computeroutput>R</computeroutput> -&gt; return <computeroutput>const R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>R&amp;</computeroutput> -&gt; return <computeroutput>R&amp;</computeroutput></para>
+</listitem><listitem><para><computeroutput>void</computeroutput> -&gt; return <computeroutput>void</computeroutput> </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="525" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aad10ac2552989ec18d2c353204070855" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::exception_ptr</type>
+        <definition>std::exception_ptr futures::basic_future&lt; R, Options &gt;::get_exception_ptr</definition>
+        <argsstring>()</argsstring>
+        <name>get_exception_ptr</name>
+        <qualifiedname>futures::basic_future::get_exception_ptr</qualifiedname>
+        <briefdescription>
+<para>Get exception pointer without throwing an exception. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If the future does not hold an exception, the exception_ptr is nullptr.</para>
+<para>This extends future objects so that we can always check if the future contains an exception without throwing it.</para>
+<para><simplesect kind="return"><para>An exception pointer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="549" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Continuations</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a913be65c244d630c3254d9b3be4225f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Fn</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::then_impl</definition>
+        <argsstring>(std::true_type, Executor const &amp;ex, Fn &amp;&amp;fn)</argsstring>
+        <name>then_impl</name>
+        <qualifiedname>futures::basic_future::then_impl</qualifiedname>
+        <param>
+          <type>std::true_type</type>
+        </param>
+        <param>
+          <type>Executor const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a continuation to a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attach the continuation function to this future object. The behavior is undefined if this future has no associated operation state (i.e., <computeroutput>valid() == false</computeroutput>).</para>
+<para>Creates an operation state associated with the future object to be returned.</para>
+<para>When the shared state currently associated with this future is ready, the continuation is called on the specified executor.</para>
+<para>Any value returned from the continuation is stored as the result in the operation state of the returned future object. Any exception propagated from the execution of the continuation is stored as the exceptional result in the operation state of the returned future object.</para>
+<para>A continuation to an eager future is also eager. If this future is eager, the continuation is attached to a list of continuations of this future.</para>
+<para>A continuation to a deferred future is also deferred. If this future is deferred, this future is stored as the parent future of the next future.</para>
+<para>If this future is ready, the continuation is directly launched or scheduled in the specified executor.</para>
+<para><simplesect kind="note"><para>Unlike <computeroutput>std::experimental::future</computeroutput>, when the return type of the continuation function is also a future, this function performs no implicit unwrapping on the return type with the <computeroutput>get</computeroutput> function. This (i) simplifies the development of generic algorithms with futures, (ii) makes the executor for the unwrapping task explicit, and (iii) allows the user to retrieve the returned type as a future or as its unwrapped type.</para>
+</simplesect>
+<simplesect kind="note"><para>This function only participates in overload resolution if the future supports continuations</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A continuation function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The continuation future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="767" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a957bc23e3e1a1a54c3ce7e2cbcc7293e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Fn</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::then_impl</definition>
+        <argsstring>(std::false_type, Executor const &amp;ex, Fn &amp;&amp;fn)</argsstring>
+        <name>then_impl</name>
+        <qualifiedname>futures::basic_future::then_impl</qualifiedname>
+        <param>
+          <type>std::false_type</type>
+        </param>
+        <param>
+          <type>Executor const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a continuation to a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attach the continuation function to this future object. The behavior is undefined if this future has no associated operation state (i.e., <computeroutput>valid() == false</computeroutput>).</para>
+<para>Creates an operation state associated with the future object to be returned.</para>
+<para>When the shared state currently associated with this future is ready, the continuation is called on the specified executor.</para>
+<para>Any value returned from the continuation is stored as the result in the operation state of the returned future object. Any exception propagated from the execution of the continuation is stored as the exceptional result in the operation state of the returned future object.</para>
+<para>A continuation to an eager future is also eager. If this future is eager, the continuation is attached to a list of continuations of this future.</para>
+<para>A continuation to a deferred future is also deferred. If this future is deferred, this future is stored as the parent future of the next future.</para>
+<para>If this future is ready, the continuation is directly launched or scheduled in the specified executor.</para>
+<para><simplesect kind="note"><para>Unlike <computeroutput>std::experimental::future</computeroutput>, when the return type of the continuation function is also a future, this function performs no implicit unwrapping on the return type with the <computeroutput>get</computeroutput> function. This (i) simplifies the development of generic algorithms with futures, (ii) makes the executor for the unwrapping task explicit, and (iii) allows the user to retrieve the returned type as a future or as its unwrapped type.</para>
+</simplesect>
+<simplesect kind="note"><para>This function only participates in overload resolution if the future supports continuations</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A continuation function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The continuation future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="777" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a207a3b387a36883dc7cf0d69e6284b56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Executor</type>
+          </param>
+          <param>
+            <type>class Fn</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::then</definition>
+        <argsstring>(Executor const &amp;ex, Fn &amp;&amp;fn)</argsstring>
+        <name>then</name>
+        <qualifiedname>futures::basic_future::then</qualifiedname>
+        <param>
+          <type>Executor const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a continuation to a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attach the continuation function to this future object. The behavior is undefined if this future has no associated operation state (i.e., <computeroutput>valid() == false</computeroutput>).</para>
+<para>Creates an operation state associated with the future object to be returned.</para>
+<para>When the shared state currently associated with this future is ready, the continuation is called on the specified executor.</para>
+<para>Any value returned from the continuation is stored as the result in the operation state of the returned future object. Any exception propagated from the execution of the continuation is stored as the exceptional result in the operation state of the returned future object.</para>
+<para>A continuation to an eager future is also eager. If this future is eager, the continuation is attached to a list of continuations of this future.</para>
+<para>A continuation to a deferred future is also deferred. If this future is deferred, this future is stored as the parent future of the next future.</para>
+<para>If this future is ready, the continuation is directly launched or scheduled in the specified executor.</para>
+<para><simplesect kind="note"><para>Unlike <computeroutput>std::experimental::future</computeroutput>, when the return type of the continuation function is also a future, this function performs no implicit unwrapping on the return type with the <computeroutput>get</computeroutput> function. This (i) simplifies the development of generic algorithms with futures, (ii) makes the executor for the unwrapping task explicit, and (iii) allows the user to retrieve the returned type as a future or as its unwrapped type.</para>
+</simplesect>
+<simplesect kind="note"><para>This function only participates in overload resolution if the future supports continuations</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Executor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A continuation function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The continuation future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="759" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aac40919b46d97f6b5dde80c4ea94c54d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Fn</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::then</definition>
+        <argsstring>(Fn &amp;&amp;fn)</argsstring>
+        <name>then</name>
+        <qualifiedname>futures::basic_future::then</qualifiedname>
+        <param>
+          <type>Fn &amp;&amp;</type>
+          <declname>fn</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a continuation to a future on the same executor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attach the continuation function to this future object with the default executor.</para>
+<para>When the shared state currently associated with this future is ready, the continuation is called on the same executor as this future. If no executor is associated with this future, the default executor is used.</para>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if the future supports continuations</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A continuation function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The continuation future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="805" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a9fcda86de72d4393c7be94e314b2ef58" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const Options::executor_t &amp;</type>
+        <definition>const Options::executor_t &amp; futures::basic_future&lt; R, Options &gt;::get_executor</definition>
+        <argsstring>() const</argsstring>
+        <name>get_executor</name>
+        <qualifiedname>futures::basic_future::get_executor</qualifiedname>
+        <briefdescription>
+<para>Get the current executor for this task. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if future_options has an associated executor</para>
+</simplesect>
+<simplesect kind="return"><para>The executor associated with this future instance </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="816" column="9" bodyfile="futures/future.hpp" bodystart="816" bodyend="819"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Private Functions</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1ae5b927a02b0d5e778488bde680b44c25" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>__see_below__</type>
+        <definition>__see_below__ futures::basic_future&lt; R, Options &gt;::get_continuations_source</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>get_continuations_source</name>
+        <qualifiedname>futures::basic_future::get_continuations_source</qualifiedname>
+        <briefdescription>
+<para>Get this future&apos;s continuations source. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if the future supports continuations</para>
+</simplesect>
+<simplesect kind="return"><para>The continuations source </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="899" column="9" bodyfile="futures/future.hpp" bodystart="899" bodyend="901"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aa5ee6d6cf322867e8567a91c57a7fd5f" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>notify_when_ready_handle</type>
+        <definition>notify_when_ready_handle futures::basic_future&lt; R, Options &gt;::notify_when_ready</definition>
+        <argsstring>(std::condition_variable_any &amp;cv)</argsstring>
+        <name>notify_when_ready</name>
+        <qualifiedname>futures::basic_future::notify_when_ready</qualifiedname>
+        <param>
+          <type>std::condition_variable_any &amp;</type>
+          <declname>cv</declname>
+        </param>
+        <briefdescription>
+<para>Notify this condition variable when the future is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="905" column="9" bodyfile="futures/future.hpp" bodystart="905" bodyend="910"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a69809146d06aa3a508c4f155d8a913d8" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::basic_future&lt; R, Options &gt;::unnotify_when_ready</definition>
+        <argsstring>(notify_when_ready_handle h)</argsstring>
+        <name>unnotify_when_ready</name>
+        <qualifiedname>futures::basic_future::unnotify_when_ready</qualifiedname>
+        <param>
+          <type>notify_when_ready_handle</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+<para>Cancel request to notify this condition variable when the future is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="915" column="9" bodyfile="futures/future.hpp" bodystart="915" bodyend="920"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1afc55c0bedc792282b418a9ef551f5690" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::mutex &amp;</type>
+        <definition>std::mutex &amp; futures::basic_future&lt; R, Options &gt;::waiters_mutex</definition>
+        <argsstring>()</argsstring>
+        <name>waiters_mutex</name>
+        <qualifiedname>futures::basic_future::waiters_mutex</qualifiedname>
+        <briefdescription>
+<para>Get a reference to the mutex in the underlying shared state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="924" column="9" bodyfile="futures/future.hpp" bodystart="924" bodyend="929"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a9d1c6284709935ab707247c9f9dee794" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::basic_future&lt; R, Options &gt;::wait_if_last</definition>
+        <argsstring>()</argsstring>
+        <name>wait_if_last</name>
+        <qualifiedname>futures::basic_future::wait_if_last</qualifiedname>
+        <briefdescription>
+<para>Wait if this is the last future referring to the operation state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="933" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Constructors</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1ae19c2a26988c4510b75754ccdb5ccef6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::~basic_future</definition>
+        <argsstring>()</argsstring>
+        <name>~basic_future</name>
+        <qualifiedname>futures::basic_future::~basic_future</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="416" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aba02f8e6bce14658f6a68386bd2cd249" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The default constructor creates an invalid future with no shared state.</para>
+<para>After construction, <computeroutput>valid() == false</computeroutput>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="425" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a75430a390154f2e6d165f781a1ce7097" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(basic_future const &amp;other)=default</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> const &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a shared future that refers to the same shared state, if any, as other.</para>
+<para><simplesect kind="note"><para>The copy constructor only participates in overload resolution if <computeroutput>basic_future</computeroutput> is shared. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="435" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a76cc4f3a9cbce8fb0ad260664efbc7dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> &amp;</type>
+        <definition>basic_future &amp; futures::basic_future&lt; R, Options &gt;::operator=</definition>
+        <argsstring>(basic_future const &amp;other)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::basic_future::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> const &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Copy assignment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a shared future that refers to the same shared state, if any, as other.</para>
+<para><simplesect kind="note"><para>The copy assignment only participates in overload resolution if <computeroutput>basic_future</computeroutput> is shared. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="446" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1ae0cb00065c0f483c7ec5b53f2db34eda" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(basic_future &amp;&amp;other) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a basic_future with the operation state of other using move semantics.</para>
+<para>After construction, other.valid() == false. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="456" column="9" bodyfile="futures/future.hpp" bodystart="456" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a9a4dafdc181b7a13239ae6e3218352b6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> &amp;</type>
+        <definition>basic_future &amp; futures::basic_future&lt; R, Options &gt;::operator=</definition>
+        <argsstring>(basic_future &amp;&amp;other) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::basic_future::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+<para>Move assignment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs a basic_future with the operation state of other using move semantics.</para>
+<para>After construction, other.valid() == false. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="468" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Sharing</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; R, detail::append_future_option_t&lt; <ref refid="structfutures_1_1shared__opt" kindref="compound">shared_opt</ref>, Options &gt; &gt;</type>
+        <definition>basic_future&lt; R, detail::append_future_option_t&lt; shared_opt, Options &gt; &gt; futures::basic_future&lt; R, Options &gt;::share</definition>
+        <argsstring>()</argsstring>
+        <name>share</name>
+        <qualifiedname>futures::basic_future::share</qualifiedname>
+        <briefdescription>
+<para>Create another future whose state is shared. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Create a shared variant of the current future object.</para>
+<para>If the current type is not shared, the object becomes invalid.</para>
+<para>If the current type is already shared, the new object is equivalent to a copy.</para>
+<para><simplesect kind="return"><para>A shared variant of this future </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="489" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Future state</header>
+      <description><para>Observe the current state of the future value</para>
+</description>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::basic_future&lt; R, Options &gt;::valid</definition>
+        <argsstring>() const</argsstring>
+        <name>valid</name>
+        <qualifiedname>futures::basic_future::valid</qualifiedname>
+        <briefdescription>
+<para>Checks if the future refers to a valid operation state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the case only for futures that were not default-constructed or moved from until the first time get() or share() is called. If the future is shared, its state is not invalidated when get() is called.</para>
+<para>If any member function other than the destructor, the move-assignment operator, or <computeroutput>valid</computeroutput> is called on a future that does not refer a valid operation state, a future_error will be throw to indicate <computeroutput>no_state</computeroutput>.</para>
+<para>It is valid to move (or copy, for shared futures) from a future object for which <computeroutput>valid()</computeroutput> is <computeroutput>false</computeroutput>.</para>
+<para><simplesect kind="return"><para>true if <computeroutput>*this</computeroutput> refers to a valid operation state </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="580" column="9" bodyfile="futures/future.hpp" bodystart="580" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a012e07ba560ae3fe0b28fc7529a190c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::basic_future&lt; R, Options &gt;::wait</definition>
+        <argsstring>() const</argsstring>
+        <name>wait</name>
+        <qualifiedname>futures::basic_future::wait</qualifiedname>
+        <briefdescription>
+<para>Waits for the result to become available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Blocks until the result becomes available.</para>
+<para><computeroutput>valid() == true</computeroutput> after the call.</para>
+<para>A <computeroutput>future_uninitialized</computeroutput> exception is thrown if <computeroutput>valid() == false</computeroutput> before the call to this function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="594" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1ade45437687837ce62df4855fa6ffcbf1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::basic_future&lt; R, Options &gt;::wait</definition>
+        <argsstring>()</argsstring>
+        <name>wait</name>
+        <qualifiedname>futures::basic_future::wait</qualifiedname>
+        <briefdescription>
+<para>Waits for the result to become available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Blocks until the result becomes available.</para>
+<para><computeroutput>valid() == true</computeroutput> after the call.</para>
+<para>A <computeroutput>future_uninitialized</computeroutput> exception is thrown if <computeroutput>valid() == false</computeroutput> before the call to this function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="606" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a2132240593aabade4844ac99acfa5931" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kindref="member">future_status</ref></type>
+        <definition>future_status futures::basic_future&lt; R, Options &gt;::wait_for</definition>
+        <argsstring>(std::chrono::duration&lt; Rep, Period &gt; const &amp;timeout_duration) const</argsstring>
+        <name>wait_for</name>
+        <qualifiedname>futures::basic_future::wait_for</qualifiedname>
+        <param>
+          <type>std::chrono::duration&lt; Rep, Period &gt; const &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <briefdescription>
+<para>Waits for the result, returns if it is unavailable for duration. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Waits for the result to become available. Blocks until specified timeout_duration has elapsed or the result becomes available, whichever comes first. The return value identifies the state of the result.</para>
+<para>If the future is deferred, the operation state might be converted into a shared operation state. This ensures that (i) the result will be computed only when explicitly requested, and (ii) the address of the operation state will not change once the result is requested.</para>
+<para>This function may block for longer than <computeroutput>timeout_duration</computeroutput> due to scheduling or resource contention delays.</para>
+<para>The behavior is undefined if valid() is false before the call to this function.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_duration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>maximum duration to block for</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>future status </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="632" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a480670e0058f73f9fda9fa541a5975e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Rep</type>
+          </param>
+          <param>
+            <type>class Period</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kindref="member">future_status</ref></type>
+        <definition>future_status futures::basic_future&lt; R, Options &gt;::wait_for</definition>
+        <argsstring>(std::chrono::duration&lt; Rep, Period &gt; const &amp;timeout_duration)</argsstring>
+        <name>wait_for</name>
+        <qualifiedname>futures::basic_future::wait_for</qualifiedname>
+        <param>
+          <type>std::chrono::duration&lt; Rep, Period &gt; const &amp;</type>
+          <declname>timeout_duration</declname>
+        </param>
+        <briefdescription>
+<para>Waits for the result, returns if it is unavailable for duration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="638" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a7f0d280ecc65079c1a7aed26a49e649b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kindref="member">future_status</ref></type>
+        <definition>future_status futures::basic_future&lt; R, Options &gt;::wait_until</definition>
+        <argsstring>(std::chrono::time_point&lt; Clock, Duration &gt; const &amp;timeout_time) const</argsstring>
+        <name>wait_until</name>
+        <qualifiedname>futures::basic_future::wait_until</qualifiedname>
+        <param>
+          <type>std::chrono::time_point&lt; Clock, Duration &gt; const &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <briefdescription>
+<para>Waits for the result, returns if it is unavailable for duration. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Waits for a result to become available. It blocks until specified <computeroutput>timeout_time</computeroutput> has been reached or the result becomes available, whichever comes first. The return value indicates why <computeroutput>wait_until</computeroutput> returned.</para>
+<para>If the future is deferred, the operation state might be converted into a shared operation state. This ensures that (i) the result will be computed only when explicitly requested, and (ii) the address of the operation state will not change once the result is requested.</para>
+<para>This function may block until after <computeroutput>timeout_time</computeroutput> due to scheduling or resource contention delays.</para>
+<para>The behavior is undefined if valid() is false before the call to this function.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>timeout_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>maximum time point to block until</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>future status </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="664" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a225ec44be24fdf982a68e87eadf4f79d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Clock</type>
+          </param>
+          <param>
+            <type>class Duration</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kindref="member">future_status</ref></type>
+        <definition>future_status futures::basic_future&lt; R, Options &gt;::wait_until</definition>
+        <argsstring>(std::chrono::time_point&lt; Clock, Duration &gt; const &amp;timeout_time)</argsstring>
+        <name>wait_until</name>
+        <qualifiedname>futures::basic_future::wait_until</qualifiedname>
+        <param>
+          <type>std::chrono::time_point&lt; Clock, Duration &gt; const &amp;</type>
+          <declname>timeout_time</declname>
+        </param>
+        <briefdescription>
+<para>Waits for the result, returns if it is unavailable for duration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="670" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aa59ff40148ab17c3403e940d6bf623c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::basic_future&lt; R, Options &gt;::is_ready</definition>
+        <argsstring>() const</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>futures::basic_future::is_ready</qualifiedname>
+        <briefdescription>
+<para>Checks if the associated operation state is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks if the associated shared state is ready.</para>
+<para>The behavior is undefined if valid() is false.</para>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the associated shared state is ready </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="682" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a653ffc72aeaf534eb67c6f26ef44271a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::basic_future&lt; R, Options &gt;::detach</definition>
+        <argsstring>()</argsstring>
+        <name>detach</name>
+        <qualifiedname>futures::basic_future::detach</qualifiedname>
+        <briefdescription>
+<para>Tell this future not to join at destruction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For safety, all futures wait at destruction by default.</para>
+<para>This function separates the execution from the future object, allowing execution to continue independently. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="692" column="9" bodyfile="futures/future.hpp" bodystart="692" bodyend="694"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Stop requests</header>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aae451e46e9b3d2036a9309caf5b27dc8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool futures::basic_future&lt; R, Options &gt;::request_stop</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>request_stop</name>
+        <qualifiedname>futures::basic_future::request_stop</qualifiedname>
+        <briefdescription>
+<para>Requests execution stop via the shared stop state of the task. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Issues a stop request to the internal stop-state, if it has not yet already had stop requested. The task associated to the future can use the stop token to identify it should stop running.</para>
+<para>The determination is made atomically, and if stop was requested, the stop-state is atomically updated to avoid race conditions.</para>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if the future supports stop tokens</para>
+</simplesect>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if this invocation made a stop request </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="846" column="9" bodyfile="futures/future.hpp" bodystart="846" bodyend="848"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a569965b51d4e0eea5e9dc72ce90c1026" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1stop__source" kindref="compound">stop_source</ref></type>
+        <definition>stop_source futures::basic_future&lt; R, Options &gt;::get_stop_source</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>get_stop_source</name>
+        <qualifiedname>futures::basic_future::get_stop_source</qualifiedname>
+        <briefdescription>
+<para>Get this future&apos;s stop source. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a stop_source associated with the same shared stop-state as held internally by the future task object.</para>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if the future supports stop tokens</para>
+</simplesect>
+<simplesect kind="return"><para>The stop source </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="862" column="9" bodyfile="futures/future.hpp" bodystart="862" bodyend="864"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aef053bd6b45694dae53f40ba5b31141f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1stop__token" kindref="compound">stop_token</ref></type>
+        <definition>stop_token futures::basic_future&lt; R, Options &gt;::get_stop_token</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>get_stop_token</name>
+        <qualifiedname>futures::basic_future::get_stop_token</qualifiedname>
+        <briefdescription>
+<para>Get this future&apos;s stop token. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a stop_token associated with the same shared stop-state held internally by the future task object.</para>
+<para><simplesect kind="note"><para>This function only participates in overload resolution if the future supports stop tokens</para>
+</simplesect>
+<simplesect kind="return"><para>The stop token </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="878" column="9" bodyfile="futures/future.hpp" bodystart="878" bodyend="880"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1aaed27db9f2dca623f1950c9926a2c56d" prot="private" static="no">
+        <type>detail::remove_future_option_t&lt; <ref refid="structfutures_1_1shared__opt" kindref="compound">shared_opt</ref>, Options &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::operation_state_options =  detail:: remove_future_option_t&lt;shared_opt, Options&gt;</definition>
+        <argsstring></argsstring>
+        <name>operation_state_options</name>
+        <qualifiedname>futures::basic_future::operation_state_options</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="174" column="9" bodyfile="futures/future.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1ad693ddc27db0361b7c0add3d45ee1a21" prot="private" static="no">
+        <type>std::conditional_t&lt; inline_op_state, detail::deferred_operation_state&lt; R, operation_state_options &gt;, detail::operation_state&lt; R, operation_state_options &gt; &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::operation_state_type =  std::conditional_t&lt; inline_op_state, detail::deferred_operation_state&lt;R, operation_state_options&gt;, detail::operation_state&lt;R, operation_state_options&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>operation_state_type</name>
+        <qualifiedname>futures::basic_future::operation_state_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="192" column="9" bodyfile="futures/future.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1aa5e861de52a829b10c2e30bc668952fc" prot="private" static="no">
+        <type>std::shared_ptr&lt; operation_state_type &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::shared_state_type =  std::shared_ptr&lt;operation_state_type&gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_state_type</name>
+        <qualifiedname>futures::basic_future::shared_state_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="200" column="9" bodyfile="futures/future.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1a88f600c792f3860440116728b61d46ff" prot="private" static="no">
+        <type>detail::variant_state&lt; R, operation_state_type &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::future_state_type =  detail::variant_state&lt;R, operation_state_type&gt;</definition>
+        <argsstring></argsstring>
+        <name>future_state_type</name>
+        <qualifiedname>futures::basic_future::future_state_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="210" column="9" bodyfile="futures/future.hpp" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1aa21bffbe74015d03e7cdce0e4b24b0de" prot="private" static="no">
+        <type>detail::operation_state_base</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::operation_state_base =  detail::operation_state_base</definition>
+        <argsstring></argsstring>
+        <name>operation_state_base</name>
+        <qualifiedname>futures::basic_future::operation_state_base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="218" column="9" bodyfile="futures/future.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1a689896468c52c9f8baf032374f35d528" prot="private" static="no">
+        <type>typename operation_state_base::notify_when_ready_handle</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::notify_when_ready_handle =  typename operation_state_base:: notify_when_ready_handle</definition>
+        <argsstring></argsstring>
+        <name>notify_when_ready_handle</name>
+        <qualifiedname>futures::basic_future::notify_when_ready_handle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="225" column="9" bodyfile="futures/future.hpp" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classfutures_1_1basic__future_1a95d7cff2e333ae3fcd19a58411edce3d" prot="private" static="no">
+        <type><ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>&lt; R, detail::append_future_option_t&lt; <ref refid="structfutures_1_1shared__opt" kindref="compound">shared_opt</ref>, Options &gt; &gt;</type>
+        <definition>using futures::basic_future&lt; R, Options &gt;::shared_basic_future =  basic_future&lt; R, detail::append_future_option_t&lt;shared_opt, Options&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_basic_future</name>
+        <qualifiedname>futures::basic_future::shared_basic_future</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="229" column="9" bodyfile="futures/future.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classfutures_1_1basic__future_1a544c53799f8d7fa021df92a394a79bd4" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::basic_future&lt; R, Options &gt;::inline_op_state</definition>
+        <argsstring></argsstring>
+        <name>inline_op_state</name>
+        <qualifiedname>futures::basic_future::inline_op_state</qualifiedname>
+        <initializer>= Options::is_always_deferred
+                                                &amp;&amp; !Options::is_shared</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="189" column="31" bodyfile="futures/future.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aef04f39c70b5090350808593e6996cc7" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(shared_state_type const &amp;s) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>shared_state_type const &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="295" column="18" bodyfile="futures/future.hpp" bodystart="295" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a86241f07e5b8c820dd127ef2f1dbd4b6" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(shared_state_type &amp;&amp;s) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>shared_state_type &amp;&amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="316" column="18" bodyfile="futures/future.hpp" bodystart="316" bodyend="317"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1aff6108a40089ac1694d8d37edb7fdf5d" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(operation_state_type &amp;&amp;op) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>operation_state_type &amp;&amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="345" column="18" bodyfile="futures/future.hpp" bodystart="345" bodyend="346"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a626d73be3daa74d1bb8a99171a3e5343" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(detail::operation_state_storage&lt; R &gt; &amp;&amp;op) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>detail::operation_state_storage&lt; R &gt; &amp;&amp;</type>
+          <declname>op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="362" column="18" bodyfile="futures/future.hpp" bodystart="362" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1ae01ae8d565e1d3154cfde17b3dc61a48" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(future_state_type const &amp;s) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>future_state_type const &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="374" column="18" bodyfile="futures/future.hpp" bodystart="374" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1af5c589697f186f0a5acd73323a2c8bc7" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(future_state_type &amp;&amp;s) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>future_state_type &amp;&amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="386" column="18" bodyfile="futures/future.hpp" bodystart="386" bodyend="387"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1basic__future_1a47d49c8225bf8df85518f5fba514d4b9" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::basic_future&lt; R, Options &gt;::basic_future</definition>
+        <argsstring>(T &amp;&amp;v) noexcept</argsstring>
+        <name>basic_future</name>
+        <qualifiedname>futures::basic_future::basic_future</qualifiedname>
+        <param>
+          <type>T &amp;&amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="398" column="33" bodyfile="futures/future.hpp" bodystart="398" bodyend="402"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A basic future type with custom features. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Note that these classes only provide the capabilities of tracking these features, such as continuations.</para>
+<para>Setting up these capabilities (creating tokens or setting main future to run continuations) needs to be done when the future is created in a function such as <ref refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kindref="member">async</ref> by creating the appropriate state for each feature.</para>
+<para>All this behavior is already encapsulated in the <ref refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kindref="member">async</ref> function.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>R</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of element </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Future value options </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="futures/future.hpp" line="154" column="5" bodyfile="futures/future.hpp" bodystart="161" bodyend="945"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1basic__future_1aef04f39c70b5090350808593e6996cc7" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1a86241f07e5b8c820dd127ef2f1dbd4b6" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1aff6108a40089ac1694d8d37edb7fdf5d" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1a626d73be3daa74d1bb8a99171a3e5343" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1ae01ae8d565e1d3154cfde17b3dc61a48" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1af5c589697f186f0a5acd73323a2c8bc7" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1a47d49c8225bf8df85518f5fba514d4b9" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1aba02f8e6bce14658f6a68386bd2cd249" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1a75430a390154f2e6d165f781a1ce7097" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1ae0cb00065c0f483c7ec5b53f2db34eda" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1a653ffc72aeaf534eb67c6f26ef44271a" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>detach</name></member>
+      <member refid="classfutures_1_1basic__future_1a88f600c792f3860440116728b61d46ff" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>future_state_type</name></member>
+      <member refid="classfutures_1_1basic__future_1a1491b64679c09495bc8dee965dd97813" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>get</name></member>
+      <member refid="classfutures_1_1basic__future_1ae5b927a02b0d5e778488bde680b44c25" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>get_continuations_source</name></member>
+      <member refid="classfutures_1_1basic__future_1aad10ac2552989ec18d2c353204070855" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>get_exception_ptr</name></member>
+      <member refid="classfutures_1_1basic__future_1a9fcda86de72d4393c7be94e314b2ef58" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>get_executor</name></member>
+      <member refid="classfutures_1_1basic__future_1a9b0f2cf31b6faf5b70113e50613a59f6" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>get_impl</name></member>
+      <member refid="classfutures_1_1basic__future_1a0a006bc832ee31fc1ee9674621e4df22" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>get_impl</name></member>
+      <member refid="classfutures_1_1basic__future_1aa25e9a793417ab77f978bf57cf89fcf2" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>get_impl</name></member>
+      <member refid="classfutures_1_1basic__future_1a569965b51d4e0eea5e9dc72ce90c1026" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>get_stop_source</name></member>
+      <member refid="classfutures_1_1basic__future_1aef053bd6b45694dae53f40ba5b31141f" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>get_stop_token</name></member>
+      <member refid="classfutures_1_1basic__future_1a544c53799f8d7fa021df92a394a79bd4" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>inline_op_state</name></member>
+      <member refid="classfutures_1_1basic__future_1aa59ff40148ab17c3403e940d6bf623c8" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>is_ready</name></member>
+      <member refid="classfutures_1_1basic__future_1a97d6f334a8ad61e3605e4acfb561fd75" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>join_</name></member>
+      <member refid="classfutures_1_1basic__future_1aa5ee6d6cf322867e8567a91c57a7fd5f" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>notify_when_ready</name></member>
+      <member refid="classfutures_1_1basic__future_1a689896468c52c9f8baf032374f35d528" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>notify_when_ready_handle</name></member>
+      <member refid="classfutures_1_1basic__future_1aa21bffbe74015d03e7cdce0e4b24b0de" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>operation_state_base</name></member>
+      <member refid="classfutures_1_1basic__future_1aaed27db9f2dca623f1950c9926a2c56d" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>operation_state_options</name></member>
+      <member refid="classfutures_1_1basic__future_1ad693ddc27db0361b7c0add3d45ee1a21" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>operation_state_type</name></member>
+      <member refid="classfutures_1_1basic__future_1a76cc4f3a9cbce8fb0ad260664efbc7dc" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1basic__future_1a9a4dafdc181b7a13239ae6e3218352b6" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1basic__future_1aae451e46e9b3d2036a9309caf5b27dc8" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>request_stop</name></member>
+      <member refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>share</name></member>
+      <member refid="classfutures_1_1basic__future_1a95d7cff2e333ae3fcd19a58411edce3d" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>shared_basic_future</name></member>
+      <member refid="classfutures_1_1basic__future_1aa5e861de52a829b10c2e30bc668952fc" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>shared_state_type</name></member>
+      <member refid="classfutures_1_1basic__future_1abb0c68ad541e5fd0d6f00a613c8ba190" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>state_</name></member>
+      <member refid="classfutures_1_1basic__future_1a207a3b387a36883dc7cf0d69e6284b56" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>then</name></member>
+      <member refid="classfutures_1_1basic__future_1aac40919b46d97f6b5dde80c4ea94c54d" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>then</name></member>
+      <member refid="classfutures_1_1basic__future_1a913be65c244d630c3254d9b3be4225f3" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>then_impl</name></member>
+      <member refid="classfutures_1_1basic__future_1a957bc23e3e1a1a54c3ce7e2cbcc7293e" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>then_impl</name></member>
+      <member refid="classfutures_1_1basic__future_1a69809146d06aa3a508c4f155d8a913d8" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>unnotify_when_ready</name></member>
+      <member refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>valid</name></member>
+      <member refid="classfutures_1_1basic__future_1ad7308ec8c2fa1672b28aad2f29524348" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>value_type</name></member>
+      <member refid="classfutures_1_1basic__future_1a012e07ba560ae3fe0b28fc7529a190c0" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait</name></member>
+      <member refid="classfutures_1_1basic__future_1ade45437687837ce62df4855fa6ffcbf1" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait</name></member>
+      <member refid="classfutures_1_1basic__future_1a2132240593aabade4844ac99acfa5931" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait_for</name></member>
+      <member refid="classfutures_1_1basic__future_1a480670e0058f73f9fda9fa541a5975e0" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait_for</name></member>
+      <member refid="classfutures_1_1basic__future_1a9d1c6284709935ab707247c9f9dee794" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>wait_if_last</name></member>
+      <member refid="classfutures_1_1basic__future_1a7f0d280ecc65079c1a7aed26a49e649b" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait_until</name></member>
+      <member refid="classfutures_1_1basic__future_1a225ec44be24fdf982a68e87eadf4f79d" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>wait_until</name></member>
+      <member refid="classfutures_1_1basic__future_1afc55c0bedc792282b418a9ef551f5690" prot="private" virt="non-virtual"><scope>futures::basic_future</scope><name>waiters_mutex</name></member>
+      <member refid="classfutures_1_1basic__future_1ae19c2a26988c4510b75754ccdb5ccef6" prot="public" virt="non-virtual"><scope>futures::basic_future</scope><name>~basic_future</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

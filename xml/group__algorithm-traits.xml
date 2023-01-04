@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__algorithm-traits" kind="group">
+    <compoundname>algorithm-traits</compoundname>
+    <title>Algorithm Traits</title>
+    <innerclass refid="classfutures_1_1binary__invoke__algorithm__functor" prot="public">futures::binary_invoke_algorithm_functor</innerclass>
+    <innerclass refid="classfutures_1_1unary__invoke__algorithm__functor" prot="public">futures::unary_invoke_algorithm_functor</innerclass>
+    <innerclass refid="classfutures_1_1value__cmp__algorithm__functor" prot="public">futures::value_cmp_algorithm_functor</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

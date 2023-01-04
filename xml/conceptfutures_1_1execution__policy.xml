@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="conceptfutures_1_1execution__policy" kind="concept">
+    <compoundname>futures::execution_policy</compoundname>
+    <includes refid="policies_8hpp" local="no">policies.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class E</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;class E&gt;
+concept <ref refid="conceptfutures_1_1execution__policy" kindref="compound">futures::execution_policy</ref> =  is_execution_policy_v&lt;E&gt;    </initializer>
+    <briefdescription>
+<para>Determines if a type is an execution_policy. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/algorithm/policies.hpp" line="121" column="5"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1thread__pool" kind="class" language="C++" prot="public">
+    <compoundname>futures::thread_pool</compoundname>
+    <includes refid="thread__pool_8hpp" local="no">thread_pool.hpp</includes>
+    <innerclass refid="classfutures_1_1thread__pool_1_1executor__type" prot="public">futures::thread_pool::executor_type</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1thread__pool_1a87b06d5ecd34a0bac517ccc6c2c855e5" prot="private" static="no" mutable="no">
+        <type>futures::asio::thread_pool</type>
+        <definition>futures::asio::thread_pool futures::thread_pool::pool_</definition>
+        <argsstring></argsstring>
+        <name>pool_</name>
+        <qualifiedname>futures::thread_pool::pool_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="29" column="36" bodyfile="futures/executor/thread_pool.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1a5ed7149a5936bf0cc44a54e682a7e225" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_pool::thread_pool</definition>
+        <argsstring>()</argsstring>
+        <name>thread_pool</name>
+        <qualifiedname>futures::thread_pool::thread_pool</qualifiedname>
+        <briefdescription>
+<para>Construct a thread pool. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="46" column="9" bodyfile="futures/executor/thread_pool.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1adbf20560ca307b9654abf419fa224337" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_pool::thread_pool</definition>
+        <argsstring>(unsigned int threads)</argsstring>
+        <name>thread_pool</name>
+        <qualifiedname>futures::thread_pool::thread_pool</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>threads</declname>
+        </param>
+        <briefdescription>
+<para>Construct a thread pool with specified number of threads. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="49" column="9" bodyfile="futures/executor/thread_pool.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1ab9e34a1b1151839c8733f8d73ec01ba6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_pool::thread_pool</definition>
+        <argsstring>(thread_pool &amp;)=delete</argsstring>
+        <name>thread_pool</name>
+        <qualifiedname>futures::thread_pool::thread_pool</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1thread__pool" kindref="compound">thread_pool</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>Thread pools cannot be copied. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="52" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1a4d3e33439a50ffac4a23209dfcc1875b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_pool::thread_pool</definition>
+        <argsstring>(thread_pool &amp;&amp;)=delete</argsstring>
+        <name>thread_pool</name>
+        <qualifiedname>futures::thread_pool::thread_pool</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1thread__pool" kindref="compound">thread_pool</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+<para>Thread pools cannot be moved. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="55" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1a8ab64282b6c642e374403d1964f4c9f1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1thread__pool_1_1executor__type" kindref="compound">executor_type</ref></type>
+        <definition>executor_type futures::thread_pool::get_executor</definition>
+        <argsstring>()</argsstring>
+        <name>get_executor</name>
+        <qualifiedname>futures::thread_pool::get_executor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="58" column="9" bodyfile="futures/executor/thread_pool.hpp" bodystart="58" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1abd7d372761ef2cd11cff2d562daacad7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void futures::thread_pool::join</definition>
+        <argsstring>()</argsstring>
+        <name>join</name>
+        <qualifiedname>futures::thread_pool::join</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="63" column="9" bodyfile="futures/executor/thread_pool.hpp" bodystart="63" bodyend="65"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A thread pool with the specified number of threads. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/executor/thread_pool.hpp" line="28" column="5" bodyfile="futures/executor/thread_pool.hpp" bodystart="28" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1thread__pool_1a8ab64282b6c642e374403d1964f4c9f1" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>get_executor</name></member>
+      <member refid="classfutures_1_1thread__pool_1abd7d372761ef2cd11cff2d562daacad7" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>join</name></member>
+      <member refid="classfutures_1_1thread__pool_1a87b06d5ecd34a0bac517ccc6c2c855e5" prot="private" virt="non-virtual"><scope>futures::thread_pool</scope><name>pool_</name></member>
+      <member refid="classfutures_1_1thread__pool_1a5ed7149a5936bf0cc44a54e682a7e225" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>thread_pool</name></member>
+      <member refid="classfutures_1_1thread__pool_1adbf20560ca307b9654abf419fa224337" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>thread_pool</name></member>
+      <member refid="classfutures_1_1thread__pool_1ab9e34a1b1151839c8733f8d73ec01ba6" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>thread_pool</name></member>
+      <member refid="classfutures_1_1thread__pool_1a4d3e33439a50ffac4a23209dfcc1875b" prot="public" virt="non-virtual"><scope>futures::thread_pool</scope><name>thread_pool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

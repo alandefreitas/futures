@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="conceptfutures_1_1executor" kind="concept">
+    <compoundname>futures::executor</compoundname>
+    <includes refid="is__executor_8hpp" local="no">is_executor.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class E</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;class E&gt;
+concept <ref refid="conceptfutures_1_1executor" kindref="compound">futures::executor</ref> =  executor_for&lt;E,   __invocable_archetype__  &gt;    </initializer>
+    <briefdescription>
+<para>The invocable archetype task is a regular functor. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Determines if a type is an executor for invocable types.</para>
+<para>Determines if a type is an execution context for invocable types.</para>
+<para>This means this trait should work for any executor that supports non-heterogeneous tasks. </para>
+    </detaileddescription>
+    <location file="futures/executor/is_executor.hpp" line="56" column="5"/>
+  </compounddef>
+</doxygen>

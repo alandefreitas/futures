@@ -1,0 +1,1077 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="algorithm_2traits_8hpp" kind="file" language="C++">
+    <compoundname>traits.hpp</compoundname>
+    <includes refid="binary__invoke__algorithm_8hpp" local="no">futures/algorithm/traits/binary_invoke_algorithm.hpp</includes>
+    <includes refid="common__comparison__category_8hpp" local="no">futures/algorithm/traits/common_comparison_category.hpp</includes>
+    <includes refid="is__assignable__from_8hpp" local="no">futures/algorithm/traits/is_assignable_from.hpp</includes>
+    <includes refid="is__bidirectional__iterator_8hpp" local="no">futures/algorithm/traits/is_bidirectional_iterator.hpp</includes>
+    <includes refid="is__constructible__from_8hpp" local="no">futures/algorithm/traits/is_constructible_from.hpp</includes>
+    <includes refid="is__convertible__to_8hpp" local="no">futures/algorithm/traits/is_convertible_to.hpp</includes>
+    <includes refid="is__copyable_8hpp" local="no">futures/algorithm/traits/is_copyable.hpp</includes>
+    <includes refid="is__default__initializable_8hpp" local="no">futures/algorithm/traits/is_default_initializable.hpp</includes>
+    <includes refid="is__derived__from_8hpp" local="no">futures/algorithm/traits/is_derived_from.hpp</includes>
+    <includes refid="is__equality__comparable_8hpp" local="no">futures/algorithm/traits/is_equality_comparable.hpp</includes>
+    <includes refid="is__equality__comparable__with_8hpp" local="no">futures/algorithm/traits/is_equality_comparable_with.hpp</includes>
+    <includes refid="is__forward__iterator_8hpp" local="no">futures/algorithm/traits/is_forward_iterator.hpp</includes>
+    <includes refid="is__incrementable_8hpp" local="no">futures/algorithm/traits/is_incrementable.hpp</includes>
+    <includes refid="is__indirectly__binary__invocable_8hpp" local="no">futures/algorithm/traits/is_indirectly_binary_invocable.hpp</includes>
+    <includes refid="is__indirectly__readable_8hpp" local="no">futures/algorithm/traits/is_indirectly_readable.hpp</includes>
+    <includes refid="is__indirectly__unary__invocable_8hpp" local="no">futures/algorithm/traits/is_indirectly_unary_invocable.hpp</includes>
+    <includes refid="is__input__iterator_8hpp" local="no">futures/algorithm/traits/is_input_iterator.hpp</includes>
+    <includes refid="is__input__or__output__iterator_8hpp" local="no">futures/algorithm/traits/is_input_or_output_iterator.hpp</includes>
+    <includes refid="is__input__range_8hpp" local="no">futures/algorithm/traits/is_input_range.hpp</includes>
+    <includes refid="is__movable_8hpp" local="no">futures/algorithm/traits/is_movable.hpp</includes>
+    <includes refid="is__move__constructible_8hpp" local="no">futures/algorithm/traits/is_move_constructible.hpp</includes>
+    <includes refid="is__random__access__iterator_8hpp" local="no">futures/algorithm/traits/is_random_access_iterator.hpp</includes>
+    <includes refid="is__range_8hpp" local="no">futures/algorithm/traits/is_range.hpp</includes>
+    <includes refid="is__regular_8hpp" local="no">futures/algorithm/traits/is_regular.hpp</includes>
+    <includes refid="is__semiregular_8hpp" local="no">futures/algorithm/traits/is_semiregular.hpp</includes>
+    <includes refid="is__sentinel__for_8hpp" local="no">futures/algorithm/traits/is_sentinel_for.hpp</includes>
+    <includes refid="is__swappable_8hpp" local="no">futures/algorithm/traits/is_swappable.hpp</includes>
+    <includes refid="is__three__way__comparable_8hpp" local="no">futures/algorithm/traits/is_three_way_comparable.hpp</includes>
+    <includes refid="is__three__way__comparable__with_8hpp" local="no">futures/algorithm/traits/is_three_way_comparable_with.hpp</includes>
+    <includes refid="is__totally__ordered_8hpp" local="no">futures/algorithm/traits/is_totally_ordered.hpp</includes>
+    <includes refid="is__totally__ordered__with_8hpp" local="no">futures/algorithm/traits/is_totally_ordered_with.hpp</includes>
+    <includes refid="is__weakly__incrementable_8hpp" local="no">futures/algorithm/traits/is_weakly_incrementable.hpp</includes>
+    <includes refid="iter__difference_8hpp" local="no">futures/algorithm/traits/iter_difference.hpp</includes>
+    <includes refid="iter__reference_8hpp" local="no">futures/algorithm/traits/iter_reference.hpp</includes>
+    <includes refid="iter__rvalue__reference_8hpp" local="no">futures/algorithm/traits/iter_rvalue_reference.hpp</includes>
+    <includes refid="iter__value_8hpp" local="no">futures/algorithm/traits/iter_value.hpp</includes>
+    <includes refid="iterator_8hpp" local="no">futures/algorithm/traits/iterator.hpp</includes>
+    <includes refid="range__value_8hpp" local="no">futures/algorithm/traits/range_value.hpp</includes>
+    <includes refid="remove__cvref_8hpp" local="no">futures/algorithm/traits/remove_cvref.hpp</includes>
+    <includes refid="unary__invoke__algorithm_8hpp" local="no">futures/algorithm/traits/unary_invoke_algorithm.hpp</includes>
+    <includes refid="value__cmp__algorithm_8hpp" local="no">futures/algorithm/traits/value_cmp_algorithm.hpp</includes>
+    <includedby refid="algorithm_8hpp" local="no">futures/algorithm.hpp</includedby>
+    <incdepgraph>
+      <node id="87">
+        <label>futures/algorithm/compare/equal_to.hpp</label>
+        <link refid="equal__to_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>futures/algorithm/compare/partial_ordering.hpp</label>
+        <link refid="partial__ordering_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>futures/algorithm/compare/strong_ordering.hpp</label>
+        <link refid="strong__ordering_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>futures/algorithm/compare/weak_ordering.hpp</label>
+        <link refid="weak__ordering_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/partitioner/default_partitioner.hpp</label>
+        <link refid="default__partitioner_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>futures/algorithm/partitioner/halve_partitioner.hpp</label>
+        <link refid="halve__partitioner_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>futures/algorithm/partitioner/partitioner_for.hpp</label>
+        <link refid="partitioner__for_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/partitioner/thread_partitioner.hpp</label>
+        <link refid="thread__partitioner_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>futures/algorithm/policies.hpp</label>
+        <link refid="policies_8hpp"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/traits.hpp</label>
+        <link refid="algorithm_2traits_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/algorithm/traits/binary_invoke_algorithm.hpp</label>
+        <link refid="binary__invoke__algorithm_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>futures/algorithm/traits/common_comparison_category.hpp</label>
+        <link refid="common__comparison__category_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>futures/algorithm/traits/is_assignable_from.hpp</label>
+        <link refid="is__assignable__from_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>futures/algorithm/traits/is_bidirectional_iterator.hpp</label>
+        <link refid="is__bidirectional__iterator_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>futures/algorithm/traits/is_constructible_from.hpp</label>
+        <link refid="is__constructible__from_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>futures/algorithm/traits/is_convertible_to.hpp</label>
+        <link refid="is__convertible__to_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>futures/algorithm/traits/is_copyable.hpp</label>
+        <link refid="is__copyable_8hpp"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>futures/algorithm/traits/is_default_initializable.hpp</label>
+        <link refid="is__default__initializable_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>futures/algorithm/traits/is_derived_from.hpp</label>
+        <link refid="is__derived__from_8hpp"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>futures/algorithm/traits/is_equality_comparable.hpp</label>
+        <link refid="is__equality__comparable_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>futures/algorithm/traits/is_equality_comparable_with.hpp</label>
+        <link refid="is__equality__comparable__with_8hpp"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>futures/algorithm/traits/is_forward_iterator.hpp</label>
+        <link refid="is__forward__iterator_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>futures/algorithm/traits/is_incrementable.hpp</label>
+        <link refid="is__incrementable_8hpp"/>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>futures/algorithm/traits/is_indirectly_binary_invocable.hpp</label>
+        <link refid="is__indirectly__binary__invocable_8hpp"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/traits/is_indirectly_readable.hpp</label>
+        <link refid="is__indirectly__readable_8hpp"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>futures/algorithm/traits/is_indirectly_unary_invocable.hpp</label>
+        <link refid="is__indirectly__unary__invocable_8hpp"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures/algorithm/traits/is_input_iterator.hpp</label>
+        <link refid="is__input__iterator_8hpp"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>futures/algorithm/traits/is_input_or_output_iterator.hpp</label>
+        <link refid="is__input__or__output__iterator_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>futures/algorithm/traits/is_input_range.hpp</label>
+        <link refid="is__input__range_8hpp"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>futures/algorithm/traits/is_movable.hpp</label>
+        <link refid="is__movable_8hpp"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>futures/algorithm/traits/is_move_constructible.hpp</label>
+        <link refid="is__move__constructible_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>futures/algorithm/traits/is_random_access_iterator.hpp</label>
+        <link refid="is__random__access__iterator_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>futures/algorithm/traits/is_range.hpp</label>
+        <link refid="is__range_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>futures/algorithm/traits/is_regular.hpp</label>
+        <link refid="is__regular_8hpp"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>futures/algorithm/traits/is_semiregular.hpp</label>
+        <link refid="is__semiregular_8hpp"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>futures/algorithm/traits/is_sentinel_for.hpp</label>
+        <link refid="is__sentinel__for_8hpp"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>futures/algorithm/traits/is_swappable.hpp</label>
+        <link refid="is__swappable_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="82">
+        <label>futures/algorithm/traits/is_three_way_comparable.hpp</label>
+        <link refid="is__three__way__comparable_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>futures/algorithm/traits/is_three_way_comparable_with.hpp</label>
+        <link refid="is__three__way__comparable__with_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>futures/algorithm/traits/is_totally_ordered.hpp</label>
+        <link refid="is__totally__ordered_8hpp"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>futures/algorithm/traits/is_totally_ordered_with.hpp</label>
+        <link refid="is__totally__ordered__with_8hpp"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>futures/algorithm/traits/is_weakly_incrementable.hpp</label>
+        <link refid="is__weakly__incrementable_8hpp"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>futures/algorithm/traits/iter_difference.hpp</label>
+        <link refid="iter__difference_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>futures/algorithm/traits/iter_reference.hpp</label>
+        <link refid="iter__reference_8hpp"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>futures/algorithm/traits/iter_rvalue_reference.hpp</label>
+        <link refid="iter__rvalue__reference_8hpp"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>futures/algorithm/traits/iter_value.hpp</label>
+        <link refid="iter__value_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>futures/algorithm/traits/iterator.hpp</label>
+        <link refid="iterator_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>futures/algorithm/traits/range_value.hpp</label>
+        <link refid="range__value_8hpp"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>futures/algorithm/traits/remove_cvref.hpp</label>
+        <link refid="remove__cvref_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>futures/algorithm/traits/unary_invoke_algorithm.hpp</label>
+        <link refid="unary__invoke__algorithm_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>futures/algorithm/traits/value_cmp_algorithm.hpp</label>
+        <link refid="value__cmp__algorithm_8hpp"/>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>futures/executor/default_executor.hpp</label>
+        <link refid="default__executor_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>futures/executor/hardware_concurrency.hpp</label>
+        <link refid="hardware__concurrency_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>futures/executor/inline_executor.hpp</label>
+        <link refid="inline__executor_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>futures/executor/is_executor.hpp</label>
+        <link refid="is__executor_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>futures/executor/thread_pool.hpp</label>
+        <link refid="thread__pool_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>futures/algorithm/compare/impl/partial_ordering.hpp</label>
+      </node>
+      <node id="61">
+        <label>futures/algorithm/compare/impl/strong_ordering.hpp</label>
+      </node>
+      <node id="60">
+        <label>futures/algorithm/compare/impl/weak_ordering.hpp</label>
+      </node>
+      <node id="48">
+        <label>futures/algorithm/detail/execution.hpp</label>
+      </node>
+      <node id="52">
+        <label>futures/algorithm/detail/make_policy_executor.hpp</label>
+      </node>
+      <node id="72">
+        <label>futures/algorithm/traits/detail/has_difference_type.hpp</label>
+      </node>
+      <node id="15">
+        <label>futures/algorithm/traits/detail/has_element_type.hpp</label>
+      </node>
+      <node id="73">
+        <label>futures/algorithm/traits/detail/has_iterator_traits_difference_type.hpp</label>
+      </node>
+      <node id="16">
+        <label>futures/algorithm/traits/detail/has_iterator_traits_value_type.hpp</label>
+      </node>
+      <node id="17">
+        <label>futures/algorithm/traits/detail/has_value_type.hpp</label>
+      </node>
+      <node id="81">
+        <label>futures/algorithm/traits/detail/is_partially_ordered_with.hpp</label>
+      </node>
+      <node id="74">
+        <label>futures/algorithm/traits/detail/is_subtractable.hpp</label>
+      </node>
+      <node id="63">
+        <label>futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp</label>
+      </node>
+      <node id="76">
+        <label>futures/algorithm/traits/detail/iter_concept.hpp</label>
+      </node>
+      <node id="75">
+        <label>futures/algorithm/traits/detail/nested_iterator_traits_difference_type.hpp</label>
+      </node>
+      <node id="4">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="46">
+        <label>futures/detail/deps/asio/thread_pool.hpp</label>
+      </node>
+      <node id="51">
+        <label>futures/detail/deps/boost/core/empty_value.hpp</label>
+      </node>
+      <node id="64">
+        <label>futures/detail/deps/boost/mp11/algorithm.hpp</label>
+      </node>
+      <node id="13">
+        <label>futures/detail/deps/boost/mp11/utility.hpp</label>
+      </node>
+      <node id="19">
+        <label>futures/detail/traits/std_type_traits.hpp</label>
+      </node>
+      <node id="40">
+        <label>futures/detail/utility/invoke.hpp</label>
+      </node>
+      <node id="33">
+        <label>futures/detail/utility/is_constant_evaluated.hpp</label>
+      </node>
+      <node id="44">
+        <label>futures/executor/detail/is_executor.hpp</label>
+      </node>
+      <node id="5">
+        <label>futures/impl/config.hpp</label>
+      </node>
+      <node id="18">
+        <label>iterator</label>
+      </node>
+      <node id="53">
+        <label>numeric</label>
+      </node>
+      <node id="54">
+        <label>ranges</label>
+      </node>
+      <node id="34">
+        <label>thread</label>
+      </node>
+      <node id="14">
+        <label>type_traits</label>
+      </node>
+      <node id="88">
+        <label>utility</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>futures/algorithm.hpp</label>
+        <link refid="algorithm_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/traits.hpp</label>
+        <link refid="algorithm_2traits_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <briefdescription>
+<para>All algorithm traits. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Use this header to include all functionalities of the algorithm traits submodule at once. In most cases, however, we recommend only including the headers for the functionality you need. Use the reference to identify these files. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2022<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ALGORITHM_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ALGORITHM_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="comment">//<sp/>#glob<sp/>&lt;futures/algorithm/traits/*.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="binary__invoke__algorithm_8hpp" kindref="compound">futures/algorithm/traits/binary_invoke_algorithm.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="common__comparison__category_8hpp" kindref="compound">futures/algorithm/traits/common_comparison_category.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__assignable__from_8hpp" kindref="compound">futures/algorithm/traits/is_assignable_from.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__bidirectional__iterator_8hpp" kindref="compound">futures/algorithm/traits/is_bidirectional_iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__constructible__from_8hpp" kindref="compound">futures/algorithm/traits/is_constructible_from.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__convertible__to_8hpp" kindref="compound">futures/algorithm/traits/is_convertible_to.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__copyable_8hpp" kindref="compound">futures/algorithm/traits/is_copyable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__default__initializable_8hpp" kindref="compound">futures/algorithm/traits/is_default_initializable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__derived__from_8hpp" kindref="compound">futures/algorithm/traits/is_derived_from.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__equality__comparable_8hpp" kindref="compound">futures/algorithm/traits/is_equality_comparable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__equality__comparable__with_8hpp" kindref="compound">futures/algorithm/traits/is_equality_comparable_with.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__forward__iterator_8hpp" kindref="compound">futures/algorithm/traits/is_forward_iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__incrementable_8hpp" kindref="compound">futures/algorithm/traits/is_incrementable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__indirectly__binary__invocable_8hpp" kindref="compound">futures/algorithm/traits/is_indirectly_binary_invocable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__indirectly__readable_8hpp" kindref="compound">futures/algorithm/traits/is_indirectly_readable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__indirectly__unary__invocable_8hpp" kindref="compound">futures/algorithm/traits/is_indirectly_unary_invocable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__input__iterator_8hpp" kindref="compound">futures/algorithm/traits/is_input_iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__input__or__output__iterator_8hpp" kindref="compound">futures/algorithm/traits/is_input_or_output_iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__input__range_8hpp" kindref="compound">futures/algorithm/traits/is_input_range.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__movable_8hpp" kindref="compound">futures/algorithm/traits/is_movable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__move__constructible_8hpp" kindref="compound">futures/algorithm/traits/is_move_constructible.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__random__access__iterator_8hpp" kindref="compound">futures/algorithm/traits/is_random_access_iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__range_8hpp" kindref="compound">futures/algorithm/traits/is_range.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__regular_8hpp" kindref="compound">futures/algorithm/traits/is_regular.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__semiregular_8hpp" kindref="compound">futures/algorithm/traits/is_semiregular.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__sentinel__for_8hpp" kindref="compound">futures/algorithm/traits/is_sentinel_for.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__swappable_8hpp" kindref="compound">futures/algorithm/traits/is_swappable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__three__way__comparable_8hpp" kindref="compound">futures/algorithm/traits/is_three_way_comparable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__three__way__comparable__with_8hpp" kindref="compound">futures/algorithm/traits/is_three_way_comparable_with.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__totally__ordered_8hpp" kindref="compound">futures/algorithm/traits/is_totally_ordered.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__totally__ordered__with_8hpp" kindref="compound">futures/algorithm/traits/is_totally_ordered_with.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__weakly__incrementable_8hpp" kindref="compound">futures/algorithm/traits/is_weakly_incrementable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="iter__difference_8hpp" kindref="compound">futures/algorithm/traits/iter_difference.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="iter__reference_8hpp" kindref="compound">futures/algorithm/traits/iter_reference.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="iter__rvalue__reference_8hpp" kindref="compound">futures/algorithm/traits/iter_rvalue_reference.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="iter__value_8hpp" kindref="compound">futures/algorithm/traits/iter_value.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="iterator_8hpp" kindref="compound">futures/algorithm/traits/iterator.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="range__value_8hpp" kindref="compound">futures/algorithm/traits/range_value.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="remove__cvref_8hpp" kindref="compound">futures/algorithm/traits/remove_cvref.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="unary__invoke__algorithm_8hpp" kindref="compound">futures/algorithm/traits/unary_invoke_algorithm.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="value__cmp__algorithm_8hpp" kindref="compound">futures/algorithm/traits/value_cmp_algorithm.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_ALGORITHM_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/algorithm/traits.hpp"/>
+  </compounddef>
+</doxygen>

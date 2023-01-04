@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__shared__state" kind="group">
+    <compoundname>shared_state</compoundname>
+    <title>Shared State</title>
+    <innerclass refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4" prot="public">futures::packaged_task&lt; R(Args...), Options &gt;</innerclass>
+    <innerclass refid="classfutures_1_1promise__base" prot="public">futures::promise_base</innerclass>
+    <innerclass refid="classfutures_1_1promise" prot="public">futures::promise</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__shared__state_1ga320f807f067a8d02c4d0e9ed66e53b0b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Signature</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::swap</definition>
+        <argsstring>(packaged_task&lt; Signature &gt; &amp;l, packaged_task&lt; Signature &gt; &amp;r) noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>futures::swap</qualifiedname>
+        <param>
+          <type>packaged_task&lt; Signature &gt; &amp;</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type>packaged_task&lt; Signature &gt; &amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Specializes the std::swap algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/packaged_task.hpp" line="278" column="5" bodyfile="futures/packaged_task.hpp" bodystart="278" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="group__shared__state_1ga9a3170dfeff3872b6a6bcfab5ce63e66" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename R</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::swap</definition>
+        <argsstring>(promise&lt; R &gt; &amp;l, promise&lt; R &gt; &amp;r) noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>futures::swap</qualifiedname>
+        <param>
+          <type>promise&lt; R &gt; &amp;</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type>promise&lt; R &gt; &amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Swap the value of two promises. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/promise.hpp" line="251" column="5" bodyfile="futures/promise.hpp" bodystart="251" bodyend="253"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Shared state objects. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

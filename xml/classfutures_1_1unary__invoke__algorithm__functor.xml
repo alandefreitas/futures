@@ -1,0 +1,776 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1unary__invoke__algorithm__functor" kind="class" language="C++" prot="public">
+    <compoundname>futures::unary_invoke_algorithm_functor</compoundname>
+    <derivedcompoundref refid="classfutures_1_1all__of__functor" prot="public" virt="non-virtual">futures::all_of_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1any__of__functor" prot="public" virt="non-virtual">futures::any_of_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1count__if__functor" prot="public" virt="non-virtual">futures::count_if_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1find__if__functor" prot="public" virt="non-virtual">futures::find_if_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1find__if__not__functor" prot="public" virt="non-virtual">futures::find_if_not_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1for__each__functor" prot="public" virt="non-virtual">futures::for_each_functor</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1none__of__functor" prot="public" virt="non-virtual">futures::none_of_functor</derivedcompoundref>
+    <includes refid="unary__invoke__algorithm_8hpp" local="no">unary_invoke_algorithm.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Derived</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the underlying algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>E</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executor type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>I</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>S</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>P</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Partitioner type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Fun</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An executor instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A partitioner instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator to first element in the range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel iterator to one element past the last </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Function invocable with the return type of the iterator </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Result of the underlying algorithm </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="99" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="99" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;, P p, I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the underlying algorithm with an execution policy. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The execution policy is converted into the corresponding executor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="141" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="141" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::input_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm with a range of iterators. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="182" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="182" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, P p, R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm with a range of iterators and execution policy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="219" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="219" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; I, S &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the underlying algorithm with a default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="255" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="255" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>partitioner_for&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>P</declname>
+            <defname>P</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(P p, R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>P</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm on a range with a default executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="288" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="288" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the underlying algorithm with a default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="328" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="328" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm with execution policy and default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="368" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="368" bodyend="384"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::input_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm on a range with the default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="406" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="406" bodyend="422"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>execution_policy</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+          <param>
+            <type>std::ranges::input_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(E const &amp;ex, R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm on a range with policy and default partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="444" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="444" bodyend="460"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; I &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(I first, S last, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the algorithm with default executor and partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="481" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="481" bodyend="497"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::input_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>std::indirectly_unary_invocable&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+            <declname>Fun</declname>
+            <defname>Fun</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr __see_below__</type>
+        <definition>constexpr __see_below__ futures::unary_invoke_algorithm_functor&lt; Derived &gt;::operator()</definition>
+        <argsstring>(R &amp;&amp;r, Fun f) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::unary_invoke_algorithm_functor::operator()</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>Fun</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute algorithm on a range with default executor and partitioner. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="516" column="9" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="516" bodyend="532"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Overloads for unary invoke algorithms. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>CRTP class with the overloads for algorithm functors that iterate elements in a sequence with an unary function.</para>
+<para>This includes algorithms such as <ref refid="group__functions_1ga696ae412208d98f074d3ed6667e1a64f" kindref="member">for_each</ref> and <ref refid="group__functions_1gac70d945839135728f9ac534f5a8626c9" kindref="member">any_of</ref>. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>futures::all_of_functor</label>
+        <link refid="classfutures_1_1all__of__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures::any_of_functor</label>
+        <link refid="classfutures_1_1any__of__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures::count_if_functor</label>
+        <link refid="classfutures_1_1count__if__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures::find_if_functor</label>
+        <link refid="classfutures_1_1find__if__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures::find_if_not_functor</label>
+        <link refid="classfutures_1_1find__if__not__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures::for_each_functor</label>
+        <link refid="classfutures_1_1for__each__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures::none_of_functor</label>
+        <link refid="classfutures_1_1none__of__functor"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::unary_invoke_algorithm_functor&lt; Derived &gt;</label>
+        <link refid="classfutures_1_1unary__invoke__algorithm__functor"/>
+      </node>
+    </inheritancegraph>
+    <location file="futures/algorithm/traits/unary_invoke_algorithm.hpp" line="60" column="5" bodyfile="futures/algorithm/traits/unary_invoke_algorithm.hpp" bodystart="60" bodyend="533"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+      <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" prot="public" virt="non-virtual"><scope>futures::unary_invoke_algorithm_functor</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
