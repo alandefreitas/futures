@@ -21,7 +21,9 @@
 #    endif
 #endif
 
-#ifdef __cpp_lib_execution
+#ifdef FUTURES_DOXYGEN
+#    define FUTURES_HAS_STD_POLICIES
+#elif defined(__cpp_lib_execution)
 #    if defined(BOOST_GCC)
 #        if BOOST_WORKAROUND(BOOST_GCC_VERSION, >= 100000)
 #            include <execution>

@@ -34,7 +34,7 @@ namespace futures {
     /**
      * This trait identifies whether the type represents a future value.
      *
-     * Unless the trait is specialized, a type is considered stoppable
+     * Unless the trait is specialized, a type is considered future-like
      * if it has the `get()` member function.
      *
      * @see
@@ -42,7 +42,14 @@ namespace futures {
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
-    using is_future_like = __see_below__;
+    struct is_future_like;
+#elif defined(FUTURES_HAS_CONCEPTS)
+    template <class T>
+    struct is_future_like : std::false_type {};
+
+    template <class T>
+    requires requires(T a) { a.get(); }
+    struct is_future_like<T> : std::true_type {};
 #else
     namespace detail {
         template <class T, class = void>
@@ -71,7 +78,7 @@ namespace futures {
     /// @brief An object with the common members of a future.
     /**
      * A class is considered future-like when 1) it specializes the
-     * `is_future` trait to indicate it is a future type, or 2) it has the
+     * `is_future_like` trait to indicate it is a future type, or 2) it has the
      * a `get()` function to obtain its future value.
      *
      * This allows algorithms to interoperate with future types from other
@@ -83,6 +90,7 @@ namespace futures {
     template <class T>
     concept future_like = is_future_like_v<std::decay_t<T>>;
 #endif
+
 
     /** @} */ // @addtogroup future-traits Future Traits
     /** @} */ // @addtogroup futures Futures

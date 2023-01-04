@@ -37,11 +37,6 @@ namespace futures {
         FUTURES_INLINE_VAR constexpr bool is_error_code_enum_v = std::
             is_error_code_enum<E>::value;
 
-#ifdef FUTURES_HAS_CONCEPTS
-        template <class E>
-        concept error_code_enum = detail::is_error_code_enum_v<E>;
-#endif
-
         template <class E>
         FUTURES_INLINE_VAR constexpr bool is_enum_v = std::is_enum<E>::value;
 

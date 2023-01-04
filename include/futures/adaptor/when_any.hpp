@@ -17,7 +17,8 @@
  *
  *  It implements the when_any functionality for futures and executors
  *  The same rationale as `std::experimental::when_any` applies here
- *  @see [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
+ *  @see
+ * [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
  */
 
 #include <futures/is_ready.hpp>
@@ -204,7 +205,8 @@ namespace futures {
          *  This future is always valid() unless there are tasks and they are
          *  all invalid
          *
-         *  @see [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
+         *  @see
+         * [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
          *
          *  @return Return `true` if underlying futures are valid
          */
@@ -482,7 +484,8 @@ namespace futures {
     /// in the range is ready
     /**
      *  @param first,last Range of futures
-     *  @return @ref when_any_future with all future objects
+     *  @return @ref when_any_future with all future objects. The sequence type
+     *  is a range object holding the futures.
      */
 #ifdef FUTURES_HAS_CONCEPTS
     template <class InputIt>
@@ -508,8 +511,7 @@ namespace futures {
     /// @copybrief when_any
     /**
      *  This function does not participate in overload resolution unless every
-     *  argument is either a (possibly cv-qualified) std::shared_future or a
-     *  cv-unqualified std::future.
+     *  argument is future-like.
      *
      *  @param r Range of futures
      *  @return @ref when_any_future with all future objects

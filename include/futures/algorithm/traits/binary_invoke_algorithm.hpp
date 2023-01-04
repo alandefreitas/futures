@@ -32,6 +32,7 @@
 #include <futures/algorithm/traits/range_value.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
+#include <futures/algorithm/detail/make_policy_executor.hpp>
 #include <numeric>
 
 #ifdef FUTURES_HAS_CONCEPTS
@@ -212,7 +213,7 @@ namespace futures {
                     std::move(f));
             } else {
                 return operator()(
-                    make_policy_executor<E, I, S>(),
+                    detail::make_policy_executor<E, I, S>(),
                     p,
                     first,
                     last,
@@ -257,7 +258,7 @@ namespace futures {
                     std::move(f));
             } else {
                 return operator()(
-                    make_policy_executor<E, I, S>(),
+                    detail::make_policy_executor<E, I, S>(),
                     p,
                     first,
                     last,

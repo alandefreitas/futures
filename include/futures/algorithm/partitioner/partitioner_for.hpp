@@ -10,6 +10,7 @@
 
 #include <futures/config.hpp>
 #include <futures/algorithm/traits/is_input_iterator.hpp>
+#include <futures/algorithm/traits/is_sentinel_for.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/utility/invoke.hpp>
 
@@ -32,29 +33,29 @@ namespace futures {
      *  @{
      */
 
-    /// Determine if P is a valid partitioner for the iterator range [I,S]
-    template <class T, class I, class S = I>
-    using is_partitioner_for = detail::conjunction<
-        std::conditional_t<
-            is_input_iterator_v<I>,
-            std::true_type,
-            std::false_type>,
-        std::conditional_t<
-            is_input_iterator_v<S>,
-            std::true_type,
-            std::false_type>,
-        detail::is_invocable<T, I, S>>;
-
-    /// Determine if P is a valid partitioner for the iterator range [I,S]
-    template <class P, class I, class S = I>
-    constexpr bool is_partitioner_for_v = is_partitioner_for<P, I, S>::value;
-
 #ifdef FUTURES_HAS_CONCEPTS
     /// @concept partitioner_for
     /// @brief Determines if a type is an partitioner
     template <class P, class I, class S = I>
-    concept partitioner_for = is_partitioner_for_v<P, I, S>;
+    concept partitioner_for = std::input_iterator<I> && std::sentinel_for<S, I>
+                              && std::invocable<P, I, S>;
 #endif
+
+    /// Determine if P is a valid partitioner for the iterator range [I,S]
+    template <class P, class I, class S = I>
+    using is_partitioner_for =
+#ifdef FUTURES_HAS_CONCEPTS
+        std::bool_constant<partitioner_for<P, I, S>>;
+#else
+        detail::conjunction<
+            is_input_iterator<I>,
+            is_sentinel_for<S, I>,
+            detail::is_invocable<P, I, S>>;
+#endif
+
+    /// Determine if P is a valid partitioner for the iterator range [I,S]
+    template <class P, class I, class S = I>
+    constexpr bool is_partitioner_for_v = is_partitioner_for<P, I, S>::value;
 
     /** @} */ // @addtogroup partitioners Partitioners
     /** @} */ // @addtogroup algorithms Algorithms
