@@ -19,8 +19,8 @@
  *  and views It allows us to get algorithm overloads for free, including
  *  default inference of the best execution policies
  *
- *  @see https://en.cppreference.com/w/cpp/ranges/transform_view
- *  @see https://en.cppreference.com/w/cpp/ranges/view
+ *  @see [`std::ranges::transform_view`](https://en.cppreference.com/w/cpp/ranges/transform_view)
+ *  @see [`std::ranges::view`](https://en.cppreference.com/w/cpp/ranges/view)
  */
 
 #include <futures/algorithm/partitioner/default_partitioner.hpp>

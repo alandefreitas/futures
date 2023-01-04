@@ -34,7 +34,7 @@ namespace futures {
      * `std::ranges::compare_three_way`. If C++20 is available, it represents
      * an alias to `std::ranges::compare_three_way`.
      *
-     * @see https://en.cppreference.com/w/cpp/utility/compare/compare_three_way
+     * @see [`std::compare_three_way`](https://en.cppreference.com/w/cpp/utility/compare/compare_three_way)
      */
 #if __cplusplus > 201703L && __cpp_lib_three_way_comparison
     using compare_three_way = std::compare_three_way;

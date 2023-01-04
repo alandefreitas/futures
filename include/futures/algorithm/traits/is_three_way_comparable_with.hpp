@@ -39,7 +39,7 @@ namespace futures {
     /// concept
     /**
      * @see
-     * https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable
+     * [`std::three_way_comparable`](https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable)
      */
 #if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
     template <class T, class U, class Cat = std::partial_ordering>

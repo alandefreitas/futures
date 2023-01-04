@@ -34,7 +34,7 @@ namespace futures {
     /// @brief A type trait equivalent to the `std::random_access_iterator`
     /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/random_access_iterator
+     * @see [`std::random_access_iterator`](https://en.cppreference.com/w/cpp/iterator/random_access_iterator)
      */
 #if defined(FUTURES_DOXYGEN)
     template <class T>

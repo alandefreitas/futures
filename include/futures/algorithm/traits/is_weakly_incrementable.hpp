@@ -31,7 +31,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::weakly_incrementable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/weakly_incrementable
+     * @see [`std::weakly_incrementable`](https://en.cppreference.com/w/cpp/iterator/weakly_incrementable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>

@@ -35,7 +35,7 @@ namespace futures {
     /// concept
     /**
      * @see
-     * https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable
+     * [`std::indirectly_unary_invocable`](https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class F, class I>

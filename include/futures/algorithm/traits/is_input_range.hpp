@@ -32,7 +32,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::input_range` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/ranges/input_range
+     * @see [`std::ranges::input_range`](https://en.cppreference.com/w/cpp/ranges/input_range)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

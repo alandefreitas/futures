@@ -30,7 +30,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::semiregular` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/semiregular
+     * @see [`std::semiregular`](https://en.cppreference.com/w/cpp/concepts/semiregular)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

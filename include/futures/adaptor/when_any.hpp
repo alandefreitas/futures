@@ -17,7 +17,7 @@
  *
  *  It implements the when_any functionality for futures and executors
  *  The same rationale as `std::experimental::when_any` applies here
- *  @see https://en.cppreference.com/w/cpp/experimental/when_any
+ *  @see [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
  */
 
 #include <futures/is_ready.hpp>
@@ -204,7 +204,7 @@ namespace futures {
          *  This future is always valid() unless there are tasks and they are
          *  all invalid
          *
-         *  @see https://en.cppreference.com/w/cpp/experimental/when_any
+         *  @see [`std::experimental::when_any`](https://en.cppreference.com/w/cpp/experimental/when_any)
          *
          *  @return Return `true` if underlying futures are valid
          */

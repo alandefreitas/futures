@@ -35,7 +35,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::equality_comparable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/equality_comparable
+     * @see [`std::equality_comparable`](https://en.cppreference.com/w/cpp/concepts/equality_comparable)
      */
 #if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
     template <class T>

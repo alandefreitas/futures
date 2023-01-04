@@ -22,7 +22,7 @@
 namespace futures {
     /// A C++17 functor equivalent to the C++20 std::ranges::less_equal
     /**
-     * @see https://en.cppreference.com/w/cpp/utility/functional/less
+     * @see [`std::less`](https://en.cppreference.com/w/cpp/utility/functional/less)
      */
     struct less_equal {
         FUTURES_TEMPLATE(class T, class U)

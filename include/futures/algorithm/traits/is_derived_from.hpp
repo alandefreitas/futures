@@ -33,7 +33,7 @@ namespace futures {
 
     /// A type trait equivalent to the `derived_from` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/derived_from
+     * @see [`std::derived_from`](https://en.cppreference.com/w/cpp/concepts/derived_from)
      */
 #ifdef FUTURES_DOXYGEN
     template <class Derived, class Base>

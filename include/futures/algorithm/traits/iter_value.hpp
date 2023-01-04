@@ -34,7 +34,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to `std::iter_value`
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/iter_t
+     * @see [`std::iter_value`](https://en.cppreference.com/w/cpp/iterator/iter_t)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

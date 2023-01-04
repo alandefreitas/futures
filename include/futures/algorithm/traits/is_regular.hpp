@@ -31,7 +31,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::regular` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/regular
+     * @see [`std::regular`](https://en.cppreference.com/w/cpp/concepts/regular)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

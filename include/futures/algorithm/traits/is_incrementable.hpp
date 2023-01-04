@@ -31,7 +31,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::incrementable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/incrementable
+     * @see [`std::incrementable`](https://en.cppreference.com/w/cpp/iterator/incrementable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class I>

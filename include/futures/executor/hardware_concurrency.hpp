@@ -38,7 +38,7 @@ namespace futures {
      *  partitioners and algorithms to be constexpr.
      *
      *  @see
-     *  https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency
+     *  [`std::hardware_concurrency`](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
      *
      *  @return Number of concurrent threads supported. If the value is not
      *  well-defined or not computable, returns 1.

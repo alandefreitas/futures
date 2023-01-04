@@ -32,7 +32,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::input_iterator` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/input_iterator
+     * @see [`std::input_iterator`](https://en.cppreference.com/w/cpp/iterator/input_iterator)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

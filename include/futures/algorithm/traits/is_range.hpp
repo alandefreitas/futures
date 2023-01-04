@@ -31,7 +31,7 @@ namespace futures {
     /// @brief A type trait equivalent to the `std::range`
     /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/ranges/range
+     * @see [`std::ranges::range`](https://en.cppreference.com/w/cpp/ranges/range)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

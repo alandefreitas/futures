@@ -32,7 +32,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::indirectly_readable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/iterator/indirectly_readable
+     * @see [`std::indirectly_readable`](https://en.cppreference.com/w/cpp/iterator/indirectly_readable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

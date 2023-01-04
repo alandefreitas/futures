@@ -32,7 +32,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::movable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/movable
+     * @see [`std::movable`](https://en.cppreference.com/w/cpp/concepts/movable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

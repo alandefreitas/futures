@@ -68,7 +68,7 @@
  *  Note that although `when_all` always takes longer than `when_any`,
  *  `when_any` involves a number of heuristics that influence its performance.
  *
- *  @see https://en.cppreference.com/w/cpp/experimental/concurrency
+ *  @see [`std::experimental::concurrency`](https://en.cppreference.com/w/cpp/experimental/concurrency)
  *  @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
  *  @see https://github.com/Amanieu/asyncplusplus
  */

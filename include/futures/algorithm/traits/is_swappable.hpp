@@ -30,7 +30,7 @@ namespace futures {
     /// @brief A type trait equivalent to the `std::swappable`
     /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/swappable
+     * @see [`std::swappable`](https://en.cppreference.com/w/cpp/concepts/swappable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

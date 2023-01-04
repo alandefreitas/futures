@@ -29,7 +29,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::constructible_from` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/constructible_from
+     * @see [`std::constructible_from`](https://en.cppreference.com/w/cpp/concepts/constructible_from)
      */
     template <class T, class... Args>
     using is_constructible_from = detail::

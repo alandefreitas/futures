@@ -31,7 +31,7 @@ namespace futures {
     /// concept
     /**
      * @see
-     * https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator
+     * [`std::is_input_or_output_iterator`](https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

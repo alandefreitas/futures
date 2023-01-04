@@ -32,7 +32,7 @@ namespace futures {
     /// @brief A type trait equivalent to the `std::default_initializable`
     /// concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/default_initializable
+     * @see [`std::default_initializable`](https://en.cppreference.com/w/cpp/concepts/default_initializable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

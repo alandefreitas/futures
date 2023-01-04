@@ -31,7 +31,7 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::copyable` concept
     /**
-     * @see https://en.cppreference.com/w/cpp/concepts/copyable
+     * @see [`std::copyable`](https://en.cppreference.com/w/cpp/concepts/copyable)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>
