@@ -30,59 +30,63 @@ namespace futures {
             : std::true_type {};
 
         // Check if a type implements the get function
-        template <class T, typename = void>
+        template <class T, class F = invocable_archetype, typename = void>
         struct has_execute : std::false_type {};
 
-        template <class T>
+        template <class T, class F>
         struct has_execute<
             T,
-            void_t<decltype(std::declval<T>().execute(
-                std::declval<invocable_archetype>()))>> : std::true_type {};
+            F,
+            void_t<decltype(std::declval<T>().execute(std::declval<F>()))>>
+            : std::true_type {};
 
         // Check if a type implements the get function but not the get_execute
         // This is a workaround for GCC7, which fails to return false for
         // has_execute when the class has a private execute function
-        template <class T, class = void>
+        template <class T, class F = invocable_archetype, class = void>
         struct is_light_executor_impl : std::false_type {};
 
-        template <class T>
+        template <class T, class F>
         struct is_light_executor_impl<
             T,
+            F,
             std::enable_if_t<
                 // clang-format off
                 !detail::has_get_executor<T>::value
                 // clang-format on
-                >> : has_execute<T> {};
+                >> : has_execute<T, F> {};
 
         // check if something is an asio executor
-        template <class T, class = void>
-        struct is_asio_executor_impl : std::false_type {};
+        template <class T, class F = invocable_archetype, class = void>
+        struct is_asio_executor_for_impl : std::false_type {};
 
-        template <class T>
-        struct is_asio_executor_impl<
+        template <class T, class F>
+        struct is_asio_executor_for_impl<
             T,
+            F,
             void_t<
                 // clang-format off
                 decltype(std::declval<T>().context()),
                 decltype(std::declval<T>().on_work_started()),
                 decltype(std::declval<T>().on_work_finished()),
-                decltype(std::declval<T>().dispatch(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>())),
-                decltype(std::declval<T>().post(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>())),
-                decltype(std::declval<T>().defer(std::declval<invocable_archetype>(), std::declval<std::allocator<void>>()))
+                decltype(std::declval<T>().dispatch(std::declval<F>(), std::declval<std::allocator<void>>())),
+                decltype(std::declval<T>().post(std::declval<F>(), std::declval<std::allocator<void>>())),
+                decltype(std::declval<T>().defer(std::declval<F>(), std::declval<std::allocator<void>>()))
                 // clang-format on
                 >>
             : detail::conjunction<
                   std::is_copy_constructible<T>,
                   is_equality_comparable<T>> {};
 
-        template <typename T>
-        struct is_asio_executor : is_asio_executor_impl<T> {};
+        template <class T, class F = invocable_archetype>
+        struct is_asio_executor_for : is_asio_executor_for_impl<T, F> {};
 
         // Check if a type implements the get function
-        template <class T>
-        using is_executor_impl = conjunction<
-            is_light_executor_impl<T>,
+        template <class T, class F = invocable_archetype>
+        using is_executor_for_impl = conjunction<
+            is_light_executor_impl<T, F>,
             std::is_copy_constructible<T>>;
+
     } // namespace detail
 } // namespace futures
 

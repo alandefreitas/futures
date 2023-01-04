@@ -34,9 +34,9 @@ namespace futures {
         execute_in_executor(E const& ex, F&& f) {
             detail::execute_impl(
                 detail::mp_cond<
-                    detail::is_asio_executor<E>,
+                    detail::is_asio_executor_for<E, F>,
                     detail::mp_int<1>,
-                    is_executor<E>,
+                    is_executor_for<E, F>,
                     detail::mp_int<0>>{},
                 ex,
                 std::forward<F>(f));

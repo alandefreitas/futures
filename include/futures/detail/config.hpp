@@ -22,10 +22,15 @@
  * documentation.
  */
 #ifndef FUTURES_DOXYGEN
-#    define FUTURES_DETAIL(x) x
+#    define FUTURES_DETAIL(x)       x
+#    define FUTURES_DETAIL_AS(x, y) x
 #else
-#    define FUTURES_DETAIL(x) __see_below__
+#    define FUTURES_DETAIL(x)       __see_below__
+#    define FUTURES_DETAIL_AS(x, y) y
 #endif
+
+#define FUTURES_INVOCABLE_ARCHETYPE \
+    FUTURES_DETAIL_AS(detail::invocable_archetype, __invocable_archetype__)
 
 /*
  * Macros related to concepts and constraints

@@ -9,6 +9,8 @@
 #define FUTURES_EXECUTOR_EXECUTE_HPP
 
 #include <futures/config.hpp>
+#include <futures/executor/is_execution_context.hpp>
+#include <futures/executor/is_executor.hpp>
 #include <futures/executor/detail/execute.hpp>
 #include <type_traits>
 
@@ -27,34 +29,44 @@ namespace futures {
      * @param f The task
      */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class E, class F>
-    requires(is_executor<E>::value || detail::is_asio_executor<E>::value)
+    template <class F, executor_for<F> E>
 #else
     template <
-            class E,
-            class F,
-            std::enable_if_t<
-                (is_executor<E>::value || detail::is_asio_executor<E>::value),
-                int>
-            = 0>
+        class E,
+        class F,
+        std::enable_if_t<is_executor_for<E, F>::value, int> = 0>
 #endif
-    void execute(E const& ex, F&& f) {
+    void
+    execute(E const& ex, F&& f) {
         detail::execute_in_executor(ex, std::forward<F>(f));
     }
 
-    /// @copydoc execute
+    /// Submits a task for execution on an execution context
+    /**
+     * This free function submits a task for execution using the specified
+     * execution context.
+     *
+     * This is a convenience function that extracts the executor from the
+     * context and uses it instead.
+     *
+     * @param ctx The target execution context
+     * @param f The task
+     */
 #ifdef FUTURES_HAS_CONCEPTS
-    template <class E, class F>
-    requires(
-        !is_executor<E>::value && !detail::is_asio_executor<E>::value
-        && detail::has_get_executor<E>::value)
+    template <class F, execution_context_for<F> C>
+    requires(!executor_for<C, F>)
 #else
-    template <class E, class F, std::enable_if_t<(
-        !is_executor<E>::value && !detail::is_asio_executor<E>::value
-        && detail::has_get_executor<E>::value), int> = 0>
+    template <
+        class C,
+        class F,
+        std::enable_if_t<
+            (!is_executor_for<C, F>::value
+             && is_execution_context_for_v<C, F>),
+            int>
+        = 0>
 #endif
-    void execute(E& ex, F&& f) {
-        detail::execute_in_context(ex, std::forward<F>(f));
+    void execute(C& ctx, F&& f) {
+        detail::execute_in_context(ctx, std::forward<F>(f));
     }
 } // namespace futures
 
