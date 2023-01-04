@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.10)
 if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.12.4)
     project(
             futures
-            VERSION 0.1.4
+            VERSION 0.1.5
             DESCRIPTION "C++ Lock-Free Task Programming"
             HOMEPAGE_URL "https://alandefreitas.github.io/futures/"
             LANGUAGES CXX
@@ -13,7 +13,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.12.4)
 else ()
     project(
             futures
-            VERSION 0.1.4
+            VERSION 0.1.5
             DESCRIPTION "C++ Lock-Free Task Programming"
             LANGUAGES CXX
     )
