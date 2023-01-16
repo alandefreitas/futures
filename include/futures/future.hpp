@@ -68,7 +68,8 @@
  *  Note that although `when_all` always takes longer than `when_any`,
  *  `when_any` involves a number of heuristics that influence its performance.
  *
- *  @see [`std::experimental::concurrency`](https://en.cppreference.com/w/cpp/experimental/concurrency)
+ *  @see
+ * [`std::experimental::concurrency`](https://en.cppreference.com/w/cpp/experimental/concurrency)
  *  @see https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html
  *  @see https://github.com/Amanieu/asyncplusplus
  */
@@ -753,12 +754,16 @@ namespace futures {
          *
          * @return The continuation future
          */
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class Executor, class Fn>
+        requires(Options::is_continuable || Options::is_always_deferred)
+#else
         template <
             class Executor,
             class Fn FUTURES_ALSO_SELF_REQUIRE(
                 (Options::is_continuable || Options::is_always_deferred))>
-        FUTURES_DETAIL(decltype(auto))
-        then(Executor const &ex, Fn &&fn);
+#endif
+        FUTURES_DETAIL(decltype(auto)) then(Executor const &ex, Fn &&fn);
 
     private:
         template <
@@ -801,10 +806,14 @@ namespace futures {
          *
          * @return The continuation future
          */
+#ifdef FUTURES_HAS_CONCEPTS
+        template <class Fn>
+        requires(Options::is_continuable || Options::is_always_deferred)
+#else
         template <class Fn FUTURES_ALSO_SELF_REQUIRE(
             (Options::is_continuable || Options::is_always_deferred))>
-        FUTURES_DETAIL(decltype(auto))
-        then(Fn &&fn);
+#endif
+        FUTURES_DETAIL(decltype(auto)) then(Fn &&fn);
 
         /// Get the current executor for this task
         /**
@@ -813,9 +822,15 @@ namespace futures {
          *
          * @return The executor associated with this future instance
          */
+#ifndef FUTURES_HAS_CONCEPTS
         FUTURES_SELF_REQUIRE((Options::has_executor))
+#endif
         const typename Options::executor_t &
-        get_executor() const {
+        get_executor() const
+#ifdef FUTURES_HAS_CONCEPTS
+        requires Options::has_executor
+#endif
+        {
             FUTURES_STATIC_ASSERT(Options::has_executor);
             return state_.get_executor();
         }
@@ -843,9 +858,15 @@ namespace futures {
          *
          * @return `true` if this invocation made a stop request
          */
+#ifndef FUTURES_HAS_CONCEPTS
         FUTURES_SELF_REQUIRE((Options::is_stoppable))
+#endif
         bool
-        request_stop() noexcept {
+        request_stop() noexcept
+#ifdef FUTURES_HAS_CONCEPTS
+        requires Options::is_stoppable
+#endif
+        {
             return get_stop_source().request_stop();
         }
 
@@ -859,9 +880,15 @@ namespace futures {
          *
          * @return The stop source
          */
+#ifndef FUTURES_HAS_CONCEPTS
         FUTURES_SELF_REQUIRE((Options::is_stoppable))
+#endif
         FUTURES_NODISCARD stop_source
-        get_stop_source() const noexcept {
+        get_stop_source() const noexcept
+#ifdef FUTURES_HAS_CONCEPTS
+        requires Options::is_stoppable
+#endif
+        {
             return state_.get_stop_source();
         }
 
@@ -875,9 +902,15 @@ namespace futures {
          *
          * @return The stop token
          */
+#ifndef FUTURES_HAS_CONCEPTS
         FUTURES_SELF_REQUIRE((Options::is_stoppable))
+#endif
         FUTURES_NODISCARD stop_token
-        get_stop_token() const noexcept {
+        get_stop_token() const noexcept
+#ifdef FUTURES_HAS_CONCEPTS
+        requires Options::is_stoppable
+#endif
+        {
             return get_stop_source().get_token();
         }
 

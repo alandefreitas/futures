@@ -205,12 +205,17 @@ namespace futures {
     }
 
     template <class R, class Options>
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Executor, class Fn>
+    requires(Options::is_continuable || Options::is_always_deferred)
+#else
     template <
         class Executor,
         class Fn FUTURES_ALSO_SELF_REQUIRE_IMPL(
             (Options::is_continuable || Options::is_always_deferred))>
+#endif
     FUTURES_DETAIL(decltype(auto))
-    basic_future<R, Options>::then(Executor const &ex, Fn &&fn) {
+        basic_future<R, Options>::then(Executor const &ex, Fn &&fn) {
         // Throw if invalid
         if (!valid()) {
             throw_exception(no_state{});
@@ -361,10 +366,14 @@ namespace futures {
 
 
     template <class R, class Options>
+#ifdef FUTURES_HAS_CONCEPTS
+    template <class Fn>
+    requires(Options::is_continuable || Options::is_always_deferred)
+#else
     template <class Fn FUTURES_ALSO_SELF_REQUIRE_IMPL(
         (Options::is_continuable || Options::is_always_deferred))>
-    FUTURES_DETAIL(decltype(auto))
-    basic_future<R, Options>::then(Fn &&fn) {
+#endif
+    FUTURES_DETAIL(decltype(auto)) basic_future<R, Options>::then(Fn &&fn) {
         FUTURES_IF_CONSTEXPR (Options::has_executor) {
             return this->then(get_executor(), std::forward<Fn>(fn));
         } else {
