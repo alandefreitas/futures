@@ -29,6 +29,7 @@
 #include <futures/executor/execute.hpp>
 #include <futures/executor/hardware_concurrency.hpp>
 #include <futures/executor/inline_executor.hpp>
+#include <futures/executor/is_execution_context.hpp>
 #include <futures/executor/is_executor.hpp>
 #include <futures/executor/new_thread_executor.hpp>
 #include <futures/executor/thread_pool.hpp>

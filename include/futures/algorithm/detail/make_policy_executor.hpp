@@ -5,8 +5,8 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 
-#ifndef FUTURES_ALGORITHM_DETAIL_POLICIES_HPP
-#define FUTURES_ALGORITHM_DETAIL_POLICIES_HPP
+#ifndef FUTURES_ALGORITHM_DETAIL_MAKE_POLICY_EXECUTOR_HPP
+#define FUTURES_ALGORITHM_DETAIL_MAKE_POLICY_EXECUTOR_HPP
 
 #include <futures/algorithm/policies.hpp>
 
@@ -61,4 +61,4 @@ namespace futures {
     } // namespace detail
 } // namespace futures
 
-#endif // FUTURES_ALGORITHM_DETAIL_POLICIES_HPP
+#endif // FUTURES_ALGORITHM_DETAIL_MAKE_POLICY_EXECUTOR_HPP

@@ -13,6 +13,7 @@
 #include <futures/detail/operation_state.hpp>
 #include <futures/detail/operation_state_storage.hpp>
 #include <futures/detail/shared_state.hpp>
+#include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/detail/utility/byte.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>
 #include <futures/detail/deps/boost/mp11/algorithm.hpp>
@@ -23,26 +24,6 @@ namespace futures {
         /** @addtogroup futures Futures
          *  @{
          */
-
-        /// Disambiguation tags that can be passed to the constructors
-        /// future_state
-        /**
-         * @par Example
-         * @code
-         * // Construct future state with my_type as initial state
-         * future_state<my_type> s(in_place_type<my_type>, my_type_arguments,
-         * ...);
-         * @endcode
-         *
-         * @tparam T Type the tag represents
-         */
-        template <class T>
-        struct in_place_type_t {
-            explicit in_place_type_t() = default;
-        };
-
-        template <class T>
-        FUTURES_INLINE_VAR constexpr in_place_type_t<T> in_place_type{};
 
         /*
          * Exposition only

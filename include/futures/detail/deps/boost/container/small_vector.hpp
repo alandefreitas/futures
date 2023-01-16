@@ -15,11 +15,20 @@
 #    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
+#if defined(BOOST_CLANG)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 // Include boost/container/small_vector.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
 #    include <boost/container/small_vector.hpp>
 #else
 #    include <futures/detail/bundled/boost/container/small_vector.hpp>
+#endif
+
+#ifdef BOOST_CLANG
+#    pragma clang diagnostic pop
 #endif
 
 #ifdef BOOST_GCC

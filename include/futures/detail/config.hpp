@@ -13,6 +13,7 @@
  */
 
 #include <futures/detail/deps/boost/config.hpp>
+#include <futures/detail/deps/boost/assert.hpp>
 #include <futures/detail/deps/boost/static_assert.hpp>
 
 /*
@@ -157,6 +158,14 @@ namespace futures {
 #endif
 
 /*
+ * ASSERT
+ */
+#ifndef FUTURES_ASSERT
+#    define FUTURES_ASSERT(...)     BOOST_ASSERT(__VA_ARGS__)
+#    define FUTURES_ASSERT_MSG(...) BOOST_ASSERT_MSG(__VA_ARGS__)
+#endif
+
+/*
  * STATIC_ASSERT
  */
 #ifndef FUTURES_STATIC_ASSERT
@@ -165,7 +174,7 @@ namespace futures {
 #endif
 
 /*
- * STATIC_ASSERT
+ * IF_CONSTEXPR
  */
 #ifndef FUTURES_IF_CONSTEXPR
 #    define FUTURES_IF_CONSTEXPR BOOST_IF_CONSTEXPR

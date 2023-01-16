@@ -13,14 +13,7 @@
 
 namespace futures {
     namespace detail {
-        /** @addtogroup futures Futures
-         *  @{
-         */
-        /** @addtogroup future-options Future options
-         *  @{
-         */
-
-        /// Future options list as a sorted set
+        // Future options list as a sorted set
         template <class... Args>
         struct future_options_flat {
         private:
@@ -79,10 +72,6 @@ namespace futures {
         public:
             using type = maybe_shared_list_t;
         };
-
-        template <class... Args>
-        using future_options_flat_t = typename future_options_flat<
-            Args...>::type;
 
     } // namespace detail
 } // namespace futures

@@ -57,6 +57,7 @@ macro(set_compiler_booleans)
     elseif (UNIX AND NOT APPLE AND GCC)
         set(EXPECTED_COMPILER ON)
     endif ()
+    message(STATUS "CMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID}")
 endmacro()
 
 # @brief Set the default optimization flags in case the user didn't

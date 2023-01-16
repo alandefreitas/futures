@@ -43,6 +43,16 @@ if (Threads_FOUND)
     target_link_libraries(futures PUBLIC Threads::Threads)
 endif ()
 
+if (CLANG)
+    # Disable allocator::rebind<void> warning on external deps
+    # futures/detail/bundled/boost/intrusive/pointer_rebind.hpp
+    target_compile_options(
+            futures
+            INTERFACE
+            -Wno-error=deprecated-declarations)
+endif ()
+
+
 #######################################################
 ### Install targets                                 ###
 #######################################################

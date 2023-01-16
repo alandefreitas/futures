@@ -66,9 +66,25 @@ namespace futures {
         FUTURES_INLINE_VAR constexpr bool is_copy_constructible_v = std::
             is_copy_constructible<T>::value;
 
+        template <class T>
+        FUTURES_INLINE_VAR constexpr bool is_move_constructible_v = std::
+            is_move_constructible<T>::value;
+
+        template <class T>
+        FUTURES_INLINE_VAR constexpr bool is_nothrow_move_constructible_v
+            = std::is_nothrow_move_constructible<T>::value;
+
         template <class T, class U>
         FUTURES_INLINE_VAR constexpr bool is_convertible_v = std::
             is_convertible<T, U>::value;
+
+        template <class T, class... Args>
+        FUTURES_INLINE_VAR constexpr bool is_constructible_v = std::
+            is_constructible<T, Args...>::value;
+
+        template <class T, class... Args>
+        FUTURES_INLINE_VAR constexpr bool is_nothrow_constructible_v = std::
+            is_nothrow_constructible<T, Args...>::value;
 
         template <class T, class U>
         FUTURES_INLINE_VAR constexpr bool is_base_of_v = std::is_base_of<T, U>::
@@ -99,6 +115,25 @@ namespace futures {
 
         template <typename... Ts>
         using void_t = typename make_void<Ts...>::type;
+
+        struct in_place_t {
+            explicit in_place_t() = default;
+        };
+        FUTURES_INLINE_VAR constexpr in_place_t in_place{};
+
+        template <class T>
+        struct in_place_type_t {
+            explicit in_place_type_t() = default;
+        };
+        template <class T>
+        FUTURES_INLINE_VAR constexpr in_place_type_t<T> in_place_type{};
+
+        template <class T>
+        constexpr std::add_const_t<T>&
+        as_const(T& t) noexcept {
+            return t;
+        }
+
     } // namespace detail
 } // namespace futures
 

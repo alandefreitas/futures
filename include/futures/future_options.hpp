@@ -32,7 +32,7 @@ namespace futures {
      */
 
     template <class... Args>
-    using future_options = detail::future_options_flat_t<Args...>;
+    using future_options = typename detail::future_options_flat<Args...>::type;
 
     /** @} */
     /** @} */
