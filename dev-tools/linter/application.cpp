@@ -168,7 +168,7 @@ application::apply_include_globs(
     std::string &content) {
     fs::path relative_p = fs::relative(p, parent);
     if (is_parent(config_.bundled_deps_path, p)) {
-        trace("We do not change guards of bundled deps", relative_p);
+        trace("We do not apply globs in bundled deps", relative_p);
     }
     static std::regex const glob_regex{
         "// #glob < *([a-zA-Z0-9_/\\. \\*]+) *>"
