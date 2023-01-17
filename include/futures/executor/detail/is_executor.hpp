@@ -83,7 +83,7 @@ namespace futures {
 
         // Check if a type implements the get function
         template <class T, class F = invocable_archetype>
-        using is_executor_for_impl = conjunction<
+        using is_executor_for_impl = mp_all<
             is_light_executor_impl<T, F>,
             std::is_copy_constructible<T>>;
 
