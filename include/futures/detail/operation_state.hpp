@@ -31,12 +31,8 @@
 
 namespace futures {
     namespace detail {
-        /** @addtogroup futures Futures
-         *  @{
-         */
-
-        /// Operation state common synchronization primitives
-        /**
+        // Operation state common synchronization primitives
+        /*
          * Member functions and objects common to all operation state object
          * types.
          *
@@ -56,13 +52,8 @@ namespace futures {
          */
         class operation_state_base {
         private:
-            /**
-             * @name Private types
-             * @{
-             */
-
-            /// Type used for a list of external waiters
-            /**
+            // Type used for a list of external waiters
+            /*
              * A list of waiters is a list of references to external condition
              * variables we should notify when this operation state is ready.
              *
@@ -73,249 +64,145 @@ namespace futures {
              */
             using waiter_list = small_vector<std::condition_variable_any *>;
 
-            /**
-             * @}
-             */
-
         public:
-            /**
-             * @name Public types
-             * @{
-             */
-
-            /// A handle to notify an external context about this state being
-            /// ready
+            // A handle to notify an external context about this state being
+            // ready
             using notify_when_ready_handle = waiter_list::iterator;
 
-            /**
-             * @}
+            /*
+             * Constructors
              */
 
-            /**
-             * @name Constructors
-             * @{
-             */
-
-            /// Virtual operation state data destructor
+            // Virtual operation state data destructor
+            // It waits for any operations to complete
             virtual ~operation_state_base() {
-                // Wait for any operations to complete
                 auto lk = make_wait_lock();
             };
 
-            /// Constructor
-            /**
-             * Deleted to ensure we always explicitly define the initial
-             * status of the operation state.
+            // Constructor
+            /*
+             * Deleted to ensure the base class always explicitly defines
+             * the initial status of the operation state.
              */
             operation_state_base() = delete;
 
-            /// Constructor
-            /**
+            // Constructor
+            /*
              * Defaults to the initial status for the operation state.
-             *
-             * The initial status is already launched for eager futures.
+             * The initial status is always either launched or deferred.
              */
             explicit operation_state_base(bool is_deferred)
                 : status_(is_deferred ? status::deferred : status::launched) {}
 
-            /// Deleted copy constructor
-            /**
-             *  We should not copy construct the operation state data because
-             * its members, which include synchronization primitives, should be
-             * shared in eager futures.
-             *
-             *  In deferred futures, copying would still represent a logic error
-             *  at a higher level. A shared deferred future will still use a
-             *  shared operation state, while a unique deferred future is not
-             *  allowed to be copied.
+            // Deleted copy constructor
+            /*
+             * Cannot copy:
+             * - synchronization primitives can't be copied
+             * - unique futures have a single state
+             * - shared futures refer to the same state
              */
             operation_state_base(operation_state_base const &) = delete;
 
-            /// Deleted copy assignment
-            /**
-             * We cannot copy assign the operation state data because this base
-             * class holds synchronization primitives.
-             */
-            operation_state_base &
-            operator=(operation_state_base const &)
-                = delete;
-
-            /// Move constructor
-            /**
-             * Moving the operation state is only valid before the task is
-             * running, as it might happen with deferred futures. This allows us
-             * to change the address of the deferred future without having to
-             * share it.
+            // Move constructor
+            /*
+             * Other classes can only move the state before it's launched.
+             * The intended use case is a moving a deferred future around
+             * before launching the task (deferred futures use static storage).
              *
-             * At this point, we can ignore/recreate the unused synchronization
-             * primitives, such as condition variables and mutexes, and let
-             * other objects steal the contents of the base class while
-             * recreating the condition variables.
+             * We also accept moving it after everything is ready. The intended
+             * use case is futures that have already waited for the operation
+             * state and are now moving out the result.
              *
-             * This is only supposed to be used by deferred futures being
-             * shared, which means
-             *
-             * 1) the task hasn't been launched yet,
-             * 2) their `operation_state_base` is inline in the future and would
-             *    become shared otherwise.
-             *
-             * Thus, this allows us to (i) move deferred futures with inline
-             * operation states, or (ii) to construct a shared_ptr from an
-             * existing operation state, in case it needs to be shared.
-             *
+             * In both cases the new object can have a new mutex because we
+             * can be sure it's idle in these states.
              */
             operation_state_base(operation_state_base &&other) noexcept
-                : status_{ other.status_ }
-                , except_{ std::move(other.except_) }
+                : status_(std::exchange(other.status_, status::ready))
+                , except_(std::move(other.except_))
                 , external_waiters_(std::move(other.external_waiters_)) {
-                std::unique_lock<std::mutex> lk(other.waiters_mutex_);
-                assert(!is_running());
-                other.status_ = status::ready;
-            };
+                std::unique_lock<std::mutex> lk(other.mutex_);
+                FUTURES_ASSERT(
+                    status_ == status::deferred || status_ == status::ready);
+            }
 
-            /// Move assignment
-            /**
-             * Moving the operation state is only valid before the task is
-             * running, as it might happen with deferred futures. This allows us
-             * to change the address of the deferred future without having to
-             * share it.
-             *
-             * At this point, we can ignore/recreate the unused synchronization
-             * primitives, such as condition variables and mutexes, and let
-             * other objects steal the contents of the base class while
-             * recreating the condition variables.
-             *
-             * This is only supposed to be used by deferred futures being
-             * shared, which means
-             *
-             * 1) the task hasn't been launched yet,
-             * 2) their `operation_state_base` is inline in the future and would
-             *    become shared otherwise.
-             *
-             * Thus, this allows us to (i) move deferred futures with inline
-             * operation states, or (ii) to construct a shared_ptr from an
-             * existing operation state, in case it needs to be shared.
-             *
-             */
+            // Move assignment
             operation_state_base &
             operator=(operation_state_base &&other) noexcept {
-                status_ = std::move(other.status_);
+                status_ = std::exchange(other.status_, status::ready);
                 except_ = std::move(other.except_);
                 external_waiters_ = std::move(other.external_waiters_);
-                std::unique_lock<std::mutex> lk(other.waiters_mutex_);
-                assert(!is_running());
-                other.status_ = status::ready;
+                std::unique_lock<std::mutex> lk(other.mutex_);
+                FUTURES_ASSERT(
+                    status_ == status::deferred || status_ == status::ready);
                 return *this;
             };
 
-            /**
-             * @}
+            /*
+             * Observers
              */
 
-            /**
-             * @name Observers
-             *
-             * Determine the current state of the shared state.
-             * All of these operations are individually unsafe.
-             *
-             * @{
-             */
-
-            /// Check if operation state is currently deferred
+            // Check if operation state is currently deferred
             bool
-            is_deferred() const {
+            is_deferred() const noexcept {
                 return status_ == status::deferred;
             }
 
-            /// Check if operation state has been launched
+            // Check if operation state has been launched
             bool
-            is_launched() const {
+            is_launched() const noexcept {
                 return status_ == status::launched;
             }
 
-            /// Check if operation state is waiting
+            // Check if operation state is waiting
             bool
-            is_waiting() const {
+            is_waiting() const noexcept {
                 return status_ == status::waiting;
             }
 
-            /// Check if operation state is ready
+            // Check if operation state is ready
             bool
-            is_ready() const {
+            is_ready() const noexcept {
                 return status_ == status::ready;
             }
 
-            /// Check if associated task is running
+            // Check if associated task is running
             bool
-            is_running() const {
+            is_running() const noexcept {
                 return status_ == status::launched
                        || status_ == status::waiting;
             }
 
-            /// Check if state is ready with no exception
+            // Check if state is ready with no exception
             bool
-            succeeded() const {
+            succeeded() const noexcept {
                 return is_ready() && except_ == nullptr;
             }
 
-            /// Check if state is ready without locking
+            // Check if state is ready without locking
             bool
-            failed() const {
+            failed() const noexcept {
                 return is_ready() && except_ != nullptr;
             }
 
-            /**
-             * @}
+            /*
+             * Accessors
              */
 
-            /**
-             * @name Accessors
-             *
-             * The accessor functions are used to mark a change to the state of
-             * the operation. They will trigger and use whatever synchronization
-             * primitives are necessary to avoid data races between promises
-             * and futures.
-             *
-             * This base object only handles flags, while the base classes are
-             * concerned with the state storage and extensions, if any.
-             *
-             * @{
-             */
-
-            /// Mark operation state as ready
-            /**
-             *  This operation marks the status flag as ready and warns any
-             * future waiting for them.
-             *
-             *  We only block the thread to notify futures if there are any
-             *  threads really waiting for this operation state.
-             *
-             *  This overload is meant to be used by derived classes that will
-             *  also set the state of their storage.
-             */
+            // Mark operation state as ready
             void
             mark_ready() noexcept {
                 auto lk = make_wait_lock();
                 mark_ready_unsafe();
             }
 
-            /// Set operation state to an exception
-            /**
-             *  This sets the exception value and marks the operation state as
-             *  ready.
-             *
-             *  If we try to set an exception on a operation state that's ready,
-             * we throw an exception.
-             *
-             *  This overload is meant to be used by derived classes.
-             */
+            // Set operation state to an exception
             void
             mark_exception(std::exception_ptr except) {
                 auto lk = make_wait_lock();
                 mark_exception_unsafe(std::move(except));
             }
 
-            /// Get the operation state when it's as an exception
+            // Get the operation state when it's as an exception
             std::exception_ptr
             get_exception_ptr() const {
                 auto lk = make_wait_lock();
@@ -325,19 +212,19 @@ namespace futures {
                 return except_;
             }
 
-            /// Rethrow the exception we have stored
+            // Rethrow the exception we have stored
             void
             throw_internal_exception() const {
                 std::rethrow_exception(get_exception_ptr());
             }
 
-            /// Indicate to the operation state its owner has been destroyed
-            /**
-             *  Promise types, such as promise and packaged task, call this
-             * function to allows us to set an error if the promise has been
+            // Indicate to the operation state its owner has been destroyed
+            /*
+             * Promise types, such as promise and packaged task, call this
+             * function to allow us to set an error if the promise has been
              * destroyed too early.
              *
-             *  If the owner has been destroyed before the operation state is
+             * If the owner has been destroyed before the operation state is
              * ready, this means a promise has been broken and the operation
              * state should store an exception.
              */
@@ -348,110 +235,77 @@ namespace futures {
                 }
             }
 
-
-            /**
-             * @}
+            /*
+             * Waiting
              */
 
-            /**
-             * @name Waiting
-             * @{
-             */
-
-            /// Wait for operation state to become ready
-            /**
-             *  This function uses the condition variable waiters to wait for
-             *  this operation state to be marked as ready.
-             */
+            // Wait for operation state to become ready
             void
             wait() {
-                wait_impl<false>(*this);
+                std::unique_lock<std::mutex> lk = make_wait_lock();
+                status prev = status_;
+                if (prev != status::ready) {
+                    // Only the mutable version is allowed to post the deferred
+                    // task.
+                    wait_for_parent();
+                    if (prev == status::deferred) {
+                        status_ = status::launched;
+                        relocker rlk(lk);
+                        post_deferred();
+                    }
+                    prev = status_;
+                    if (prev != status::ready) {
+                        status_ = status::waiting;
+                        waiter_.wait(lk, [this]() { return is_ready(); });
+                    }
+                }
             }
 
-            /// Wait for operation state to become ready
-            void
-            wait() const {
-                wait_impl<true>(*this);
-            }
-
-            /// Wait for the operation state to become ready
-            /**
-             *  This function uses the condition variable waiters to wait for
-             *  this operation state to be marked as ready for a specified
-             *  duration.
-             *
-             *  @tparam Rep An arithmetic type representing the number of ticks
-             *  @tparam Period A std::ratio representing the tick period
-             *
-             *  @param timeout_duration maximum duration to block for
-             *
-             *  @return The state of the operation value
-             */
+            // Wait for the operation state to become ready
             template <typename Rep, typename Period>
             future_status
             wait_for(
                 std::chrono::duration<Rep, Period> const &timeout_duration) {
-                auto timeout_time = std::chrono::system_clock::now()
-                                    + timeout_duration;
-                return wait_impl<false>(*this, &timeout_time);
+                return wait_until(
+                    std::chrono::system_clock::now() + timeout_duration);
             }
 
-            /// Wait for the operation state to become ready
-            template <typename Rep, typename Period>
-            future_status
-            wait_for(std::chrono::duration<Rep, Period> const &timeout_duration)
-                const {
-                auto timeout_time = std::chrono::system_clock::now()
-                                    + timeout_duration;
-                return wait_impl<true>(*this, &timeout_time);
-            }
-
-            /// Wait for the operation state to become ready
-            /**
-             *  This function uses the condition variable waiters
-             *  to wait for this operation state to be marked as ready until a
-             *  specified time point.
-             *
-             *  @tparam Clock The clock type
-             *  @tparam Duration The duration type
-             *
-             *  @param timeout_time maximum time point to block until
-             *
-             *  @return The state of the operation value
-             */
+            // Wait for the operation state to become ready
             template <typename Clock, typename Duration>
             future_status
             wait_until(
                 std::chrono::time_point<Clock, Duration> const &timeout_time) {
-                return wait_impl<false>(*this, &timeout_time);
+                std::unique_lock<std::mutex> lk = make_wait_lock();
+                status prev = status_;
+                if (prev != status::ready) {
+                    wait_for_parent();
+                    if (prev == status::deferred) {
+                        status_ = status::launched;
+                        relocker rlk(lk);
+                        post_deferred();
+                    }
+                    prev = status_;
+                    if (prev != status::ready) {
+                        status_ = status::waiting;
+                        if (waiter_.wait_until(lk, timeout_time, [this]() {
+                                return is_ready();
+                            }))
+                        {
+                            return future_status::ready;
+                        } else {
+                            status_ = status::launched;
+                            return future_status::timeout;
+                        }
+                    }
+                }
+                return future_status::ready;
             }
 
-            /// Wait for the operation state to become ready
-            template <typename Clock, typename Duration>
-            future_status
-            wait_until(std::chrono::time_point<Clock, Duration> const
-                           &timeout_time) const {
-                return wait_impl<true>(*this, &timeout_time);
-            }
-
-            /**
-             * @}
+            /*
+             * Synchronization
              */
 
-            /**
-             * @name Synchronization
-             * @{
-             */
-
-            /// Include an external condition variable in the list of waiters
-            /**
-             *  These are external waiters we need to notify when the state is
-             *  ready.
-             *
-             *  @param cv Reference to an external condition variable
-             *
-             *  @return Handle which can be used to unnotify when ready
-             */
+            // Include an external condition variable in the list of waiters
             notify_when_ready_handle
             notify_when_ready(std::condition_variable_any &cv) {
                 auto lk = make_wait_lock();
@@ -468,57 +322,46 @@ namespace futures {
                 return external_waiters_.insert(external_waiters_.end(), &cv);
             }
 
-            /// Remove condition variable from list of external waiters
-            /**
-             *  @param it External condition variable
-             */
+            // Remove condition variable from list of external waiters
             void
             unnotify_when_ready(notify_when_ready_handle it) {
                 auto lk = make_wait_lock();
                 external_waiters_.erase(it);
             }
 
-            /// Post a deferred function
+            // Post a deferred function
             virtual void
             post_deferred() {
                 // do nothing by default / assume tasks are eager
                 // override in deferred futures only
             }
 
-            /// Wait for parent operation
+            // Wait for parent operation
             virtual void
             wait_for_parent() {
                 // do nothing by default / assume tasks are eager
                 // override in deferred futures only
             }
 
-            /// Get a reference to the mutex in the operation state
+            // Get a reference to the mutex in the operation state
             std::mutex &
             waiters_mutex() {
-                return waiters_mutex_;
+                return mutex_;
             }
 
-            /// Generate unique lock for the operation state
-            /**
-             *  This lock can be used for any operations on the state that might
-             *  need to be protected.
-             */
+            // Generate unique lock for the operation state
             std::unique_lock<std::mutex>
             make_wait_lock() const {
-                return std::unique_lock<std::mutex>{ waiters_mutex_ };
+                return std::unique_lock<std::mutex>{ mutex_ };
             }
 
-            /**
-             * @}
-             */
-
         protected:
-            /**
+            /*
              * @name Private functions
              * @{
              */
 
-            /// Mark operation state as ready without synchronization
+            // Mark operation state as ready without synchronization
             void
             mark_ready_unsafe() noexcept {
                 status prev = status_;
@@ -531,7 +374,7 @@ namespace futures {
                 }
             }
 
-            /// Set operation state to an exception without synchronization
+            // Set operation state to an exception without synchronization
             void
             mark_exception_unsafe(std::exception_ptr except) {
                 if (is_ready()) {
@@ -548,105 +391,41 @@ namespace futures {
                 operation_state_base>;
 
         private:
-            static void
-            post_deferred_impl(
-                operation_state_base const &,
-                bool,
-                std::unique_lock<std::mutex> &) {}
-
-            static void
-            post_deferred_impl(
-                operation_state_base &op,
-                bool prev_is_deferred,
-                std::unique_lock<std::mutex> &lk) {
-                op.wait_for_parent();
-                if (prev_is_deferred) {
-                    op.status_ = status::launched;
-                    relocker rlk(lk);
-                    op.post_deferred();
-                }
-            }
-
-            template <
-                bool is_const,
-                typename Clock = std::chrono::system_clock,
-                typename Duration = std::chrono::system_clock::duration>
-            static future_status
-            wait_impl(
-                maybe_const_this<is_const> &op,
-                std::chrono::time_point<Clock, Duration> const *timeout_time
-                = nullptr) {
-                std::unique_lock<std::mutex> lk = op.make_wait_lock();
-                FUTURES_IF_CONSTEXPR (is_const) {
-                    if (op.is_deferred()) {
-                        return future_status::deferred;
-                    }
-                }
-                status prev = op.status_;
-                if (prev != status::ready) {
-                    // Only the mutable version is allowed to post the deferred
-                    // task.
-                    post_deferred_impl(op, prev == status::deferred, lk);
-                    prev = op.status_;
-                    if (prev != status::ready) {
-                        op.status_ = status::waiting;
-                        if (timeout_time) {
-                            if (op.waiter_
-                                    .wait_until(lk, *timeout_time, [&op]() {
-                                        return op.is_ready();
-                                    }))
-                            {
-                                return future_status::ready;
-                            } else {
-                                op.status_ = status::launched;
-                                return future_status::timeout;
-                            }
-                        } else {
-                            op.waiter_.wait(lk, [&op]() {
-                                return op.is_ready();
-                            });
-                            return future_status::ready;
-                        }
-                    }
-                }
-                return future_status::ready;
-            }
-
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Member values
              * @{
              */
 
 
-            /// The current status of this operation state
+            // The current status of this operation state
             enum status : uint8_t
             {
-                /// Nothing happened yet
+                // Nothing happened yet
                 deferred,
-                /// The task has been launched
+                // The task has been launched
                 launched,
-                /// Some thread is waiting for the result
+                // Some thread is waiting for the result
                 waiting,
-                /// The state has been set and we notified everyone
+                // The state has been set and we notified everyone
                 ready,
             };
 
-            /// Indicates if the operation state is already set
+            // Indicates if the operation state is already set
             mutable status status_;
 
-            /// Pointer to an exception, when the operation_state fails
-            /**
+            // Pointer to an exception, when the operation_state fails
+            /*
              *  std::exception_ptr does not need to be atomic because
              *  the status variable is guarding it.
              */
             std::exception_ptr except_{ nullptr };
 
-            /// Condition variable to notify any object waiting for this state
-            /**
+            // Condition variable to notify any object waiting for this state
+            /*
              *  This is the object we use to be able to block until the
              * operation state is ready. Although the operation state is
              * lock-free, users might still need to wait for results to be
@@ -657,33 +436,40 @@ namespace futures {
              */
             mutable std::condition_variable waiter_{};
 
-            /// List of external condition variables waiting for the state
-            /**
+            // List of external condition variables waiting for the state
+            /*
              *  While the internal waiter is intended for
              */
             waiter_list external_waiters_;
 
-            /// Mutex for threads that want to wait on the result
-            /**
-             *  While the basic state operations is lock-free, it also includes
-             * a mutex that can be used for communication between futures, such
-             * as waiter futures.
+            // Mutex for threads that want to wait on the result
+            /*
+             * We could remove the mutex by using an atomic enum for the status.
+             * This is specially true now that atomic objects have a "wait"
+             * member function. However, this isn't very useful because
+             * contention tends to be extremely low even for the shortest tasks
+             * (see benchmarks).
              *
-             *  This is used when one thread intents to wait for the result
-             *  of a future. The mutex is not used for lazy futures or if
-             *  the result is ready before the waiting operation.
+             * The cost of locking a mutex when there is no contention, also
+             * known as the "fast path," is typically low and is usually just a
+             * simple atomic operation such as a test-and-set or
+             * compare-and-swap instruction. However, the specific cost can
+             * depend on the implementation of the mutex and the underlying
+             * hardware.
              *
-             *  These functions should be used directly by users very often.
+             * A secondary reason for using a mutex here is that atomics make
+             * the library less deterministic, harder to tests, and impossible
+             * to test with TSan.
              */
-            mutable std::mutex waiters_mutex_{};
+            mutable std::mutex mutex_{};
 
-            /**
+            /*
              * @}
              */
         };
 
-        /// Operation state with its concrete storage
-        /**
+        // Operation state with its concrete storage
+        /*
          * This class stores the data for a operation state holding an element
          * of type `R`, which might be a concrete type, a reference, or `void`.
          *
@@ -744,7 +530,7 @@ namespace futures {
             layout_tuple_type layout_;
 
         public:
-            /**
+            /*
              * @name Public types
              * @{
              */
@@ -759,17 +545,17 @@ namespace futures {
             using storage_type = typename layout_tuple_type::
                 template value_type<3>;
 
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Constructors
              * @{
              */
 
-            /// Destructor
-            /**
+            // Destructor
+            /*
              *  This might destroy the operation state object R if the state is
              *  ready with a value. This logic is encapsulated into the
              *  operation state storage.
@@ -787,8 +573,8 @@ namespace futures {
             void destroy_impl(std::false_type /* Options::is_stoppable*/){};
 
         public:
-            /// Constructor
-            /**
+            // Constructor
+            /*
              *  This function will construct the state with storage for R.
              *
              *  This is often invalid because we cannot let it create an empty
@@ -797,8 +583,8 @@ namespace futures {
              */
             operation_state() : operation_state(false) {}
 
-            /// Constructor
-            /**
+            // Constructor
+            /*
              *  This function will construct the state with storage for R.
              *
              *  This is often invalid because we cannot let it create an empty
@@ -809,32 +595,35 @@ namespace futures {
                 : operation_state_base(is_deferred)
                 , layout_() {}
 
-            /// Copy constructor
-            operation_state(operation_state const &) = default;
+            // Copy constructor
+            /*
+             * Operation states are static
+             */
+            operation_state(operation_state const &) = delete;
 
-            /// Move constructor
+            // Move constructor
             operation_state(operation_state &&) noexcept = default;
 
-            /// Copy assignment operator
+            // Copy assignment operator
             operation_state &
             operator=(operation_state const &)
                 = default;
 
-            /// Move assignment operator
+            // Move assignment operator
             operation_state &
             operator=(operation_state &&)
                 = default;
 
-            /// Constructor for state with reference to executor
-            /**
+            // Constructor for state with reference to executor
+            /*
              * The executor allows us to emplace continuations on the
              * same executor by default.
              */
             explicit operation_state(executor_type const &ex)
                 : operation_state(false, ex) {}
 
-            /// Constructor for potentially deferred state with executor
-            /**
+            // Constructor for potentially deferred state with executor
+            /*
              * The executor allows us to emplace continuations on the
              * same executor by default.
              */
@@ -846,17 +635,17 @@ namespace futures {
                       stop_source_type{},
                       storage_type{}) {}
 
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Accessors
              * @{
              */
 
-            /// Set the value of the operation state
-            /**
+            // Set the value of the operation state
+            /*
              * This function will directly construct the value with the
              * specified arguments.
              *
@@ -887,8 +676,8 @@ namespace futures {
             }
 
         public:
-            /// Set operation state to an exception
-            /**
+            // Set operation state to an exception
+            /*
              *  This sets the exception value and marks the operation state as
              *  ready.
              *
@@ -919,8 +708,8 @@ namespace futures {
             }
 
         public:
-            /// Set value with a callable and an argument list
-            /**
+            // Set value with a callable and an argument list
+            /*
              * Instead of directly setting the value, we can use this function
              * to use a callable that will later set the value.
              *
@@ -963,8 +752,8 @@ namespace futures {
             }
 
         public:
-            /// Set value with a callable and a tuple or arguments
-            /**
+            // Set value with a callable and a tuple or arguments
+            /*
              * This function is a version of apply that accepts a tuple of
              * arguments instead of a variadic list of arguments.
              *
@@ -987,8 +776,8 @@ namespace futures {
                         std::remove_reference_t<Tuple>>::value>{});
             }
 
-            /// Get the value of the operation state
-            /**
+            // Get the value of the operation state
+            /*
              * This function waits for the operation state to become ready and
              * returns its value.
              *
@@ -1007,11 +796,11 @@ namespace futures {
                 return get_storage().get();
             }
 
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Observers
              * @{
              */
@@ -1056,7 +845,7 @@ namespace futures {
                 return layout_.template get<stop_source_type>();
             }
 
-            /**
+            /*
              * @}
              */
 
@@ -1070,8 +859,8 @@ namespace futures {
             }
         };
 
-        /// A functor that binds function arguments for deferred futures
-        /**
+        // A functor that binds function arguments for deferred futures
+        /*
          * This function binds the function arguments to a function, generating
          * a named functor we can use in a deferred shared state. When the
          * function has arguments, this means we can only store this callable in
@@ -1099,8 +888,8 @@ namespace futures {
             std::tuple<std::decay_t<Args>...> args_;
         };
 
-        /// An extension of shared state with storage for a deferred task
-        /**
+        // An extension of shared state with storage for a deferred task
+        /*
          *  This class provides the same functionality as shared state and
          *  extra storage for a deferred task.
          *
@@ -1122,38 +911,38 @@ namespace futures {
             using deferred_function_type = typename deferred_function_base::type;
 
         public:
-            /**
+            /*
              * @name Constructors
              * @{
              */
 
-            /// Destructor
+            // Destructor
             ~deferred_operation_state() override = default;
 
-            /// Constructor
+            // Constructor
             deferred_operation_state()
                 : operation_state<R, Options>(true)
                 , deferred_function_base() {}
 
-            /// Copy Constructor
+            // Copy Constructor
             deferred_operation_state(deferred_operation_state const &) = default;
 
-            /// Move Constructor
+            // Move Constructor
             deferred_operation_state(deferred_operation_state &&) noexcept
                 = default;
 
-            /// Copy Assignment
+            // Copy Assignment
             deferred_operation_state &
             operator=(deferred_operation_state const &)
                 = default;
 
-            /// Move Assignment
+            // Move Assignment
             deferred_operation_state &
             operator=(deferred_operation_state &&)
                 = default;
 
-            /// Constructor from the deferred function
-            /**
+            // Constructor from the deferred function
+            /*
              *  Although the function type will be the same as
              *  deferred_function_type most of the time, any function
              * convertible deferred_function_type is also accepted.
@@ -1172,8 +961,8 @@ namespace futures {
                 , deferred_function_base(boost::empty_init, std::forward<Fn>(f)) {
             }
 
-            /// Constructor from the deferred function
-            /**
+            // Constructor from the deferred function
+            /*
              *  The function accepts other function and args types so
              *  (i) we can forward the variables, and (ii) allow
              compatible
@@ -1181,8 +970,8 @@ namespace futures {
              *  same types as Fn and Args.
              */
 
-            /// Constructor from the deferred function and its arguments
-            /**
+            // Constructor from the deferred function and its arguments
+            /*
              *  Although the function type will be the same as
              *  deferred_function_type most of the time, any function
              * convertible deferred_function_type is also accepted so that
@@ -1205,25 +994,25 @@ namespace futures {
                           std::forward<Fn>(f),
                           std::forward<Args>(args)...)) {}
 
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Shared state functions
              * @{
              */
 
-            /// Get the current value from this operation state
-            /**
+            // Get the current value from this operation state
+            /*
              * We explicitly define that to use the overload from
              * `operation_state<R, Options>` because empty base functions
              * also have their overloads of `get`.
              */
             using operation_state<R, Options>::get;
 
-            /// Post the deferred task to the executor
-            /**
+            // Post the deferred task to the executor
+            /*
              * When we wait for an operation state for the first time, the base
              * class operation_state_base is responsible for calling
              * post_deferred, which posts any deferred task to the executor.
@@ -1260,8 +1049,8 @@ namespace futures {
             void
             post_deferred_impl(std::false_type /* is_always_deferred */) {}
         public:
-            /// Wait for the parent operation state to be set
-            /**
+            // Wait for the parent operation state to be set
+            /*
              * When we wait for an operation state for the first time, the base
              * class operation_state_base cannot call `post_deferred` before
              * waiting for the parent task to finish.
@@ -1295,7 +1084,7 @@ namespace futures {
             wait_for_parent_impl(
                 std::false_type /* is_future_continue_task */) {}
         public:
-            /// Swap two deferred operation states
+            // Swap two deferred operation states
             void
             swap(deferred_operation_state &other) {
                 std::swap(
@@ -1306,11 +1095,11 @@ namespace futures {
                     static_cast<deferred_function_base &>(other));
             }
 
-            /**
+            /*
              * @}
              */
 
-            /**
+            /*
              * @name Observers
              * @{
              */
@@ -1325,12 +1114,12 @@ namespace futures {
                 return deferred_function_base::get();
             }
 
-            /**
+            /*
              * @}
              */
         };
 
-        /// Check if type is an operation state
+        // Check if type is an operation state
         template <typename>
         struct is_operation_state : std::false_type {};
 
@@ -1360,9 +1149,7 @@ namespace futures {
         template <class T>
         using operation_state_options_t = typename operation_state_options<
             T>::type;
-
-        /** @} */ // @addtogroup futures Futures
-    }             // namespace detail
+    } // namespace detail
 } // namespace futures
 
 #endif // FUTURES_DETAIL_OPERATION_STATE_HPP

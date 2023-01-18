@@ -596,18 +596,6 @@ namespace futures {
         void
         wait() const;
 
-        /// Waits for the result to become available
-        /**
-         * Blocks until the result becomes available.
-         *
-         * `valid() == true` after the call.
-         *
-         * A `future_uninitialized` exception is thrown if `valid() == false`
-         * before the call to this function.
-         */
-        void
-        wait();
-
         /// Waits for the result, returns if it is unavailable for duration
         /**
          * Waits for the result to become available. Blocks until specified
@@ -636,11 +624,6 @@ namespace futures {
             std::chrono::duration<Rep, Period> const &timeout_duration) const;
 
         /// Waits for the result, returns if it is unavailable for duration
-        template <class Rep, class Period>
-        future_status
-        wait_for(std::chrono::duration<Rep, Period> const &timeout_duration);
-
-        /// Waits for the result, returns if it is unavailable for duration
         /**
          * Waits for a result to become available. It blocks until specified
          * `timeout_time` has been reached or the result becomes available,
@@ -666,12 +649,6 @@ namespace futures {
         future_status
         wait_until(
             std::chrono::time_point<Clock, Duration> const &timeout_time) const;
-
-        /// Waits for the result, returns if it is unavailable for duration
-        template <class Clock, class Duration>
-        future_status
-        wait_until(
-            std::chrono::time_point<Clock, Duration> const &timeout_time);
 
         /// Checks if the associated operation state is ready.
         /**

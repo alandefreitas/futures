@@ -130,18 +130,6 @@ namespace futures {
         if (!valid()) {
             throw_exception(future_uninitialized{});
         }
-        FUTURES_IF_CONSTEXPR (Options::is_always_deferred) {
-            throw_exception(future_deferred{});
-        }
-        state_.wait();
-    }
-
-    template <class R, class Options>
-    void
-    basic_future<R, Options>::wait() {
-        if (!valid()) {
-            throw_exception(future_uninitialized{});
-        }
         state_.wait();
     }
 
@@ -150,20 +138,6 @@ namespace futures {
     future_status
     basic_future<R, Options>::wait_for(
         std::chrono::duration<Rep, Period> const &timeout_duration) const {
-        if (!valid()) {
-            throw_exception(future_uninitialized{});
-        }
-        FUTURES_IF_CONSTEXPR (Options::is_always_deferred) {
-            return future_status::deferred;
-        }
-        return state_.wait_for(timeout_duration);
-    }
-
-    template <class R, class Options>
-    template <class Rep, class Period>
-    future_status
-    basic_future<R, Options>::wait_for(
-        std::chrono::duration<Rep, Period> const &timeout_duration) {
         if (!valid()) {
             throw_exception(future_uninitialized{});
         }
@@ -177,20 +151,6 @@ namespace futures {
         std::chrono::time_point<Clock, Duration> const &timeout_time) const {
         if (!valid()) {
             throw_exception(future_uninitialized{});
-        }
-        return state_.wait_until(timeout_time);
-    }
-
-    template <class R, class Options>
-    template <class Clock, class Duration>
-    future_status
-    basic_future<R, Options>::wait_until(
-        std::chrono::time_point<Clock, Duration> const &timeout_time) {
-        if (!valid()) {
-            throw_exception(future_uninitialized{});
-        }
-        FUTURES_IF_CONSTEXPR (Options::is_always_deferred) {
-            throw_exception(future_deferred{});
         }
         return state_.wait_until(timeout_time);
     }
