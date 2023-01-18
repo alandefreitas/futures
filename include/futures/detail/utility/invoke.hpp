@@ -45,9 +45,9 @@ namespace futures {
             : is_invocable_impl<invoke_result<F, Args...>, R>::type {};
 
         // is_invocable_r_v
-        template <class F, class... Args>
+        template <class R, class F, class... Args>
         FUTURES_INLINE_VAR constexpr bool is_invocable_r_v
-            = is_invocable_r<F, Args...>::value;
+            = is_invocable_r<R, F, Args...>::value;
 
         // is_nothrow_invocable_r
         template <typename R, typename F, typename... Args>
@@ -57,9 +57,9 @@ namespace futures {
                   call_is_nothrow<F, Args...>>::type {};
 
         // is_nothrow_invocable_r_v
-        template <class F, class... Args>
+        template <class R, class F, class... Args>
         FUTURES_INLINE_VAR constexpr bool is_nothrow_invocable_r_v
-            = is_nothrow_invocable_r<F, Args...>::value;
+            = is_nothrow_invocable_r<R, F, Args...>::value;
 
         // std::is_nothrow_invocable
         template <class Fn, class... Args>
@@ -88,12 +88,12 @@ namespace futures {
             class R,
             class F,
             class... Args,
-            typename std::enable_if<is_invocable_r_v<F, Args...>, int>::type = 0>
+            typename std::enable_if<is_invocable_r_v<R, F, Args...>, int>::type = 0>
         constexpr R
         invoke_r(F&& f, Args&&... args) noexcept(
             is_nothrow_invocable_r_v<R, F, Args...>) {
             // f might be a regular function or a member pointer in a class
-            return invoke_r_impl(
+            return invoke_r_impl<R>(
                 is_void<R>{},
                 std::forward<F>(f),
                 std::forward<Args>(args)...);

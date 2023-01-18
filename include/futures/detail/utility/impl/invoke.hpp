@@ -263,6 +263,11 @@ namespace futures {
         struct is_invocable_impl : std::false_type {};
 
         // Used for valid INVOKE and INVOKE<void> expressions.
+        // The result is true whenever Result (std::invoke_result) has the
+        // type alias.
+        // If Ret is void, all conversions are valid because we are going
+        // to ignore the result. So INVOKE and INVOKE<void> have the same
+        // trait result.
         template <typename Result, typename Ret>
         struct is_invocable_impl<
             Result,
@@ -270,14 +275,16 @@ namespace futures {
             /* is_void<Ret> = */ true,
             void_t<typename Result::type>> : std::true_type {};
 
-        // Used for valid INVOKE and INVOKE<R> expressions.
+        // Used for valid INVOKE_R<R> expressions.
+        // When using invoke_r, we also need to check if the other type Ret
+        // can be implicitly converted from the result type.
         template <typename Result, typename Ret>
         struct is_invocable_impl<
             Result,
             Ret,
             /* is_void<Ret> = */ false,
             void_t<typename Result::type>>
-            : std::is_convertible<Result, Ret> {};
+            : std::is_convertible<typename Result::type, Ret> {};
 
         // Check if invoke is nothrow considering the type of invoke call
         // determined by a tag

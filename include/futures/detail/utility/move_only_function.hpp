@@ -86,33 +86,33 @@ namespace futures {
             return t;
         }
 
-#define FUTURES_DECL_MOVE_ONLY_IMPL_FOR(expr, do_move, do_const)               \
-    template <class F, class R, class... Args>                                 \
-    class move_only_function_interface_impl<F, R(Args...) expr>                \
-        : public move_only_function_interface<R(Args...) expr> {               \
-        F f_;                                                                  \
-    public:                                                                    \
-        virtual ~move_only_function_interface_impl() = default;                \
-                                                                               \
-        move_only_function_interface_impl(                                     \
-            move_only_function_interface_impl &&) noexcept                     \
-            = default;                                                         \
-                                                                               \
-        move_only_function_interface_impl(                                     \
-            move_only_function_interface_impl const &)                         \
-            = default;                                                         \
-                                                                               \
-        FUTURES_TEMPLATE(class U)                                              \
-        (requires std::is_convertible<U, F>::value)                            \
-            move_only_function_interface_impl(U &&u)                           \
-            : f_(std::forward<U>(u)) {}                                        \
-                                                                               \
-        virtual R                                                              \
-        operator()(Args... args) expr {                                        \
-            auto &f = maybe_as_const_impl(bool_constant<do_const>{}, f_);      \
-            return ::futures::detail::                                         \
-                invoke(maybe_move_impl(bool_constant<do_move>{}, f), args...); \
-        }                                                                      \
+#define FUTURES_DECL_MOVE_ONLY_IMPL_FOR(expr, do_move, do_const)           \
+    template <class F, class R, class... Args>                             \
+    class move_only_function_interface_impl<F, R(Args...) expr>            \
+        : public move_only_function_interface<R(Args...) expr> {           \
+        F f_;                                                              \
+    public:                                                                \
+        virtual ~move_only_function_interface_impl() = default;            \
+                                                                           \
+        move_only_function_interface_impl(                                 \
+            move_only_function_interface_impl &&) noexcept                 \
+            = default;                                                     \
+                                                                           \
+        move_only_function_interface_impl(                                 \
+            move_only_function_interface_impl const &)                     \
+            = default;                                                     \
+                                                                           \
+        FUTURES_TEMPLATE(class U)                                          \
+        (requires std::is_convertible<U, F>::value)                        \
+            move_only_function_interface_impl(U &&u)                       \
+            : f_(std::forward<U>(u)) {}                                    \
+                                                                           \
+        virtual R                                                          \
+        operator()(Args... args) expr {                                    \
+            auto &f = maybe_as_const_impl(bool_constant<do_const>{}, f_);  \
+            return ::futures::detail::invoke_r<                            \
+                R>(maybe_move_impl(bool_constant<do_move>{}, f), args...); \
+        }                                                                  \
     }
 
         FUTURES_DECL_MOVE_ONLY_IMPL_FOR(FUTURES_NO_ARG, false, false);

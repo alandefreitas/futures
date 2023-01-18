@@ -40,6 +40,19 @@ TEST_CASE("invoke") {
 #endif
         }
 
+        SECTION("invoke_r") {
+            STATIC_REQUIRE(std::is_function<decltype(times_two)>::value);
+            STATIC_REQUIRE(!std::is_member_pointer<decltype(times_two)>::value);
+            STATIC_REQUIRE(is_invocable_r_v<double, decltype(times_two), int>);
+            STATIC_REQUIRE(
+                is_invocable_r_v<double, decltype(times_two_nt), int>);
+            STATIC_REQUIRE(
+                !is_nothrow_invocable_r_v<double, decltype(times_two), int>);
+            STATIC_REQUIRE(is_invocable_r_v<double, decltype(times_two), int>);
+            REQUIRE(invoke_r<double>(times_two, 1) == 2.0);
+            REQUIRE_NOTHROW(invoke_r<void>(times_two, 1));
+        }
+
         SECTION("nothrow") {
             STATIC_REQUIRE(std::is_function<decltype(times_two_nt)>::value);
             STATIC_REQUIRE(
