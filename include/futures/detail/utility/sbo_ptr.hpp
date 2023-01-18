@@ -169,8 +169,11 @@ namespace futures {
             sbo_ptr_base(sbo_ptr_base const&) = delete;
 
             // Move constructor
-            sbo_ptr_base(sbo_ptr_base&& other) noexcept {
-                construct_from(std::move(other));
+            sbo_ptr_base(sbo_ptr_base&& other) noexcept
+                : alloc_base(
+                    boost::empty_init,
+                    std::move(other.alloc_base::get())) {
+                transfer_ownership_from(std::move(other));
             }
 
             // Can't copy assign
@@ -182,8 +185,31 @@ namespace futures {
             sbo_ptr_base&
             operator=(sbo_ptr_base&& other) noexcept {
                 if (this != &other) {
+                    // destroy this now at the first step because the new
+                    // allocator might not be able to
                     destroy();
-                    construct_from(std::move(other));
+                    // https://stackoverflow.com/questions/27471053/example-usage-of-propagate-on-container-move-assignment
+                    static constexpr bool propagate = boost::
+                        allocator_propagate_on_container_move_assignment<
+                            Allocator>::type::value;
+                    auto& this_alloc = alloc_base::get();
+                    auto& other_alloc = other.alloc_base::get();
+                    FUTURES_IF_CONSTEXPR (propagate) {
+                        // move assign allocator
+                        this_alloc = std::move(other_alloc);
+                        // Transfer memory ownership. This new allocator should
+                        // be able to later deallocate it.
+                        transfer_ownership_from(std::move(other));
+                    } else {
+                        if (this_alloc == other_alloc) {
+                            // allocators are the same, just move pointers
+                            transfer_ownership_from(std::move(other));
+                        } else {
+                            // cannot transfer ownership of any memory
+                            // we need to move construct the underlying object
+                            construct_from(std::move(other));
+                        }
+                    }
                 }
                 return *this;
             }
@@ -198,7 +224,8 @@ namespace futures {
             Base* ptr_ = nullptr;
 
             // stores how to move this object
-            Base* (*buffer_move_)(void* /* from */, void* /* to */) = nullptr;
+            Base* (*move_)(void* /* alloc */, void* /* from */, void* /* to */)
+                = nullptr;
             void (*heap_destroy_)(void* /* allocator */, void* /* ptr */)
                 = nullptr;
 
@@ -227,8 +254,8 @@ namespace futures {
                     // construct on buffer
                     ptr_ = reinterpret_cast<Base*>(&sbo_buffer_);
                     ::new ((void*) ptr_) Derived(std::forward<Args>(args)...);
-                    buffer_move_ = {
-                        [](void* from, void* to) -> Base* {
+                    move_ = {
+                        [](void*, void* from, void* to) -> Base* {
                             FUTURES_ASSERT(from);
                             FUTURES_ASSERT(to);
                             new (to) Derived(
@@ -246,6 +273,22 @@ namespace futures {
                         a,
                         reinterpret_cast<Derived*>(ptr_),
                         std::forward<Args>(args)...);
+                    move_ = {
+                        [](void* alloc, void* from, void* to) -> Base* {
+                            FUTURES_ASSERT(alloc);
+                            FUTURES_ASSERT(from);
+                            FUTURES_ASSERT(!to);
+                            auto dalloc = boost::
+                                allocator_rebind_t<Allocator, Derived>(
+                                    *reinterpret_cast<Allocator*>(alloc));
+                            to = boost::allocator_allocate(dalloc, 1);
+                            boost::allocator_construct(
+                                dalloc,
+                                reinterpret_cast<Derived*>(to),
+                                std::move(*reinterpret_cast<Derived*>(from)));
+                            return reinterpret_cast<Base*>(to);
+                        },
+                    };
                     heap_destroy_ = {
                         [](void* alloc, void* from) {
                         FUTURES_ASSERT(alloc);
@@ -259,20 +302,57 @@ namespace futures {
             }
 
             void
+            transfer_ownership_from(sbo_ptr_base&& other) noexcept {
+                move_resources_from(std::true_type{}, std::move(other));
+            }
+
+            void
             construct_from(sbo_ptr_base&& other) noexcept {
+                move_resources_from(std::false_type{}, std::move(other));
+            }
+
+            template <class StealPtrResource>
+            void
+            move_resources_from(
+                StealPtrResource,
+                sbo_ptr_base&& other) noexcept {
+                FUTURES_STATIC_ASSERT(
+                    std::is_same<StealPtrResource, std::true_type>::value
+                    || std::is_same<StealPtrResource, std::false_type>::value);
                 // This is only executed after destroy()
                 FUTURES_ASSERT(!ptr_);
                 if (other.ptr_) {
                     if (!other.on_heap()) {
-                        ptr_ = other.buffer_move_(other.ptr_, sbo_buffer_);
+                        // on buffer, we can't transfer ownership or just
+                        // memmove because we are not sure if the underlying
+                        // object is relocatable
+                        ptr_ = other.move_(nullptr, other.ptr_, sbo_buffer_);
                         other.ptr_ = nullptr;
                     } else {
-                        ptr_ = std::exchange(other.ptr_, nullptr);
+                        move_ptr_resource(StealPtrResource{}, std::move(other));
                     }
                     heap_destroy_ = std::exchange(other.heap_destroy_, nullptr);
-                    buffer_move_ = std::exchange(other.buffer_move_, nullptr);
-                    alloc_base::get() = std::move(other.alloc_base::get());
+                    move_ = std::exchange(other.move_, nullptr);
                 }
+            }
+
+            void
+            move_ptr_resource(std::true_type, sbo_ptr_base&& other) {
+                ptr_ = std::exchange(other.ptr_, nullptr);
+            }
+
+            void
+            move_ptr_resource(std::false_type, sbo_ptr_base&& other) {
+                // we asked to construct because the allocators do not
+                // propagate at move_construction and are different
+                // This means this allocator cannot manage memory
+                // allocated by other, and we need to move the object
+                Allocator& a0 = alloc_base::get();
+                ptr_ = other.move_(&a0, other.ptr_, nullptr);
+                // Delete the moved from object from other
+                Allocator& a1 = alloc_base::get();
+                other.heap_destroy_(&a1, other.ptr_);
+                other.ptr_ = nullptr;
             }
 
             void
@@ -284,7 +364,7 @@ namespace futures {
                         heap_destroy_ = nullptr;
                     } else {
                         ptr_->~Base();
-                        buffer_move_ = nullptr;
+                        move_ = nullptr;
                     }
                     ptr_ = nullptr;
                 }
@@ -313,13 +393,20 @@ namespace futures {
                 : alloc_base(boost::empty_init, a) {}
 
             // Copy constructor
-            sbo_ptr_base(sbo_ptr_base const& other) : alloc_base() {
+            sbo_ptr_base(sbo_ptr_base const& other)
+                : alloc_base(
+                    boost::empty_init,
+                    boost::allocator_select_on_container_copy_construction(
+                        other.alloc_base::get())) {
                 construct_from(other);
             }
 
             // Move constructor
-            sbo_ptr_base(sbo_ptr_base&& other) noexcept {
-                construct_from(std::move(other));
+            sbo_ptr_base(sbo_ptr_base&& other) noexcept
+                : alloc_base(
+                    boost::empty_init,
+                    std::move(other.alloc_base::get())) {
+                transfer_ownership_from(std::move(other));
             }
 
             // Copy assignment
@@ -329,6 +416,12 @@ namespace futures {
                     // Strong exception guarantee
                     sbo_ptr_base tmp(other);
                     destroy();
+                    FUTURES_IF_CONSTEXPR (
+                        boost::allocator_propagate_on_container_copy_assignment<
+                            Allocator>::type ::value)
+                    {
+                        alloc_base::get() = other.alloc_base::get();
+                    }
                     construct_from(std::move(tmp));
                 }
                 return *this;
@@ -338,8 +431,31 @@ namespace futures {
             sbo_ptr_base&
             operator=(sbo_ptr_base&& other) noexcept {
                 if (this != &other) {
+                    // destroy this now at the first step because the new
+                    // allocator might not be able to
                     destroy();
-                    construct_from(std::move(other));
+                    // https://stackoverflow.com/questions/27471053/example-usage-of-propagate-on-container-move-assignment
+                    static constexpr bool propagate = boost::
+                        allocator_propagate_on_container_move_assignment<
+                            Allocator>::type::value;
+                    auto& this_alloc = alloc_base::get();
+                    auto& other_alloc = other.alloc_base::get();
+                    FUTURES_IF_CONSTEXPR (propagate) {
+                        // move assign allocator
+                        this_alloc = std::move(other_alloc);
+                        // Transfer memory ownership. This new allocator should
+                        // be able to later deallocate it.
+                        transfer_ownership_from(std::move(other));
+                    } else {
+                        if (this_alloc == other_alloc) {
+                            // allocators are the same, just move pointers
+                            transfer_ownership_from(std::move(other));
+                        } else {
+                            // cannot transfer ownership of any memory
+                            // we need to move construct the underlying object
+                            construct_from(std::move(other));
+                        }
+                    }
                 }
                 return *this;
             }
@@ -352,7 +468,8 @@ namespace futures {
         protected:
             using alloc_base = boost::empty_value<Allocator, 0>;
             Base* ptr_ = nullptr;
-            Base* (*buffer_move_)(void* /* from */, void* /* to */) = nullptr;
+            Base* (*move_)(void* /* alloc */, void* /* from */, void* /* to */)
+                = nullptr;
             Base* (
                 *copy_)(void* /* allocator */, void* /* from */, void* /* to */)
                 = nullptr;
@@ -384,8 +501,8 @@ namespace futures {
                 FUTURES_IF_CONSTEXPR (sizeof(Derived) <= sbo_size) {
                     ptr_ = reinterpret_cast<Base*>(&sbo_buffer_);
                     ::new ((void*) ptr_) Derived(std::forward<Args>(args)...);
-                    buffer_move_ = {
-                        [](void* from, void* to) -> Base* {
+                    move_ = {
+                        [](void*, void* from, void* to) -> Base* {
                             FUTURES_ASSERT(from);
                             FUTURES_ASSERT(to);
                             new (to) Derived(
@@ -411,6 +528,22 @@ namespace futures {
                         a,
                         reinterpret_cast<Derived*>(ptr_),
                         std::forward<Args>(args)...);
+                    move_ = {
+                        [](void* alloc, void* from, void* to) -> Base* {
+                            FUTURES_ASSERT(alloc);
+                            FUTURES_ASSERT(from);
+                            FUTURES_ASSERT(!to);
+                            auto dalloc = boost::
+                                allocator_rebind_t<Allocator, Derived>(
+                                    *reinterpret_cast<Allocator*>(alloc));
+                            to = boost::allocator_allocate(dalloc, 1);
+                            boost::allocator_construct(
+                                dalloc,
+                                reinterpret_cast<Derived*>(to),
+                                std::move(*reinterpret_cast<Derived*>(from)));
+                            return reinterpret_cast<Base*>(to);
+                        },
+                    };
                     copy_ = {
                         [](void* alloc, void* from, void* to) -> Base* {
                             FUTURES_ASSERT(alloc);
@@ -449,27 +582,65 @@ namespace futures {
                     auto a = alloc_base::get();
                     ptr_ = other.copy_(&a, other.ptr_, ptr_);
                     heap_destroy_ = other.heap_destroy_;
-                    buffer_move_ = other.buffer_move_;
+                    move_ = other.move_;
                     copy_ = other.copy_;
                     alloc_base::get() = other.alloc_base::get();
                 }
             }
 
             void
+            transfer_ownership_from(sbo_ptr_base&& other) noexcept {
+                move_resources_from(std::true_type{}, std::move(other));
+            }
+
+            void
             construct_from(sbo_ptr_base&& other) noexcept {
+                move_resources_from(std::false_type{}, std::move(other));
+            }
+
+            template <class StealPtrResource>
+            void
+            move_resources_from(
+                StealPtrResource,
+                sbo_ptr_base&& other) noexcept {
+                FUTURES_STATIC_ASSERT(
+                    std::is_same<StealPtrResource, std::true_type>::value
+                    || std::is_same<StealPtrResource, std::false_type>::value);
+                // This is only executed after destroy()
                 FUTURES_ASSERT(!ptr_);
                 if (other.ptr_) {
                     if (!other.on_heap()) {
-                        ptr_ = other.buffer_move_(other.ptr_, sbo_buffer_);
+                        // on buffer, we can't transfer ownership or just
+                        // memmove because we are not sure if the underlying
+                        // object is relocatable
+                        ptr_ = other.move_(nullptr, other.ptr_, sbo_buffer_);
                         other.ptr_ = nullptr;
                     } else {
-                        ptr_ = std::exchange(other.ptr_, nullptr);
+                        move_ptr_resource(StealPtrResource{}, std::move(other));
                     }
                     heap_destroy_ = std::exchange(other.heap_destroy_, nullptr);
-                    buffer_move_ = std::exchange(other.buffer_move_, nullptr);
+                    move_ = std::exchange(other.move_, nullptr);
                     copy_ = std::exchange(other.copy_, nullptr);
-                    alloc_base::get() = std::move(other.alloc_base::get());
                 }
+            }
+
+            void
+            move_ptr_resource(std::true_type, sbo_ptr_base&& other) {
+                ptr_ = std::exchange(other.ptr_, nullptr);
+            }
+
+            void
+            move_ptr_resource(std::false_type, sbo_ptr_base&& other) {
+                // we asked to construct because the allocators do not
+                // propagate at move_construction and are different
+                // This means this allocator cannot manage memory
+                // allocated by other, and we need to move the object
+                Allocator& a0 = alloc_base::get();
+                ptr_ = other.move_(&a0, other.ptr_, nullptr);
+                // Delete the moved from object from other
+                Allocator& a1 = alloc_base::get();
+                other.heap_destroy_(&a1, other.ptr_);
+                other.ptr_ = nullptr;
             }
 
             void
@@ -481,8 +652,9 @@ namespace futures {
                         heap_destroy_ = nullptr;
                     } else {
                         ptr_->~Base();
-                        buffer_move_ = nullptr;
                     }
+                    move_ = nullptr;
+                    copy_ = nullptr;
                     ptr_ = nullptr;
                 }
             }
