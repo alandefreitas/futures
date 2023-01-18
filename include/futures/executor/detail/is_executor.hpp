@@ -11,13 +11,11 @@
 #include <futures/config.hpp>
 #include <futures/algorithm/traits/is_equality_comparable.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
+#include <futures/detail/utility/move_only_function.hpp>
 
 namespace futures {
     namespace detail {
-        struct invocable_archetype {
-            void
-            operator()() const {}
-        };
+        using invocable_archetype = move_only_function<void() const>;
 
         // Check if a type implements the get_executor() function
         template <class T, typename = void>
