@@ -107,7 +107,7 @@ namespace futures {
              *  is launched
              */
             using function_t = mp_eval_or<
-                std::function<void()>,
+                move_only_function<void()>,
                 get_deferred_function_opt_type,
                 mp_list<Args...>>;
 

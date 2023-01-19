@@ -11,10 +11,10 @@
 #include <futures/stop_token.hpp>
 #include <futures/executor/execute.hpp>
 #include <futures/traits/future_value.hpp>
-#include <futures/detail/continuations_source.hpp>
 #include <futures/detail/launch.hpp>
 #include <futures/detail/shared_state.hpp>
 #include <futures/detail/traits/launch_result.hpp>
+#include <futures/detail/utility/move_only_function.hpp>
 #include <futures/detail/deps/boost/core/ignore_unused.hpp>
 #include <type_traits>
 
@@ -44,7 +44,7 @@ namespace futures {
                 // Future traits
                 static constexpr bool is_eager
                     = !FutureOptions::is_always_deferred;
-                return schedule_impl<FutureOptions>(
+                return launch_impl<FutureOptions>(
                     mp_bool<is_eager>{},
                     ex,
                     std::forward<Function>(f),
@@ -57,7 +57,7 @@ namespace futures {
                 class Function,
                 class... Args>
             FUTURES_DETAIL(decltype(auto))
-            schedule_impl(
+            launch_impl(
                 std::true_type /* is_eager */,
                 Executor const& ex,
                 Function&& f,
@@ -92,7 +92,7 @@ namespace futures {
                 class Function,
                 class... Args>
             FUTURES_DETAIL(decltype(auto))
-            schedule_impl(
+            launch_impl(
                 std::false_type /* is_eager */,
                 Executor const& ex,
                 Function&& f,

@@ -89,6 +89,7 @@
 #include <futures/detail/traits/append_future_option.hpp>
 #include <futures/detail/traits/remove_future_option.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
+#include <futures/detail/utility/move_only_function.hpp>
 #include <futures/detail/variant_state.hpp>
 #include <futures/adaptor/detail/continue.hpp>
 #include <futures/adaptor/detail/make_continuation_state.hpp>
