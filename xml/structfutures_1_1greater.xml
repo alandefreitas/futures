@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1greater" kind="struct" language="C++" prot="public">
+    <compoundname>futures::greater</compoundname>
+    <includes refid="greater_8hpp" local="no">greater.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structfutures_1_1greater_1a2c83004ea47b5ee8800ad01601875d0d" prot="public" static="no">
+        <type>void</type>
+        <definition>using futures::greater::is_transparent =  void</definition>
+        <argsstring></argsstring>
+        <name>is_transparent</name>
+        <qualifiedname>futures::greater::is_transparent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/compare/greater.hpp" line="33" column="9" bodyfile="futures/algorithm/compare/greater.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structfutures_1_1greater_1a35686c742642ee79ad6d0903d72d974b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::greater::operator()</definition>
+        <argsstring>(T &amp;&amp;t, U &amp;&amp;u) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::greater::operator()</qualifiedname>
+        <param>
+          <type>T &amp;&amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>U &amp;&amp;</type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/compare/greater.hpp" line="30" column="9" bodyfile="futures/algorithm/compare/greater.hpp" bodystart="30" bodyend="32"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A C++17 functor equivalent to the C++20 std::ranges::greater. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="see"><para><ulink url="https://en.cppreference.com/w/cpp/utility/functional/greater"><computeroutput>std::greater</computeroutput></ulink> </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="futures/algorithm/compare/greater.hpp" line="28" column="5" bodyfile="futures/algorithm/compare/greater.hpp" bodystart="28" bodyend="34"/>
+    <listofallmembers>
+      <member refid="structfutures_1_1greater_1a2c83004ea47b5ee8800ad01601875d0d" prot="public" virt="non-virtual"><scope>futures::greater</scope><name>is_transparent</name></member>
+      <member refid="structfutures_1_1greater_1a35686c742642ee79ad6d0903d72d974b" prot="public" virt="non-virtual"><scope>futures::greater</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

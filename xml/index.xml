@@ -1,0 +1,1297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.7" xml:lang="en-US">
+  <compound refid="classfutures_1_1all__of__functor" kind="class"><name>futures::all_of_functor</name>
+    <member refid="classfutures_1_1all__of__functor_1abb128019f78e658adb2f1303d2cee5ae" kind="variable"><name>unary_invoke_algorithm_functor&lt; all_of_functor &gt;</name></member>
+    <member refid="classfutures_1_1all__of__functor_1ac85eb8116471351bf22687098cb63076" kind="function"><name>inline_all_of</name></member>
+    <member refid="classfutures_1_1all__of__functor_1ab9e056e3ebaea9226fb08fc692dbc33a" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1always__deferred__opt" kind="struct"><name>futures::always_deferred_opt</name>
+  </compound>
+  <compound refid="structfutures_1_1always__detached__opt" kind="struct"><name>futures::always_detached_opt</name>
+  </compound>
+  <compound refid="classfutures_1_1any__executor" kind="class"><name>futures::any_executor</name>
+    <member refid="classfutures_1_1any__executor_1a0fe8581f5e735ee377e2ef2f3eef9d85" kind="variable"><name>impl_</name></member>
+    <member refid="classfutures_1_1any__executor_1ae4bf6681585684cf06926b4ce70964d9" kind="function"><name>~any_executor</name></member>
+    <member refid="classfutures_1_1any__executor_1ada0a2b5bfee2cdc1af2d7240bdff9506" kind="function"><name>any_executor</name></member>
+    <member refid="classfutures_1_1any__executor_1a548a7ff378d0376d2d9c993a6c27bb47" kind="function"><name>any_executor</name></member>
+    <member refid="classfutures_1_1any__executor_1a3829ff7f38d79694685213743fa06291" kind="function"><name>any_executor</name></member>
+    <member refid="classfutures_1_1any__executor_1a2cff0106310d5f8f4bbe9dd7bbe0a28f" kind="function"><name>any_executor</name></member>
+    <member refid="classfutures_1_1any__executor_1ab3d0d4f34a91b76c79fc76d7a81a992b" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1any__executor_1a6944e862c28a939e4884ca3bd6c4962d" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1any__executor_1abda32114e17808de84573f5649c05a5f" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1any__executor_1aa6a7b539fcd922649efe4c334abdfe3a" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1any__executor_1a70a00d2be460c6c97917791ed354653a" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="classfutures_1_1any__of__functor" kind="class"><name>futures::any_of_functor</name>
+    <member refid="classfutures_1_1any__of__functor_1a0120a34725e6c5a3080ae3af27201649" kind="variable"><name>unary_invoke_algorithm_functor&lt; any_of_functor &gt;</name></member>
+    <member refid="classfutures_1_1any__of__functor_1a67177d59f431dc5b0056a850c47c4017" kind="function"><name>inline_any_of</name></member>
+    <member refid="classfutures_1_1any__of__functor_1af43cf286390e91d4219ccf60551c0edd" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1basic__future" kind="class"><name>futures::basic_future</name>
+    <member refid="classfutures_1_1basic__future_1ad7308ec8c2fa1672b28aad2f29524348" kind="typedef"><name>value_type</name></member>
+    <member refid="classfutures_1_1basic__future_1abb0c68ad541e5fd0d6f00a613c8ba190" kind="variable"><name>state_</name></member>
+    <member refid="classfutures_1_1basic__future_1a97d6f334a8ad61e3605e4acfb561fd75" kind="variable"><name>join_</name></member>
+    <member refid="classfutures_1_1basic__future_1a9b0f2cf31b6faf5b70113e50613a59f6" kind="function"><name>get_impl</name></member>
+    <member refid="classfutures_1_1basic__future_1a0a006bc832ee31fc1ee9674621e4df22" kind="function"><name>get_impl</name></member>
+    <member refid="classfutures_1_1basic__future_1aa25e9a793417ab77f978bf57cf89fcf2" kind="function"><name>get_impl</name></member>
+    <member refid="classfutures_1_1basic__future_1a1491b64679c09495bc8dee965dd97813" kind="function"><name>get</name></member>
+    <member refid="classfutures_1_1basic__future_1aad10ac2552989ec18d2c353204070855" kind="function"><name>get_exception_ptr</name></member>
+    <member refid="classfutures_1_1basic__future_1a913be65c244d630c3254d9b3be4225f3" kind="function"><name>then_impl</name></member>
+    <member refid="classfutures_1_1basic__future_1a957bc23e3e1a1a54c3ce7e2cbcc7293e" kind="function"><name>then_impl</name></member>
+    <member refid="classfutures_1_1basic__future_1a231037f4f70402a20417ce9b8e0391bf" kind="function"><name>then</name></member>
+    <member refid="classfutures_1_1basic__future_1a46e2bad66727ca4b5a5ce605819e28f2" kind="function"><name>then</name></member>
+    <member refid="classfutures_1_1basic__future_1ae19c2a26988c4510b75754ccdb5ccef6" kind="function"><name>~basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1aba02f8e6bce14658f6a68386bd2cd249" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a75430a390154f2e6d165f781a1ce7097" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a76cc4f3a9cbce8fb0ad260664efbc7dc" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1basic__future_1ae0cb00065c0f483c7ec5b53f2db34eda" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a9a4dafdc181b7a13239ae6e3218352b6" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" kind="function"><name>share</name></member>
+    <member refid="classfutures_1_1basic__future_1a8c6752b1a027f94a91d56ba0b2e763e3" kind="function"><name>valid</name></member>
+    <member refid="classfutures_1_1basic__future_1a012e07ba560ae3fe0b28fc7529a190c0" kind="function"><name>wait</name></member>
+    <member refid="classfutures_1_1basic__future_1a2132240593aabade4844ac99acfa5931" kind="function"><name>wait_for</name></member>
+    <member refid="classfutures_1_1basic__future_1a7f0d280ecc65079c1a7aed26a49e649b" kind="function"><name>wait_until</name></member>
+    <member refid="classfutures_1_1basic__future_1aa59ff40148ab17c3403e940d6bf623c8" kind="function"><name>is_ready</name></member>
+    <member refid="classfutures_1_1basic__future_1a653ffc72aeaf534eb67c6f26ef44271a" kind="function"><name>detach</name></member>
+    <member refid="classfutures_1_1basic__future_1a69809146d06aa3a508c4f155d8a913d8" kind="function"><name>unnotify_when_ready</name></member>
+    <member refid="classfutures_1_1basic__future_1afc55c0bedc792282b418a9ef551f5690" kind="function"><name>waiters_mutex</name></member>
+    <member refid="classfutures_1_1basic__future_1a9d1c6284709935ab707247c9f9dee794" kind="function"><name>wait_if_last</name></member>
+    <member refid="classfutures_1_1basic__future_1aaed27db9f2dca623f1950c9926a2c56d" kind="typedef"><name>operation_state_options</name></member>
+    <member refid="classfutures_1_1basic__future_1ad693ddc27db0361b7c0add3d45ee1a21" kind="typedef"><name>operation_state_type</name></member>
+    <member refid="classfutures_1_1basic__future_1aa5e861de52a829b10c2e30bc668952fc" kind="typedef"><name>shared_state_type</name></member>
+    <member refid="classfutures_1_1basic__future_1a88f600c792f3860440116728b61d46ff" kind="typedef"><name>future_state_type</name></member>
+    <member refid="classfutures_1_1basic__future_1aa21bffbe74015d03e7cdce0e4b24b0de" kind="typedef"><name>operation_state_base</name></member>
+    <member refid="classfutures_1_1basic__future_1a689896468c52c9f8baf032374f35d528" kind="typedef"><name>notify_when_ready_handle</name></member>
+    <member refid="classfutures_1_1basic__future_1a95d7cff2e333ae3fcd19a58411edce3d" kind="typedef"><name>shared_basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a544c53799f8d7fa021df92a394a79bd4" kind="variable"><name>inline_op_state</name></member>
+    <member refid="classfutures_1_1basic__future_1aef04f39c70b5090350808593e6996cc7" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a86241f07e5b8c820dd127ef2f1dbd4b6" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1aff6108a40089ac1694d8d37edb7fdf5d" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a626d73be3daa74d1bb8a99171a3e5343" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1ae01ae8d565e1d3154cfde17b3dc61a48" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1af5c589697f186f0a5acd73323a2c8bc7" kind="function"><name>basic_future</name></member>
+    <member refid="classfutures_1_1basic__future_1a47d49c8225bf8df85518f5fba514d4b9" kind="function"><name>basic_future</name></member>
+  </compound>
+  <compound refid="classfutures_1_1binary__invoke__algorithm__functor" kind="class"><name>futures::binary_invoke_algorithm_functor</name>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a7d327e4bf44fa209dfd84fbc924ea8d0" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a83321eba6f66274e9baf435707484827" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a323271b66f2017a19bc65b0b482189cf" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1af675f5e2cd43f9b99145cf9d97b1660f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ac111f1439715392cd6bafe25942cae6f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ac111f1439715392cd6bafe25942cae6f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aefe64ed4e75ad3f78436ad879c8ecf6a" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aefe64ed4e75ad3f78436ad879c8ecf6a" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a49c6257306b981edcad75e60d3af3918" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ae2cf4dafb68230a9445f2f86f172b1e4" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a36e2133c32f0b547c17b947abaa8f24d" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a08f7cdcca1e12589bf9cf4293d873b24" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a84f8cc1fb2f278f6550d12cb54ffebe3" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a84f8cc1fb2f278f6550d12cb54ffebe3" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aa9bfba33fdd6dae7c87ac6139b3fce31" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aa9bfba33fdd6dae7c87ac6139b3fce31" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8d980391416017a135a52f7f09dbe80f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8d980391416017a135a52f7f09dbe80f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a9724cc37e20646aa19c45dda8af27604" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a9724cc37e20646aa19c45dda8af27604" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ae2030273c670eff5b256b545f5174492" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a095a9fe9b35ef40f8d44159c5b42765e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a5b7c85760825e81be5e636f4cd556eb1" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a39a67444a43a1c6d20c358b92cfb1c16" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1broken__promise" kind="class"><name>futures::broken_promise</name>
+    <member refid="classfutures_1_1broken__promise_1a5298cab8c9eaa1ef8192086b2922a02b" kind="function"><name>broken_promise</name></member>
+  </compound>
+  <compound refid="structfutures_1_1compare__three__way" kind="struct"><name>futures::compare_three_way</name>
+    <member refid="structfutures_1_1compare__three__way_1a03f54fa20c664291fa21355a699350f1" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1compare__three__way_1a7225c0d94749b6a5a433bff990a83e9f" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1continuable__opt" kind="struct"><name>futures::continuable_opt</name>
+  </compound>
+  <compound refid="classfutures_1_1count__functor" kind="class"><name>futures::count_functor</name>
+    <member refid="classfutures_1_1count__functor_1a815b5957b780801edfe732fe8efb5885" kind="variable"><name>value_cmp_algorithm_functor&lt; count_functor &gt;</name></member>
+    <member refid="classfutures_1_1count__functor_1a27f094d4b90d07e331455e46685031e9" kind="function"><name>inline_count</name></member>
+    <member refid="classfutures_1_1count__functor_1a07e42b43c2f1e6f57c79a574cdf278a9" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a80be044c56540abebdcc81240e29cbf6" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a5fd55d225acfdd07108c2653f241cc34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a112c7d4cafb79b5a457382fbb31b1553" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51e87b9d3cb5c68da580fb002707a7b1" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51af8cca6aeaa1c7a71d0c4f647aa0ca" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a1e851756adcd930a117f41af67a5872e" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1count__if__functor" kind="class"><name>futures::count_if_functor</name>
+    <member refid="classfutures_1_1count__if__functor_1a095277f95f686c5264e73883b08238d7" kind="variable"><name>unary_invoke_algorithm_functor&lt; count_if_functor &gt;</name></member>
+    <member refid="classfutures_1_1count__if__functor_1a002196d829ecf6a9660fc680d17038c3" kind="variable"><name>count_functor</name></member>
+    <member refid="classfutures_1_1count__if__functor_1aeb2fe9f7ca71e24a19153986077d9eab" kind="function"><name>inline_count_if</name></member>
+    <member refid="classfutures_1_1count__if__functor_1a1265115de58887845bbf772e8caa127c" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1deferred__function__opt" kind="struct"><name>futures::deferred_function_opt</name>
+    <member refid="structfutures_1_1deferred__function__opt_1a9b198ed0e3a16a7fa8dc11386fcca9ec" kind="typedef"><name>type</name></member>
+  </compound>
+  <compound refid="structfutures_1_1equal__to" kind="struct"><name>futures::equal_to</name>
+    <member refid="structfutures_1_1equal__to_1a386ccc6f6663c410864513469e67f04b" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1equal__to_1acc9f99f5f1a411c1e34ec5890d5cb766" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1error" kind="class"><name>futures::error</name>
+    <member refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" kind="function"><name>error</name></member>
+    <member refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" kind="function"><name>error</name></member>
+    <member refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" kind="function"><name>error</name></member>
+    <member refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" kind="function"><name>~error</name></member>
+  </compound>
+  <compound refid="structfutures_1_1executor__opt" kind="struct"><name>futures::executor_opt</name>
+    <member refid="structfutures_1_1executor__opt_1a0371473fdbb433920589e0742bae230e" kind="typedef"><name>type</name></member>
+  </compound>
+  <compound refid="classfutures_1_1thread__pool_1_1executor__type" kind="class"><name>futures::thread_pool::executor_type</name>
+    <member refid="classfutures_1_1thread__pool_1_1executor__type_1a63d668995109028bdc9cdbb726de4807" kind="friend"><name>thread_pool</name></member>
+    <member refid="classfutures_1_1thread__pool_1_1executor__type_1a53cafc018affd1fbf9cc5672ba20cf3a" kind="variable"><name>ex_</name></member>
+    <member refid="classfutures_1_1thread__pool_1_1executor__type_1a15efbb7294a119f92ca9e9de69189527" kind="function"><name>executor_type</name></member>
+    <member refid="classfutures_1_1thread__pool_1_1executor__type_1a48f6a97f2fd4f782965e64d51ec0f423" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="classfutures_1_1find__functor" kind="class"><name>futures::find_functor</name>
+    <member refid="classfutures_1_1find__functor_1aa09369fde0320619e3fff6ca99cafa9b" kind="variable"><name>value_cmp_algorithm_functor&lt; find_functor &gt;</name></member>
+    <member refid="classfutures_1_1find__functor_1aca7793887f348c6985e8aa08ac52bca7" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a80be044c56540abebdcc81240e29cbf6" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a5fd55d225acfdd07108c2653f241cc34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a112c7d4cafb79b5a457382fbb31b1553" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51e87b9d3cb5c68da580fb002707a7b1" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51af8cca6aeaa1c7a71d0c4f647aa0ca" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a1e851756adcd930a117f41af67a5872e" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1find__if__functor" kind="class"><name>futures::find_if_functor</name>
+    <member refid="classfutures_1_1find__if__functor_1a34d0da3fd59e506547a14dc9806db400" kind="variable"><name>unary_invoke_algorithm_functor&lt; find_if_functor &gt;</name></member>
+    <member refid="classfutures_1_1find__if__functor_1a65d143d2bf62fd7be07f6b9a4dbde421" kind="variable"><name>find_functor</name></member>
+    <member refid="classfutures_1_1find__if__functor_1a40d747c8c98a2384d389665ea5d3a539" kind="variable"><name>find_if_not_functor</name></member>
+    <member refid="classfutures_1_1find__if__functor_1ab375988a738ece7e4c0010a641568749" kind="function"><name>inline_find_if</name></member>
+    <member refid="classfutures_1_1find__if__functor_1abcc9c636a87db10587be717668db6f53" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1find__if__not__functor" kind="class"><name>futures::find_if_not_functor</name>
+    <member refid="classfutures_1_1find__if__not__functor_1a4128d09e7b1f605badd182f96b6d7007" kind="variable"><name>unary_invoke_algorithm_functor&lt; find_if_not_functor &gt;</name></member>
+    <member refid="classfutures_1_1find__if__not__functor_1af8e9e9f6bc3d058ddf883954b7e6715c" kind="function"><name>inline_find_if_not</name></member>
+    <member refid="classfutures_1_1find__if__not__functor_1a76b6c151816f151fde1a9d8a65bc966b" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1for__each__functor" kind="class"><name>futures::for_each_functor</name>
+    <member refid="classfutures_1_1for__each__functor_1a8ee57701f132cd8ee4fe8be31b355a29" kind="variable"><name>unary_invoke_algorithm_functor&lt; for_each_functor &gt;</name></member>
+    <member refid="classfutures_1_1for__each__functor_1a07d97a873037b11512a2800a03bf1594" kind="function"><name>inline_for_each</name></member>
+    <member refid="classfutures_1_1for__each__functor_1aec25a0f863b136b4701cad667928529d" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1future__already__retrieved" kind="class"><name>futures::future_already_retrieved</name>
+    <member refid="classfutures_1_1future__already__retrieved_1a25ff805f4a35256b46818e3992bd6dfb" kind="function"><name>future_already_retrieved</name></member>
+  </compound>
+  <compound refid="classfutures_1_1future__deferred" kind="class"><name>futures::future_deferred</name>
+    <member refid="classfutures_1_1future__deferred_1a3a5b5f6f4f5732ad2f50ee404fb384ba" kind="function"><name>future_deferred</name></member>
+  </compound>
+  <compound refid="classfutures_1_1future__uninitialized" kind="class"><name>futures::future_uninitialized</name>
+    <member refid="classfutures_1_1future__uninitialized_1adf684ddf0eca1cd493076e87a7846b86" kind="function"><name>future_uninitialized</name></member>
+  </compound>
+  <compound refid="structfutures_1_1greater" kind="struct"><name>futures::greater</name>
+    <member refid="structfutures_1_1greater_1a2c83004ea47b5ee8800ad01601875d0d" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1greater_1a35686c742642ee79ad6d0903d72d974b" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1greater__equal" kind="struct"><name>futures::greater_equal</name>
+    <member refid="structfutures_1_1greater__equal_1a81a6ab2a7c9d9a27ffb4db7d05904ce2" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1greater__equal_1abba632504455aa529bc9bb0d1cd2f646" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1halve__partitioner" kind="class"><name>futures::halve_partitioner</name>
+    <member refid="classfutures_1_1halve__partitioner_1a15f721b1bc035d643fd106ea3582c7c2" kind="variable"><name>min_grain_size_</name></member>
+    <member refid="classfutures_1_1halve__partitioner_1a7329c117dbf2ea48ee2de9042fc2f24b" kind="function"><name>halve_partitioner</name></member>
+    <member refid="classfutures_1_1halve__partitioner_1a4ec3ec6505565e1a02ffa4fe42f5f93b" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1has__executor" kind="struct"><name>futures::has_executor</name>
+  </compound>
+  <compound refid="structfutures_1_1has__ready__notifier" kind="struct"><name>futures::has_ready_notifier</name>
+  </compound>
+  <compound refid="classfutures_1_1inline__executor" kind="class"><name>futures::inline_executor</name>
+    <member refid="classfutures_1_1inline__executor_1a9bc0b8c18fbae4c25acdf133adb427c6" kind="function"><name>inline_executor</name></member>
+    <member refid="classfutures_1_1inline__executor_1ae9fbde1fed18bfc057196dea41144a7b" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="structfutures_1_1is__always__deferred" kind="struct"><name>futures::is_always_deferred</name>
+  </compound>
+  <compound refid="structfutures_1_1is__continuable" kind="struct"><name>futures::is_continuable</name>
+  </compound>
+  <compound refid="structfutures_1_1is__execution__policy" kind="struct"><name>futures::is_execution_policy</name>
+  </compound>
+  <compound refid="structfutures_1_1is__future__like" kind="struct"><name>futures::is_future_like</name>
+  </compound>
+  <compound refid="structfutures_1_1is__shared__future" kind="struct"><name>futures::is_shared_future</name>
+  </compound>
+  <compound refid="structfutures_1_1less" kind="struct"><name>futures::less</name>
+    <member refid="structfutures_1_1less_1aa6249e34fa218e435c0a9a1779215dac" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1less_1ad5ff8873ad8d126999f928b0033aaf7a" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1less__equal" kind="struct"><name>futures::less_equal</name>
+    <member refid="structfutures_1_1less__equal_1a784db1a22dd681c02deb85cbb4c5cc9a" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1less__equal_1a62aa5c718bce4b9bff907f106e1c2d08" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1new__thread__executor" kind="class"><name>futures::new_thread_executor</name>
+    <member refid="classfutures_1_1new__thread__executor_1ab89e8c7da71588c9f438461dc3257a37" kind="function"><name>new_thread_executor</name></member>
+    <member refid="classfutures_1_1new__thread__executor_1af70d701d0e952b1923375bf331421f91" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="classfutures_1_1no__state" kind="class"><name>futures::no_state</name>
+    <member refid="classfutures_1_1no__state_1af5ea4ed60208051c364da0f3e196e112" kind="function"><name>no_state</name></member>
+  </compound>
+  <compound refid="classfutures_1_1none__of__functor" kind="class"><name>futures::none_of_functor</name>
+    <member refid="classfutures_1_1none__of__functor_1a6acdc926d1e0ef74a0712b29733bcf37" kind="variable"><name>unary_invoke_algorithm_functor&lt; none_of_functor &gt;</name></member>
+    <member refid="classfutures_1_1none__of__functor_1a21bc48bc03917b8dbb610de785dd26dd" kind="function"><name>inline_none_of</name></member>
+    <member refid="classfutures_1_1none__of__functor_1a0024dcb82ba72e503331a9d92bd33947" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1nostopstate__t" kind="struct"><name>futures::nostopstate_t</name>
+    <member refid="structfutures_1_1nostopstate__t_1a7018850638c4c6234a464d2b9137b873" kind="function"><name>nostopstate_t</name></member>
+  </compound>
+  <compound refid="structfutures_1_1not__equal__to" kind="struct"><name>futures::not_equal_to</name>
+    <member refid="structfutures_1_1not__equal__to_1afc7d1bd980e7c695f0498bc171d43d1d" kind="typedef"><name>is_transparent</name></member>
+    <member refid="structfutures_1_1not__equal__to_1a77a09f2ad180b2febffc6d9d938bfc1b" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4" kind="class"><name>futures::packaged_task&lt; R(Args...), Options &gt;</name>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a48392a1ea499a183203bfe995d0d1a98" kind="variable"><name>future_retrieved_</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9ef6d39cdf829157b1ed7f6e96b6ceb7" kind="variable"><name>task_</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a69e702cd34f9b475270f8cbbd9d09b8c" kind="function"><name>packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a71f71ff43d8973f51cfe0170286b300d" kind="function"><name>packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a0568be3d859bf7388db8d6095373f879" kind="function"><name>packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1aff5547bf1de1dbeb06fed08deadbc009" kind="function"><name>packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a23e3853079417a44e641e7310dd00400" kind="function"><name>packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1ab7b45a7318f5a6b3414b37109d3d949b" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1ab2b3c8f971124310812ae9add338780b" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acf0c0700f4cf9a433111e5bbf92983ac" kind="function"><name>~packaged_task</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9cce52a1a87367d72da16873d5b1053b" kind="function"><name>valid</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a8f8c8ba026d9b9b6d24cd152a1148fbc" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9f7cb187c44ffc03fb4f68bf74b36838" kind="function"><name>get_future</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1af856bb3a9a0abfff217fc64bd70e6f1f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1acabfcd99100cf56e70bb6f1251b58587" kind="function"><name>reset</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9dd3937960988bdd7cbb10e695b20636" kind="function"><name>set_wait_callback</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a9138037dbf09bd5e59b02080d90170af" kind="function"><name>request_run_impl</name></member>
+    <member refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4_1a652648ac408771b3042c3ba2a1158a58" kind="function"><name>request_run_impl</name></member>
+  </compound>
+  <compound refid="classfutures_1_1packaged__task__uninitialized" kind="class"><name>futures::packaged_task_uninitialized</name>
+    <member refid="classfutures_1_1packaged__task__uninitialized_1a8048ae0310275fc0712c84c7d7620d90" kind="function"><name>packaged_task_uninitialized</name></member>
+  </compound>
+  <compound refid="classfutures_1_1promise" kind="class"><name>futures::promise</name>
+    <member refid="classfutures_1_1promise_1a853d57cb653aaff430a7e5383985a8bd" kind="function"><name>set_value</name></member>
+    <member refid="classfutures_1_1promise_1a080f8a9fabeaf7c72b9606b535b25229" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1promise__base_1ab78246aee912437b816183e4d269ab0e" kind="function"><name>get_future</name></member>
+    <member refid="classfutures_1_1promise__base_1a6f78829ba8a4931bb41675757db2fcd5" kind="function"><name>set_exception</name></member>
+    <member refid="classfutures_1_1promise__base_1a1f33e737667ae4857ef7214414cd094d" kind="function"><name>set_exception</name></member>
+    <member refid="classfutures_1_1promise__base_1aaee44c22691de0b7d1eab0b8a067eb3e" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1promise__base_1ae79ef4231344fd9fe92976056aba7a4a" kind="function"><name>get_shared_state</name></member>
+  </compound>
+  <compound refid="classfutures_1_1promise__already__satisfied" kind="class"><name>futures::promise_already_satisfied</name>
+    <member refid="classfutures_1_1promise__already__satisfied_1a3cfaf964df7c75d2b66a23de418a7078" kind="function"><name>promise_already_satisfied</name></member>
+  </compound>
+  <compound refid="classfutures_1_1promise__base" kind="class"><name>futures::promise_base</name>
+    <member refid="classfutures_1_1promise__base_1acc4d2d9a6715fa9c89e06f1881f15db0" kind="variable"><name>obtained_</name></member>
+    <member refid="classfutures_1_1promise__base_1abce8cf115d8ebb0a8bae17cda2c228f9" kind="variable"><name>shared_state_</name></member>
+    <member refid="classfutures_1_1promise__base_1a6522cea0afdfc7ba1ad1df9e786c4d0f" kind="function"><name>promise_base</name></member>
+    <member refid="classfutures_1_1promise__base_1a022144b36501f4274c9d5c3baa9f4eb5" kind="function"><name>promise_base</name></member>
+    <member refid="classfutures_1_1promise__base_1a29777f0404b975e2fb03282dbb39994a" kind="function"><name>promise_base</name></member>
+    <member refid="classfutures_1_1promise__base_1a95f942d95d7c67d47cafa9c8224ab644" kind="function"><name>promise_base</name></member>
+    <member refid="classfutures_1_1promise__base_1ab24b3c62fb71f85e1cb04a35835444fc" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1promise__base_1a1cc89379d7f508213719ba5cf3e4daf7" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1promise__base_1a73b9131a13dec097ddf347d6d7967dc4" kind="function"><name>~promise_base</name></member>
+    <member refid="classfutures_1_1promise__base_1ab78246aee912437b816183e4d269ab0e" kind="function"><name>get_future</name></member>
+    <member refid="classfutures_1_1promise__base_1a6f78829ba8a4931bb41675757db2fcd5" kind="function"><name>set_exception</name></member>
+    <member refid="classfutures_1_1promise__base_1a1f33e737667ae4857ef7214414cd094d" kind="function"><name>set_exception</name></member>
+    <member refid="classfutures_1_1promise__base_1aaee44c22691de0b7d1eab0b8a067eb3e" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1promise__base_1ae79ef4231344fd9fe92976056aba7a4a" kind="function"><name>get_shared_state</name></member>
+    <member refid="classfutures_1_1promise__base_1ae8c04e81cbf3d9f96bda441c8d47aceb" kind="function"><name>make_shared_state</name></member>
+    <member refid="classfutures_1_1promise__base_1ab6961854352d3f2dc04957b5ee524ffe" kind="function"><name>make_shared_state_impl</name></member>
+    <member refid="classfutures_1_1promise__base_1ae9ece7fa0b8e4c78dcc23594b3f2f04f" kind="function"><name>make_shared_state_impl</name></member>
+  </compound>
+  <compound refid="classfutures_1_1promise__uninitialized" kind="class"><name>futures::promise_uninitialized</name>
+    <member refid="classfutures_1_1promise__uninitialized_1a688f16acc5a35a3b3daacfd32489f965" kind="function"><name>promise_uninitialized</name></member>
+  </compound>
+  <compound refid="classfutures_1_1reduce__functor" kind="class"><name>futures::reduce_functor</name>
+    <member refid="classfutures_1_1reduce__functor_1a783d529ba4fdecf2ab6b9c5a551b32bb" kind="variable"><name>binary_invoke_algorithm_functor&lt; reduce_functor &gt;</name></member>
+    <member refid="classfutures_1_1reduce__functor_1a5a3584750dfeb0c4513df2b670c5a060" kind="function"><name>inline_accumulate</name></member>
+    <member refid="classfutures_1_1reduce__functor_1af285c15c06d6e7f48f58bd2cf479e83a" kind="function"><name>run</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a7d327e4bf44fa209dfd84fbc924ea8d0" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a83321eba6f66274e9baf435707484827" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a323271b66f2017a19bc65b0b482189cf" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1af675f5e2cd43f9b99145cf9d97b1660f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ac111f1439715392cd6bafe25942cae6f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ac111f1439715392cd6bafe25942cae6f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aefe64ed4e75ad3f78436ad879c8ecf6a" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aefe64ed4e75ad3f78436ad879c8ecf6a" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a49c6257306b981edcad75e60d3af3918" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ae2cf4dafb68230a9445f2f86f172b1e4" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a36e2133c32f0b547c17b947abaa8f24d" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a08f7cdcca1e12589bf9cf4293d873b24" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a84f8cc1fb2f278f6550d12cb54ffebe3" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a84f8cc1fb2f278f6550d12cb54ffebe3" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aa9bfba33fdd6dae7c87ac6139b3fce31" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1aa9bfba33fdd6dae7c87ac6139b3fce31" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8d980391416017a135a52f7f09dbe80f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a8d980391416017a135a52f7f09dbe80f" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a9724cc37e20646aa19c45dda8af27604" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a9724cc37e20646aa19c45dda8af27604" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1ae2030273c670eff5b256b545f5174492" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a095a9fe9b35ef40f8d44159c5b42765e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a5b7c85760825e81be5e636f4cd556eb1" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1binary__invoke__algorithm__functor_1a39a67444a43a1c6d20c358b92cfb1c16" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structfutures_1_1shared__opt" kind="struct"><name>futures::shared_opt</name>
+  </compound>
+  <compound refid="classfutures_1_1stop__source" kind="class"><name>futures::stop_source</name>
+    <member refid="classfutures_1_1stop__source_1a55a7a391384ec0ac496f2616c6eb853e" kind="function"><name>stop_source</name></member>
+    <member refid="classfutures_1_1stop__source_1a4a3161ffc7ace77e4a77d1d189eed52c" kind="function"><name>stop_source</name></member>
+    <member refid="classfutures_1_1stop__source_1a2d6a255023145dd7d7fbd0093e66314c" kind="function"><name>stop_source</name></member>
+    <member refid="classfutures_1_1stop__source_1a1c322f8a0fb8d5056d5ceedb9ae30d07" kind="function"><name>stop_source</name></member>
+    <member refid="classfutures_1_1stop__source_1a3c5d6f894a5140d1584ec2059e9bb16a" kind="function"><name>~stop_source</name></member>
+    <member refid="classfutures_1_1stop__source_1a8dcbb62d7b70434b887a07061c7920a9" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1stop__source_1ac9c4262658add1bf05c00470b0bdd371" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1stop__source_1a786fe974addeff1b4daff66588b72d73" kind="function"><name>request_stop</name></member>
+    <member refid="classfutures_1_1stop__source_1aafdb77d5e23ed010e8e9ee95f06c23a6" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1stop__source_1a320db67ce72a5795cf6ea3302a2daf01" kind="function"><name>get_token</name></member>
+    <member refid="classfutures_1_1stop__source_1a340ee4947695468dda5802529f967334" kind="function"><name>stop_requested</name></member>
+    <member refid="classfutures_1_1stop__source_1ad60b01f87a358f998ba9259f0d23b097" kind="function"><name>stop_possible</name></member>
+    <member refid="classfutures_1_1stop__source_1a251940442b45a1f084025396377e1842" kind="friend"><name>operator==</name></member>
+    <member refid="classfutures_1_1stop__source_1a3381b3829c8ee46c5105beed41e95f1b" kind="friend"><name>operator!=</name></member>
+    <member refid="classfutures_1_1stop__source_1a065c07c8336417a8d115ca0190dc1f83" kind="variable"><name>shared_state_</name></member>
+  </compound>
+  <compound refid="classfutures_1_1stop__token" kind="class"><name>futures::stop_token</name>
+    <member refid="classfutures_1_1stop__token_1a8c902f96c7aaab72e9d5cc7e03eaf866" kind="friend"><name>operator==</name></member>
+    <member refid="classfutures_1_1stop__token_1a9b20850dc88391ada7df76bac20f2987" kind="friend"><name>operator!=</name></member>
+    <member refid="classfutures_1_1stop__token_1a2d9784e503c98c18a79a3ce3291facf1" kind="function"><name>stop_token</name></member>
+    <member refid="classfutures_1_1stop__token_1a0e4709b47e78a7c7c7d894462072ed5d" kind="function"><name>stop_token</name></member>
+    <member refid="classfutures_1_1stop__token_1ae47d601a7d7ffc2be469136a549a912b" kind="function"><name>stop_token</name></member>
+    <member refid="classfutures_1_1stop__token_1ab10369fbc3989b574a263d2828e70554" kind="function"><name>~stop_token</name></member>
+    <member refid="classfutures_1_1stop__token_1af75bf416c715f64d01bc114a53b80d5e" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1stop__token_1aeea1d212b1e3e34eb300722872c7d57b" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1stop__token_1acc0f57abb9ff333ad7a87447a61ee2e8" kind="function"><name>swap</name></member>
+    <member refid="classfutures_1_1stop__token_1a332648a2adf9a8a4e8bbf8506aedbc75" kind="function"><name>stop_requested</name></member>
+    <member refid="classfutures_1_1stop__token_1aeb2ee38adf29c373229318fc0bed6d4b" kind="function"><name>stop_possible</name></member>
+    <member refid="classfutures_1_1stop__token_1a0a26096d0071b0d089255f8f56e42ea1" kind="friend"><name>stop_source</name></member>
+    <member refid="classfutures_1_1stop__token_1a716b016bada7a6665cd6d17257991913" kind="variable"><name>shared_state_</name></member>
+    <member refid="classfutures_1_1stop__token_1a18485627436a61b70ef4f74791e0f206" kind="function"><name>stop_token</name></member>
+  </compound>
+  <compound refid="structfutures_1_1stoppable__opt" kind="struct"><name>futures::stoppable_opt</name>
+  </compound>
+  <compound refid="classfutures_1_1thread__partitioner" kind="class"><name>futures::thread_partitioner</name>
+    <member refid="classfutures_1_1thread__partitioner_1a1a7591eff0bec060e9d81a12414122a9" kind="variable"><name>min_grain_size_</name></member>
+    <member refid="classfutures_1_1thread__partitioner_1a6aec1e23b05d1cc7a9dbaf351ef6f3b2" kind="variable"><name>num_threads_</name></member>
+    <member refid="classfutures_1_1thread__partitioner_1a3b104fb60aa20fe7b6ce9312093bb3b2" kind="variable"><name>last_thread_id_</name></member>
+    <member refid="classfutures_1_1thread__partitioner_1a27ad4c7f543c86eb37c3f6ef4f4b9556" kind="function"><name>thread_partitioner</name></member>
+    <member refid="classfutures_1_1thread__partitioner_1a8c54592986537e2e4b220da8d2240eb7" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1thread__pool" kind="class"><name>futures::thread_pool</name>
+    <member refid="classfutures_1_1thread__pool_1a87b06d5ecd34a0bac517ccc6c2c855e5" kind="variable"><name>pool_</name></member>
+    <member refid="classfutures_1_1thread__pool_1a5ed7149a5936bf0cc44a54e682a7e225" kind="function"><name>thread_pool</name></member>
+    <member refid="classfutures_1_1thread__pool_1adbf20560ca307b9654abf419fa224337" kind="function"><name>thread_pool</name></member>
+    <member refid="classfutures_1_1thread__pool_1ab9e34a1b1151839c8733f8d73ec01ba6" kind="function"><name>thread_pool</name></member>
+    <member refid="classfutures_1_1thread__pool_1a4d3e33439a50ffac4a23209dfcc1875b" kind="function"><name>thread_pool</name></member>
+    <member refid="classfutures_1_1thread__pool_1a8ab64282b6c642e374403d1964f4c9f1" kind="function"><name>get_executor</name></member>
+    <member refid="classfutures_1_1thread__pool_1abd7d372761ef2cd11cff2d562daacad7" kind="function"><name>join</name></member>
+  </compound>
+  <compound refid="classfutures_1_1unary__invoke__algorithm__functor" kind="class"><name>futures::unary_invoke_algorithm_functor</name>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a4f5e0903945564300757a7fcec2fd901" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1ab1d4bb9e64c90debabf3820b618a4859" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a1d3c91e8e2eeb27f8feac439221deb7e" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a5e86e5ccd03df08b8db90b36873894de" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aac415938d2b20b556b2c7a52a7471eaa" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1aba45974413fbcde8bd8600af43e17e34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a28a4f33b7a6fcad0f29c5765a508dd16" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a822d102a6b517851c8df1b1ca681d034" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1unary__invoke__algorithm__functor_1a6afc8659362f9576d40f0f51ab1b6cfc" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1value__cmp__algorithm__functor" kind="class"><name>futures::value_cmp_algorithm_functor</name>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a80be044c56540abebdcc81240e29cbf6" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a5fd55d225acfdd07108c2653f241cc34" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1af45fc6a9cd702f6738f80b7ecdd8a3eb" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a112c7d4cafb79b5a457382fbb31b1553" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51e87b9d3cb5c68da580fb002707a7b1" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a3717878758e5b77c4ff53780fd303273" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1afe25657d27a3daab53a4a1eea9a0d387" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a51af8cca6aeaa1c7a71d0c4f647aa0ca" kind="function"><name>operator()</name></member>
+    <member refid="classfutures_1_1value__cmp__algorithm__functor_1a1e851756adcd930a117f41af67a5872e" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classfutures_1_1when__all__future" kind="class"><name>futures::when_all_future</name>
+    <member refid="classfutures_1_1when__all__future_1af2df374262633b7c11de9be092af44c5" kind="typedef"><name>sequence_type</name></member>
+    <member refid="classfutures_1_1when__all__future_1a811a2613a5c582b61f08fcd3617cc1ef" kind="variable"><name>sequence_is_range</name></member>
+    <member refid="classfutures_1_1when__all__future_1a26bc06a003af25b1567c611dc178e63b" kind="variable"><name>sequence_is_tuple</name></member>
+    <member refid="classfutures_1_1when__all__future_1a4f0bbfb778ad58f7973a6b805c204bba" kind="variable"><name>v</name></member>
+    <member refid="classfutures_1_1when__all__future_1a52590c9386145da43d16cfbe0d812f62" kind="function"><name>when_all_future</name></member>
+    <member refid="classfutures_1_1when__all__future_1ad3290f653b10b61a37d22cc1c380cc7a" kind="function"><name>when_all_future</name></member>
+    <member refid="classfutures_1_1when__all__future_1a8f5b8645547b42bf4b1d7596e78a011f" kind="function"><name>when_all_future</name></member>
+    <member refid="classfutures_1_1when__all__future_1a2a77d45022651b251117e044d8795a20" kind="function"><name>when_all_future</name></member>
+    <member refid="classfutures_1_1when__all__future_1ad230e0dcb8b445b6c1cd297903bea43c" kind="function"><name>~when_all_future</name></member>
+    <member refid="classfutures_1_1when__all__future_1a93a90a17dda54a9927cd4e1ad2617842" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1when__all__future_1adcc0140f0660ee25a05c4205dc325105" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1when__all__future_1a9a3d9ef4082b5b981f11a9676ff54166" kind="function"><name>get</name></member>
+    <member refid="classfutures_1_1when__all__future_1a0e538c69f673be31a6d7529f3e131217" kind="function"><name>valid</name></member>
+    <member refid="classfutures_1_1when__all__future_1a49ea44da9244ae15cbc469743d752c30" kind="function"><name>wait</name></member>
+    <member refid="classfutures_1_1when__all__future_1a17119c6ea69ba8c514f1bc3936f0f1b0" kind="function"><name>wait_for</name></member>
+    <member refid="classfutures_1_1when__all__future_1a521bf95baed0c9f704939fd8fdcf2ce6" kind="function"><name>wait_until</name></member>
+    <member refid="classfutures_1_1when__all__future_1a6e089259240a96c800ccf03593876a17" kind="function"><name>release</name></member>
+    <member refid="classfutures_1_1when__all__future_1aefbe34127bf53c2da1a1e5e0313b6314" kind="function"><name>request_stop</name></member>
+    <member refid="classfutures_1_1when__all__future_1a7853a56989e8feb2505684a599c3f9b7" kind="function"><name>valid_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a19aef2d053b4888e48f1de3c7bb5aef6" kind="function"><name>valid_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1ad560b463ca38e38d9986836d0dbf9bb8" kind="function"><name>wait_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a57b27388cae8f9bb7705901ddd4c4bf2" kind="function"><name>wait_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1adb30bc5ead405465bbc4bb90c03e9a58" kind="function"><name>is_empty_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1af3b4b539afb4aa4abb84db360884417f" kind="function"><name>is_empty_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a294f43fbd9c1474922f1a8f3d50ed5d4" kind="function"><name>is_empty</name></member>
+    <member refid="classfutures_1_1when__all__future_1a9c39ad624233cf291c7c9bdcf62f020c" kind="function"><name>wait_for_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a3e251da12c51b2046a3d7a553947ccc0" kind="function"><name>wait_for_tuple_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1adf1bac905a44b4c13316c5e6d9e66a89" kind="function"><name>wait_for_tuple_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a13333c9ad295ace5b77e4428f6359f09" kind="function"><name>wait_for_impl</name></member>
+    <member refid="classfutures_1_1when__all__future_1a70aa4f7472aa0cfd889c545e75dc34ad" kind="function"><name>wait_for_impl</name></member>
+  </compound>
+  <compound refid="classfutures_1_1when__any__future" kind="class"><name>futures::when_any_future</name>
+    <member refid="classfutures_1_1when__any__future_1a17121cd7e67d17481c5a32568fe94302" kind="typedef"><name>sequence_type</name></member>
+    <member refid="classfutures_1_1when__any__future_1aa43637bb808f247d4c805902a8b3247c" kind="variable"><name>sequence_is_range</name></member>
+    <member refid="classfutures_1_1when__any__future_1aed3b433e8d8b74c6a851576e8ceda459" kind="variable"><name>sequence_is_tuple</name></member>
+    <member refid="classfutures_1_1when__any__future_1a0cec87bc76f0a4985e7c009afc040e4a" kind="variable"><name>v</name></member>
+    <member refid="classfutures_1_1when__any__future_1ac66e42176694ca3700db21670ab577a5" kind="function"><name>when_any_future</name></member>
+    <member refid="classfutures_1_1when__any__future_1a164167a13c4897a937a210e46ce9bc72" kind="function"><name>when_any_future</name></member>
+    <member refid="classfutures_1_1when__any__future_1a6f0477b558012d93f4852d74b98c0199" kind="function"><name>when_any_future</name></member>
+    <member refid="classfutures_1_1when__any__future_1a7f8bceb04c6dc71bd3d45a437f79f5c1" kind="function"><name>when_any_future</name></member>
+    <member refid="classfutures_1_1when__any__future_1a2e8113044d166fadad102d9d0dd8b93a" kind="function"><name>~when_any_future</name></member>
+    <member refid="classfutures_1_1when__any__future_1a7deb0d7145d9b1125c18bb136bdefd8c" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1when__any__future_1a0a8abc17e9a6a2186cc0f9982c28fc2b" kind="function"><name>operator=</name></member>
+    <member refid="classfutures_1_1when__any__future_1aaa330e5010d964cf6bfcb3d3174fd3fa" kind="function"><name>get</name></member>
+    <member refid="classfutures_1_1when__any__future_1a8665c3ed6ffdc9e05f2250bc4283e2d2" kind="function"><name>valid</name></member>
+    <member refid="classfutures_1_1when__any__future_1a15cff0500baa669d82e83b044e51f2a9" kind="function"><name>wait</name></member>
+    <member refid="classfutures_1_1when__any__future_1ac9770d452ca52cde83ec6d32a716933e" kind="function"><name>wait_for</name></member>
+    <member refid="classfutures_1_1when__any__future_1aff69173ad7ef0a1e20033d13213e9ad6" kind="function"><name>wait_until</name></member>
+    <member refid="classfutures_1_1when__any__future_1abde344da4e051f163ff028d9383e1f35" kind="function"><name>is_ready</name></member>
+    <member refid="classfutures_1_1when__any__future_1ade2873b0112e644823c6950127e72a55" kind="function"><name>release</name></member>
+    <member refid="classfutures_1_1when__any__future_1ac6e7c54ac68fcfbda707539770d56de3" kind="function"><name>lazy_continuable_size</name></member>
+    <member refid="classfutures_1_1when__any__future_1a451dd5c45319cb049fca8fe58cc6611c" kind="function"><name>all_lazy_continuable</name></member>
+    <member refid="classfutures_1_1when__any__future_1ad57d6e2cc4ba4e22551e26aa73007b7a" kind="function"><name>is_ready</name></member>
+    <member refid="classfutures_1_1when__any__future_1af8742d3998f4b13724ace18c4e1ed382" kind="function"><name>valid_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1ae56a9c7a050c57ebed2cfb756e379660" kind="function"><name>valid_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1ae354c757a62c10743fb03bc8368fd614" kind="function"><name>valid_tuple_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a4ad1b3cfd82013a8d3344bdbc5652498" kind="function"><name>valid_tuple_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a5b36c0441a264f2dba8f9d6eaf853e8e" kind="function"><name>get_ready_index</name></member>
+    <member refid="classfutures_1_1when__any__future_1a287b8f820b905668c40d67a194d99fb9" kind="function"><name>get_ready_index_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a6744856bf207de3aa2b7b07bef29c4e8" kind="function"><name>get_ready_index_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1abb4c0c4af57cb2d81ca3f46bd61225e2" kind="function"><name>size</name></member>
+    <member refid="classfutures_1_1when__any__future_1a8cd34c55f3727e693452928fc2e3e1b7" kind="function"><name>size_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a3599e74ecfd8ee74fff9769d01fc1d8a" kind="function"><name>size_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1aeaea5fc73ea4d74fd5748283e994dcfc" kind="function"><name>lazy_continuable_size_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a2d95fa9d17eaa681fca7721358903fdb" kind="function"><name>lazy_continuable_size_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1ab03f1d18c293c345ed13c665c14cca15" kind="function"><name>is_ready_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1ad1c9ac6bfa1f71ca13b5758df19a704d" kind="function"><name>is_ready_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a67567a9d38cdc2f483c47cf8feb3d0f5" kind="function"><name>compile_time_size</name></member>
+    <member refid="classfutures_1_1when__any__future_1ae7542ae1098deaaca0332b4ec3e01d41" kind="function"><name>compile_time_size_impl</name></member>
+    <member refid="classfutures_1_1when__any__future_1a8a137a3fb91fa239ba48156e45e76316" kind="function"><name>compile_time_size_impl</name></member>
+  </compound>
+  <compound refid="structfutures_1_1when__any__result" kind="struct"><name>futures::when_any_result</name>
+    <member refid="structfutures_1_1when__any__result_1aae60564d7339f1afd6a0a3580594cbd2" kind="typedef"><name>size_type</name></member>
+    <member refid="structfutures_1_1when__any__result_1af4eee77055b88d885697fef66672b486" kind="typedef"><name>sequence_type</name></member>
+    <member refid="structfutures_1_1when__any__result_1a6e7503a645fb889c080ba674ac794fa0" kind="variable"><name>index</name></member>
+    <member refid="structfutures_1_1when__any__result_1a221787d150f27ae4f9234b8876525a6f" kind="variable"><name>tasks</name></member>
+  </compound>
+  <compound refid="conceptfutures_1_1execution__context" kind="concept"><name>futures::execution_context</name>
+  </compound>
+  <compound refid="conceptfutures_1_1execution__context__for" kind="concept"><name>futures::execution_context_for</name>
+  </compound>
+  <compound refid="conceptfutures_1_1execution__policy" kind="concept"><name>futures::execution_policy</name>
+  </compound>
+  <compound refid="conceptfutures_1_1executor" kind="concept"><name>futures::executor</name>
+  </compound>
+  <compound refid="conceptfutures_1_1executor__for" kind="concept"><name>futures::executor_for</name>
+  </compound>
+  <compound refid="conceptfutures_1_1future__like" kind="concept"><name>futures::future_like</name>
+  </compound>
+  <compound refid="conceptfutures_1_1partitioner__for" kind="concept"><name>futures::partitioner_for</name>
+  </compound>
+  <compound refid="namespacefutures" kind="namespace"><name>futures</name>
+    <member refid="group__error_1ga6b514c11923c676167997aae802757b8" kind="enum"><name>future_errc</name></member>
+    <member refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kind="enum"><name>future_status</name></member>
+    <member refid="group__future-types_1ga33c4a67592f57bcb5d04764d425c29a0" kind="typedef"><name>future</name></member>
+    <member refid="group__future-types_1ga691b06597181e3664dc3ab9a4976af6e" kind="typedef"><name>cfuture</name></member>
+    <member refid="group__future-types_1ga594ffcefc7c53a3eab6431c9d9ef8f65" kind="typedef"><name>jcfuture</name></member>
+    <member refid="group__future-types_1gaf9531b575c37bfe7fb80ff7e4c7b5b26" kind="typedef"><name>dfuture</name></member>
+    <member refid="group__future-types_1gab6f89384255b61ed8004b61c25cfa0b0" kind="typedef"><name>jdfuture</name></member>
+    <member refid="group__future-types_1gaf8ae95b0fa154b6b1aed392fc0b12c2d" kind="typedef"><name>vfuture</name></member>
+    <member refid="group__future-types_1ga7a01532e89adeadf5d9867b6bd767630" kind="typedef"><name>shared_future</name></member>
+    <member refid="group__future-types_1ga944b7785ed3941b348360bd463a29109" kind="typedef"><name>shared_cfuture</name></member>
+    <member refid="group__future-types_1ga85aeb742e0facea42147c5bca36dbafe" kind="typedef"><name>shared_jcfuture</name></member>
+    <member refid="group__future-types_1gac625c612509f8d6e983f18b30d4a50c7" kind="typedef"><name>shared_dfuture</name></member>
+    <member refid="group__future-types_1ga6ed365c544f18f9e09c5a291754cd3d3" kind="typedef"><name>shared_jdfuture</name></member>
+    <member refid="group__future-types_1ga0dbca35f60e6be3e06cf318a67042dd7" kind="typedef"><name>shared_vfuture</name></member>
+    <member refid="namespacefutures_1a2616ae270c50b96ac0cc23d25521fe3e" kind="typedef"><name>partial_ordering</name></member>
+    <member refid="namespacefutures_1a6cdf610a1446f3290b241594d29c07f1" kind="typedef"><name>strong_ordering</name></member>
+    <member refid="namespacefutures_1aaa4179da18ef4ccba8471045493daca5" kind="typedef"><name>weak_ordering</name></member>
+    <member refid="group__partitioners_1ga1dfbb885c6bb2f86870d55160dd16783" kind="typedef"><name>default_partitioner</name></member>
+    <member refid="group__partitioners_1gace2856b25ae230b1d91b1e1a79267cf5" kind="typedef"><name>is_partitioner_for</name></member>
+    <member refid="group__execution-policies_1gaf5d088ab9052836d3d58c62a02697e26" kind="typedef"><name>sequenced_policy</name></member>
+    <member refid="group__execution-policies_1gaeb6a426f21b797b63d6cfd5f1a4585ee" kind="typedef"><name>parallel_policy</name></member>
+    <member refid="group__execution-policies_1ga1cfc7e6ec53363f996022ad8282b0cfe" kind="typedef"><name>parallel_unsequenced_policy</name></member>
+    <member refid="group__execution-policies_1gabaa708215fbcb22a94cc04f7ef726059" kind="typedef"><name>unsequenced_policy</name></member>
+    <member refid="group__traits_1gacd1a119404dd4b52bcb267a28c530720" kind="typedef"><name>common_comparison_category</name></member>
+    <member refid="group__traits_1gaa31c7a165f142f3cbb7523128b649038" kind="typedef"><name>common_comparison_category_t</name></member>
+    <member refid="group__traits_1ga7bda1c11fe675de42221596af9f0df5f" kind="typedef"><name>is_assignable_from</name></member>
+    <member refid="group__traits_1ga76db62394fec337406efe0efe4680339" kind="typedef"><name>is_bidirectional_iterator</name></member>
+    <member refid="group__traits_1gaa14660ab0fd62ba08cc33db046c7f3b1" kind="typedef"><name>is_constructible_from</name></member>
+    <member refid="group__traits_1ga478ba461a135cc0e9c291252ec9b2d8f" kind="typedef"><name>is_convertible_to</name></member>
+    <member refid="group__traits_1gafeeb5e8c14faf5518660bbbd61cadf2b" kind="typedef"><name>is_copyable</name></member>
+    <member refid="group__traits_1gade601510289810972f9caf8e2b4c73fb" kind="typedef"><name>is_default_initializable</name></member>
+    <member refid="group__traits_1ga1e386f4f05388c302d714c7d1a2c6aa2" kind="typedef"><name>is_derived_from</name></member>
+    <member refid="group__traits_1ga700cff8b3f85ddd38376e54c9ca3e6b8" kind="typedef"><name>is_equality_comparable</name></member>
+    <member refid="group__traits_1ga33c9e5b16ea99aea746e3bffa28cc56c" kind="typedef"><name>is_equality_comparable_with</name></member>
+    <member refid="group__traits_1ga848d84bbb112bc916c2efd34da93a572" kind="typedef"><name>is_forward_iterator</name></member>
+    <member refid="group__traits_1ga33d3975351d7b6285a7e0c8663e96c84" kind="typedef"><name>is_incrementable</name></member>
+    <member refid="group__traits_1gacec3cf84299f155f1a34a4984c69a8e3" kind="typedef"><name>is_indirectly_binary_invocable</name></member>
+    <member refid="group__traits_1ga5d997016e1af193a53e63e8d35454110" kind="typedef"><name>is_indirectly_readable</name></member>
+    <member refid="group__traits_1ga8a78009173a34f27d5d088459b744253" kind="typedef"><name>is_indirectly_unary_invocable</name></member>
+    <member refid="group__traits_1gafdc7cbe83b02548031e1457c533b0413" kind="typedef"><name>is_input_iterator</name></member>
+    <member refid="group__traits_1ga787d4f89658a472119f07b2b0797000f" kind="typedef"><name>is_input_or_output_iterator</name></member>
+    <member refid="group__traits_1gaf1bf7865ae3e06fd952ef1f861a28f70" kind="typedef"><name>is_input_range</name></member>
+    <member refid="group__traits_1gaf041a0c651e1e59ea18df0e2dc2dc8fe" kind="typedef"><name>is_movable</name></member>
+    <member refid="group__traits_1gae4e9bd33e6ed647165d69f3ece27935d" kind="typedef"><name>is_move_constructible</name></member>
+    <member refid="group__traits_1ga0a68b1cb70778749f176868ea5489453" kind="typedef"><name>is_random_access_iterator</name></member>
+    <member refid="group__traits_1gaea08f93eea232d08478c9cc04773e116" kind="typedef"><name>is_range</name></member>
+    <member refid="group__traits_1ga6c651460b5dfa33f143fef4514c3120b" kind="typedef"><name>is_regular</name></member>
+    <member refid="group__traits_1ga1f7dc3c45de0abcd0e466f853e283679" kind="typedef"><name>is_semiregular</name></member>
+    <member refid="group__traits_1ga5dea935029d8615e75f76c5d244f1a46" kind="typedef"><name>is_sentinel_for</name></member>
+    <member refid="group__traits_1gaced3438d14261ee82a0efa2cff8a08e4" kind="typedef"><name>is_swappable</name></member>
+    <member refid="group__traits_1gac22a6b82a79830ec1177653c62c89597" kind="typedef"><name>is_three_way_comparable</name></member>
+    <member refid="group__traits_1ga7d342b63b24fa9b3a399a8be75a909b1" kind="typedef"><name>is_three_way_comparable_with</name></member>
+    <member refid="group__traits_1gacca0150c5cccef1847a596ff7dbfb85c" kind="typedef"><name>is_totally_ordered</name></member>
+    <member refid="group__traits_1ga3e7a594dd861beb0287aab525b8d44d8" kind="typedef"><name>is_totally_ordered_with</name></member>
+    <member refid="group__traits_1ga9420a5b6af74d0339ded7b71b49aae5c" kind="typedef"><name>is_weakly_incrementable</name></member>
+    <member refid="group__traits_1ga0cd4722e248e01dcf1f077f5b64dd135" kind="typedef"><name>iter_difference</name></member>
+    <member refid="group__traits_1gadb88ead4be9c831ffd25b07850d1f1db" kind="typedef"><name>iter_difference_t</name></member>
+    <member refid="group__traits_1gae8d16e13ff22db3256af14a4d4b89fa9" kind="typedef"><name>iter_reference</name></member>
+    <member refid="group__traits_1ga4b1badc7c239d872ac366d4a8c57101a" kind="typedef"><name>iter_reference_t</name></member>
+    <member refid="group__traits_1ga512a5a98c50c6dd379e05bb4934ceed2" kind="typedef"><name>iter_rvalue_reference</name></member>
+    <member refid="group__traits_1ga2de87617ebb91ba233b7d4f5ee08e703" kind="typedef"><name>iter_rvalue_reference_t</name></member>
+    <member refid="group__traits_1gab7bdd46a3627a696302c30934567f51d" kind="typedef"><name>iter_value</name></member>
+    <member refid="group__traits_1gabd912e4dacd864daedb36cd1f39e1723" kind="typedef"><name>iter_value_t</name></member>
+    <member refid="group__traits_1gaba9b74185a646620729400ed744f7ecc" kind="typedef"><name>iterator</name></member>
+    <member refid="group__traits_1ga25b9349b8a29ca3bea4913f8b704e515" kind="typedef"><name>iterator_t</name></member>
+    <member refid="group__traits_1gaa097d6855d1af3709d4facf9848b3088" kind="typedef"><name>range_value</name></member>
+    <member refid="group__traits_1ga36b10fa59d1005a75cecb03df26b12d8" kind="typedef"><name>range_value_t</name></member>
+    <member refid="group__traits_1gab2f4c9b824ed7e93242a4f61967218df" kind="typedef"><name>remove_cvref</name></member>
+    <member refid="group__traits_1ga08dfd6b7fc387123f45b76f825a47193" kind="typedef"><name>remove_cvref_t</name></member>
+    <member refid="group__executors_1gaf961f88543ab12949fd90f310bc90663" kind="typedef"><name>default_execution_context_type</name></member>
+    <member refid="group__executors_1gacdecb5da8c06084b542ae33964dba59b" kind="typedef"><name>default_executor_type</name></member>
+    <member refid="group__executors_1gad9066c383b30d857c2527720c86f0a71" kind="typedef"><name>is_execution_context_for</name></member>
+    <member refid="group__executors_1ga50b8774bb35c27e2150e9080a3590038" kind="typedef"><name>is_execution_context</name></member>
+    <member refid="group__executors_1ga6702c04e6873f0a2ce6344a5dd3a60a7" kind="typedef"><name>is_executor_for</name></member>
+    <member refid="group__executors_1gaabcc65b63cd88a8479054d368e688f27" kind="typedef"><name>is_executor</name></member>
+    <member refid="group__future-options_1ga068aa34de70d0b9bc581127c7d46d08e" kind="typedef"><name>future_options</name></member>
+    <member refid="group__error_1gaa09c7b0f3e466783023afb96eea90fad" kind="typedef"><name>source_location</name></member>
+    <member refid="group__future-traits_1ga6b9f710ec419153132923160875d24ad" kind="typedef"><name>future_value</name></member>
+    <member refid="group__future-traits_1ga6e31e50532fd1185e4321c4b76918907" kind="typedef"><name>future_value_t</name></member>
+    <member refid="group__future-traits_1ga721bbb35763f4def43c4360cf80e7363" kind="typedef"><name>has_stop_token</name></member>
+    <member refid="group__future-traits_1ga367eb573176946bd3c564a385eb549fe" kind="typedef"><name>is_stoppable</name></member>
+    <member refid="group__functions_1ga0a19ce4d22f4c8a251aced2077623b03" kind="variable"><name>all_of</name></member>
+    <member refid="group__functions_1gac70d945839135728f9ac534f5a8626c9" kind="variable"><name>any_of</name></member>
+    <member refid="group__functions_1gaeb543fc7a0437fc057e2acf823abbb13" kind="variable"><name>count</name></member>
+    <member refid="group__functions_1ga0741d870e77e49d34e7daae10ecfb721" kind="variable"><name>count_if</name></member>
+    <member refid="group__functions_1ga15c434fa0fbabddf6b1ab8cf06760ec5" kind="variable"><name>find</name></member>
+    <member refid="group__functions_1ga10dff629b2c06c53c69024821bce5efc" kind="variable"><name>find_if</name></member>
+    <member refid="group__functions_1ga58db85c74ede4cc40c6e8735e3f228d7" kind="variable"><name>find_if_not</name></member>
+    <member refid="group__functions_1ga696ae412208d98f074d3ed6667e1a64f" kind="variable"><name>for_each</name></member>
+    <member refid="group__functions_1ga0fb3a8de3d488915fcd3ebe63d603731" kind="variable"><name>none_of</name></member>
+    <member refid="group__partitioners_1gac228eb71c167a6df66aa61d19253993d" kind="variable"><name>is_partitioner_for_v</name></member>
+    <member refid="group__execution-policies_1gabc55040ea2bc2503075ab0b70004899a" kind="variable"><name>seq</name></member>
+    <member refid="group__execution-policies_1ga15d309529b3196659d901c905bd0bbc6" kind="variable"><name>par</name></member>
+    <member refid="group__execution-policies_1ga2dfc04fa043d76435dfc6531db67a93d" kind="variable"><name>par_unseq</name></member>
+    <member refid="group__execution-policies_1ga92c59cac6e6ea17c04b929917c037446" kind="variable"><name>unseq</name></member>
+    <member refid="group__execution-policies_1ga91acd0da3465836ab08bfa9ed016d2dd" kind="variable"><name>is_execution_policy_v</name></member>
+    <member refid="group__functions_1ga12eba09a0c6fb20ae5a7f3c561e2b433" kind="variable"><name>reduce</name></member>
+    <member refid="group__traits_1ga77606ec080e615c4f83c1a737589268d" kind="variable"><name>is_assignable_from_v</name></member>
+    <member refid="group__traits_1ga53831f07f1d23a5c9575f717bf4c4ce1" kind="variable"><name>is_bidirectional_iterator_v</name></member>
+    <member refid="group__traits_1ga6c5fc06c5acf15dbbc0e490988e0bbcc" kind="variable"><name>is_constructible_from_v</name></member>
+    <member refid="group__traits_1ga99d9a1bd8e1ab89863224c78b515e4e1" kind="variable"><name>is_convertible_to_v</name></member>
+    <member refid="group__traits_1ga19bdaf3c43f699426957a966a1d16c37" kind="variable"><name>is_copyable_v</name></member>
+    <member refid="group__traits_1ga25c80aeac9b688386b0755fd4f7e2236" kind="variable"><name>is_default_initializable_v</name></member>
+    <member refid="group__traits_1gac0544fcb34d2441bf49ecd2b4165b727" kind="variable"><name>is_derived_from_v</name></member>
+    <member refid="group__traits_1ga8465918081b89b0713376f47aa9e51cf" kind="variable"><name>is_equality_comparable_v</name></member>
+    <member refid="group__traits_1ga5a60f9e666ffd6d75f260a8cd79c4fcb" kind="variable"><name>is_equality_comparable_with_v</name></member>
+    <member refid="group__traits_1ga39f0eb89da25215eabcb5b741a1f2f8f" kind="variable"><name>is_forward_iterator_v</name></member>
+    <member refid="group__traits_1gab9d3117a9157923b43113f8950b58ea6" kind="variable"><name>is_incrementable_v</name></member>
+    <member refid="group__traits_1ga2ce9de37185584b4cc70508a0c709f72" kind="variable"><name>is_indirectly_binary_invocable_v</name></member>
+    <member refid="group__traits_1ga39b8d413d2e15c20ad26708791d48c96" kind="variable"><name>is_indirectly_readable_v</name></member>
+    <member refid="group__traits_1ga035daff7f18105b4ec196371bdeb6d5c" kind="variable"><name>is_indirectly_unary_invocable_v</name></member>
+    <member refid="group__traits_1ga164df25f7613782d753e35e084c236b7" kind="variable"><name>is_input_iterator_v</name></member>
+    <member refid="group__traits_1gac5975521439989723185832ac2645166" kind="variable"><name>is_input_or_output_iterator_v</name></member>
+    <member refid="group__traits_1gac9784d2e05f3cf8a9f9590f04f123e74" kind="variable"><name>is_input_range_v</name></member>
+    <member refid="group__traits_1ga9900979cf6cb29a928197a494ccfd023" kind="variable"><name>is_movable_v</name></member>
+    <member refid="group__traits_1gaaba2a10a79777082f19420c161b7ca40" kind="variable"><name>is_move_constructible_v</name></member>
+    <member refid="group__traits_1gae9954a411bcf40e3f06c2c24b4b0a6bd" kind="variable"><name>is_random_access_iterator_v</name></member>
+    <member refid="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" kind="variable"><name>is_range_v</name></member>
+    <member refid="group__traits_1gaaa5f05191e3a4aaf4b084d1c29559bc4" kind="variable"><name>is_regular_v</name></member>
+    <member refid="group__traits_1gadcef95d15ae7d9498b6c45d0f05bc648" kind="variable"><name>is_semiregular_v</name></member>
+    <member refid="group__traits_1gacadf25f8f6492d3710eb2d513b0dc7a7" kind="variable"><name>is_sentinel_for_v</name></member>
+    <member refid="group__traits_1ga3df986359d7ffe87ad775677e9e46326" kind="variable"><name>is_swappable_v</name></member>
+    <member refid="group__traits_1ga7f63cfc0969c7768a3ed2fb040a99b95" kind="variable"><name>is_three_way_comparable_v</name></member>
+    <member refid="group__traits_1ga8830992102877a3f25d09866d080333f" kind="variable"><name>is_three_way_comparable_with_v</name></member>
+    <member refid="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" kind="variable"><name>is_totally_ordered_v</name></member>
+    <member refid="group__traits_1gafa9051526c36ea222da0f4d83f3d3b66" kind="variable"><name>is_totally_ordered_with_v</name></member>
+    <member refid="group__traits_1gaa514a224bede48a6941ec53d58b3692f" kind="variable"><name>is_weakly_incrementable_v</name></member>
+    <member refid="group__executors_1ga1ce8960b0f1aeaf6f5d9c1a08291041d" kind="variable"><name>is_execution_context_for_v</name></member>
+    <member refid="group__executors_1ga7a06e7d040be2e43b5ae92f8b754133b" kind="variable"><name>is_execution_context_v</name></member>
+    <member refid="group__executors_1ga29e93e53607e1d7fd42078006e8d2155" kind="variable"><name>is_executor_for_v</name></member>
+    <member refid="group__executors_1ga27c20c657a0f5357f9523df487980a88" kind="variable"><name>is_executor_v</name></member>
+    <member refid="group__cancellation_1ga01213ebdf9bd19b06e4860d863094735" kind="variable"><name>nostopstate</name></member>
+    <member refid="group__future-traits_1ga1d65f925849576acd6b5a4a6333d1380" kind="variable"><name>has_executor_v</name></member>
+    <member refid="group__future-traits_1gaaa06f944510ee5b88b996ec9e1f41adb" kind="variable"><name>has_ready_notifier_v</name></member>
+    <member refid="group__future-traits_1ga298d5e966d0a87153c8feb6dfaf6a222" kind="variable"><name>has_stop_token_v</name></member>
+    <member refid="group__future-traits_1ga61c743647bbfe6907f93a674af321ad1" kind="variable"><name>is_always_deferred_v</name></member>
+    <member refid="group__future-traits_1gaa1dab24425678e965a56ff21c6d1624e" kind="variable"><name>is_continuable_v</name></member>
+    <member refid="group__future-traits_1gaafc70e30ead3e35866fa26ba79b3721d" kind="variable"><name>is_future_like_v</name></member>
+    <member refid="group__future-traits_1ga98d13b2d7d89edd37c377b59e2c3d6f5" kind="variable"><name>is_shared_future_v</name></member>
+    <member refid="group__future-traits_1gad4b42cfc7fecf09378dbf1548501a366" kind="variable"><name>is_stoppable_v</name></member>
+    <member refid="group__adaptors_1ga3d79a1bc16752e3a3b2d9cda6904178c" kind="function"><name>operator%</name></member>
+    <member refid="group__adaptors_1gacb4e00b6c170bb3ae76893524bfab046" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1ga659e9f6c7e24219433bf4079ada8e2b3" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1ga0e4df3e1f8048b61db143fdd7d29b9c7" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1gab5ece643ec44101cce6bd81b2fb84966" kind="function"><name>make_exceptional_future</name></member>
+    <member refid="group__adaptors_1ga512555b53d37358d770df8df97e4e398" kind="function"><name>make_exceptional_future</name></member>
+    <member refid="group__adaptors_1ga4bc04aed0af78c914f202a2ccad236a0" kind="function"><name>then</name></member>
+    <member refid="group__adaptors_1ga3c5bcb86d6f7a938f4d1dea57dcfae0c" kind="function"><name>then</name></member>
+    <member refid="group__adaptors_1ga8e228fec77e89e5071dbd391d2d01523" kind="function"><name>operator&gt;&gt;</name></member>
+    <member refid="group__adaptors_1ga47832f9e4e10be3eec7abc2083d85be0" kind="function"><name>operator&gt;&gt;</name></member>
+    <member refid="group__adaptors_1gaf29fa7770136bef87fc206de9ced9485" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga5631320ae4a5b964c93f9ba3a812c3a1" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga8203d4f82bf8ee3bffae100123b0c601" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga2339ff3a16ab28b15882e8051977f2cb" kind="function"><name>operator&amp;&amp;</name></member>
+    <member refid="group__adaptors_1ga326cd907b4a3bf8a50327d66ce41bead" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1ga842a1ff92d9194317719529dcd49b42d" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1gaeba0729046288863d01773d2e13c5f13" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1ga2d3466eb250f13d9c7f909c4a07a787f" kind="function"><name>operator||</name></member>
+    <member refid="group__partitioners_1ga20c9290c9184f57260f5d6f8692d73b6" kind="function"><name>make_grain_size</name></member>
+    <member refid="group__partitioners_1ga47766e8c4150a6b098bf298023669558" kind="function"><name>make_default_partitioner</name></member>
+    <member refid="group__partitioners_1ga39395da895517ad34cfa27ef8b1d6d87" kind="function"><name>make_default_partitioner</name></member>
+    <member refid="group__partitioners_1ga27d6c718a4152cd510382df27662a199" kind="function"><name>make_default_partitioner</name></member>
+    <member refid="group__waiting_1ga3aff4d8b5cd3b961aaf86f0c59652d5e" kind="function"><name>await</name></member>
+    <member refid="group__waiting_1ga6e65f21a7e07afbab340ede45e568068" kind="function"><name>await</name></member>
+    <member refid="group__executors_1ga046c80f7c9ec8c63cd18bebe62f3ce3f" kind="function"><name>default_execution_context</name></member>
+    <member refid="group__executors_1ga1ab933a38b4db38d0955b3e6764dd90d" kind="function"><name>make_default_executor</name></member>
+    <member refid="namespacefutures_1a7b2a38e1190a1de44f046e7aa3101980" kind="function"><name>execute</name></member>
+    <member refid="namespacefutures_1afcf0c0be15dabc267db8b38925813a97" kind="function"><name>execute</name></member>
+    <member refid="group__executors_1gaa58c1bc10fe96080f355b709a30473f6" kind="function"><name>hardware_concurrency</name></member>
+    <member refid="group__executors_1ga8402f32dc6d52a81897b54b45ec84616" kind="function"><name>make_inline_executor</name></member>
+    <member refid="group__executors_1ga421a5f50523a4c393344869afbb7a85f" kind="function"><name>make_new_thread_executor</name></member>
+    <member refid="group__adaptors_1ga4b25abc5ba5c39102a1545d29d8c03a3" kind="function"><name>is_ready</name></member>
+    <member refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kind="function"><name>async</name></member>
+    <member refid="group__launch_1ga85e60c1de0d37a14ec5623e85ae9a0c7" kind="function"><name>async</name></member>
+    <member refid="group__launch_1gaa3cac9f64c928b7c63acd65c6e17cc69" kind="function"><name>schedule</name></member>
+    <member refid="group__launch_1ga5132dec81e533dfd824848751a1a3565" kind="function"><name>schedule</name></member>
+    <member refid="group__shared__state_1ga320f807f067a8d02c4d0e9ed66e53b0b" kind="function"><name>swap</name></member>
+    <member refid="group__shared__state_1ga9a3170dfeff3872b6a6bcfab5ce63e66" kind="function"><name>swap</name></member>
+    <member refid="group__error_1ga1d60ca812337944e729a84a9f37195ab" kind="function"><name>handle_exception</name></member>
+    <member refid="group__error_1ga3ee1de4e2e5e2809f8936319b4b2ce09" kind="function"><name>throw_exception</name></member>
+    <member refid="group__waiting_1ga059ba1404ba968cb2cb108a76f9cffa8" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gabbd368b77796881cce9c951099f7a25a" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gaa3ea0a0826fda6a1c9c7f9b5ad3be390" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gadc987f5c0fbf9c029b6e4fd303778e06" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gabe48c8000499e7d6b858c2ba03f24f9d" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1ga03aaee3fbed390c33ca18829365f457f" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1ga5ca790c41550c9952a733a5c3ec4f9d3" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1gabe33547dffed01e98f0fbb5e6b250e5c" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1gab87515245b042239085fb0c231dbf49d" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1gaec7ba0721287ed2d804fefcf60aeb043" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga5176c9911068fd8dec7347b45b99ed64" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga1e43cb93d4aca81d2313dc2ce032ec91" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga7fa10c7413d3b02bcf65e63ead2185c1" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga5a34d89268642da91a61c25184b47095" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga7ad63bcada8c89257d6338a0f40c6622" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga9e77d6e17363998b5efbe74b4d0b2acb" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1gad32e2da4457116249c758eed1550e3ab" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1ga916e8c489e9b283a63304287b9d86a8e" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1gac858955f3202d94606e73574f302f9c9" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1gaa71e8ffc7c5260316fea850335e29860" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1ga55f81bf19839326a15d9daad7667cc2a" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1ga498289356066c74ee09b692586f55b8e" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1ga109330c8b2744f4d74464a2533b98556" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1gab0146fa5deaf49968c0aa421ebca990b" kind="function"><name>wait_for_any_until</name></member>
+  </compound>
+  <compound refid="adaptor_8hpp" kind="file"><name>adaptor.hpp</name>
+  </compound>
+  <compound refid="bind__executor__to__lambda_8hpp" kind="file"><name>bind_executor_to_lambda.hpp</name>
+  </compound>
+  <compound refid="make__ready__future_8hpp" kind="file"><name>make_ready_future.hpp</name>
+  </compound>
+  <compound refid="then_8hpp" kind="file"><name>then.hpp</name>
+  </compound>
+  <compound refid="when__all_8hpp" kind="file"><name>when_all.hpp</name>
+  </compound>
+  <compound refid="when__any_8hpp" kind="file"><name>when_any.hpp</name>
+  </compound>
+  <compound refid="algorithm_8hpp" kind="file"><name>algorithm.hpp</name>
+  </compound>
+  <compound refid="all__of_8hpp" kind="file"><name>all_of.hpp</name>
+  </compound>
+  <compound refid="any__of_8hpp" kind="file"><name>any_of.hpp</name>
+  </compound>
+  <compound refid="compare_8hpp" kind="file"><name>compare.hpp</name>
+  </compound>
+  <compound refid="compare__three__way_8hpp" kind="file"><name>compare_three_way.hpp</name>
+  </compound>
+  <compound refid="equal__to_8hpp" kind="file"><name>equal_to.hpp</name>
+  </compound>
+  <compound refid="greater_8hpp" kind="file"><name>greater.hpp</name>
+  </compound>
+  <compound refid="greater__equal_8hpp" kind="file"><name>greater_equal.hpp</name>
+  </compound>
+  <compound refid="less_8hpp" kind="file"><name>less.hpp</name>
+  </compound>
+  <compound refid="less__equal_8hpp" kind="file"><name>less_equal.hpp</name>
+  </compound>
+  <compound refid="not__equal__to_8hpp" kind="file"><name>not_equal_to.hpp</name>
+  </compound>
+  <compound refid="partial__ordering_8hpp" kind="file"><name>partial_ordering.hpp</name>
+  </compound>
+  <compound refid="strong__ordering_8hpp" kind="file"><name>strong_ordering.hpp</name>
+  </compound>
+  <compound refid="weak__ordering_8hpp" kind="file"><name>weak_ordering.hpp</name>
+  </compound>
+  <compound refid="count_8hpp" kind="file"><name>count.hpp</name>
+  </compound>
+  <compound refid="count__if_8hpp" kind="file"><name>count_if.hpp</name>
+  </compound>
+  <compound refid="find_8hpp" kind="file"><name>find.hpp</name>
+  </compound>
+  <compound refid="find__if_8hpp" kind="file"><name>find_if.hpp</name>
+  </compound>
+  <compound refid="find__if__not_8hpp" kind="file"><name>find_if_not.hpp</name>
+  </compound>
+  <compound refid="for__each_8hpp" kind="file"><name>for_each.hpp</name>
+  </compound>
+  <compound refid="none__of_8hpp" kind="file"><name>none_of.hpp</name>
+  </compound>
+  <compound refid="partitioner_8hpp" kind="file"><name>partitioner.hpp</name>
+  </compound>
+  <compound refid="default__partitioner_8hpp" kind="file"><name>default_partitioner.hpp</name>
+  </compound>
+  <compound refid="halve__partitioner_8hpp" kind="file"><name>halve_partitioner.hpp</name>
+  </compound>
+  <compound refid="partitioner__for_8hpp" kind="file"><name>partitioner_for.hpp</name>
+  </compound>
+  <compound refid="thread__partitioner_8hpp" kind="file"><name>thread_partitioner.hpp</name>
+  </compound>
+  <compound refid="policies_8hpp" kind="file"><name>policies.hpp</name>
+  </compound>
+  <compound refid="reduce_8hpp" kind="file"><name>reduce.hpp</name>
+  </compound>
+  <compound refid="algorithm_2traits_8hpp" kind="file"><name>traits.hpp</name>
+  </compound>
+  <compound refid="traits_8hpp" kind="file"><name>traits.hpp</name>
+  </compound>
+  <compound refid="binary__invoke__algorithm_8hpp" kind="file"><name>binary_invoke_algorithm.hpp</name>
+  </compound>
+  <compound refid="common__comparison__category_8hpp" kind="file"><name>common_comparison_category.hpp</name>
+  </compound>
+  <compound refid="is__assignable__from_8hpp" kind="file"><name>is_assignable_from.hpp</name>
+  </compound>
+  <compound refid="is__bidirectional__iterator_8hpp" kind="file"><name>is_bidirectional_iterator.hpp</name>
+  </compound>
+  <compound refid="is__constructible__from_8hpp" kind="file"><name>is_constructible_from.hpp</name>
+  </compound>
+  <compound refid="is__convertible__to_8hpp" kind="file"><name>is_convertible_to.hpp</name>
+  </compound>
+  <compound refid="is__copyable_8hpp" kind="file"><name>is_copyable.hpp</name>
+  </compound>
+  <compound refid="is__default__initializable_8hpp" kind="file"><name>is_default_initializable.hpp</name>
+  </compound>
+  <compound refid="is__derived__from_8hpp" kind="file"><name>is_derived_from.hpp</name>
+  </compound>
+  <compound refid="is__equality__comparable_8hpp" kind="file"><name>is_equality_comparable.hpp</name>
+  </compound>
+  <compound refid="is__equality__comparable__with_8hpp" kind="file"><name>is_equality_comparable_with.hpp</name>
+  </compound>
+  <compound refid="is__forward__iterator_8hpp" kind="file"><name>is_forward_iterator.hpp</name>
+  </compound>
+  <compound refid="is__incrementable_8hpp" kind="file"><name>is_incrementable.hpp</name>
+  </compound>
+  <compound refid="is__indirectly__binary__invocable_8hpp" kind="file"><name>is_indirectly_binary_invocable.hpp</name>
+  </compound>
+  <compound refid="is__indirectly__readable_8hpp" kind="file"><name>is_indirectly_readable.hpp</name>
+  </compound>
+  <compound refid="is__indirectly__unary__invocable_8hpp" kind="file"><name>is_indirectly_unary_invocable.hpp</name>
+  </compound>
+  <compound refid="is__input__iterator_8hpp" kind="file"><name>is_input_iterator.hpp</name>
+  </compound>
+  <compound refid="is__input__or__output__iterator_8hpp" kind="file"><name>is_input_or_output_iterator.hpp</name>
+  </compound>
+  <compound refid="is__input__range_8hpp" kind="file"><name>is_input_range.hpp</name>
+  </compound>
+  <compound refid="is__movable_8hpp" kind="file"><name>is_movable.hpp</name>
+  </compound>
+  <compound refid="is__move__constructible_8hpp" kind="file"><name>is_move_constructible.hpp</name>
+  </compound>
+  <compound refid="is__random__access__iterator_8hpp" kind="file"><name>is_random_access_iterator.hpp</name>
+  </compound>
+  <compound refid="is__range_8hpp" kind="file"><name>is_range.hpp</name>
+  </compound>
+  <compound refid="is__regular_8hpp" kind="file"><name>is_regular.hpp</name>
+  </compound>
+  <compound refid="is__semiregular_8hpp" kind="file"><name>is_semiregular.hpp</name>
+  </compound>
+  <compound refid="is__sentinel__for_8hpp" kind="file"><name>is_sentinel_for.hpp</name>
+  </compound>
+  <compound refid="is__swappable_8hpp" kind="file"><name>is_swappable.hpp</name>
+  </compound>
+  <compound refid="is__three__way__comparable_8hpp" kind="file"><name>is_three_way_comparable.hpp</name>
+  </compound>
+  <compound refid="is__three__way__comparable__with_8hpp" kind="file"><name>is_three_way_comparable_with.hpp</name>
+  </compound>
+  <compound refid="is__totally__ordered_8hpp" kind="file"><name>is_totally_ordered.hpp</name>
+  </compound>
+  <compound refid="is__totally__ordered__with_8hpp" kind="file"><name>is_totally_ordered_with.hpp</name>
+  </compound>
+  <compound refid="is__weakly__incrementable_8hpp" kind="file"><name>is_weakly_incrementable.hpp</name>
+  </compound>
+  <compound refid="iter__difference_8hpp" kind="file"><name>iter_difference.hpp</name>
+  </compound>
+  <compound refid="iter__reference_8hpp" kind="file"><name>iter_reference.hpp</name>
+  </compound>
+  <compound refid="iter__rvalue__reference_8hpp" kind="file"><name>iter_rvalue_reference.hpp</name>
+  </compound>
+  <compound refid="iter__value_8hpp" kind="file"><name>iter_value.hpp</name>
+  </compound>
+  <compound refid="iterator_8hpp" kind="file"><name>iterator.hpp</name>
+  </compound>
+  <compound refid="range__value_8hpp" kind="file"><name>range_value.hpp</name>
+  </compound>
+  <compound refid="remove__cvref_8hpp" kind="file"><name>remove_cvref.hpp</name>
+  </compound>
+  <compound refid="unary__invoke__algorithm_8hpp" kind="file"><name>unary_invoke_algorithm.hpp</name>
+  </compound>
+  <compound refid="value__cmp__algorithm_8hpp" kind="file"><name>value_cmp_algorithm.hpp</name>
+  </compound>
+  <compound refid="await_8hpp" kind="file"><name>await.hpp</name>
+  </compound>
+  <compound refid="config_8hpp" kind="file"><name>config.hpp</name>
+    <member refid="config_8hpp_1a5a4dfba09981d02a3737a4f8c04a924d" kind="define"><name>FUTURES_HAS_STANDALONE_ASIO</name></member>
+    <member refid="config_8hpp_1a72558b7fa543323dd91f532b1e5d6730" kind="define"><name>FUTURES_HAS_BOOST</name></member>
+    <member refid="config_8hpp_1aee57248b1b744817f4a2b02507b93d91" kind="define"><name>FUTURES_PREFER_STANDALONE_ASIO</name></member>
+    <member refid="config_8hpp_1a20fee02cefdd77c59419be521cba90ab" kind="define"><name>FUTURES_PREFER_BOOST</name></member>
+    <member refid="config_8hpp_1a1411791fc0bb5c82a23e24a875e9a5d2" kind="define"><name>FUTURES_SEPARATE_COMPILATION</name></member>
+    <member refid="config_8hpp_1a88c5f8bac9b8cee5d61caf298c83cf49" kind="define"><name>FUTURES_NO_EXCEPTIONS</name></member>
+    <member refid="config_8hpp_1aafd86f87f4188bfabe42994ad5b2fec4" kind="define"><name>FUTURES_CUSTOM_EXCEPTION_HANDLE</name></member>
+  </compound>
+  <compound refid="error_8hpp" kind="file"><name>error.hpp</name>
+    <member refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kind="define"><name>FUTURES_ERROR_TYPE</name></member>
+  </compound>
+  <compound refid="executor_8hpp" kind="file"><name>executor.hpp</name>
+  </compound>
+  <compound refid="any__executor_8hpp" kind="file"><name>any_executor.hpp</name>
+  </compound>
+  <compound refid="default__executor_8hpp" kind="file"><name>default_executor.hpp</name>
+  </compound>
+  <compound refid="execute_8hpp" kind="file"><name>execute.hpp</name>
+  </compound>
+  <compound refid="hardware__concurrency_8hpp" kind="file"><name>hardware_concurrency.hpp</name>
+  </compound>
+  <compound refid="inline__executor_8hpp" kind="file"><name>inline_executor.hpp</name>
+  </compound>
+  <compound refid="is__execution__context_8hpp" kind="file"><name>is_execution_context.hpp</name>
+  </compound>
+  <compound refid="is__executor_8hpp" kind="file"><name>is_executor.hpp</name>
+  </compound>
+  <compound refid="new__thread__executor_8hpp" kind="file"><name>new_thread_executor.hpp</name>
+  </compound>
+  <compound refid="thread__pool_8hpp" kind="file"><name>thread_pool.hpp</name>
+  </compound>
+  <compound refid="future_8hpp" kind="file"><name>future.hpp</name>
+  </compound>
+  <compound refid="future__options_8hpp" kind="file"><name>future_options.hpp</name>
+  </compound>
+  <compound refid="future__options__args_8hpp" kind="file"><name>future_options_args.hpp</name>
+  </compound>
+  <compound refid="future__status_8hpp" kind="file"><name>future_status.hpp</name>
+  </compound>
+  <compound refid="futures_8hpp" kind="file"><name>futures.hpp</name>
+  </compound>
+  <compound refid="is__ready_8hpp" kind="file"><name>is_ready.hpp</name>
+  </compound>
+  <compound refid="launch_8hpp" kind="file"><name>launch.hpp</name>
+  </compound>
+  <compound refid="packaged__task_8hpp" kind="file"><name>packaged_task.hpp</name>
+  </compound>
+  <compound refid="promise_8hpp" kind="file"><name>promise.hpp</name>
+  </compound>
+  <compound refid="stop__token_8hpp" kind="file"><name>stop_token.hpp</name>
+  </compound>
+  <compound refid="throw_8hpp" kind="file"><name>throw.hpp</name>
+  </compound>
+  <compound refid="future__value_8hpp" kind="file"><name>future_value.hpp</name>
+  </compound>
+  <compound refid="has__executor_8hpp" kind="file"><name>has_executor.hpp</name>
+  </compound>
+  <compound refid="has__ready__notifier_8hpp" kind="file"><name>has_ready_notifier.hpp</name>
+  </compound>
+  <compound refid="has__stop__token_8hpp" kind="file"><name>has_stop_token.hpp</name>
+  </compound>
+  <compound refid="is__always__deferred_8hpp" kind="file"><name>is_always_deferred.hpp</name>
+  </compound>
+  <compound refid="is__continuable_8hpp" kind="file"><name>is_continuable.hpp</name>
+  </compound>
+  <compound refid="is__future__like_8hpp" kind="file"><name>is_future_like.hpp</name>
+  </compound>
+  <compound refid="is__shared__future_8hpp" kind="file"><name>is_shared_future.hpp</name>
+  </compound>
+  <compound refid="is__stoppable_8hpp" kind="file"><name>is_stoppable.hpp</name>
+  </compound>
+  <compound refid="wait__for__all_8hpp" kind="file"><name>wait_for_all.hpp</name>
+  </compound>
+  <compound refid="wait__for__any_8hpp" kind="file"><name>wait_for_any.hpp</name>
+  </compound>
+  <compound refid="group__futures" kind="group"><name>futures</name>
+  </compound>
+  <compound refid="group__future-types" kind="group"><name>future-types</name>
+    <member refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kind="enum"><name>future_status</name></member>
+    <member refid="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6ab2fdab230a2c39f3595a947861863cb7" kind="enumvalue"><name>ready</name></member>
+    <member refid="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6a90272dda245ae1fb3cf197e91a8689dc" kind="enumvalue"><name>timeout</name></member>
+    <member refid="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6a43fff3df3fc0b3417c86dc3040fb2d86" kind="enumvalue"><name>deferred</name></member>
+    <member refid="group__future-types_1ga33c4a67592f57bcb5d04764d425c29a0" kind="typedef"><name>future</name></member>
+    <member refid="group__future-types_1ga691b06597181e3664dc3ab9a4976af6e" kind="typedef"><name>cfuture</name></member>
+    <member refid="group__future-types_1ga594ffcefc7c53a3eab6431c9d9ef8f65" kind="typedef"><name>jcfuture</name></member>
+    <member refid="group__future-types_1gaf9531b575c37bfe7fb80ff7e4c7b5b26" kind="typedef"><name>dfuture</name></member>
+    <member refid="group__future-types_1gab6f89384255b61ed8004b61c25cfa0b0" kind="typedef"><name>jdfuture</name></member>
+    <member refid="group__future-types_1gaf8ae95b0fa154b6b1aed392fc0b12c2d" kind="typedef"><name>vfuture</name></member>
+    <member refid="group__future-types_1ga7a01532e89adeadf5d9867b6bd767630" kind="typedef"><name>shared_future</name></member>
+    <member refid="group__future-types_1ga944b7785ed3941b348360bd463a29109" kind="typedef"><name>shared_cfuture</name></member>
+    <member refid="group__future-types_1ga85aeb742e0facea42147c5bca36dbafe" kind="typedef"><name>shared_jcfuture</name></member>
+    <member refid="group__future-types_1gac625c612509f8d6e983f18b30d4a50c7" kind="typedef"><name>shared_dfuture</name></member>
+    <member refid="group__future-types_1ga6ed365c544f18f9e09c5a291754cd3d3" kind="typedef"><name>shared_jdfuture</name></member>
+    <member refid="group__future-types_1ga0dbca35f60e6be3e06cf318a67042dd7" kind="typedef"><name>shared_vfuture</name></member>
+  </compound>
+  <compound refid="group__adaptors" kind="group"><name>adaptors</name>
+    <member refid="group__adaptors_1ga3d79a1bc16752e3a3b2d9cda6904178c" kind="function"><name>operator%</name></member>
+    <member refid="group__adaptors_1gacb4e00b6c170bb3ae76893524bfab046" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1ga659e9f6c7e24219433bf4079ada8e2b3" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1ga0e4df3e1f8048b61db143fdd7d29b9c7" kind="function"><name>make_ready_future</name></member>
+    <member refid="group__adaptors_1gab5ece643ec44101cce6bd81b2fb84966" kind="function"><name>make_exceptional_future</name></member>
+    <member refid="group__adaptors_1ga512555b53d37358d770df8df97e4e398" kind="function"><name>make_exceptional_future</name></member>
+    <member refid="group__adaptors_1ga4bc04aed0af78c914f202a2ccad236a0" kind="function"><name>then</name></member>
+    <member refid="group__adaptors_1ga3c5bcb86d6f7a938f4d1dea57dcfae0c" kind="function"><name>then</name></member>
+    <member refid="group__adaptors_1ga8e228fec77e89e5071dbd391d2d01523" kind="function"><name>operator&gt;&gt;</name></member>
+    <member refid="group__adaptors_1ga47832f9e4e10be3eec7abc2083d85be0" kind="function"><name>operator&gt;&gt;</name></member>
+    <member refid="group__adaptors_1gaf29fa7770136bef87fc206de9ced9485" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga5631320ae4a5b964c93f9ba3a812c3a1" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga8203d4f82bf8ee3bffae100123b0c601" kind="function"><name>when_all</name></member>
+    <member refid="group__adaptors_1ga2339ff3a16ab28b15882e8051977f2cb" kind="function"><name>operator&amp;&amp;</name></member>
+    <member refid="group__adaptors_1ga326cd907b4a3bf8a50327d66ce41bead" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1ga842a1ff92d9194317719529dcd49b42d" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1gaeba0729046288863d01773d2e13c5f13" kind="function"><name>when_any</name></member>
+    <member refid="group__adaptors_1ga2d3466eb250f13d9c7f909c4a07a787f" kind="function"><name>operator||</name></member>
+    <member refid="group__adaptors_1ga4b25abc5ba5c39102a1545d29d8c03a3" kind="function"><name>is_ready</name></member>
+  </compound>
+  <compound refid="group__algorithms" kind="group"><name>algorithms</name>
+  </compound>
+  <compound refid="group__functions" kind="group"><name>functions</name>
+    <member refid="group__functions_1ga0a19ce4d22f4c8a251aced2077623b03" kind="variable"><name>all_of</name></member>
+    <member refid="group__functions_1gac70d945839135728f9ac534f5a8626c9" kind="variable"><name>any_of</name></member>
+    <member refid="group__functions_1gaeb543fc7a0437fc057e2acf823abbb13" kind="variable"><name>count</name></member>
+    <member refid="group__functions_1ga0741d870e77e49d34e7daae10ecfb721" kind="variable"><name>count_if</name></member>
+    <member refid="group__functions_1ga15c434fa0fbabddf6b1ab8cf06760ec5" kind="variable"><name>find</name></member>
+    <member refid="group__functions_1ga10dff629b2c06c53c69024821bce5efc" kind="variable"><name>find_if</name></member>
+    <member refid="group__functions_1ga58db85c74ede4cc40c6e8735e3f228d7" kind="variable"><name>find_if_not</name></member>
+    <member refid="group__functions_1ga696ae412208d98f074d3ed6667e1a64f" kind="variable"><name>for_each</name></member>
+    <member refid="group__functions_1ga0fb3a8de3d488915fcd3ebe63d603731" kind="variable"><name>none_of</name></member>
+    <member refid="group__functions_1ga12eba09a0c6fb20ae5a7f3c561e2b433" kind="variable"><name>reduce</name></member>
+  </compound>
+  <compound refid="group__partitioners" kind="group"><name>partitioners</name>
+    <member refid="group__partitioners_1ga1dfbb885c6bb2f86870d55160dd16783" kind="typedef"><name>default_partitioner</name></member>
+    <member refid="group__partitioners_1gace2856b25ae230b1d91b1e1a79267cf5" kind="typedef"><name>is_partitioner_for</name></member>
+    <member refid="group__partitioners_1gac228eb71c167a6df66aa61d19253993d" kind="variable"><name>is_partitioner_for_v</name></member>
+    <member refid="group__partitioners_1ga20c9290c9184f57260f5d6f8692d73b6" kind="function"><name>make_grain_size</name></member>
+    <member refid="group__partitioners_1ga47766e8c4150a6b098bf298023669558" kind="function"><name>make_default_partitioner</name></member>
+    <member refid="group__partitioners_1ga39395da895517ad34cfa27ef8b1d6d87" kind="function"><name>make_default_partitioner</name></member>
+    <member refid="group__partitioners_1ga27d6c718a4152cd510382df27662a199" kind="function"><name>make_default_partitioner</name></member>
+  </compound>
+  <compound refid="group__execution-policies" kind="group"><name>execution-policies</name>
+    <member refid="group__execution-policies_1gaf5d088ab9052836d3d58c62a02697e26" kind="typedef"><name>sequenced_policy</name></member>
+    <member refid="group__execution-policies_1gaeb6a426f21b797b63d6cfd5f1a4585ee" kind="typedef"><name>parallel_policy</name></member>
+    <member refid="group__execution-policies_1ga1cfc7e6ec53363f996022ad8282b0cfe" kind="typedef"><name>parallel_unsequenced_policy</name></member>
+    <member refid="group__execution-policies_1gabaa708215fbcb22a94cc04f7ef726059" kind="typedef"><name>unsequenced_policy</name></member>
+    <member refid="group__execution-policies_1gabc55040ea2bc2503075ab0b70004899a" kind="variable"><name>seq</name></member>
+    <member refid="group__execution-policies_1ga15d309529b3196659d901c905bd0bbc6" kind="variable"><name>par</name></member>
+    <member refid="group__execution-policies_1ga2dfc04fa043d76435dfc6531db67a93d" kind="variable"><name>par_unseq</name></member>
+    <member refid="group__execution-policies_1ga92c59cac6e6ea17c04b929917c037446" kind="variable"><name>unseq</name></member>
+    <member refid="group__execution-policies_1ga91acd0da3465836ab08bfa9ed016d2dd" kind="variable"><name>is_execution_policy_v</name></member>
+  </compound>
+  <compound refid="group__algorithm-traits" kind="group"><name>algorithm-traits</name>
+  </compound>
+  <compound refid="group__traits" kind="group"><name>traits</name>
+    <member refid="group__traits_1gacd1a119404dd4b52bcb267a28c530720" kind="typedef"><name>common_comparison_category</name></member>
+    <member refid="group__traits_1gaa31c7a165f142f3cbb7523128b649038" kind="typedef"><name>common_comparison_category_t</name></member>
+    <member refid="group__traits_1ga7bda1c11fe675de42221596af9f0df5f" kind="typedef"><name>is_assignable_from</name></member>
+    <member refid="group__traits_1ga76db62394fec337406efe0efe4680339" kind="typedef"><name>is_bidirectional_iterator</name></member>
+    <member refid="group__traits_1gaa14660ab0fd62ba08cc33db046c7f3b1" kind="typedef"><name>is_constructible_from</name></member>
+    <member refid="group__traits_1ga478ba461a135cc0e9c291252ec9b2d8f" kind="typedef"><name>is_convertible_to</name></member>
+    <member refid="group__traits_1gafeeb5e8c14faf5518660bbbd61cadf2b" kind="typedef"><name>is_copyable</name></member>
+    <member refid="group__traits_1gade601510289810972f9caf8e2b4c73fb" kind="typedef"><name>is_default_initializable</name></member>
+    <member refid="group__traits_1ga1e386f4f05388c302d714c7d1a2c6aa2" kind="typedef"><name>is_derived_from</name></member>
+    <member refid="group__traits_1ga700cff8b3f85ddd38376e54c9ca3e6b8" kind="typedef"><name>is_equality_comparable</name></member>
+    <member refid="group__traits_1ga33c9e5b16ea99aea746e3bffa28cc56c" kind="typedef"><name>is_equality_comparable_with</name></member>
+    <member refid="group__traits_1ga848d84bbb112bc916c2efd34da93a572" kind="typedef"><name>is_forward_iterator</name></member>
+    <member refid="group__traits_1ga33d3975351d7b6285a7e0c8663e96c84" kind="typedef"><name>is_incrementable</name></member>
+    <member refid="group__traits_1gacec3cf84299f155f1a34a4984c69a8e3" kind="typedef"><name>is_indirectly_binary_invocable</name></member>
+    <member refid="group__traits_1ga5d997016e1af193a53e63e8d35454110" kind="typedef"><name>is_indirectly_readable</name></member>
+    <member refid="group__traits_1ga8a78009173a34f27d5d088459b744253" kind="typedef"><name>is_indirectly_unary_invocable</name></member>
+    <member refid="group__traits_1gafdc7cbe83b02548031e1457c533b0413" kind="typedef"><name>is_input_iterator</name></member>
+    <member refid="group__traits_1ga787d4f89658a472119f07b2b0797000f" kind="typedef"><name>is_input_or_output_iterator</name></member>
+    <member refid="group__traits_1gaf1bf7865ae3e06fd952ef1f861a28f70" kind="typedef"><name>is_input_range</name></member>
+    <member refid="group__traits_1gaf041a0c651e1e59ea18df0e2dc2dc8fe" kind="typedef"><name>is_movable</name></member>
+    <member refid="group__traits_1gae4e9bd33e6ed647165d69f3ece27935d" kind="typedef"><name>is_move_constructible</name></member>
+    <member refid="group__traits_1ga0a68b1cb70778749f176868ea5489453" kind="typedef"><name>is_random_access_iterator</name></member>
+    <member refid="group__traits_1gaea08f93eea232d08478c9cc04773e116" kind="typedef"><name>is_range</name></member>
+    <member refid="group__traits_1ga6c651460b5dfa33f143fef4514c3120b" kind="typedef"><name>is_regular</name></member>
+    <member refid="group__traits_1ga1f7dc3c45de0abcd0e466f853e283679" kind="typedef"><name>is_semiregular</name></member>
+    <member refid="group__traits_1ga5dea935029d8615e75f76c5d244f1a46" kind="typedef"><name>is_sentinel_for</name></member>
+    <member refid="group__traits_1gaced3438d14261ee82a0efa2cff8a08e4" kind="typedef"><name>is_swappable</name></member>
+    <member refid="group__traits_1gac22a6b82a79830ec1177653c62c89597" kind="typedef"><name>is_three_way_comparable</name></member>
+    <member refid="group__traits_1ga7d342b63b24fa9b3a399a8be75a909b1" kind="typedef"><name>is_three_way_comparable_with</name></member>
+    <member refid="group__traits_1gacca0150c5cccef1847a596ff7dbfb85c" kind="typedef"><name>is_totally_ordered</name></member>
+    <member refid="group__traits_1ga3e7a594dd861beb0287aab525b8d44d8" kind="typedef"><name>is_totally_ordered_with</name></member>
+    <member refid="group__traits_1ga9420a5b6af74d0339ded7b71b49aae5c" kind="typedef"><name>is_weakly_incrementable</name></member>
+    <member refid="group__traits_1ga0cd4722e248e01dcf1f077f5b64dd135" kind="typedef"><name>iter_difference</name></member>
+    <member refid="group__traits_1gadb88ead4be9c831ffd25b07850d1f1db" kind="typedef"><name>iter_difference_t</name></member>
+    <member refid="group__traits_1gae8d16e13ff22db3256af14a4d4b89fa9" kind="typedef"><name>iter_reference</name></member>
+    <member refid="group__traits_1ga4b1badc7c239d872ac366d4a8c57101a" kind="typedef"><name>iter_reference_t</name></member>
+    <member refid="group__traits_1ga512a5a98c50c6dd379e05bb4934ceed2" kind="typedef"><name>iter_rvalue_reference</name></member>
+    <member refid="group__traits_1ga2de87617ebb91ba233b7d4f5ee08e703" kind="typedef"><name>iter_rvalue_reference_t</name></member>
+    <member refid="group__traits_1gab7bdd46a3627a696302c30934567f51d" kind="typedef"><name>iter_value</name></member>
+    <member refid="group__traits_1gabd912e4dacd864daedb36cd1f39e1723" kind="typedef"><name>iter_value_t</name></member>
+    <member refid="group__traits_1gaba9b74185a646620729400ed744f7ecc" kind="typedef"><name>iterator</name></member>
+    <member refid="group__traits_1ga25b9349b8a29ca3bea4913f8b704e515" kind="typedef"><name>iterator_t</name></member>
+    <member refid="group__traits_1gaa097d6855d1af3709d4facf9848b3088" kind="typedef"><name>range_value</name></member>
+    <member refid="group__traits_1ga36b10fa59d1005a75cecb03df26b12d8" kind="typedef"><name>range_value_t</name></member>
+    <member refid="group__traits_1gab2f4c9b824ed7e93242a4f61967218df" kind="typedef"><name>remove_cvref</name></member>
+    <member refid="group__traits_1ga08dfd6b7fc387123f45b76f825a47193" kind="typedef"><name>remove_cvref_t</name></member>
+    <member refid="group__traits_1ga77606ec080e615c4f83c1a737589268d" kind="variable"><name>is_assignable_from_v</name></member>
+    <member refid="group__traits_1ga53831f07f1d23a5c9575f717bf4c4ce1" kind="variable"><name>is_bidirectional_iterator_v</name></member>
+    <member refid="group__traits_1ga6c5fc06c5acf15dbbc0e490988e0bbcc" kind="variable"><name>is_constructible_from_v</name></member>
+    <member refid="group__traits_1ga99d9a1bd8e1ab89863224c78b515e4e1" kind="variable"><name>is_convertible_to_v</name></member>
+    <member refid="group__traits_1ga19bdaf3c43f699426957a966a1d16c37" kind="variable"><name>is_copyable_v</name></member>
+    <member refid="group__traits_1ga25c80aeac9b688386b0755fd4f7e2236" kind="variable"><name>is_default_initializable_v</name></member>
+    <member refid="group__traits_1gac0544fcb34d2441bf49ecd2b4165b727" kind="variable"><name>is_derived_from_v</name></member>
+    <member refid="group__traits_1ga8465918081b89b0713376f47aa9e51cf" kind="variable"><name>is_equality_comparable_v</name></member>
+    <member refid="group__traits_1ga5a60f9e666ffd6d75f260a8cd79c4fcb" kind="variable"><name>is_equality_comparable_with_v</name></member>
+    <member refid="group__traits_1ga39f0eb89da25215eabcb5b741a1f2f8f" kind="variable"><name>is_forward_iterator_v</name></member>
+    <member refid="group__traits_1gab9d3117a9157923b43113f8950b58ea6" kind="variable"><name>is_incrementable_v</name></member>
+    <member refid="group__traits_1ga2ce9de37185584b4cc70508a0c709f72" kind="variable"><name>is_indirectly_binary_invocable_v</name></member>
+    <member refid="group__traits_1ga39b8d413d2e15c20ad26708791d48c96" kind="variable"><name>is_indirectly_readable_v</name></member>
+    <member refid="group__traits_1ga035daff7f18105b4ec196371bdeb6d5c" kind="variable"><name>is_indirectly_unary_invocable_v</name></member>
+    <member refid="group__traits_1ga164df25f7613782d753e35e084c236b7" kind="variable"><name>is_input_iterator_v</name></member>
+    <member refid="group__traits_1gac5975521439989723185832ac2645166" kind="variable"><name>is_input_or_output_iterator_v</name></member>
+    <member refid="group__traits_1gac9784d2e05f3cf8a9f9590f04f123e74" kind="variable"><name>is_input_range_v</name></member>
+    <member refid="group__traits_1ga9900979cf6cb29a928197a494ccfd023" kind="variable"><name>is_movable_v</name></member>
+    <member refid="group__traits_1gaaba2a10a79777082f19420c161b7ca40" kind="variable"><name>is_move_constructible_v</name></member>
+    <member refid="group__traits_1gae9954a411bcf40e3f06c2c24b4b0a6bd" kind="variable"><name>is_random_access_iterator_v</name></member>
+    <member refid="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" kind="variable"><name>is_range_v</name></member>
+    <member refid="group__traits_1gaaa5f05191e3a4aaf4b084d1c29559bc4" kind="variable"><name>is_regular_v</name></member>
+    <member refid="group__traits_1gadcef95d15ae7d9498b6c45d0f05bc648" kind="variable"><name>is_semiregular_v</name></member>
+    <member refid="group__traits_1gacadf25f8f6492d3710eb2d513b0dc7a7" kind="variable"><name>is_sentinel_for_v</name></member>
+    <member refid="group__traits_1ga3df986359d7ffe87ad775677e9e46326" kind="variable"><name>is_swappable_v</name></member>
+    <member refid="group__traits_1ga7f63cfc0969c7768a3ed2fb040a99b95" kind="variable"><name>is_three_way_comparable_v</name></member>
+    <member refid="group__traits_1ga8830992102877a3f25d09866d080333f" kind="variable"><name>is_three_way_comparable_with_v</name></member>
+    <member refid="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" kind="variable"><name>is_totally_ordered_v</name></member>
+    <member refid="group__traits_1gafa9051526c36ea222da0f4d83f3d3b66" kind="variable"><name>is_totally_ordered_with_v</name></member>
+    <member refid="group__traits_1gaa514a224bede48a6941ec53d58b3692f" kind="variable"><name>is_weakly_incrementable_v</name></member>
+  </compound>
+  <compound refid="group__waiting" kind="group"><name>waiting</name>
+    <member refid="group__waiting_1ga3aff4d8b5cd3b961aaf86f0c59652d5e" kind="function"><name>await</name></member>
+    <member refid="group__waiting_1ga6e65f21a7e07afbab340ede45e568068" kind="function"><name>await</name></member>
+    <member refid="group__waiting_1ga059ba1404ba968cb2cb108a76f9cffa8" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gabbd368b77796881cce9c951099f7a25a" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gaa3ea0a0826fda6a1c9c7f9b5ad3be390" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gadc987f5c0fbf9c029b6e4fd303778e06" kind="function"><name>wait_for_all</name></member>
+    <member refid="group__waiting_1gabe48c8000499e7d6b858c2ba03f24f9d" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1ga03aaee3fbed390c33ca18829365f457f" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1ga5ca790c41550c9952a733a5c3ec4f9d3" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1gabe33547dffed01e98f0fbb5e6b250e5c" kind="function"><name>wait_for_all_for</name></member>
+    <member refid="group__waiting_1gab87515245b042239085fb0c231dbf49d" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1gaec7ba0721287ed2d804fefcf60aeb043" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga5176c9911068fd8dec7347b45b99ed64" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga1e43cb93d4aca81d2313dc2ce032ec91" kind="function"><name>wait_for_all_until</name></member>
+    <member refid="group__waiting_1ga7fa10c7413d3b02bcf65e63ead2185c1" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga5a34d89268642da91a61c25184b47095" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga7ad63bcada8c89257d6338a0f40c6622" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1ga9e77d6e17363998b5efbe74b4d0b2acb" kind="function"><name>wait_for_any</name></member>
+    <member refid="group__waiting_1gad32e2da4457116249c758eed1550e3ab" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1ga916e8c489e9b283a63304287b9d86a8e" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1gac858955f3202d94606e73574f302f9c9" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1gaa71e8ffc7c5260316fea850335e29860" kind="function"><name>wait_for_any_for</name></member>
+    <member refid="group__waiting_1ga55f81bf19839326a15d9daad7667cc2a" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1ga498289356066c74ee09b692586f55b8e" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1ga109330c8b2744f4d74464a2533b98556" kind="function"><name>wait_for_any_until</name></member>
+    <member refid="group__waiting_1gab0146fa5deaf49968c0aa421ebca990b" kind="function"><name>wait_for_any_until</name></member>
+  </compound>
+  <compound refid="group__error" kind="group"><name>error</name>
+    <member refid="group__error_1ga6b514c11923c676167997aae802757b8" kind="enum"><name>future_errc</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8a2c6bc6062e72db1c0915032943cb6452" kind="enumvalue"><name>broken_promise</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8a829037befd349f04ff71ddea385bdb9a" kind="enumvalue"><name>future_already_retrieved</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8a9327d6f7b9aca59b62b436696fd17a00" kind="enumvalue"><name>promise_already_satisfied</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8ac537dcef56fd6ff75592c0220fd3dae1" kind="enumvalue"><name>no_state</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8a10a2ce2357c08905b322144ac783b248" kind="enumvalue"><name>promise_uninitialized</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8ada2a787ba1dc30bb1fdcd016be91c974" kind="enumvalue"><name>packaged_task_uninitialized</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8af7626f3bd2a01c1cf17826a6a0302d7b" kind="enumvalue"><name>future_uninitialized</name></member>
+    <member refid="group__error_1gga6b514c11923c676167997aae802757b8a2002f5e501ea387b93c160010199797b" kind="enumvalue"><name>future_deferred</name></member>
+    <member refid="group__error_1gaa09c7b0f3e466783023afb96eea90fad" kind="typedef"><name>source_location</name></member>
+    <member refid="group__error_1ga1d60ca812337944e729a84a9f37195ab" kind="function"><name>handle_exception</name></member>
+    <member refid="group__error_1ga3ee1de4e2e5e2809f8936319b4b2ce09" kind="function"><name>throw_exception</name></member>
+    <member refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kind="define"><name>FUTURES_ERROR_TYPE</name></member>
+  </compound>
+  <compound refid="group__executors" kind="group"><name>executors</name>
+    <member refid="group__executors_1gaf961f88543ab12949fd90f310bc90663" kind="typedef"><name>default_execution_context_type</name></member>
+    <member refid="group__executors_1gacdecb5da8c06084b542ae33964dba59b" kind="typedef"><name>default_executor_type</name></member>
+    <member refid="group__executors_1gad9066c383b30d857c2527720c86f0a71" kind="typedef"><name>is_execution_context_for</name></member>
+    <member refid="group__executors_1ga50b8774bb35c27e2150e9080a3590038" kind="typedef"><name>is_execution_context</name></member>
+    <member refid="group__executors_1ga6702c04e6873f0a2ce6344a5dd3a60a7" kind="typedef"><name>is_executor_for</name></member>
+    <member refid="group__executors_1gaabcc65b63cd88a8479054d368e688f27" kind="typedef"><name>is_executor</name></member>
+    <member refid="group__executors_1ga1ce8960b0f1aeaf6f5d9c1a08291041d" kind="variable"><name>is_execution_context_for_v</name></member>
+    <member refid="group__executors_1ga7a06e7d040be2e43b5ae92f8b754133b" kind="variable"><name>is_execution_context_v</name></member>
+    <member refid="group__executors_1ga29e93e53607e1d7fd42078006e8d2155" kind="variable"><name>is_executor_for_v</name></member>
+    <member refid="group__executors_1ga27c20c657a0f5357f9523df487980a88" kind="variable"><name>is_executor_v</name></member>
+    <member refid="group__executors_1ga046c80f7c9ec8c63cd18bebe62f3ce3f" kind="function"><name>default_execution_context</name></member>
+    <member refid="group__executors_1ga1ab933a38b4db38d0955b3e6764dd90d" kind="function"><name>make_default_executor</name></member>
+    <member refid="group__executors_1gaa58c1bc10fe96080f355b709a30473f6" kind="function"><name>hardware_concurrency</name></member>
+    <member refid="group__executors_1ga8402f32dc6d52a81897b54b45ec84616" kind="function"><name>make_inline_executor</name></member>
+    <member refid="group__executors_1ga421a5f50523a4c393344869afbb7a85f" kind="function"><name>make_new_thread_executor</name></member>
+  </compound>
+  <compound refid="group__future-options" kind="group"><name>future-options</name>
+    <member refid="group__future-options_1ga068aa34de70d0b9bc581127c7d46d08e" kind="typedef"><name>future_options</name></member>
+  </compound>
+  <compound refid="group__launch" kind="group"><name>launch</name>
+    <member refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kind="function"><name>async</name></member>
+    <member refid="group__launch_1ga85e60c1de0d37a14ec5623e85ae9a0c7" kind="function"><name>async</name></member>
+    <member refid="group__launch_1gaa3cac9f64c928b7c63acd65c6e17cc69" kind="function"><name>schedule</name></member>
+    <member refid="group__launch_1ga5132dec81e533dfd824848751a1a3565" kind="function"><name>schedule</name></member>
+  </compound>
+  <compound refid="group__shared__state" kind="group"><name>shared_state</name>
+    <member refid="group__shared__state_1ga320f807f067a8d02c4d0e9ed66e53b0b" kind="function"><name>swap</name></member>
+    <member refid="group__shared__state_1ga9a3170dfeff3872b6a6bcfab5ce63e66" kind="function"><name>swap</name></member>
+  </compound>
+  <compound refid="group__cancellation" kind="group"><name>cancellation</name>
+    <member refid="group__cancellation_1ga01213ebdf9bd19b06e4860d863094735" kind="variable"><name>nostopstate</name></member>
+  </compound>
+  <compound refid="group__future-traits" kind="group"><name>future-traits</name>
+    <member refid="group__future-traits_1ga6b9f710ec419153132923160875d24ad" kind="typedef"><name>future_value</name></member>
+    <member refid="group__future-traits_1ga6e31e50532fd1185e4321c4b76918907" kind="typedef"><name>future_value_t</name></member>
+    <member refid="group__future-traits_1ga721bbb35763f4def43c4360cf80e7363" kind="typedef"><name>has_stop_token</name></member>
+    <member refid="group__future-traits_1ga367eb573176946bd3c564a385eb549fe" kind="typedef"><name>is_stoppable</name></member>
+    <member refid="group__future-traits_1ga1d65f925849576acd6b5a4a6333d1380" kind="variable"><name>has_executor_v</name></member>
+    <member refid="group__future-traits_1gaaa06f944510ee5b88b996ec9e1f41adb" kind="variable"><name>has_ready_notifier_v</name></member>
+    <member refid="group__future-traits_1ga298d5e966d0a87153c8feb6dfaf6a222" kind="variable"><name>has_stop_token_v</name></member>
+    <member refid="group__future-traits_1ga61c743647bbfe6907f93a674af321ad1" kind="variable"><name>is_always_deferred_v</name></member>
+    <member refid="group__future-traits_1gaa1dab24425678e965a56ff21c6d1624e" kind="variable"><name>is_continuable_v</name></member>
+    <member refid="group__future-traits_1gaafc70e30ead3e35866fa26ba79b3721d" kind="variable"><name>is_future_like_v</name></member>
+    <member refid="group__future-traits_1ga98d13b2d7d89edd37c377b59e2c3d6f5" kind="variable"><name>is_shared_future_v</name></member>
+    <member refid="group__future-traits_1gad4b42cfc7fecf09378dbf1548501a366" kind="variable"><name>is_stoppable_v</name></member>
+  </compound>
+  <compound refid="dir_7600b8ee04eb55a58ff8852c23efb638" kind="dir"><name>futures/adaptor</name>
+  </compound>
+  <compound refid="dir_e7b4090e56732c0d3902af1e1fd5618b" kind="dir"><name>futures/algorithm</name>
+  </compound>
+  <compound refid="dir_34b5388a361cceed2f002017f04883fe" kind="dir"><name>futures/algorithm/compare</name>
+  </compound>
+  <compound refid="dir_df6dfc4d57e7b6f5a7fc1dc1541dbff4" kind="dir"><name>futures/executor</name>
+  </compound>
+  <compound refid="dir_1cd73713a542b57572a4ff9fdd4ed6a7" kind="dir"><name>futures</name>
+  </compound>
+  <compound refid="dir_e0a1cc086a107475864c8fa8ce1ca572" kind="dir"><name>futures/algorithm/partitioner</name>
+  </compound>
+  <compound refid="dir_f487c0495566dbafde251364b6bff68f" kind="dir"><name>futures/algorithm/traits</name>
+  </compound>
+  <compound refid="dir_04dc2de138a37a89cd3cb54fe1e11cf0" kind="dir"><name>futures/traits</name>
+  </compound>
+</doxygenindex>

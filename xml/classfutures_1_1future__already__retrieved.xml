@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1future__already__retrieved" kind="class" language="C++" prot="public">
+    <compoundname>futures::future_already_retrieved</compoundname>
+    <basecompoundref refid="classfutures_1_1error" prot="public" virt="non-virtual">futures::error</basecompoundref>
+    <includes refid="error_8hpp" local="no">error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1future__already__retrieved_1a25ff805f4a35256b46818e3992bd6dfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::future_already_retrieved::future_already_retrieved</definition>
+        <argsstring>()</argsstring>
+        <name>future_already_retrieved</name>
+        <qualifiedname>futures::future_already_retrieved::future_already_retrieved</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="138" column="60" bodyfile="futures/error.hpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Attempted to retrieve a unique future twice. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::future_already_retrieved</label>
+        <link refid="classfutures_1_1future__already__retrieved"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::system_error</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::future_already_retrieved</label>
+        <link refid="classfutures_1_1future__already__retrieved"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::system_error</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/error.hpp" line="138" column="5" bodyfile="futures/error.hpp" bodystart="138" bodyend="138"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" prot="public" virt="non-virtual"><scope>futures::future_already_retrieved</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" prot="public" virt="non-virtual"><scope>futures::future_already_retrieved</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" prot="public" virt="non-virtual"><scope>futures::future_already_retrieved</scope><name>error</name></member>
+      <member refid="classfutures_1_1future__already__retrieved_1a25ff805f4a35256b46818e3992bd6dfb" prot="public" virt="non-virtual"><scope>futures::future_already_retrieved</scope><name>future_already_retrieved</name></member>
+      <member refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" prot="public" virt="non-virtual"><scope>futures::future_already_retrieved</scope><name>~error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

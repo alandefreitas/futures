@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_1cd73713a542b57572a4ff9fdd4ed6a7" kind="dir">
+    <compoundname>futures</compoundname>
+    <innerdir refid="dir_7600b8ee04eb55a58ff8852c23efb638">futures/adaptor</innerdir>
+    <innerdir refid="dir_e7b4090e56732c0d3902af1e1fd5618b">futures/algorithm</innerdir>
+    <innerdir refid="dir_df6dfc4d57e7b6f5a7fc1dc1541dbff4">futures/executor</innerdir>
+    <innerdir refid="dir_04dc2de138a37a89cd3cb54fe1e11cf0">futures/traits</innerdir>
+    <innerfile refid="adaptor_8hpp">adaptor.hpp</innerfile>
+    <innerfile refid="algorithm_8hpp">algorithm.hpp</innerfile>
+    <innerfile refid="await_8hpp">await.hpp</innerfile>
+    <innerfile refid="config_8hpp">config.hpp</innerfile>
+    <innerfile refid="error_8hpp">error.hpp</innerfile>
+    <innerfile refid="executor_8hpp">executor.hpp</innerfile>
+    <innerfile refid="future_8hpp">future.hpp</innerfile>
+    <innerfile refid="future__options_8hpp">future_options.hpp</innerfile>
+    <innerfile refid="future__options__args_8hpp">future_options_args.hpp</innerfile>
+    <innerfile refid="future__status_8hpp">future_status.hpp</innerfile>
+    <innerfile refid="futures_8hpp">futures.hpp</innerfile>
+    <innerfile refid="is__ready_8hpp">is_ready.hpp</innerfile>
+    <innerfile refid="launch_8hpp">launch.hpp</innerfile>
+    <innerfile refid="packaged__task_8hpp">packaged_task.hpp</innerfile>
+    <innerfile refid="promise_8hpp">promise.hpp</innerfile>
+    <innerfile refid="stop__token_8hpp">stop_token.hpp</innerfile>
+    <innerfile refid="throw_8hpp">throw.hpp</innerfile>
+    <innerfile refid="traits_8hpp">traits.hpp</innerfile>
+    <innerfile refid="wait__for__all_8hpp">wait_for_all.hpp</innerfile>
+    <innerfile refid="wait__for__any_8hpp">wait_for_any.hpp</innerfile>
+    <briefdescription>
+<para>Root library directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The root directory contains headers related to the main module, including futures and basic functionality. </para>
+    </detaileddescription>
+    <location file="futures/"/>
+  </compounddef>
+</doxygen>

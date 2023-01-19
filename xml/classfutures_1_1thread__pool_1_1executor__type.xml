@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1thread__pool_1_1executor__type" kind="class" language="C++" prot="public">
+    <compoundname>futures::thread_pool::executor_type</compoundname>
+    <includes refid="thread__pool_8hpp" local="no">thread_pool.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="classfutures_1_1thread__pool_1_1executor__type_1a63d668995109028bdc9cdbb726de4807" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class thread_pool</definition>
+        <argsstring></argsstring>
+        <name>thread_pool</name>
+        <qualifiedname>futures::thread_pool::executor_type::thread_pool</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1thread__pool" kindref="compound">thread_pool</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="34" column="26" bodyfile="futures/executor/thread_pool.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1thread__pool_1_1executor__type_1a53cafc018affd1fbf9cc5672ba20cf3a" prot="private" static="no" mutable="no">
+        <type>asio::thread_pool::executor_type</type>
+        <definition>asio::thread_pool::executor_type futures::thread_pool::executor_type::ex_</definition>
+        <argsstring></argsstring>
+        <name>ex_</name>
+        <qualifiedname>futures::thread_pool::executor_type::ex_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="35" column="46" bodyfile="futures/executor/thread_pool.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1_1executor__type_1a15efbb7294a119f92ca9e9de69189527" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::thread_pool::executor_type::executor_type</definition>
+        <argsstring>(asio::thread_pool::executor_type ex)</argsstring>
+        <name>executor_type</name>
+        <qualifiedname>futures::thread_pool::executor_type::executor_type</qualifiedname>
+        <param>
+          <type>asio::thread_pool::executor_type</type>
+          <declname>ex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="36" column="13" bodyfile="futures/executor/thread_pool.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1thread__pool_1_1executor__type_1a48f6a97f2fd4f782965e64d51ec0f423" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::thread_pool::executor_type::execute</definition>
+        <argsstring>(F &amp;&amp;f) const</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::thread_pool::executor_type::execute</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/thread_pool.hpp" line="40" column="13" bodyfile="futures/executor/thread_pool.hpp" bodystart="40" bodyend="42"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A executor that sends tasks to the thread pool. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/executor/thread_pool.hpp" line="33" column="9" bodyfile="futures/executor/thread_pool.hpp" bodystart="33" bodyend="43"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1thread__pool_1_1executor__type_1a53cafc018affd1fbf9cc5672ba20cf3a" prot="private" virt="non-virtual"><scope>futures::thread_pool::executor_type</scope><name>ex_</name></member>
+      <member refid="classfutures_1_1thread__pool_1_1executor__type_1a48f6a97f2fd4f782965e64d51ec0f423" prot="public" virt="non-virtual"><scope>futures::thread_pool::executor_type</scope><name>execute</name></member>
+      <member refid="classfutures_1_1thread__pool_1_1executor__type_1a15efbb7294a119f92ca9e9de69189527" prot="private" virt="non-virtual"><scope>futures::thread_pool::executor_type</scope><name>executor_type</name></member>
+      <member refid="classfutures_1_1thread__pool_1_1executor__type_1a63d668995109028bdc9cdbb726de4807" prot="private" virt="non-virtual"><scope>futures::thread_pool::executor_type</scope><name>thread_pool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

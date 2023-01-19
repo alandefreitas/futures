@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="error_8hpp" kind="file" language="C++">
+    <compoundname>error.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">futures/config.hpp</includes>
+    <includes local="no">futures/detail/traits/std_type_traits.hpp</includes>
+    <includes local="no">system_error</includes>
+    <includes local="no">futures/impl/error.hpp</includes>
+    <includedby refid="futures_8hpp" local="no">futures/futures.hpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/error.hpp</label>
+        <link refid="error_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="5">
+        <label>futures/detail/traits/std_type_traits.hpp</label>
+      </node>
+      <node id="4">
+        <label>futures/impl/config.hpp</label>
+      </node>
+      <node id="7">
+        <label>futures/impl/error.hpp</label>
+      </node>
+      <node id="6">
+        <label>system_error</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>futures/error.hpp</label>
+        <link refid="error_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classfutures_1_1error" prot="public">futures::error</innerclass>
+    <innerclass refid="classfutures_1_1broken__promise" prot="public">futures::broken_promise</innerclass>
+    <innerclass refid="classfutures_1_1future__already__retrieved" prot="public">futures::future_already_retrieved</innerclass>
+    <innerclass refid="classfutures_1_1promise__already__satisfied" prot="public">futures::promise_already_satisfied</innerclass>
+    <innerclass refid="classfutures_1_1no__state" prot="public">futures::no_state</innerclass>
+    <innerclass refid="classfutures_1_1promise__uninitialized" prot="public">futures::promise_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1packaged__task__uninitialized" prot="public">futures::packaged_task_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__uninitialized" prot="public">futures::future_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1future__deferred" prot="public">futures::future_deferred</innerclass>
+    <innernamespace refid="namespacefutures">futures</innernamespace>
+      <sectiondef kind="define">
+      <member refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kind="define"><name>FUTURES_ERROR_TYPE</name></member>
+      </sectiondef>
+    <briefdescription>
+<para>Future error types. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This file defines error types used by futures types and algorithms. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2021<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ERROR_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ERROR_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">futures/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;futures/detail/traits/std_type_traits.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;system_error&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacefutures" kindref="compound">futures</ref><sp/>{</highlight></codeline>
+<codeline lineno="34" refid="group__error_1ga6b514c11923c676167997aae802757b8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum<sp/>class</highlight><highlight class="normal"><sp/><ref refid="group__error_1ga6b514c11923c676167997aae802757b8" kindref="member">future_errc</ref></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1broken__promise" kindref="compound">broken_promise</ref><sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1future__already__retrieved" kindref="compound">future_already_retrieved</ref>,</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1promise__already__satisfied" kindref="compound">promise_already_satisfied</ref>,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1no__state" kindref="compound">no_state</ref>,</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1promise__uninitialized" kindref="compound">promise_uninitialized</ref>,</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1packaged__task__uninitialized" kindref="compound">packaged_task_uninitialized</ref>,</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1future__uninitialized" kindref="compound">future_uninitialized</ref>,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1future__deferred" kindref="compound">future_deferred</ref>,</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60" refid="classfutures_1_1error" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classfutures_1_1error" kindref="compound">error</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>std::system_error<sp/>{</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="63"><highlight class="preprocessor">#ifdef<sp/>FUTURES_HAS_CONCEPTS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;)</highlight></codeline>
+<codeline lineno="68"><highlight class="normal">#</highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::enable_if_t&lt;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0&gt;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal">#endif</highlight></codeline>
+<codeline lineno="77" refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" kindref="member">error</ref>(ErrorCodeEnum<sp/>ec)<sp/>:<sp/>std::system_error{<sp/>ec<sp/>}<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="preprocessor">#ifdef<sp/>FUTURES_HAS_CONCEPTS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;)</highlight></codeline>
+<codeline lineno="86"><highlight class="normal">#</highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::enable_if_t&lt;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;,</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0&gt;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">#endif</highlight></codeline>
+<codeline lineno="95" refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" kindref="member">error</ref>(ErrorCodeEnum<sp/>ec,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>*what_arg)</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>std::system_error{<sp/>ec,<sp/>what_arg<sp/>}<sp/>{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="preprocessor">#ifdef<sp/>FUTURES_HAS_CONCEPTS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;)</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">#</highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>ErrorCodeEnum,</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::enable_if_t&lt;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>||<sp/>detail::is_same_v&lt;ErrorCodeEnum,<sp/>std::error_code&gt;,</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0&gt;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">#endif</highlight></codeline>
+<codeline lineno="114" refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" kindref="member">error</ref>(ErrorCodeEnum<sp/>ec,<sp/>std::string<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;what_arg)</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>std::system_error{<sp/>ec,<sp/>what_arg<sp/>}<sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119" refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" kindref="member">~error</ref>()<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal"><sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_DOXYGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>FUTURES_DECLARE</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>std::error_code</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>make_error_code(<ref refid="group__error_1ga6b514c11923c676167997aae802757b8" kindref="member">future_errc</ref><sp/>code);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128" refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ERROR_TYPE(name)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="129"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>class<sp/>name<sp/>:<sp/>public<sp/>error<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="130"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>public:<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="131"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>name()<sp/>:<sp/>error{<sp/>make_error_code(future_errc::name)<sp/>}<sp/>{}<sp/>\</highlight></codeline>
+<codeline lineno="132"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135" refid="classfutures_1_1broken__promise_1a5298cab8c9eaa1ef8192086b2922a02b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1broken__promise" kindref="compound">broken_promise</ref>);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138" refid="classfutures_1_1future__already__retrieved_1a25ff805f4a35256b46818e3992bd6dfb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1future__already__retrieved" kindref="compound">future_already_retrieved</ref>);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141" refid="classfutures_1_1promise__already__satisfied_1a3cfaf964df7c75d2b66a23de418a7078" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1promise__already__satisfied" kindref="compound">promise_already_satisfied</ref>);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="144" refid="classfutures_1_1no__state_1af5ea4ed60208051c364da0f3e196e112" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1no__state" kindref="compound">no_state</ref>);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147" refid="classfutures_1_1promise__uninitialized_1a688f16acc5a35a3b3daacfd32489f965" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1promise__uninitialized" kindref="compound">promise_uninitialized</ref>);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150" refid="classfutures_1_1packaged__task__uninitialized_1a8048ae0310275fc0712c84c7d7620d90" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1packaged__task__uninitialized" kindref="compound">packaged_task_uninitialized</ref>);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153" refid="classfutures_1_1future__uninitialized_1adf684ddf0eca1cd493076e87a7846b86" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1future__uninitialized" kindref="compound">future_uninitialized</ref>);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156" refid="classfutures_1_1future__deferred_1a3a5b5f6f4f5732ad2f50ee404fb384ba" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__error_1ga5bc7f37ffbd0f57c1f8d7769a3fdd0e4" kindref="member">FUTURES_ERROR_TYPE</ref>(<ref refid="classfutures_1_1future__deferred" kindref="compound">future_deferred</ref>);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>FUTURES_ERROR_TYPE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>futures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;futures/impl/error.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>FUTURES_HEADER_ONLY</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>include<sp/>&lt;futures/impl/error.ipp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_ERROR_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/error.hpp"/>
+  </compounddef>
+</doxygen>

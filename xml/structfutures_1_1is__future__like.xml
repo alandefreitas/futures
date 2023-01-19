@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1is__future__like" kind="struct" language="C++" prot="public">
+    <compoundname>futures::is_future_like</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Customization point to determine if a type is a future type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This trait identifies whether the type represents a future value.</para>
+<para>Unless the trait is specialized, a type is considered future-like if it has the <computeroutput>get()</computeroutput> member function.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>has_stop_token </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="futures/traits/is_future_like.hpp" line="45" column="5" bodyfile="futures/traits/is_future_like.hpp" bodystart="45" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

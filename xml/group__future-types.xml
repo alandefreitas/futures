@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__future-types" kind="group">
+    <compoundname>future-types</compoundname>
+    <title>Future types</title>
+    <innerclass refid="classfutures_1_1basic__future" prot="public">futures::basic_future</innerclass>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>future_status</name>
+        <qualifiedname>futures::future_status</qualifiedname>
+        <enumvalue id="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6ab2fdab230a2c39f3595a947861863cb7" prot="public">
+          <name>ready</name>
+          <briefdescription>
+<para>The operation state is ready. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6a90272dda245ae1fb3cf197e91a8689dc" prot="public">
+          <name>timeout</name>
+          <briefdescription>
+<para>The operation state did not become ready before specified timeout duration has passed. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__future-types_1gga2d9145fe40c699d6f0060bcddbf910a6a43fff3df3fc0b3417c86dc3040fb2d86" prot="public">
+          <name>deferred</name>
+          <briefdescription>
+<para>The operation state contains a deferred function, so the result will be computed only when explicitly requested. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Specifies state of a future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Specifies state of a future as returned by <computeroutput>wait_for</computeroutput> and <computeroutput>wait_until</computeroutput> functions of <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future_status.hpp" line="32" column="5" bodyfile="futures/future_status.hpp" bodystart="33" bodyend="42"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__future-types_1ga33c4a67592f57bcb5d04764d425c29a0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt; &gt; &gt;</type>
+        <definition>using futures::future = typedef basic_future&lt;T, future_options&lt;executor_opt&lt;Executor&gt; &gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>future</name>
+        <qualifiedname>futures::future</qualifiedname>
+        <briefdescription>
+<para>A simple future type similar to <computeroutput>std::future</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>We should only use this future type for eager tasks that do not expect continuations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1013" column="5" bodyfile="futures/future.hpp" bodystart="1013" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga691b06597181e3664dc3ab9a4976af6e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, continuable_opt &gt; &gt;</type>
+        <definition>using futures::cfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>cfuture</name>
+        <qualifiedname>futures::cfuture</qualifiedname>
+        <briefdescription>
+<para>A future type with lazy continuations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Futures with lazy continuations contains a list of continuation tasks to be launched once the main task is complete.</para>
+<para>This is what a <ref refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kindref="member">futures::async</ref> returns by default when the first function parameter is not a <ref refid="classfutures_1_1stop__token" kindref="compound">futures::stop_token</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1024" column="5" bodyfile="futures/future.hpp" bodystart="1026" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga594ffcefc7c53a3eab6431c9d9ef8f65" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, continuable_opt, stoppable_opt &gt; &gt;</type>
+        <definition>using futures::jcfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt, stoppable_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>jcfuture</name>
+        <qualifiedname>futures::jcfuture</qualifiedname>
+        <briefdescription>
+<para>A future type with lazy continuations and stop tokens. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>It&apos;s a quite common use case that we need a way to cancel futures and jcfuture provides us with an even better way to do that.</para>
+<para>This is what <ref refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kindref="member">futures::async</ref> returns when the first function parameter is a <ref refid="classfutures_1_1stop__token" kindref="compound">futures::stop_token</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1037" column="5" bodyfile="futures/future.hpp" bodystart="1039" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1gaf9531b575c37bfe7fb80ff7e4c7b5b26" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, always_deferred_opt &gt; &gt;</type>
+        <definition>using futures::dfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, always_deferred_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>dfuture</name>
+        <qualifiedname>futures::dfuture</qualifiedname>
+        <briefdescription>
+<para>A deferred future type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a future type whose main task will only be launched when we wait for its results from another execution context.</para>
+<para>This is what the function <ref refid="group__launch_1gaa3cac9f64c928b7c63acd65c6e17cc69" kindref="member">schedule</ref> returns when the first task parameter is not a stop token.</para>
+<para>The state of this future stores the function to be run.</para>
+<para>This future type supports continuations without the continuation lists of continuable futures. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1056" column="5" bodyfile="futures/future.hpp" bodystart="1058" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1gab6f89384255b61ed8004b61c25cfa0b0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, always_deferred_opt &gt; &gt;</type>
+        <definition>using futures::jdfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, always_deferred_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>jdfuture</name>
+        <qualifiedname>futures::jdfuture</qualifiedname>
+        <briefdescription>
+<para>A deferred stoppable future type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a future type whose main task will only be launched when we wait for its results from another execution context.</para>
+<para>Once the task is launched, it can be requested to stop through its stop source.</para>
+<para>This is what the function <ref refid="group__launch_1gaa3cac9f64c928b7c63acd65c6e17cc69" kindref="member">schedule</ref> returns when the first task parameter is a stop token. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1072" column="5" bodyfile="futures/future.hpp" bodystart="1074" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1gaf8ae95b0fa154b6b1aed392fc0b12c2d" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt;&gt; &gt;</type>
+        <definition>using futures::vfuture = typedef basic_future&lt;T, future_options&lt;&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>vfuture</name>
+        <qualifiedname>futures::vfuture</qualifiedname>
+        <briefdescription>
+<para>A future that simply holds a ready value. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the future type we use for constant values. This is the future type we usually return from functions such as <ref refid="group__adaptors_1gacb4e00b6c170bb3ae76893524bfab046" kindref="member">make_ready_future</ref>.</para>
+<para>These futures have no support for associated executors, continuations, or deferred tasks.</para>
+<para>Like deferred futures, the operation state is stored inline. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1089" column="5" bodyfile="futures/future.hpp" bodystart="1089" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga7a01532e89adeadf5d9867b6bd767630" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_future = typedef basic_future&lt;T, future_options&lt;executor_opt&lt;Executor&gt;, shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_future</name>
+        <qualifiedname>futures::shared_future</qualifiedname>
+        <briefdescription>
+<para>A simple std::shared_future. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is what a futures::future::share() returns </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1096" column="5" bodyfile="futures/future.hpp" bodystart="1097" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga944b7785ed3941b348360bd463a29109" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, continuable_opt, shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_cfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, continuable_opt, shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_cfuture</name>
+        <qualifiedname>futures::shared_cfuture</qualifiedname>
+        <briefdescription>
+<para>A shared future type with lazy continuations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is what a <ref refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" kindref="member">futures::cfuture::share()</ref> returns </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1104" column="5" bodyfile="futures/future.hpp" bodystart="1106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga85aeb742e0facea42147c5bca36dbafe" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, continuable_opt, stoppable_opt, shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_jcfuture = typedef basic_future&lt; T, future_options&lt; executor_opt&lt;Executor&gt;, continuable_opt, stoppable_opt, shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_jcfuture</name>
+        <qualifiedname>futures::shared_jcfuture</qualifiedname>
+        <briefdescription>
+<para>A shared future type with lazy continuations and stop tokens. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is what a <ref refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" kindref="member">futures::jcfuture::share()</ref> returns </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1113" column="5" bodyfile="futures/future.hpp" bodystart="1119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1gac625c612509f8d6e983f18b30d4a50c7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, always_deferred_opt, shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_dfuture = typedef basic_future&lt; T, future_options&lt;executor_opt&lt;Executor&gt;, always_deferred_opt, shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_dfuture</name>
+        <qualifiedname>futures::shared_dfuture</qualifiedname>
+        <briefdescription>
+<para>A shared future type with deferred task. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is what a <ref refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" kindref="member">futures::dfuture::share()</ref> returns </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1126" column="5" bodyfile="futures/future.hpp" bodystart="1128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga6ed365c544f18f9e09c5a291754cd3d3" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class Executor</type>
+            <defval>default_executor_type</defval>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; executor_opt&lt; Executor &gt;, stoppable_opt, always_deferred_opt, shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_jdfuture = typedef basic_future&lt; T, future_options&lt; executor_opt&lt;Executor&gt;, stoppable_opt, always_deferred_opt, shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_jdfuture</name>
+        <qualifiedname>futures::shared_jdfuture</qualifiedname>
+        <briefdescription>
+<para>A shared future type with deferred task and stop token. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is what a <ref refid="classfutures_1_1basic__future_1afdc42ec4d91e68b180276045f8003255" kindref="member">futures::jdfuture::share()</ref> returns </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1135" column="5" bodyfile="futures/future.hpp" bodystart="1141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-types_1ga0dbca35f60e6be3e06cf318a67042dd7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>basic_future&lt; T, future_options&lt; shared_opt &gt; &gt;</type>
+        <definition>using futures::shared_vfuture = typedef basic_future&lt;T, future_options&lt;shared_opt&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>shared_vfuture</name>
+        <qualifiedname>futures::shared_vfuture</qualifiedname>
+        <briefdescription>
+<para>A shared future that simply holds a ready value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/future.hpp" line="1145" column="5" bodyfile="futures/future.hpp" bodystart="1145" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Basic future types. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This module defines the <ref refid="classfutures_1_1basic__future" kindref="compound">basic_future</ref> template class, which can be used to define futures with a number of extensions. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

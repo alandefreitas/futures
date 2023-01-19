@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__cancellation" kind="group">
+    <compoundname>cancellation</compoundname>
+    <title>Cancellation</title>
+    <innerclass refid="structfutures_1_1nostopstate__t" prot="public">futures::nostopstate_t</innerclass>
+    <innerclass refid="classfutures_1_1stop__token" prot="public">futures::stop_token</innerclass>
+    <innerclass refid="classfutures_1_1stop__source" prot="public">futures::stop_source</innerclass>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__cancellation_1ga01213ebdf9bd19b06e4860d863094735" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr nostopstate_t</type>
+        <definition>constexpr nostopstate_t futures::nostopstate</definition>
+        <argsstring></argsstring>
+        <name>nostopstate</name>
+        <qualifiedname>futures::nostopstate</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Empty struct to initialize a <ref refid="classfutures_1_1stop__source" kindref="compound">stop_source</ref> without a shared stop state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/stop_token.hpp" line="66" column="38" bodyfile="futures/stop_token.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Future cancellation primitives. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1error" kind="class" language="C++" prot="public">
+    <compoundname>futures::error</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::system_error</basecompoundref>
+    <derivedcompoundref refid="classfutures_1_1broken__promise" prot="public" virt="non-virtual">futures::broken_promise</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1future__already__retrieved" prot="public" virt="non-virtual">futures::future_already_retrieved</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1future__deferred" prot="public" virt="non-virtual">futures::future_deferred</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1future__uninitialized" prot="public" virt="non-virtual">futures::future_uninitialized</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1no__state" prot="public" virt="non-virtual">futures::no_state</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1packaged__task__uninitialized" prot="public" virt="non-virtual">futures::packaged_task_uninitialized</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1promise__already__satisfied" prot="public" virt="non-virtual">futures::promise_already_satisfied</derivedcompoundref>
+    <derivedcompoundref refid="classfutures_1_1promise__uninitialized" prot="public" virt="non-virtual">futures::promise_uninitialized</derivedcompoundref>
+    <includes refid="error_8hpp" local="no">error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class ErrorCodeEnum</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::error::error</definition>
+        <argsstring>(ErrorCodeEnum ec)</argsstring>
+        <name>error</name>
+        <qualifiedname>futures::error::error</qualifiedname>
+        <param>
+          <type>ErrorCodeEnum</type>
+          <declname>ec</declname>
+        </param>
+    <requiresclause>( detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt; || detail::is_same_v&lt;ErrorCodeEnum, std::error_code&gt;)    </requiresclause>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="77" column="9" bodyfile="futures/error.hpp" bodystart="77" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class ErrorCodeEnum</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::error::error</definition>
+        <argsstring>(ErrorCodeEnum ec, char const *what_arg)</argsstring>
+        <name>error</name>
+        <qualifiedname>futures::error::error</qualifiedname>
+        <param>
+          <type>ErrorCodeEnum</type>
+          <declname>ec</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>what_arg</declname>
+        </param>
+    <requiresclause>( detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt; || detail::is_same_v&lt;ErrorCodeEnum, std::error_code&gt;)    </requiresclause>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="95" column="9" bodyfile="futures/error.hpp" bodystart="95" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class ErrorCodeEnum</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::error::error</definition>
+        <argsstring>(ErrorCodeEnum ec, std::string const &amp;what_arg)</argsstring>
+        <name>error</name>
+        <qualifiedname>futures::error::error</qualifiedname>
+        <param>
+          <type>ErrorCodeEnum</type>
+          <declname>ec</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>what_arg</declname>
+        </param>
+    <requiresclause>( detail::is_error_code_enum_v&lt;ErrorCodeEnum&gt; || detail::is_same_v&lt;ErrorCodeEnum, std::error_code&gt;)    </requiresclause>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="114" column="9" bodyfile="futures/error.hpp" bodystart="114" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::error::~error</definition>
+        <argsstring>() override=default</argsstring>
+        <name>~error</name>
+        <qualifiedname>futures::error::~error</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="119" column="9"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Class for errors in the futures library. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>All errors in the futures library derive from this class.</para>
+<para>The type carries a <ref refid="group__error_1ga6b514c11923c676167997aae802757b8" kindref="member">future_errc</ref> </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>futures::broken_promise</label>
+        <link refid="classfutures_1_1broken__promise"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures::future_already_retrieved</label>
+        <link refid="classfutures_1_1future__already__retrieved"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures::future_deferred</label>
+        <link refid="classfutures_1_1future__deferred"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures::future_uninitialized</label>
+        <link refid="classfutures_1_1future__uninitialized"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures::no_state</label>
+        <link refid="classfutures_1_1no__state"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures::packaged_task_uninitialized</label>
+        <link refid="classfutures_1_1packaged__task__uninitialized"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures::promise_already_satisfied</label>
+        <link refid="classfutures_1_1promise__already__satisfied"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>futures::promise_uninitialized</label>
+        <link refid="classfutures_1_1promise__uninitialized"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::system_error</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::system_error</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/error.hpp" line="60" column="5" bodyfile="futures/error.hpp" bodystart="60" bodyend="120"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" prot="public" virt="non-virtual"><scope>futures::error</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" prot="public" virt="non-virtual"><scope>futures::error</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" prot="public" virt="non-virtual"><scope>futures::error</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" prot="public" virt="non-virtual"><scope>futures::error</scope><name>~error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1promise__already__satisfied" kind="class" language="C++" prot="public">
+    <compoundname>futures::promise_already_satisfied</compoundname>
+    <basecompoundref refid="classfutures_1_1error" prot="public" virt="non-virtual">futures::error</basecompoundref>
+    <includes refid="error_8hpp" local="no">error.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1promise__already__satisfied_1a3cfaf964df7c75d2b66a23de418a7078" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::promise_already_satisfied::promise_already_satisfied</definition>
+        <argsstring>()</argsstring>
+        <name>promise_already_satisfied</name>
+        <qualifiedname>futures::promise_already_satisfied::promise_already_satisfied</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/error.hpp" line="141" column="61" bodyfile="futures/error.hpp" bodystart="141" bodyend="141"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Promise has already been fulfilled. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::promise_already_satisfied</label>
+        <link refid="classfutures_1_1promise__already__satisfied"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::system_error</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>futures::error</label>
+        <link refid="classfutures_1_1error"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures::promise_already_satisfied</label>
+        <link refid="classfutures_1_1promise__already__satisfied"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::system_error</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/error.hpp" line="141" column="5" bodyfile="futures/error.hpp" bodystart="141" bodyend="141"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1error_1a66fbbd410cca72cc53148378fe2cca69" prot="public" virt="non-virtual"><scope>futures::promise_already_satisfied</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a369c72d80e711a10fc60ab99b8bff395" prot="public" virt="non-virtual"><scope>futures::promise_already_satisfied</scope><name>error</name></member>
+      <member refid="classfutures_1_1error_1a7e4d41693037f5456a6e53cbec421e67" prot="public" virt="non-virtual"><scope>futures::promise_already_satisfied</scope><name>error</name></member>
+      <member refid="classfutures_1_1promise__already__satisfied_1a3cfaf964df7c75d2b66a23de418a7078" prot="public" virt="non-virtual"><scope>futures::promise_already_satisfied</scope><name>promise_already_satisfied</name></member>
+      <member refid="classfutures_1_1error_1a9aad9a47f45efa97c69a5abd03e57b5b" prot="public" virt="non-virtual"><scope>futures::promise_already_satisfied</scope><name>~error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

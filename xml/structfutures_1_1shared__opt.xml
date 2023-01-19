@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1shared__opt" kind="struct" language="C++" prot="public">
+    <compoundname>futures::shared_opt</compoundname>
+    <includes refid="future__options__args_8hpp" local="no">future_options_args.hpp</includes>
+    <briefdescription>
+<para>Future option to determine the future is shared. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Shared futures refer to the same operation state. The result of the future operation is not moved from the future so that other tasks can depend on it. </para>
+    </detaileddescription>
+    <location file="futures/future_options_args.hpp" line="91" column="5" bodyfile="futures/future_options_args.hpp" bodystart="91" bodyend="91"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

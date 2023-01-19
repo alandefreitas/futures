@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1halve__partitioner" kind="class" language="C++" prot="public">
+    <compoundname>futures::halve_partitioner</compoundname>
+    <includes refid="halve__partitioner_8hpp" local="no">halve_partitioner.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1halve__partitioner_1a15f721b1bc035d643fd106ea3582c7c2" prot="private" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t futures::halve_partitioner::min_grain_size_</definition>
+        <argsstring></argsstring>
+        <name>min_grain_size_</name>
+        <qualifiedname>futures::halve_partitioner::min_grain_size_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/halve_partitioner.hpp" line="45" column="21" bodyfile="futures/algorithm/partitioner/halve_partitioner.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1halve__partitioner_1a7329c117dbf2ea48ee2de9042fc2f24b" prot="public" static="no" constexpr="yes" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr futures::halve_partitioner::halve_partitioner</definition>
+        <argsstring>(std::size_t min_grain_size_)</argsstring>
+        <name>halve_partitioner</name>
+        <qualifiedname>futures::halve_partitioner::halve_partitioner</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>min_grain_size_</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The constructor has a minimum grain size after which the range should not be split.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>min_grain_size_</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Minimum grain size used to split ranges </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/halve_partitioner.hpp" line="55" column="28" bodyfile="futures/algorithm/partitioner/halve_partitioner.hpp" bodystart="55" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1halve__partitioner_1a4ec3ec6505565e1a02ffa4fe42f5f93b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::input_iterator</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type>I</type>
+        <definition>I futures::halve_partitioner::operator()</definition>
+        <argsstring>(I first, S last)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>futures::halve_partitioner::operator()</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Split a range of elements. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>I</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iterator type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>S</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sentinel type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First element in range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Last element in range </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Iterator to point where sequence should be split </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/partitioner/halve_partitioner.hpp" line="78" column="9" bodyfile="futures/algorithm/partitioner/halve_partitioner.hpp" bodystart="78" bodyend="83"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A partitioner that always splits the problem in half. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The halve partitioner always splits the sequence into two parts of roughly equal size</para>
+<para>The sequence is split up to a minimum grain size. As a concept, the result from the partitioner is considered a suggestion for parallelization. For algorithms such as for_each, a partitioner with a very small grain size might be appropriate if the operation is very expensive. Some algorithms, such as a binary search, might naturally adjust this suggestion so that the result makes sense. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/partitioner/halve_partitioner.hpp" line="44" column="5" bodyfile="futures/algorithm/partitioner/halve_partitioner.hpp" bodystart="44" bodyend="84"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1halve__partitioner_1a7329c117dbf2ea48ee2de9042fc2f24b" prot="public" virt="non-virtual"><scope>futures::halve_partitioner</scope><name>halve_partitioner</name></member>
+      <member refid="classfutures_1_1halve__partitioner_1a15f721b1bc035d643fd106ea3582c7c2" prot="private" virt="non-virtual"><scope>futures::halve_partitioner</scope><name>min_grain_size_</name></member>
+      <member refid="classfutures_1_1halve__partitioner_1a4ec3ec6505565e1a02ffa4fe42f5f93b" prot="public" virt="non-virtual"><scope>futures::halve_partitioner</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

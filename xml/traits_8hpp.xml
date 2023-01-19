@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="traits_8hpp" kind="file" language="C++">
+    <compoundname>traits.hpp</compoundname>
+    <includes refid="future__value_8hpp" local="no">futures/traits/future_value.hpp</includes>
+    <includes refid="has__executor_8hpp" local="no">futures/traits/has_executor.hpp</includes>
+    <includes refid="has__ready__notifier_8hpp" local="no">futures/traits/has_ready_notifier.hpp</includes>
+    <includes refid="has__stop__token_8hpp" local="no">futures/traits/has_stop_token.hpp</includes>
+    <includes refid="is__always__deferred_8hpp" local="no">futures/traits/is_always_deferred.hpp</includes>
+    <includes refid="is__continuable_8hpp" local="no">futures/traits/is_continuable.hpp</includes>
+    <includes refid="is__future__like_8hpp" local="no">futures/traits/is_future_like.hpp</includes>
+    <includes refid="is__shared__future_8hpp" local="no">futures/traits/is_shared_future.hpp</includes>
+    <includes refid="is__stoppable_8hpp" local="no">futures/traits/is_stoppable.hpp</includes>
+    <includedby refid="futures_8hpp" local="no">futures/futures.hpp</includedby>
+    <incdepgraph>
+      <node id="3">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/traits.hpp</label>
+        <link refid="traits_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/traits/future_value.hpp</label>
+        <link refid="future__value_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>futures/traits/has_executor.hpp</label>
+        <link refid="has__executor_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>futures/traits/has_ready_notifier.hpp</label>
+        <link refid="has__ready__notifier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>futures/traits/has_stop_token.hpp</label>
+        <link refid="has__stop__token_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>futures/traits/is_always_deferred.hpp</label>
+        <link refid="is__always__deferred_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>futures/traits/is_continuable.hpp</label>
+        <link refid="is__continuable_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/traits/is_future_like.hpp</label>
+        <link refid="is__future__like_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>futures/traits/is_shared_future.hpp</label>
+        <link refid="is__shared__future_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>futures/traits/is_stoppable.hpp</label>
+        <link refid="is__stoppable_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="9">
+        <label>futures/detail/traits/future_value.hpp</label>
+      </node>
+      <node id="7">
+        <label>futures/detail/traits/std_type_traits.hpp</label>
+      </node>
+      <node id="5">
+        <label>futures/impl/config.hpp</label>
+      </node>
+      <node id="8">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+      <node id="1">
+        <label>futures/traits.hpp</label>
+        <link refid="traits_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <briefdescription>
+<para>All Futures Traits. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Use this header to include all functionalities of the futures traits module at once. In most cases, however, we recommend only including the headers for the functionality you need. Use the reference to identify these files. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2021<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">//<sp/>#glob<sp/>&lt;futures/traits/*.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="future__value_8hpp" kindref="compound">futures/traits/future_value.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="has__executor_8hpp" kindref="compound">futures/traits/has_executor.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="has__ready__notifier_8hpp" kindref="compound">futures/traits/has_ready_notifier.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="has__stop__token_8hpp" kindref="compound">futures/traits/has_stop_token.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__always__deferred_8hpp" kindref="compound">futures/traits/is_always_deferred.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__continuable_8hpp" kindref="compound">futures/traits/is_continuable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__future__like_8hpp" kindref="compound">futures/traits/is_future_like.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__shared__future_8hpp" kindref="compound">futures/traits/is_shared_future.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__stoppable_8hpp" kindref="compound">futures/traits/is_stoppable.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_TRAITS_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/traits.hpp"/>
+  </compounddef>
+</doxygen>

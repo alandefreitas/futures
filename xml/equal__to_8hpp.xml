@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="equal__to_8hpp" kind="file" language="C++">
+    <compoundname>equal_to.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">futures/config.hpp</includes>
+    <includes refid="is__equality__comparable__with_8hpp" local="no">futures/algorithm/traits/is_equality_comparable_with.hpp</includes>
+    <includes local="no">utility</includes>
+    <includes local="no">type_traits</includes>
+    <includedby refid="compare_8hpp" local="no">futures/algorithm/compare.hpp</includedby>
+    <includedby refid="not__equal__to_8hpp" local="no">futures/algorithm/compare/not_equal_to.hpp</includedby>
+    <includedby refid="count_8hpp" local="no">futures/algorithm/count.hpp</includedby>
+    <includedby refid="find_8hpp" local="no">futures/algorithm/find.hpp</includedby>
+    <includedby refid="value__cmp__algorithm_8hpp" local="no">futures/algorithm/traits/value_cmp_algorithm.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>futures/algorithm/compare/equal_to.hpp</label>
+        <link refid="equal__to_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/traits/is_equality_comparable.hpp</label>
+        <link refid="is__equality__comparable_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures/algorithm/traits/is_equality_comparable_with.hpp</label>
+        <link refid="is__equality__comparable__with_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/traits/detail/is_weakly_equality_comparable_with.hpp</label>
+      </node>
+      <node id="3">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="9">
+        <label>futures/detail/traits/std_type_traits.hpp</label>
+      </node>
+      <node id="4">
+        <label>futures/impl/config.hpp</label>
+      </node>
+      <node id="8">
+        <label>type_traits</label>
+      </node>
+      <node id="10">
+        <label>utility</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>futures/algorithm.hpp</label>
+        <link refid="algorithm_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/algorithm/compare.hpp</label>
+        <link refid="compare_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/compare/equal_to.hpp</label>
+        <link refid="equal__to_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures/algorithm/compare/not_equal_to.hpp</label>
+        <link refid="not__equal__to_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/count.hpp</label>
+        <link refid="count_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/find.hpp</label>
+        <link refid="find_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/traits.hpp</label>
+        <link refid="algorithm_2traits_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures/algorithm/traits/value_cmp_algorithm.hpp</label>
+        <link refid="value__cmp__algorithm_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structfutures_1_1equal__to" prot="public">futures::equal_to</innerclass>
+    <innernamespace refid="namespacefutures">futures</innernamespace>
+    <briefdescription>
+<para>Equality comparison functor. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This file defines the equality operator as a functor. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2022<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">futures/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="is__equality__comparable__with_8hpp" kindref="compound">futures/algorithm/traits/is_equality_comparable_with.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;utility&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacefutures" kindref="compound">futures</ref><sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="structfutures_1_1equal__to" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structfutures_1_1equal__to" kindref="compound">equal_to</ref><sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FUTURES_TEMPLATE(</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>U)</highlight></codeline>
+<codeline lineno="31" refid="structfutures_1_1equal__to_1acc9f99f5f1a411c1e34ec5890d5cb766" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(</highlight><highlight class="keyword">requires</highlight><highlight class="normal"><sp/>is_equality_comparable_with_v&lt;T,<sp/>U&gt;)<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">operator</highlight><highlight class="normal">()(T<sp/>&amp;&amp;t,<sp/>U<sp/>&amp;&amp;u)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::forward&lt;T&gt;(t)<sp/>==<sp/>std::forward&lt;U&gt;(u);</highlight></codeline>
+<codeline lineno="34" refid="structfutures_1_1equal__to_1a386ccc6f6663c410864513469e67f04b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structfutures_1_1equal__to_1a386ccc6f6663c410864513469e67f04b" kindref="member">is_transparent</ref><sp/>=<sp/>void;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>futures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_ALGORITHM_COMPARE_EQUAL_TO_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/algorithm/compare/equal_to.hpp"/>
+  </compounddef>
+</doxygen>

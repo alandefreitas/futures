@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_f487c0495566dbafde251364b6bff68f" kind="dir">
+    <compoundname>futures/algorithm/traits</compoundname>
+    <innerfile refid="binary__invoke__algorithm_8hpp">binary_invoke_algorithm.hpp</innerfile>
+    <innerfile refid="common__comparison__category_8hpp">common_comparison_category.hpp</innerfile>
+    <innerfile refid="is__assignable__from_8hpp">is_assignable_from.hpp</innerfile>
+    <innerfile refid="is__bidirectional__iterator_8hpp">is_bidirectional_iterator.hpp</innerfile>
+    <innerfile refid="is__constructible__from_8hpp">is_constructible_from.hpp</innerfile>
+    <innerfile refid="is__convertible__to_8hpp">is_convertible_to.hpp</innerfile>
+    <innerfile refid="is__copyable_8hpp">is_copyable.hpp</innerfile>
+    <innerfile refid="is__default__initializable_8hpp">is_default_initializable.hpp</innerfile>
+    <innerfile refid="is__derived__from_8hpp">is_derived_from.hpp</innerfile>
+    <innerfile refid="is__equality__comparable_8hpp">is_equality_comparable.hpp</innerfile>
+    <innerfile refid="is__equality__comparable__with_8hpp">is_equality_comparable_with.hpp</innerfile>
+    <innerfile refid="is__forward__iterator_8hpp">is_forward_iterator.hpp</innerfile>
+    <innerfile refid="is__incrementable_8hpp">is_incrementable.hpp</innerfile>
+    <innerfile refid="is__indirectly__binary__invocable_8hpp">is_indirectly_binary_invocable.hpp</innerfile>
+    <innerfile refid="is__indirectly__readable_8hpp">is_indirectly_readable.hpp</innerfile>
+    <innerfile refid="is__indirectly__unary__invocable_8hpp">is_indirectly_unary_invocable.hpp</innerfile>
+    <innerfile refid="is__input__iterator_8hpp">is_input_iterator.hpp</innerfile>
+    <innerfile refid="is__input__or__output__iterator_8hpp">is_input_or_output_iterator.hpp</innerfile>
+    <innerfile refid="is__input__range_8hpp">is_input_range.hpp</innerfile>
+    <innerfile refid="is__movable_8hpp">is_movable.hpp</innerfile>
+    <innerfile refid="is__move__constructible_8hpp">is_move_constructible.hpp</innerfile>
+    <innerfile refid="is__random__access__iterator_8hpp">is_random_access_iterator.hpp</innerfile>
+    <innerfile refid="is__range_8hpp">is_range.hpp</innerfile>
+    <innerfile refid="is__regular_8hpp">is_regular.hpp</innerfile>
+    <innerfile refid="is__semiregular_8hpp">is_semiregular.hpp</innerfile>
+    <innerfile refid="is__sentinel__for_8hpp">is_sentinel_for.hpp</innerfile>
+    <innerfile refid="is__swappable_8hpp">is_swappable.hpp</innerfile>
+    <innerfile refid="is__three__way__comparable_8hpp">is_three_way_comparable.hpp</innerfile>
+    <innerfile refid="is__three__way__comparable__with_8hpp">is_three_way_comparable_with.hpp</innerfile>
+    <innerfile refid="is__totally__ordered_8hpp">is_totally_ordered.hpp</innerfile>
+    <innerfile refid="is__totally__ordered__with_8hpp">is_totally_ordered_with.hpp</innerfile>
+    <innerfile refid="is__weakly__incrementable_8hpp">is_weakly_incrementable.hpp</innerfile>
+    <innerfile refid="iter__difference_8hpp">iter_difference.hpp</innerfile>
+    <innerfile refid="iter__reference_8hpp">iter_reference.hpp</innerfile>
+    <innerfile refid="iter__rvalue__reference_8hpp">iter_rvalue_reference.hpp</innerfile>
+    <innerfile refid="iter__value_8hpp">iter_value.hpp</innerfile>
+    <innerfile refid="iterator_8hpp">iterator.hpp</innerfile>
+    <innerfile refid="range__value_8hpp">range_value.hpp</innerfile>
+    <innerfile refid="remove__cvref_8hpp">remove_cvref.hpp</innerfile>
+    <innerfile refid="unary__invoke__algorithm_8hpp">unary_invoke_algorithm.hpp</innerfile>
+    <innerfile refid="value__cmp__algorithm_8hpp">value_cmp_algorithm.hpp</innerfile>
+    <briefdescription>
+<para>Root traits directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This root directory contains all headers related to the algorithm traits module. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/traits/"/>
+  </compounddef>
+</doxygen>

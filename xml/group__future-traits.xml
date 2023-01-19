@@ -1,0 +1,329 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__future-traits" kind="group">
+    <compoundname>future-traits</compoundname>
+    <title>Future Traits</title>
+    <innerclass refid="structfutures_1_1has__executor" prot="public">futures::has_executor</innerclass>
+    <innerclass refid="structfutures_1_1has__ready__notifier" prot="public">futures::has_ready_notifier</innerclass>
+    <innerclass refid="structfutures_1_1is__always__deferred" prot="public">futures::is_always_deferred</innerclass>
+    <innerclass refid="structfutures_1_1is__continuable" prot="public">futures::is_continuable</innerclass>
+    <innerclass refid="structfutures_1_1is__future__like" prot="public">futures::is_future_like</innerclass>
+    <innerclass refid="structfutures_1_1is__shared__future" prot="public">futures::is_shared_future</innerclass>
+    <innerconcept refid="conceptfutures_1_1future__like">futures::future_like</innerconcept>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__future-traits_1ga6b9f710ec419153132923160875d24ad" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::future_value = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>future_value</name>
+        <qualifiedname>futures::future_value</qualifiedname>
+        <briefdescription>
+<para>Determine type the future object holds. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Primary template handles non-future types</para>
+<para><simplesect kind="note"><para>Not to be confused with continuation unwrapping </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/future_value.hpp" line="39" column="5" bodyfile="futures/traits/future_value.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-traits_1ga6e31e50532fd1185e4321c4b76918907" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>typename future_value&lt; T &gt;::type</type>
+        <definition>using futures::future_value_t = typedef typename future_value&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>future_value_t</name>
+        <qualifiedname>futures::future_value_t</qualifiedname>
+        <briefdescription>
+<para>Determine type the future object holds.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Primary template handles non-future types</para>
+<para><simplesect kind="note"><para>Not to be confused with continuation unwrapping   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/future_value.hpp" line="63" column="5" bodyfile="futures/traits/future_value.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-traits_1ga721bbb35763f4def43c4360cf80e7363" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::has_stop_token = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>has_stop_token</name>
+        <qualifiedname>futures::has_stop_token</qualifiedname>
+        <briefdescription>
+<para>Customization point to define future as having a common stop token. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Besides being stoppable, this trait identifies whether the future has a stop token, which means this token can be shared with other futures to create a common thread of futures that can be stopped with the same token.</para>
+<para>Unless the trait is specialized, a type is considered to have a stop token if it has the <computeroutput>get_stop_source()</computeroutput> and <computeroutput>get_stop_token()</computeroutput> member functions.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>is_stoppable </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/has_stop_token.hpp" line="50" column="5" bodyfile="futures/traits/has_stop_token.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__future-traits_1ga367eb573176946bd3c564a385eb549fe" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>__see_below__</type>
+        <definition>using futures::is_stoppable = typedef __see_below__</definition>
+        <argsstring></argsstring>
+        <name>is_stoppable</name>
+        <qualifiedname>futures::is_stoppable</qualifiedname>
+        <briefdescription>
+<para>Customization point to define future as stoppable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This trait identifies whether the future is stoppable, which means the future has a <computeroutput>request_stop</computeroutput> function to stop the underlying task.</para>
+<para><simplesect kind="note"><para>Not all stoppable futures have stops token, which can be shared with other futures to create a common thread of futures that can be stopped with the same token.</para>
+</simplesect>
+Unless the trait is specialized, a type is considered stoppable if it has the <computeroutput>request_stop()</computeroutput> member function.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>has_stop_token </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_stoppable.hpp" line="50" column="5" bodyfile="futures/traits/is_stoppable.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__future-traits_1ga1d65f925849576acd6b5a4a6333d1380" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_executor_v</definition>
+        <argsstring></argsstring>
+        <name>has_executor_v</name>
+        <qualifiedname>futures::has_executor_v</qualifiedname>
+        <initializer>= has_executor&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Determine if a future type has an executor.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/has_executor.hpp" line="38" column="20" bodyfile="futures/traits/has_executor.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gaaa06f944510ee5b88b996ec9e1f41adb" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_ready_notifier_v</definition>
+        <argsstring></argsstring>
+        <name>has_ready_notifier_v</name>
+        <qualifiedname>futures::has_ready_notifier_v</qualifiedname>
+        <initializer>= has_ready_notifier&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type has a ready notifier.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The ready notifier is an external handle used to identify when the future is ready.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/has_ready_notifier.hpp" line="42" column="20" bodyfile="futures/traits/has_ready_notifier.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga298d5e966d0a87153c8feb6dfaf6a222" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::has_stop_token_v</definition>
+        <argsstring></argsstring>
+        <name>has_stop_token_v</name>
+        <qualifiedname>futures::has_stop_token_v</qualifiedname>
+        <initializer>= has_stop_token&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as having a common stop token.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Besides being stoppable, this trait identifies whether the future has a stop token, which means this token can be shared with other futures to create a common thread of futures that can be stopped with the same token.</para>
+<para>Unless the trait is specialized, a type is considered to have a stop token if it has the <computeroutput>get_stop_source()</computeroutput> and <computeroutput>get_stop_token()</computeroutput> member functions.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>is_stoppable   </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/has_stop_token.hpp" line="72" column="20" bodyfile="futures/traits/has_stop_token.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga61c743647bbfe6907f93a674af321ad1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_always_deferred_v</definition>
+        <argsstring></argsstring>
+        <name>is_always_deferred_v</name>
+        <qualifiedname>futures::is_always_deferred_v</qualifiedname>
+        <initializer>= is_always_deferred&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as always deferred. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_always_deferred.hpp" line="47" column="20" bodyfile="futures/traits/is_always_deferred.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gaa1dab24425678e965a56ff21c6d1624e" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_continuable_v</definition>
+        <argsstring></argsstring>
+        <name>is_continuable_v</name>
+        <qualifiedname>futures::is_continuable_v</qualifiedname>
+        <initializer>= is_continuable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as supporting continuations.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_continuable.hpp" line="38" column="20" bodyfile="futures/traits/is_continuable.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gaafc70e30ead3e35866fa26ba79b3721d" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_future_like_v</definition>
+        <argsstring></argsstring>
+        <name>is_future_like_v</name>
+        <qualifiedname>futures::is_future_like_v</qualifiedname>
+        <initializer>= is_future_like&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type is a future type.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This trait identifies whether the type represents a future value.</para>
+<para>Unless the trait is specialized, a type is considered future-like if it has the <computeroutput>get()</computeroutput> member function.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>has_stop_token   </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_future_like.hpp" line="74" column="20" bodyfile="futures/traits/is_future_like.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1ga98d13b2d7d89edd37c377b59e2c3d6f5" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_shared_future_v</definition>
+        <argsstring></argsstring>
+        <name>is_shared_future_v</name>
+        <qualifiedname>futures::is_shared_future_v</qualifiedname>
+        <initializer>= is_shared_future&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to determine if a type is a shared future type.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_shared_future.hpp" line="38" column="20" bodyfile="futures/traits/is_shared_future.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__future-traits_1gad4b42cfc7fecf09378dbf1548501a366" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool futures::is_stoppable_v</definition>
+        <argsstring></argsstring>
+        <name>is_stoppable_v</name>
+        <qualifiedname>futures::is_stoppable_v</qualifiedname>
+        <initializer>= is_stoppable&lt;T&gt;::value</initializer>
+        <briefdescription>
+<para>Customization point to define future as stoppable.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This trait identifies whether the future is stoppable, which means the future has a <computeroutput>request_stop</computeroutput> function to stop the underlying task.</para>
+<para><simplesect kind="note"><para>Not all stoppable futures have stops token, which can be shared with other futures to create a common thread of futures that can be stopped with the same token.</para>
+</simplesect>
+Unless the trait is specialized, a type is considered stoppable if it has the <computeroutput>request_stop()</computeroutput> member function.</para>
+<para><simplesect kind="see"><para><itemizedlist>
+<listitem><para>has_stop_token   </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/traits/is_stoppable.hpp" line="72" column="20" bodyfile="futures/traits/is_stoppable.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Determine properties of future types. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

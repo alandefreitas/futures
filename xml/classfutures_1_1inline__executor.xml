@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1inline__executor" kind="class" language="C++" prot="public">
+    <compoundname>futures::inline_executor</compoundname>
+    <includes refid="inline__executor_8hpp" local="no">inline_executor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1inline__executor_1a9bc0b8c18fbae4c25acdf133adb427c6" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr futures::inline_executor::inline_executor</definition>
+        <argsstring>()=default</argsstring>
+        <name>inline_executor</name>
+        <qualifiedname>futures::inline_executor::inline_executor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="37" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1inline__executor_1ae9fbde1fed18bfc057196dea41144a7b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::inline_executor::execute</definition>
+        <argsstring>(F &amp;&amp;f) const</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::inline_executor::execute</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/inline_executor.hpp" line="41" column="9" bodyfile="futures/executor/inline_executor.hpp" bodystart="41" bodyend="43"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>An executor that runs anything inline. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Although simple, it needs to meet the executor requirements:<itemizedlist>
+<listitem><para>Executor concept</para>
+</listitem><listitem><para>Ability to query the execution context<itemizedlist>
+<listitem><para>Result being derived from execution_context</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>The execute function <simplesect kind="see"><para><ulink url="https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html">https://think-async.com/Asio/asio-1.18.2/doc/asio/std_executors.html</ulink> </para>
+</simplesect>
+</para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <location file="futures/executor/inline_executor.hpp" line="35" column="5" bodyfile="futures/executor/inline_executor.hpp" bodystart="35" bodyend="44"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1inline__executor_1ae9fbde1fed18bfc057196dea41144a7b" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>execute</name></member>
+      <member refid="classfutures_1_1inline__executor_1a9bc0b8c18fbae4c25acdf133adb427c6" prot="public" virt="non-virtual"><scope>futures::inline_executor</scope><name>inline_executor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

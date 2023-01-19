@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="namespacefutures" kind="namespace" language="C++">
+    <compoundname>futures</compoundname>
+    <innerclass refid="classfutures_1_1all__of__functor" prot="public">futures::all_of_functor</innerclass>
+    <innerclass refid="structfutures_1_1always__deferred__opt" prot="public">futures::always_deferred_opt</innerclass>
+    <innerclass refid="structfutures_1_1always__detached__opt" prot="public">futures::always_detached_opt</innerclass>
+    <innerclass refid="classfutures_1_1any__executor" prot="public">futures::any_executor</innerclass>
+    <innerclass refid="classfutures_1_1any__of__functor" prot="public">futures::any_of_functor</innerclass>
+    <innerclass refid="classfutures_1_1basic__future" prot="public">futures::basic_future</innerclass>
+    <innerclass refid="classfutures_1_1binary__invoke__algorithm__functor" prot="public">futures::binary_invoke_algorithm_functor</innerclass>
+    <innerclass refid="classfutures_1_1broken__promise" prot="public">futures::broken_promise</innerclass>
+    <innerclass refid="structfutures_1_1compare__three__way" prot="public">futures::compare_three_way</innerclass>
+    <innerclass refid="structfutures_1_1continuable__opt" prot="public">futures::continuable_opt</innerclass>
+    <innerclass refid="classfutures_1_1count__functor" prot="public">futures::count_functor</innerclass>
+    <innerclass refid="classfutures_1_1count__if__functor" prot="public">futures::count_if_functor</innerclass>
+    <innerclass refid="structfutures_1_1deferred__function__opt" prot="public">futures::deferred_function_opt</innerclass>
+    <innerclass refid="structfutures_1_1equal__to" prot="public">futures::equal_to</innerclass>
+    <innerclass refid="classfutures_1_1error" prot="public">futures::error</innerclass>
+    <innerclass refid="structfutures_1_1executor__opt" prot="public">futures::executor_opt</innerclass>
+    <innerclass refid="classfutures_1_1find__functor" prot="public">futures::find_functor</innerclass>
+    <innerclass refid="classfutures_1_1find__if__functor" prot="public">futures::find_if_functor</innerclass>
+    <innerclass refid="classfutures_1_1find__if__not__functor" prot="public">futures::find_if_not_functor</innerclass>
+    <innerclass refid="classfutures_1_1for__each__functor" prot="public">futures::for_each_functor</innerclass>
+    <innerclass refid="classfutures_1_1future__already__retrieved" prot="public">futures::future_already_retrieved</innerclass>
+    <innerclass refid="classfutures_1_1future__deferred" prot="public">futures::future_deferred</innerclass>
+    <innerclass refid="classfutures_1_1future__uninitialized" prot="public">futures::future_uninitialized</innerclass>
+    <innerclass refid="structfutures_1_1greater" prot="public">futures::greater</innerclass>
+    <innerclass refid="structfutures_1_1greater__equal" prot="public">futures::greater_equal</innerclass>
+    <innerclass refid="classfutures_1_1halve__partitioner" prot="public">futures::halve_partitioner</innerclass>
+    <innerclass refid="structfutures_1_1has__executor" prot="public">futures::has_executor</innerclass>
+    <innerclass refid="structfutures_1_1has__ready__notifier" prot="public">futures::has_ready_notifier</innerclass>
+    <innerclass refid="classfutures_1_1inline__executor" prot="public">futures::inline_executor</innerclass>
+    <innerclass refid="structfutures_1_1is__always__deferred" prot="public">futures::is_always_deferred</innerclass>
+    <innerclass refid="structfutures_1_1is__continuable" prot="public">futures::is_continuable</innerclass>
+    <innerclass refid="structfutures_1_1is__execution__policy" prot="public">futures::is_execution_policy</innerclass>
+    <innerclass refid="structfutures_1_1is__future__like" prot="public">futures::is_future_like</innerclass>
+    <innerclass refid="structfutures_1_1is__shared__future" prot="public">futures::is_shared_future</innerclass>
+    <innerclass refid="structfutures_1_1less" prot="public">futures::less</innerclass>
+    <innerclass refid="structfutures_1_1less__equal" prot="public">futures::less_equal</innerclass>
+    <innerclass refid="classfutures_1_1new__thread__executor" prot="public">futures::new_thread_executor</innerclass>
+    <innerclass refid="classfutures_1_1no__state" prot="public">futures::no_state</innerclass>
+    <innerclass refid="classfutures_1_1none__of__functor" prot="public">futures::none_of_functor</innerclass>
+    <innerclass refid="structfutures_1_1nostopstate__t" prot="public">futures::nostopstate_t</innerclass>
+    <innerclass refid="structfutures_1_1not__equal__to" prot="public">futures::not_equal_to</innerclass>
+    <innerclass refid="classfutures_1_1packaged__task_3_01R_07Args_8_8_8_08_00_01Options_01_4" prot="public">futures::packaged_task&lt; R(Args...), Options &gt;</innerclass>
+    <innerclass refid="classfutures_1_1packaged__task__uninitialized" prot="public">futures::packaged_task_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1promise" prot="public">futures::promise</innerclass>
+    <innerclass refid="classfutures_1_1promise__already__satisfied" prot="public">futures::promise_already_satisfied</innerclass>
+    <innerclass refid="classfutures_1_1promise__base" prot="public">futures::promise_base</innerclass>
+    <innerclass refid="classfutures_1_1promise__uninitialized" prot="public">futures::promise_uninitialized</innerclass>
+    <innerclass refid="classfutures_1_1reduce__functor" prot="public">futures::reduce_functor</innerclass>
+    <innerclass refid="structfutures_1_1shared__opt" prot="public">futures::shared_opt</innerclass>
+    <innerclass refid="classfutures_1_1stop__source" prot="public">futures::stop_source</innerclass>
+    <innerclass refid="classfutures_1_1stop__token" prot="public">futures::stop_token</innerclass>
+    <innerclass refid="structfutures_1_1stoppable__opt" prot="public">futures::stoppable_opt</innerclass>
+    <innerclass refid="classfutures_1_1thread__partitioner" prot="public">futures::thread_partitioner</innerclass>
+    <innerclass refid="classfutures_1_1thread__pool" prot="public">futures::thread_pool</innerclass>
+    <innerclass refid="classfutures_1_1unary__invoke__algorithm__functor" prot="public">futures::unary_invoke_algorithm_functor</innerclass>
+    <innerclass refid="classfutures_1_1value__cmp__algorithm__functor" prot="public">futures::value_cmp_algorithm_functor</innerclass>
+    <innerclass refid="classfutures_1_1when__all__future" prot="public">futures::when_all_future</innerclass>
+    <innerclass refid="classfutures_1_1when__any__future" prot="public">futures::when_any_future</innerclass>
+    <innerclass refid="structfutures_1_1when__any__result" prot="public">futures::when_any_result</innerclass>
+    <innerconcept refid="conceptfutures_1_1partitioner__for">futures::partitioner_for</innerconcept>
+    <innerconcept refid="conceptfutures_1_1execution__policy">futures::execution_policy</innerconcept>
+    <innerconcept refid="conceptfutures_1_1execution__context__for">futures::execution_context_for</innerconcept>
+    <innerconcept refid="conceptfutures_1_1execution__context">futures::execution_context</innerconcept>
+    <innerconcept refid="conceptfutures_1_1executor__for">futures::executor_for</innerconcept>
+    <innerconcept refid="conceptfutures_1_1executor">futures::executor</innerconcept>
+    <innerconcept refid="conceptfutures_1_1future__like">futures::future_like</innerconcept>
+      <sectiondef kind="enum">
+      <member refid="group__error_1ga6b514c11923c676167997aae802757b8" kind="enum"><name>future_errc</name></member>
+      <member refid="group__future-types_1ga2d9145fe40c699d6f0060bcddbf910a6" kind="enum"><name>future_status</name></member>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <member refid="group__future-types_1ga33c4a67592f57bcb5d04764d425c29a0" kind="typedef"><name>future</name></member>
+      <member refid="group__future-types_1ga691b06597181e3664dc3ab9a4976af6e" kind="typedef"><name>cfuture</name></member>
+      <member refid="group__future-types_1ga594ffcefc7c53a3eab6431c9d9ef8f65" kind="typedef"><name>jcfuture</name></member>
+      <member refid="group__future-types_1gaf9531b575c37bfe7fb80ff7e4c7b5b26" kind="typedef"><name>dfuture</name></member>
+      <member refid="group__future-types_1gab6f89384255b61ed8004b61c25cfa0b0" kind="typedef"><name>jdfuture</name></member>
+      <member refid="group__future-types_1gaf8ae95b0fa154b6b1aed392fc0b12c2d" kind="typedef"><name>vfuture</name></member>
+      <member refid="group__future-types_1ga7a01532e89adeadf5d9867b6bd767630" kind="typedef"><name>shared_future</name></member>
+      <member refid="group__future-types_1ga944b7785ed3941b348360bd463a29109" kind="typedef"><name>shared_cfuture</name></member>
+      <member refid="group__future-types_1ga85aeb742e0facea42147c5bca36dbafe" kind="typedef"><name>shared_jcfuture</name></member>
+      <member refid="group__future-types_1gac625c612509f8d6e983f18b30d4a50c7" kind="typedef"><name>shared_dfuture</name></member>
+      <member refid="group__future-types_1ga6ed365c544f18f9e09c5a291754cd3d3" kind="typedef"><name>shared_jdfuture</name></member>
+      <member refid="group__future-types_1ga0dbca35f60e6be3e06cf318a67042dd7" kind="typedef"><name>shared_vfuture</name></member>
+      <memberdef kind="typedef" id="namespacefutures_1a2616ae270c50b96ac0cc23d25521fe3e" prot="public" static="no">
+        <type>std::partial_ordering</type>
+        <definition>using futures::partial_ordering = typedef std::partial_ordering</definition>
+        <argsstring></argsstring>
+        <name>partial_ordering</name>
+        <qualifiedname>futures::partial_ordering</qualifiedname>
+        <briefdescription>
+<para>the result type of 3-way comparison that supports all 6 operators, </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/compare/partial_ordering.hpp" line="28" column="5" bodyfile="futures/algorithm/compare/partial_ordering.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacefutures_1a6cdf610a1446f3290b241594d29c07f1" prot="public" static="no">
+        <type>std::strong_ordering</type>
+        <definition>using futures::strong_ordering = typedef std::strong_ordering</definition>
+        <argsstring></argsstring>
+        <name>strong_ordering</name>
+        <qualifiedname>futures::strong_ordering</qualifiedname>
+        <briefdescription>
+<para>the result type of 3-way comparison that supports all 6 operators and is substitutable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/compare/strong_ordering.hpp" line="30" column="5" bodyfile="futures/algorithm/compare/strong_ordering.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacefutures_1aaa4179da18ef4ccba8471045493daca5" prot="public" static="no">
+        <type>std::weak_ordering</type>
+        <definition>using futures::weak_ordering = typedef std::weak_ordering</definition>
+        <argsstring></argsstring>
+        <name>weak_ordering</name>
+        <qualifiedname>futures::weak_ordering</qualifiedname>
+        <briefdescription>
+<para>the result type of 3-way comparison that supports all 6 operators, does </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/algorithm/compare/weak_ordering.hpp" line="29" column="5" bodyfile="futures/algorithm/compare/weak_ordering.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <member refid="group__partitioners_1ga1dfbb885c6bb2f86870d55160dd16783" kind="typedef"><name>default_partitioner</name></member>
+      <member refid="group__partitioners_1gace2856b25ae230b1d91b1e1a79267cf5" kind="typedef"><name>is_partitioner_for</name></member>
+      <member refid="group__execution-policies_1gaf5d088ab9052836d3d58c62a02697e26" kind="typedef"><name>sequenced_policy</name></member>
+      <member refid="group__execution-policies_1gaeb6a426f21b797b63d6cfd5f1a4585ee" kind="typedef"><name>parallel_policy</name></member>
+      <member refid="group__execution-policies_1ga1cfc7e6ec53363f996022ad8282b0cfe" kind="typedef"><name>parallel_unsequenced_policy</name></member>
+      <member refid="group__execution-policies_1gabaa708215fbcb22a94cc04f7ef726059" kind="typedef"><name>unsequenced_policy</name></member>
+      <member refid="group__traits_1gacd1a119404dd4b52bcb267a28c530720" kind="typedef"><name>common_comparison_category</name></member>
+      <member refid="group__traits_1gaa31c7a165f142f3cbb7523128b649038" kind="typedef"><name>common_comparison_category_t</name></member>
+      <member refid="group__traits_1ga7bda1c11fe675de42221596af9f0df5f" kind="typedef"><name>is_assignable_from</name></member>
+      <member refid="group__traits_1ga76db62394fec337406efe0efe4680339" kind="typedef"><name>is_bidirectional_iterator</name></member>
+      <member refid="group__traits_1gaa14660ab0fd62ba08cc33db046c7f3b1" kind="typedef"><name>is_constructible_from</name></member>
+      <member refid="group__traits_1ga478ba461a135cc0e9c291252ec9b2d8f" kind="typedef"><name>is_convertible_to</name></member>
+      <member refid="group__traits_1gafeeb5e8c14faf5518660bbbd61cadf2b" kind="typedef"><name>is_copyable</name></member>
+      <member refid="group__traits_1gade601510289810972f9caf8e2b4c73fb" kind="typedef"><name>is_default_initializable</name></member>
+      <member refid="group__traits_1ga1e386f4f05388c302d714c7d1a2c6aa2" kind="typedef"><name>is_derived_from</name></member>
+      <member refid="group__traits_1ga700cff8b3f85ddd38376e54c9ca3e6b8" kind="typedef"><name>is_equality_comparable</name></member>
+      <member refid="group__traits_1ga33c9e5b16ea99aea746e3bffa28cc56c" kind="typedef"><name>is_equality_comparable_with</name></member>
+      <member refid="group__traits_1ga848d84bbb112bc916c2efd34da93a572" kind="typedef"><name>is_forward_iterator</name></member>
+      <member refid="group__traits_1ga33d3975351d7b6285a7e0c8663e96c84" kind="typedef"><name>is_incrementable</name></member>
+      <member refid="group__traits_1gacec3cf84299f155f1a34a4984c69a8e3" kind="typedef"><name>is_indirectly_binary_invocable</name></member>
+      <member refid="group__traits_1ga5d997016e1af193a53e63e8d35454110" kind="typedef"><name>is_indirectly_readable</name></member>
+      <member refid="group__traits_1ga8a78009173a34f27d5d088459b744253" kind="typedef"><name>is_indirectly_unary_invocable</name></member>
+      <member refid="group__traits_1gafdc7cbe83b02548031e1457c533b0413" kind="typedef"><name>is_input_iterator</name></member>
+      <member refid="group__traits_1ga787d4f89658a472119f07b2b0797000f" kind="typedef"><name>is_input_or_output_iterator</name></member>
+      <member refid="group__traits_1gaf1bf7865ae3e06fd952ef1f861a28f70" kind="typedef"><name>is_input_range</name></member>
+      <member refid="group__traits_1gaf041a0c651e1e59ea18df0e2dc2dc8fe" kind="typedef"><name>is_movable</name></member>
+      <member refid="group__traits_1gae4e9bd33e6ed647165d69f3ece27935d" kind="typedef"><name>is_move_constructible</name></member>
+      <member refid="group__traits_1ga0a68b1cb70778749f176868ea5489453" kind="typedef"><name>is_random_access_iterator</name></member>
+      <member refid="group__traits_1gaea08f93eea232d08478c9cc04773e116" kind="typedef"><name>is_range</name></member>
+      <member refid="group__traits_1ga6c651460b5dfa33f143fef4514c3120b" kind="typedef"><name>is_regular</name></member>
+      <member refid="group__traits_1ga1f7dc3c45de0abcd0e466f853e283679" kind="typedef"><name>is_semiregular</name></member>
+      <member refid="group__traits_1ga5dea935029d8615e75f76c5d244f1a46" kind="typedef"><name>is_sentinel_for</name></member>
+      <member refid="group__traits_1gaced3438d14261ee82a0efa2cff8a08e4" kind="typedef"><name>is_swappable</name></member>
+      <member refid="group__traits_1gac22a6b82a79830ec1177653c62c89597" kind="typedef"><name>is_three_way_comparable</name></member>
+      <member refid="group__traits_1ga7d342b63b24fa9b3a399a8be75a909b1" kind="typedef"><name>is_three_way_comparable_with</name></member>
+      <member refid="group__traits_1gacca0150c5cccef1847a596ff7dbfb85c" kind="typedef"><name>is_totally_ordered</name></member>
+      <member refid="group__traits_1ga3e7a594dd861beb0287aab525b8d44d8" kind="typedef"><name>is_totally_ordered_with</name></member>
+      <member refid="group__traits_1ga9420a5b6af74d0339ded7b71b49aae5c" kind="typedef"><name>is_weakly_incrementable</name></member>
+      <member refid="group__traits_1ga0cd4722e248e01dcf1f077f5b64dd135" kind="typedef"><name>iter_difference</name></member>
+      <member refid="group__traits_1gadb88ead4be9c831ffd25b07850d1f1db" kind="typedef"><name>iter_difference_t</name></member>
+      <member refid="group__traits_1gae8d16e13ff22db3256af14a4d4b89fa9" kind="typedef"><name>iter_reference</name></member>
+      <member refid="group__traits_1ga4b1badc7c239d872ac366d4a8c57101a" kind="typedef"><name>iter_reference_t</name></member>
+      <member refid="group__traits_1ga512a5a98c50c6dd379e05bb4934ceed2" kind="typedef"><name>iter_rvalue_reference</name></member>
+      <member refid="group__traits_1ga2de87617ebb91ba233b7d4f5ee08e703" kind="typedef"><name>iter_rvalue_reference_t</name></member>
+      <member refid="group__traits_1gab7bdd46a3627a696302c30934567f51d" kind="typedef"><name>iter_value</name></member>
+      <member refid="group__traits_1gabd912e4dacd864daedb36cd1f39e1723" kind="typedef"><name>iter_value_t</name></member>
+      <member refid="group__traits_1gaba9b74185a646620729400ed744f7ecc" kind="typedef"><name>iterator</name></member>
+      <member refid="group__traits_1ga25b9349b8a29ca3bea4913f8b704e515" kind="typedef"><name>iterator_t</name></member>
+      <member refid="group__traits_1gaa097d6855d1af3709d4facf9848b3088" kind="typedef"><name>range_value</name></member>
+      <member refid="group__traits_1ga36b10fa59d1005a75cecb03df26b12d8" kind="typedef"><name>range_value_t</name></member>
+      <member refid="group__traits_1gab2f4c9b824ed7e93242a4f61967218df" kind="typedef"><name>remove_cvref</name></member>
+      <member refid="group__traits_1ga08dfd6b7fc387123f45b76f825a47193" kind="typedef"><name>remove_cvref_t</name></member>
+      <member refid="group__executors_1gaf961f88543ab12949fd90f310bc90663" kind="typedef"><name>default_execution_context_type</name></member>
+      <member refid="group__executors_1gacdecb5da8c06084b542ae33964dba59b" kind="typedef"><name>default_executor_type</name></member>
+      <member refid="group__executors_1gad9066c383b30d857c2527720c86f0a71" kind="typedef"><name>is_execution_context_for</name></member>
+      <member refid="group__executors_1ga50b8774bb35c27e2150e9080a3590038" kind="typedef"><name>is_execution_context</name></member>
+      <member refid="group__executors_1ga6702c04e6873f0a2ce6344a5dd3a60a7" kind="typedef"><name>is_executor_for</name></member>
+      <member refid="group__executors_1gaabcc65b63cd88a8479054d368e688f27" kind="typedef"><name>is_executor</name></member>
+      <member refid="group__future-options_1ga068aa34de70d0b9bc581127c7d46d08e" kind="typedef"><name>future_options</name></member>
+      <member refid="group__error_1gaa09c7b0f3e466783023afb96eea90fad" kind="typedef"><name>source_location</name></member>
+      <member refid="group__future-traits_1ga6b9f710ec419153132923160875d24ad" kind="typedef"><name>future_value</name></member>
+      <member refid="group__future-traits_1ga6e31e50532fd1185e4321c4b76918907" kind="typedef"><name>future_value_t</name></member>
+      <member refid="group__future-traits_1ga721bbb35763f4def43c4360cf80e7363" kind="typedef"><name>has_stop_token</name></member>
+      <member refid="group__future-traits_1ga367eb573176946bd3c564a385eb549fe" kind="typedef"><name>is_stoppable</name></member>
+      </sectiondef>
+      <sectiondef kind="var">
+      <member refid="group__functions_1ga0a19ce4d22f4c8a251aced2077623b03" kind="variable"><name>all_of</name></member>
+      <member refid="group__functions_1gac70d945839135728f9ac534f5a8626c9" kind="variable"><name>any_of</name></member>
+      <member refid="group__functions_1gaeb543fc7a0437fc057e2acf823abbb13" kind="variable"><name>count</name></member>
+      <member refid="group__functions_1ga0741d870e77e49d34e7daae10ecfb721" kind="variable"><name>count_if</name></member>
+      <member refid="group__functions_1ga15c434fa0fbabddf6b1ab8cf06760ec5" kind="variable"><name>find</name></member>
+      <member refid="group__functions_1ga10dff629b2c06c53c69024821bce5efc" kind="variable"><name>find_if</name></member>
+      <member refid="group__functions_1ga58db85c74ede4cc40c6e8735e3f228d7" kind="variable"><name>find_if_not</name></member>
+      <member refid="group__functions_1ga696ae412208d98f074d3ed6667e1a64f" kind="variable"><name>for_each</name></member>
+      <member refid="group__functions_1ga0fb3a8de3d488915fcd3ebe63d603731" kind="variable"><name>none_of</name></member>
+      <member refid="group__partitioners_1gac228eb71c167a6df66aa61d19253993d" kind="variable"><name>is_partitioner_for_v</name></member>
+      <member refid="group__execution-policies_1gabc55040ea2bc2503075ab0b70004899a" kind="variable"><name>seq</name></member>
+      <member refid="group__execution-policies_1ga15d309529b3196659d901c905bd0bbc6" kind="variable"><name>par</name></member>
+      <member refid="group__execution-policies_1ga2dfc04fa043d76435dfc6531db67a93d" kind="variable"><name>par_unseq</name></member>
+      <member refid="group__execution-policies_1ga92c59cac6e6ea17c04b929917c037446" kind="variable"><name>unseq</name></member>
+      <member refid="group__execution-policies_1ga91acd0da3465836ab08bfa9ed016d2dd" kind="variable"><name>is_execution_policy_v</name></member>
+      <member refid="group__functions_1ga12eba09a0c6fb20ae5a7f3c561e2b433" kind="variable"><name>reduce</name></member>
+      <member refid="group__traits_1ga77606ec080e615c4f83c1a737589268d" kind="variable"><name>is_assignable_from_v</name></member>
+      <member refid="group__traits_1ga53831f07f1d23a5c9575f717bf4c4ce1" kind="variable"><name>is_bidirectional_iterator_v</name></member>
+      <member refid="group__traits_1ga6c5fc06c5acf15dbbc0e490988e0bbcc" kind="variable"><name>is_constructible_from_v</name></member>
+      <member refid="group__traits_1ga99d9a1bd8e1ab89863224c78b515e4e1" kind="variable"><name>is_convertible_to_v</name></member>
+      <member refid="group__traits_1ga19bdaf3c43f699426957a966a1d16c37" kind="variable"><name>is_copyable_v</name></member>
+      <member refid="group__traits_1ga25c80aeac9b688386b0755fd4f7e2236" kind="variable"><name>is_default_initializable_v</name></member>
+      <member refid="group__traits_1gac0544fcb34d2441bf49ecd2b4165b727" kind="variable"><name>is_derived_from_v</name></member>
+      <member refid="group__traits_1ga8465918081b89b0713376f47aa9e51cf" kind="variable"><name>is_equality_comparable_v</name></member>
+      <member refid="group__traits_1ga5a60f9e666ffd6d75f260a8cd79c4fcb" kind="variable"><name>is_equality_comparable_with_v</name></member>
+      <member refid="group__traits_1ga39f0eb89da25215eabcb5b741a1f2f8f" kind="variable"><name>is_forward_iterator_v</name></member>
+      <member refid="group__traits_1gab9d3117a9157923b43113f8950b58ea6" kind="variable"><name>is_incrementable_v</name></member>
+      <member refid="group__traits_1ga2ce9de37185584b4cc70508a0c709f72" kind="variable"><name>is_indirectly_binary_invocable_v</name></member>
+      <member refid="group__traits_1ga39b8d413d2e15c20ad26708791d48c96" kind="variable"><name>is_indirectly_readable_v</name></member>
+      <member refid="group__traits_1ga035daff7f18105b4ec196371bdeb6d5c" kind="variable"><name>is_indirectly_unary_invocable_v</name></member>
+      <member refid="group__traits_1ga164df25f7613782d753e35e084c236b7" kind="variable"><name>is_input_iterator_v</name></member>
+      <member refid="group__traits_1gac5975521439989723185832ac2645166" kind="variable"><name>is_input_or_output_iterator_v</name></member>
+      <member refid="group__traits_1gac9784d2e05f3cf8a9f9590f04f123e74" kind="variable"><name>is_input_range_v</name></member>
+      <member refid="group__traits_1ga9900979cf6cb29a928197a494ccfd023" kind="variable"><name>is_movable_v</name></member>
+      <member refid="group__traits_1gaaba2a10a79777082f19420c161b7ca40" kind="variable"><name>is_move_constructible_v</name></member>
+      <member refid="group__traits_1gae9954a411bcf40e3f06c2c24b4b0a6bd" kind="variable"><name>is_random_access_iterator_v</name></member>
+      <member refid="group__traits_1ga7a11846e3d86b8f2f049f3e4b9ba0733" kind="variable"><name>is_range_v</name></member>
+      <member refid="group__traits_1gaaa5f05191e3a4aaf4b084d1c29559bc4" kind="variable"><name>is_regular_v</name></member>
+      <member refid="group__traits_1gadcef95d15ae7d9498b6c45d0f05bc648" kind="variable"><name>is_semiregular_v</name></member>
+      <member refid="group__traits_1gacadf25f8f6492d3710eb2d513b0dc7a7" kind="variable"><name>is_sentinel_for_v</name></member>
+      <member refid="group__traits_1ga3df986359d7ffe87ad775677e9e46326" kind="variable"><name>is_swappable_v</name></member>
+      <member refid="group__traits_1ga7f63cfc0969c7768a3ed2fb040a99b95" kind="variable"><name>is_three_way_comparable_v</name></member>
+      <member refid="group__traits_1ga8830992102877a3f25d09866d080333f" kind="variable"><name>is_three_way_comparable_with_v</name></member>
+      <member refid="group__traits_1ga7f013c84366d4939cbdbf3f4fd088e09" kind="variable"><name>is_totally_ordered_v</name></member>
+      <member refid="group__traits_1gafa9051526c36ea222da0f4d83f3d3b66" kind="variable"><name>is_totally_ordered_with_v</name></member>
+      <member refid="group__traits_1gaa514a224bede48a6941ec53d58b3692f" kind="variable"><name>is_weakly_incrementable_v</name></member>
+      <member refid="group__executors_1ga1ce8960b0f1aeaf6f5d9c1a08291041d" kind="variable"><name>is_execution_context_for_v</name></member>
+      <member refid="group__executors_1ga7a06e7d040be2e43b5ae92f8b754133b" kind="variable"><name>is_execution_context_v</name></member>
+      <member refid="group__executors_1ga29e93e53607e1d7fd42078006e8d2155" kind="variable"><name>is_executor_for_v</name></member>
+      <member refid="group__executors_1ga27c20c657a0f5357f9523df487980a88" kind="variable"><name>is_executor_v</name></member>
+      <member refid="group__cancellation_1ga01213ebdf9bd19b06e4860d863094735" kind="variable"><name>nostopstate</name></member>
+      <member refid="group__future-traits_1ga1d65f925849576acd6b5a4a6333d1380" kind="variable"><name>has_executor_v</name></member>
+      <member refid="group__future-traits_1gaaa06f944510ee5b88b996ec9e1f41adb" kind="variable"><name>has_ready_notifier_v</name></member>
+      <member refid="group__future-traits_1ga298d5e966d0a87153c8feb6dfaf6a222" kind="variable"><name>has_stop_token_v</name></member>
+      <member refid="group__future-traits_1ga61c743647bbfe6907f93a674af321ad1" kind="variable"><name>is_always_deferred_v</name></member>
+      <member refid="group__future-traits_1gaa1dab24425678e965a56ff21c6d1624e" kind="variable"><name>is_continuable_v</name></member>
+      <member refid="group__future-traits_1gaafc70e30ead3e35866fa26ba79b3721d" kind="variable"><name>is_future_like_v</name></member>
+      <member refid="group__future-traits_1ga98d13b2d7d89edd37c377b59e2c3d6f5" kind="variable"><name>is_shared_future_v</name></member>
+      <member refid="group__future-traits_1gad4b42cfc7fecf09378dbf1548501a366" kind="variable"><name>is_stoppable_v</name></member>
+      </sectiondef>
+      <sectiondef kind="func">
+      <member refid="group__adaptors_1ga3d79a1bc16752e3a3b2d9cda6904178c" kind="function"><name>operator%</name></member>
+      <member refid="group__adaptors_1gacb4e00b6c170bb3ae76893524bfab046" kind="function"><name>make_ready_future</name></member>
+      <member refid="group__adaptors_1ga659e9f6c7e24219433bf4079ada8e2b3" kind="function"><name>make_ready_future</name></member>
+      <member refid="group__adaptors_1ga0e4df3e1f8048b61db143fdd7d29b9c7" kind="function"><name>make_ready_future</name></member>
+      <member refid="group__adaptors_1gab5ece643ec44101cce6bd81b2fb84966" kind="function"><name>make_exceptional_future</name></member>
+      <member refid="group__adaptors_1ga512555b53d37358d770df8df97e4e398" kind="function"><name>make_exceptional_future</name></member>
+      <member refid="group__adaptors_1ga4bc04aed0af78c914f202a2ccad236a0" kind="function"><name>then</name></member>
+      <member refid="group__adaptors_1ga3c5bcb86d6f7a938f4d1dea57dcfae0c" kind="function"><name>then</name></member>
+      <member refid="group__adaptors_1ga8e228fec77e89e5071dbd391d2d01523" kind="function"><name>operator&gt;&gt;</name></member>
+      <member refid="group__adaptors_1ga47832f9e4e10be3eec7abc2083d85be0" kind="function"><name>operator&gt;&gt;</name></member>
+      <member refid="group__adaptors_1gaf29fa7770136bef87fc206de9ced9485" kind="function"><name>when_all</name></member>
+      <member refid="group__adaptors_1ga5631320ae4a5b964c93f9ba3a812c3a1" kind="function"><name>when_all</name></member>
+      <member refid="group__adaptors_1ga8203d4f82bf8ee3bffae100123b0c601" kind="function"><name>when_all</name></member>
+      <member refid="group__adaptors_1ga2339ff3a16ab28b15882e8051977f2cb" kind="function"><name>operator&amp;&amp;</name></member>
+      <member refid="group__adaptors_1ga326cd907b4a3bf8a50327d66ce41bead" kind="function"><name>when_any</name></member>
+      <member refid="group__adaptors_1ga842a1ff92d9194317719529dcd49b42d" kind="function"><name>when_any</name></member>
+      <member refid="group__adaptors_1gaeba0729046288863d01773d2e13c5f13" kind="function"><name>when_any</name></member>
+      <member refid="group__adaptors_1ga2d3466eb250f13d9c7f909c4a07a787f" kind="function"><name>operator||</name></member>
+      <member refid="group__partitioners_1ga20c9290c9184f57260f5d6f8692d73b6" kind="function"><name>make_grain_size</name></member>
+      <member refid="group__partitioners_1ga47766e8c4150a6b098bf298023669558" kind="function"><name>make_default_partitioner</name></member>
+      <member refid="group__partitioners_1ga39395da895517ad34cfa27ef8b1d6d87" kind="function"><name>make_default_partitioner</name></member>
+      <member refid="group__partitioners_1ga27d6c718a4152cd510382df27662a199" kind="function"><name>make_default_partitioner</name></member>
+      <member refid="group__waiting_1ga3aff4d8b5cd3b961aaf86f0c59652d5e" kind="function"><name>await</name></member>
+      <member refid="group__waiting_1ga6e65f21a7e07afbab340ede45e568068" kind="function"><name>await</name></member>
+      <member refid="group__executors_1ga046c80f7c9ec8c63cd18bebe62f3ce3f" kind="function"><name>default_execution_context</name></member>
+      <member refid="group__executors_1ga1ab933a38b4db38d0955b3e6764dd90d" kind="function"><name>make_default_executor</name></member>
+      <memberdef kind="function" id="namespacefutures_1a7b2a38e1190a1de44f046e7aa3101980" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>executor_for&lt; F &gt;</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::execute</definition>
+        <argsstring>(E const &amp;ex, F &amp;&amp;f)</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::execute</qualifiedname>
+        <param>
+          <type>E const &amp;</type>
+          <declname>ex</declname>
+        </param>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Submits a task for execution. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This free function submits a task for execution using the specified executor.</para>
+<para>Unlike the <computeroutput>execute</computeroutput> member function of executors, this function identifies and interoperates with other executor types, such as Asio executors. If an execution context is provided, its executor is retrived and used instead.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The target executor </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The task </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/execute.hpp" line="40" column="5" bodyfile="futures/executor/execute.hpp" bodystart="40" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacefutures_1afcf0c0be15dabc267db8b38925813a97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>execution_context_for&lt; F &gt;</type>
+            <declname>C</declname>
+            <defname>C</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::execute</definition>
+        <argsstring>(C &amp;ctx, F &amp;&amp;f)</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::execute</qualifiedname>
+        <param>
+          <type>C &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+    <requiresclause>(!executor_for&lt;C, F&gt;)    </requiresclause>
+        <briefdescription>
+<para>Submits a task for execution on an execution context. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This free function submits a task for execution using the specified execution context.</para>
+<para>This is a convenience function that extracts the executor from the context and uses it instead.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The target execution context </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The task </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/execute.hpp" line="68" column="10" bodyfile="futures/executor/execute.hpp" bodystart="68" bodyend="70"/>
+      </memberdef>
+      <member refid="group__executors_1gaa58c1bc10fe96080f355b709a30473f6" kind="function"><name>hardware_concurrency</name></member>
+      <member refid="group__executors_1ga8402f32dc6d52a81897b54b45ec84616" kind="function"><name>make_inline_executor</name></member>
+      <member refid="group__executors_1ga421a5f50523a4c393344869afbb7a85f" kind="function"><name>make_new_thread_executor</name></member>
+      <member refid="group__adaptors_1ga4b25abc5ba5c39102a1545d29d8c03a3" kind="function"><name>is_ready</name></member>
+      <member refid="group__launch_1gafcb2799edc3dab5292f720d81f7be75e" kind="function"><name>async</name></member>
+      <member refid="group__launch_1ga85e60c1de0d37a14ec5623e85ae9a0c7" kind="function"><name>async</name></member>
+      <member refid="group__launch_1gaa3cac9f64c928b7c63acd65c6e17cc69" kind="function"><name>schedule</name></member>
+      <member refid="group__launch_1ga5132dec81e533dfd824848751a1a3565" kind="function"><name>schedule</name></member>
+      <member refid="group__shared__state_1ga320f807f067a8d02c4d0e9ed66e53b0b" kind="function"><name>swap</name></member>
+      <member refid="group__shared__state_1ga9a3170dfeff3872b6a6bcfab5ce63e66" kind="function"><name>swap</name></member>
+      <member refid="group__error_1ga1d60ca812337944e729a84a9f37195ab" kind="function"><name>handle_exception</name></member>
+      <member refid="group__error_1ga3ee1de4e2e5e2809f8936319b4b2ce09" kind="function"><name>throw_exception</name></member>
+      <member refid="group__waiting_1ga059ba1404ba968cb2cb108a76f9cffa8" kind="function"><name>wait_for_all</name></member>
+      <member refid="group__waiting_1gabbd368b77796881cce9c951099f7a25a" kind="function"><name>wait_for_all</name></member>
+      <member refid="group__waiting_1gaa3ea0a0826fda6a1c9c7f9b5ad3be390" kind="function"><name>wait_for_all</name></member>
+      <member refid="group__waiting_1gadc987f5c0fbf9c029b6e4fd303778e06" kind="function"><name>wait_for_all</name></member>
+      <member refid="group__waiting_1gabe48c8000499e7d6b858c2ba03f24f9d" kind="function"><name>wait_for_all_for</name></member>
+      <member refid="group__waiting_1ga03aaee3fbed390c33ca18829365f457f" kind="function"><name>wait_for_all_for</name></member>
+      <member refid="group__waiting_1ga5ca790c41550c9952a733a5c3ec4f9d3" kind="function"><name>wait_for_all_for</name></member>
+      <member refid="group__waiting_1gabe33547dffed01e98f0fbb5e6b250e5c" kind="function"><name>wait_for_all_for</name></member>
+      <member refid="group__waiting_1gab87515245b042239085fb0c231dbf49d" kind="function"><name>wait_for_all_until</name></member>
+      <member refid="group__waiting_1gaec7ba0721287ed2d804fefcf60aeb043" kind="function"><name>wait_for_all_until</name></member>
+      <member refid="group__waiting_1ga5176c9911068fd8dec7347b45b99ed64" kind="function"><name>wait_for_all_until</name></member>
+      <member refid="group__waiting_1ga1e43cb93d4aca81d2313dc2ce032ec91" kind="function"><name>wait_for_all_until</name></member>
+      <member refid="group__waiting_1ga7fa10c7413d3b02bcf65e63ead2185c1" kind="function"><name>wait_for_any</name></member>
+      <member refid="group__waiting_1ga5a34d89268642da91a61c25184b47095" kind="function"><name>wait_for_any</name></member>
+      <member refid="group__waiting_1ga7ad63bcada8c89257d6338a0f40c6622" kind="function"><name>wait_for_any</name></member>
+      <member refid="group__waiting_1ga9e77d6e17363998b5efbe74b4d0b2acb" kind="function"><name>wait_for_any</name></member>
+      <member refid="group__waiting_1gad32e2da4457116249c758eed1550e3ab" kind="function"><name>wait_for_any_for</name></member>
+      <member refid="group__waiting_1ga916e8c489e9b283a63304287b9d86a8e" kind="function"><name>wait_for_any_for</name></member>
+      <member refid="group__waiting_1gac858955f3202d94606e73574f302f9c9" kind="function"><name>wait_for_any_for</name></member>
+      <member refid="group__waiting_1gaa71e8ffc7c5260316fea850335e29860" kind="function"><name>wait_for_any_for</name></member>
+      <member refid="group__waiting_1ga55f81bf19839326a15d9daad7667cc2a" kind="function"><name>wait_for_any_until</name></member>
+      <member refid="group__waiting_1ga498289356066c74ee09b692586f55b8e" kind="function"><name>wait_for_any_until</name></member>
+      <member refid="group__waiting_1ga109330c8b2744f4d74464a2533b98556" kind="function"><name>wait_for_any_until</name></member>
+      <member refid="group__waiting_1gab0146fa5deaf49968c0aa421ebca990b" kind="function"><name>wait_for_any_until</name></member>
+      </sectiondef>
+    <briefdescription>
+<para>Main library namespace. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/future.hpp" line="103" column="1"/>
+  </compounddef>
+</doxygen>

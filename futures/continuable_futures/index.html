@@ -1,0 +1,1554 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Better Futures: Because futures don't have to be awful">
+      
+      
+      
+        <link rel="canonical" href="https://alandefreitas.github.io/futures/futures/continuable_futures/">
+      
+      
+        <link rel="prev" href="../deferred/">
+      
+      
+        <link rel="next" href="../stoppable_futures/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+    
+    
+      
+        <title>Continuable Futures - Better Futures</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-290016612",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-290016612",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="futures" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#continuable-futures" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Better Futures" class="md-header__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Better Futures
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Continuable Futures
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+<!-- Main navigation -->
+
+
+<div
+        class="md-sidebar md-sidebar--primary"
+        data-md-component="sidebar" data-md-type="navigation"
+        
+>
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Better Futures" class="md-nav__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    Better Futures
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="true">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Futures" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../future_types/" class="md-nav__link">
+        Basic Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../launching/" class="md-nav__link">
+        Launching Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/" class="md-nav__link">
+        Deferred Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Continuable Futures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Continuable Futures
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+    <nav class="md-nav" aria-label="Motivation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-continuable-tasks" class="md-nav__link">
+    Non-continuable tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polling" class="md-nav__link">
+    Polling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuable-futures_1" class="md-nav__link">
+    Continuable futures
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-continuations" class="md-nav__link">
+    Deferred continuations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stoppable_futures/" class="md-nav__link">
+        Stoppable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shared_futures/" class="md-nav__link">
+        Shared Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../waiting/" class="md-nav__link">
+        Waiting for Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../promises/" class="md-nav__link">
+        Promises and Tasks
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Future Adaptors" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/continuations/" class="md-nav__link">
+        Continuations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/conjunctions/" class="md-nav__link">
+        Conjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/disjunctions/" class="md-nav__link">
+        Disjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adaptors/task_graphs/" class="md-nav__link">
+        Task Graphs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Parallel Algorithms" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/partitioners/" class="md-nav__link">
+        Partitioners
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="false">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Networking" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/asio/" class="md-nav__link">
+        Asio
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_reference/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__futures/" class="md-nav__link">
+        Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__adaptors/" class="md-nav__link">
+        Adaptors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__executors/" class="md-nav__link">
+        Executors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/namespaces/namespacefutures/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/files/" class="md-nav__link">
+        Files
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+        </div>
+    </div>
+</div>
+
+
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+    <nav class="md-nav" aria-label="Motivation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-continuable-tasks" class="md-nav__link">
+    Non-continuable tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polling" class="md-nav__link">
+    Polling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuable-futures_1" class="md-nav__link">
+    Continuable futures
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-continuations" class="md-nav__link">
+    Deferred continuations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+            <div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+        </div>
+    </div>
+</div>
+
+
+
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+                  
+
+  
+  
+
+
+
+<h1 id="continuable-futures">Continuable Futures</h1>
+<p>Continuations are the most common extension to future objects. A continuable shared state provides the future instance
+with write access to attach continuations to a task. When the task sets the value of the shared state, all continuations
+are run.</p>
+<div class="mermaid">
+graph LR
+M[[Main Thread]] ==> |store|F[Future Value]
+M -.-> |attach continuation|F
+E[[Executor]] --> |run|T[Task]
+M -.-> |launch|T
+subgraph Futures and Promises
+F --> |read|S[(Shared State <br> + <br> Continuations)]
+F -.-> |attach continuation|S
+T[Task] --> |set and continue|S
+end
+</div>
+
+<h2 id="motivation">Motivation</h2>
+<h3 id="non-continuable-tasks">Non-continuable tasks</h3>
+<p>Consider what happens when we launch a task with C++11 <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a>:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Simple std::async task</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Parallel work</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="c1">// Main work</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">65</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>When we only need a single parallel task with future types, the main thread is allowed to wait or do some other work
+while the task is running.</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>+Task: Launch
+    Main->>Main: Do work
+    Main->>Task: Wait
+    activate Main
+    Note left of Main: Time spent waiting
+    Task->>-Main: Return
+    deactivate Main
+</div>
+
+<p>In this example, the main thread spent some time waiting but this is often OK, as long as it had nothing better to do
+but to wait for the asynchronous task. This is common in user interfaces that need to be refreshed while a longer
+background task is running.</p>
+<p>Now let's say we want to execute a sequence of asynchronous tasks as simple as:</p>
+<div class="mermaid">
+graph LR
+subgraph Async
+A --> B --> C
+end
+Main --> A
+C --> End
+Main --> End
+</div>
+
+<p>As we shall see, <a href="https://en.cppreference.com/w/cpp/thread/async">std::async</a> does not provide the mechanisms to make this happen properly. The first alternative that
+usually comes to mind is waiting for one task after launching the next.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Always waiting for the next task</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span>
+<span class="w">    </span><span class="n">async</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([](</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The code might look reasonable but, in that case, we would have:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>+A: Launch
+    Main->>A: Wait
+    activate Main
+    A->>-Main: Return
+    deactivate Main
+    Main->>+B: Launch
+    Main->>B: Wait
+    activate Main
+    B->>-Main: Return
+    deactivate Main
+    Main->>+C: Launch
+    Main->>C: Wait
+    activate Main
+    C->>-Main: Return
+    deactivate Main
+</div>
+
+<p>We have a number of problems here. The more tasks we have, and the shorter the tasks, the less time the main thread has
+to do any useful work before waiting and the more time it spends waiting for tasks. Even worse, we already know how
+these tasks should continue: we are just waiting to attach this continuation. At a certain point, it might not even be
+worth using asynchronous code at all.</p>
+<h3 id="polling">Polling</h3>
+<p>The second alternative to solve this problem is polling. In this case, we would make task B wait for A before doing its
+work. The same for task B and C.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Polling the previous task</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="n">A</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// B waits for A in its turn</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Use the value</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="n">B</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>And now we have:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>+A: Launch
+    Main->>+B: Launch
+    Main->>+C: Launch
+    B->>A: Wait
+    C->>B: Wait
+    Main->>Main: Do work
+    A->>-B: Return
+    B->>-C: Return
+    Main->>C: Wait
+    C->>-Main: Return
+</div>
+
+<p>This might look more reasonable from the perspective of the main thread. We are not waiting for so long inline, and we
+have more time to do work in parallel. However, this outsources the cost of waiting to other threads even though we know
+the initial task is not ready. Note for how long the tasks A, B, and C are active in this example.</p>
+<p>Thus, the biggest problem with this strategy is it cannot scale properly. For every task in our application, we would
+need one idle thread waiting for the previous task. In an application with 2000 tasks, we would need 1999 threads for
+polling antecedent tasks and only one thread would to execute real work.</p>
+<div class="admonition info">
+<p class="admonition-title">Continuations in C++ libraries</p>
+<p>The act of waiting for a <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> <strong>result is synchronous</strong>, which is not appropriate in communication-intensive code.
+In the original <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a> model, if a continuation task <code>B</code> depends on the result of the first task <code>A</code>, we only
+have two options:</p>
+<ul>
+<li>waiting for the first task synchronously</li>
+<li>polling the first task asynchronously.</li>
+</ul>
+<p>If we always wait for the first task to start its continuation, the asynchronicity has <strong>no purpose</strong>. If we always poll for
+the first task, we <strong>waste resources</strong> and an extra thread to repeatedly check the status of the first task.</p>
+<p>For this reason, the most common <strong>extension</strong> proposed for <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>
+is <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3784.pdf">continuations</a>, such as implemented in
+Microsoft's <a href="https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?view=msvc-160">PPL</a>, <a href="https://github.com/Amanieu/asyncplusplus">async++</a>, <a href="https://github.com/Naios/continuable">continuable</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Waiting</label><label for="__tabbed_4_2">Polling</label><label for="__tabbed_4_3">Continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">experimental</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Continuations are the foundation for composing task graphs, with operations such
+as <a href="https://en.cppreference.com/w/cpp/experimental/when_all">std::experimental::when_all</a> and <a href="https://en.cppreference.com/w/cpp/experimental/when_any">std::experimental::when_any</a>. These conjunction and disjunction
+operations depend on continuations so that previous tasks can inform the operation result when they
+are ready without polling.</p>
+</div>
+<h2 id="continuable-futures_1">Continuable futures</h2>
+<p>Continuable futures allow us to launch a second task as a continuation to the first task, instead of an independent
+task.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Continuable futures</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Note we can use both the member function <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a> or the free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a>. <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a> allows
+chaining while the free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> allows interoperability between future types.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Chaining continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span>
+<span class="p">}).</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">}).</span><span class="n">then</span><span class="p">([](</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In these examples,</p>
+<ul>
+<li>it's up to the continuation to wait for the previous task, and</li>
+<li>it's up to the previous task to launch its own continuations</li>
+</ul>
+<p>In other words, task B does not have to pool task A because task A is launching task B. Task B knows A is ready and can
+just take it from there.</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>A: Launch
+    activate A
+    Main-->>B: Attach to A
+    Main-->>C: Attach to B
+    A->>B: Launch
+    deactivate A
+    activate B
+    B->>C: Launch
+    deactivate B
+    activate C
+    Main->>Main: Do work
+    Main->>C : Wait
+    activate Main
+    C->>Main: Return
+    deactivate Main
+    deactivate C
+</div>
+
+<p>In this solution, the main thread has more time to do useful work, such as scheduling other tasks, and the processing
+time we spend on waiting is minimized.</p>
+<div class="admonition hint">
+<p class="admonition-title">Continuation Unwrapping</p>
+<p>You might notice that continuation functions also unwrap the previous future value. A continuation function for
+<code>future&lt;A&gt;</code> might have a parameter <code>future&lt;A&gt;</code> or <code>A</code>. More patterns of continuation unwrapping are described in
+Section <a href="/futures/adaptors/continuations">adaptors/continuations</a>. </p>
+</div>
+<p>For this reason, continuations are one of the most common proposed extensions for <a href="https://en.cppreference.com/w/cpp/thread/future">std::future</a>, including the original
+model presented by
+the <a href="https://docs.microsoft.com/en-us/cpp/parallel/concrt/parallel-patterns-library-ppl?redirectedfrom=MSDN&amp;view=msvc-160">Microsoft PPL Library</a>
+which inspired the <a href="https://en.cppreference.com/w/cpp/experimental/concurrency">C++ Extensions for Concurrency</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">Eager Future Continuations in C++</p>
+<p><em>Eager</em> futures with <em>eager</em> continuation chaining, such as in <a href="https://en.cppreference.com/w/cpp/experimental/future">std::experimental::future</a>, allow us to <strong>asynchronously</strong>
+register a second operation and pass data to it. The first task <strong>might already be running</strong> eagerly.</p>
+<ul>
+<li>The continuation is attached after the first task is scheduled</li>
+<li>The continuation is scheduled as soon as, but not before, the first task is ready</li>
+</ul>
+<p>The process does not consume any polling threads. The continuation can also have its continuations and so on.
+In this scenario, attaching a continuation has its own synchronization cost.</p>
+</div>
+<h2 id="deferred-continuations">Deferred continuations</h2>
+<p>The process of attaching continuations to a future whose main task is potentially executing has a synchronization cost.
+When attaching a continuation, we need to check if the future is not currently attempting to run the continuations and
+vice-versa. This synchronization cost was identified
+in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3747.pdf">N3747</a>.</p>
+<p>The library implements this procedure with <a href="https://en.cppreference.com/w/cpp/atomic/atomic">atomic</a> operations to avoid
+this cost. However, in some contexts, the cost of continuations can be further minimized
+by <a href="/futures/launching/">launching deferred futures</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Continuable futures</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">schedule</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// launch A now!</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The continuation to a deferred shared state created with <a href="/futures/reference/Namespaces/namespacefutures/#function-schedule">schedule</a> is also deferred by default. When the task related
+to any shared state is deferred, we have a different sequence of events:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main->>A: Schedule
+    Main-->>B: Attach to A
+    Main-->>C: Attach to B
+    Main->>C : Wait
+    activate Main
+    C->>B : Request start
+    B->>A : Request start
+    activate A
+    B->>A: Wait
+    A->>B: Return
+    deactivate A
+    activate B
+    C->>B: Wait
+    B->>C: Return
+    deactivate B
+    activate C
+    Main->>Main: Do work
+    C->>Main: Return
+    deactivate C
+    deactivate Main
+</div>
+
+<p>In this case, the synchronization cost can be completely removed because the task will only be sent to the executor once
+its continuations have already been attached to it. Notice how tasks B and C are never waiting at the same time.</p>
+<p>Deferred futures can also avoid the list of continuations all together. When requesting a deferred continuation to
+start, it can simply wait for the previous task inline before sending its own task to the executor.</p>
+<p>While an eager future stores its continuations:</p>
+<div class="mermaid">
+graph LR
+subgraph Eager futures
+A --> |store|B --> |store|C
+end
+</div>
+
+<p>A deferred continuation can store the previous task:</p>
+<div class="mermaid">
+graph LR
+subgraph Deferred futures
+C --> |store|D --> |store|A
+end
+</div>
+
+<p>Thus, deferred futures without explicit continuation lists can still have lazy continuations, as the continuation task
+will store its previous task, forming a chain of tasks in the shared state of these objects. This allows deferred
+futures to have the member function <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a> defined even we no continuation list is available.</p>
+<p>In fact, this is safer than continuation lists for deferred futures. Let A and B be deferred tasks. Because they are not
+eager, task A will <em>not be launched before task B</em> and then post task B to the executor. When we wait for task B, it
+will be launched, which would take room in the executor. Task B, already running, will need to wait for task A. At the
+point, however, the executor might not have the enough capacity for launching task A because B is already running and
+polling A:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main ->> A: Create
+    Main ->> B: Create
+    A ->> B: Store as continuation
+    Main ->> B: Wait
+    B ->> B: Post task
+    B ->> A: Wait (using executor)
+    A ->> A: Do work (might fail)
+    A ->> B: Return
+    B ->> B: Do work
+</div>
+
+<p>The library solves this problem by checking for previous continuations of A before starting B. But deferred
+continuations can solve the problem natively:</p>
+<div class="mermaid">
+sequenceDiagram
+    Main ->> A: Create
+    Main ->> B: Create
+    B ->> A: Stores inline
+    Main ->> B: Wait
+    B ->> A: Wait inline
+    A ->> A: Do work (executor is free)
+    A ->> B: Return
+    B ->> B: Post task
+    B ->> B: Do work
+</div>
+
+<p>For this reason, by default, <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> attaches the previous future to its deferred continuation instead of attaching the
+continuation to the antecedent future.</p>
+<div class="admonition info">
+<p class="admonition-title">Lazy future continuations in C++</p>
+<p><em>Lazy</em> futures with <em>lazy</em> continuation chaining store the continuation in the shared state of the
+first task <strong>before</strong> the task is scheduled.</p>
+<ul>
+<li>The continuation is attached before the first task starts to execute</li>
+<li>The continuation is scheduled as soon as, but not before, the first task is ready</li>
+</ul>
+<p>As usual, all futures are programmed to run its internal continuations when they finish their
+main task. This also avoids blocking waits and wasting threads pooling for the results of the
+antecedent task. In this scenario, attaching a continuation has no synchronization cost.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">experimental</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">A_result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// This task is not scheduled until A completes</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">A_result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="n">B</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Exceptions and continuations in C++</p>
+<p>If the antecedent future throws an exception, attempting to retrieve the result usually rethrows the error.
+Some models besides <a href="https://en.cppreference.com/w/cpp/experimental/concurrency">C++ Extensions for Concurrency</a>, such as <a href="https://github.com/Naios/continuable">Continuable</a>,
+allow the continuation to also catch this error:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Catching errors</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">async</span><span class="p">([]{</span><span class="w"> </span><span class="cm">/* operation that might throw an error */</span><span class="w"> </span><span class="p">})</span>
+<span class="w">  </span><span class="p">.</span><span class="n">then</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Some error&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">})</span>
+<span class="w">  </span><span class="p">.</span><span class="n">fail</span><span class="p">([]</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">rethrow_exception</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Handle the exception or error code here</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">  </span><span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Continuations and Executors in C++</p>
+<p>By default, the first task usually includes an executor handle and the continuation inherits it unless some other
+executor is requested for the continuation. Futures with continuations can also be used as components
+of <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3650.pdf">resumable functions</a>.</p>
+</div>
+<!-- Standard C++ -->
+<!-- C++ Standard library -->
+<!-- C++ Standard library / Extensions and Proposals -->
+<!-- Libraries -->
+<!-- Futures -->
+
+
+  
+
+
+
+
+                
+
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px; text-align: center;">
+    <a href="https://github.com/alandefreitas/futures/" title="Better Futures" class="md-button" target="_blank">
+        ⭐️ Star Better Futures
+    </a>
+</footer>
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Application footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+    <div class="md-footer-nav">
+        <nav
+                class="md-footer-nav__inner md-grid"
+                aria-label=""
+        >
+
+            <!-- Link to previous page -->
+            
+            <a
+                    href="../deferred/"
+                    class="md-footer-nav__link md-footer-nav__link--prev"
+                    rel="prev"
+            >
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+                </div>
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                        Deferred Tasks
+                    </div>
+                </div>
+            </a>
+            
+
+            <!-- Link to next page -->
+            
+            <a
+                    href="../stoppable_futures/"
+                    class="md-footer-nav__link md-footer-nav__link--next"
+                    rel="next"
+            >
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                        Stoppable Futures
+                    </div>
+                </div>
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+                </div>
+            </a>
+            
+        </nav>
+    </div>
+    
+
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+        <div class="md-footer-meta__inner md-grid">
+
+            <!-- Copyright and theme information -->
+            <div class="md-footer-copyright">
+                
+                <div class="md-footer-copyright__highlight">
+                    Copyright &copy; Alan Freitas
+                </div>
+                
+                Made with
+                <a
+                        href="https://squidfunk.github.io/mkdocs-material/"
+                        target="_blank" rel="noopener"
+                >
+                    Material for MkDocs
+                </a>
+            </div>
+
+            <!-- Social links -->
+            <div class="md-social">
+  
+</div>
+        </div>
+    </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../js/mkdocs-charts-plugin.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1is__execution__policy" kind="struct" language="C++" prot="public">
+    <compoundname>futures::is_execution_policy</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::disjunction&lt; std::is_same&lt; T, sequenced_policy &gt;, std::is_same&lt; T, parallel_policy &gt;, std::is_same&lt; T, parallel_unsequenced_policy &gt;, std::is_same&lt; T, unsequenced_policy &gt; &gt;</basecompoundref>
+    <includes refid="policies_8hpp" local="no">policies.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Determines whether T is a standard or implementation-defined execution policy type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>detail::disjunction&lt; std::is_same&lt; T, sequenced_policy &gt;, std::is_same&lt; T, parallel_policy &gt;, std::is_same&lt; T, parallel_unsequenced_policy &gt;, std::is_same&lt; T, unsequenced_policy &gt; &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::is_execution_policy&lt; T &gt;</label>
+        <link refid="structfutures_1_1is__execution__policy"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>detail::disjunction&lt; std::is_same&lt; T, sequenced_policy &gt;, std::is_same&lt; T, parallel_policy &gt;, std::is_same&lt; T, parallel_unsequenced_policy &gt;, std::is_same&lt; T, unsequenced_policy &gt; &gt;</label>
+      </node>
+      <node id="1">
+        <label>futures::is_execution_policy&lt; T &gt;</label>
+        <link refid="structfutures_1_1is__execution__policy"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="futures/algorithm/policies.hpp" line="105" column="5" bodyfile="futures/algorithm/policies.hpp" bodystart="110" bodyend="110"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

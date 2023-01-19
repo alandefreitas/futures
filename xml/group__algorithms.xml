@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="group__algorithms" kind="group">
+    <compoundname>algorithms</compoundname>
+    <title>Algorithms</title>
+    <innergroup refid="group__functions">Functions</innergroup>
+    <innergroup refid="group__partitioners">Partitioners</innergroup>
+    <innergroup refid="group__execution-policies">Execution Policies</innergroup>
+    <innergroup refid="group__algorithm-traits">Algorithm Traits</innergroup>
+    <innergroup refid="group__traits">Traits</innergroup>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

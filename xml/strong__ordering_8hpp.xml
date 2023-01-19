@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="strong__ordering_8hpp" kind="file" language="C++">
+    <compoundname>strong_ordering.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">futures/config.hpp</includes>
+    <includes refid="partial__ordering_8hpp" local="no">futures/algorithm/compare/partial_ordering.hpp</includes>
+    <includes refid="weak__ordering_8hpp" local="no">futures/algorithm/compare/weak_ordering.hpp</includes>
+    <includes local="no">futures/algorithm/compare/impl/strong_ordering.hpp</includes>
+    <includedby refid="compare_8hpp" local="no">futures/algorithm/compare.hpp</includedby>
+    <includedby refid="common__comparison__category_8hpp" local="no">futures/algorithm/traits/common_comparison_category.hpp</includedby>
+    <includedby refid="is__three__way__comparable_8hpp" local="no">futures/algorithm/traits/is_three_way_comparable.hpp</includedby>
+    <incdepgraph>
+      <node id="5">
+        <label>futures/algorithm/compare/partial_ordering.hpp</label>
+        <link refid="partial__ordering_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/compare/strong_ordering.hpp</label>
+        <link refid="strong__ordering_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/compare/weak_ordering.hpp</label>
+        <link refid="weak__ordering_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/compare/impl/partial_ordering.hpp</label>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/compare/impl/strong_ordering.hpp</label>
+      </node>
+      <node id="8">
+        <label>futures/algorithm/compare/impl/weak_ordering.hpp</label>
+      </node>
+      <node id="3">
+        <label>futures/detail/config.hpp</label>
+      </node>
+      <node id="4">
+        <label>futures/impl/config.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>futures/algorithm.hpp</label>
+        <link refid="algorithm_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>futures/algorithm/compare.hpp</label>
+        <link refid="compare_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>futures/algorithm/compare/compare_three_way.hpp</label>
+        <link refid="compare__three__way_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>futures/algorithm/compare/strong_ordering.hpp</label>
+        <link refid="strong__ordering_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>futures/algorithm/traits.hpp</label>
+        <link refid="algorithm_2traits_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>futures/algorithm/traits/common_comparison_category.hpp</label>
+        <link refid="common__comparison__category_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>futures/algorithm/traits/is_three_way_comparable.hpp</label>
+        <link refid="is__three__way__comparable_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>futures/algorithm/traits/is_three_way_comparable_with.hpp</label>
+        <link refid="is__three__way__comparable__with_8hpp"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>futures/futures.hpp</label>
+        <link refid="futures_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespacefutures">futures</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2022<sp/>alandefreitas<sp/>(alandefreitas@gmail.com)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Distributed<sp/>under<sp/>the<sp/>Boost<sp/>Software<sp/>License,<sp/>Version<sp/>1.0.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>https://www.boost.org/LICENSE_1_0.txt</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FUTURES_ALGORITHM_COMPARE_STRONG_ORDERING_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FUTURES_ALGORITHM_COMPARE_STRONG_ORDERING_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">futures/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="partial__ordering_8hpp" kindref="compound">futures/algorithm/compare/partial_ordering.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="weak__ordering_8hpp" kindref="compound">futures/algorithm/compare/weak_ordering.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cpp_lib_three_way_comparison</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/>include<sp/>&lt;compare&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacefutures" kindref="compound">futures</ref><sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(FUTURES_DOXYGEN)<sp/>||<sp/>defined(__cpp_lib_three_way_comparison)</highlight></codeline>
+<codeline lineno="30" refid="namespacefutures_1a6cdf610a1446f3290b241594d29c07f1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="namespacefutures_1a6cdf610a1446f3290b241594d29c07f1" kindref="member">strong_ordering</ref><sp/>=<sp/>std::strong_ordering;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="namespacefutures_1a6cdf610a1446f3290b241594d29c07f1" kindref="member">strong_ordering</ref>;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>futures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;futures/algorithm/compare/impl/strong_ordering.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FUTURES_ALGORITHM_COMPARE_STRONG_ORDERING_HPP</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="futures/algorithm/compare/strong_ordering.hpp"/>
+  </compounddef>
+</doxygen>

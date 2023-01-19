@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_df6dfc4d57e7b6f5a7fc1dc1541dbff4" kind="dir">
+    <compoundname>futures/executor</compoundname>
+    <innerfile refid="any__executor_8hpp">any_executor.hpp</innerfile>
+    <innerfile refid="default__executor_8hpp">default_executor.hpp</innerfile>
+    <innerfile refid="execute_8hpp">execute.hpp</innerfile>
+    <innerfile refid="hardware__concurrency_8hpp">hardware_concurrency.hpp</innerfile>
+    <innerfile refid="inline__executor_8hpp">inline_executor.hpp</innerfile>
+    <innerfile refid="is__execution__context_8hpp">is_execution_context.hpp</innerfile>
+    <innerfile refid="is__executor_8hpp">is_executor.hpp</innerfile>
+    <innerfile refid="new__thread__executor_8hpp">new_thread_executor.hpp</innerfile>
+    <innerfile refid="thread__pool_8hpp">thread_pool.hpp</innerfile>
+    <briefdescription>
+<para>Root executors directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The root directory contains headers related to the executor module, including executors and traits. </para>
+    </detaileddescription>
+    <location file="futures/executor/"/>
+  </compounddef>
+</doxygen>

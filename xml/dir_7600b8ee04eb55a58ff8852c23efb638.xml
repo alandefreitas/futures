@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_7600b8ee04eb55a58ff8852c23efb638" kind="dir">
+    <compoundname>futures/adaptor</compoundname>
+    <innerfile refid="bind__executor__to__lambda_8hpp">bind_executor_to_lambda.hpp</innerfile>
+    <innerfile refid="make__ready__future_8hpp">make_ready_future.hpp</innerfile>
+    <innerfile refid="then_8hpp">then.hpp</innerfile>
+    <innerfile refid="when__all_8hpp">when_all.hpp</innerfile>
+    <innerfile refid="when__any_8hpp">when_any.hpp</innerfile>
+    <briefdescription>
+<para>Root adaptors directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The root directory contains headers related to the adaptor module, including conjunctions, disjunctions, and continuations. </para>
+    </detaileddescription>
+    <location file="futures/adaptor/"/>
+  </compounddef>
+</doxygen>

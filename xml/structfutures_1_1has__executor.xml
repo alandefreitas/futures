@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1has__executor" kind="struct" language="C++" prot="public">
+    <compoundname>futures::has_executor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes refid="has__executor_8hpp" local="no">has_executor.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Determine if a future type has an executor. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>futures::has_executor&lt; typename &gt;</label>
+        <link refid="structfutures_1_1has__executor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>futures::has_executor&lt; typename &gt;</label>
+        <link refid="structfutures_1_1has__executor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="futures/traits/has_executor.hpp" line="34" column="5" bodyfile="futures/traits/has_executor.hpp" bodystart="34" bodyend="34"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

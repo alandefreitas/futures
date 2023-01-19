@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="dir_e0a1cc086a107475864c8fa8ce1ca572" kind="dir">
+    <compoundname>futures/algorithm/partitioner</compoundname>
+    <innerfile refid="default__partitioner_8hpp">default_partitioner.hpp</innerfile>
+    <innerfile refid="halve__partitioner_8hpp">halve_partitioner.hpp</innerfile>
+    <innerfile refid="partitioner__for_8hpp">partitioner_for.hpp</innerfile>
+    <innerfile refid="thread__partitioner_8hpp">thread_partitioner.hpp</innerfile>
+    <briefdescription>
+<para>Root partitioners directory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This root directory contains all headers related to the partitioner module. </para>
+    </detaileddescription>
+    <location file="futures/algorithm/partitioner/"/>
+  </compounddef>
+</doxygen>

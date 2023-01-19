@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="structfutures_1_1stoppable__opt" kind="struct" language="C++" prot="public">
+    <compoundname>futures::stoppable_opt</compoundname>
+    <includes refid="future__options__args_8hpp" local="no">future_options_args.hpp</includes>
+    <briefdescription>
+<para>Future option to determine the future is stoppable. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The operation state of a stoppable future holds a stop token we can use to request the main operation to stop. </para>
+    </detaileddescription>
+    <location file="futures/future_options_args.hpp" line="53" column="5" bodyfile="futures/future_options_args.hpp" bodystart="53" bodyend="53"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

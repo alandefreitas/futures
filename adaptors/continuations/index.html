@@ -1,0 +1,1784 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Better Futures: Because futures don't have to be awful">
+      
+      
+      
+        <link rel="canonical" href="https://alandefreitas.github.io/futures/adaptors/continuations/">
+      
+      
+        <link rel="prev" href="../../futures/promises/">
+      
+      
+        <link rel="next" href="../conjunctions/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+    
+    
+      
+        <title>Continuations - Better Futures</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-290016612",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-290016612",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="futures" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#continuations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Better Futures" class="md-header__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Better Futures
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Continuations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+<!-- Main navigation -->
+
+
+<div
+        class="md-sidebar md-sidebar--primary"
+        data-md-component="sidebar" data-md-type="navigation"
+        
+>
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Better Futures" class="md-nav__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    Better Futures
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Futures" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/future_types/" class="md-nav__link">
+        Basic Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/launching/" class="md-nav__link">
+        Launching Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/deferred/" class="md-nav__link">
+        Deferred Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/continuable_futures/" class="md-nav__link">
+        Continuable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/stoppable_futures/" class="md-nav__link">
+        Stoppable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/shared_futures/" class="md-nav__link">
+        Shared Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/waiting/" class="md-nav__link">
+        Waiting for Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../futures/promises/" class="md-nav__link">
+        Promises and Tasks
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="true">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Future Adaptors" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Continuations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Continuations
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-continuations" class="md-nav__link">
+    Lazy continuations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executors" class="md-nav__link">
+    Executors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    Operators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuation-unwrapping" class="md-nav__link">
+    Continuation unwrapping
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuation unwrapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-unwrapping" class="md-nav__link">
+    Value unwrapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples-unwrapping" class="md-nav__link">
+    Tuples unwrapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unwrapping-conjunctions" class="md-nav__link">
+    Unwrapping conjunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unwrapping-disjunctions" class="md-nav__link">
+    Unwrapping disjunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#return-type-unwrapping" class="md-nav__link">
+    Return type unwrapping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuation-stop" class="md-nav__link">
+    Continuation stop
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conjunctions/" class="md-nav__link">
+        Conjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../disjunctions/" class="md-nav__link">
+        Disjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../task_graphs/" class="md-nav__link">
+        Task Graphs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Parallel Algorithms" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/partitioners/" class="md-nav__link">
+        Partitioners
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="false">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Networking" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/asio/" class="md-nav__link">
+        Asio
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_reference/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__futures/" class="md-nav__link">
+        Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__adaptors/" class="md-nav__link">
+        Adaptors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__executors/" class="md-nav__link">
+        Executors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/libraries/group__algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/namespaces/namespacefutures/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/files/" class="md-nav__link">
+        Files
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+        </div>
+    </div>
+</div>
+
+
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-continuations" class="md-nav__link">
+    Lazy continuations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executors" class="md-nav__link">
+    Executors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    Operators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuation-unwrapping" class="md-nav__link">
+    Continuation unwrapping
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuation unwrapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-unwrapping" class="md-nav__link">
+    Value unwrapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples-unwrapping" class="md-nav__link">
+    Tuples unwrapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unwrapping-conjunctions" class="md-nav__link">
+    Unwrapping conjunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unwrapping-disjunctions" class="md-nav__link">
+    Unwrapping disjunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#return-type-unwrapping" class="md-nav__link">
+    Return type unwrapping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuation-stop" class="md-nav__link">
+    Continuation stop
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+            <div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+        </div>
+    </div>
+</div>
+
+
+
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+                  
+
+  
+  
+
+
+
+<h1 id="continuations">Continuations</h1>
+<p>Continuations are the main primitive to assemble asynchronous task graphs. An instance of <a href="/futures/reference/Classes/classfutures_1_1basic__future/">basic_future</a> can have
+continuations, which allows us to create tasks chains.</p>
+<p>Say we want to execute the following sequence of asynchronous tasks:</p>
+<div class="mermaid">
+graph LR
+subgraph Async
+A --> B --> C
+end
+Main --> A
+C --> End
+Main --> End
+</div>
+
+<p>Achieving that with the function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> is as simple as:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Continuable futures</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">65</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="n">C</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>All instances of <a href="/futures/reference/Classes/classfutures_1_1basic__future/">basic_future</a> that support lazy continuations also have the member function <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a>.
+However, the free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> is used to create a continuation to any future, which is itself another future value.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Continuation to a continuable future</label><label for="__tabbed_2_2">Continuation to a std::future</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Another task in the executor</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">63</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">f3</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Another task in the default executor</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">63</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Continuation Function</p>
+<p>Only futures with lazy continuations have a <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a> member function. For the general case, we should 
+prefer the free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a>.</p>
+</div>
+<p>The free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> allows us to create task graphs with future continuations regardless of underlying support for
+lazy continuations.</p>
+<div class="admonition info">
+<p class="admonition-title">Better future adaptors</p>
+<p>This library includes:</p>
+<ul>
+<li>Large set of <a href="#senders-and-receivers"><strong>composition</strong> operations</a>, such as <a href="/futures/reference/Namespaces/namespacefutures/#function-when_all">when_all</a> and <a href="/futures/reference/Namespaces/namespacefutures/#function-when_any">when_any</a><ul>
+<li>Easier composition of task graphs</li>
+<li>Syntax closer to the existing future types users are used to</li>
+</ul>
+</li>
+<li>The future adaptors still work for existing future types</li>
+<li>Adaptors are also provided to facilitate the creation of cyclic task graphs</li>
+<li>Continuations are attached to old future types with a single polling future</li>
+<li>Integrations with Asio are provided, such as completion tokens and async IO operations.</li>
+</ul>
+</div>
+<h2 id="lazy-continuations">Lazy continuations</h2>
+<p>The function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> changes its behavior according to the traits <a href="/futures/reference/Classes/structfutures_1_1is__continuable/">is_continuable</a> defined for the previous future type.
+If a previous future type supports lazy continuations, the next task is attached to the previous task with
+<a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a>.</p>
+<p>If the next future type [is_deferred], then no lazy continuations need to be involved. A new deferred task waits for the
+previous task to be ready inline. Only when the previous task is ready the continuation task will be launched to the
+executor.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Continuation to a deferred future</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">schedule</span><span class="p">([]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">63</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">f5</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">63</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In both cases, there's no polling involved. Polling is only necessary for (i) eager futures, (ii) that don't support
+continuations, and (iii) are potentially not ready. The last criteria eliminates future types such as <a href="/futures/reference/Namespaces/namespacefutures/#using-vfuture">vfuture</a>
+generated by <a href="/futures/reference/Namespaces/namespacefutures/#function-make_ready_future">make_ready_future</a>.</p>
+<p>In general, such futures types should not be used when we require continuations. However, to enable generic algorithms,
+the function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> also works for these future types and will automatically launch polling tasks to wait for their
+results.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Continuation to a std::future</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">63</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">f3</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Another task in the default executor</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">63</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="executors">Executors</h2>
+<p>It's important to note continuations are never executed inline. Although common patterns used in javascript for callback
+functions are still possible, future continuations are always posted to the executor again. The default future objects
+returned by <a href="/futures/reference/Namespaces/namespacefutures/#function-async">futures::async</a> carry light handles to their execution contexts, through which continuation tasks can be
+launched by default. If a future object carries no executor, the default executor is used.</p>
+<p>However, if the continuation should be launched with another executor, both the member function <a href="/futures/reference/Classes/classfutures_1_1basic__future/#function-then">basic_future::then</a> and
+the free function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> support custom executors for the continuation task.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Continuation with another executor</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">futures</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="nf">pool</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">ex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">get_executor</span><span class="p">();</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="n">f7</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>When this parameter is provided, the task will continue in another executor.</p>
+<h2 id="operators">Operators</h2>
+<p>The operator <code>&gt;&gt;</code> is defined as a convenience to assemble large task graphs including continuations.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">operator&gt;&gt;</label><label for="__tabbed_6_2">operators &gt;&gt; and %</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f8</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">inline_executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_inline_executor</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f9</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">inline_executor</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f10</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The types accepted by these operators are limited to those matching the future concept and callables that are valid as
+continuations to the future instance.</p>
+<h2 id="continuation-unwrapping">Continuation unwrapping</h2>
+<p>By default, continuations attempt to receive the previous future object as their input. This allows the continuation to
+examine the state of the previous future object before deciding how to continue.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Continuations with no unwrapping</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">task_that_might_fail</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">get_exception_ptr</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">handle_success</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">handle_error</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>However, continuations involve accessing the future object from the previous task. This means continuation chains where
+the previous task is derived from a number of container adaptors can easily become verbose and error-prone. For
+instance, consider a very simple continuation to a task that depends on 3 other futures objects.</p>
+<p>This is the task for which we need a continuation.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Task returning 3 values</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;3&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>And this is how verbose the continuation looks like without unwrapping:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Verbose continuations</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">then</span><span class="p">(</span>
+<span class="w">    </span><span class="n">f1</span><span class="p">,</span>
+<span class="w">    </span><span class="p">[](</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span>
+<span class="w">           </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">           </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">           </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// retrieve futures</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">vfuture</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="w">    </span><span class="c1">// get their values</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fa</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fb</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fc</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// use values</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Although this pattern could be slightly simplified with more recent C++ features, such as structured bindings, this
+pattern is unmaintainable. To simplify this process, the function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> accepts continuations that expect the unwrapped
+result from the previous task.</p>
+<p>For instance, consider the following continuation function:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Unwrap void</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Task</span>
+<span class="w">    </span><span class="n">long_task</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The continuation function requires no parameters. This means it only needs the previous future to be ready to be
+executor, but it does not require to access the previous future object so a parameter of the previous type would be of
+no use here. This also removes the necessity of marking the unused future object with attributes such
+as <a href="https://en.cppreference.com/w/cpp/language/attributes/maybe_unused"><code>[[maybe_unused]]</code></a>.</p>
+<h3 id="exceptions">Exceptions</h3>
+<p>If the previous task fails and its exception would be lost in the unwrapping process, the exception is automatically
+propagated to the following task.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:1"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Unwrap and query</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">task_that_might_fail</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f2</span><span class="p">.</span><span class="n">get_exception_ptr</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">handle_success_vals</span><span class="p">(</span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">handle_error</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>With future adaptors, the exception information is still propagated to the unwrapped continuation future with the
+underlying future objects being unwrapped. Thus, continuations without unwrapping are only necessary when (i) the
+unwrapped version would lose the relevant exception information, and (ii) we need a different behavior for the
+continuation. This typically happens when the continuation task contains some logic allowing us to recover from the
+error.</p>
+<h3 id="value-unwrapping">Value unwrapping</h3>
+<p>The simplest form of unwrapping is sending the internal future value directly to the continuation function.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Forward value directly</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This allows the continuation function to worry only about the internal value type <code>int</code> instead of the complete future
+type <code>cfuture&lt;int&gt;</code>. This also makes the algorithm easier to generalize for alternative future types.</p>
+<p>If the previous future also contains a future, we can double unwrap the value to the next task:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="13:1"><input checked="checked" id="__tabbed_13_1" name="__tabbed_13" type="radio" /><div class="tabbed-labels"><label for="__tabbed_13_1">Double value unwrap</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="tuples-unwrapping">Tuples unwrapping</h3>
+<p>Tuple unwrapping becomes useful as a simplified way for futures to return multiple values to its continuations.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="14:1"><input checked="checked" id="__tabbed_14_1" name="__tabbed_14" type="radio" /><div class="tabbed-labels"><label for="__tabbed_14_1">Unwrap tuple</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f3</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The tuple components are also double unwrapped if necessary:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="15:1"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio" /><div class="tabbed-labels"><label for="__tabbed_15_1">Unwrap tuple</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">),</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">),</span>
+<span class="w">        </span><span class="n">make_ready_future</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">));</span>
+<span class="p">};</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f3</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In this case, without unwrapping, the continuation would require
+a <code>cfuture&lt;std::tuple&lt;vfuture&lt;int&gt;, vfuture&lt;int&gt;, vfuture&lt;int&gt;&gt;&gt;</code> as its first parameter.</p>
+<h3 id="unwrapping-conjunctions">Unwrapping conjunctions</h3>
+<p>Double tuple unwrapping is one of the most useful types of future unwrapping for continuation functions of conjunctions.
+When we wait for a conjunction of futures, the return value is represented as a tuple of all future objects that got
+ready. Double tuple unwrapping allows us to handle the results is a pattern that is more manageable:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="16:1"><input checked="checked" id="__tabbed_16_1" name="__tabbed_16" type="radio" /><div class="tabbed-labels"><label for="__tabbed_16_1">Unwrap future conjunction</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">when_all</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="p">,</span><span class="w"> </span><span class="n">f3</span><span class="p">,</span><span class="w"> </span><span class="n">f4</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f5</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f6</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This allows the continuation function to worry only about the internal value type <code>int</code> instead of the complete future
+type <code>cfuture&lt;int&gt;</code>. This also makes the algorithm easier to generalize for alternative future types.</p>
+<h3 id="unwrapping-disjunctions">Unwrapping disjunctions</h3>
+<p>Future disjunctions are represented with instances of <a href="/futures/reference/Classes/classfutures_1_1when__any__result/">when_any_result</a>. Special unwrapping functions are defined for
+these objects. This simplest for of unwrapping for disjunctions is the index of the ready future and the previous
+sequence of future objects.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio" /><div class="tabbed-labels"><label for="__tabbed_17_1">Unwrap future disjunction</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">when_any_future</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span>
+<span class="w">    </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">when_any</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">&gt;&gt;</span>
+<span class="w">          </span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span>
+<span class="w">             </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">prev</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">prev</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">prev</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f4</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This can still be as verbose as wrapped tuples. However, we might still want to have access to each individual future as
+we know only one of them is ready when the continuation starts. So the second option is exploding the tuple of futures
+into the continuation parameters.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="18:1"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio" /><div class="tabbed-labels"><label for="__tabbed_18_1">Explode future conjunction</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">when_any</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">&gt;&gt;</span>
+<span class="w">          </span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">f1</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f4</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This pattern allows us to do something about <code>f2</code> when <code>f1</code> is ready and vice-versa. It implies we want to continue as
+soon as there are results available but the results from unfinished tasks should not be discarded.</p>
+<p>Very often, only one of the objects is really necessary and the meaning of what they store is homogenous. For instance,
+this is the case when we attempt to connect to a number of servers and want to continue with whatever server replies
+first. In this case, unfinished futures can be discarded, and we only need the finished task to continue.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="19:1"><input checked="checked" id="__tabbed_19_1" name="__tabbed_19" type="radio" /><div class="tabbed-labels"><label for="__tabbed_19_1">Homogenous disjunction</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">when_any</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f4</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>If the previous futures are stoppable, the adaptor will request other tasks to stop. If the tasks are homogeneous, this
+means we can also unwrap the underlying value of the finished task.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="20:1"><input checked="checked" id="__tabbed_20_1" name="__tabbed_20" type="radio" /><div class="tabbed-labels"><label for="__tabbed_20_1">Homogenous unwrap</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">when_any</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f4</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="summary">Summary</h3>
+<p>The following table describes all unwrapping functions by their priority:</p>
+<table>
+<thead>
+<tr>
+<th>Future output</th>
+<th>Continuation input</th>
+<th>Inputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>future&lt;R&gt;</code></td>
+<td><code>future&lt;R&gt;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;R&gt;</code></td>
+<td>``</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>future&lt;R&gt;</code></td>
+<td><code>R</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;tuple&lt;future&lt;T1&gt;, future&lt;T2&gt;, ...&gt;&gt;</code></td>
+<td><code>future&lt;T1&gt;</code>, <code>future&lt;T2&gt;</code> ...</td>
+<td>N</td>
+</tr>
+<tr>
+<td><code>future&lt;tuple&lt;future&lt;T1&gt;, future&lt;T2&gt;, ...&gt;&gt;</code></td>
+<td><code>T1</code>, <code>T2</code> ...</td>
+<td>N</td>
+</tr>
+<tr>
+<td><code>future&lt;vector&lt;future&lt;R&gt;&gt;&gt;</code></td>
+<td><code>vector&lt;R&gt;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;tuple&lt;future&lt;T1&gt;, future&lt;T2&gt;, ...&gt;&gt;&gt;</code></td>
+<td><code>size_t</code>, <code>tuple&lt;future&lt;T1&gt;, future&lt;T2&gt;, ...&gt;</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;tuple&lt;future&lt;T1&gt;, future&lt;T2&gt;, ...&gt;&gt;&gt;</code></td>
+<td><code>size_t</code>, <code>future&lt;T1&gt;</code>, <code>future&lt;T2&gt;</code>, ...</td>
+<td>N + 1</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;tuple&lt;future&lt;R&gt;, future&lt;R&gt;, ...&gt;&gt;&gt;</code></td>
+<td><code>future&lt;R&gt;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;vector&lt;future&lt;R&gt;&gt;&gt;&gt;</code></td>
+<td><code>future&lt;R&gt;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;tuple&lt;future&lt;R&gt;, future&lt;R&gt;, ...&gt;&gt;&gt;</code></td>
+<td><code>R</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>future&lt;when_any_result&lt;vector&lt;future&lt;R&gt;&gt;&gt;&gt;</code></td>
+<td><code>R</code></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>Note that types are very important here. Whenever the continuation has the same number of arguments for the same future
+output, a template function or a lambda using <code>auto</code> would be ambiguous.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="21:1"><input checked="checked" id="__tabbed_21_1" name="__tabbed_21" type="radio" /><div class="tabbed-labels"><label for="__tabbed_21_1">Ambiguous unwrapping</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[](</span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">decltype</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Is `f` a `cfuture&lt;int&gt;` or `int`?</span>
+<span class="w">    </span><span class="c1">// `cfuture&lt;int&gt;` has highest priority</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In this case, the continuation function will attempt to use the unwrapping with the highest priority, which would
+be <code>cfuture&lt;int&gt;</code>. However, this is not always possible if the unwrapping overloads are ambiguous enough.</p>
+<p>The continuation with the highest priority is always the safer and usually more verbose continuation. This means a
+template continuation will usually unwrap to <code>future&lt;R&gt;</code> over <code>R</code> continuation input variants. On the other hand, this
+is also useful since the most verbose continuation patterns are the ones that could benefit the most from <code>auto</code>.</p>
+<h2 id="return-type-unwrapping">Return type unwrapping</h2>
+<p>Future are allowed to expect other futures:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="22:1"><input checked="checked" id="__tabbed_22_1" name="__tabbed_22" type="radio" /><div class="tabbed-labels"><label for="__tabbed_22_1">Getting a future from a future</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">cfuture</span><span class="o">&lt;</span><span class="n">cfuture</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">async</span><span class="p">([]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="p">});</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>In this example, we can choose to wait for the value of the first future or the value of the future it encapsulates.</p>
+<p>Unlike the function <a href="https://en.cppreference.com/w/cpp/experimental/future/then">std::experimental::future::then</a> in <a href="https://en.cppreference.com/w/cpp/experimental/concurrency">C++ Extensions for Concurrency</a>, this library does not
+automatically unwrap a continuation return type from <code>future&lt;future&lt;int&gt;&gt;</code> to <code>future&lt;int&gt;</code>. There are two reasons for
+that: not unwrapping the return type (i) facilitates generic algorithms that operate on futures, and (ii) avoids
+potentially blocking the executor with two tasks to execute the unwrapping.</p>
+<p>However, other algorithms based on the function <a href="/futures/reference/Namespaces/namespacefutures/#function-then">then</a> can still perform return type unwrapping.</p>
+<h2 id="continuation-stop">Continuation stop</h2>
+<p>When a non-shared future has a continuation attached, its value is moved into the continuation. With stoppable futures,
+this means the <a href="/futures/reference/Classes/classfutures_1_1stop__source/">stop_source</a> is also moved into the continuation. If the future has already been moved, and we want to
+request its corresponding task to stop, we can do that through its <a href="/futures/reference/Classes/classfutures_1_1stop__source/">stop_source</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="23:1"><input checked="checked" id="__tabbed_23_1" name="__tabbed_23" type="radio" /><div class="tabbed-labels"><label for="__tabbed_23_1">Continuation stop source</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">([](</span><span class="n">stop_token</span><span class="w"> </span><span class="n">st</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">stop_requested</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">some_task</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="p">.</span><span class="n">get_stop_source</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// f1 done</span>
+<span class="w">    </span><span class="n">handle_success</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="c1">// f1.request_stop() won&#39;t work anymore</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">request_stop</span><span class="p">();</span>
+<span class="n">f2</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<!-- Standard C++ -->
+<!-- C++ Standard library -->
+<!-- C++ Standard library / Extensions and Proposals -->
+<!-- Libraries -->
+<!-- Futures -->
+
+
+  
+
+
+
+
+                
+
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px; text-align: center;">
+    <a href="https://github.com/alandefreitas/futures/" title="Better Futures" class="md-button" target="_blank">
+        ⭐️ Star Better Futures
+    </a>
+</footer>
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Application footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+    <div class="md-footer-nav">
+        <nav
+                class="md-footer-nav__inner md-grid"
+                aria-label=""
+        >
+
+            <!-- Link to previous page -->
+            
+            <a
+                    href="../../futures/promises/"
+                    class="md-footer-nav__link md-footer-nav__link--prev"
+                    rel="prev"
+            >
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+                </div>
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                        Promises and Tasks
+                    </div>
+                </div>
+            </a>
+            
+
+            <!-- Link to next page -->
+            
+            <a
+                    href="../conjunctions/"
+                    class="md-footer-nav__link md-footer-nav__link--next"
+                    rel="next"
+            >
+                <div class="md-footer-nav__title">
+                    <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                        Conjunctions
+                    </div>
+                </div>
+                <div class="md-footer-nav__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+                </div>
+            </a>
+            
+        </nav>
+    </div>
+    
+
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+        <div class="md-footer-meta__inner md-grid">
+
+            <!-- Copyright and theme information -->
+            <div class="md-footer-copyright">
+                
+                <div class="md-footer-copyright__highlight">
+                    Copyright &copy; Alan Freitas
+                </div>
+                
+                Made with
+                <a
+                        href="https://squidfunk.github.io/mkdocs-material/"
+                        target="_blank" rel="noopener"
+                >
+                    Material for MkDocs
+                </a>
+            </div>
+
+            <!-- Social links -->
+            <div class="md-social">
+  
+</div>
+        </div>
+    </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../js/mkdocs-charts-plugin.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>

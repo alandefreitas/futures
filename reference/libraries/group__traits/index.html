@@ -1,0 +1,2375 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Better Futures: Because futures don't have to be awful">
+      
+      
+      
+        <link rel="canonical" href="https://alandefreitas.github.io/futures/reference/libraries/group__traits/">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+    
+    
+      
+        <title>Traits - Better Futures</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-290016612"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-290016612",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-290016612",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="futures" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#algorithms-library-traits" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Better Futures" class="md-header__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Better Futures
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Traits
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+<!-- Main navigation -->
+
+
+<div
+        class="md-sidebar md-sidebar--primary"
+        data-md-component="sidebar" data-md-type="navigation"
+        
+>
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Better Futures" class="md-nav__button md-logo" aria-label="Better Futures" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3l89.3 89.4-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+    </a>
+    Better Futures
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/alandefreitas/futures/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alandefreitas/futures
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Futures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Futures" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Futures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/future_types/" class="md-nav__link">
+        Basic Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/launching/" class="md-nav__link">
+        Launching Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/deferred/" class="md-nav__link">
+        Deferred Tasks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/continuable_futures/" class="md-nav__link">
+        Continuable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/stoppable_futures/" class="md-nav__link">
+        Stoppable Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/shared_futures/" class="md-nav__link">
+        Shared Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/waiting/" class="md-nav__link">
+        Waiting for Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../futures/promises/" class="md-nav__link">
+        Promises and Tasks
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          Future Adaptors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Future Adaptors" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Future Adaptors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adaptors/continuations/" class="md-nav__link">
+        Continuations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adaptors/conjunctions/" class="md-nav__link">
+        Conjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adaptors/disjunctions/" class="md-nav__link">
+        Disjunctions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adaptors/task_graphs/" class="md-nav__link">
+        Task Graphs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Parallel Algorithms
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Parallel Algorithms" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Parallel Algorithms
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../algorithms/algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../algorithms/partitioners/" class="md-nav__link">
+        Partitioners
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="false">
+          Networking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Networking" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Networking
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../networking/asio/" class="md-nav__link">
+        Asio
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../config_reference/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group__futures/" class="md-nav__link">
+        Futures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group__adaptors/" class="md-nav__link">
+        Adaptors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group__executors/" class="md-nav__link">
+        Executors
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group__algorithms/" class="md-nav__link">
+        Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../namespaces/namespacefutures/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../files/" class="md-nav__link">
+        Files
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+        </div>
+    </div>
+</div>
+
+
+<!-- Table of contents: never hidden -->
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#types" class="md-nav__link">
+    Types
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types_1" class="md-nav__link">
+    Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-common_comparison_category" class="md-nav__link">
+    using common_comparison_category
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-common_comparison_category_t" class="md-nav__link">
+    using common_comparison_category_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_assignable_from" class="md-nav__link">
+    using is_assignable_from
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_bidirectional_iterator" class="md-nav__link">
+    using is_bidirectional_iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_constructible_from" class="md-nav__link">
+    using is_constructible_from
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_convertible_to" class="md-nav__link">
+    using is_convertible_to
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_copyable" class="md-nav__link">
+    using is_copyable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_default_initializable" class="md-nav__link">
+    using is_default_initializable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_derived_from" class="md-nav__link">
+    using is_derived_from
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_equality_comparable" class="md-nav__link">
+    using is_equality_comparable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_equality_comparable_with" class="md-nav__link">
+    using is_equality_comparable_with
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_forward_iterator" class="md-nav__link">
+    using is_forward_iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_incrementable" class="md-nav__link">
+    using is_incrementable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_indirectly_binary_invocable" class="md-nav__link">
+    using is_indirectly_binary_invocable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_indirectly_readable" class="md-nav__link">
+    using is_indirectly_readable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_indirectly_unary_invocable" class="md-nav__link">
+    using is_indirectly_unary_invocable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_input_iterator" class="md-nav__link">
+    using is_input_iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_input_or_output_iterator" class="md-nav__link">
+    using is_input_or_output_iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_input_range" class="md-nav__link">
+    using is_input_range
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_movable" class="md-nav__link">
+    using is_movable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_move_constructible" class="md-nav__link">
+    using is_move_constructible
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_random_access_iterator" class="md-nav__link">
+    using is_random_access_iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_range" class="md-nav__link">
+    using is_range
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_regular" class="md-nav__link">
+    using is_regular
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_semiregular" class="md-nav__link">
+    using is_semiregular
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_sentinel_for" class="md-nav__link">
+    using is_sentinel_for
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_swappable" class="md-nav__link">
+    using is_swappable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_three_way_comparable" class="md-nav__link">
+    using is_three_way_comparable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_three_way_comparable_with" class="md-nav__link">
+    using is_three_way_comparable_with
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_totally_ordered" class="md-nav__link">
+    using is_totally_ordered
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_totally_ordered_with" class="md-nav__link">
+    using is_totally_ordered_with
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-is_weakly_incrementable" class="md-nav__link">
+    using is_weakly_incrementable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_difference" class="md-nav__link">
+    using iter_difference
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_difference_t" class="md-nav__link">
+    using iter_difference_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_reference" class="md-nav__link">
+    using iter_reference
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_reference_t" class="md-nav__link">
+    using iter_reference_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_rvalue_reference" class="md-nav__link">
+    using iter_rvalue_reference
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_rvalue_reference_t" class="md-nav__link">
+    using iter_rvalue_reference_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_value" class="md-nav__link">
+    using iter_value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iter_value_t" class="md-nav__link">
+    using iter_value_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iterator" class="md-nav__link">
+    using iterator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iterator_t" class="md-nav__link">
+    using iterator_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-range_value" class="md-nav__link">
+    using range_value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-range_value_t" class="md-nav__link">
+    using range_value_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-remove_cvref" class="md-nav__link">
+    using remove_cvref
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-remove_cvref_t" class="md-nav__link">
+    using remove_cvref_t
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attributes_1" class="md-nav__link">
+    Attributes
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_assignable_from_v" class="md-nav__link">
+    variable is_assignable_from_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_bidirectional_iterator_v" class="md-nav__link">
+    variable is_bidirectional_iterator_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_constructible_from_v" class="md-nav__link">
+    variable is_constructible_from_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_convertible_to_v" class="md-nav__link">
+    variable is_convertible_to_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_copyable_v" class="md-nav__link">
+    variable is_copyable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_default_initializable_v" class="md-nav__link">
+    variable is_default_initializable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_derived_from_v" class="md-nav__link">
+    variable is_derived_from_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_equality_comparable_v" class="md-nav__link">
+    variable is_equality_comparable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_equality_comparable_with_v" class="md-nav__link">
+    variable is_equality_comparable_with_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_forward_iterator_v" class="md-nav__link">
+    variable is_forward_iterator_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_incrementable_v" class="md-nav__link">
+    variable is_incrementable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_indirectly_binary_invocable_v" class="md-nav__link">
+    variable is_indirectly_binary_invocable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_indirectly_readable_v" class="md-nav__link">
+    variable is_indirectly_readable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_indirectly_unary_invocable_v" class="md-nav__link">
+    variable is_indirectly_unary_invocable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_input_iterator_v" class="md-nav__link">
+    variable is_input_iterator_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_input_or_output_iterator_v" class="md-nav__link">
+    variable is_input_or_output_iterator_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_input_range_v" class="md-nav__link">
+    variable is_input_range_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_movable_v" class="md-nav__link">
+    variable is_movable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_move_constructible_v" class="md-nav__link">
+    variable is_move_constructible_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_random_access_iterator_v" class="md-nav__link">
+    variable is_random_access_iterator_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_range_v" class="md-nav__link">
+    variable is_range_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_regular_v" class="md-nav__link">
+    variable is_regular_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_semiregular_v" class="md-nav__link">
+    variable is_semiregular_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_sentinel_for_v" class="md-nav__link">
+    variable is_sentinel_for_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_swappable_v" class="md-nav__link">
+    variable is_swappable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_three_way_comparable_v" class="md-nav__link">
+    variable is_three_way_comparable_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_three_way_comparable_with_v" class="md-nav__link">
+    variable is_three_way_comparable_with_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_totally_ordered_v" class="md-nav__link">
+    variable is_totally_ordered_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_totally_ordered_with_v" class="md-nav__link">
+    variable is_totally_ordered_with_v
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-is_weakly_incrementable_v" class="md-nav__link">
+    variable is_weakly_incrementable_v
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+            <div data-ea-publisher="alandefreitas-com" data-ea-type="image"></div>
+        </div>
+    </div>
+</div>
+
+
+
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+                  
+
+  
+  
+
+
+
+<h1 id="algorithms-library-traits">Algorithms Library: Traits</h1>
+<p><strong><a href="/futures/reference/libraries/group__algorithms/">Algorithms</a></strong> <strong>/</strong> 
+<strong><a href="/futures/reference/libraries/group__traits/">Traits</a></strong></p>
+<h2 id="types">Types</h2>
+<table>
+<thead>
+<tr>
+<th>Member Types</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-common_comparison_category">common_comparison_category</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-common_comparison_category_t">common_comparison_category_t</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept.   <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_assignable_from">is_assignable_from</a></strong></td>
+<td>A type trait equivalent to the <code>std::assignable_from</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_bidirectional_iterator">is_bidirectional_iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::bidirectional_iterator</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_constructible_from">is_constructible_from</a></strong></td>
+<td>A type trait equivalent to the <code>std::constructible_from</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_convertible_to">is_convertible_to</a></strong></td>
+<td>A type trait equivalent to the <code>std::convertible_to</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_copyable">is_copyable</a></strong></td>
+<td>A type trait equivalent to the <code>std::copyable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_default_initializable">is_default_initializable</a></strong></td>
+<td>A type trait equivalent to the <code>std::default_initializable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_derived_from">is_derived_from</a></strong></td>
+<td>A type trait equivalent to the <code>derived_from</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_equality_comparable">is_equality_comparable</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_equality_comparable_with">is_equality_comparable_with</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable_with</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_forward_iterator">is_forward_iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::forward_iterator</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_incrementable">is_incrementable</a></strong></td>
+<td>A type trait equivalent to the <code>std::incrementable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_indirectly_binary_invocable">is_indirectly_binary_invocable</a></strong></td>
+<td>Determine if a function can be invoke with the value type of both iterators. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_indirectly_readable">is_indirectly_readable</a></strong></td>
+<td>A type trait equivalent to the <code>std::indirectly_readable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_indirectly_unary_invocable">is_indirectly_unary_invocable</a></strong></td>
+<td>A type trait equivalent to the <code>std::indirectly_unary_invocable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_input_iterator">is_input_iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::input_iterator</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_input_or_output_iterator">is_input_or_output_iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::is_input_or_output_iterator</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_input_range">is_input_range</a></strong></td>
+<td>A type trait equivalent to the <code>std::input_range</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_movable">is_movable</a></strong></td>
+<td>A type trait equivalent to the <code>std::movable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_move_constructible">is_move_constructible</a></strong></td>
+<td>A type trait equivalent to the <code>std::move_constructible</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_random_access_iterator">is_random_access_iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::random_access_iterator</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_range">is_range</a></strong></td>
+<td>A type trait equivalent to the <code>std::range</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_regular">is_regular</a></strong></td>
+<td>A type trait equivalent to the <code>std::regular</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_semiregular">is_semiregular</a></strong></td>
+<td>A type trait equivalent to the <code>std::semiregular</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_sentinel_for">is_sentinel_for</a></strong></td>
+<td>A type trait equivalent to the <code>std::sentinel_for</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_swappable">is_swappable</a></strong></td>
+<td>A type trait equivalent to the <code>std::swappable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_three_way_comparable">is_three_way_comparable</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_three_way_comparable_with">is_three_way_comparable_with</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable_with</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_totally_ordered">is_totally_ordered</a></strong></td>
+<td>A type trait equivalent to the <code>std::totally_ordered</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_totally_ordered_with">is_totally_ordered_with</a></strong></td>
+<td>A type trait equivalent to the <code>std::totally_ordered_with</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-is_weakly_incrementable">is_weakly_incrementable</a></strong></td>
+<td>A type trait equivalent to the <code>std::weakly_incrementable</code> concept. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_difference">iter_difference</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_difference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_difference_t">iter_difference_t</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_difference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_reference">iter_reference</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_reference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_reference_t">iter_reference_t</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_reference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_rvalue_reference">iter_rvalue_reference</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_rvalue_reference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_rvalue_reference_t">iter_rvalue_reference_t</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_rvalue_reference</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_value">iter_value</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_value</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iter_value_t">iter_value_t</a></strong></td>
+<td>A type trait equivalent to <code>std::iter_value</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iterator">iterator</a></strong></td>
+<td>A type trait equivalent to the <code>std::iterator</code> trait. <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-iterator_t">iterator_t</a></strong></td>
+<td>A type trait equivalent to the <code>std::iterator</code> trait.   <br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-range_value">range_value</a></strong></td>
+<td>A type trait equivalent to <code>std::range_value</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-range_value_t">range_value_t</a></strong></td>
+<td>A type trait equivalent to <code>std::range_value</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-remove_cvref">remove_cvref</a></strong></td>
+<td>A type trait equivalent to <code>std::remove_cvref</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#using-remove_cvref_t">remove_cvref_t</a></strong></td>
+<td>A type trait equivalent to <code>std::remove_cvref</code><br> <sup><span style="color:green">(using)</span></sup></td>
+</tr>
+</tbody>
+</table>
+<h2 id="attributes">Attributes</h2>
+<table>
+<thead>
+<tr>
+<th>Member Attributes</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_assignable_from_v">is_assignable_from_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::assignable_from</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_bidirectional_iterator_v">is_bidirectional_iterator_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::bidirectional_iterator</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_constructible_from_v">is_constructible_from_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::constructible_from</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_convertible_to_v">is_convertible_to_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::convertible_to</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_copyable_v">is_copyable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::copyable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_default_initializable_v">is_default_initializable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::default_initializable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_derived_from_v">is_derived_from_v</a></strong></td>
+<td>A type trait equivalent to the <code>derived_from</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_equality_comparable_v">is_equality_comparable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_equality_comparable_with_v">is_equality_comparable_with_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable_with</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_forward_iterator_v">is_forward_iterator_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::forward_iterator</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_incrementable_v">is_incrementable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::incrementable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_indirectly_binary_invocable_v">is_indirectly_binary_invocable_v</a></strong></td>
+<td>Determine if a function can be invoke with the value type of both iterators.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_indirectly_readable_v">is_indirectly_readable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::indirectly_readable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_indirectly_unary_invocable_v">is_indirectly_unary_invocable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::indirectly_unary_invocable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_input_iterator_v">is_input_iterator_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::input_iterator</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_input_or_output_iterator_v">is_input_or_output_iterator_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::is_input_or_output_iterator</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_input_range_v">is_input_range_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::input_range</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_movable_v">is_movable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::movable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_move_constructible_v">is_move_constructible_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::move_constructible</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_random_access_iterator_v">is_random_access_iterator_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::random_access_iterator</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_range_v">is_range_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::range</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_regular_v">is_regular_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::regular</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_semiregular_v">is_semiregular_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::semiregular</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_sentinel_for_v">is_sentinel_for_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::sentinel_for</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_swappable_v">is_swappable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::swappable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_three_way_comparable_v">is_three_way_comparable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_three_way_comparable_with_v">is_three_way_comparable_with_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::equality_comparable_with</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_totally_ordered_v">is_totally_ordered_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::totally_ordered</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_totally_ordered_with_v">is_totally_ordered_with_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::totally_ordered_with</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+<tr>
+<td><strong><a href="/futures/reference/libraries/group__traits/#variable-is_weakly_incrementable_v">is_weakly_incrementable_v</a></strong></td>
+<td>A type trait equivalent to the <code>std::weakly_incrementable</code> concept.   <br> <sup><span style="color:green">(public variable template)</span></sup></td>
+</tr>
+</tbody>
+</table>
+<h2 id="types_1">Types</h2>
+<h3 id="using-common_comparison_category">using common_comparison_category</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/common__comparison__category_8hpp/#file-common_comparison_category.hpp"><code>&lt;futures/algorithm/traits/common_comparison_category.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="p">...</span><span class="w"> </span><span class="n">Ts</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">common_comparison_category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">common_comparison_category</span><span class="o">&lt;</span><span class="w"> </span><span class="n">Ts</span><span class="p">...</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="using-common_comparison_category_t">using common_comparison_category_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/common__comparison__category_8hpp/#file-common_comparison_category.hpp"><code>&lt;futures/algorithm/traits/common_comparison_category.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="p">...</span><span class="w"> </span><span class="n">Ts</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">common_comparison_category_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="k">typename</span><span class="w"> </span><span class="nc">common_comparison_category</span><span class="o">&lt;</span><span class="w"> </span><span class="n">Ts</span><span class="p">...</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="using-is_assignable_from">using is_assignable_from</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__assignable__from_8hpp/#file-is_assignable_from.hpp"><code>&lt;futures/algorithm/traits/is_assignable_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">LHS</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RHS</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_assignable_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">assignable_from</span><span class="o">&lt;</span><span class="w"> </span><span class="n">LHS</span><span class="p">,</span><span class="w"> </span><span class="n">RHS</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::assignable_from</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/assignable_from"><code>std::assignable_from</code></a></p>
+<h3 id="using-is_bidirectional_iterator">using is_bidirectional_iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__bidirectional__iterator_8hpp/#file-is_bidirectional_iterator.hpp"><code>&lt;futures/algorithm/traits/is_bidirectional_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_bidirectional_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bidirectional_iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::bidirectional_iterator</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator"><code>std::bidirectional_iterator</code></a></p>
+<h3 id="using-is_constructible_from">using is_constructible_from</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__constructible__from_8hpp/#file-is_constructible_from.hpp"><code>&lt;futures/algorithm/traits/is_constructible_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_constructible_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="cm">/* see below */</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::constructible_from</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/constructible_from"><code>std::constructible_from</code></a></p>
+<h3 id="using-is_convertible_to">using is_convertible_to</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__convertible__to_8hpp/#file-is_convertible_to.hpp"><code>&lt;futures/algorithm/traits/is_convertible_to.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">From</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">To</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_convertible_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">convertible_to</span><span class="o">&lt;</span><span class="w"> </span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">To</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::convertible_to</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/convertible_to"><code>std::convertible_to</code></a></p>
+<h3 id="using-is_copyable">using is_copyable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__copyable_8hpp/#file-is_copyable.hpp"><code>&lt;futures/algorithm/traits/is_copyable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_copyable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">copyable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::copyable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/copyable"><code>std::copyable</code></a></p>
+<h3 id="using-is_default_initializable">using is_default_initializable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__default__initializable_8hpp/#file-is_default_initializable.hpp"><code>&lt;futures/algorithm/traits/is_default_initializable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_default_initializable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">default_initializable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::default_initializable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/default_initializable"><code>std::default_initializable</code></a></p>
+<h3 id="using-is_derived_from">using is_derived_from</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__derived__from_8hpp/#file-is_derived_from.hpp"><code>&lt;futures/algorithm/traits/is_derived_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">Derived</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_derived_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">derived_from</span><span class="o">&lt;</span><span class="w"> </span><span class="n">Derived</span><span class="p">,</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>derived_from</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/derived_from"><code>std::derived_from</code></a></p>
+<h3 id="using-is_equality_comparable">using is_equality_comparable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__equality__comparable_8hpp/#file-is_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_equality_comparable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">equality_comparable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/equality_comparable"><code>std::equality_comparable</code></a></p>
+<h3 id="using-is_equality_comparable_with">using is_equality_comparable_with</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__equality__comparable__with_8hpp/#file-is_equality_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_equality_comparable_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">equality_comparable_with</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable_with</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/equality_comparable_with"><code>std::equality_comparable_with</code></a></p>
+<h3 id="using-is_forward_iterator">using is_forward_iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__forward__iterator_8hpp/#file-is_forward_iterator.hpp"><code>&lt;futures/algorithm/traits/is_forward_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_forward_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">forward_iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::forward_iterator</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/forward_iterator"><code>std::forward_iterator</code></a></p>
+<h3 id="using-is_incrementable">using is_incrementable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__incrementable_8hpp/#file-is_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_incrementable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_incrementable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">incrementable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::incrementable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/incrementable"><code>std::incrementable</code></a></p>
+<h3 id="using-is_indirectly_binary_invocable">using is_indirectly_binary_invocable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__binary__invocable_8hpp/#file-is_indirectly_binary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_binary_invocable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">I1</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">I2</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* see below */</span><span class="p">;</span>
+</code></pre></div></p>
+<p>Determine if a function can be invoke with the value type of both iterators. </p>
+<h3 id="using-is_indirectly_readable">using is_indirectly_readable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__readable_8hpp/#file-is_indirectly_readable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_readable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_readable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">indirectly_readable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::indirectly_readable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/indirectly_readable"><code>std::indirectly_readable</code></a></p>
+<h3 id="using-is_indirectly_unary_invocable">using is_indirectly_unary_invocable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__unary__invocable_8hpp/#file-is_indirectly_unary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_unary_invocable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">indirectly_unary_invocable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::indirectly_unary_invocable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable"><code>std::indirectly_unary_invocable</code></a></p>
+<h3 id="using-is_input_iterator">using is_input_iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__iterator_8hpp/#file-is_input_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">input_iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::input_iterator</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator"><code>std::input_iterator</code></a></p>
+<h3 id="using-is_input_or_output_iterator">using is_input_or_output_iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__or__output__iterator_8hpp/#file-is_input_or_output_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_or_output_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_or_output_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_input_or_output_iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::is_input_or_output_iterator</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator"><code>std::is_input_or_output_iterator</code></a></p>
+<h3 id="using-is_input_range">using is_input_range</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__range_8hpp/#file-is_input_range.hpp"><code>&lt;futures/algorithm/traits/is_input_range.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_input_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_input_range</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::input_range</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/input_range"><code>std::ranges::input_range</code></a></p>
+<h3 id="using-is_movable">using is_movable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__movable_8hpp/#file-is_movable.hpp"><code>&lt;futures/algorithm/traits/is_movable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_movable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">movable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::movable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/movable"><code>std::movable</code></a></p>
+<h3 id="using-is_move_constructible">using is_move_constructible</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__move__constructible_8hpp/#file-is_move_constructible.hpp"><code>&lt;futures/algorithm/traits/is_move_constructible.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_move_constructible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move_constructible</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::move_constructible</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/move_constructible"><code>std::move_constructible</code></a></p>
+<h3 id="using-is_random_access_iterator">using is_random_access_iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__random__access__iterator_8hpp/#file-is_random_access_iterator.hpp"><code>&lt;futures/algorithm/traits/is_random_access_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_random_access_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">random_access_iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::random_access_iterator</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/random_access_iterator"><code>std::random_access_iterator</code></a></p>
+<h3 id="using-is_range">using is_range</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__range_8hpp/#file-is_range.hpp"><code>&lt;futures/algorithm/traits/is_range.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">range</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::range</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/range"><code>std::ranges::range</code></a></p>
+<h3 id="using-is_regular">using is_regular</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__regular_8hpp/#file-is_regular.hpp"><code>&lt;futures/algorithm/traits/is_regular.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_regular</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">regular</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::regular</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/regular"><code>std::regular</code></a></p>
+<h3 id="using-is_semiregular">using is_semiregular</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__semiregular_8hpp/#file-is_semiregular.hpp"><code>&lt;futures/algorithm/traits/is_semiregular.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_semiregular</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">semiregular</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::semiregular</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/semiregular"><code>std::semiregular</code></a></p>
+<h3 id="using-is_sentinel_for">using is_sentinel_for</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__sentinel__for_8hpp/#file-is_sentinel_for.hpp"><code>&lt;futures/algorithm/traits/is_sentinel_for.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">S</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_sentinel_for</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sentinel_for</span><span class="o">&lt;</span><span class="w"> </span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::sentinel_for</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/sentinel_for"><code>std::sentinel_for</code></a></p>
+<h3 id="using-is_swappable">using is_swappable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__swappable_8hpp/#file-is_swappable.hpp"><code>&lt;futures/algorithm/traits/is_swappable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_swappable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">swappable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::swappable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/swappable"><code>std::swappable</code></a></p>
+<h3 id="using-is_three_way_comparable">using is_three_way_comparable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__three__way__comparable_8hpp/#file-is_three_way_comparable.hpp"><code>&lt;futures/algorithm/traits/is_three_way_comparable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">partial_ordering</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_three_way_comparable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">three_way_comparable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Cat</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="using-is_three_way_comparable_with">using is_three_way_comparable_with</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__three__way__comparable__with_8hpp/#file-is_three_way_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_three_way_comparable_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">partial_ordering</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_three_way_comparable_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">three_way_comparable_with</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Cat</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable_with</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="using-is_totally_ordered">using is_totally_ordered</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__totally__ordered_8hpp/#file-is_totally_ordered.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_totally_ordered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">totally_ordered</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::totally_ordered</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><code>std::totally_ordered</code></a></p>
+<h3 id="using-is_totally_ordered_with">using is_totally_ordered_with</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__totally__ordered__with_8hpp/#file-is_totally_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_totally_ordered_with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">totally_ordered_with</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::totally_ordered_with</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><code>std::totally_ordered</code></a></p>
+<h3 id="using-is_weakly_incrementable">using is_weakly_incrementable</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__weakly__incrementable_8hpp/#file-is_weakly_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_incrementable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">I</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">is_weakly_incrementable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">bool_constant</span><span class="o">&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weakly_incrementable</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::weakly_incrementable</code> concept. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/weakly_incrementable"><code>std::weakly_incrementable</code></a></p>
+<h3 id="using-iter_difference">using iter_difference</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__difference_8hpp/#file-iter_difference.hpp"><code>&lt;futures/algorithm/traits/iter_difference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_difference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">iter_difference</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_difference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_difference</code></a></p>
+<h3 id="using-iter_difference_t">using iter_difference_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__difference_8hpp/#file-iter_difference.hpp"><code>&lt;futures/algorithm/traits/iter_difference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_difference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_difference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_difference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_difference</code></a></p>
+<h3 id="using-iter_reference">using iter_reference</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__reference_8hpp/#file-iter_reference.hpp"><code>&lt;futures/algorithm/traits/iter_reference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">iter_reference</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_reference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_reference</code></a></p>
+<h3 id="using-iter_reference_t">using iter_reference_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__reference_8hpp/#file-iter_reference.hpp"><code>&lt;futures/algorithm/traits/iter_reference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_reference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_reference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_reference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_reference</code></a></p>
+<h3 id="using-iter_rvalue_reference">using iter_rvalue_reference</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__rvalue__reference_8hpp/#file-iter_rvalue_reference.hpp"><code>&lt;futures/algorithm/traits/iter_rvalue_reference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_rvalue_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">iter_rvalue_reference</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_rvalue_reference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_rvalue_reference</code></a></p>
+<h3 id="using-iter_rvalue_reference_t">using iter_rvalue_reference_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__rvalue__reference_8hpp/#file-iter_rvalue_reference.hpp"><code>&lt;futures/algorithm/traits/iter_rvalue_reference.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_rvalue_reference_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_rvalue_reference</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_rvalue_reference</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_rvalue_reference</code></a></p>
+<h3 id="using-iter_value">using iter_value</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__value_8hpp/#file-iter_value.hpp"><code>&lt;futures/algorithm/traits/iter_value.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">iter_value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_value</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_value</code></a></p>
+<h3 id="using-iter_value_t">using iter_value_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iter__value_8hpp/#file-iter_value.hpp"><code>&lt;futures/algorithm/traits/iter_value.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iter_value_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iter_value</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::iter_value</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/iter_t"><code>std::iter_value</code></a></p>
+<h3 id="using-iterator">using iterator</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iterator_8hpp/#file-iterator.hpp"><code>&lt;futures/algorithm/traits/iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::iterator</code> trait. </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/iterator_t"><code>std::ranges::iterator_t</code></a></p>
+<h3 id="using-iterator_t">using iterator_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/iterator_8hpp/#file-iterator.hpp"><code>&lt;futures/algorithm/traits/iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">iterator_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">iterator</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::iterator</code> trait.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/iterator_t"><code>std::ranges::iterator_t</code></a></p>
+<h3 id="using-range_value">using range_value</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/range__value_8hpp/#file-range_value.hpp"><code>&lt;futures/algorithm/traits/range_value.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">range_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">range_value</span><span class="o">&lt;</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::range_value</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/iterator_t"><code>std::ranges::iterator_t</code></a></p>
+<h3 id="using-range_value_t">using range_value_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/range__value_8hpp/#file-range_value.hpp"><code>&lt;futures/algorithm/traits/range_value.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">range_value_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">range_value</span><span class="o">&lt;</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::range_value</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/iterator_t"><code>std::ranges::iterator_t</code></a></p>
+<h3 id="using-remove_cvref">using remove_cvref</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/remove__cvref_8hpp/#file-remove_cvref.hpp"><code>&lt;futures/algorithm/traits/remove_cvref.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">remove_cvref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">remove_cvref</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::remove_cvref</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/types/remove_cvref"><code>std::remove_cvref</code></a></p>
+<h3 id="using-remove_cvref_t">using remove_cvref_t</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/remove__cvref_8hpp/#file-remove_cvref.hpp"><code>&lt;futures/algorithm/traits/remove_cvref.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">remove_cvref_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">remove_cvref</span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to <code>std::remove_cvref</code></p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/types/remove_cvref"><code>std::remove_cvref</code></a></p>
+<h2 id="attributes_1">Attributes</h2>
+<h3 id="variable-is_assignable_from_v">variable is_assignable_from_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__assignable__from_8hpp/#file-is_assignable_from.hpp"><code>&lt;futures/algorithm/traits/is_assignable_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_assignable_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_assignable_from</span><span class="o">&lt;</span><span class="n">LHS</span><span class="p">,</span><span class="w"> </span><span class="n">RHS</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::assignable_from</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/assignable_from"><code>std::assignable_from</code></a></p>
+<h3 id="variable-is_bidirectional_iterator_v">variable is_bidirectional_iterator_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__bidirectional__iterator_8hpp/#file-is_bidirectional_iterator.hpp"><code>&lt;futures/algorithm/traits/is_bidirectional_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_bidirectional_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_bidirectional_iterator</span><span class="o">&lt;</span>
+<span class="w">        </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::bidirectional_iterator</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator"><code>std::bidirectional_iterator</code></a></p>
+<h3 id="variable-is_constructible_from_v">variable is_constructible_from_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__constructible__from_8hpp/#file-is_constructible_from.hpp"><code>&lt;futures/algorithm/traits/is_constructible_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_constructible_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_constructible_from</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::constructible_from</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/constructible_from"><code>std::constructible_from</code></a></p>
+<h3 id="variable-is_convertible_to_v">variable is_convertible_to_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__convertible__to_8hpp/#file-is_convertible_to.hpp"><code>&lt;futures/algorithm/traits/is_convertible_to.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_convertible_to_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_convertible_to</span><span class="o">&lt;</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">To</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::convertible_to</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/convertible_to"><code>std::convertible_to</code></a></p>
+<h3 id="variable-is_copyable_v">variable is_copyable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__copyable_8hpp/#file-is_copyable.hpp"><code>&lt;futures/algorithm/traits/is_copyable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_copyable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_copyable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::copyable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/copyable"><code>std::copyable</code></a></p>
+<h3 id="variable-is_default_initializable_v">variable is_default_initializable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__default__initializable_8hpp/#file-is_default_initializable.hpp"><code>&lt;futures/algorithm/traits/is_default_initializable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_default_initializable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_default_initializable</span><span class="o">&lt;</span>
+<span class="w">        </span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::default_initializable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/default_initializable"><code>std::default_initializable</code></a></p>
+<h3 id="variable-is_derived_from_v">variable is_derived_from_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__derived__from_8hpp/#file-is_derived_from.hpp"><code>&lt;futures/algorithm/traits/is_derived_from.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_derived_from_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_derived_from</span><span class="o">&lt;</span><span class="n">Derived</span><span class="p">,</span><span class="w"> </span><span class="n">Base</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>derived_from</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/derived_from"><code>std::derived_from</code></a></p>
+<h3 id="variable-is_equality_comparable_v">variable is_equality_comparable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__equality__comparable_8hpp/#file-is_equality_comparable.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_equality_comparable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/equality_comparable"><code>std::equality_comparable</code></a></p>
+<h3 id="variable-is_equality_comparable_with_v">variable is_equality_comparable_with_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__equality__comparable__with_8hpp/#file-is_equality_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_equality_comparable_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_equality_comparable_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_equality_comparable_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable_with</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/equality_comparable_with"><code>std::equality_comparable_with</code></a></p>
+<h3 id="variable-is_forward_iterator_v">variable is_forward_iterator_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__forward__iterator_8hpp/#file-is_forward_iterator.hpp"><code>&lt;futures/algorithm/traits/is_forward_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_forward_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_forward_iterator</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::forward_iterator</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/forward_iterator"><code>std::forward_iterator</code></a></p>
+<h3 id="variable-is_incrementable_v">variable is_incrementable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__incrementable_8hpp/#file-is_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_incrementable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_incrementable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_incrementable</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::incrementable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/incrementable"><code>std::incrementable</code></a></p>
+<h3 id="variable-is_indirectly_binary_invocable_v">variable is_indirectly_binary_invocable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__binary__invocable_8hpp/#file-is_indirectly_binary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_binary_invocable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_binary_invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">I1</span><span class="p">,</span><span class="w"> </span><span class="n">I2</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>Determine if a function can be invoke with the value type of both iterators.   </p>
+<h3 id="variable-is_indirectly_readable_v">variable is_indirectly_readable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__readable_8hpp/#file-is_indirectly_readable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_readable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_readable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_readable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::indirectly_readable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/indirectly_readable"><code>std::indirectly_readable</code></a></p>
+<h3 id="variable-is_indirectly_unary_invocable_v">variable is_indirectly_unary_invocable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__indirectly__unary__invocable_8hpp/#file-is_indirectly_unary_invocable.hpp"><code>&lt;futures/algorithm/traits/is_indirectly_unary_invocable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_indirectly_unary_invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::indirectly_unary_invocable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/indirectly_unary_invocable"><code>std::indirectly_unary_invocable</code></a></p>
+<h3 id="variable-is_input_iterator_v">variable is_input_iterator_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__iterator_8hpp/#file-is_input_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_input_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_iterator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::input_iterator</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator"><code>std::input_iterator</code></a></p>
+<h3 id="variable-is_input_or_output_iterator_v">variable is_input_or_output_iterator_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__or__output__iterator_8hpp/#file-is_input_or_output_iterator.hpp"><code>&lt;futures/algorithm/traits/is_input_or_output_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_input_or_output_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_or_output_iterator</span><span class="o">&lt;</span>
+<span class="w">        </span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::is_input_or_output_iterator</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/is_input_or_output_iterator"><code>std::is_input_or_output_iterator</code></a></p>
+<h3 id="variable-is_input_range_v">variable is_input_range_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__input__range_8hpp/#file-is_input_range.hpp"><code>&lt;futures/algorithm/traits/is_input_range.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">is_input_range_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_input_range</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::input_range</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/input_range"><code>std::ranges::input_range</code></a></p>
+<h3 id="variable-is_movable_v">variable is_movable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__movable_8hpp/#file-is_movable.hpp"><code>&lt;futures/algorithm/traits/is_movable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_movable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_movable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::movable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/movable"><code>std::movable</code></a></p>
+<h3 id="variable-is_move_constructible_v">variable is_move_constructible_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__move__constructible_8hpp/#file-is_move_constructible.hpp"><code>&lt;futures/algorithm/traits/is_move_constructible.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_move_constructible_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_move_constructible</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::move_constructible</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/move_constructible"><code>std::move_constructible</code></a></p>
+<h3 id="variable-is_random_access_iterator_v">variable is_random_access_iterator_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__random__access__iterator_8hpp/#file-is_random_access_iterator.hpp"><code>&lt;futures/algorithm/traits/is_random_access_iterator.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_random_access_iterator_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_random_access_iterator</span><span class="o">&lt;</span>
+<span class="w">        </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::random_access_iterator</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/random_access_iterator"><code>std::random_access_iterator</code></a></p>
+<h3 id="variable-is_range_v">variable is_range_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__range_8hpp/#file-is_range.hpp"><code>&lt;futures/algorithm/traits/is_range.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_range_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_range</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::range</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/ranges/range"><code>std::ranges::range</code></a></p>
+<h3 id="variable-is_regular_v">variable is_regular_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__regular_8hpp/#file-is_regular.hpp"><code>&lt;futures/algorithm/traits/is_regular.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_regular_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_regular</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::regular</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/regular"><code>std::regular</code></a></p>
+<h3 id="variable-is_semiregular_v">variable is_semiregular_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__semiregular_8hpp/#file-is_semiregular.hpp"><code>&lt;futures/algorithm/traits/is_semiregular.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_semiregular_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_semiregular</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::semiregular</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/semiregular"><code>std::semiregular</code></a></p>
+<h3 id="variable-is_sentinel_for_v">variable is_sentinel_for_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__sentinel__for_8hpp/#file-is_sentinel_for.hpp"><code>&lt;futures/algorithm/traits/is_sentinel_for.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_sentinel_for_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_sentinel_for</span><span class="o">&lt;</span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::sentinel_for</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/sentinel_for"><code>std::sentinel_for</code></a></p>
+<h3 id="variable-is_swappable_v">variable is_swappable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__swappable_8hpp/#file-is_swappable.hpp"><code>&lt;futures/algorithm/traits/is_swappable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_swappable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_swappable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::swappable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/swappable"><code>std::swappable</code></a></p>
+<h3 id="variable-is_three_way_comparable_v">variable is_three_way_comparable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__three__way__comparable_8hpp/#file-is_three_way_comparable.hpp"><code>&lt;futures/algorithm/traits/is_three_way_comparable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_three_way_comparable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_three_way_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="variable-is_three_way_comparable_with_v">variable is_three_way_comparable_with_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__three__way__comparable__with_8hpp/#file-is_three_way_comparable_with.hpp"><code>&lt;futures/algorithm/traits/is_three_way_comparable_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_three_way_comparable_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_three_way_comparable_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::equality_comparable_with</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/utility/compare/three_way_comparable"><code>std::three_way_comparable</code></a></p>
+<h3 id="variable-is_totally_ordered_v">variable is_totally_ordered_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__totally__ordered_8hpp/#file-is_totally_ordered.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_totally_ordered_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_totally_ordered</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::totally_ordered</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><code>std::totally_ordered</code></a></p>
+<h3 id="variable-is_totally_ordered_with_v">variable is_totally_ordered_with_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__totally__ordered__with_8hpp/#file-is_totally_ordered_with.hpp"><code>&lt;futures/algorithm/traits/is_totally_ordered_with.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_totally_ordered_with_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_totally_ordered_with</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;::</span>
+<span class="w">        </span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::totally_ordered_with</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/concepts/totally_ordered"><code>std::totally_ordered</code></a></p>
+<h3 id="variable-is_weakly_incrementable_v">variable is_weakly_incrementable_v</h3>
+<p><sup>Defined in header <a href="/futures/reference/files/is__weakly__incrementable_8hpp/#file-is_weakly_incrementable.hpp"><code>&lt;futures/algorithm/traits/is_weakly_incrementable.hpp&gt;</code></a></sup>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_weakly_incrementable_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">is_weakly_incrementable</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>
+</code></pre></div></p>
+<p>A type trait equivalent to the <code>std::weakly_incrementable</code> concept.   </p>
+<p><strong>See Also</strong>: <a href="https://en.cppreference.com/w/cpp/iterator/weakly_incrementable"><code>std::weakly_incrementable</code></a></p>
+<hr />
+<p><sub>Updated on 2023-01-19</sub></p>
+
+
+  
+
+
+
+
+                
+
+<footer class="tx-content__footer md-typeset" style="margin-top: 70px; text-align: center;">
+    <a href="https://github.com/alandefreitas/futures/" title="Better Futures" class="md-button" target="_blank">
+        ⭐️ Star Better Futures
+    </a>
+</footer>
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Application footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+        <div class="md-footer-meta__inner md-grid">
+
+            <!-- Copyright and theme information -->
+            <div class="md-footer-copyright">
+                
+                <div class="md-footer-copyright__highlight">
+                    Copyright &copy; Alan Freitas
+                </div>
+                
+                Made with
+                <a
+                        href="https://squidfunk.github.io/mkdocs-material/"
+                        target="_blank" rel="noopener"
+                >
+                    Material for MkDocs
+                </a>
+            </div>
+
+            <!-- Social links -->
+            <div class="md-social">
+  
+</div>
+        </div>
+    </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../../js/mkdocs-charts-plugin.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>

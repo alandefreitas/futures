@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1any__executor" kind="class" language="C++" prot="public">
+    <compoundname>futures::any_executor</compoundname>
+    <includes refid="any__executor_8hpp" local="no">any_executor.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classfutures_1_1any__executor_1a0fe8581f5e735ee377e2ef2f3eef9d85" prot="private" static="no" mutable="no">
+        <type>detail::sbo_ptr&lt; detail::executor_interface &gt;</type>
+        <definition>detail::sbo_ptr&lt;detail::executor_interface&gt; futures::any_executor::impl_</definition>
+        <argsstring></argsstring>
+        <name>impl_</name>
+        <qualifiedname>futures::any_executor::impl_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="36" column="25" bodyfile="futures/executor/any_executor.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1any__executor_1ae4bf6681585684cf06926b4ce70964d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::any_executor::~any_executor</definition>
+        <argsstring>()=default</argsstring>
+        <name>~any_executor</name>
+        <qualifiedname>futures::any_executor::~any_executor</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1ada0a2b5bfee2cdc1af2d7240bdff9506" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::any_executor::any_executor</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>any_executor</name>
+        <qualifiedname>futures::any_executor::any_executor</qualifiedname>
+        <briefdescription>
+<para>Default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The wrapper will hold no executor.</para>
+<para>Any task sent for execution will be execute inline. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="48" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1a548a7ff378d0376d2d9c993a6c27bb47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>futures::any_executor::any_executor</definition>
+        <argsstring>(any_executor const &amp;e)=default</argsstring>
+        <name>any_executor</name>
+        <qualifiedname>futures::any_executor::any_executor</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> const &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1a3829ff7f38d79694685213743fa06291" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>futures::any_executor::any_executor</definition>
+        <argsstring>(any_executor &amp;&amp;e) noexcept=default</argsstring>
+        <name>any_executor</name>
+        <qualifiedname>futures::any_executor::any_executor</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1a2cff0106310d5f8f4bbe9dd7bbe0a28f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>futures::any_executor::any_executor</definition>
+        <argsstring>(E e)</argsstring>
+        <name>any_executor</name>
+        <qualifiedname>futures::any_executor::any_executor</qualifiedname>
+        <param>
+          <type>E</type>
+          <declname>e</declname>
+        </param>
+    <requiresclause>( !std::same_as&lt;any_executor, E&gt; &amp;&amp; std::copy_constructible&lt;E&gt; &amp;&amp; std::is_nothrow_move_constructible_v&lt;E&gt;)    </requiresclause>
+        <briefdescription>
+<para>Construct a wrapper for the specified executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="74" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1ab3d0d4f34a91b76c79fc76d7a81a992b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;</type>
+        <definition>any_executor &amp; futures::any_executor::operator=</definition>
+        <argsstring>(any_executor const &amp;e)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::any_executor::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> const &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="78" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1a6944e862c28a939e4884ca3bd6c4962d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;</type>
+        <definition>any_executor &amp; futures::any_executor::operator=</definition>
+        <argsstring>(any_executor &amp;&amp;e) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::any_executor::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Move assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="83" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1abda32114e17808de84573f5649c05a5f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;</type>
+        <definition>any_executor &amp; futures::any_executor::operator=</definition>
+        <argsstring>(std::nullptr_t)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::any_executor::operator=</qualifiedname>
+        <param>
+          <type>std::nullptr_t</type>
+        </param>
+        <briefdescription>
+<para>Assignment operator that sets the polymorphic wrapper to the empty state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="89" column="9" bodyfile="futures/executor/any_executor.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1aa6a7b539fcd922649efe4c334abdfe3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>executor</type>
+            <declname>E</declname>
+            <defname>E</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classfutures_1_1any__executor" kindref="compound">any_executor</ref> &amp;</type>
+        <definition>any_executor &amp; futures::any_executor::operator=</definition>
+        <argsstring>(E e)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>futures::any_executor::operator=</qualifiedname>
+        <param>
+          <type>E</type>
+          <declname>e</declname>
+        </param>
+    <requiresclause>( !std::same_as&lt;any_executor, E&gt; &amp;&amp; std::copy_constructible&lt;E&gt; &amp;&amp; std::is_nothrow_move_constructible_v&lt;E&gt;)    </requiresclause>
+        <briefdescription>
+<para>Construct a wrapper for the specified executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="111" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1any__executor_1a70a00d2be460c6c97917791ed354653a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::any_executor::execute</definition>
+        <argsstring>(F &amp;&amp;f) const</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::any_executor::execute</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>Execute the function on the target executor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/any_executor.hpp" line="116" column="9"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>An wrapper that type erases any non-heterogeneous executor. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The wrapped executor should be copy-constructible. </para>
+    </detaileddescription>
+    <location file="futures/executor/any_executor.hpp" line="35" column="5" bodyfile="futures/executor/any_executor.hpp" bodystart="35" bodyend="117"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1any__executor_1ada0a2b5bfee2cdc1af2d7240bdff9506" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>any_executor</name></member>
+      <member refid="classfutures_1_1any__executor_1a548a7ff378d0376d2d9c993a6c27bb47" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>any_executor</name></member>
+      <member refid="classfutures_1_1any__executor_1a3829ff7f38d79694685213743fa06291" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>any_executor</name></member>
+      <member refid="classfutures_1_1any__executor_1a2cff0106310d5f8f4bbe9dd7bbe0a28f" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>any_executor</name></member>
+      <member refid="classfutures_1_1any__executor_1a70a00d2be460c6c97917791ed354653a" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>execute</name></member>
+      <member refid="classfutures_1_1any__executor_1a0fe8581f5e735ee377e2ef2f3eef9d85" prot="private" virt="non-virtual"><scope>futures::any_executor</scope><name>impl_</name></member>
+      <member refid="classfutures_1_1any__executor_1ab3d0d4f34a91b76c79fc76d7a81a992b" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1any__executor_1a6944e862c28a939e4884ca3bd6c4962d" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1any__executor_1abda32114e17808de84573f5649c05a5f" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1any__executor_1aa6a7b539fcd922649efe4c334abdfe3a" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>operator=</name></member>
+      <member refid="classfutures_1_1any__executor_1ae4bf6681585684cf06926b4ce70964d9" prot="public" virt="non-virtual"><scope>futures::any_executor</scope><name>~any_executor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

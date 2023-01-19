@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classfutures_1_1new__thread__executor" kind="class" language="C++" prot="public">
+    <compoundname>futures::new_thread_executor</compoundname>
+    <includes refid="new__thread__executor_8hpp" local="no">new_thread_executor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classfutures_1_1new__thread__executor_1ab89e8c7da71588c9f438461dc3257a37" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr futures::new_thread_executor::new_thread_executor</definition>
+        <argsstring>()=default</argsstring>
+        <name>new_thread_executor</name>
+        <qualifiedname>futures::new_thread_executor::new_thread_executor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/new_thread_executor.hpp" line="34" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classfutures_1_1new__thread__executor_1af70d701d0e952b1923375bf331421f91" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void futures::new_thread_executor::execute</definition>
+        <argsstring>(F &amp;&amp;f) const</argsstring>
+        <name>execute</name>
+        <qualifiedname>futures::new_thread_executor::execute</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="futures/executor/new_thread_executor.hpp" line="38" column="9" bodyfile="futures/executor/new_thread_executor.hpp" bodystart="38" bodyend="44"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>An executor that runs anything in a new thread, like std::async does. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="futures/executor/new_thread_executor.hpp" line="32" column="5" bodyfile="futures/executor/new_thread_executor.hpp" bodystart="32" bodyend="45"/>
+    <listofallmembers>
+      <member refid="classfutures_1_1new__thread__executor_1af70d701d0e952b1923375bf331421f91" prot="public" virt="non-virtual"><scope>futures::new_thread_executor</scope><name>execute</name></member>
+      <member refid="classfutures_1_1new__thread__executor_1ab89e8c7da71588c9f438461dc3257a37" prot="public" virt="non-virtual"><scope>futures::new_thread_executor</scope><name>new_thread_executor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
