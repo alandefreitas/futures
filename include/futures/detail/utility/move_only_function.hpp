@@ -225,8 +225,19 @@ namespace futures {
                     std::move(other.impl_)) {}
 
             // Construct for callable f
-            template <class F>
-            move_only_function(F &&f) : Base(std::forward<F>(f)) {}
+            FUTURES_TEMPLATE(class F)
+            (requires(
+                !std::is_lvalue_reference<F>::value
+                && std::is_move_constructible<F>::value
+                && !is_in_place_type_t<F>::value)) move_only_function(F &&f)
+                : Base(std::move(f)) {}
+
+            FUTURES_TEMPLATE(class F)
+            (requires(
+                std::is_copy_constructible<F>::value
+                && !is_in_place_type_t<F>::value))
+                move_only_function(F const &f)
+                : Base(f) {}
 
             // Construct callable in place
             template <class T, class... CArgs>

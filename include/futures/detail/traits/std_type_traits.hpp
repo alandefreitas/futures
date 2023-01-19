@@ -125,8 +125,15 @@ namespace futures {
         struct in_place_type_t {
             explicit in_place_type_t() = default;
         };
+
         template <class T>
         FUTURES_INLINE_VAR constexpr in_place_type_t<T> in_place_type{};
+
+        template <class T>
+        struct is_in_place_type_t : std::false_type {};
+
+        template <class T>
+        struct is_in_place_type_t<in_place_type_t<T>> : std::true_type {};
 
         template <class T>
         constexpr std::add_const_t<T>&
