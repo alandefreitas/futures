@@ -12,8 +12,8 @@
  * only the library implementation is allowed to use.
  */
 
-#include <futures/detail/deps/boost/config.hpp>
 #include <futures/detail/deps/boost/assert.hpp>
+#include <futures/detail/deps/boost/config.hpp>
 #include <futures/detail/deps/boost/static_assert.hpp>
 
 /*

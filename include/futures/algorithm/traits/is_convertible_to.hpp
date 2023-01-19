@@ -30,7 +30,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::convertible_to` concept
     /**
-     * @see [`std::convertible_to`](https://en.cppreference.com/w/cpp/concepts/convertible_to)
+     * @see
+     * [`std::convertible_to`](https://en.cppreference.com/w/cpp/concepts/convertible_to)
      */
 #ifdef FUTURES_DOXYGEN
     template <class From, class To>

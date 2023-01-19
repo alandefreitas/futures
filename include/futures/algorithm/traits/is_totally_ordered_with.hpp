@@ -34,7 +34,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::totally_ordered_with` concept
     /**
-     * @see [`std::totally_ordered`](https://en.cppreference.com/w/cpp/concepts/totally_ordered)
+     * @see
+     * [`std::totally_ordered`](https://en.cppreference.com/w/cpp/concepts/totally_ordered)
      */
 #if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_three_way_comparison)
     template <class T, class U>

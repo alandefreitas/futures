@@ -9,6 +9,7 @@
 #define FUTURES_DETAIL_TRAITS_UNWRAP_REFWRAPPER_HPP
 
 #include <functional>
+#include <type_traits>
 
 namespace futures {
     namespace detail {

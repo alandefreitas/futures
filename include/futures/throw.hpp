@@ -39,7 +39,8 @@ namespace futures {
      * The source_location class represents certain information about the source
      * code, such as file names, line numbers, and function names.
      *
-     * @see [`std::source_location`](https://en.cppreference.com/w/cpp/utility/source_location)
+     * @see
+     * [`std::source_location`](https://en.cppreference.com/w/cpp/utility/source_location)
      */
 #if defined(FUTURES_DOXYGEN) || defined(__cpp_lib_source_location)
     using source_location = std::source_location;

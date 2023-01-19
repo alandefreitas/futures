@@ -27,7 +27,8 @@ namespace futures {
     /**
      *  @return A future associated with the shared state that is created.
      *
-     *  @see [`std::experimental::make_ready_future`](https://en.cppreference.com/w/cpp/experimental/make_ready_future)
+     *  @see
+     * [`std::experimental::make_ready_future`](https://en.cppreference.com/w/cpp/experimental/make_ready_future)
      */
     inline basic_future<void, future_options<>>
     make_ready_future() {

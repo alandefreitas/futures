@@ -31,7 +31,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::assignable_from` concept
     /**
-     * @see [`std::assignable_from`](https://en.cppreference.com/w/cpp/concepts/assignable_from)
+     * @see
+     * [`std::assignable_from`](https://en.cppreference.com/w/cpp/concepts/assignable_from)
      */
 #ifdef FUTURES_DOXYGEN
     template <class LHS, class RHS>

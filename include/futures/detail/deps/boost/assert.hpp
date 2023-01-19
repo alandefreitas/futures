@@ -10,11 +10,11 @@
 
 #include <futures/config.hpp>
 
-// Include boost/assert.hpp from external or bundled boost 
+// Include boost/assert.hpp from external or bundled boost
 #if defined(FUTURES_HAS_BOOST)
-#include <boost/assert.hpp>
+#    include <boost/assert.hpp>
 #else
-#include <futures/detail/bundled/boost/assert.hpp>
+#    include <futures/detail/bundled/boost/assert.hpp>
 #endif
 
 #endif // FUTURES_DETAIL_DEPS_BOOST_ASSERT_HPP

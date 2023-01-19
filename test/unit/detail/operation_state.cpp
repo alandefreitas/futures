@@ -2,6 +2,7 @@
 //
 #include <futures/packaged_task.hpp>
 #include <futures/promise.hpp>
+#include <futures/executor/execute.hpp>
 #include <catch2/catch.hpp>
 #include <array>
 

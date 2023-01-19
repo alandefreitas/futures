@@ -31,7 +31,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::sentinel_for` concept
     /**
-     * @see [`std::sentinel_for`](https://en.cppreference.com/w/cpp/iterator/sentinel_for)
+     * @see
+     * [`std::sentinel_for`](https://en.cppreference.com/w/cpp/iterator/sentinel_for)
      */
 #ifdef FUTURES_DOXYGEN
     template <class S, class I>

@@ -34,7 +34,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to `std::range_value`
     /**
-     * @see [`std::ranges::iterator_t`](https://en.cppreference.com/w/cpp/ranges/iterator_t)
+     * @see
+     * [`std::ranges::iterator_t`](https://en.cppreference.com/w/cpp/ranges/iterator_t)
      */
 #ifdef FUTURES_DOXYGEN
     template <class R>

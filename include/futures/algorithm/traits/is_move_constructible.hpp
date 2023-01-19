@@ -32,7 +32,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::move_constructible` concept
     /**
-     * @see [`std::move_constructible`](https://en.cppreference.com/w/cpp/concepts/move_constructible)
+     * @see
+     * [`std::move_constructible`](https://en.cppreference.com/w/cpp/concepts/move_constructible)
      */
 #if defined(FUTURES_DOXYGEN)
     template <class T>

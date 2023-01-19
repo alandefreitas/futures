@@ -22,7 +22,8 @@
 namespace futures {
     /// A C++17 functor equivalent to the C++20 std::ranges::greater
     /**
-     * @see [`std::greater`](https://en.cppreference.com/w/cpp/utility/functional/greater)
+     * @see
+     * [`std::greater`](https://en.cppreference.com/w/cpp/utility/functional/greater)
      */
     struct greater {
         FUTURES_TEMPLATE(class T, class U)

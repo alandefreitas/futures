@@ -33,7 +33,8 @@ namespace futures {
     /// @brief A type trait equivalent to the `std::bidirectional_iterator`
     /// concept
     /**
-     * @see [`std::bidirectional_iterator`](https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator)
+     * @see
+     * [`std::bidirectional_iterator`](https://en.cppreference.com/w/cpp/iterator/bidirectional_iterator)
      */
 #if defined(FUTURES_DOXYGEN)
     template <class T>

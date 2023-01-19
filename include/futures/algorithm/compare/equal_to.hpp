@@ -23,7 +23,8 @@
 namespace futures {
     /// A C++17 functor equivalent to the C++20 std::ranges::equal_to
     /**
-     * @see [`std::equal_to`](https://en.cppreference.com/w/cpp/utility/functional/equal_to)
+     * @see
+     * [`std::equal_to`](https://en.cppreference.com/w/cpp/utility/functional/equal_to)
      */
     struct equal_to {
         FUTURES_TEMPLATE(class T, class U)

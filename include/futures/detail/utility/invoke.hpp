@@ -88,7 +88,8 @@ namespace futures {
             class R,
             class F,
             class... Args,
-            typename std::enable_if<is_invocable_r_v<R, F, Args...>, int>::type = 0>
+            typename std::enable_if<is_invocable_r_v<R, F, Args...>, int>::type
+            = 0>
         constexpr R
         invoke_r(F&& f, Args&&... args) noexcept(
             is_nothrow_invocable_r_v<R, F, Args...>) {

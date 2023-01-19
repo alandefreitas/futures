@@ -22,6 +22,7 @@
 #include <futures/algorithm/partitioner/partitioner_for.hpp>
 #include <futures/algorithm/traits/is_forward_iterator.hpp>
 #include <futures/algorithm/traits/unary_invoke_algorithm.hpp>
+#include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/traits/std_type_traits.hpp>
 #include <futures/algorithm/detail/execution.hpp>
 #include <futures/detail/deps/boost/core/empty_value.hpp>

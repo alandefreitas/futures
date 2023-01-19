@@ -29,7 +29,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to `std::remove_cvref`
     /**
-     * @see [`std::remove_cvref`](https://en.cppreference.com/w/cpp/types/remove_cvref)
+     * @see
+     * [`std::remove_cvref`](https://en.cppreference.com/w/cpp/types/remove_cvref)
      */
 #ifdef FUTURES_DOXYGEN
     template <class T>

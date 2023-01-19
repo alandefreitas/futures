@@ -23,7 +23,8 @@
 namespace futures {
     /// A C++17 functor equivalent to the C++20 std::ranges::not_equal_to
     /**
-     * @see [`std::not_equal_to`](https://en.cppreference.com/w/cpp/utility/functional/not_equal_to)
+     * @see
+     * [`std::not_equal_to`](https://en.cppreference.com/w/cpp/utility/functional/not_equal_to)
      */
     struct not_equal_to {
         FUTURES_TEMPLATE(class T, class U)

@@ -35,7 +35,8 @@ namespace futures {
 
     /// @brief A type trait equivalent to the `std::forward_iterator` concept
     /**
-     * @see [`std::forward_iterator`](https://en.cppreference.com/w/cpp/iterator/forward_iterator)
+     * @see
+     * [`std::forward_iterator`](https://en.cppreference.com/w/cpp/iterator/forward_iterator)
      */
 #if defined(FUTURES_DOXYGEN)
     template <class T>
