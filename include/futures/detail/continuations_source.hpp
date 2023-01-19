@@ -12,7 +12,7 @@
 #include <futures/executor/execute.hpp>
 #include <futures/detail/container/atomic_queue.hpp>
 #include <futures/detail/container/small_vector.hpp>
-#include <functional>
+#include <futures/detail/utility/move_only_function.hpp>
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
@@ -53,7 +53,7 @@ namespace futures {
             // executor. We cannot ensure the tasks go to the same executor.
             // This needs to be type erased because there are many types of
             // callables that might become a continuation here.
-            using continuation_type = std::function<void()>;
+            using continuation_type = move_only_function<void()>;
 
             // The continuation vector
             // We use a small vector because of the common case when there few
