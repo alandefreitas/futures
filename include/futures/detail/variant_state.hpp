@@ -679,7 +679,8 @@ namespace futures {
                 }
                 // Throw in use cases where the underlying basic_future is not
                 // allowed to copy
-                if (is_static_storage() || is_static_operation_state()) {
+                else if (is_static_storage() || is_static_operation_state())
+                {
                     throw_exception(
                         std::logic_error{ "Inline states cannot be copied" });
                 }
